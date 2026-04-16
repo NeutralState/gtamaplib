@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>gtamaplib — Dependency Graph</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f4f0; color: #3d3d3a; min-height: 100vh; }
+  @media (prefers-color-scheme: dark) {
+    body { background: #1a1a18; color: #c2c0b6; }
+    .canvas-wrap { background: #2C2C2A; border-color: #444441; }
+    button { background: #2C2C2A; color: #c2c0b6; border-color: #5F5E5A; }
+    button:hover { background: #444441; }
+    button.active { background: #0c447c22; color: #85B7EB; border-color: #378ADD; }
+    #tooltip { background: #2C2C2A; border-color: #5F5E5A; }
+    h1 { color: #c2c0b6; }
+    .subtitle { color: #888780; }
+    .legend-item { color: #888780; }
+  }
+  header { padding: 24px 32px 16px; border-bottom: 0.5px solid rgba(0,0,0,0.1); }
+  h1 { font-size: 18px; font-weight: 500; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #888780; }
+  .main { padding: 20px 32px 32px; }
+  .controls { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+  .controls span { font-size: 12px; color: #888780; }
+  button { font-size: 12px; padding: 5px 12px; border: 0.5px solid #B4B2A9; border-radius: 6px; background: #fff; color: #3d3d3a; cursor: pointer; transition: all 0.15s; }
+  button:hover { background: #f1efe8; }
+  button.active { background: #e6f1fb; color: #185FA5; border-color: #378ADD; }
+  .canvas-wrap { border: 0.5px solid #D3D1C7; border-radius: 10px; background: #fafaf8; overflow: auto; }
+  canvas { display: block; cursor: default; }
+  .legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 14px; }
+  .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #5F5E5A; }
+  .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
+  #tooltip { position: fixed; background: #fff; border: 0.5px solid #B4B2A9; border-radius: 8px; padding: 10px 14px; font-size: 12px; pointer-events: none; display: none; z-index: 999; max-width: 280px; }
+  #tooltip strong { display: block; font-size: 13px; font-weight: 500; margin-bottom: 5px; color: #3d3d3a; }
+  #tooltip .type-badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-bottom: 6px; }
+  #tooltip .deps-section { font-size: 11px; color: #5F5E5A; line-height: 1.6; }
+  #tooltip .deps-section b { color: #3d3d3a; }
+  .hint { font-size: 11px; color: #888780; margin-top: 8px; }
+</style>
+</head>
+<body>
+<header>
+  <h1>gtamaplib — Camera Dependency Graph</h1>
+  <p class="subtitle">How cameras depend on each other to triangulate landmarks across the GTA VI map</p>
+</header>
+<div class="main">
+  <div class="controls">
+    <span>Filter zone:</span>
+    <button class="active" onclick="setFilter('all',this)">All</button>
+    <button onclick="setFilter('leak',this)">Leak cameras</button>
+    <button onclick="setFilter('keys',this)">Leonida Keys</button>
+    <button onclick="setFilter('ambrosia',this)">Ambrosia</button>
+    <button onclick="setFilter('vice',this)">Vice City</button>
+    <button onclick="setFilter('grassrivers',this)">Grassrivers</button>
+  </div>
+  <div class="canvas-wrap">
+    <canvas id="dag" width="1100" height="740"></canvas>
+  </div>
+  <div class="legend">
+    <div class="legend-item"><div class="dot" style="background:#534AB7"></div>Leak camera (known position)</div>
+    <div class="legend-item"><div class="dot" style="background:#0F6E56"></div>Calibrated camera</div>
+    <div class="legend-item"><div class="dot" style="background:#854F0B"></div>Uncalibrated / WIP</div>
+    <div class="legend-item"><div class="dot" style="background:#993C1D"></div>Landmark cluster</div>
+    <div class="legend-item">
+      <svg width="36" height="12"><line x1="0" y1="6" x2="28" y2="6" stroke="#534AB7" stroke-width="1.5"/><polygon points="28,3 36,6 28,9" fill="#534AB7"/></svg>
+      Calibrates
+    </div>
+    <div class="legend-item">
+      <svg width="36" height="12"><line x1="0" y1="6" x2="36" y2="6" stroke="#B4B2A9" stroke-width="1" stroke-dasharray="4 2"/></svg>
+      Triangulates landmark
+    </div>
+  </div>
+  <p class="hint">Hover over any node to see its dependencies. Click a filter to focus on a zone.</p>
+</div>
+<div id="tooltip"></div>
+
+<script>
+const W = 1100, H = 740;
+const canvas = document.getElementById('dag');
+const ctx = canvas.getContext('2d');
+const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
+
+const C = {
+  leak:    isDark ? '#AFA9EC' : '#534AB7',
+  calib:   isDark ? '#5DCAA5' : '#0F6E56',
+  uncalib: isDark ? '#EF9F27' : '#854F0B',
+  lm:      isDark ? '#F0997B' : '#993C1D',
+  edge:    isDark ? '#5F5E5A' : '#B4B2A9',
+  edgeLm:  isDark ? '#3d3c38' : '#D3D1C7',
+  text:    isDark ? '#c2c0b6' : '#3d3d3a',
+  textSub: isDark ? '#888780' : '#888780',
+};
+
+const nodes = [
+  { id:'tennis_4k',  label:'Tennis Stadium\n(4K)',          type:'leak',    zone:'vice',        x:320,  y:60  },
+  { id:'vb_a',       label:'Vice Beach (A)',                 type:'leak',    zone:'vice',        x:100,  y:150 },
+  { id:'vb_b',       label:'Vice Beach (B)',                 type:'leak',    zone:'vice',        x:260,  y:150 },
+  { id:'metro_se',   label:'Metro (SE)\n(A) (4K)',           type:'leak',    zone:'vice',        x:480,  y:60  },
+  { id:'alley_w',    label:'Alley (W)',                      type:'leak',    zone:'vice',        x:80,   y:60  },
+  { id:'park',       label:'Park',                           type:'leak',    zone:'vice',        x:170,  y:60  },
+  { id:'port',       label:'Port',                           type:'leak',    zone:'vice',        x:530,  y:150 },
+  { id:'tc_se',      label:'Tennis Court\n(SE)',             type:'leak',    zone:'vice',        x:620,  y:60  },
+  { id:'lm_fs',      label:'Four Seasons\nlandmarks',        type:'lm',      zone:'vice',        x:320,  y:250 },
+  { id:'lm_vc',      label:'Vice City\nlandmarks',           type:'lm',      zone:'vice',        x:120,  y:360 },
+  { id:'lm_keys',    label:'Keys bridge\n& island LMs',      type:'lm',      zone:'keys',        x:700,  y:250 },
+  { id:'lm_gv',      label:'Grassrivers\nlandmarks',         type:'lm',      zone:'grassrivers', x:500,  y:390 },
+  { id:'lm_prison',  label:'Prison towers\n& Turkey Point',  type:'lm',      zone:'grassrivers', x:700,  y:390 },
+  { id:'lm_ambrosia',label:'Ambrosia\nlandmarks',            type:'lm',      zone:'ambrosia',    x:860,  y:490 },
+  { id:'lka',        label:'LK Airplane\n(X)',               type:'calib',   zone:'keys',        x:700,  y:130 },
+  { id:'lkp',        label:'LK Postcard\n(X)',               type:'calib',   zone:'keys',        x:860,  y:250 },
+  { id:'kl',         label:'Key Lento',                      type:'calib',   zone:'keys',        x:1000, y:310 },
+  { id:'gw',         label:'Grassrivers 02\n(Watson Bay)',   type:'calib',   zone:'grassrivers', x:580,  y:270 },
+  { id:'prison',     label:'Prison',                         type:'calib',   zone:'grassrivers', x:700,  y:510 },
+  { id:'skyline',    label:'Skyline',                        type:'calib',   zone:'vice',        x:200,  y:460 },
+  { id:'vi',         label:'Venetian\nIslands',              type:'calib',   zone:'vice',        x:80,   y:460 },
+  { id:'beach',      label:'Beach',                          type:'calib',   zone:'vice',        x:330,  y:460 },
+  { id:'basketball', label:'VC 03\n(Basketball)',            type:'calib',   zone:'vice',        x:460,  y:460 },
+  { id:'vcp',        label:'Vice City\nPostcard',            type:'calib',   zone:'vice',        x:200,  y:580 },
+  { id:'rooftop',    label:'Rooftop Party',                  type:'calib',   zone:'vice',        x:370,  y:580 },
+  { id:'motorboats', label:'Motorboats\n(A/B)',              type:'calib',   zone:'vice',        x:440,  y:310 },
+  { id:'ferris',     label:'VC 08\n(Ferris Wheel)',          type:'calib',   zone:'vice',        x:550,  y:580 },
+  { id:'amb02',      label:'Ambrosia 02\n(Panorama)',        type:'calib',   zone:'ambrosia',    x:860,  y:390 },
+  { id:'amb04',      label:'Ambrosia 04\n(Fires)',           type:'calib',   zone:'ambrosia',    x:1000, y:490 },
+  { id:'amb_post',   label:'Ambrosia\nPostcard (X)',         type:'uncalib', zone:'ambrosia',    x:1000, y:590 },
+  { id:'waning',     label:'Waning Sands\n(A) (X)',         type:'uncalib', zone:'ambrosia',    x:1000, y:670 },
+  { id:'lkp_boats',  label:'LK 05 (Boats)',                 type:'calib',   zone:'keys',        x:1000, y:390 },
+];
+
+const edges = [
+  ['tennis_4k','lm_fs','calib'],['metro_se','lm_fs','calib'],
+  ['lm_fs','vb_a','calib'],['lm_fs','vb_b','calib'],['lm_fs','motorboats','calib'],
+  ['vb_b','lm_vc','lm'],['vb_a','lm_vc','lm'],['alley_w','lm_vc','lm'],
+  ['park','lm_vc','lm'],['port','lm_vc','lm'],['tc_se','lm_vc','lm'],
+  ['tennis_4k','lka','calib'],['lka','lm_keys','lm'],['lka','lkp','calib'],
+  ['lkp','lm_keys','lm'],['lkp','kl','calib'],['kl','lm_keys','lm'],
+  ['lka','gw','calib'],['tennis_4k','gw','calib'],
+  ['gw','lm_gv','lm'],['gw','lm_prison','lm'],['lka','lm_prison','lm'],
+  ['lm_prison','prison','calib'],['gw','prison','calib'],
+  ['lm_vc','skyline','calib'],['lm_vc','vi','calib'],['lm_vc','rooftop','calib'],
+  ['lm_vc','beach','calib'],['lm_vc','basketball','calib'],
+  ['skyline','lm_vc','lm'],['vi','lm_vc','lm'],['basketball','lm_vc','lm'],['beach','lm_vc','lm'],
+  ['basketball','vcp','calib'],['skyline','vcp','calib'],['vb_b','vcp','calib'],
+  ['basketball','ferris','calib'],['skyline','ferris','calib'],
+  ['lka','amb02','calib'],['amb02','lm_ambrosia','lm'],['amb04','lm_ambrosia','lm'],
+  ['amb02','amb04','calib'],['lm_ambrosia','amb_post','calib'],
+  ['lkp','lkp_boats','calib'],['lm_keys','lkp_boats','calib'],
+];
+
+let activeFilter = 'all';
+const zoneFilters = {
+  all: null,
+  leak: n => n.type === 'leak',
+  keys: n => n.zone === 'keys' || n.id === 'tennis_4k',
+  ambrosia: n => n.zone === 'ambrosia' || n.id === 'lka',
+  vice: n => n.zone === 'vice',
+  grassrivers: n => n.zone === 'grassrivers' || n.id === 'tennis_4k' || n.id === 'metro_se',
+};
+
+function nodeColor(type) {
+  return { leak: C.leak, calib: C.calib, uncalib: C.uncalib, lm: C.lm }[type];
+}
+function nodeVisible(n) {
+  if (!zoneFilters[activeFilter]) return true;
+  return zoneFilters[activeFilter](n);
+}
+
+let hoveredNode = null;
+
+function getNodeAt(mx, my) {
+  for (const n of nodes) {
+    if (!nodeVisible(n)) continue;
+    const dx = mx-n.x, dy = my-n.y;
+    if (Math.sqrt(dx*dx+dy*dy) < 22) return n;
+  }
+  return null;
+}
+
+function drawArrow(x1,y1,x2,y2,color,lw,dashed) {
+  const dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy);
+  const ux=dx/len,uy=dy/len,r=18;
+  const sx=x1+ux*r,sy=y1+uy*r,ex=x2-ux*(r+9),ey=y2-uy*(r+9);
+  ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(ex,ey);
+  ctx.strokeStyle=color; ctx.lineWidth=lw;
+  if(dashed) ctx.setLineDash([4,3]); else ctx.setLineDash([]);
+  ctx.stroke(); ctx.setLineDash([]);
+  const angle=Math.atan2(uy,ux);
+  ctx.save(); ctx.translate(ex+ux*8,ey+uy*8); ctx.rotate(angle);
+  ctx.beginPath(); ctx.moveTo(-6,-3.5); ctx.lineTo(0,0); ctx.lineTo(-6,3.5);
+  ctx.strokeStyle=color; ctx.lineWidth=1.2; ctx.stroke();
+  ctx.restore();
+}
+
+function draw() {
+  ctx.clearRect(0,0,W,H);
+  for (const [a,b,type] of edges) {
+    const na=nodes.find(n=>n.id===a), nb=nodes.find(n=>n.id===b);
+    if(!na||!nb||!nodeVisible(na)||!nodeVisible(nb)) continue;
+    const isHov = hoveredNode && (hoveredNode.id===a||hoveredNode.id===b);
+    ctx.globalAlpha = isHov ? 0.9 : (hoveredNode ? 0.1 : 0.5);
+    const color = type==='calib' ? nodeColor(na.type) : C.edgeLm;
+    const lw = isHov ? 2 : (type==='calib' ? 1.5 : 0.8);
+    drawArrow(na.x,na.y,nb.x,nb.y,color,lw,type==='lm');
+    ctx.globalAlpha=1;
+  }
+  for (const n of nodes) {
+    if(!nodeVisible(n)) continue;
+    const isHov = hoveredNode && hoveredNode.id===n.id;
+    const color=nodeColor(n.type), r=18;
+    ctx.beginPath(); ctx.arc(n.x,n.y,r,0,Math.PI*2);
+    ctx.fillStyle=isHov?color:color+'2a'; ctx.fill();
+    ctx.strokeStyle=color; ctx.lineWidth=isHov?2:1; ctx.stroke();
+    const lines=n.label.split('\n');
+    ctx.font='10px -apple-system,sans-serif';
+    ctx.textAlign='center';
+    ctx.fillStyle=isHov?C.text:C.textSub;
+    const startY=n.y+r+7+(lines.length===1?5:0);
+    lines.forEach((l,i)=>ctx.fillText(l,n.x,startY+i*13));
+  }
+}
+
+canvas.addEventListener('mousemove', e => {
+  const rect=canvas.getBoundingClientRect();
+  const scaleX=W/rect.width, scaleY=H/rect.height;
+  const mx=(e.clientX-rect.left)*scaleX, my=(e.clientY-rect.top)*scaleY;
+  hoveredNode=getNodeAt(mx,my);
+  canvas.style.cursor=hoveredNode?'pointer':'default';
+  const tip=document.getElementById('tooltip');
+  if(hoveredNode){
+    const n=hoveredNode;
+    const deps=edges.filter(([a,b])=>b===n.id).map(([a])=>nodes.find(x=>x.id===a)?.label.replace('\n',' ')).filter(Boolean);
+    const provides=edges.filter(([a,b])=>a===n.id).map(([_,b])=>nodes.find(x=>x.id===b)?.label.replace('\n',' ')).filter(Boolean);
+    const typeLabel={leak:'Leak camera',calib:'Calibrated camera',uncalib:'Uncalibrated / WIP',lm:'Landmark cluster'}[n.type];
+    const typeColor={leak:'#534AB7',calib:'#0F6E56',uncalib:'#854F0B',lm:'#993C1D'}[n.type];
+    tip.style.display='block';
+    tip.style.left=(e.clientX+14)+'px';
+    tip.style.top=(e.clientY-10)+'px';
+    tip.innerHTML=`<strong>${n.label.replace('\n',' ')}</strong><span class="type-badge" style="background:${typeColor}22;color:${typeColor}">${typeLabel}</span>${deps.length?`<div class="deps-section"><b>Depends on:</b> ${deps.join(', ')}</div>`:''}${provides.length?`<div class="deps-section"><b>Provides to:</b> ${provides.join(', ')}</div>`:''}`;
+  } else { tip.style.display='none'; }
+  draw();
+});
+canvas.addEventListener('mouseleave',()=>{ hoveredNode=null; document.getElementById('tooltip').style.display='none'; draw(); });
+
+function setFilter(f,btn) {
+  activeFilter=f;
+  document.querySelectorAll('button').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  draw();
+}
+
+draw();
+</script>
+</body>
+</html>
