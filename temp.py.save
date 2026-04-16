@@ -1,0 +1,32 @@
+
+import gtamaplib as ml
+import gtamapdata as md
+
+md.landmarks["Green Building (SW)"] = (-716.250, 1019.500, 5.0)
+md.landmarks["Metro Entrance (Top Left)"]  = (-716.000, 978.250, 5.0)
+md.landmarks["Metro Entrance (Top Right)"] = (-715.250, 983.250, 5.0)
+md.landmarks["Ambrosia Hill"]       = (-3298.000, 5408.000, 200.0)
+
+cam = ml.get_camera("Empty Lot near Metro Station")
+cam.landmark_pixels["Green Building (SW)"] = (3241, 510)
+cam.landmark_pixels["Metro Entrance (Top Left)"]  = (1262, 41)
+cam.landmark_pixels["Metro Entrance (Top Right)"] = (1534, 78)
+cam.landmark_pixels["Ambrosia Hill"]       = (3098, 449)
+cam.register()
+
+ml.find_camera(
+    cam_name="Empty Lot near Metro Station",
+    lm_names=["Green Building (SW)", "Metro Entrance (Top Left)", "Metro Entrance (Top Right)", "Ambrosia Hill"],
+    rays=[],
+    line=((-673.250, 938.250), (-673.250, 938.250)),
+    radius=1,
+    step=1,
+    z_limits=(3, 8),
+    pitch_range=(-10.0, 5.0, 0.5),
+    hfov_range=(40.0, 65.0, 1.0),
+    map_name="yanis",
+    map_scale=1.0,
+    map_area=(-1500, 200, 500, 1800),
+    projection_area=None,
+    basename="renders/EmptyLot",
+)
