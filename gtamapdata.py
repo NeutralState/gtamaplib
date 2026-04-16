@@ -9,11 +9,6 @@ import zipfile
 
 DIRNAME = os.path.dirname(__file__)
 DATA_DIR = os.path.join(DIRNAME, "gtamapdata")
-LANDMARK_ZONES = [
-    "vice_city", "ambrosia", "grassrivers", "leonida_keys",
-    "port_gellhorn", "leonard_county"
-]
-
 for name in ("fonts", "frames", "maps"):
     dirname = f"{DIRNAME}/{name}"
     filename = f"{DIRNAME}/{name}.zip"
@@ -65,17 +60,16 @@ pixels = {
 # ── Landmarks ────────────────────────────────────────────────────────────────
 
 landmarks = {}
-landmarks_meta = {}  # source_cameras + error_m, keyed by landmark name
+landmarks_meta = {}  # source_cameras + error_m + zone, keyed by landmark name
 
-for zone in LANDMARK_ZONES:
-    zone_data = _load(f"landmarks/{zone}.json")
-    for lm_name, data in zone_data.items():
-        landmarks[lm_name] = tuple(data["xyz"])
-        landmarks_meta[lm_name] = {
-            "source_cameras": data.get("source_cameras", []),
-            "error_m": data.get("error_m"),
-            "zone": zone,
-        }
+_landmarks_raw = _load("landmarks.json")
+for lm_name, data in _landmarks_raw.items():
+    landmarks[lm_name] = tuple(data["xyz"])
+    landmarks_meta[lm_name] = {
+        "source_cameras": data.get("source_cameras", []),
+        "error_m": data.get("error_m"),
+        "zone": data.get("zone", "unknown"),
+    }
 
 # ── Maps ─────────────────────────────────────────────────────────────────────
 
@@ -129,19 +123,20 @@ def update_landmark(lm_name, xyz, source_cameras=None, error_m=None, zone=None):
         "zone": zone,
     }
 
-    # Persist to JSON
-    zone_path = os.path.join(DATA_DIR, f"landmarks/{zone}.json")
-    with open(zone_path) as f:
-        zone_data = json.load(f)
-    zone_data[lm_name] = {
+    # Persist to landmarks.json
+    lm_path = os.path.join(DATA_DIR, "landmarks.json")
+    with open(lm_path) as f:
+        lm_data = json.load(f)
+    lm_data[lm_name] = {
         "xyz": list(xyz),
         "source_cameras": source_cameras or [],
         "error_m": error_m,
+        "zone": zone,
     }
-    tmp = zone_path + ".tmp"
+    tmp = lm_path + ".tmp"
     with open(tmp, "w") as f:
-        json.dump(zone_data, f, indent=2)
-    os.replace(tmp, zone_path)
+        json.dump(lm_data, f, indent=2)
+    os.replace(tmp, lm_path)
 
 
 def update_camera(cam_name, xyz=None, ypr=None, fov=None):
@@ -165,3 +160,6 @@ def update_camera(cam_name, xyz=None, ypr=None, fov=None):
     with open(tmp, "w") as f:
         json.dump(cam_data, f, indent=2)
     os.replace(tmp, cam_path)
+
+# Lines not yet migrated to JSON
+lines = {}
