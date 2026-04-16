@@ -1,15 +1,15 @@
 {
-  "Billboard #2 (Key Lento)": {
+  "99353 Overseas Hwy": {
     "xyz": [
-      -3056.172,
-      -6496.183,
-      25.615
+      -3369.349,
+      -6779.484,
+      74.152
     ],
     "source_cameras": [
-      "Leonida Keys Postcard (X)",
-      "Key Lento"
+      "Ocean near Keys (N)",
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 0.606
+    "error_m": 0.467
   },
   "Blimp Bay": {
     "xyz": [
@@ -34,18 +34,6 @@
     ],
     "error_m": 0.238
   },
-  "House with Pier (E)": {
-    "xyz": [
-      -3155.67,
-      -6500.087,
-      12.353
-    ],
-    "source_cameras": [
-      "Leonida Keys 05 (Boats)",
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": 0.548
-  },
   "Island A (W)": {
     "xyz": [
       -2561.894,
@@ -57,50 +45,6 @@
     ],
     "error_m": null
   },
-  "Island F (E)": {
-    "xyz": [
-      -1786.271,
-      -5718.466,
-      0.0
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "Island F (W)": {
-    "xyz": [
-      -1837.483,
-      -5897.036,
-      0.0
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "Island G (E)": {
-    "xyz": [
-      -2142.519,
-      -6218.571,
-      0.0
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "Island G (W)": {
-    "xyz": [
-      -2197.904,
-      -6292.396,
-      0.0
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": null
-  },
   "Island J (E)": {
     "xyz": [
       -2507.148,
@@ -109,39 +53,6 @@
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Island J (W)": {
-    "xyz": [
-      -2577.286,
-      -6635.502,
-      0.0
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "Island K (E)": {
-    "xyz": [
-      -3562.974,
-      -7797.697,
-      0.0
-    ],
-    "source_cameras": [
-      "Key Lento"
-    ],
-    "error_m": null
-  },
-  "Island K (W)": {
-    "xyz": [
-      -3691.596,
-      -7923.045,
-      0.0
-    ],
-    "source_cameras": [
-      "Key Lento"
     ],
     "error_m": null
   },
@@ -200,14 +111,380 @@
     ],
     "error_m": null
   },
-  "Island W (N)": {
+  "Key Lento (A)": {
     "xyz": [
-      -3743.862,
-      -6117.335,
+      -2620.476,
+      -5762.622,
       0.0
     ],
     "source_cameras": [
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Key Lento (J)": {
+    "xyz": [
+      -3016.386,
+      -6703.864,
+      0.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (10B)": {
+    "xyz": [
+      -3731.978,
+      -6993.827,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (11B)": {
+    "xyz": [
+      -3753.089,
+      -7006.523,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (12B)": {
+    "xyz": [
+      -3775.646,
+      -7019.908,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (13B)": {
+    "xyz": [
+      -3796.73,
+      -7032.697,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (14B)": {
+    "xyz": [
+      -3816.832,
+      -7044.617,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (15B)": {
+    "xyz": [
+      -3836.207,
+      -7055.582,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (16B)": {
+    "xyz": [
+      -3856.928,
+      -7068.183,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (17B)": {
+    "xyz": [
+      -3876.76,
+      -7079.744,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (18B)": {
+    "xyz": [
+      -3896.356,
+      -7091.11,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (19B)": {
+    "xyz": [
+      -3920.601,
+      -7106.128,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (1B)": {
+    "xyz": [
+      -3544.086,
+      -6880.461,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (20B)": {
+    "xyz": [
+      -3940.429,
+      -7117.949,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (21B)": {
+    "xyz": [
+      -3957.535,
+      -7132.332,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (2B)": {
+    "xyz": [
+      -3568.371,
+      -6895.166,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (3B)": {
+    "xyz": [
+      -3587.296,
+      -6907.227,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (3T)": {
+    "xyz": [
+      -3572.582,
+      -6892.863,
+      3.488
+    ],
+    "source_cameras": [
+      "Ocean near Keys (N)",
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": 0.101
+  },
+  "Seven Mile Bridge (4B)": {
+    "xyz": [
+      -3609.486,
+      -6920.65,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (5B)": {
+    "xyz": [
+      -3629.187,
+      -6932.164,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (6B)": {
+    "xyz": [
+      -3650.832,
+      -6945.659,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (6T)": {
+    "xyz": [
+      -3637.196,
+      -6932.511,
+      8.104
+    ],
+    "source_cameras": [
+      "Ocean near Keys (N)",
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": 0.278
+  },
+  "Seven Mile Bridge (7B)": {
+    "xyz": [
+      -3670.344,
+      -6957.133,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (8B)": {
+    "xyz": [
+      -3691.714,
+      -6970.174,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Seven Mile Bridge (9B)": {
+    "xyz": [
+      -3712.238,
+      -6982.386,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": null
+  },
+  "Light Pollution (A)": {
+    "xyz": [
+      -8474.409,
+      -11160.441,
+      0.0
+    ],
+    "source_cameras": [
+      "Ambrosia 02 (Panorama)"
+    ],
+    "error_m": null
+  },
+  "Light Pollution (B)": {
+    "xyz": [
+      -7748.745,
+      -7991.628,
+      0.0
+    ],
+    "source_cameras": [
+      "Ambrosia 02 (Panorama)"
+    ],
+    "error_m": null
+  },
+  "Light Pollution (C)": {
+    "xyz": [
+      -9874.513,
+      -10662.575,
+      0.0
+    ],
+    "source_cameras": [
+      "Ambrosia 02 (Panorama)"
+    ],
+    "error_m": null
+  },
+  "102180 Overseas Hwy": {
+    "xyz": [
+      -2678.565,
+      -6063.121,
+      41.579
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": 0.594
+  },
+  "Island F (E)": {
+    "xyz": [
+      -1786.271,
+      -5718.466,
+      0.0
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": null
+  },
+  "Island F (W)": {
+    "xyz": [
+      -1837.483,
+      -5897.036,
+      0.0
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": null
+  },
+  "Island G (E)": {
+    "xyz": [
+      -2142.519,
+      -6218.571,
+      0.0
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": null
+  },
+  "Island G (W)": {
+    "xyz": [
+      -2197.904,
+      -6292.396,
+      0.0
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": null
+  },
+  "Island J (W)": {
+    "xyz": [
+      -2577.286,
+      -6635.502,
+      0.0
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)"
     ],
     "error_m": null
   },
@@ -244,17 +521,6 @@
     ],
     "error_m": null
   },
-  "Key Lento (A)": {
-    "xyz": [
-      -2620.476,
-      -5762.622,
-      0.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
   "Key Lento (E)": {
     "xyz": [
       -2194.499,
@@ -263,17 +529,6 @@
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "Key Lento (J)": {
-    "xyz": [
-      -3016.386,
-      -6703.864,
-      0.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": null
   },
@@ -304,6 +559,72 @@
       -3128.605,
       -6441.724,
       0.0
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": null
+  },
+  "Lake Surprise Viaduct (10B)": {
+    "xyz": [
+      -2246.278,
+      -4890.33,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": null
+  },
+  "Lake Surprise Viaduct (11B)": {
+    "xyz": [
+      -2258.347,
+      -4869.461,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": null
+  },
+  "Lake Surprise Viaduct (12B)": {
+    "xyz": [
+      -2266.029,
+      -4844.265,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": null
+  },
+  "Lake Surprise Viaduct (13B)": {
+    "xyz": [
+      -2278.128,
+      -4823.343,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": null
+  },
+  "Lake Surprise Viaduct (14B)": {
+    "xyz": [
+      -2290.227,
+      -4802.422,
+      10.0
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": null
+  },
+  "Lake Surprise Viaduct (15B)": {
+    "xyz": [
+      -2301.14,
+      -4771.577,
+      10.0
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -397,595 +718,6 @@
       "Leonida Keys Postcard (X)"
     ],
     "error_m": null
-  },
-  "Lake Surprise Viaduct (10B)": {
-    "xyz": [
-      -2246.278,
-      -4890.33,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "Lake Surprise Viaduct (11B)": {
-    "xyz": [
-      -2258.347,
-      -4869.461,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "Lake Surprise Viaduct (12B)": {
-    "xyz": [
-      -2266.029,
-      -4844.265,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "Lake Surprise Viaduct (13B)": {
-    "xyz": [
-      -2278.128,
-      -4823.343,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "Lake Surprise Viaduct (14B)": {
-    "xyz": [
-      -2290.227,
-      -4802.422,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "Lake Surprise Viaduct (15B)": {
-    "xyz": [
-      -2301.14,
-      -4771.577,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "Light Pollution (A)": {
-    "xyz": [
-      -8474.409,
-      -11160.441,
-      0.0
-    ],
-    "source_cameras": [
-      "Ambrosia 02 (Panorama)"
-    ],
-    "error_m": null
-  },
-  "Light Pollution (B)": {
-    "xyz": [
-      -7748.745,
-      -7991.628,
-      0.0
-    ],
-    "source_cameras": [
-      "Ambrosia 02 (Panorama)"
-    ],
-    "error_m": null
-  },
-  "Light Pollution (C)": {
-    "xyz": [
-      -9874.513,
-      -10662.575,
-      0.0
-    ],
-    "source_cameras": [
-      "Ambrosia 02 (Panorama)"
-    ],
-    "error_m": null
-  },
-  "Marina Club at Blackwater Sound (N)": {
-    "xyz": [
-      -2575.262,
-      -5864.326,
-      16.394
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)",
-      "Key Lento"
-    ],
-    "error_m": 0.938
-  },
-  "Marina Club at Blackwater Sound (S)": {
-    "xyz": [
-      -2573.282,
-      -5923.209,
-      16.669
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)",
-      "Key Lento"
-    ],
-    "error_m": 0.677
-  },
-  "Naval Air Station Key West (Control Tower)": {
-    "xyz": [
-      -5716.593,
-      -6602.387,
-      29.784
-    ],
-    "source_cameras": [
-      "Key Lento",
-      "Grassrivers Postcard (X)"
-    ],
-    "error_m": 1.025
-  },
-  "Naval Air Station Key West (Radar Tower)": {
-    "xyz": [
-      -5559.494,
-      -6469.937,
-      27.67
-    ],
-    "source_cameras": [
-      "Key Lento",
-      "Grassrivers Postcard (X)"
-    ],
-    "error_m": 0.692
-  },
-  "New Bahia Honda Bridge (1B)": {
-    "xyz": [
-      -4870.228,
-      -7208.165,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (2B)": {
-    "xyz": [
-      -4891.127,
-      -7201.755,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (3B)": {
-    "xyz": [
-      -4909.484,
-      -7195.364,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (4B)": {
-    "xyz": [
-      -4929.228,
-      -7189.02,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (5B)": {
-    "xyz": [
-      -4946.59,
-      -7182.674,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (6B)": {
-    "xyz": [
-      -4963.493,
-      -7176.495,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (7B)": {
-    "xyz": [
-      -4982.589,
-      -7170.038,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (8B)": {
-    "xyz": [
-      -5001.95,
-      -7163.733,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (9B)": {
-    "xyz": [
-      -5020.749,
-      -7157.333,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (10B)": {
-    "xyz": [
-      -5039.76,
-      -7151.096,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (11B)": {
-    "xyz": [
-      -5058.211,
-      -7144.774,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (12B)": {
-    "xyz": [
-      -5077.799,
-      -7136.673,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (13B)": {
-    "xyz": [
-      -5095.834,
-      -7130.482,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (14B)": {
-    "xyz": [
-      -5113.341,
-      -7124.216,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (15B)": {
-    "xyz": [
-      -5131.01,
-      -7117.871,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (16B)": {
-    "xyz": [
-      -5150.699,
-      -7111.709,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (17B)": {
-    "xyz": [
-      -5167.825,
-      -7105.768,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (18B)": {
-    "xyz": [
-      -5186.871,
-      -7099.528,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (19B)": {
-    "xyz": [
-      -5204.661,
-      -7093.504,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (20B)": {
-    "xyz": [
-      -5225.268,
-      -7087.026,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (21B)": {
-    "xyz": [
-      -5241.29,
-      -7080.944,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (22B)": {
-    "xyz": [
-      -5259.934,
-      -7074.925,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (23B)": {
-    "xyz": [
-      -5277.933,
-      -7068.677,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (27B)": {
-    "xyz": [
-      -5349.584,
-      -7046.288,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (28B)": {
-    "xyz": [
-      -5367.785,
-      -7040.127,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (29B)": {
-    "xyz": [
-      -5386.011,
-      -7034.287,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (30B)": {
-    "xyz": [
-      -5404.255,
-      -7028.373,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (31B)": {
-    "xyz": [
-      -5421.762,
-      -7022.328,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (32B)": {
-    "xyz": [
-      -5439.161,
-      -7016.995,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (33B)": {
-    "xyz": [
-      -5458.973,
-      -7012.673,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (34B)": {
-    "xyz": [
-      -5475.291,
-      -7008.77,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (35B)": {
-    "xyz": [
-      -5494.314,
-      -7006.242,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (36B)": {
-    "xyz": [
-      -5512.847,
-      -7004.438,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (37B)": {
-    "xyz": [
-      -5535.456,
-      -7004.531,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (38B)": {
-    "xyz": [
-      -5553.216,
-      -7004.23,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "New Bahia Honda Bridge (39B)": {
-    "xyz": [
-      -5567.259,
-      -7003.641,
-      10.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "Old Bahia Honda Bridge (1B)": {
-    "xyz": [
-      -5164.929,
-      -7280.745,
-      0.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "Old Bahia Honda Bridge (21B)": {
-    "xyz": [
-      -5582.075,
-      -7075.952,
-      0.0
-    ],
-    "source_cameras": [
-      "Keys"
-    ],
-    "error_m": null
-  },
-  "99353 Overseas Hwy": {
-    "xyz": [
-      -3369.349,
-      -6779.484,
-      74.152
-    ],
-    "source_cameras": [
-      "Ocean near Keys (N)",
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": 0.467
-  },
-  "102180 Overseas Hwy": {
-    "xyz": [
-      -2678.565,
-      -6063.121,
-      41.579
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": 0.594
   },
   "Pin A02R": {
     "xyz": [
@@ -1383,297 +1115,6 @@
     ],
     "error_m": 0.718
   },
-  "500 Pompano Dr": {
-    "xyz": [
-      -1914.537,
-      -5324.281,
-      21.231
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)",
-      "Key Lento"
-    ],
-    "error_m": 0.008
-  },
-  "200 Pompano Dr": {
-    "xyz": [
-      -1875.738,
-      -5390.187,
-      13.952
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)",
-      "Key Lento"
-    ],
-    "error_m": 0.258
-  },
-  "180 Pompano Dr": {
-    "xyz": [
-      -1896.308,
-      -5424.708,
-      15.68
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)",
-      "Key Lento"
-    ],
-    "error_m": 0.813
-  },
-  "Seven Mile Bridge (3T)": {
-    "xyz": [
-      -3572.582,
-      -6892.863,
-      3.488
-    ],
-    "source_cameras": [
-      "Ocean near Keys (N)",
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": 0.101
-  },
-  "Seven Mile Bridge (6T)": {
-    "xyz": [
-      -3637.196,
-      -6932.511,
-      8.104
-    ],
-    "source_cameras": [
-      "Ocean near Keys (N)",
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": 0.278
-  },
-  "Seven Mile Bridge (1B)": {
-    "xyz": [
-      -3544.086,
-      -6880.461,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (2B)": {
-    "xyz": [
-      -3568.371,
-      -6895.166,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (3B)": {
-    "xyz": [
-      -3587.296,
-      -6907.227,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (4B)": {
-    "xyz": [
-      -3609.486,
-      -6920.65,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (5B)": {
-    "xyz": [
-      -3629.187,
-      -6932.164,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (6B)": {
-    "xyz": [
-      -3650.832,
-      -6945.659,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (7B)": {
-    "xyz": [
-      -3670.344,
-      -6957.133,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (8B)": {
-    "xyz": [
-      -3691.714,
-      -6970.174,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (9B)": {
-    "xyz": [
-      -3712.238,
-      -6982.386,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (10B)": {
-    "xyz": [
-      -3731.978,
-      -6993.827,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (11B)": {
-    "xyz": [
-      -3753.089,
-      -7006.523,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (12B)": {
-    "xyz": [
-      -3775.646,
-      -7019.908,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (13B)": {
-    "xyz": [
-      -3796.73,
-      -7032.697,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (14B)": {
-    "xyz": [
-      -3816.832,
-      -7044.617,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (15B)": {
-    "xyz": [
-      -3836.207,
-      -7055.582,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (16B)": {
-    "xyz": [
-      -3856.928,
-      -7068.183,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (17B)": {
-    "xyz": [
-      -3876.76,
-      -7079.744,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (18B)": {
-    "xyz": [
-      -3896.356,
-      -7091.11,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (19B)": {
-    "xyz": [
-      -3920.601,
-      -7106.128,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (20B)": {
-    "xyz": [
-      -3940.429,
-      -7117.949,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
-  "Seven Mile Bridge (21B)": {
-    "xyz": [
-      -3957.535,
-      -7132.332,
-      10.0
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": null
-  },
   "Tree on Island J": {
     "xyz": [
       -2479.572,
@@ -1685,6 +1126,435 @@
       "Leonida Keys Postcard (X)"
     ],
     "error_m": 0.674
+  },
+  "Island W (N)": {
+    "xyz": [
+      -3743.862,
+      -6117.335,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (10B)": {
+    "xyz": [
+      -5039.76,
+      -7151.096,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (11B)": {
+    "xyz": [
+      -5058.211,
+      -7144.774,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (12B)": {
+    "xyz": [
+      -5077.799,
+      -7136.673,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (13B)": {
+    "xyz": [
+      -5095.834,
+      -7130.482,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (14B)": {
+    "xyz": [
+      -5113.341,
+      -7124.216,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (15B)": {
+    "xyz": [
+      -5131.01,
+      -7117.871,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (16B)": {
+    "xyz": [
+      -5150.699,
+      -7111.709,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (17B)": {
+    "xyz": [
+      -5167.825,
+      -7105.768,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (18B)": {
+    "xyz": [
+      -5186.871,
+      -7099.528,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (19B)": {
+    "xyz": [
+      -5204.661,
+      -7093.504,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (1B)": {
+    "xyz": [
+      -4870.228,
+      -7208.165,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (20B)": {
+    "xyz": [
+      -5225.268,
+      -7087.026,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (21B)": {
+    "xyz": [
+      -5241.29,
+      -7080.944,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (22B)": {
+    "xyz": [
+      -5259.934,
+      -7074.925,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (23B)": {
+    "xyz": [
+      -5277.933,
+      -7068.677,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (27B)": {
+    "xyz": [
+      -5349.584,
+      -7046.288,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (28B)": {
+    "xyz": [
+      -5367.785,
+      -7040.127,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (29B)": {
+    "xyz": [
+      -5386.011,
+      -7034.287,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (2B)": {
+    "xyz": [
+      -4891.127,
+      -7201.755,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (30B)": {
+    "xyz": [
+      -5404.255,
+      -7028.373,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (31B)": {
+    "xyz": [
+      -5421.762,
+      -7022.328,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (32B)": {
+    "xyz": [
+      -5439.161,
+      -7016.995,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (33B)": {
+    "xyz": [
+      -5458.973,
+      -7012.673,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (34B)": {
+    "xyz": [
+      -5475.291,
+      -7008.77,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (35B)": {
+    "xyz": [
+      -5494.314,
+      -7006.242,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (36B)": {
+    "xyz": [
+      -5512.847,
+      -7004.438,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (37B)": {
+    "xyz": [
+      -5535.456,
+      -7004.531,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (38B)": {
+    "xyz": [
+      -5553.216,
+      -7004.23,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (39B)": {
+    "xyz": [
+      -5567.259,
+      -7003.641,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (3B)": {
+    "xyz": [
+      -4909.484,
+      -7195.364,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (4B)": {
+    "xyz": [
+      -4929.228,
+      -7189.02,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (5B)": {
+    "xyz": [
+      -4946.59,
+      -7182.674,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (6B)": {
+    "xyz": [
+      -4963.493,
+      -7176.495,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (7B)": {
+    "xyz": [
+      -4982.589,
+      -7170.038,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (8B)": {
+    "xyz": [
+      -5001.95,
+      -7163.733,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "New Bahia Honda Bridge (9B)": {
+    "xyz": [
+      -5020.749,
+      -7157.333,
+      10.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "Old Bahia Honda Bridge (1B)": {
+    "xyz": [
+      -5164.929,
+      -7280.745,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
+  },
+  "Old Bahia Honda Bridge (21B)": {
+    "xyz": [
+      -5582.075,
+      -7075.952,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
+    "error_m": null
   },
   "Unnamed Building #1 (Blimp Key)": {
     "xyz": [
@@ -1719,5 +1589,135 @@
       "Keys"
     ],
     "error_m": null
+  },
+  "180 Pompano Dr": {
+    "xyz": [
+      -1896.308,
+      -5424.708,
+      15.68
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)",
+      "Key Lento"
+    ],
+    "error_m": 0.813
+  },
+  "200 Pompano Dr": {
+    "xyz": [
+      -1875.738,
+      -5390.187,
+      13.952
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)",
+      "Key Lento"
+    ],
+    "error_m": 0.258
+  },
+  "500 Pompano Dr": {
+    "xyz": [
+      -1914.537,
+      -5324.281,
+      21.231
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)",
+      "Key Lento"
+    ],
+    "error_m": 0.008
+  },
+  "Billboard #2 (Key Lento)": {
+    "xyz": [
+      -3056.172,
+      -6496.183,
+      25.615
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)",
+      "Key Lento"
+    ],
+    "error_m": 0.606
+  },
+  "Island K (E)": {
+    "xyz": [
+      -3562.974,
+      -7797.697,
+      0.0
+    ],
+    "source_cameras": [
+      "Key Lento"
+    ],
+    "error_m": null
+  },
+  "Island K (W)": {
+    "xyz": [
+      -3691.596,
+      -7923.045,
+      0.0
+    ],
+    "source_cameras": [
+      "Key Lento"
+    ],
+    "error_m": null
+  },
+  "Marina Club at Blackwater Sound (N)": {
+    "xyz": [
+      -2575.262,
+      -5864.326,
+      16.394
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)",
+      "Key Lento"
+    ],
+    "error_m": 0.938
+  },
+  "Marina Club at Blackwater Sound (S)": {
+    "xyz": [
+      -2573.282,
+      -5923.209,
+      16.669
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)",
+      "Key Lento"
+    ],
+    "error_m": 0.677
+  },
+  "Naval Air Station Key West (Control Tower)": {
+    "xyz": [
+      -5716.593,
+      -6602.387,
+      29.784
+    ],
+    "source_cameras": [
+      "Key Lento",
+      "Grassrivers Postcard (X)"
+    ],
+    "error_m": 1.025
+  },
+  "Naval Air Station Key West (Radar Tower)": {
+    "xyz": [
+      -5559.494,
+      -6469.937,
+      27.67
+    ],
+    "source_cameras": [
+      "Key Lento",
+      "Grassrivers Postcard (X)"
+    ],
+    "error_m": 0.692
+  },
+  "House with Pier (E)": {
+    "xyz": [
+      -3155.67,
+      -6500.087,
+      12.353
+    ],
+    "source_cameras": [
+      "Leonida Keys 05 (Boats)",
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": 0.548
   }
 }

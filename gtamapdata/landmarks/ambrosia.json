@@ -65,6 +65,30 @@
     ],
     "error_m": null
   },
+  "Wheelabrator South Broward": {
+    "xyz": [
+      -2402.035,
+      2384.693,
+      101.915
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Ambrosia 02 (Panorama)"
+    ],
+    "error_m": 9.502
+  },
+  "Wheelabrator South Broward (W)": {
+    "xyz": [
+      -2458.561,
+      2488.612,
+      53.08
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Ambrosia 02 (Panorama)"
+    ],
+    "error_m": 7.053
+  },
   "Large Billboard (Ambrosia)": {
     "xyz": [
       -2906.527,
@@ -77,22 +101,34 @@
     ],
     "error_m": 0.378
   },
-  "Radio Tower (Ambrosia) (B)": {
+  "1500 Sonora Ave (Tank)": {
     "xyz": [
-      -2074.852,
-      3169.762,
-      5.0
+      -2972.058,
+      3687.346,
+      36.725
     ],
     "source_cameras": [
+      "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)"
     ],
-    "error_m": null
+    "error_m": 0.767
   },
   "Radio Tower (Ambrosia)": {
     "xyz": [
       -2074.852,
       3169.762,
       124.043
+    ],
+    "source_cameras": [
+      "Ambrosia 04 (Fires)"
+    ],
+    "error_m": null
+  },
+  "Radio Tower (Ambrosia) (B)": {
+    "xyz": [
+      -2074.852,
+      3169.762,
+      5.0
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)"
@@ -111,30 +147,6 @@
     ],
     "error_m": 3.595
   },
-  "1500 Sonora Ave (Silo)": {
-    "xyz": [
-      -2720.882,
-      3851.7,
-      58.3
-    ],
-    "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia Postcard (X)"
-    ],
-    "error_m": 1.549
-  },
-  "1500 Sonora Ave (Tank)": {
-    "xyz": [
-      -2972.058,
-      3687.346,
-      36.725
-    ],
-    "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
-    ],
-    "error_m": 0.767
-  },
   "US Sugar Mill (Factory)": {
     "xyz": [
       -3024.517,
@@ -146,42 +158,6 @@
       "Ambrosia 04 (Fires)"
     ],
     "error_m": 2.143
-  },
-  "USSM Smokestack (1)": {
-    "xyz": [
-      -2725.866,
-      3758.114,
-      56.532
-    ],
-    "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia Postcard (X)"
-    ],
-    "error_m": 1.585
-  },
-  "USSM Smokestack (2)": {
-    "xyz": [
-      -2725.244,
-      3788.67,
-      47.777
-    ],
-    "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia Postcard (X)"
-    ],
-    "error_m": 0.975
-  },
-  "USSM Smokestack (3)": {
-    "xyz": [
-      -2958.472,
-      3033.778,
-      32.64
-    ],
-    "source_cameras": [
-      "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
-    ],
-    "error_m": 0.968
   },
   "USSM Smokestack (4)": {
     "xyz": [
@@ -255,6 +231,30 @@
     ],
     "error_m": 0.846
   },
+  "1500 Sonora Ave (Silo)": {
+    "xyz": [
+      -2720.882,
+      3851.7,
+      58.3
+    ],
+    "source_cameras": [
+      "Ambrosia 02 (Panorama)",
+      "Ambrosia Postcard (X)"
+    ],
+    "error_m": 1.549
+  },
+  "USSM Smokestack (1)": {
+    "xyz": [
+      -2725.866,
+      3758.114,
+      56.532
+    ],
+    "source_cameras": [
+      "Ambrosia 02 (Panorama)",
+      "Ambrosia Postcard (X)"
+    ],
+    "error_m": 1.585
+  },
   "USSM Smokestack (10)": {
     "xyz": [
       -2950.891,
@@ -279,28 +279,28 @@
     ],
     "error_m": 0.674
   },
-  "Wheelabrator South Broward": {
+  "USSM Smokestack (2)": {
     "xyz": [
-      -2402.035,
-      2384.693,
-      101.915
+      -2725.244,
+      3788.67,
+      47.777
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Ambrosia 02 (Panorama)"
+      "Ambrosia 02 (Panorama)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 9.502
+    "error_m": 0.975
   },
-  "Wheelabrator South Broward (W)": {
+  "USSM Smokestack (3)": {
     "xyz": [
-      -2458.561,
-      2488.612,
-      53.08
+      -2958.472,
+      3033.778,
+      32.64
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Ambrosia 02 (Panorama)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 7.053
+    "error_m": 0.968
   }
 }

@@ -1,4 +1,1236 @@
 {
+  "1703 E 5th St (Shack) (SE)": {
+    "xyz": [
+      -6264.218,
+      3479.946,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "1703 E 5th St (Shack) (SW)": {
+    "xyz": [
+      -6275.983,
+      3479.211,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "1703 E 5th St (Warehouse) (NW)": {
+    "xyz": [
+      -6251.006,
+      3501.332,
+      11.315
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 0.758
+  },
+  "1703 E 5th St (Warehouse) (SW)": {
+    "xyz": [
+      -6246.447,
+      3455.814,
+      11.423
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 1.35
+  },
+  "2533 E Hwy 98 (N)": {
+    "xyz": [
+      -6448.041,
+      3293.182,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "2533 E Hwy 98 (W)": {
+    "xyz": [
+      -6453.188,
+      3286.564,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "3210 E Hwy 98 (NE)": {
+    "xyz": [
+      -6440.688,
+      3108.256,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "3401 E Hwy 98 (SW)": {
+    "xyz": [
+      -6424.512,
+      3324.064,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "4937 E Hwy 98 (Gas Station) (NE)": {
+    "xyz": [
+      -6321.092,
+      2782.835,
+      17.442
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 0.99
+  },
+  "4937 E Hwy 98 (Gas Station) (SE)": {
+    "xyz": [
+      -6330.736,
+      2764.765,
+      17.649
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)",
+      "Gas Station (Jason)"
+    ],
+    "error_m": 0.943
+  },
+  "4937 E Hwy 98 (Store) (NE)": {
+    "xyz": [
+      -6331.865,
+      2752.741,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "4937 E Hwy 98 (Store) (SE)": {
+    "xyz": [
+      -6331.865,
+      2735.094,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "536 Richard Jackson Blvd (RNE)": {
+    "xyz": [
+      -6179.597,
+      4526.316,
+      16.948
+    ],
+    "source_cameras": [
+      "Diner (NW)",
+      "Diner (N)"
+    ],
+    "error_m": 0.03
+  },
+  "536 Richard Jackson Blvd (RSE)": {
+    "xyz": [
+      -6185.783,
+      4513.381,
+      16.996
+    ],
+    "source_cameras": [
+      "Diner (W) (A)",
+      "Diner (NW)"
+    ],
+    "error_m": 0.015
+  },
+  "536 Richard Jackson Blvd (RSW)": {
+    "xyz": [
+      -6203.031,
+      4521.82,
+      16.955
+    ],
+    "source_cameras": [
+      "Diner (W) (A)",
+      "Diner (NW)"
+    ],
+    "error_m": 0.006
+  },
+  "6218 E Hwy 98 (E)": {
+    "xyz": [
+      -6554.659,
+      3053.476,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "6232 E Hwy 98 (NE)": {
+    "xyz": [
+      -6337.747,
+      3388.77,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "6232 E Hwy 98 (SE)": {
+    "xyz": [
+      -6340.386,
+      3362.94,
+      9.018
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 2.638
+  },
+  "6246 E Hwy 98 (NE)": {
+    "xyz": [
+      -6323.777,
+      3263.77,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "? (L663) (SE)": {
+    "xyz": [
+      -6525.247,
+      3330.682,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "? (L664) (SE)": {
+    "xyz": [
+      -6548.776,
+      3363.77,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "? (L665) (SE)": {
+    "xyz": [
+      -6441.424,
+      2827.741,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "? (L666) (SE)": {
+    "xyz": [
+      -6483.335,
+      2842.447,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "? (L667) (SW)": {
+    "xyz": [
+      -6506.865,
+      2864.506,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "? (L668) (SW)": {
+    "xyz": [
+      -6510.541,
+      2885.094,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "? (L669) (SE)": {
+    "xyz": [
+      -6513.482,
+      2912.3,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "? (L944) (SE)": {
+    "xyz": [
+      -6578.188,
+      3439.505,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "? (L952) (NE)": {
+    "xyz": [
+      -6325.983,
+      3315.241,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "? (L953) (NE)": {
+    "xyz": [
+      -6370.1,
+      3277.741,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "? (L954) (SE)": {
+    "xyz": [
+      -6362.747,
+      3342.447,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "? (L956) (N)": {
+    "xyz": [
+      -6589.953,
+      2976.271,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "? (L957) (NE)": {
+    "xyz": [
+      -6583.335,
+      3042.447,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "? (L958) (SW)": {
+    "xyz": [
+      -6502.453,
+      3063.035,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "AIWE": {
+    "xyz": [
+      -6846.57,
+      3512.299,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Bay (AA)": {
+    "xyz": [
+      -7811.405,
+      4596.364,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (W) (A)"
+    ],
+    "error_m": null
+  },
+  "Bay (AAA)": {
+    "xyz": [
+      -7496.34,
+      4518.169,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (SW)"
+    ],
+    "error_m": null
+  },
+  "Bay (BB)": {
+    "xyz": [
+      -7786.199,
+      4629.814,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (W) (A)"
+    ],
+    "error_m": null
+  },
+  "Bay (BBB)": {
+    "xyz": [
+      -7529.528,
+      4586.147,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (SW)"
+    ],
+    "error_m": null
+  },
+  "Bay (CC)": {
+    "xyz": [
+      -7882.225,
+      4674.819,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (W) (A)"
+    ],
+    "error_m": null
+  },
+  "Bay (DD)": {
+    "xyz": [
+      -7082.125,
+      4778.94,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (W) (A)"
+    ],
+    "error_m": null
+  },
+  "Bay (EE)": {
+    "xyz": [
+      -7079.772,
+      4782.062,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (W) (A)"
+    ],
+    "error_m": null
+  },
+  "Bay (FF)": {
+    "xyz": [
+      -6594.042,
+      4633.251,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (W) (A)"
+    ],
+    "error_m": null
+  },
+  "Bay (GG)": {
+    "xyz": [
+      -6600.155,
+      4625.139,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (W) (A)"
+    ],
+    "error_m": null
+  },
+  "Beige Billboard (BE)": {
+    "xyz": [
+      -6108.791,
+      4591.625,
+      24.695
+    ],
+    "source_cameras": [
+      "Diner (N)",
+      "Diner (NE)"
+    ],
+    "error_m": 0.365
+  },
+  "Centerplate": {
+    "xyz": [
+      -6665.32,
+      2661.197,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Coyote's (SE)": {
+    "xyz": [
+      -6306.869,
+      3060.828,
+      10.223
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 0.002
+  },
+  "Coyote's (SW)": {
+    "xyz": [
+      -6350.983,
+      3053.476,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Dan's Pawn (NE)": {
+    "xyz": [
+      -6426.718,
+      3078.476,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Dan's Pawn (SE)": {
+    "xyz": [
+      -6414.953,
+      3053.476,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Domed Hills Sign (TW)": {
+    "xyz": [
+      -6107.844,
+      4474.328,
+      17.45
+    ],
+    "source_cameras": [
+      "Diner (NE)",
+      "Diner (E)"
+    ],
+    "error_m": 0.934
+  },
+  "Goodwill Career Training Center (SW)": {
+    "xyz": [
+      -6399.512,
+      3204.211,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Guardhouse": {
+    "xyz": [
+      -6378.188,
+      2588.036,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "King Slayer Charters (NE)": {
+    "xyz": [
+      -6577.453,
+      3138.77,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "King Slayer Charters (SE)": {
+    "xyz": [
+      -6578.923,
+      3118.182,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Large White Billboard": {
+    "xyz": [
+      -6329.58,
+      3355.622,
+      27.401
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 2.857
+  },
+  "Leslie Porter Wayside Park": {
+    "xyz": [
+      -6628.188,
+      3386.564,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Lucky Plucker (NE)": {
+    "xyz": [
+      -6355.394,
+      3457.152,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Lucky Plucker (SE)": {
+    "xyz": [
+      -6353.188,
+      3444.652,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Lucky Plucker (SW)": {
+    "xyz": [
+      -6365.688,
+      3441.711,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Mount Mountain": {
+    "xyz": [
+      -4006.08,
+      5799.745,
+      242.606
+    ],
+    "source_cameras": [
+      "Diner (N)",
+      "Hedge (B) (X)"
+    ],
+    "error_m": 7.591
+  },
+  "Mount Waffles": {
+    "xyz": [
+      -5217.942,
+      5581.709,
+      198.855
+    ],
+    "source_cameras": [
+      "Diner (N)",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 2.128
+  },
+  "Mr. Bingo (SE)": {
+    "xyz": [
+      -6344.365,
+      2824.8,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Mr. Bingo (SW)": {
+    "xyz": [
+      -6395.835,
+      2824.8,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "PTCC (3) (BB2)": {
+    "xyz": [
+      -7735.431,
+      4609.888,
+      40.5
+    ],
+    "source_cameras": [
+      "Diner (W) (A)"
+    ],
+    "error_m": null
+  },
+  "Parker City Hall (SW)": {
+    "xyz": [
+      -6247.698,
+      3045.29,
+      8.501
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 1.157
+  },
+  "Parker Community Center (SW)": {
+    "xyz": [
+      -6245.747,
+      3115.222,
+      7.628
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 0.092
+  },
+  "Parker Police Station (SW)": {
+    "xyz": [
+      -6221.732,
+      3039.312,
+      8.51
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 0.608
+  },
+  "Parker Public Library (SW)": {
+    "xyz": [
+      -6208.336,
+      3092.447,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Pier (L945) (SW)": {
+    "xyz": [
+      -6614.953,
+      3456.417,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Pier (L946) (NE)": {
+    "xyz": [
+      -6627.453,
+      3425.535,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Pier 98 (NE)": {
+    "xyz": [
+      -6541.424,
+      3109.359,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Port Gellhorn Smokestack": {
+    "xyz": [
+      -6351.527,
+      3419.566,
+      49.861
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)",
+      "Gas Station (Jason)"
+    ],
+    "error_m": 2.545
+  },
+  "Port of Tampa Container Crane (3)": {
+    "xyz": [
+      -7735.431,
+      4609.888,
+      74.5
+    ],
+    "source_cameras": [
+      "Diner (W) (A)"
+    ],
+    "error_m": null
+  },
+  "Pylon (3)": {
+    "xyz": [
+      -6407.067,
+      3797.198,
+      60.516
+    ],
+    "source_cameras": [
+      "Car Wash",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 0.067
+  },
+  "Red Bird Caf\u00e9 (NW)": {
+    "xyz": [
+      -6470.1,
+      3166.712,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Rodeo's (SE)": {
+    "xyz": [
+      -6549.512,
+      3143.917,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Sebring International Raceway (T17)": {
+    "xyz": [
+      -6623.776,
+      2554.212,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Sebring International Raceway (T7)": {
+    "xyz": [
+      -6372.306,
+      2370.389,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Seclusion Bay": {
+    "xyz": [
+      -6622.306,
+      2976.271,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Springfield Community Church (CW)": {
+    "xyz": [
+      -6320.702,
+      4068.742,
+      30.166
+    ],
+    "source_cameras": [
+      "Car Wash",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 2.055
+  },
+  "Sunshine Skyway Bridge (NNR)": {
+    "xyz": [
+      -6790.733,
+      4693.227,
+      30.96
+    ],
+    "source_cameras": [
+      "Diner (W) (A)"
+    ],
+    "error_m": null
+  },
+  "Sunshine Skyway Bridge (NR)": {
+    "xyz": [
+      -6753.926,
+      4566.237,
+      33.585
+    ],
+    "source_cameras": [
+      "Diner (W) (A)"
+    ],
+    "error_m": null
+  },
+  "Sunshine Skyway Bridge (SR)": {
+    "xyz": [
+      -6690.837,
+      4348.569,
+      33.585
+    ],
+    "source_cameras": [
+      "Diner (W) (A)"
+    ],
+    "error_m": null
+  },
+  "Sunshine Skyway Bridge (SSR)": {
+    "xyz": [
+      -6654.03,
+      4221.579,
+      30.96
+    ],
+    "source_cameras": [
+      "Diner (W) (A)"
+    ],
+    "error_m": null
+  },
+  "Tall Double Billboard": {
+    "xyz": [
+      -6299.54,
+      4125.617,
+      46.603
+    ],
+    "source_cameras": [
+      "Gas Station (Lucia)",
+      "Car Wash"
+    ],
+    "error_m": 3.13
+  },
+  "Traffic Sign": {
+    "xyz": [
+      -6084.656,
+      4425.942,
+      14.853
+    ],
+    "source_cameras": [
+      "Diner (E)",
+      "Diner (SE) (A)"
+    ],
+    "error_m": 1.665
+  },
+  "Train Tunnel (B)": {
+    "xyz": [
+      -5527.131,
+      5129.345,
+      69.61
+    ],
+    "source_cameras": [
+      "Diner (NE)"
+    ],
+    "error_m": null
+  },
+  "Transformer Station (SW)": {
+    "xyz": [
+      -6506.865,
+      3466.711,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Twice The Ice (N)": {
+    "xyz": [
+      -6452.453,
+      3260.094,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Twice The Ice (W)": {
+    "xyz": [
+      -6454.659,
+      3255.682,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Waffles Arrow": {
+    "xyz": [
+      -6168.37,
+      4497.709,
+      14.435
+    ],
+    "source_cameras": [
+      "Diner (NE)",
+      "Diner (E)"
+    ],
+    "error_m": 0.039
+  },
+  "Waffles Billboard": {
+    "xyz": [
+      -6156.05,
+      4514.702,
+      23.038
+    ],
+    "source_cameras": [
+      "Diner (NE)",
+      "Diner (E)"
+    ],
+    "error_m": 0.084
+  },
+  "Waffles Billboard (BW)": {
+    "xyz": [
+      -6158.466,
+      4516.257,
+      17.353
+    ],
+    "source_cameras": [
+      "Diner (N)",
+      "Diner (NE)"
+    ],
+    "error_m": 0.167
+  },
+  "Waffles Sign (TR)": {
+    "xyz": [
+      -6189.196,
+      4517.185,
+      16.067
+    ],
+    "source_cameras": [
+      "Diner (W) (A)",
+      "Diner (NW)"
+    ],
+    "error_m": 0.01
+  },
+  "Waldo Station (SE)": {
+    "xyz": [
+      -6575.247,
+      3506.417,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Water Tower (North Port Gellhorn)": {
+    "xyz": [
+      -6340.712,
+      4540.261,
+      45.181
+    ],
+    "source_cameras": [
+      "Diner (W) (A)",
+      "Diner (SW)"
+    ],
+    "error_m": 0.184
+  },
+  "Welcome to Port Gellhorn Sign": {
+    "xyz": [
+      -6288.487,
+      2856.42,
+      17.62
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 0.0
+  },
+  "White Pole": {
+    "xyz": [
+      -6092.565,
+      4474.75,
+      27.138
+    ],
+    "source_cameras": [
+      "Diner (NE)",
+      "Diner (E)"
+    ],
+    "error_m": 1.591
+  },
+  "Wildfire Scooters (NW)": {
+    "xyz": [
+      -6464.218,
+      3333.623,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Wildfire Scooters (S)": {
+    "xyz": [
+      -6458.703,
+      3323.329,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Wildfire Scooters (SE)": {
+    "xyz": [
+      -6441.424,
+      3328.476,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Wildfire Scooters (W)": {
+    "xyz": [
+      -6461.644,
+      3324.8,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Wine Country Motor Sports": {
+    "xyz": [
+      -6431.865,
+      2595.389,
+      10.0
+    ],
+    "source_cameras": [
+      "AI World Editor Map (4K)"
+    ],
+    "error_m": null
+  },
+  "Wyman (Pool)": {
+    "xyz": [
+      -5322.43,
+      3472.47,
+      66.79
+    ],
+    "source_cameras": [
+      "Pool"
+    ],
+    "error_m": null
+  },
+  "Oval Yellow Sign": {
+    "xyz": [
+      -6329.607,
+      3509.044,
+      36.101
+    ],
+    "source_cameras": [
+      "Chase (2) (A)",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 0.22
+  },
+  "Sunshine Skyway Bridge (S)": {
+    "xyz": [
+      -6690.837,
+      4348.569,
+      119.352
+    ],
+    "source_cameras": [
+      "Chase (2) (A)"
+    ],
+    "error_m": null
+  },
+  "Water Tower near Prison": {
+    "xyz": [
+      -5133.606,
+      1571.815,
+      91.326
+    ],
+    "source_cameras": [
+      "Loading Zone near Prison (SW)",
+      "Ambrosia 02 (Panorama)"
+    ],
+    "error_m": 0.076
+  },
+  "Sunshine Skyway Bridge (N)": {
+    "xyz": [
+      -6753.926,
+      4566.237,
+      119.352
+    ],
+    "source_cameras": [
+      "Diner (W) (B)",
+      "Ambrosia 04 (Fires)"
+    ],
+    "error_m": 0.037
+  },
+  "Easy Hill": {
+    "xyz": [
+      -5710.402,
+      3936.333,
+      81.993
+    ],
+    "source_cameras": [
+      "Diner (SE) (B)",
+      "Ambrosia 04 (Fires)"
+    ],
+    "error_m": 2.8
+  },
   "Bay (A)": {
     "xyz": [
       -7901.308,
@@ -285,141 +1517,6 @@
     ],
     "error_m": null
   },
-  "Bay (AA)": {
-    "xyz": [
-      -7811.405,
-      4596.364,
-      0.0
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
-    "error_m": null
-  },
-  "Bay (BB)": {
-    "xyz": [
-      -7786.199,
-      4629.814,
-      0.0
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
-    "error_m": null
-  },
-  "Bay (CC)": {
-    "xyz": [
-      -7882.225,
-      4674.819,
-      0.0
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
-    "error_m": null
-  },
-  "Bay (DD)": {
-    "xyz": [
-      -7082.125,
-      4778.94,
-      0.0
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
-    "error_m": null
-  },
-  "Bay (EE)": {
-    "xyz": [
-      -7079.772,
-      4782.062,
-      0.0
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
-    "error_m": null
-  },
-  "Bay (FF)": {
-    "xyz": [
-      -6594.042,
-      4633.251,
-      0.0
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
-    "error_m": null
-  },
-  "Bay (GG)": {
-    "xyz": [
-      -6600.155,
-      4625.139,
-      0.0
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
-    "error_m": null
-  },
-  "Bay (AAA)": {
-    "xyz": [
-      -7496.34,
-      4518.169,
-      0.0
-    ],
-    "source_cameras": [
-      "Diner (SW)"
-    ],
-    "error_m": null
-  },
-  "Bay (BBB)": {
-    "xyz": [
-      -7529.528,
-      4586.147,
-      0.0
-    ],
-    "source_cameras": [
-      "Diner (SW)"
-    ],
-    "error_m": null
-  },
-  "Beige Billboard (BE)": {
-    "xyz": [
-      -6108.791,
-      4591.625,
-      24.695
-    ],
-    "source_cameras": [
-      "Diner (N)",
-      "Diner (NE)"
-    ],
-    "error_m": 0.365
-  },
-  "Domed Hills Sign (TW)": {
-    "xyz": [
-      -6107.844,
-      4474.328,
-      17.45
-    ],
-    "source_cameras": [
-      "Diner (NE)",
-      "Diner (E)"
-    ],
-    "error_m": 0.934
-  },
-  "Easy Hill": {
-    "xyz": [
-      -5710.402,
-      3936.333,
-      81.993
-    ],
-    "source_cameras": [
-      "Diner (SE) (B)",
-      "Ambrosia 04 (Fires)"
-    ],
-    "error_m": 2.8
-  },
   "Juice Fruit Sign": {
     "xyz": [
       -6581.104,
@@ -468,30 +1565,6 @@
     ],
     "error_m": 0.036
   },
-  "Mount Mountain": {
-    "xyz": [
-      -4006.08,
-      5799.745,
-      242.606
-    ],
-    "source_cameras": [
-      "Diner (N)",
-      "Hedge (B) (X)"
-    ],
-    "error_m": 7.591
-  },
-  "Mount Waffles": {
-    "xyz": [
-      -5217.942,
-      5581.709,
-      198.855
-    ],
-    "source_cameras": [
-      "Diner (N)",
-      "Gas Station (Lucia)"
-    ],
-    "error_m": 2.128
-  },
   "New Foundation Church": {
     "xyz": [
       -6641.757,
@@ -504,22 +1577,54 @@
     ],
     "error_m": 5.501
   },
-  "Oval Yellow Sign": {
-    "xyz": [
-      -6329.607,
-      3509.044,
-      36.101
-    ],
-    "source_cameras": [
-      "Chase (2) (A)",
-      "Gas Station (Lucia)"
-    ],
-    "error_m": 0.22
-  },
   "PGH Barrier Island (E)": {
     "xyz": [
       -8418.734,
       3705.928,
+      0.0
+    ],
+    "source_cameras": [
+      "Port Gellhorn Postcard (X)"
+    ],
+    "error_m": null
+  },
+  "PGH Canal (A)": {
+    "xyz": [
+      -6992.206,
+      3906.859,
+      0.0
+    ],
+    "source_cameras": [
+      "Port Gellhorn Postcard (X)"
+    ],
+    "error_m": null
+  },
+  "PGH Canal (B)": {
+    "xyz": [
+      -6921.047,
+      3865.695,
+      0.0
+    ],
+    "source_cameras": [
+      "Port Gellhorn Postcard (X)"
+    ],
+    "error_m": null
+  },
+  "PGH Canal (C)": {
+    "xyz": [
+      -6782.595,
+      3837.521,
+      0.0
+    ],
+    "source_cameras": [
+      "Port Gellhorn Postcard (X)"
+    ],
+    "error_m": null
+  },
+  "PGH Canal (D)": {
+    "xyz": [
+      -6778.709,
+      3841.28,
       0.0
     ],
     "source_cameras": [
@@ -582,44 +1687,22 @@
     ],
     "error_m": null
   },
-  "PGH Canal (A)": {
+  "PTCC (1) (BB2)": {
     "xyz": [
-      -6992.206,
-      3906.859,
-      0.0
+      -8261.673,
+      4785.312,
+      40.5
     ],
     "source_cameras": [
       "Port Gellhorn Postcard (X)"
     ],
     "error_m": null
   },
-  "PGH Canal (B)": {
+  "PTCC (2) (BB2)": {
     "xyz": [
-      -6921.047,
-      3865.695,
-      0.0
-    ],
-    "source_cameras": [
-      "Port Gellhorn Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "PGH Canal (C)": {
-    "xyz": [
-      -6782.595,
-      3837.521,
-      0.0
-    ],
-    "source_cameras": [
-      "Port Gellhorn Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "PGH Canal (D)": {
-    "xyz": [
-      -6778.709,
-      3841.28,
-      0.0
+      -8088.251,
+      4687.005,
+      40.5
     ],
     "source_cameras": [
       "Port Gellhorn Postcard (X)"
@@ -647,98 +1730,6 @@
       "Port Gellhorn Postcard (X)"
     ],
     "error_m": null
-  },
-  "Port of Tampa Container Crane (3)": {
-    "xyz": [
-      -7735.431,
-      4609.888,
-      74.5
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
-    "error_m": null
-  },
-  "PTCC (1) (BB2)": {
-    "xyz": [
-      -8261.673,
-      4785.312,
-      40.5
-    ],
-    "source_cameras": [
-      "Port Gellhorn Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "PTCC (2) (BB2)": {
-    "xyz": [
-      -8088.251,
-      4687.005,
-      40.5
-    ],
-    "source_cameras": [
-      "Port Gellhorn Postcard (X)"
-    ],
-    "error_m": null
-  },
-  "PTCC (3) (BB2)": {
-    "xyz": [
-      -7735.431,
-      4609.888,
-      40.5
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
-    "error_m": null
-  },
-  "Pylon (3)": {
-    "xyz": [
-      -6407.067,
-      3797.198,
-      60.516
-    ],
-    "source_cameras": [
-      "Car Wash",
-      "Gas Station (Lucia)"
-    ],
-    "error_m": 0.067
-  },
-  "536 Richard Jackson Blvd (RNE)": {
-    "xyz": [
-      -6179.597,
-      4526.316,
-      16.948
-    ],
-    "source_cameras": [
-      "Diner (NW)",
-      "Diner (N)"
-    ],
-    "error_m": 0.03
-  },
-  "536 Richard Jackson Blvd (RSE)": {
-    "xyz": [
-      -6185.783,
-      4513.381,
-      16.996
-    ],
-    "source_cameras": [
-      "Diner (W) (A)",
-      "Diner (NW)"
-    ],
-    "error_m": 0.015
-  },
-  "536 Richard Jackson Blvd (RSW)": {
-    "xyz": [
-      -6203.031,
-      4521.82,
-      16.955
-    ],
-    "source_cameras": [
-      "Diner (W) (A)",
-      "Diner (NW)"
-    ],
-    "error_m": 0.006
   },
   "Ship (A)": {
     "xyz": [
@@ -773,109 +1764,6 @@
     ],
     "error_m": null
   },
-  "Springfield Community Church (CW)": {
-    "xyz": [
-      -6320.702,
-      4068.742,
-      30.166
-    ],
-    "source_cameras": [
-      "Car Wash",
-      "Gas Station (Lucia)"
-    ],
-    "error_m": 2.055
-  },
-  "Sunshine Skyway Bridge (N)": {
-    "xyz": [
-      -6753.926,
-      4566.237,
-      119.352
-    ],
-    "source_cameras": [
-      "Diner (W) (B)",
-      "Ambrosia 04 (Fires)"
-    ],
-    "error_m": 0.037
-  },
-  "Sunshine Skyway Bridge (NR)": {
-    "xyz": [
-      -6753.926,
-      4566.237,
-      33.585
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
-    "error_m": null
-  },
-  "Sunshine Skyway Bridge (NNR)": {
-    "xyz": [
-      -6790.733,
-      4693.227,
-      30.96
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
-    "error_m": null
-  },
-  "Sunshine Skyway Bridge (S)": {
-    "xyz": [
-      -6690.837,
-      4348.569,
-      119.352
-    ],
-    "source_cameras": [
-      "Chase (2) (A)"
-    ],
-    "error_m": null
-  },
-  "Sunshine Skyway Bridge (SR)": {
-    "xyz": [
-      -6690.837,
-      4348.569,
-      33.585
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
-    "error_m": null
-  },
-  "Sunshine Skyway Bridge (SSR)": {
-    "xyz": [
-      -6654.03,
-      4221.579,
-      30.96
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
-    "error_m": null
-  },
-  "Tall Double Billboard": {
-    "xyz": [
-      -6299.54,
-      4125.617,
-      46.603
-    ],
-    "source_cameras": [
-      "Gas Station (Lucia)",
-      "Car Wash"
-    ],
-    "error_m": 3.13
-  },
-  "Traffic Sign": {
-    "xyz": [
-      -6084.656,
-      4425.942,
-      14.853
-    ],
-    "source_cameras": [
-      "Diner (E)",
-      "Diner (SE) (A)"
-    ],
-    "error_m": 1.665
-  },
   "Train Signal (S) (E)": {
     "xyz": [
       -6621.336,
@@ -900,77 +1788,6 @@
     ],
     "error_m": 0.013
   },
-  "Train Tunnel (B)": {
-    "xyz": [
-      -5527.131,
-      5129.345,
-      69.61
-    ],
-    "source_cameras": [
-      "Diner (NE)"
-    ],
-    "error_m": null
-  },
-  "Waffles Arrow": {
-    "xyz": [
-      -6168.37,
-      4497.709,
-      14.435
-    ],
-    "source_cameras": [
-      "Diner (NE)",
-      "Diner (E)"
-    ],
-    "error_m": 0.039
-  },
-  "Waffles Billboard": {
-    "xyz": [
-      -6156.05,
-      4514.702,
-      23.038
-    ],
-    "source_cameras": [
-      "Diner (NE)",
-      "Diner (E)"
-    ],
-    "error_m": 0.084
-  },
-  "Waffles Billboard (BW)": {
-    "xyz": [
-      -6158.466,
-      4516.257,
-      17.353
-    ],
-    "source_cameras": [
-      "Diner (N)",
-      "Diner (NE)"
-    ],
-    "error_m": 0.167
-  },
-  "Waffles Sign (TR)": {
-    "xyz": [
-      -6189.196,
-      4517.185,
-      16.067
-    ],
-    "source_cameras": [
-      "Diner (W) (A)",
-      "Diner (NW)"
-    ],
-    "error_m": 0.01
-  },
-  "Water Tower (North Port Gellhorn)": {
-    "xyz": [
-      -6340.712,
-      4540.261,
-      45.181
-    ],
-    "source_cameras": [
-      "Diner (W) (A)",
-      "Diner (SW)"
-    ],
-    "error_m": 0.184
-  },
   "Water Tower (West Port Gellhorn)": {
     "xyz": [
       -6655.143,
@@ -994,822 +1811,5 @@
       "Port Gellhorn Postcard (X)"
     ],
     "error_m": 0.003
-  },
-  "Water Tower near Prison": {
-    "xyz": [
-      -5133.606,
-      1571.815,
-      91.326
-    ],
-    "source_cameras": [
-      "Loading Zone near Prison (SW)",
-      "Ambrosia 02 (Panorama)"
-    ],
-    "error_m": 0.076
-  },
-  "White Pole": {
-    "xyz": [
-      -6092.565,
-      4474.75,
-      27.138
-    ],
-    "source_cameras": [
-      "Diner (NE)",
-      "Diner (E)"
-    ],
-    "error_m": 1.591
-  },
-  "Wildfire Scooters (NW)": {
-    "xyz": [
-      -6464.218,
-      3333.623,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Wildfire Scooters (S)": {
-    "xyz": [
-      -6458.703,
-      3323.329,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Wyman (Pool)": {
-    "xyz": [
-      -5322.43,
-      3472.47,
-      66.79
-    ],
-    "source_cameras": [
-      "Pool"
-    ],
-    "error_m": null
-  },
-  "1703 E 5th St (Shack) (SE)": {
-    "xyz": [
-      -6264.218,
-      3479.946,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "1703 E 5th St (Shack) (SW)": {
-    "xyz": [
-      -6275.983,
-      3479.211,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "1703 E 5th St (Warehouse) (NW)": {
-    "xyz": [
-      -6251.006,
-      3501.332,
-      11.315
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)",
-      "Gas Station (Lucia)"
-    ],
-    "error_m": 0.758
-  },
-  "1703 E 5th St (Warehouse) (SW)": {
-    "xyz": [
-      -6246.447,
-      3455.814,
-      11.423
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)",
-      "Gas Station (Lucia)"
-    ],
-    "error_m": 1.35
-  },
-  "2533 E Hwy 98 (N)": {
-    "xyz": [
-      -6448.041,
-      3293.182,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "2533 E Hwy 98 (W)": {
-    "xyz": [
-      -6453.188,
-      3286.564,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "3210 E Hwy 98 (NE)": {
-    "xyz": [
-      -6440.688,
-      3108.256,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "3401 E Hwy 98 (SW)": {
-    "xyz": [
-      -6424.512,
-      3324.064,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "4937 E Hwy 98 (Gas Station) (NE)": {
-    "xyz": [
-      -6321.092,
-      2782.835,
-      17.442
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)",
-      "Gas Station (Lucia)"
-    ],
-    "error_m": 0.99
-  },
-  "4937 E Hwy 98 (Gas Station) (SE)": {
-    "xyz": [
-      -6330.736,
-      2764.765,
-      17.649
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)",
-      "Gas Station (Jason)"
-    ],
-    "error_m": 0.943
-  },
-  "4937 E Hwy 98 (Store) (NE)": {
-    "xyz": [
-      -6331.865,
-      2752.741,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "4937 E Hwy 98 (Store) (SE)": {
-    "xyz": [
-      -6331.865,
-      2735.094,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "6218 E Hwy 98 (E)": {
-    "xyz": [
-      -6554.659,
-      3053.476,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "6232 E Hwy 98 (NE)": {
-    "xyz": [
-      -6337.747,
-      3388.77,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "6232 E Hwy 98 (SE)": {
-    "xyz": [
-      -6340.386,
-      3362.94,
-      9.018
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)",
-      "Gas Station (Lucia)"
-    ],
-    "error_m": 2.638
-  },
-  "6246 E Hwy 98 (NE)": {
-    "xyz": [
-      -6323.777,
-      3263.77,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "? (L663) (SE)": {
-    "xyz": [
-      -6525.247,
-      3330.682,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "? (L664) (SE)": {
-    "xyz": [
-      -6548.776,
-      3363.77,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "? (L665) (SE)": {
-    "xyz": [
-      -6441.424,
-      2827.741,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "? (L666) (SE)": {
-    "xyz": [
-      -6483.335,
-      2842.447,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "? (L667) (SW)": {
-    "xyz": [
-      -6506.865,
-      2864.506,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "? (L668) (SW)": {
-    "xyz": [
-      -6510.541,
-      2885.094,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "? (L669) (SE)": {
-    "xyz": [
-      -6513.482,
-      2912.3,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "? (L944) (SE)": {
-    "xyz": [
-      -6578.188,
-      3439.505,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "? (L952) (NE)": {
-    "xyz": [
-      -6325.983,
-      3315.241,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "? (L953) (NE)": {
-    "xyz": [
-      -6370.1,
-      3277.741,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "? (L954) (SE)": {
-    "xyz": [
-      -6362.747,
-      3342.447,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "? (L956) (N)": {
-    "xyz": [
-      -6589.953,
-      2976.271,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "? (L957) (NE)": {
-    "xyz": [
-      -6583.335,
-      3042.447,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "? (L958) (SW)": {
-    "xyz": [
-      -6502.453,
-      3063.035,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "AIWE": {
-    "xyz": [
-      -6846.57,
-      3512.299,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Centerplate": {
-    "xyz": [
-      -6665.32,
-      2661.197,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Coyote's (SE)": {
-    "xyz": [
-      -6306.869,
-      3060.828,
-      10.223
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)",
-      "Gas Station (Lucia)"
-    ],
-    "error_m": 0.002
-  },
-  "Coyote's (SW)": {
-    "xyz": [
-      -6350.983,
-      3053.476,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Dan's Pawn (NE)": {
-    "xyz": [
-      -6426.718,
-      3078.476,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Dan's Pawn (SE)": {
-    "xyz": [
-      -6414.953,
-      3053.476,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Goodwill Career Training Center (SW)": {
-    "xyz": [
-      -6399.512,
-      3204.211,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Guardhouse": {
-    "xyz": [
-      -6378.188,
-      2588.036,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "King Slayer Charters (NE)": {
-    "xyz": [
-      -6577.453,
-      3138.77,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "King Slayer Charters (SE)": {
-    "xyz": [
-      -6578.923,
-      3118.182,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Leslie Porter Wayside Park": {
-    "xyz": [
-      -6628.188,
-      3386.564,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Large White Billboard": {
-    "xyz": [
-      -6329.58,
-      3355.622,
-      27.401
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)",
-      "Gas Station (Lucia)"
-    ],
-    "error_m": 2.857
-  },
-  "Lucky Plucker (NE)": {
-    "xyz": [
-      -6355.394,
-      3457.152,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Lucky Plucker (SE)": {
-    "xyz": [
-      -6353.188,
-      3444.652,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Lucky Plucker (SW)": {
-    "xyz": [
-      -6365.688,
-      3441.711,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Mr. Bingo (SE)": {
-    "xyz": [
-      -6344.365,
-      2824.8,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Mr. Bingo (SW)": {
-    "xyz": [
-      -6395.835,
-      2824.8,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Parker City Hall (SW)": {
-    "xyz": [
-      -6247.698,
-      3045.29,
-      8.501
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)",
-      "Gas Station (Lucia)"
-    ],
-    "error_m": 1.157
-  },
-  "Parker Community Center (SW)": {
-    "xyz": [
-      -6245.747,
-      3115.222,
-      7.628
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)",
-      "Gas Station (Lucia)"
-    ],
-    "error_m": 0.092
-  },
-  "Parker Police Station (SW)": {
-    "xyz": [
-      -6221.732,
-      3039.312,
-      8.51
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)",
-      "Gas Station (Lucia)"
-    ],
-    "error_m": 0.608
-  },
-  "Parker Public Library (SW)": {
-    "xyz": [
-      -6208.336,
-      3092.447,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Pier (L945) (SW)": {
-    "xyz": [
-      -6614.953,
-      3456.417,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Pier (L946) (NE)": {
-    "xyz": [
-      -6627.453,
-      3425.535,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Pier 98 (NE)": {
-    "xyz": [
-      -6541.424,
-      3109.359,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Port Gellhorn Smokestack": {
-    "xyz": [
-      -6351.527,
-      3419.566,
-      49.861
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)",
-      "Gas Station (Jason)"
-    ],
-    "error_m": 2.545
-  },
-  "Red Bird Caf\u00e9 (NW)": {
-    "xyz": [
-      -6470.1,
-      3166.712,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Rodeo's (SE)": {
-    "xyz": [
-      -6549.512,
-      3143.917,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Sebring International Raceway (T17)": {
-    "xyz": [
-      -6623.776,
-      2554.212,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Sebring International Raceway (T7)": {
-    "xyz": [
-      -6372.306,
-      2370.389,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Seclusion Bay": {
-    "xyz": [
-      -6622.306,
-      2976.271,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Transformer Station (SW)": {
-    "xyz": [
-      -6506.865,
-      3466.711,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Twice The Ice (N)": {
-    "xyz": [
-      -6452.453,
-      3260.094,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Twice The Ice (W)": {
-    "xyz": [
-      -6454.659,
-      3255.682,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Waldo Station (SE)": {
-    "xyz": [
-      -6575.247,
-      3506.417,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Welcome to Port Gellhorn Sign": {
-    "xyz": [
-      -6288.487,
-      2856.42,
-      17.62
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)",
-      "Gas Station (Lucia)"
-    ],
-    "error_m": 0.0
-  },
-  "Wildfire Scooters (SE)": {
-    "xyz": [
-      -6441.424,
-      3328.476,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Wildfire Scooters (W)": {
-    "xyz": [
-      -6461.644,
-      3324.8,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
-  },
-  "Wine Country Motor Sports": {
-    "xyz": [
-      -6431.865,
-      2595.389,
-      10.0
-    ],
-    "source_cameras": [
-      "AI World Editor Map (4K)"
-    ],
-    "error_m": null
   }
 }

@@ -11,6 +11,18 @@
     ],
     "error_m": 4.125
   },
+  "Park Grove Condominium (S)": {
+    "xyz": [
+      -1318.394,
+      -2135.744,
+      97.341
+    ],
+    "source_cameras": [
+      "Tennis Stadium (4K)",
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": 2.284
+  },
   "Red Billboard (Hamlet)": {
     "xyz": [
       -2542.919,
@@ -22,66 +34,6 @@
       "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": 8.899
-  },
-  "Turkey Point Nuclear Power Station (N)": {
-    "xyz": [
-      -1548.858,
-      -3459.523,
-      56.586
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Grassrivers 02 (Watson Bay)"
-    ],
-    "error_m": 0.203
-  },
-  "Turkey Point Nuclear Power Station (S)": {
-    "xyz": [
-      -1546.175,
-      -3523.098,
-      56.642
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Grassrivers 02 (Watson Bay)"
-    ],
-    "error_m": 0.09
-  },
-  "Turkey Point Nuclear Power Station (1)": {
-    "xyz": [
-      -1470.456,
-      -3677.071,
-      80.112
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Grassrivers 02 (Watson Bay)"
-    ],
-    "error_m": 1.428
-  },
-  "Turkey Point Nuclear Power Station (2)": {
-    "xyz": [
-      -1469.572,
-      -3717.393,
-      80.051
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Grassrivers 02 (Watson Bay)"
-    ],
-    "error_m": 1.319
-  },
-  "Turkey Point Nuclear Power Station (3)": {
-    "xyz": [
-      -1470.928,
-      -3758.932,
-      79.971
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Grassrivers 02 (Watson Bay)"
-    ],
-    "error_m": 1.175
   },
   "White Billboard (Hamlet)": {
     "xyz": [
@@ -161,17 +113,6 @@
     ],
     "error_m": null
   },
-  "Lamp Post (NW)": {
-    "xyz": [
-      -2253.571,
-      -2775.558,
-      50.0
-    ],
-    "source_cameras": [
-      "Prison"
-    ],
-    "error_m": null
-  },
   "Lamp Post (NE)": {
     "xyz": [
       -2251.225,
@@ -183,10 +124,10 @@
     ],
     "error_m": null
   },
-  "Lamp Post (SW)": {
+  "Lamp Post (NW)": {
     "xyz": [
-      -2251.621,
-      -2926.287,
+      -2253.571,
+      -2775.558,
       50.0
     ],
     "source_cameras": [
@@ -205,6 +146,17 @@
     ],
     "error_m": null
   },
+  "Lamp Post (SW)": {
+    "xyz": [
+      -2251.621,
+      -2926.287,
+      50.0
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "error_m": null
+  },
   "Park Grove Condominium (C)": {
     "xyz": [
       -1310.987,
@@ -216,18 +168,6 @@
       "Grassrivers 02 (Watson Bay)"
     ],
     "error_m": 3.59
-  },
-  "Park Grove Condominium (S)": {
-    "xyz": [
-      -1318.394,
-      -2135.744,
-      97.341
-    ],
-    "source_cameras": [
-      "Tennis Stadium (4K)",
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
-    "error_m": 2.284
   },
   "Prison Tower (1)": {
     "xyz": [
@@ -300,6 +240,66 @@
       "Prison"
     ],
     "error_m": 0.483
+  },
+  "Turkey Point Nuclear Power Station (1)": {
+    "xyz": [
+      -1470.456,
+      -3677.071,
+      80.112
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Grassrivers 02 (Watson Bay)"
+    ],
+    "error_m": 1.428
+  },
+  "Turkey Point Nuclear Power Station (2)": {
+    "xyz": [
+      -1469.572,
+      -3717.393,
+      80.051
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Grassrivers 02 (Watson Bay)"
+    ],
+    "error_m": 1.319
+  },
+  "Turkey Point Nuclear Power Station (3)": {
+    "xyz": [
+      -1470.928,
+      -3758.932,
+      79.971
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Grassrivers 02 (Watson Bay)"
+    ],
+    "error_m": 1.175
+  },
+  "Turkey Point Nuclear Power Station (N)": {
+    "xyz": [
+      -1548.858,
+      -3459.523,
+      56.586
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Grassrivers 02 (Watson Bay)"
+    ],
+    "error_m": 0.203
+  },
+  "Turkey Point Nuclear Power Station (S)": {
+    "xyz": [
+      -1546.175,
+      -3523.098,
+      56.642
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Grassrivers 02 (Watson Bay)"
+    ],
+    "error_m": 0.09
   },
   "WDNA FM": {
     "xyz": [
