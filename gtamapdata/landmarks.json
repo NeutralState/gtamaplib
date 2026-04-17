@@ -8242,5 +8242,31 @@
     ],
     "error_m": 1.335,
     "zone": "port_gellhorn"
+  },
+  "Sombrero Key Light (B)": {
+    "xyz": [
+      -3007.516,
+      -7217.217,
+      -0.625
+    ],
+    "source_cameras": [
+      "Ocean near Keys (E)",
+      "Keys"
+    ],
+    "error_m": 0.057,
+    "zone": "leonida_keys"
+  },
+  "Stack (B)": {
+    "xyz": [
+      1301.288,
+      -790.123,
+      12.883
+    ],
+    "source_cameras": [
+      "Motorboats (A)",
+      "Motorboats (B)"
+    ],
+    "error_m": 0.428,
+    "zone": "vice_city"
   }
 }
