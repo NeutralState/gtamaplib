@@ -8034,5 +8034,122 @@
     ],
     "error_m": 6.876,
     "zone": "vice_city"
+  },
+  "536 Richard Jackson Blvd (BSW)": {
+    "xyz": [
+      -6201.984,
+      4523.933,
+      18.833
+    ],
+    "source_cameras": [
+      "Diner (NW)",
+      "Diner (W) (B)"
+    ],
+    "error_m": 0.076,
+    "zone": "port_gellhorn"
+  },
+  "Bayshore Place Condominium (TE)": {
+    "xyz": [
+      -617.786,
+      -1353.127,
+      61.574
+    ],
+    "source_cameras": [
+      "Tennis Stadium (4K)",
+      "Raul Bautista 03 (Motorboat)"
+    ],
+    "error_m": 2.25,
+    "zone": "grassrivers"
+  },
+  "Billboard (Hank's Waffles) (B)": {
+    "xyz": [
+      -6332.062,
+      4524.376,
+      18.028
+    ],
+    "source_cameras": [
+      "Diner (NE)",
+      "Diner (E)"
+    ],
+    "error_m": 0.487,
+    "zone": "port_gellhorn"
+  },
+  "Billboard (Hank's Waffles) (BE)": {
+    "xyz": [
+      -6085.495,
+      4482.535,
+      46.096
+    ],
+    "source_cameras": [
+      "Diner (E)",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 2.191,
+    "zone": "port_gellhorn"
+  },
+  "Black Billboard (BE)": {
+    "xyz": [
+      -6353.335,
+      3963.218,
+      27.499
+    ],
+    "source_cameras": [
+      "Gas Station (Lucia)",
+      "Chase (1)"
+    ],
+    "error_m": 4.942,
+    "zone": "port_gellhorn"
+  },
+  "Cruise Terminal D": {
+    "xyz": [
+      643.504,
+      -420.789,
+      35.897
+    ],
+    "source_cameras": [
+      "Motorboats (B)",
+      "Vice City 08 (Ferris Wheel)"
+    ],
+    "error_m": 1.245,
+    "zone": "vice_city"
+  },
+  "Cruise Terminal G (B)": {
+    "xyz": [
+      330.731,
+      -334.763,
+      17.882
+    ],
+    "source_cameras": [
+      "Vice Beach (B)",
+      "Rooftop Party"
+    ],
+    "error_m": 1.675,
+    "zone": "vice_city"
+  },
+  "Flamingo South Beach (NERNE)": {
+    "xyz": [
+      1385.067,
+      1061.745,
+      57.312
+    ],
+    "source_cameras": [
+      "Vice Beach (B)",
+      "Vice City 03 (Basketball)"
+    ],
+    "error_m": 1.456,
+    "zone": "vice_city"
+  },
+  "Bank of America Financial Center (SW)": {
+    "xyz": [
+      1676.711,
+      1361.908,
+      66.563
+    ],
+    "source_cameras": [
+      "Beach",
+      "Venetian Islands"
+    ],
+    "error_m": 2.703,
+    "zone": "vice_city"
   }
 }
