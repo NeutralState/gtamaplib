@@ -8151,5 +8151,57 @@
     ],
     "error_m": 2.703,
     "zone": "vice_city"
+  },
+  "Four Seasons Hotel Miami (40NE)": {
+    "xyz": [
+      -799.996,
+      -1273.004,
+      189.133
+    ],
+    "source_cameras": [
+      "Metro (SE) (A) (4K)",
+      "Tennis Stadium (4K)"
+    ],
+    "error_m": 0.011,
+    "zone": "grassrivers"
+  },
+  "Kaseya Center (NW)": {
+    "xyz": [
+      -348.439,
+      456.214,
+      47.74
+    ],
+    "source_cameras": [
+      "Skyline",
+      "Vice City 08 (Ferris Wheel)"
+    ],
+    "error_m": 2.074,
+    "zone": "vice_city"
+  },
+  "Office in the Grove": {
+    "xyz": [
+      -1166.771,
+      -2091.394,
+      41.561
+    ],
+    "source_cameras": [
+      "Tennis Stadium (4K)",
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": 0.68,
+    "zone": "grassrivers"
+  },
+  "Hotel Breakwater (K)": {
+    "xyz": [
+      1961.112,
+      537.927,
+      10.197
+    ],
+    "source_cameras": [
+      "Park",
+      "Ocean Drive (NW)"
+    ],
+    "error_m": 5.381,
+    "zone": "vice_city"
   }
 }
