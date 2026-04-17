@@ -8203,5 +8203,44 @@
     ],
     "error_m": 5.381,
     "zone": "vice_city"
+  },
+  "Portofino Tower (NE)": {
+    "xyz": [
+      2830.894,
+      -870.997,
+      210.766
+    ],
+    "source_cameras": [
+      "Sidewalk (Jason) (E)",
+      "Tennis Court (SE)"
+    ],
+    "error_m": 0.53,
+    "zone": "vice_city"
+  },
+  "Quarry": {
+    "xyz": [
+      -5895.363,
+      4161.935,
+      36.938
+    ],
+    "source_cameras": [
+      "Diner (SE) (A)",
+      "Mount Kalaga National Park 04 (Mountain Pass) (X)"
+    ],
+    "error_m": 5.947,
+    "zone": "port_gellhorn"
+  },
+  "Radio Tower #1 (Port Gellhorn)": {
+    "xyz": [
+      -6502.024,
+      3495.439,
+      55.062
+    ],
+    "source_cameras": [
+      "U-Turn (NW)",
+      "Chase (2) (A)"
+    ],
+    "error_m": 1.335,
+    "zone": "port_gellhorn"
   }
 }
