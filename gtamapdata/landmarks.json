@@ -7839,5 +7839,187 @@
     ],
     "error_m": 1.941,
     "zone": "vice_city"
+  },
+  "Nine at Mary Brickell Village (C)": {
+    "xyz": [
+      -1046.501,
+      -1000.646,
+      118.984
+    ],
+    "source_cameras": [
+      "Metro (SE) (A) (4K)",
+      "Airport (X)"
+    ],
+    "error_m": 3.978,
+    "zone": "grassrivers"
+  },
+  "Nine at Mary Brickell Village (D)": {
+    "xyz": [
+      -1048.886,
+      -1006.389,
+      118.946
+    ],
+    "source_cameras": [
+      "Metro (SE) (A) (4K)",
+      "Airport (X)"
+    ],
+    "error_m": 4.373,
+    "zone": "grassrivers"
+  },
+  "Seven Mile Bridge (E)": {
+    "xyz": [
+      -3513.509,
+      -6856.224,
+      3.339
+    ],
+    "source_cameras": [
+      "Keys",
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": 2.41,
+    "zone": "leonida_keys"
+  },
+  "Seven Mile Bridge (W)": {
+    "xyz": [
+      -4069.19,
+      -7191.945,
+      7.425
+    ],
+    "source_cameras": [
+      "Keys",
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": 2.404,
+    "zone": "leonida_keys"
+  },
+  "City View Parking Garage (S)": {
+    "xyz": [
+      -183.71,
+      2063.064,
+      33.331
+    ],
+    "source_cameras": [
+      "Highway (NE)",
+      "Wynwood"
+    ],
+    "error_m": 1.583,
+    "zone": "vice_city"
+  },
+  "City View Parking Garage (SE)": {
+    "xyz": [
+      -160.623,
+      2058.459,
+      32.991
+    ],
+    "source_cameras": [
+      "Highway (NE)",
+      "Wynwood"
+    ],
+    "error_m": 1.83,
+    "zone": "vice_city"
+  },
+  "Car Wash Sign (BE)": {
+    "xyz": [
+      -6226.102,
+      4317.871,
+      24.841
+    ],
+    "source_cameras": [
+      "Easy Inn",
+      "Car Wash"
+    ],
+    "error_m": 0.229,
+    "zone": "port_gellhorn"
+  },
+  "Springfield Community Church": {
+    "xyz": [
+      -6302.252,
+      4122.958,
+      41.087
+    ],
+    "source_cameras": [
+      "Easy Inn",
+      "Car Wash"
+    ],
+    "error_m": 0.853,
+    "zone": "port_gellhorn"
+  },
+  "18635 SW 105th Ave (CE)": {
+    "xyz": [
+      -6188.853,
+      4480.649,
+      18.045
+    ],
+    "source_cameras": [
+      "Diner (SW)",
+      "Diner (S)"
+    ],
+    "error_m": 0.104,
+    "zone": "port_gellhorn"
+  },
+  "18635 SW 105th Ave (CW)": {
+    "xyz": [
+      -6193.349,
+      4481.7,
+      18.083
+    ],
+    "source_cameras": [
+      "Diner (SW)",
+      "Diner (S)"
+    ],
+    "error_m": 0.114,
+    "zone": "port_gellhorn"
+  },
+  "Economy Inn (RE)": {
+    "xyz": [
+      -5342.822,
+      3495.537,
+      68.796
+    ],
+    "source_cameras": [
+      "Motel",
+      "Port Gellhorn 01 (Starlet Motel)"
+    ],
+    "error_m": 2.67,
+    "zone": "port_gellhorn"
+  },
+  "Starlet Motel Sign (BS)": {
+    "xyz": [
+      -5320.951,
+      3499.205,
+      64.782
+    ],
+    "source_cameras": [
+      "Motel",
+      "Port Gellhorn 01 (Starlet Motel)"
+    ],
+    "error_m": 0.521,
+    "zone": "port_gellhorn"
+  },
+  "Red-Yellow Umbrella (1)": {
+    "xyz": [
+      -5326.752,
+      3469.7,
+      69.495
+    ],
+    "source_cameras": [
+      "Pool",
+      "Port Gellhorn 01 (Starlet Motel)"
+    ],
+    "error_m": 2.158,
+    "zone": "port_gellhorn"
+  },
+  "Red-Yellow Umbrella (2)": {
+    "xyz": [
+      -5293.588,
+      3435.593,
+      69.829
+    ],
+    "source_cameras": [
+      "Pool",
+      "Port Gellhorn 01 (Starlet Motel)"
+    ],
+    "error_m": 1.609,
+    "zone": "port_gellhorn"
   }
 }
