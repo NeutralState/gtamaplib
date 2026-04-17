@@ -8958,5 +8958,57 @@
     "error_m": 2.956,
     "zone": "grassrivers",
     "author": "neutral_state"
+  },
+  "Palazzo del Sol": {
+    "xyz": [
+      1908.839,
+      -1506.383,
+      41.485
+    ],
+    "source_cameras": [
+      "Rooftop Party",
+      "Vice City 08 (Ferris Wheel)"
+    ],
+    "error_m": 8.068,
+    "zone": "vice_city"
+  },
+  "1111 Lincoln Rd (SE)": {
+    "xyz": [
+      1419.933,
+      1195.425,
+      40.023
+    ],
+    "source_cameras": [
+      "Rooftop Party",
+      "Jet Ski"
+    ],
+    "error_m": 8.509,
+    "zone": "vice_city"
+  },
+  "Magic City Casino (?)": {
+    "xyz": [
+      -2091.603,
+      -1296.34,
+      45.296
+    ],
+    "source_cameras": [
+      "Prison",
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": 7.986,
+    "zone": "vice_city"
+  },
+  "Continuum on South Beach (S)": {
+    "xyz": [
+      1950.407,
+      -309.171,
+      127.311
+    ],
+    "source_cameras": [
+      "Amphitheater",
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": 1.25,
+    "zone": "vice_city"
   }
 }
