@@ -7709,5 +7709,135 @@
     ],
     "error_m": 1.828,
     "zone": "port_gellhorn"
+  },
+  "Citigroup Center (SE)": {
+    "xyz": [
+      -357.059,
+      -522.013,
+      152.617
+    ],
+    "source_cameras": [
+      "Skyline",
+      "Vice City 03 (Basketball)"
+    ],
+    "error_m": 0.25,
+    "zone": "vice_city"
+  },
+  "One Miami Condominium East (SE)": {
+    "xyz": [
+      -212.865,
+      -548.946,
+      183.268
+    ],
+    "source_cameras": [
+      "Skyline",
+      "Vice City 03 (Basketball)"
+    ],
+    "error_m": 0.259,
+    "zone": "vice_city"
+  },
+  "One Miami Condominium West (SE)": {
+    "xyz": [
+      -298.533,
+      -583.301,
+      188.864
+    ],
+    "source_cameras": [
+      "Skyline",
+      "Vice City 03 (Basketball)"
+    ],
+    "error_m": 0.841,
+    "zone": "vice_city"
+  },
+  "Pole near Signature Hangar 2": {
+    "xyz": [
+      -2493.923,
+      -46.203,
+      20.149
+    ],
+    "source_cameras": [
+      "Airport (X)",
+      "Hangar (A)"
+    ],
+    "error_m": 0.082,
+    "zone": "grassrivers"
+  },
+  "Signature Hangar 2 (NW)": {
+    "xyz": [
+      -2505.989,
+      -63.704,
+      3.256
+    ],
+    "source_cameras": [
+      "Airport (X)",
+      "Hangar (A)"
+    ],
+    "error_m": 0.231,
+    "zone": "grassrivers"
+  },
+  "Signature Hangar 2 (W)": {
+    "xyz": [
+      -2510.643,
+      -78.489,
+      7.188
+    ],
+    "source_cameras": [
+      "Airport (X)",
+      "Hangar (A)"
+    ],
+    "error_m": 0.208,
+    "zone": "grassrivers"
+  },
+  "Central District Wastewater Treatment Plant (Tank)": {
+    "xyz": [
+      459.015,
+      -1269.453,
+      37.93
+    ],
+    "source_cameras": [
+      "Vice City 08 (Ferris Wheel)",
+      "Vice City Postcard"
+    ],
+    "error_m": 4.371,
+    "zone": "grassrivers"
+  },
+  "Kaseya Center (S)": {
+    "xyz": [
+      -259.509,
+      358.037,
+      47.265
+    ],
+    "source_cameras": [
+      "Vice City 08 (Ferris Wheel)",
+      "Vice City Postcard"
+    ],
+    "error_m": 1.193,
+    "zone": "vice_city"
+  },
+  "1000 Venetian Way (2)": {
+    "xyz": [
+      322.313,
+      1158.759,
+      24.744
+    ],
+    "source_cameras": [
+      "Venetian Islands",
+      "Skyline"
+    ],
+    "error_m": 3.746,
+    "zone": "vice_city"
+  },
+  "1000 Venetian Way (3)": {
+    "xyz": [
+      326.496,
+      1146.661,
+      38.353
+    ],
+    "source_cameras": [
+      "Venetian Islands",
+      "Skyline"
+    ],
+    "error_m": 1.941,
+    "zone": "vice_city"
   }
 }
