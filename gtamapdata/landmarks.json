@@ -6890,5 +6890,187 @@
     ],
     "error_m": 3.354,
     "zone": "ambrosia"
+  },
+  "Cardozo South Beach": {
+    "xyz": [
+      2014.074,
+      914.788,
+      17.217
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 1.064,
+    "zone": "vice_city"
+  },
+  "Cavalier Hotel": {
+    "xyz": [
+      1977.209,
+      708.387,
+      19.984
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 0.154,
+    "zone": "vice_city"
+  },
+  "Construction Crane (Vice Beach)": {
+    "xyz": [
+      1482.213,
+      257.388,
+      60.127
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 0.116,
+    "zone": "vice_city"
+  },
+  "Container Crane (9)": {
+    "xyz": [
+      1051.629,
+      -240.09,
+      72.842
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 0.019,
+    "zone": "vice_city"
+  },
+  "Courtyard by Marriott (NE)": {
+    "xyz": [
+      1732.948,
+      1069.656,
+      34.669
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 2.685,
+    "zone": "vice_city"
+  },
+  "Hotel Victor (NW)": {
+    "xyz": [
+      1951.157,
+      754.975,
+      38.03
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 0.446,
+    "zone": "vice_city"
+  },
+  "Icon at South Beach": {
+    "xyz": [
+      1454.719,
+      107.9,
+      143.541
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 1.28,
+    "zone": "vice_city"
+  },
+  "Leslie Hotel": {
+    "xyz": [
+      1977.975,
+      724.758,
+      21.674
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 0.635,
+    "zone": "vice_city"
+  },
+  "McAlpin Ocean Plaza": {
+    "xyz": [
+      2005.884,
+      861.081,
+      23.636
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 0.335,
+    "zone": "vice_city"
+  },
+  "Miami Beach Parking Garage (SE)": {
+    "xyz": [
+      1850.104,
+      682.393,
+      34.083
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 0.565,
+    "zone": "vice_city"
+  },
+  "Southeast Financial Center (D)": {
+    "xyz": [
+      -603.352,
+      -548.025,
+      256.865
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 2.388,
+    "zone": "vice_city"
+  },
+  "The Grand": {
+    "xyz": [
+      -104.731,
+      957.815,
+      169.534
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 0.104,
+    "zone": "vice_city"
+  },
+  "The Waverly South Beach (NW)": {
+    "xyz": [
+      1169.519,
+      602.54,
+      110.497
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 2.048,
+    "zone": "vice_city"
+  },
+  "Winter Haven": {
+    "xyz": [
+      2003.517,
+      844.283,
+      28.119
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 0.113,
+    "zone": "vice_city"
   }
 }
