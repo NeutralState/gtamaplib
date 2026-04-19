@@ -9000,5 +9000,18 @@
     "error_m": 1.25,
     "zone": "vice_city",
     "author": "neutral_state"
+  },
+  "Flagler on the River (SE)": {
+    "xyz": [
+      -1108.278,
+      -360.517,
+      137.71
+    ],
+    "source_cameras": [
+      "Highway (Peacock Bay) (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 3.554,
+    "zone": "vice_city"
   }
 }
