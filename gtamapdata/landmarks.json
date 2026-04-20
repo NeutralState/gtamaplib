@@ -8970,5 +8970,70 @@
     ],
     "error_m": 0.882,
     "zone": "vice_city"
+  },
+  "Flamingo South Beach (NWNE)": {
+    "xyz": [
+      1151.66,
+      961.74,
+      52.623
+    ],
+    "source_cameras": [
+      "Rooftop Party",
+      "Vice City 03 (Basketball)"
+    ],
+    "error_m": 7.194,
+    "zone": "vice_city"
+  },
+  "Uptown Lofts": {
+    "xyz": [
+      -352.696,
+      1325.421,
+      48.494
+    ],
+    "source_cameras": [
+      "Vice City 03 (Basketball)",
+      "Vice City Postcard"
+    ],
+    "error_m": 0.903,
+    "zone": "vice_city"
+  },
+  "W South Beach (SE)": {
+    "xyz": [
+      1876.489,
+      1552.207,
+      72.509
+    ],
+    "source_cameras": [
+      "Sidewalk (Jason) (E)",
+      "Venetian Islands"
+    ],
+    "error_m": 6.143,
+    "zone": "vice_city"
+  },
+  "Waffles Ridge (C)": {
+    "xyz": [
+      -5862.807,
+      5407.602,
+      80.937
+    ],
+    "source_cameras": [
+      "Diner (N)",
+      "Gas Station (Lucia)"
+    ],
+    "error_m": 4.885,
+    "zone": "port_gellhorn"
+  },
+  "Uncle Jack's Valley": {
+    "xyz": [
+      -6128.704,
+      3926.202,
+      35.52
+    ],
+    "source_cameras": [
+      "Gas Station (Lucia)",
+      "Uncle Jack's"
+    ],
+    "error_m": 1.437,
+    "zone": "port_gellhorn"
   }
 }
