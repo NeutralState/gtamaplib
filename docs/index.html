@@ -55,6 +55,7 @@
     <button onclick="setFilter('ambrosia',this)">Ambrosia</button>
     <button onclick="setFilter('vice',this)">Vice City</button>
     <button onclick="setFilter('grassrivers',this)">Grassrivers</button>
+    <button onclick="setFilter('pgh',this)">Port Gellhorn</button>
     <button onclick="setFilter('ns',this)">neutral_state</button>
   </div>
   <div class="canvas-wrap">
@@ -387,6 +388,7 @@ const zoneFilters = {
   ambrosia: n => n.zone === 'ambrosia' || n.id === 'lka',
   vice: n => n.zone === 'vice',
   grassrivers: n => n.zone === 'grassrivers' || n.id === 'tennis_4k' || n.id === 'metro_se',
+  pgh: n => n.zone === 'port_gellhorn' || n.id === 'pgp' || n.id === 'pg04' || n.id === 'mkp04' || n.id === 'chase2a' || n.id === 'chase2b',
   ns: n => n.type === 'calibNS' || n.id === 'lm_brickell',
 };
 
