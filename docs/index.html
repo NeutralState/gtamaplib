@@ -225,6 +225,55 @@ const camData = {
     rays: ['Four Seasons Fake Cam → Four Seasons Hotel Miami (T)', 'Metro SE B → Infinity at Brickell', 'Grassrivers 02 → One Broadway (W)', 'VC 03 → Stephen P. Clark Government Center (E)'],
     author: 'neutral_state', loss: 139.06
   },
+
+  'keys': {
+    label: 'Keys',
+    lms: ['Seven Mile Bridge (20B)', 'Seven Mile Bridge (5B)', 'Island V (S)', 'Blimp Bay'],
+    rays: ['Ocean near Keys E → Sombrero Key Light (B)', 'LK Airplane → Unnamed Building #1 (Blimp Key)'],
+    author: 'rlx', loss: null
+  },
+  'convertible': {
+    label: 'Convertible',
+    lms: ['Kaseya Center (SE)'],
+    rays: ['VC 08 → Highway Sign (S), KC01-KC11', 'Vice Beach B → Ten Museum Park (SE)'],
+    author: 'rlx', loss: null
+  },
+  'raul': {
+    label: 'Raul Bautista 03 (Motorboat)',
+    lms: ['Four Seasons Hotel Miami (16E/16NE/24E/24NE)'],
+    rays: ['VC 03 → One Miami Condo East/West (SE)'],
+    author: 'rlx', loss: null
+  },
+  'chase2a': {
+    label: 'Chase (2) (A)',
+    lms: ['Pylon (3)'],
+    rays: ['Gas Station Lucia → Oval Yellow Sign', 'Diner W A → Sunshine Skyway Bridge (N)', 'AIWE → Wildfire Scooters (NW/S)'],
+    author: 'rlx', loss: null
+  },
+  'chase2b': {
+    label: 'Chase (2) (B)',
+    lms: ['Sunshine Skyway Bridge (N/S)'],
+    rays: ['AIWE → Wildfire Scooters (NW/S/SE/W)'],
+    author: 'rlx', loss: null
+  },
+  'mkp04': {
+    label: 'Mount Kalaga NP 04 (Mountain Pass) (X)',
+    lms: ['Water Tower near Prison'],
+    rays: ['Gas Station Lucia → Billboard (Delights)', 'Diner SE A → Quarry'],
+    author: 'rlx', loss: null
+  },
+  'amb01': {
+    label: 'Ambrosia 01 (Bikers)',
+    lms: ['Billboard with Irregular Shape', 'Billboard with Oval Motif #1'],
+    rays: ['Ambrosia 02 → Large Billboard (Ambrosia)'],
+    author: 'rlx', loss: null
+  },
+  'amb_post_x': {
+    label: 'Ambrosia Postcard (X)',
+    lms: ['Sebring Water Tower (B/T)', '1500 Sonora Ave (Tank)', 'US Sugar Mill (Factory/R)', 'USSM Smokestack (4-9)'],
+    rays: ['Ambrosia 02 → 1500 Sonora Ave (Silo/N), USSM Smokestack (1/2/10/11)', 'Ambrosia 04 → USSM Smokestack (3)'],
+    author: 'rlx', loss: null
+  },
   'jd05': {
     label: 'Jason Duval 05\n(Machine Gun)',
     lms: ['Vizcayne North Condominium (NE)', 'Icon at South Beach', 'The Floridian', 'Marina Blue (NE)', 'One Miami Condominium East (NE)'],
@@ -277,10 +326,23 @@ const nodes = [
   { id:'ferris',     label:'VC 08\n(Ferris Wheel)',        type:'calib',  zone:'vice',        x:590,  y:600 },
   { id:'amb02',      label:'Ambrosia 02\n(Panorama)',      type:'calib',  zone:'ambrosia',    x:940,  y:390 },
   { id:'amb04',      label:'Ambrosia 04\n(Fires)',         type:'calib',  zone:'ambrosia',    x:1080, y:510 },
-  { id:'amb_post',   label:'Ambrosia\nPostcard (X)',       type:'uncalib',zone:'ambrosia',    x:1080, y:610 },
+
   { id:'pgp',        label:'PGH Postcard\n(X)',            type:'calib',  zone:'port_gellhorn',x:630, y:460 },
   { id:'pg04',       label:'PGH 04\n(Delights) (X)',      type:'calib',  zone:'port_gellhorn',x:750, y:620 },
   { id:'lka_boats',  label:'LK 05\n(Boats)',               type:'calib',  zone:'keys',        x:1080, y:390 },
+
+  { id:'keys',      label:'Keys',                           type:'calib',  zone:'keys',        x:940,  y:130 },
+  { id:'convertible',label:'Convertible',                   type:'calib',  zone:'vice',        x:720,  y:600 },
+  { id:'raul',      label:'Raul Bautista
+03 (Motorboat)',  type:'calib',  zone:'vice',        x:340,  y:330 },
+  { id:'chase2a',   label:'Chase (2) (A)',                  type:'calib',  zone:'ambrosia',    x:780,  y:600 },
+  { id:'chase2b',   label:'Chase (2) (B)',                  type:'calib',  zone:'ambrosia',    x:860,  y:720 },
+  { id:'mkp04',     label:'MK NP 04
+(Mountain Pass) (X)', type:'calib',  zone:'port_gellhorn',x:550, y:560 },
+  { id:'amb01',     label:'Ambrosia 01
+(Bikers)',          type:'calib',  zone:'ambrosia',    x:1080, y:720 },
+  { id:'amb_post_x',label:'Ambrosia
+Postcard (X)',         type:'calib',  zone:'ambrosia',    x:1080, y:610 },
   { id:'peacock_a',  label:'Peacock Bay (A)',              type:'calib',  zone:'vice',        x:350,  y:720 },
   { id:'peacock_b',  label:'Peacock Bay (B)',              type:'calibNS',zone:'vice',        x:480,  y:720 },
   { id:'jd05',       label:'Jason Duval 05\n(Machine Gun)',type:'calibNS',zone:'vice',        x:210,  y:720 },
@@ -303,9 +365,18 @@ const edges = [
   ['basketball','vcp','calib'],['skyline','vcp','calib'],['vb_b','vcp','calib'],
   ['basketball','ferris','calib'],['skyline','ferris','calib'],
   ['lka','amb02','calib'],['amb02','lm_ambrosia','lm'],['amb04','lm_ambrosia','lm'],
-  ['amb02','amb04','calib'],['lm_ambrosia','amb_post','calib'],
+  ['amb02','amb04','calib'],
   ['lkp','lka_boats','calib'],['lm_keys','lka_boats','calib'],
   ['lm_gv','pgp','calib'],['pgp','lm_pgh','lm'],['lm_pgh','pg04','calib'],
+
+  ['lm_keys','keys','calib'],['lka','keys','calib'],
+  ['lm_vc','convertible','calib'],['ferris','convertible','calib'],
+  ['lm_fs','raul','calib'],['basketball','raul','calib'],
+  ['lm_pgh','chase2a','calib'],['chase2b','lm_ambrosia','lm'],
+  ['amb02','chase2a','calib'],['chase2a','chase2b','calib'],
+  ['lm_prison','mkp04','calib'],
+  ['amb01','lm_ambrosia','lm'],['amb02','amb01','calib'],
+  ['lm_ambrosia','amb_post_x','calib'],['amb02','amb_post_x','calib'],['amb04','amb_post_x','calib'],
   ['lm_vc','peacock_a','calib'],['lm_vc','peacock_b','calib'],
   ['peacock_a','lm_brickell','lm'],['peacock_b','lm_brickell','lm'],
   ['metro_se_b','lm_brickell','lm'],
