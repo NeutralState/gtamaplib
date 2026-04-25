@@ -13,7 +13,7 @@
     button { background: #2C2C2A; color: #c2c0b6; border-color: #5F5E5A; }
     button:hover { background: #444441; }
     button.active { background: #0c447c22; color: #85B7EB; border-color: #378ADD; }
-    #tooltip { background: #2C2C2A; border-color: #5F5E5A; }
+    #tooltip { background: #2C2C2A; border-color: #5F5E5A; color: #c2c0b6; }
     h1 { color: #c2c0b6; }
     .subtitle { color: #888780; }
     .legend-item { color: #888780; }
@@ -32,10 +32,11 @@
   .legend { display: flex; gap: 20px; flex-wrap: wrap; margin-top: 14px; }
   .legend-item { display: flex; align-items: center; gap: 7px; font-size: 12px; color: #5F5E5A; }
   .dot { width: 12px; height: 12px; border-radius: 50%; flex-shrink: 0; }
-  #tooltip { position: fixed; background: #fff; border: 0.5px solid #B4B2A9; border-radius: 8px; padding: 10px 14px; font-size: 12px; pointer-events: none; display: none; z-index: 999; max-width: 280px; }
-  #tooltip strong { display: block; font-size: 13px; font-weight: 500; margin-bottom: 5px; color: #3d3d3a; }
+  #tooltip { position: fixed; background: #fff; border: 0.5px solid #B4B2A9; border-radius: 8px; padding: 10px 14px; font-size: 12px; pointer-events: none; display: none; z-index: 999; max-width: 320px; line-height: 1.5; }
+  #tooltip strong { display: block; font-size: 13px; font-weight: 500; margin-bottom: 4px; color: #3d3d3a; }
   #tooltip .type-badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-bottom: 6px; }
-  #tooltip .deps-section { font-size: 11px; color: #5F5E5A; line-height: 1.6; }
+  #tooltip .author-badge { display: inline-block; font-size: 11px; padding: 2px 8px; border-radius: 4px; margin-left: 4px; margin-bottom: 6px; }
+  #tooltip .deps-section { font-size: 11px; color: #5F5E5A; line-height: 1.6; margin-top: 3px; }
   #tooltip .deps-section b { color: #3d3d3a; }
   .hint { font-size: 11px; color: #888780; margin-top: 8px; }
 </style>
@@ -54,13 +55,15 @@
     <button onclick="setFilter('ambrosia',this)">Ambrosia</button>
     <button onclick="setFilter('vice',this)">Vice City</button>
     <button onclick="setFilter('grassrivers',this)">Grassrivers</button>
+    <button onclick="setFilter('ns',this)">neutral_state</button>
   </div>
   <div class="canvas-wrap">
-    <canvas id="dag" width="1100" height="740"></canvas>
+    <canvas id="dag" width="1200" height="820"></canvas>
   </div>
   <div class="legend">
     <div class="legend-item"><div class="dot" style="background:#534AB7"></div>Leak camera (known position)</div>
-    <div class="legend-item"><div class="dot" style="background:#0F6E56"></div>Calibrated camera</div>
+    <div class="legend-item"><div class="dot" style="background:#0F6E56"></div>Calibrated by rlx</div>
+    <div class="legend-item"><div class="dot" style="background:#1a7a5e"></div>Calibrated by neutral_state</div>
     <div class="legend-item"><div class="dot" style="background:#854F0B"></div>Uncalibrated / WIP</div>
     <div class="legend-item"><div class="dot" style="background:#993C1D"></div>Landmark cluster</div>
     <div class="legend-item">
@@ -77,7 +80,7 @@
 <div id="tooltip"></div>
 
 <script>
-const W = 1100, H = 740;
+const W = 1200, H = 820;
 const canvas = document.getElementById('dag');
 const ctx = canvas.getContext('2d');
 const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
@@ -85,6 +88,7 @@ const isDark = matchMedia('(prefers-color-scheme: dark)').matches;
 const C = {
   leak:    isDark ? '#AFA9EC' : '#534AB7',
   calib:   isDark ? '#5DCAA5' : '#0F6E56',
+  calibNS: isDark ? '#4dcfaa' : '#1a7a5e',
   uncalib: isDark ? '#EF9F27' : '#854F0B',
   lm:      isDark ? '#F0997B' : '#993C1D',
   edge:    isDark ? '#5F5E5A' : '#B4B2A9',
@@ -93,39 +97,193 @@ const C = {
   textSub: isDark ? '#888780' : '#888780',
 };
 
+// Camera calibration metadata
+const camData = {
+  'lka': {
+    label: 'LK Airplane (X)',
+    lms: ['Four Seasons Hotel Miami (BE)', 'Four Seasons Hotel Miami (BW)', 'Portofino Tower (NW)', 'House with Boat (X)'],
+    rays: ['Tennis Stadium → Park Grove Condominium (S)', 'Tennis Stadium → Prison Tower (2-6)', 'Ocean near Keys (N) → Seven Mile Bridge (3T/6T)', 'House with Boat (X) → House D (SW)'],
+    author: 'rlx', loss: null
+  },
+  'lkp': {
+    label: 'LK Postcard (X)',
+    lms: ['Key Lento (A)', 'Key Lento (J)', 'Island A (W)', 'House with Boat (X)', 'Portofino Tower (NW)'],
+    rays: ['LK Airplane → 102180 Overseas Hwy', 'LK Airplane → Pin A02R/B04R/C01R/D01R', 'House with Boat → House D (SW)'],
+    author: 'rlx', loss: null
+  },
+  'kl': {
+    label: 'Key Lento',
+    lms: ['99353 Overseas Hwy', '102180 Overseas Hwy', 'Island G (E)', 'Island V (S)'],
+    rays: ['LK Postcard → Marina Club at Blackwater Sound (N/S)', 'LK Postcard → 500/200 Pompano Dr'],
+    author: 'rlx', loss: null
+  },
+  'gw': {
+    label: 'Grassrivers 02 (Watson Bay)',
+    lms: ['Homestead Water Tower', 'Park Grove Condominium (S)', 'Prison Tower (2-6)'],
+    rays: ['LK Airplane → Turkey Point Nuclear (N/3)', 'Four Seasons Fake Cam → Four Seasons Hotel Miami (W)'],
+    author: 'rlx', loss: null
+  },
+  'prison': {
+    label: 'Prison',
+    lms: ['Four Seasons Hotel Miami (NW/SE)', 'Turkey Point Nuclear (N/3)', 'Prison Tower (1-6)'],
+    rays: ['Grassrivers 02 → Prison Tower (1-6)', 'LK Airplane → WDNA FM SW 248th St'],
+    author: 'rlx', loss: null
+  },
+  'vb_a': {
+    label: 'Vice Beach (A)',
+    lms: ['Four Seasons Hotel Miami (BE/BW/NW/SE)'],
+    rays: ['Alley (W) → Flamingo South Beach (TE/TNE/TSE)', 'Sidewalk (Jason) E → The Floridian', 'Park → Hotel Breakwater, Jenny Hostel, 1500 Ocean Dr', 'Tennis Court SE → Old City Hall, 1000 Venetian Way'],
+    author: 'rlx', loss: null
+  },
+  'vb_b': {
+    label: 'Vice Beach (B)',
+    lms: ['Four Seasons Hotel Miami (BE/BW/NW/SE)', 'Wells Fargo Center'],
+    rays: ['Prison → Southeast Financial Center, Wells Fargo Center, Opera Tower', 'LK Airplane → Asia Brickell, FAA Miami ATCT', 'Tennis Court SE → The Waverly South Beach (NW)', 'Sidewalk Jason → Flamingo South Beach (SRSW)', 'Alley W → Flamingo South Beach (TE/TNE/TSE)', 'Park → Jenny Hostel, 1500 Ocean Dr', 'Tennis Court SE → Old City Hall, 1000 Venetian Way'],
+    author: 'rlx', loss: null
+  },
+  'rooftop': {
+    label: 'Rooftop Party',
+    lms: ['Asia Brickell Key', 'Flamingo South Beach (TE/TSE)', 'Four Seasons Hotel Miami (BE/BW)', 'Loews Miami Beach', '1500 Ocean Dr', 'Old City Hall', 'Portofino Tower (NW)'],
+    rays: ['Vice Beach B → Capri South Beach (SE)', 'Sidewalk Jason E → Continuum on South Beach (S)', 'Vice Beach B → Cruise Terminal G (B)', 'Venetian Islands → Flagler Memorial Monument'],
+    author: 'rlx', loss: null
+  },
+  'vi': {
+    label: 'Venetian Islands',
+    lms: ['Flamingo South Beach (TNE)', 'Loews Miami Beach', '1500 Ocean Dr', '1000 Venetian Way (SW)', 'Rooftop Party'],
+    rays: ['Highway NE → Akoya Condominium, Jade Ocean', 'Vice Beach A → Flamingo South Beach (SDS)', 'Sidewalk Jason E → Flamingo South Beach (SRSW/TSW)', 'Vice Beach B → St. Moritz Hotel (SW)'],
+    author: 'rlx', loss: null
+  },
+  'beach': {
+    label: 'Beach',
+    lms: ['Akoya Condominium', 'Hotel Breakwater', 'Jenny Hostel (NE)', 'Loews Miami Beach', '1500 Ocean Dr', 'Royal Palm South Beach (N/S)'],
+    rays: ['Vice Beach A → 12th St Lifeguard Tower', 'Venetian Islands → Bank of America, Green Diamond, Jade Ocean (SW)', 'Park → Hotel Victor (SW)', 'Vice Beach B → The Tides South Beach', 'Venetian Islands → Trésor Tower'],
+    author: 'rlx', loss: null
+  },
+  'skyline': {
+    label: 'Skyline',
+    lms: ['Four Seasons Hotel Miami (BE/NW)', '1000 Venetian Way (SE)'],
+    rays: ['Vice Beach B → Asia Brickell Key, Flagler on the River, The Grand (E), Loft Downtown II, Marina Blue (NE), Opera Tower, Southeast Financial Center, Ten Museum Park (SE), Wells Fargo Center (N)', 'Venetian Islands → 1000 Venetian Way (2/3/4)'],
+    author: 'rlx', loss: null
+  },
+  'basketball': {
+    label: 'VC 03 (Basketball)',
+    lms: ['Capri South Beach (SE)', 'Flamingo South Beach (NENE)', 'The Grand (E)', 'Loft Downtown II', 'Marina Blue (NE)', 'Opera Tower', 'Southeast Financial Center', 'Wells Fargo Center (N)'],
+    rays: ['Skyline → 50 Biscayne Blvd (SE), Citigroup Center (NW/SE), One Miami Condo East/West', 'Rooftop Party → Flamingo South Beach (NWNE), 1111 Lincoln Rd (NW/SE)', 'Venetian Islands → The Gates Hotel (NW), New World Center, Sunset Harbour South Condo', 'Vice Beach B → Marriott Miami Biscayne Bay (NE), Quantum on the Bay (N/S)'],
+    author: 'rlx', loss: null
+  },
+  'vcp': {
+    label: 'Vice City Postcard',
+    lms: ['Asia Brickell Key', 'Citigroup Center (NW)', 'Four Seasons Hotel Miami (BW/NW)', 'The Grand (E)', 'Marriott Miami Biscayne Bay (NE)', 'One Miami Condo East/West (NE)', 'Opera Tower', 'Quantum on the Bay (N/S)', 'Southeast Financial Center', '1000 Venetian Way (SE)', 'Wells Fargo Center (N)'],
+    rays: ['VC 03 → 1800 Club, 22 Biscayne Bay (SE), Citigroup (NE), The Crimson (CC), Uptown Lofts (NE/SE), Vizcayne North (NE/SE)', 'Skyline → Carbonell Brickell, Kaseya Center (SE), Miami Tower, Skyviews Miami', 'Ambrosia 02 → Flat Water Tower', 'Intersection W → Reworld Miami-Dade (SE)', 'Vice Beach B → Three/Two Tequesta Point, Unknown Building near VCIA'],
+    author: 'rlx', loss: null
+  },
+  'motorboats': {
+    label: 'Motorboats (A/B)',
+    lms: ['Four Seasons Hotel Miami (BE/SE)', 'Park Grove Condominium (S)', 'Container Crane (1/3)'],
+    rays: ['Vice Beach B → Asia Brickell Key (CC1/CC2)', 'VC 03 → Marina Blue (NE), Vizcayne North (NE)'],
+    author: 'rlx', loss: null
+  },
+  'ferris': {
+    label: 'VC 08 (Ferris Wheel)',
+    lms: ['Container Crane (1/2/3)', 'CC (1/2/3) (BB2)', 'Kaseya Center (SE)', 'Skyviews Miami Observation Wheel'],
+    rays: ['Skyline → Cruise Ship (FT)', 'Vice City Postcard → Cruise Ship (RT)', 'LK Postcard → WTP (E/W)'],
+    author: 'rlx', loss: null
+  },
+  'amb02': {
+    label: 'Ambrosia 02 (Panorama)',
+    lms: ['FAA Miami ATCT (MIA)'],
+    rays: ['LK Airplane → MIA North Terminal Tower, Wheelabrator South Broward', 'Loading Zone near Prison SW → Water Tower near Prison', 'WDNA FM Fake Cam → WDNA FM (B)'],
+    author: 'rlx', loss: null
+  },
+  'amb04': {
+    label: 'Ambrosia 04 (Fires)',
+    lms: ['Sunshine Skyway Bridge (N/S)'],
+    rays: ['Ambrosia 02 → Sebring Water Tower (B/T), 1500 Sonora Ave (Tank), US Sugar Mill (Factory), USSM Smokestack (4-11)', 'Ambrosia 02 → Wheelabrator South Broward (W)'],
+    author: 'rlx', loss: null
+  },
+  'pgp': {
+    label: 'Port Gellhorn Postcard (X)',
+    lms: ['Port of Tampa Container Crane (1/2/3)', 'PTCC (3) (BB2)'],
+    rays: ['Chase 2A → Juice Fruit Sign (B/E/W)', 'Chase 2A → New Foundation Church', 'Port Gellhorn 04 → Train Signal (S) (E/W)', 'Port Gellhorn 04 → Water Tower (West PGH) (C)'],
+    author: 'rlx', loss: null
+  },
+  'pg04': {
+    label: 'PGH 04 (Delights) (X)',
+    lms: ['Juice Fruit Sign (B)'],
+    rays: ['PGH Postcard → Train Signal (S) (E/W)', 'PGH Postcard → Water Tower (West PGH) (C)'],
+    author: 'rlx', loss: null
+  },
+  'peacock_a': {
+    label: 'Highway\n(Peacock Bay) (A)',
+    lms: ['Park Grove Condominium (N)', 'Park Grove Condominium (C)'],
+    rays: ['Metro SE B → Infinity at Brickell', 'Grassrivers 02 → One Broadway (W)', 'VC 03 → Stephen P. Clark Government Center (E)'],
+    author: 'rlx', loss: null
+  },
+  'peacock_b': {
+    label: 'Highway\n(Peacock Bay) (B)',
+    lms: ['Park Grove Condominium (C)'],
+    rays: ['Four Seasons Fake Cam → Four Seasons Hotel Miami (T)', 'Metro SE B → Infinity at Brickell', 'Grassrivers 02 → One Broadway (W)', 'VC 03 → Stephen P. Clark Government Center (E)'],
+    author: 'neutral_state', loss: 139.06
+  },
+  'jd05': {
+    label: 'Jason Duval 05\n(Machine Gun)',
+    lms: ['Vizcayne North Condominium (NE)', 'Icon at South Beach', 'The Floridian', 'Marina Blue (NE)', 'One Miami Condominium East (NE)'],
+    rays: [],
+    author: 'neutral_state', loss: 18.82
+  },
+  'lka_boats': {
+    label: 'LK 05 (Boats)',
+    lms: ['Blue Billboard (Key Lento)', 'Pin B01L/C01R/B02R/B02L'],
+    rays: ['LK Postcard → House with Pier (E)'],
+    author: 'rlx', loss: null
+  },
+};
+
 const nodes = [
-  { id:'tennis_4k',  label:'Tennis Stadium\n(4K)',          type:'leak',    zone:'vice',        x:320,  y:60  },
-  { id:'vb_a',       label:'Vice Beach (A)',                 type:'leak',    zone:'vice',        x:100,  y:150 },
-  { id:'vb_b',       label:'Vice Beach (B)',                 type:'leak',    zone:'vice',        x:260,  y:150 },
-  { id:'metro_se',   label:'Metro (SE)\n(A) (4K)',           type:'leak',    zone:'vice',        x:480,  y:60  },
-  { id:'alley_w',    label:'Alley (W)',                      type:'leak',    zone:'vice',        x:80,   y:60  },
-  { id:'park',       label:'Park',                           type:'leak',    zone:'vice',        x:170,  y:60  },
-  { id:'port',       label:'Port',                           type:'leak',    zone:'vice',        x:530,  y:150 },
-  { id:'tc_se',      label:'Tennis Court\n(SE)',             type:'leak',    zone:'vice',        x:620,  y:60  },
-  { id:'lm_fs',      label:'Four Seasons\nlandmarks',        type:'lm',      zone:'vice',        x:320,  y:250 },
-  { id:'lm_vc',      label:'Vice City\nlandmarks',           type:'lm',      zone:'vice',        x:120,  y:360 },
-  { id:'lm_keys',    label:'Keys bridge\n& island LMs',      type:'lm',      zone:'keys',        x:700,  y:250 },
-  { id:'lm_gv',      label:'Grassrivers\nlandmarks',         type:'lm',      zone:'grassrivers', x:500,  y:390 },
-  { id:'lm_prison',  label:'Prison towers\n& Turkey Point',  type:'lm',      zone:'grassrivers', x:700,  y:390 },
-  { id:'lm_ambrosia',label:'Ambrosia\nlandmarks',            type:'lm',      zone:'ambrosia',    x:860,  y:490 },
-  { id:'lka',        label:'LK Airplane\n(X)',               type:'calib',   zone:'keys',        x:700,  y:130 },
-  { id:'lkp',        label:'LK Postcard\n(X)',               type:'calib',   zone:'keys',        x:860,  y:250 },
-  { id:'kl',         label:'Key Lento',                      type:'calib',   zone:'keys',        x:1000, y:310 },
-  { id:'gw',         label:'Grassrivers 02\n(Watson Bay)',   type:'calib',   zone:'grassrivers', x:580,  y:270 },
-  { id:'prison',     label:'Prison',                         type:'calib',   zone:'grassrivers', x:700,  y:510 },
-  { id:'skyline',    label:'Skyline',                        type:'calib',   zone:'vice',        x:200,  y:460 },
-  { id:'vi',         label:'Venetian\nIslands',              type:'calib',   zone:'vice',        x:80,   y:460 },
-  { id:'beach',      label:'Beach',                          type:'calib',   zone:'vice',        x:330,  y:460 },
-  { id:'basketball', label:'VC 03\n(Basketball)',            type:'calib',   zone:'vice',        x:460,  y:460 },
-  { id:'vcp',        label:'Vice City\nPostcard',            type:'calib',   zone:'vice',        x:200,  y:580 },
-  { id:'rooftop',    label:'Rooftop Party',                  type:'calib',   zone:'vice',        x:370,  y:580 },
-  { id:'motorboats', label:'Motorboats\n(A/B)',              type:'calib',   zone:'vice',        x:440,  y:310 },
-  { id:'ferris',     label:'VC 08\n(Ferris Wheel)',          type:'calib',   zone:'vice',        x:550,  y:580 },
-  { id:'amb02',      label:'Ambrosia 02\n(Panorama)',        type:'calib',   zone:'ambrosia',    x:860,  y:390 },
-  { id:'amb04',      label:'Ambrosia 04\n(Fires)',           type:'calib',   zone:'ambrosia',    x:1000, y:490 },
-  { id:'amb_post',   label:'Ambrosia\nPostcard (X)',         type:'uncalib', zone:'ambrosia',    x:1000, y:590 },
-  { id:'waning',     label:'Waning Sands\n(A) (X)',         type:'uncalib', zone:'ambrosia',    x:1000, y:670 },
-  { id:'lkp_boats',  label:'LK 05 (Boats)',                 type:'calib',   zone:'keys',        x:1000, y:390 },
+  // Leaks
+  { id:'tennis_4k',  label:'Tennis Stadium\n(4K)',        type:'leak',   zone:'vice',        x:340,  y:60  },
+  { id:'vb_a',       label:'Vice Beach (A)',               type:'leak',   zone:'vice',        x:110,  y:150 },
+  { id:'vb_b',       label:'Vice Beach (B)',               type:'leak',   zone:'vice',        x:270,  y:150 },
+  { id:'metro_se',   label:'Metro (SE)\n(A) (4K)',         type:'leak',   zone:'vice',        x:500,  y:60  },
+  { id:'metro_se_b', label:'Metro (SE) (B)',               type:'leak',   zone:'vice',        x:620,  y:150 },
+  { id:'alley_w',    label:'Alley (W)',                    type:'leak',   zone:'vice',        x:90,   y:60  },
+  { id:'park',       label:'Park',                         type:'leak',   zone:'vice',        x:180,  y:60  },
+  { id:'port',       label:'Port',                         type:'leak',   zone:'vice',        x:550,  y:150 },
+  { id:'tc_se',      label:'Tennis Court\n(SE)',           type:'leak',   zone:'vice',        x:650,  y:60  },
+  { id:'sidewalk_j', label:'Sidewalk\n(Jason) (E)',        type:'leak',   zone:'vice',        x:430,  y:60  },
+  { id:'highway_ne', label:'Highway (NE)',                 type:'leak',   zone:'vice',        x:230,  y:60  },
+  // Landmark clusters
+  { id:'lm_fs',      label:'Four Seasons\nlandmarks',      type:'lm',     zone:'vice',        x:340,  y:250 },
+  { id:'lm_vc',      label:'Vice City\nlandmarks',         type:'lm',     zone:'vice',        x:130,  y:380 },
+  { id:'lm_keys',    label:'Keys bridge\n& island LMs',    type:'lm',     zone:'keys',        x:780,  y:250 },
+  { id:'lm_gv',      label:'Grassrivers\nlandmarks',       type:'lm',     zone:'grassrivers', x:560,  y:390 },
+  { id:'lm_prison',  label:'Prison towers\n& Turkey Point',type:'lm',     zone:'grassrivers', x:750,  y:390 },
+  { id:'lm_ambrosia',label:'Ambrosia\nlandmarks',          type:'lm',     zone:'ambrosia',    x:940,  y:510 },
+  { id:'lm_pgh',     label:'Port Gellhorn\nlandmarks',     type:'lm',     zone:'port_gellhorn',x:680, y:560 },
+  { id:'lm_brickell',label:'Brickell\nlandmarks',          type:'lm',     zone:'vice',        x:480,  y:560 },
+  // Calibrated cameras
+  { id:'lka',        label:'LK Airplane\n(X)',             type:'calib',  zone:'keys',        x:780,  y:130 },
+  { id:'lkp',        label:'LK Postcard\n(X)',             type:'calib',  zone:'keys',        x:940,  y:250 },
+  { id:'kl',         label:'Key Lento',                    type:'calib',  zone:'keys',        x:1080, y:310 },
+  { id:'gw',         label:'Grassrivers 02\n(Watson Bay)', type:'calib',  zone:'grassrivers', x:620,  y:270 },
+  { id:'prison',     label:'Prison',                       type:'calib',  zone:'grassrivers', x:750,  y:510 },
+  { id:'skyline',    label:'Skyline',                      type:'calib',  zone:'vice',        x:210,  y:480 },
+  { id:'vi',         label:'Venetian\nIslands',            type:'calib',  zone:'vice',        x:90,   y:480 },
+  { id:'beach',      label:'Beach',                        type:'calib',  zone:'vice',        x:350,  y:480 },
+  { id:'basketball', label:'VC 03\n(Basketball)',          type:'calib',  zone:'vice',        x:480,  y:480 },
+  { id:'vcp',        label:'Vice City\nPostcard',          type:'calib',  zone:'vice',        x:210,  y:600 },
+  { id:'rooftop',    label:'Rooftop Party',                type:'calib',  zone:'vice',        x:370,  y:600 },
+  { id:'motorboats', label:'Motorboats\n(A/B)',            type:'calib',  zone:'vice',        x:460,  y:320 },
+  { id:'ferris',     label:'VC 08\n(Ferris Wheel)',        type:'calib',  zone:'vice',        x:590,  y:600 },
+  { id:'amb02',      label:'Ambrosia 02\n(Panorama)',      type:'calib',  zone:'ambrosia',    x:940,  y:390 },
+  { id:'amb04',      label:'Ambrosia 04\n(Fires)',         type:'calib',  zone:'ambrosia',    x:1080, y:510 },
+  { id:'amb_post',   label:'Ambrosia\nPostcard (X)',       type:'uncalib',zone:'ambrosia',    x:1080, y:610 },
+  { id:'pgp',        label:'PGH Postcard\n(X)',            type:'calib',  zone:'port_gellhorn',x:630, y:460 },
+  { id:'pg04',       label:'PGH 04\n(Delights) (X)',      type:'calib',  zone:'port_gellhorn',x:750, y:620 },
+  { id:'lka_boats',  label:'LK 05\n(Boats)',               type:'calib',  zone:'keys',        x:1080, y:390 },
+  { id:'peacock_a',  label:'Peacock Bay (A)',              type:'calib',  zone:'vice',        x:350,  y:720 },
+  { id:'peacock_b',  label:'Peacock Bay (B)',              type:'calibNS',zone:'vice',        x:480,  y:720 },
+  { id:'jd05',       label:'Jason Duval 05\n(Machine Gun)',type:'calibNS',zone:'vice',        x:210,  y:720 },
 ];
 
 const edges = [
@@ -133,6 +291,7 @@ const edges = [
   ['lm_fs','vb_a','calib'],['lm_fs','vb_b','calib'],['lm_fs','motorboats','calib'],
   ['vb_b','lm_vc','lm'],['vb_a','lm_vc','lm'],['alley_w','lm_vc','lm'],
   ['park','lm_vc','lm'],['port','lm_vc','lm'],['tc_se','lm_vc','lm'],
+  ['sidewalk_j','lm_vc','lm'],['highway_ne','lm_vc','lm'],
   ['tennis_4k','lka','calib'],['lka','lm_keys','lm'],['lka','lkp','calib'],
   ['lkp','lm_keys','lm'],['lkp','kl','calib'],['kl','lm_keys','lm'],
   ['lka','gw','calib'],['tennis_4k','gw','calib'],
@@ -145,7 +304,12 @@ const edges = [
   ['basketball','ferris','calib'],['skyline','ferris','calib'],
   ['lka','amb02','calib'],['amb02','lm_ambrosia','lm'],['amb04','lm_ambrosia','lm'],
   ['amb02','amb04','calib'],['lm_ambrosia','amb_post','calib'],
-  ['lkp','lkp_boats','calib'],['lm_keys','lkp_boats','calib'],
+  ['lkp','lka_boats','calib'],['lm_keys','lka_boats','calib'],
+  ['lm_gv','pgp','calib'],['pgp','lm_pgh','lm'],['lm_pgh','pg04','calib'],
+  ['lm_vc','peacock_a','calib'],['lm_vc','peacock_b','calib'],
+  ['peacock_a','lm_brickell','lm'],['peacock_b','lm_brickell','lm'],
+  ['metro_se_b','lm_brickell','lm'],
+  ['lm_vc','jd05','calib'],['jd05','lm_vc','lm'],
 ];
 
 let activeFilter = 'all';
@@ -156,10 +320,12 @@ const zoneFilters = {
   ambrosia: n => n.zone === 'ambrosia' || n.id === 'lka',
   vice: n => n.zone === 'vice',
   grassrivers: n => n.zone === 'grassrivers' || n.id === 'tennis_4k' || n.id === 'metro_se',
+  ns: n => n.type === 'calibNS' || n.id === 'lm_brickell',
 };
 
 function nodeColor(type) {
-  return { leak: C.leak, calib: C.calib, uncalib: C.uncalib, lm: C.lm }[type];
+  if (type === 'calibNS') return C.calibNS;
+  return { leak: C.leak, calib: C.calib, uncalib: C.uncalib, lm: C.lm }[type] || C.calib;
 }
 function nodeVisible(n) {
   if (!zoneFilters[activeFilter]) return true;
@@ -179,6 +345,7 @@ function getNodeAt(mx, my) {
 
 function drawArrow(x1,y1,x2,y2,color,lw,dashed) {
   const dx=x2-x1,dy=y2-y1,len=Math.sqrt(dx*dx+dy*dy);
+  if(len<1) return;
   const ux=dx/len,uy=dy/len,r=18;
   const sx=x1+ux*r,sy=y1+uy*r,ex=x2-ux*(r+9),ey=y2-uy*(r+9);
   ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(ex,ey);
@@ -211,6 +378,13 @@ function draw() {
     ctx.beginPath(); ctx.arc(n.x,n.y,r,0,Math.PI*2);
     ctx.fillStyle=isHov?color:color+'2a'; ctx.fill();
     ctx.strokeStyle=color; ctx.lineWidth=isHov?2:1; ctx.stroke();
+    // NS badge
+    if(n.type==='calibNS') {
+      ctx.beginPath(); ctx.arc(n.x+13,n.y-13,6,0,Math.PI*2);
+      ctx.fillStyle=C.calibNS; ctx.fill();
+      ctx.font='bold 7px sans-serif'; ctx.textAlign='center'; ctx.fillStyle='#fff';
+      ctx.fillText('NS',n.x+13,n.y-10);
+    }
     const lines=n.label.split('\n');
     ctx.font='10px -apple-system,sans-serif';
     ctx.textAlign='center';
@@ -229,14 +403,23 @@ canvas.addEventListener('mousemove', e => {
   const tip=document.getElementById('tooltip');
   if(hoveredNode){
     const n=hoveredNode;
+    const data=camData[n.id];
     const deps=edges.filter(([a,b])=>b===n.id).map(([a])=>nodes.find(x=>x.id===a)?.label.replace('\n',' ')).filter(Boolean);
     const provides=edges.filter(([a,b])=>a===n.id).map(([_,b])=>nodes.find(x=>x.id===b)?.label.replace('\n',' ')).filter(Boolean);
-    const typeLabel={leak:'Leak camera',calib:'Calibrated camera',uncalib:'Uncalibrated / WIP',lm:'Landmark cluster'}[n.type];
-    const typeColor={leak:'#534AB7',calib:'#0F6E56',uncalib:'#854F0B',lm:'#993C1D'}[n.type];
+    const typeLabel={leak:'Leak camera',calib:'Calibrated — rlx',calibNS:'Calibrated — neutral_state',uncalib:'Uncalibrated / WIP',lm:'Landmark cluster'}[n.type];
+    const typeColor={leak:'#534AB7',calib:'#0F6E56',calibNS:'#1a7a5e',uncalib:'#854F0B',lm:'#993C1D'}[n.type];
+    let html=`<strong>${n.label.replace('\n',' ')}</strong><span class="type-badge" style="background:${typeColor}22;color:${typeColor}">${typeLabel}</span>`;
+    if(data) {
+      if(data.loss!==null) html+=`<span class="author-badge" style="background:#37337022;color:#534AB7">loss=${data.loss}</span>`;
+      if(data.lms?.length) html+=`<div class="deps-section"><b>Landmarks:</b> ${data.lms.join(', ')}</div>`;
+      if(data.rays?.length) html+=`<div class="deps-section"><b>Rays:</b> ${data.rays.join(' · ')}</div>`;
+    }
+    if(deps.length) html+=`<div class="deps-section"><b>Depends on:</b> ${deps.join(', ')}</div>`;
+    if(provides.length) html+=`<div class="deps-section"><b>Provides to:</b> ${provides.join(', ')}</div>`;
     tip.style.display='block';
     tip.style.left=(e.clientX+14)+'px';
     tip.style.top=(e.clientY-10)+'px';
-    tip.innerHTML=`<strong>${n.label.replace('\n',' ')}</strong><span class="type-badge" style="background:${typeColor}22;color:${typeColor}">${typeLabel}</span>${deps.length?`<div class="deps-section"><b>Depends on:</b> ${deps.join(', ')}</div>`:''}${provides.length?`<div class="deps-section"><b>Provides to:</b> ${provides.join(', ')}</div>`:''}`;
+    tip.innerHTML=html;
   } else { tip.style.display='none'; }
   draw();
 });
