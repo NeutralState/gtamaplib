@@ -6453,17 +6453,16 @@
   },
   "Park Grove Condominium (C)": {
     "xyz": [
-      -1310.987,
-      -2053.385,
-      96.905
+      -1313.796,
+      -2058.209,
+      97.502
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Grassrivers 02 (Watson Bay)"
+      "Tennis Stadium (4K)",
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 3.59,
-    "zone": "grassrivers",
-    "author": "rlx"
+    "error_m": 2.365,
+    "zone": "vice_city"
   },
   "Park Grove Condominium (N)": {
     "xyz": [
@@ -7741,34 +7740,6 @@
     "zone": "vice_city",
     "author": "neutral_state"
   },
-  "Infinity at Brickell": {
-    "xyz": [
-      -1332.799,
-      -1878.498,
-      91.03
-    ],
-    "source_cameras": [
-      "Highway (Peacock Bay) (A)",
-      "Highway (Peacock Bay) (B)"
-    ],
-    "error_m": 1.492,
-    "zone": "grassrivers",
-    "author": "neutral_state"
-  },
-  "One Broadway (W)": {
-    "xyz": [
-      -1317.985,
-      -1907.883,
-      67.121
-    ],
-    "source_cameras": [
-      "Highway (Peacock Bay) (A)",
-      "Highway (Peacock Bay) (B)"
-    ],
-    "error_m": 4.418,
-    "zone": "grassrivers",
-    "author": "neutral_state"
-  },
   "Turkey Point Nuclear Power Station (CNE)": {
     "xyz": [
       -1572.196,
@@ -8944,32 +8915,6 @@
     "error_m": 1.25,
     "zone": "vice_city",
     "author": "neutral_state"
-  },
-  "Flagler on the River (SE)": {
-    "xyz": [
-      -1108.278,
-      -360.517,
-      137.71
-    ],
-    "source_cameras": [
-      "Highway (Peacock Bay) (A)",
-      "Vice Beach (B)"
-    ],
-    "error_m": 3.554,
-    "zone": "vice_city"
-  },
-  "Stephen P. Clark Government Center (E)": {
-    "xyz": [
-      -941.781,
-      -6.778,
-      161.32
-    ],
-    "source_cameras": [
-      "Highway (Peacock Bay) (A)",
-      "Vice City 03 (Basketball)"
-    ],
-    "error_m": 0.882,
-    "zone": "vice_city"
   },
   "Flamingo South Beach (NWNE)": {
     "xyz": [
