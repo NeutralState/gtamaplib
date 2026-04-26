@@ -489,7 +489,7 @@ canvas.addEventListener('mousemove', e => {
     tip.style.left=(e.clientX+14)+'px';
     tip.style.top=(e.clientY-10)+'px';
     const thumbPath = 'thumbs/' + (camData[n.id] ? camData[n.id].label : n.label.replace(/\n/g, ' ')) + '.jpg';
-    html += '<img src=' + JSON.stringify(thumbPath) + ' style="width:100%;border-radius:4px;margin-top:6px;display:block" onerror="this.style.display='none'"/>';
+    html += '<img src=' + JSON.stringify(thumbPath) + ' style="width:100%;border-radius:4px;margin-top:6px" onerror="this.remove()">'; 
     tip.innerHTML=html;
   } else { tip.style.display='none'; }
   draw();
