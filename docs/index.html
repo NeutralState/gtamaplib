@@ -487,7 +487,7 @@ canvas.addEventListener('mousemove', e => {
     if(provides.length) html+=`<div class="deps-section"><b>Provides to:</b> ${provides.join(', ')}</div>`;
     tip.style.display='block';
     tip.style.left=(e.clientX+14)+'px';
-    tip.style.top=(e.clientY-10)+'px';
+    tip.style.top=e.clientY+'px'; tip.style.transform='translateY(-50%)';
     const thumbPath = 'thumbs/' + n.label.split('\\n').join(' ') + '.jpg';
     html += '<img src=' + JSON.stringify(thumbPath) + ' style="width:100%;border-radius:4px;margin-top:6px" onerror="this.remove()">'; 
     tip.innerHTML=html;
