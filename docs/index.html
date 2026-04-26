@@ -310,7 +310,7 @@ const nodes = [
   { id:'lm_prison',  label:'Prison towers\n& Turkey Point',type:'lm',     zone:'grassrivers', x:750,  y:390 },
   { id:'lm_ambrosia',label:'Ambrosia\nlandmarks',          type:'lm',     zone:'ambrosia',    x:940,  y:510 },
   { id:'lm_pgh',     label:'Port Gellhorn\nlandmarks',     type:'lm',     zone:'port_gellhorn',x:680, y:560 },
-  { id:'lm_brickell',label:'Brickell\nlandmarks',          type:'lm',     zone:'vice',        x:480,  y:560 },
+  { id:'lm_brickell',label:'Brickell\nlandmarks',          type:'lm',     zone:'vice',        x:620,  y:560 },
   // Calibrated cameras
   { id:'lka',        label:'LK Airplane\n(X)',             type:'calib',  zone:'keys',        x:780,  y:130 },
   { id:'lkp',        label:'LK Postcard\n(X)',             type:'calib',  zone:'keys',        x:940,  y:250 },
@@ -324,25 +324,25 @@ const nodes = [
   { id:'vcp',        label:'Vice City\nPostcard',          type:'calib',  zone:'vice',        x:210,  y:600 },
   { id:'rooftop',    label:'Rooftop Party',                type:'calib',  zone:'vice',        x:370,  y:600 },
   { id:'motorboats', label:'Motorboats\n(A/B)',            type:'calib',  zone:'vice',        x:460,  y:320 },
-  { id:'ferris',     label:'VC 08\n(Ferris Wheel)',        type:'calib',  zone:'vice',        x:590,  y:600 },
+  { id:'ferris',     label:'VC 08\n(Ferris Wheel)',        type:'calib',  zone:'vice',        x:310,  y:700 },
   { id:'amb02',      label:'Ambrosia 02\n(Panorama)',      type:'calib',  zone:'ambrosia',    x:940,  y:390 },
   { id:'amb04',      label:'Ambrosia 04\n(Fires)',         type:'calib',  zone:'ambrosia',    x:1080, y:510 },
 
-  { id:'pgp',        label:'PGH Postcard\n(X)',            type:'calib',  zone:'port_gellhorn',x:630, y:460 },
+  { id:'pgp',        label:'PGH Postcard\n(X)',            type:'calib',  zone:'port_gellhorn',x:700, y:460 },
   { id:'pg04',       label:'PGH 04\n(Delights) (X)',      type:'calib',  zone:'port_gellhorn',x:750, y:620 },
   { id:'lka_boats',  label:'LK 05\n(Boats)',               type:'calib',  zone:'keys',        x:1080, y:390 },
 
   { id:'keys',      label:'Keys',                           type:'calib',  zone:'keys',        x:940,  y:130 },
-  { id:'convertible',label:'Convertible',                   type:'calib',  zone:'vice',        x:720,  y:600 },
+  { id:'convertible',label:'Convertible',                   type:'calib',  zone:'vice',        x:460,  y:700 },
   { id:'raul',      label:'Raul Bautista 03\n(Motorboat)',  type:'calib',  zone:'vice',        x:340,  y:330 },
-  { id:'chase2a',   label:'Chase (2) (A)',                  type:'calib',  zone:'ambrosia',    x:780,  y:600 },
+  { id:'chase2a',   label:'Chase (2) (A)',                  type:'calib',  zone:'ambrosia',    x:820,  y:580 },
   { id:'chase2b',   label:'Chase (2) (B)',                  type:'calib',  zone:'ambrosia',    x:860,  y:720 },
   { id:'mkp04',     label:'MK NP 04\n(Mountain Pass) (X)', type:'calib',  zone:'port_gellhorn',x:550, y:560 },
   { id:'amb01',     label:'Ambrosia 01\n(Bikers)',          type:'calib',  zone:'ambrosia',    x:1080, y:720 },
   { id:'amb_post_x',label:'Ambrosia\nPostcard (X)',         type:'calib',  zone:'ambrosia',    x:1080, y:610 },
-  { id:'peacock_a',  label:'Peacock Bay (A)',              type:'calib',  zone:'vice',        x:350,  y:720 },
-  { id:'peacock_b',  label:'Peacock Bay (B)',              type:'calibNS',zone:'vice',        x:480,  y:720 },
-  { id:'jd05',       label:'Jason Duval 05\n(Machine Gun)',type:'calibNS',zone:'vice',        x:210,  y:720 },
+  { id:'peacock_a',  label:'Peacock Bay (A)',              type:'calib',  zone:'vice',        x:600,  y:720 },
+  { id:'peacock_b',  label:'Peacock Bay (B)',              type:'calibNS',zone:'vice',        x:730,  y:720 },
+  { id:'jd05',       label:'Jason Duval 05\n(Machine Gun)',type:'calibNS',zone:'vice',        x:220,  y:720 },
 ];
 
 const edges = [
@@ -382,7 +382,7 @@ const edges = [
 
 let activeFilter = 'all';
 const zoneFilters = {
-  all: 2.793,
+  all: null,
   leak: n => n.type === 'leak',
   keys: n => n.zone === 'keys' || n.id === 'tennis_4k',
   ambrosia: n => n.zone === 'ambrosia' || n.id === 'lka',
