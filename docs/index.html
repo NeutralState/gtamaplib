@@ -488,9 +488,7 @@ canvas.addEventListener('mousemove', e => {
     tip.style.display='block';
     tip.style.left=(e.clientX+14)+'px';
     tip.style.top=(e.clientY-10)+'px';
-    const rawLabel = (camData[n.id] ? camData[n.id].label : n.label).replace(/\\n/g,' ').replace(/\n/g,' ').replace(/
-/g,' ');
-    const thumbPath = 'thumbs/' + rawLabel + '.jpg';
+    const thumbPath = 'thumbs/' + n.label.split('\\n').join(' ') + '.jpg';
     html += '<img src=' + JSON.stringify(thumbPath) + ' style="width:100%;border-radius:4px;margin-top:6px" onerror="this.remove()">'; 
     tip.innerHTML=html;
   } else { tip.style.display='none'; }
