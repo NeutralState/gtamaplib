@@ -164,7 +164,7 @@ const camData = {
     label: 'Skyline',
     lms: ['Four Seasons Hotel Miami (BE/NW)', '1000 Venetian Way (SE)'],
     rays: ['Vice Beach B → Asia Brickell Key, Flagler on the River, The Grand (E), Loft Downtown II, Marina Blue (NE), Opera Tower, Southeast Financial Center, Ten Museum Park (SE), Wells Fargo Center (N)', 'Venetian Islands → 1000 Venetian Way (2/3/4)'],
-    author: 'rlx', loss: 2.793
+    author: 'rlx', loss: 2.017
   },
   'basketball': {
     label: 'VC 03 (Basketball)',
@@ -473,13 +473,13 @@ canvas.addEventListener('mousemove', e => {
   if(hoveredNode){
     const n=hoveredNode;
     const data=camData[n.id];
-    const deps=edges.filter(([a,b])=>b===n.id).map(([a])=>nodes.find(x=>x.id===a)?.label.replace('\n',' ')).filter(Boolean);
-    const provides=edges.filter(([a,b])=>a===n.id).map(([_,b])=>nodes.find(x=>x.id===b)?.label.replace('\n',' ')).filter(Boolean);
+    const deps=edges.filter(([a,b])=>b===n.id).map(([a])=>nodes.find(x=>x.id===a)?.label?.replace('\n',' ')).filter(Boolean);
+    const provides=edges.filter(([a,b])=>a===n.id).map(([_,b])=>nodes.find(x=>x.id===b)?.label?.replace('\n',' ')).filter(Boolean);
     const typeLabel={leak:'Leak camera',calib:'Calibrated — rlx',calibNS:'Calibrated — neutral_state',uncalib:'Uncalibrated / WIP',lm:'Landmark cluster'}[n.type];
     const typeColor={leak:'#534AB7',calib:'#0F6E56',calibNS:'#1a7a5e',uncalib:'#854F0B',lm:'#993C1D'}[n.type];
     let html=`<strong>${n.label.replace('\n',' ')}</strong><span class="type-badge" style="background:${typeColor}22;color:${typeColor}">${typeLabel}</span>`;
     if(data) {
-      if(data.loss!==2.793) html+=`<span class="author-badge" style="background:#37337022;color:#534AB7">loss=${data.loss}</span>`;
+      if(data.loss!==null) html+=`<span class="author-badge" style="background:#37337022;color:#534AB7">loss=${data.loss}</span>`;
       if(data.lms?.length) html+=`<div class="deps-section"><b>Landmarks:</b> ${data.lms.join(', ')}</div>`;
       if(data.rays?.length) html+=`<div class="deps-section"><b>Rays:</b> ${data.rays.join(' · ')}</div>`;
     }
