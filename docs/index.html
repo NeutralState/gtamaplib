@@ -193,13 +193,13 @@ const camData = {
     label: 'Ambrosia 02 (Panorama)',
     lms: ['FAA Miami ATCT (MIA)'],
     rays: ['LK Airplane → MIA North Terminal Tower, Wheelabrator South Broward', 'Loading Zone near Prison SW → Water Tower near Prison', 'WDNA FM Fake Cam → WDNA FM (B)'],
-    author: 'rlx', loss: null
+    author: 'rlx', loss: 0.037
   },
   'amb04': {
     label: 'Ambrosia 04 (Fires)',
     lms: ['Sunshine Skyway Bridge (N/S)'],
     rays: ['Ambrosia 02 → Sebring Water Tower (B/T), 1500 Sonora Ave (Tank), US Sugar Mill (Factory), USSM Smokestack (4-11)', 'Ambrosia 02 → Wheelabrator South Broward (W)'],
-    author: 'rlx', loss: null
+    author: 'rlx', loss: 23.512
   },
   'pgp': {
     label: 'Port Gellhorn Postcard (X)',
@@ -211,7 +211,7 @@ const camData = {
     label: 'PGH 04 (Delights) (X)',
     lms: ['Juice Fruit Sign (B)'],
     rays: ['PGH Postcard → Train Signal (S) (E/W)', 'PGH Postcard → Water Tower (West PGH) (C)'],
-    author: 'rlx', loss: null
+    author: 'rlx', loss: 0.035
   },
   'peacock_a': {
     label: 'Highway\n(Peacock Bay) (A)',
@@ -254,13 +254,13 @@ const camData = {
     label: 'Chase (2) (B)',
     lms: ['Sunshine Skyway Bridge (N/S)'],
     rays: ['AIWE → Wildfire Scooters (NW/S/SE/W)'],
-    author: 'rlx', loss: null
+    author: 'rlx', loss: 8.196
   },
   'mkp04': {
     label: 'Mount Kalaga NP 04 (Mountain Pass) (X)',
     lms: ['Water Tower near Prison'],
     rays: ['Gas Station Lucia → Billboard (Delights)', 'Diner SE A → Quarry'],
-    author: 'rlx', loss: null
+    author: 'rlx', loss: 0.270
   },
   'amb01': {
     label: 'Ambrosia 01 (Bikers)',
@@ -488,6 +488,8 @@ canvas.addEventListener('mousemove', e => {
     tip.style.display='block';
     tip.style.left=(e.clientX+14)+'px';
     tip.style.top=(e.clientY-10)+'px';
+    const thumbPath = 'thumbs/' + n.label.replace(/\n/g,' ') + '.jpg';
+    html = '<img src="' + thumbPath + '" style="width:100%;border-radius:4px;margin-bottom:6px;display:block" onerror="this.style.display='none'"/>' + html;
     tip.innerHTML=html;
   } else { tip.style.display='none'; }
   draw();
