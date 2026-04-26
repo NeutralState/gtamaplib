@@ -489,8 +489,42 @@ canvas.addEventListener('mousemove', e => {
     tip.style.display='block';
     tip.style.left=(e.clientX+14)+'px';
     tip.style.top=e.clientY+'px'; tip.style.transform='translateY(-50%)';
-    const thumbPath = 'thumbs/' + n.label.split('\\n').join(' ') + '.jpg';
-    html += '<img src=' + JSON.stringify(thumbPath) + ' style="width:100%;border-radius:4px;margin-top:6px" onerror="this.remove()">'; 
+    const thumbMap = {
+    'lka': 'LK Airplane (X)',
+    'lkp': 'LK Postcard (X)',
+    'kl': 'Key Lento',
+    'keys': 'Keys',
+    'lka_boats': 'LK 05 (Boats)',
+    'gw': 'Grassrivers 02 (Watson Bay)',
+    'prison': 'Prison',
+    'vb_a': 'Vice Beach (A)',
+    'vb_b': 'Vice Beach (B)',
+    'rooftop': 'Rooftop Party',
+    'vi': 'Venetian Islands',
+    'beach': 'Beach',
+    'skyline': 'Skyline',
+    'basketball': 'VC 03 (Basketball)',
+    'vcp': 'Vice City Postcard',
+    'motorboats': 'Motorboats (A-B)',
+    'ferris': 'VC 08 (Ferris Wheel)',
+    'convertible': 'Convertible',
+    'raul': 'Raul Bautista 03 (Motorboat)',
+    'peacock_a': 'Peacock Bay (A)',
+    'peacock_b': 'Peacock Bay (B)',
+    'amb02': 'Ambrosia 02 (Panorama)',
+    'amb04': 'Ambrosia 04 (Fires)',
+    'chase2a': 'Chase (2) (A)',
+    'chase2b': 'Chase (2) (B)',
+    'pgp': 'PGH Postcard (X)',
+    'pg04': 'PGH 04 (Delights) (X)',
+    'mkp04': 'MK NP 04 (Mountain Pass) (X)',
+    'amb01': 'Ambrosia 01 (Bikers)',
+    'amb_post_x': 'Ambrosia Postcard (X)',
+    'jd05': 'Jason Duval 05 (Machine Gun)',
+  };
+    const thumbFile = thumbMap[n.id];
+    const thumbPath = thumbFile ? 'thumbs/' + thumbFile + '.jpg' : null;
+    if(thumbPath) html += '<img src=' + JSON.stringify(thumbPath) + ' style="width:100%;border-radius:4px;margin-top:6px" onerror="this.remove()">'; 
     tip.innerHTML=html;
   } else { tip.style.display='none'; }
   draw();
