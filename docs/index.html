@@ -488,8 +488,8 @@ canvas.addEventListener('mousemove', e => {
     tip.style.display='block';
     tip.style.left=(e.clientX+14)+'px';
     tip.style.top=(e.clientY-10)+'px';
-    const thumbPath = 'thumbs/' + n.label.replace(/\n/g,' ') + '.jpg';
-    html = '<img src="' + thumbPath + '" style="width:100%;border-radius:4px;margin-bottom:6px;display:block" onerror="this.style.display='none'"/>' + html;
+    const thumbPath = 'thumbs/' + n.label.replace(/\n/g, ' ') + '.jpg';
+    html = '<img src=' + JSON.stringify(thumbPath) + ' style="width:100%;border-radius:4px;margin-bottom:6px;display:block" onerror="this.style.display=none"/>' + html;
     tip.innerHTML=html;
   } else { tip.style.display='none'; }
   draw();
