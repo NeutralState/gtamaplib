@@ -4365,135 +4365,131 @@
   },
   "180 Pompano Dr": {
     "xyz": [
-      -1899.7529878772812,
-      -5430.7431334814755,
-      14.210142605565238
+      -1878.2946462775421,
+      -5415.22252589731,
+      11.924479314792977
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)",
       "Key Lento"
     ],
-    "error_m": 2.541,
+    "error_m": 1.068,
     "zone": "leonida_keys"
   },
   "200 Pompano Dr": {
     "xyz": [
-      -1879.0409766005673,
-      -5396.096506452372,
-      12.307269967431633
+      -1857.1082746091665,
+      -5379.9743270048675,
+      10.042699799624115
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)",
       "Key Lento"
     ],
-    "error_m": 1.336,
+    "error_m": 0.056,
     "zone": "leonida_keys"
   },
   "500 Pompano Dr": {
     "xyz": [
-      -1921.3494618197044,
-      -5329.963707627432,
-      19.737822838985288
+      -1896.6330427154364,
+      -5312.106835752422,
+      17.50203003922831
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)",
       "Key Lento"
     ],
-    "error_m": 2.552,
+    "error_m": 0.406,
     "zone": "leonida_keys"
   },
   "Billboard #2 (Key Lento)": {
     "xyz": [
-      -3058.8920938811707,
-      -6498.878365482577,
-      25.58193146781467
+      -3057.0110619087136,
+      -6498.178541615378,
+      25.35883313508047
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)",
       "Key Lento"
     ],
-    "error_m": 0.575,
+    "error_m": 0.386,
     "zone": "leonida_keys"
   },
   "Island K (E)": {
     "xyz": [
-      -3562.974,
-      -7797.697,
-      0.0
+      -3708.456738469483,
+      -8006.598640988123,
+      0
     ],
     "source_cameras": [
       "Key Lento"
     ],
     "error_m": null,
-    "zone": "leonida_keys",
-    "author": "rlx"
+    "zone": "leonida_keys"
   },
   "Island K (W)": {
     "xyz": [
-      -3691.596,
-      -7923.045,
-      0.0
+      -3875.2092738916817,
+      -8179.8324169995685,
+      0
     ],
     "source_cameras": [
       "Key Lento"
     ],
     "error_m": null,
-    "zone": "leonida_keys",
-    "author": "rlx"
+    "zone": "leonida_keys"
   },
   "Marina Club at Blackwater Sound (N)": {
     "xyz": [
-      -2581.6119712179097,
-      -5868.353268909857,
-      16.0408237137778
+      -2567.406325589307,
+      -5857.6002817386525,
+      14.414622831872592
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)",
       "Key Lento"
     ],
-    "error_m": 2.584,
+    "error_m": 2.386,
     "zone": "leonida_keys"
   },
   "Marina Club at Blackwater Sound (S)": {
     "xyz": [
-      -2575.78173870504,
-      -5924.775900342865,
-      16.165594765481554
+      -2564.004405741657,
+      -5916.341672021954,
+      14.688484553170642
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)",
       "Key Lento"
     ],
-    "error_m": 0.617,
+    "error_m": 0.155,
     "zone": "leonida_keys"
   },
   "Naval Air Station Key West (Control Tower)": {
     "xyz": [
-      -5716.593,
-      -6602.387,
-      29.784
+      -5706.213381607473,
+      -6590.229165252491,
+      31.69758405854204
     ],
     "source_cameras": [
       "Key Lento",
       "Grassrivers Postcard (X)"
     ],
-    "error_m": 1.025,
-    "zone": "leonida_keys",
-    "author": "rlx"
+    "error_m": 2.618,
+    "zone": "leonida_keys"
   },
   "Naval Air Station Key West (Radar Tower)": {
     "xyz": [
-      -5559.494,
-      -6469.937,
-      27.67
+      -5549.509683105128,
+      -6457.9888521369885,
+      29.393758950128188
     ],
     "source_cameras": [
       "Key Lento",
       "Grassrivers Postcard (X)"
     ],
-    "error_m": 0.692,
-    "zone": "leonida_keys",
-    "author": "rlx"
+    "error_m": 2.542,
+    "zone": "leonida_keys"
   },
   "House with Pier (E)": {
     "xyz": [
@@ -7821,41 +7817,41 @@
   },
   "House C (E)": {
     "xyz": [
-      -2335.6245650379733,
-      -5516.271850424468,
-      9.537784174436766
+      -2321.6999358369544,
+      -5504.682816617155,
+      7.54700521911113
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 3.361,
+    "error_m": 1.953,
     "zone": "leonida_keys"
   },
   "House D (E)": {
     "xyz": [
-      -2321.847272102159,
-      -5488.665566039712,
-      14.947263886308107
+      -2308.105765686415,
+      -5477.02023348807,
+      12.982296714290111
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 1.311,
+    "error_m": 0.168,
     "zone": "leonida_keys"
   },
   "Unknown Residential Building": {
     "xyz": [
-      -1937.1332039986469,
-      -5418.959377160816,
-      15.289919258038074
+      -1913.7363891802158,
+      -5401.53414830932,
+      13.041122804314604
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 2.438,
+    "error_m": 1.305,
     "zone": "leonida_keys"
   },
   "Bridge Island (W)": {
