@@ -103,31 +103,36 @@ const camData = {
     label: 'LK Airplane (X)',
     lms: ['Four Seasons Hotel Miami (BE)', 'Four Seasons Hotel Miami (BW)', 'Portofino Tower (NW)', 'House with Boat (X)', 'Two Tequesta Point', 'Three Tequesta Point', 'Prison Tower (1)', 'Asia Brickell Key'],
     rays: ['Tennis Stadium → Park Grove Condominium (S)', 'Tennis Stadium → Homestead Water Tower', 'Ocean near Keys (N) → Seven Mile Bridge (3T/6T)', 'Ocean near Keys (N) → Blue Billboard (Key Lento)', 'Ocean near Keys (N) → 99353/102180 Overseas Hwy', 'House with Boat (X) → House D (SW)'],
-    author: 'neutral_state', loss: 5.562
+    author: 'neutral_state', loss: 5.562,
+    params: 'xyz=(-4374.7, -7585.7, 78.996) · ypr=(318.625, -9.400, 0.000) · hfov=62.550'
   },
   'lkp': {
     label: 'LK Postcard (X)',
     lms: ['Island A (W)', 'Island J (E)', 'Portofino Tower (NW)', 'Icon at South Beach'],
     rays: ['LK Airplane → Pin D01R/D01L/D02R/D02L', 'LK Airplane → House D (SW)', 'LK Airplane → Tree on Island J', 'LK Airplane → 102180 Overseas Hwy', 'LK Airplane → Turkey Point (3)'],
-    author: 'neutral_state', loss: 5.616
+    author: 'neutral_state', loss: 5.616,
+    params: 'xyz=(-3826.5, -6799.0, 154.302) · ypr=(299.747, -12.250, 0.000) · hfov=47.450'
   },
   'kl': {
     label: 'Key Lento',
     lms: ['Blue Billboard (Key Lento)', '99353 Overseas Hwy', 'Tree on Island J', '102180 Overseas Hwy'],
     rays: ['LK Postcard → Marina Club at Blackwater Sound (S)', 'LK Postcard → Billboard #2 (Key Lento)', 'LK Postcard → House D (E)', 'LK Postcard → 200 Pompano Dr'],
-    author: 'neutral_state', loss: 3.038
+    author: 'neutral_state', loss: 3.038,
+    params: 'xyz=(-1786.5, -5241.5, 30.168) · ypr=(134.211, -7.950, 0.000) · hfov=62.250'
   },
   'gw': {
     label: 'Grassrivers 02 (Watson Bay)',
     lms: ['Homestead Water Tower', 'Park Grove Condominium (S)', 'Prison Tower (2)', 'Prison Tower (3)', 'Prison Tower (4)', 'Prison Tower (5)', 'Prison Tower (6)'],
     rays: ['LK Airplane → Turkey Point Nuclear (N)', 'LK Airplane → Turkey Point Nuclear (3)'],
-    author: 'neutral_state', loss: 0.838
+    author: 'neutral_state', loss: 0.838,
+    params: 'xyz=(-5251.5, -3359.0, 25.772) · ypr=(282.228, -5.900, 0.000) · hfov=49.100'
   },
   'prison': {
     label: 'Prison',
     lms: ['Opera Tower', 'The Grand (E)', 'Turkey Point Nuclear (S)', 'Turkey Point Nuclear (N)', 'Prison Tower (1-6)'],
     rays: ['Grassrivers 02 → Prison Tower (1)', 'Grassrivers 02 → Prison Tower (3)', 'Grassrivers 02 → Prison Tower (5)'],
-    author: 'neutral_state', loss: 2.758
+    author: 'neutral_state', loss: 2.758,
+    params: 'xyz=(-3355.5, -2757.5, 33.294) · ypr=(281.580, -2.550, 0.000) · hfov=80.550'
   },
   'vb_a': {
     label: 'Vice Beach (A)',
@@ -284,7 +289,8 @@ const camData = {
     label: 'LK 05 (Boats)',
     lms: ['Blue Billboard (Key Lento)', 'Pin B01L/C01R/B02R/B02L'],
     rays: ['LK Postcard → House with Pier (E)'],
-    author: 'neutral_state', loss: 32.964
+    author: 'neutral_state', loss: 32.964,
+    params: 'xyz=(-3173.5, -6351.0, 3.557) · ypr=(162.116, -17.050, 0.000) · hfov=74.400'
   },
 };
 
@@ -486,6 +492,7 @@ canvas.addEventListener('mousemove', e => {
     }
     if(deps.length) html+=`<div class="deps-section"><b>Depends on:</b> ${deps.join(', ')}</div>`;
     if(provides.length) html+=`<div class="deps-section"><b>Provides to:</b> ${provides.join(', ')}</div>`;
+    if(data.params) html+=`<div class="deps-section"><b>Camera:</b> ${data.params}</div>`;
     tip.style.display='block';
     tip.style.left=(e.clientX+14)+'px';
     tip.style.top=e.clientY+'px'; tip.style.transform='translateY(-50%)';
