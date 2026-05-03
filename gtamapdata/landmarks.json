@@ -8882,5 +8882,77 @@
     "source_cameras": [],
     "error_m": null,
     "zone": "unknown"
+  },
+  "Bay (AAAA)": {
+    "xyz": [
+      -6586.5201,
+      4619.1975,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (W) (B)"
+    ],
+    "error_m": null,
+    "zone": "port_gellhorn"
+  },
+  "Bay (BBBB)": {
+    "xyz": [
+      -6582.3128,
+      4627.8489,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (W) (B)"
+    ],
+    "error_m": null,
+    "zone": "port_gellhorn"
+  },
+  "Bay (CCCC)": {
+    "xyz": [
+      -6980.9813,
+      4755.4377,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (W) (B)"
+    ],
+    "error_m": null,
+    "zone": "port_gellhorn"
+  },
+  "Bay (DDDD)": {
+    "xyz": [
+      -6987.0857,
+      4742.8852,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (W) (B)"
+    ],
+    "error_m": null,
+    "zone": "port_gellhorn"
+  },
+  "Bay (EEEE)": {
+    "xyz": [
+      -7539.5238,
+      4636.4269,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (W) (B)"
+    ],
+    "error_m": null,
+    "zone": "port_gellhorn"
+  },
+  "Bay (FFFF)": {
+    "xyz": [
+      -7440.9229,
+      4569.3172,
+      0.0
+    ],
+    "source_cameras": [
+      "Diner (W) (B)"
+    ],
+    "error_m": null,
+    "zone": "port_gellhorn"
   }
 }
