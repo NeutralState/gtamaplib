@@ -1,0 +1,1209 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>gtamaplib — Calibration Tool</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap');
+:root {
+  --bg:#0a0a0c; --surface:#13131a; --surface2:#1c1c26; --border:#252535;
+  --green:#4ade80; --yellow:#f59e0b; --red:#f87171; --blue:#60a5fa;
+  --text:#e2e2f0; --dim:#5a5a7a; --mid:#9090b0;
+  --mono:'JetBrains Mono',monospace; --sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+
+header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.logo{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green)}
+#cam-sel{font-family:var(--mono);font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:5px;cursor:pointer;flex:1;max-width:320px}
+#cam-meta{font-family:var(--mono);font-size:10px;color:var(--dim);flex:1}
+.chip{font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:12px;background:var(--surface2);border:1px solid var(--border)}
+.chip .v{font-weight:700}
+.chip.good .v{color:var(--green)} .chip.mid .v{color:var(--yellow)} .chip.bad .v{color:var(--red)}
+.btn{font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 12px;border-radius:5px;border:none;cursor:pointer;transition:all .15s}
+.btn-save{background:var(--green);color:#000}.btn-save:hover{background:#22c55e}.btn-save:disabled{opacity:.4;cursor:default}
+.btn-reset{background:var(--surface2);color:var(--mid);border:1px solid var(--border)}.btn-reset:hover{color:var(--yellow);border-color:var(--yellow)}
+.saved{font-family:var(--mono);font-size:10px;color:var(--green);display:none}
+
+.main{display:flex;flex:1;overflow:hidden}
+
+.canvas-wrap{flex:1;position:relative;background:#000;overflow:hidden}
+#frame-img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}
+#overlay{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+.no-img{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--dim)}
+
+.sidebar{width:290px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sb-sec{padding:11px 13px;border-bottom:1px solid var(--border)}
+.sb-title{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:9px}
+.sl-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.sl-lbl{font-family:var(--mono);font-size:10px;color:var(--mid);width:32px;flex-shrink:0}
+input[type=range]{flex:1;height:3px;-webkit-appearance:none;background:var(--border);border-radius:2px;outline:none;cursor:pointer}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--green);cursor:pointer}
+.num{font-family:var(--mono);font-size:10px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:3px 5px;border-radius:4px;width:72px;text-align:right}
+.num:focus{outline:none;border-color:var(--green)}
+
+.opt-bar{display:flex;gap:6px;align-items:center;padding:10px 13px;border-bottom:1px solid var(--border)}
+.btn-opt{font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 0;border-radius:5px;border:none;cursor:pointer;background:var(--blue);color:#000;flex:1}
+.btn-opt:hover{background:#93c5fd}.btn-opt:disabled{opacity:.4;cursor:default}
+.btn-opt.running{background:var(--yellow);animation:pulse 1s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
+.indep-chip{font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:5px;background:#0f1a2e;border:1px solid var(--blue);color:var(--blue);text-align:center;white-space:nowrap}
+.indep-chip .v{font-weight:700}
+
+.opt-result{padding:8px 13px;background:#0f1a2e;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--blue);display:none}
+.opt-result .ol{font-weight:700;font-size:12px}
+.opt-result .od{color:var(--dim);margin-top:2px}
+
+.lm-hdr{padding:7px 13px 4px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
+.lm-filters{display:flex;gap:3px}
+.f-btn{font-family:var(--mono);font-size:9px;padding:3px 7px;border-radius:3px;border:1px solid var(--border);background:transparent;color:var(--dim);cursor:pointer}
+.f-btn.on{background:var(--surface2);color:var(--text);border-color:var(--mid)}
+
+.lm-list{flex:1;overflow-y:auto}
+.lm-list::-webkit-scrollbar{width:3px}
+.lm-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.lm-item{display:flex;align-items:center;gap:6px;padding:5px 13px;border-bottom:1px solid #111118;cursor:pointer;transition:background .1s}
+.lm-item:hover{background:var(--surface2)}
+.lm-item.sel{background:#1a2820}
+.lm-item.faded{opacity:.25}
+.lm-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.lm-badge{font-family:var(--mono);font-size:8px;padding:1px 4px;border-radius:3px;flex-shrink:0}
+.lm-badge.c{background:#2a1a1a;color:#f87171}
+.lm-badge.i{background:#0f1a2e;color:#60a5fa}
+.lm-name{font-family:var(--mono);font-size:9px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lm-d{font-family:var(--mono);font-size:10px;font-weight:700;flex-shrink:0}
+
+.statusbar{padding:5px 13px;background:var(--surface);border-top:1px solid var(--border);font-family:var(--mono);font-size:9px;color:var(--dim);display:flex;gap:10px;flex-shrink:0}
+
+.tip{position:fixed;background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:5px 9px;font-family:var(--mono);font-size:10px;pointer-events:none;display:none;z-index:99;white-space:nowrap}
+
+/* Pixel Editor */
+#px-editor{display:none;position:fixed;inset:0;background:#000d;z-index:300;flex-direction:column}
+#px-editor.active{display:flex}
+.pxe-header{display:flex;align-items:center;gap:10px;padding:10px 16px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
+.pxe-title{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--text);flex:1}
+.pxe-lm{font-family:var(--mono);font-size:11px;color:var(--yellow)}
+.pxe-mode{font-family:var(--mono);font-size:10px;padding:4px 10px;border-radius:4px;background:#1a2820;color:var(--green);border:1px solid var(--green)}
+.pxe-mode.fix{background:#2a1a1a;color:var(--red);border-color:var(--red)}
+.btn-pxe{font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 12px;border-radius:5px;border:none;cursor:pointer}
+.btn-validate{background:var(--green);color:#000}
+.btn-fix-mode{background:#2a1a1a;color:var(--red);border:1px solid var(--red)}
+.btn-fix-mode.active{background:var(--red);color:#000}
+.btn-cancel{background:var(--surface2);color:var(--mid);border:1px solid var(--border)}
+.pxe-body{flex:1;display:flex;overflow:hidden}
+.pxe-canvas-wrap{flex:1;position:relative;overflow:hidden;background:#111;cursor:crosshair}
+#pxe-canvas{position:absolute;top:0;left:0;image-rendering:pixelated}
+.pxe-info{width:200px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);padding:14px;font-family:var(--mono);font-size:10px}
+.pxe-info-row{margin-bottom:8px;color:var(--mid)}
+.pxe-info-row span{color:var(--text);display:block;font-size:11px;font-weight:700}
+.pxe-zoom-bar{padding:6px 16px;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;color:var(--dim);flex-shrink:0}
+
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">gtamaplib</div>
+  <select id="cam-sel"><option value="">— Select camera —</option></select>
+  <span id="cam-meta"></span>
+  <div class="chip" id="chip-all"><span style="color:var(--dim)">loss </span><span class="v" id="loss-all">—</span></div>
+  <button class="btn btn-reset" id="btn-reset">Reset</button>
+  <button class="btn btn-save" id="btn-save" disabled>Save</button>
+  <button class="btn" id="btn-update" disabled style="background:#7c3aed;color:#fff">Update LMs</button>
+  <button class="btn" id="btn-suspicious" style="background:#1c1c26;color:#f59e0b;border:1px solid #f59e0b">⚠ Suspicious</button>
+  <span class="saved" id="saved">✓ Saved</span>
+</header>
+
+<div class="main">
+  <div class="canvas-wrap" id="canvas-wrap">
+    <img id="frame-img" src="" draggable="false">
+    <canvas id="overlay"></canvas>
+    <div class="no-img" id="no-img">Select a camera to begin</div>
+  </div>
+
+  <div class="sidebar">
+    <div class="sb-sec">
+      <div class="sb-title">Position</div>
+      <div class="sl-row"><span class="sl-lbl">X</span><input type="range" id="sl-x" min="-12000" max="12000" step="0.25"><input class="num" id="num-x" type="number" step="0.25"></div>
+      <div class="sl-row"><span class="sl-lbl">Y</span><input type="range" id="sl-y" min="-12000" max="12000" step="0.25"><input class="num" id="num-y" type="number" step="0.25"></div>
+      <div class="sl-row"><span class="sl-lbl">Z</span><input type="range" id="sl-z" min="-200" max="1500" step="0.25"><input class="num" id="num-z" type="number" step="0.25"></div>
+    </div>
+    <div class="sb-sec">
+      <div class="sb-title">Orientation & FOV</div>
+      <div class="sl-row"><span class="sl-lbl">Yaw</span><input type="range" id="sl-yaw" min="-180" max="360" step="0.01"><input class="num" id="num-yaw" type="number" step="0.01"></div>
+      <div class="sl-row"><span class="sl-lbl">Pitch</span><input type="range" id="sl-pitch" min="-90" max="90" step="0.01"><input class="num" id="num-pitch" type="number" step="0.01"></div>
+      <div class="sl-row"><span class="sl-lbl">hFOV</span><input type="range" id="sl-hfov" min="10" max="130" step="0.01"><input class="num" id="num-hfov" type="number" step="0.01"></div>
+    </div>
+    <div class="opt-bar">
+      <button class="btn-opt" id="btn-opt" disabled>⚡ Optimize</button>
+      <div class="indep-chip"><span style="font-size:9px;color:var(--dim)">indep </span><span class="v" id="loss-indep">—</span></div>
+    </div>
+    <div class="opt-result" id="opt-result">
+      <div class="ol" id="opt-loss"></div>
+      <div class="od" id="opt-detail"></div>
+    </div>
+    <div class="lm-hdr">
+      <div class="sb-title" style="margin:0">Landmarks (<span id="lm-count">0</span>)</div>
+      <div class="lm-filters">
+        <button class="f-btn on" onclick="setFilter('all',this)">All</button>
+        <button class="f-btn" onclick="setFilter('indep',this)">Indep</button>
+        <button class="f-btn" onclick="setFilter('bad',this)">Bad</button>
+        <button class="f-btn" id="btn-add-px" onclick="openAddPixel()" style="color:var(--green);border-color:var(--green)">+ Add</button>
+      </div>
+    </div>
+    <div class="lm-list" id="lm-list"></div>
+    <div class="statusbar"><span id="st-mouse">—</span><span id="st-n">—</span></div>
+  </div>
+</div>
+<div class="tip" id="tip"></div>
+
+
+
+<div id="ray-map-modal" style="display:none;position:fixed;inset:0;background:#000d;z-index:350;align-items:center;justify-content:center">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:0;width:700px;max-width:95vw;overflow:hidden">
+    <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border)">
+      <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green);flex:1" id="ray-map-title">Ray Visualization</div>
+      <button onclick="document.getElementById('ray-map-modal').style.display='none'" style="background:transparent;border:none;color:var(--dim);font-size:18px;cursor:pointer">✕</button>
+    </div>
+    <div id="ray-map-body" style="padding:16px;text-align:center">
+      <div style="font-family:var(--mono);font-size:11px;color:var(--dim)">Loading map...</div>
+    </div>
+    <div style="padding:10px 16px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--dim)" id="ray-map-info">—</div>
+  </div>
+</div>
+
+<div id="add-px-modal" style="display:none;position:fixed;inset:0;background:#000a;z-index:250;align-items:center;justify-content:center">
+  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;width:400px">
+    <div style="font-family:var(--mono);font-size:13px;font-weight:700;margin-bottom:14px;color:var(--text)">Add Pixel Marking</div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:10px">Select landmark to add to current camera:</div>
+    <input id="add-px-search" type="text" placeholder="Search landmarks..." style="font-family:var(--mono);font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:7px 10px;border-radius:5px;width:100%;margin-bottom:8px;outline:none">
+    <div id="add-px-list" style="max-height:220px;overflow-y:auto;border:1px solid var(--border);border-radius:5px;margin-bottom:12px"></div>
+    <div style="font-family:var(--mono);font-size:10px;color:var(--dim);margin-bottom:12px">Selected: <span id="add-px-selected" style="color:var(--yellow)">—</span></div>
+    <div style="display:flex;gap:8px">
+      <button onclick="startAddPixel()" style="font-family:var(--mono);font-size:11px;font-weight:700;padding:7px 14px;background:var(--green);color:#000;border:none;border-radius:5px;cursor:pointer;flex:1">Place on Image</button>
+      <button onclick="document.getElementById('add-px-modal').style.display='none'" style="font-family:var(--mono);font-size:11px;padding:7px 14px;background:var(--surface2);color:var(--mid);border:1px solid var(--border);border-radius:5px;cursor:pointer">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div id="px-editor">
+  <div class="pxe-header">
+    <div class="pxe-title">Pixel Editor</div>
+    <div class="pxe-lm" id="pxe-lm-name">—</div>
+    <div class="pxe-mode" id="pxe-mode-label">VIEW</div>
+    <button class="btn-pxe btn-validate" id="pxe-validate">✓ Validate</button>
+    <button class="btn-pxe btn-fix-mode" id="pxe-fix-mode">✎ Fix Pixel</button>
+    <button class="btn-pxe" id="pxe-delete" style="background:#2a1a1a;color:#f87171;border:1px solid #f87171">✕ Delete Pixel</button>
+    <button class="btn-pxe btn-cancel" onclick="closePxEditor()">✕ Close</button>
+  </div>
+  <div class="pxe-body">
+    <div class="pxe-canvas-wrap" id="pxe-wrap">
+      <canvas id="pxe-canvas"></canvas>
+    </div>
+    <div class="pxe-info">
+      <div class="pxe-info-row">Landmark<span id="pxe-info-lm">—</span></div>
+      <div class="pxe-info-row">Camera<span id="pxe-info-cam">—</span></div>
+      <div class="pxe-info-row">Current pixel<span id="pxe-info-cur">—</span></div>
+      <div class="pxe-info-row">Projected<span id="pxe-info-proj">—</span></div>
+      <div class="pxe-info-row">Error<span id="pxe-info-err">—</span></div>
+      <div class="pxe-info-row">Mouse<span id="pxe-info-mouse">—</span></div>
+      <div style="margin-top:16px;color:var(--dim);font-size:9px;line-height:1.6">
+        Scroll to zoom<br>
+        Drag to pan<br>
+        In Fix mode:<br>
+        Click to place new pixel
+      </div>
+    </div>
+  </div>
+  <div class="pxe-zoom-bar">
+    <span>Zoom:</span>
+    <span id="pxe-zoom-val">1×</span>
+    <input type="range" id="pxe-zoom-slider" min="1" max="32" value="4" style="width:120px">
+    <span style="margin-left:10px">Scroll on image to zoom · Drag to pan</span>
+  </div>
+</div>
+
+<div id="susp-panel" style="display:none;position:fixed;inset:0;background:#000a;z-index:200;overflow:auto">
+  <div style="background:#13131a;border:1px solid #252535;border-radius:10px;max-width:700px;margin:40px auto;padding:20px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px">
+      <div style="font-family:var(--mono);font-size:13px;font-weight:700;color:#f59e0b">⚠ Suspicious Pixels</div>
+      <button onclick="document.getElementById('susp-panel').style.display='none'" style="background:transparent;border:none;color:#888;font-size:18px;cursor:pointer">✕</button>
+    </div>
+    <div style="font-family:var(--mono);font-size:10px;color:#5a5a7a;margin-bottom:8px">Landmarks whose pixel is far from consensus. <span id="susp-leak-count" style="color:#4ade80"></span></div>
+    <div style="display:flex;gap:6px;margin-bottom:12px">
+      <button id="susp-filter-all" onclick="suspSetFilter('all')" style="font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:3px;border:1px solid var(--mid);background:var(--surface2);color:var(--text);cursor:pointer">All suspects</button>
+      <button id="susp-filter-leak" onclick="suspSetFilter('leak')" style="font-family:var(--mono);font-size:9px;padding:3px 8px;border-radius:3px;border:1px solid #4ade80;background:transparent;color:#4ade80;cursor:pointer">★ Leak-anchored</button>
+    </div>
+    <div id="susp-list"></div>
+  </div>
+</div>
+
+<script>
+// ── State ──────────────────────────────────────────────────────────────────
+let currentCam = null, camData = null, projections = [], losses = {};
+let params = {x:0,y:0,z:0,yaw:0,pitch:0,hfov:60};
+let origParams = null;
+let hoveredLm = null, selectedLm = null;
+let dirty = false, optimizing = false, lmFilter = 'all';
+let mainZoom = 1, mainPanX = 0, mainPanY = 0, mainDragging = false, mainDragStart = null, mainPanStart = null;
+
+// ── DOM ────────────────────────────────────────────────────────────────────
+const camSel   = document.getElementById('cam-sel');
+const camMeta  = document.getElementById('cam-meta');
+const frameImg = document.getElementById('frame-img');
+const overlay  = document.getElementById('overlay');
+const ctx      = overlay.getContext('2d');
+const noImg    = document.getElementById('no-img');
+const lmList   = document.getElementById('lm-list');
+const lmCount  = document.getElementById('lm-count');
+const lossAll  = document.getElementById('loss-all');
+const chipAll  = document.getElementById('chip-all');
+const lossIndep = document.getElementById('loss-indep');
+const btnOpt   = document.getElementById('btn-opt');
+const btnReset = document.getElementById('btn-reset');
+const btnSave  = document.getElementById('btn-save');
+const savedEl  = document.getElementById('saved');
+const btnUpdate = document.getElementById('btn-update');
+const btnSuspicious = document.getElementById('btn-suspicious');
+const canvasWrap = document.getElementById('canvas-wrap');
+const optResult  = document.getElementById('opt-result');
+const optLoss    = document.getElementById('opt-loss');
+const optDetail  = document.getElementById('opt-detail');
+const tip        = document.getElementById('tip');
+
+const SL_IDS  = {x:'sl-x',y:'sl-y',z:'sl-z',yaw:'sl-yaw',pitch:'sl-pitch',hfov:'sl-hfov'};
+const NUM_IDS = {x:'num-x',y:'num-y',z:'num-z',yaw:'num-yaw',pitch:'num-pitch',hfov:'num-hfov'};
+
+// ── Init ───────────────────────────────────────────────────────────────────
+async function init() {
+  const cams = await fetch('/api/cameras').then(r => r.json());
+  cams.forEach(c => {
+    const o = document.createElement('option');
+    o.value = c.name;
+    o.textContent = `${c.name}${c.has_image ? '' : ' ✗'} (${c.n_pixels}px / ${c.n_independent} indep)`;
+    if (!c.has_image) o.style.color = '#444';
+    camSel.appendChild(o);
+  });
+}
+
+// ── Camera select ──────────────────────────────────────────────────────────
+camSel.addEventListener('change', async () => {
+  currentCam = camSel.value || null;
+  if (!currentCam) return;
+
+  origParams = null;
+  dirty = false;
+  btnSave.disabled = true;
+  btnOpt.disabled = false;
+  resetMainZoom();
+  savedEl.style.display = 'none';
+  optResult.style.display = 'none';
+  projections = [];
+  ctx.clearRect(0, 0, overlay.width, overlay.height);
+  lmList.innerHTML = '';
+  lmCount.textContent = '0';
+  lossAll.textContent = '—';
+  lossIndep.textContent = '—';
+
+  noImg.style.display = 'flex';
+  noImg.textContent = 'Loading...';
+  frameImg.src = `/frame/${encodeURIComponent(currentCam)}`;
+  frameImg.onload  = () => { noImg.style.display = 'none'; resizeOverlay(); };
+  frameImg.onerror = () => { noImg.textContent = 'No image'; };
+
+  await loadProjections();
+});
+
+// ── Projections ────────────────────────────────────────────────────────────
+let debounce = null;
+async function loadProjections() {
+  if (!currentCam) return;
+
+  const isFirst = !origParams;
+  let url = `/api/project?cam=${encodeURIComponent(currentCam)}`;
+  if (!isFirst) {
+    url += `&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&hfov=${params.hfov}`;
+  }
+
+  const data = await fetch(url).then(r => r.json());
+  camData = data.camera;
+
+  if (isFirst) {
+    params = {
+      x: camData.xyz[0], y: camData.xyz[1], z: camData.xyz[2],
+      yaw: camData.ypr[0], pitch: camData.ypr[1], hfov: camData.hfov
+    };
+    origParams = {...params};
+    syncSliders();
+    camMeta.textContent = `${camData.source || ''} · ${camData.size ? camData.size.join('×') : ''}`;
+  // Handle leak cam
+  const isLeak = /^\d{4}-\d{2}-\d{2}/.test(camData.source || '');
+  document.getElementById('chip-all').style.opacity = isLeak ? '0.4' : '1';
+  btnOpt.disabled = isLeak;
+  btnOpt.title = isLeak ? 'Leak cam — params are ground truth' : '';
+  if (isLeak) {
+    lossAll.textContent = 'leak cam';
+    document.getElementById('chip-all').style.borderColor = '#4ade80';
+  }
+  }
+
+  projections = data.projections;
+  losses = data.losses || {};
+  updateLoss();
+  // Leak cam detection — update after losses
+  const isLeakCam = /^\d{4}-\d{2}-\d{2}/.test(camData.source || '');
+  if (isLeakCam) {
+    lossAll.textContent = 'leak cam';
+    chipAll.className = 'chip';
+    chipAll.style.borderColor = '#4ade80';
+    chipAll.style.color = '#4ade80';
+    btnOpt.disabled = true;
+  } else {
+    chipAll.style.borderColor = '';
+    chipAll.style.color = '';
+    btnOpt.disabled = false;
+  }
+  renderLmList();
+  draw();
+}
+
+function scheduleLoad() {
+  clearTimeout(debounce);
+  debounce = setTimeout(loadProjections, 60);
+}
+
+// ── Sliders ────────────────────────────────────────────────────────────────
+function onParam(key, val) {
+  params[key] = parseFloat(val);
+  document.getElementById(SL_IDS[key]).value = params[key];
+  document.getElementById(NUM_IDS[key]).value = params[key];
+  dirty = true;
+  btnSave.disabled = false;
+  savedEl.style.display = 'none';
+  scheduleLoad();
+}
+
+Object.keys(SL_IDS).forEach(key => {
+  document.getElementById(SL_IDS[key]).addEventListener('input', e => onParam(key, e.target.value));
+  const ni = document.getElementById(NUM_IDS[key]);
+  ni.addEventListener('change', e => onParam(key, e.target.value));
+  ni.addEventListener('keydown', e => {
+    if (e.key === 'ArrowUp')   { onParam(key, parseFloat(ni.value) + parseFloat(ni.step)); e.preventDefault(); }
+    if (e.key === 'ArrowDown') { onParam(key, parseFloat(ni.value) - parseFloat(ni.step)); e.preventDefault(); }
+  });
+});
+
+function syncSliders() {
+  Object.keys(params).forEach(k => {
+    document.getElementById(SL_IDS[k]).value  = params[k];
+    document.getElementById(NUM_IDS[k]).value = params[k];
+  });
+}
+
+// ── Reset ──────────────────────────────────────────────────────────────────
+btnReset.addEventListener('click', () => {
+  if (!origParams) return;
+  params = {...origParams};
+  syncSliders();
+  dirty = false;
+  btnSave.disabled = true;
+  optResult.style.display = 'none';
+  loadProjections();
+});
+
+// ── Optimize ───────────────────────────────────────────────────────────────
+btnOpt.addEventListener('click', async () => {
+  if (!currentCam || optimizing) return;
+  optimizing = true;
+  btnOpt.textContent = '⏳ Optimizing...';
+  btnOpt.classList.add('running');
+  btnOpt.disabled = true;
+
+  const url = `/api/optimize?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&hfov=${params.hfov}`;
+  const data = await fetch(url).then(r => r.json());
+
+  optimizing = false;
+  btnOpt.textContent = '⚡ Optimize';
+  btnOpt.classList.remove('running');
+  btnOpt.disabled = false;
+
+  if (data.error) {
+    optResult.style.display = 'block';
+    optLoss.textContent = `⚠ ${data.error}`;
+    optDetail.textContent = 'Need more independent landmarks to optimize';
+    return;
+  }
+
+  params = {x: data.xyz[0], y: data.xyz[1], z: data.xyz[2],
+            yaw: data.ypr[0], pitch: data.ypr[1], hfov: data.hfov};
+  syncSliders();
+  dirty = true;
+  btnSave.disabled = false;
+  btnUpdate.disabled = false;
+
+  optResult.style.display = 'block';
+  const improvement = data.improvement_pct >= 0 ? `↓${data.improvement_pct}%` : `↑${Math.abs(data.improvement_pct)}%`;
+  optLoss.textContent = `${data.loss_before} → ${data.loss} arcmin (${improvement})`;
+  optDetail.textContent = `${data.n_constraints} indep constraints · ${data.success ? 'converged ✓' : 'max iter'}`;
+
+  await loadProjections();
+  // Show ray map after optimize
+  showRayMap([currentCam], null, `Ray viz: ${currentCam} · loss ${data.loss_before} → ${data.loss} arcmin`);
+});
+
+// ── Save ───────────────────────────────────────────────────────────────────
+btnSave.addEventListener('click', async () => {
+  if (!currentCam) return;
+  await fetch(`/api/save?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&hfov=${params.hfov}`);
+  dirty = false;
+  btnSave.disabled = true;
+  origParams = {...params};
+  savedEl.style.display = 'inline';
+  setTimeout(() => savedEl.style.display = 'none', 2000);
+});
+
+// ── Loss ───────────────────────────────────────────────────────────────────
+function lossClass(v) {
+  if (v == null) return '';
+  return v < 2 ? 'good' : v < 8 ? 'mid' : 'bad';
+}
+function updateLoss() {
+  lossAll.textContent   = losses.total      != null ? losses.total.toFixed(3)      : '—';
+  lossIndep.textContent = losses.independent != null ? losses.independent.toFixed(3) : '—';
+  chipAll.className = 'chip ' + lossClass(losses.total);
+}
+
+// ── Landmark list ──────────────────────────────────────────────────────────
+function dColor(d) {
+  if (d == null) return '#333';
+  if (d < 1) return '#4ade80';
+  if (d < 3) return '#a3e635';
+  if (d < 8) return '#f59e0b';
+  return '#f87171';
+}
+
+function setFilter(f, btn) {
+  lmFilter = f;
+  document.querySelectorAll('.f-btn').forEach(b => b.classList.remove('on'));
+  btn.classList.add('on');
+  renderLmList();
+  draw();
+}
+
+function renderLmList() {
+  lmCount.textContent = projections.length;
+  const sorted = [...projections].sort((a, b) => (b.delta||0) - (a.delta||0));
+  lmList.innerHTML = '';
+  sorted.forEach(lm => {
+    const show = lmFilter === 'all'   ? true
+               : lmFilter === 'indep' ? !lm.is_circular
+               : (lm.delta != null && lm.delta > 5);
+    const div = document.createElement('div');
+    div.className = 'lm-item' + (selectedLm === lm.name ? ' sel' : '') + (!show ? ' faded' : '');
+    div.innerHTML = `
+      <div class="lm-dot" style="background:${dColor(lm.delta)}"></div>
+      <span class="lm-badge ${lm.is_circular ? 'c' : 'i'}">${lm.is_circular ? '↻' : '★'}</span>
+      <span class="lm-name">${lm.name}</span>
+      <span class="lm-d" style="color:${dColor(lm.delta)}">${lm.delta != null ? lm.delta.toFixed(2) : '—'}</span>
+      <span class="lm-edit-btn" title="Edit pixel" style="font-size:10px;color:var(--dim);padding:2px 4px;border-radius:3px;cursor:pointer;flex-shrink:0" onmouseenter="this.style.color='var(--blue)'" onmouseleave="this.style.color='var(--dim)'">✎</span>
+      <span class="lm-tri-btn" title="Triangulate landmark" style="font-size:10px;color:var(--dim);padding:2px 4px;border-radius:3px;cursor:pointer;flex-shrink:0" onmouseenter="this.style.color='var(--green)'" onmouseleave="this.style.color='var(--dim)'">⊕</span>
+    `;
+    div.querySelector('.lm-edit-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      openPxEditor(currentCam, lm.name);
+    });
+    div.querySelector('.lm-tri-btn').addEventListener('click', e => {
+      e.stopPropagation();
+      triangulateLandmark(lm.name);
+    });
+    div.addEventListener('mouseenter', () => { hoveredLm = lm.name; draw(); });
+    div.addEventListener('mouseleave', () => { hoveredLm = null; draw(); });
+    div.addEventListener('click', () => { selectedLm = selectedLm === lm.name ? null : lm.name; renderLmList(); draw(); });
+    lmList.appendChild(div);
+  });
+  document.getElementById('st-n').textContent = `${losses.n_independent||0} indep / ${losses.n_total||0} total`;
+}
+
+// ── Canvas ─────────────────────────────────────────────────────────────────
+function resizeOverlay() {
+  overlay.width  = canvasWrap.clientWidth;
+  overlay.height = canvasWrap.clientHeight;
+  draw();
+}
+window.addEventListener('resize', resizeOverlay);
+resizeOverlay();
+
+function baseScale() {
+  if (!camData || !camData.size) return {scale:1, ox:0, oy:0};
+  const [iw, ih] = camData.size;
+  const scale = Math.min(overlay.width / iw, overlay.height / ih);
+  const ox = (overlay.width  - iw * scale) / 2;
+  const oy = (overlay.height - ih * scale) / 2;
+  return {scale, ox, oy};
+}
+
+function toCanvas(px, py) {
+  const {scale, ox, oy} = baseScale();
+  const bx = ox + px * scale;
+  const by = oy + py * scale;
+  return [mainPanX + bx * mainZoom, mainPanY + by * mainZoom];
+}
+
+function canvasToImg(cx, cy) {
+  const {scale, ox, oy} = baseScale();
+  const bx = (cx - mainPanX) / mainZoom;
+  const by = (cy - mainPanY) / mainZoom;
+  return [(bx - ox) / scale, (by - oy) / scale];
+}
+
+function resetMainZoom() {
+  mainZoom = 1; mainPanX = 0; mainPanY = 0;
+}
+
+function draw() {
+  ctx.clearRect(0, 0, overlay.width, overlay.height);
+  // Sync frame image with zoom/pan
+  if (camData?.size) {
+    const {scale, ox, oy} = baseScale();
+    const left = mainPanX + ox * mainZoom;
+    const top  = mainPanY + oy * mainZoom;
+    const w    = camData.size[0] * scale * mainZoom;
+    const h    = camData.size[1] * scale * mainZoom;
+    frameImg.style.cssText = `position:absolute;left:${left}px;top:${top}px;width:${w}px;height:${h}px;object-fit:fill;pointer-events:none`;
+  }
+  if (!projections.length) return;
+
+  projections.forEach(lm => {
+    const hi = hoveredLm === lm.name || selectedLm === lm.name;
+    const color = dColor(lm.delta);
+    const visible = lmFilter === 'all'   ? true
+                  : lmFilter === 'indep' ? !lm.is_circular
+                  : (lm.delta != null && lm.delta > 5);
+
+    ctx.globalAlpha = visible ? 1 : 0.12;
+
+    // Error line
+    if (hi && lm.marked_pixel && lm.projected) {
+      const [mx, my] = toCanvas(lm.marked_pixel[0], lm.marked_pixel[1]);
+      const [px, py] = toCanvas(lm.projected[0],    lm.projected[1]);
+      ctx.beginPath(); ctx.moveTo(mx, my); ctx.lineTo(px, py);
+      ctx.strokeStyle = color + '88'; ctx.lineWidth = 1.5;
+      ctx.setLineDash([3, 3]); ctx.stroke(); ctx.setLineDash([]);
+    }
+
+    // Marked pixel circle
+    if (lm.marked_pixel) {
+      const [mx, my] = toCanvas(lm.marked_pixel[0], lm.marked_pixel[1]);
+      const r = hi ? 8 : (lm.is_circular ? 3 : 5);
+      ctx.beginPath(); ctx.arc(mx, my, r, 0, Math.PI * 2);
+      ctx.fillStyle = color + '44'; ctx.fill();
+      ctx.strokeStyle = color; ctx.lineWidth = hi ? 2.5 : 1.5; ctx.stroke();
+
+      if (hi) {
+        ctx.font = '11px JetBrains Mono, monospace';
+        ctx.fillStyle = '#fff';
+        ctx.fillText(lm.name, mx + 10, my - 8);
+        if (lm.delta != null) {
+          ctx.fillStyle = color;
+          ctx.fillText(`d=${lm.delta.toFixed(3)} arcmin`, mx + 10, my + 6);
+        }
+      }
+    }
+
+    // Projected cross (independent only)
+    if (lm.projected && !lm.is_circular) {
+      const [px, py] = toCanvas(lm.projected[0], lm.projected[1]);
+      const s = hi ? 8 : 5;
+      ctx.beginPath();
+      ctx.moveTo(px - s, py); ctx.lineTo(px + s, py);
+      ctx.moveTo(px, py - s); ctx.lineTo(px, py + s);
+      ctx.strokeStyle = color; ctx.lineWidth = hi ? 2 : 1; ctx.stroke();
+    }
+
+    ctx.globalAlpha = 1;
+  });
+}
+
+// ── Mouse ──────────────────────────────────────────────────────────────────
+canvasWrap.addEventListener('mousemove', e => {
+  const rect = canvasWrap.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+
+  if (camData?.size) {
+    const [ix, iy] = canvasToImg(mx, my);
+    document.getElementById('st-mouse').textContent = `x=${ix.toFixed(1)} y=${iy.toFixed(1)}`;
+  }
+
+  let found = null;
+  projections.forEach(lm => {
+    if (!lm.marked_pixel) return;
+    const [cx, cy] = toCanvas(lm.marked_pixel[0], lm.marked_pixel[1]);
+    if (Math.sqrt((mx-cx)**2 + (my-cy)**2) < 14) found = lm.name;
+  });
+  if (found !== hoveredLm) { hoveredLm = found; draw(); }
+
+  if (found) {
+    const lm = projections.find(p => p.name === found);
+    tip.style.cssText = `display:block;left:${e.clientX+14}px;top:${e.clientY-10}px`;
+    tip.textContent = `${lm.name} ${lm.is_circular ? '[↻ circular]' : '[★ indep]'}${lm.delta != null ? ` · d=${lm.delta.toFixed(3)}` : ''}`;
+  } else { tip.style.display = 'none'; }
+});
+canvasWrap.addEventListener('mouseleave', () => { hoveredLm = null; tip.style.display = 'none'; draw(); });
+
+// Main canvas zoom
+canvasWrap.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect = canvasWrap.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const {scale, ox, oy} = baseScale();
+  const bx = (mx - mainPanX) / mainZoom;
+  const by = (my - mainPanY) / mainZoom;
+  const factor = e.deltaY < 0 ? 1.15 : 0.87;
+  mainZoom = Math.max(0.3, Math.min(32, mainZoom * factor));
+  mainPanX = mx - bx * mainZoom;
+  mainPanY = my - by * mainZoom;
+  draw();
+}, {passive: false});
+
+// Main canvas pan
+canvasWrap.addEventListener('mousedown', e => {
+  if (addPxMode) return;
+  mainDragging = true;
+  mainDragStart = [e.clientX, e.clientY];
+  mainPanStart = [mainPanX, mainPanY];
+  canvasWrap.style.cursor = 'grabbing';
+});
+window.addEventListener('mousemove', e => {
+  if (!mainDragging) return;
+  mainPanX = mainPanStart[0] + e.clientX - mainDragStart[0];
+  mainPanY = mainPanStart[1] + e.clientY - mainDragStart[1];
+  draw();
+});
+window.addEventListener('mouseup', () => {
+  if (mainDragging) { mainDragging = false; canvasWrap.style.cursor = 'crosshair'; }
+});
+
+// Double click to reset zoom
+canvasWrap.addEventListener('dblclick', () => { resetMainZoom(); draw(); });
+
+// ── Update Landmarks ──────────────────────────────────────────────────────
+btnUpdate.addEventListener('click', async () => {
+  if (!currentCam) return;
+  btnUpdate.textContent = '⏳ Updating...';
+  btnUpdate.disabled = true;
+
+  const url = `/api/update_landmarks?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&hfov=${params.hfov}`;
+  const data = await fetch(url).then(r => r.json());
+
+  btnUpdate.textContent = 'Update LMs';
+  btnUpdate.disabled = false;
+
+  // Show result in opt-result area
+  optResult.style.display = 'block';
+  optLoss.textContent = `✓ Updated ${data.updated} landmarks`;
+  optDetail.textContent = `${data.errors} errors · reload to see new projections`;
+
+  // Reload projections with new landmark positions
+  await loadProjections();
+});
+
+// ── Suspicious pixels ─────────────────────────────────────────────────────
+let suspData = null, suspFilter = 'all';
+
+function suspSetFilter(f) {
+  suspFilter = f;
+  document.getElementById('susp-filter-all').style.background = f==='all' ? 'var(--surface2)' : 'transparent';
+  document.getElementById('susp-filter-all').style.color = f==='all' ? 'var(--text)' : 'var(--dim)';
+  document.getElementById('susp-filter-leak').style.background = f==='leak' ? '#1a2820' : 'transparent';
+  if (suspData) renderSuspList(suspData);
+}
+
+function renderSuspList(data) {
+  const list = document.getElementById('susp-list');
+  const pool = suspFilter === 'leak' ? data.leak_outliers : data.outliers;
+  const items = (currentCam ? pool.filter(o => o.cam_name === currentCam) : pool)
+    .filter(o => !pxe.validated.has(o.cam_name + '|' + o.lm_name));
+  const leakCount = document.getElementById('susp-leak-count');
+  if (leakCount) leakCount.textContent = data.n_leak_anchored > 0 ? `★ ${data.n_leak_anchored} leak-anchored` : '';
+
+  if (items.length === 0) {
+    list.innerHTML = '<div style="font-family:var(--mono);font-size:11px;color:#4ade80;padding:10px">✓ No suspicious pixels found</div>';
+  } else {
+    list.innerHTML = items.map(o => `
+      <div onclick="selectSuspicious('${o.cam_name.replace(/'/g,"\'")}','${o.lm_name.replace(/'/g,"\'")}',${o.err})" style="display:flex;align-items:center;gap:10px;padding:8px 10px;border-bottom:1px solid #1a1a22;cursor:pointer;border-radius:4px" onmouseover="this.style.background='#1c1c26'" onmouseout="this.style.background='transparent'">
+        <div style="width:8px;height:8px;border-radius:50%;background:${o.leak_anchored ? '#4ade80' : '#f87171'};flex-shrink:0"></div>
+        <div style="font-family:var(--mono);font-size:10px;flex:1">
+          <div style="color:#e2e2f0">${o.lm_name}${o.leak_anchored ? ' <span style=\"color:#4ade80;font-size:9px\">★</span>' : ''}</div>
+          <div style="color:#5a5a7a;font-size:9px">${o.cam_name}</div>
+        </div>
+        <div style="font-family:var(--mono);font-size:11px;font-weight:700;color:#f87171">${o.err.toFixed(1)}</div>
+        <div style="font-family:var(--mono);font-size:9px;color:#5a5a7a">avg ${o.avg_err.toFixed(1)}</div>
+      </div>
+    `).join('');
+  }
+}
+
+btnSuspicious.addEventListener('click', async () => {
+  const data = await fetch('/api/suspicious').then(r => r.json());
+  suspData = data;
+  renderSuspList(data);
+  document.getElementById('susp-panel').style.display = 'block';
+});
+
+function selectSuspicious(cam_name, lm_name, err) {
+  document.getElementById('susp-panel').style.display = 'none';
+  // Switch cam if needed
+  if (currentCam !== cam_name) {
+    const sel = document.getElementById('cam-sel');
+    sel.value = cam_name;
+    sel.dispatchEvent(new Event('change'));
+    setTimeout(() => openPxEditor(cam_name, lm_name), 1500);
+  } else {
+    openPxEditor(cam_name, lm_name);
+  }
+}
+
+// ── Pixel Editor ──────────────────────────────────────────────────────────
+let pxe = {
+  cam: null, lm: null,
+  img: null, imgW: 0, imgH: 0,
+  zoom: 4, panX: 0, panY: 0,
+  curPx: null, projPx: null, err: null,
+  fixMode: false, validated: new Set(),
+  dragging: false, dragStart: null, panStart: null,
+};
+
+const pxeEditor    = document.getElementById('px-editor');
+const pxeCanvas    = document.getElementById('pxe-canvas');
+const pxeCtx       = pxeCanvas.getContext('2d');
+const pxeWrap      = document.getElementById('pxe-wrap');
+const pxeLmName    = document.getElementById('pxe-lm-name');
+const pxeModeLabel = document.getElementById('pxe-mode-label');
+const pxeFixBtn    = document.getElementById('pxe-fix-mode');
+const pxeZoomSlider = document.getElementById('pxe-zoom-slider');
+const pxeZoomVal   = document.getElementById('pxe-zoom-val');
+
+function openPxEditor(cam_name, lm_name, lm_proj, lm_err) {
+  pxe.cam = cam_name;
+  pxe.lm = lm_name;
+  pxe.fixMode = false;
+  pxeFixBtn.classList.remove('active');
+  pxeModeLabel.textContent = 'VIEW';
+  pxeModeLabel.className = 'pxe-mode';
+
+  // Find current pixel for this landmark
+  const lmData = projections.find(p => p.name === lm_name);
+  pxe.curPx = lmData ? [...lmData.marked_pixel] : null;
+  pxe.projPx = lmData?.projected ? [...lmData.projected] : null;
+  pxe.err = lmData?.delta;
+
+  pxeLmName.textContent = lm_name;
+  document.getElementById('pxe-info-lm').textContent = lm_name;
+  document.getElementById('pxe-info-cam').textContent = cam_name;
+  document.getElementById('pxe-info-cur').textContent = pxe.curPx ? pxe.curPx.map(v=>v.toFixed(1)).join(', ') : '—';
+  document.getElementById('pxe-info-proj').textContent = pxe.projPx ? pxe.projPx.map(v=>v.toFixed(1)).join(', ') : '—';
+  document.getElementById('pxe-info-err').textContent = pxe.err != null ? pxe.err.toFixed(3) + ' arcmin' : '—';
+
+  // Load image
+  pxe.img = new Image();
+  pxe.img.onload = () => {
+    pxe.imgW = pxe.img.naturalWidth;
+    pxe.imgH = pxe.img.naturalHeight;
+    // Center view on current pixel
+    if (pxe.curPx) {
+      pxe.panX = pxeWrap.clientWidth/2 - pxe.curPx[0] * pxe.zoom;
+      pxe.panY = pxeWrap.clientHeight/2 - pxe.curPx[1] * pxe.zoom;
+    }
+    pxeRender();
+  };
+  pxe.img.src = `/frame/${encodeURIComponent(cam_name)}`;
+
+  pxeEditor.classList.add('active');
+}
+
+function closePxEditor() {
+  pxeEditor.classList.remove('active');
+  pxe.fixMode = false;
+}
+
+function pxeRender() {
+  const W = pxeWrap.clientWidth;
+  const H = pxeWrap.clientHeight;
+  pxeCanvas.width = W;
+  pxeCanvas.height = H;
+  pxeCanvas.style.width = W + 'px';
+  pxeCanvas.style.height = H + 'px';
+
+  pxeCtx.clearRect(0,0,W,H);
+
+  if (pxe.img?.complete) {
+    pxeCtx.imageSmoothingEnabled = false;
+    pxeCtx.drawImage(pxe.img,
+      0, 0, pxe.imgW, pxe.imgH,
+      pxe.panX, pxe.panY, pxe.imgW * pxe.zoom, pxe.imgH * pxe.zoom
+    );
+  }
+
+  // Draw projected position (cross, blue)
+  if (pxe.projPx) {
+    const [px, py] = imgToPxe(pxe.projPx[0], pxe.projPx[1]);
+    pxeCtx.strokeStyle = '#60a5fa'; pxeCtx.lineWidth = 2;
+    pxeCtx.beginPath();
+    pxeCtx.moveTo(px-10,py); pxeCtx.lineTo(px+10,py);
+    pxeCtx.moveTo(px,py-10); pxeCtx.lineTo(px,py+10);
+    pxeCtx.stroke();
+  }
+
+  // Draw current pixel (circle, color by error)
+  if (pxe.curPx) {
+    const [px, py] = imgToPxe(pxe.curPx[0], pxe.curPx[1]);
+    const color = pxe.err != null ? (pxe.err < 3 ? '#4ade80' : pxe.err < 8 ? '#f59e0b' : '#f87171') : '#888';
+    pxeCtx.strokeStyle = color; pxeCtx.lineWidth = 2.5;
+    pxeCtx.beginPath(); pxeCtx.arc(px, py, 8, 0, Math.PI*2); pxeCtx.stroke();
+
+    // Error line
+    if (pxe.projPx) {
+      const [ppx, ppy] = imgToPxe(pxe.projPx[0], pxe.projPx[1]);
+      pxeCtx.strokeStyle = color+'88'; pxeCtx.lineWidth = 1.5;
+      pxeCtx.setLineDash([4,3]);
+      pxeCtx.beginPath(); pxeCtx.moveTo(px,py); pxeCtx.lineTo(ppx,ppy); pxeCtx.stroke();
+      pxeCtx.setLineDash([]);
+    }
+  }
+
+  // Fix mode indicator
+  if (pxe.fixMode) {
+    pxeCtx.fillStyle = '#f8717133';
+    pxeCtx.fillRect(0,0,W,H);
+    pxeCtx.font = 'bold 13px JetBrains Mono, monospace';
+    pxeCtx.fillStyle = '#f87171';
+    pxeCtx.fillText('CLICK TO PLACE NEW PIXEL', 10, 24);
+  }
+}
+
+function imgToPxe(ix, iy) {
+  return [pxe.panX + ix * pxe.zoom, pxe.panY + iy * pxe.zoom];
+}
+function pxeToImg(cx, cy) {
+  return [(cx - pxe.panX) / pxe.zoom, (cy - pxe.panY) / pxe.zoom];
+}
+
+// Zoom
+pxeWrap.addEventListener('wheel', e => {
+  e.preventDefault();
+  const rect = pxeWrap.getBoundingClientRect();
+  const mx = e.clientX - rect.left;
+  const my = e.clientY - rect.top;
+  const [ix, iy] = pxeToImg(mx, my);
+  const factor = e.deltaY < 0 ? 1.2 : 0.833;
+  pxe.zoom = Math.max(0.5, Math.min(64, pxe.zoom * factor));
+  pxe.panX = mx - ix * pxe.zoom;
+  pxe.panY = my - iy * pxe.zoom;
+  pxeZoomSlider.value = Math.round(pxe.zoom);
+  pxeZoomVal.textContent = pxe.zoom.toFixed(1) + '×';
+  pxeRender();
+}, {passive: false});
+
+pxeZoomSlider.addEventListener('input', () => {
+  const rect = pxeWrap.getBoundingClientRect();
+  const cx = rect.width/2, cy = rect.height/2;
+  const [ix, iy] = pxeToImg(cx, cy);
+  pxe.zoom = parseInt(pxeZoomSlider.value);
+  pxe.panX = cx - ix * pxe.zoom;
+  pxe.panY = cy - iy * pxe.zoom;
+  pxeZoomVal.textContent = pxe.zoom + '×';
+  pxeRender();
+});
+
+// Pan
+pxeWrap.addEventListener('mousedown', e => {
+  if (pxe.fixMode) return;
+  pxe.dragging = true;
+  pxe.dragStart = [e.clientX, e.clientY];
+  pxe.panStart = [pxe.panX, pxe.panY];
+  pxeWrap.style.cursor = 'grabbing';
+});
+window.addEventListener('mousemove', e => {
+  if (!pxe.dragging) return;
+  pxe.panX = pxe.panStart[0] + e.clientX - pxe.dragStart[0];
+  pxe.panY = pxe.panStart[1] + e.clientY - pxe.dragStart[1];
+  pxeRender();
+});
+window.addEventListener('mouseup', () => {
+  pxe.dragging = false;
+  pxeWrap.style.cursor = pxe.fixMode ? 'crosshair' : 'grab';
+});
+
+// Mouse position display
+pxeWrap.addEventListener('mousemove', e => {
+  const rect = pxeWrap.getBoundingClientRect();
+  const [ix, iy] = pxeToImg(e.clientX - rect.left, e.clientY - rect.top);
+  document.getElementById('pxe-info-mouse').textContent = ix.toFixed(1) + ', ' + iy.toFixed(1);
+});
+
+// Fix mode click
+pxeWrap.addEventListener('click', async e => {
+  if (!pxe.fixMode) return;
+  const rect = pxeWrap.getBoundingClientRect();
+  const [ix, iy] = pxeToImg(e.clientX - rect.left, e.clientY - rect.top);
+  const nx = Math.round(ix * 10) / 10;
+  const ny = Math.round(iy * 10) / 10;
+
+  // Save pixel (new or existing)
+  const endpoint = pxe.isNew ? '/api/add_pixel' : '/api/set_pixel';
+  const newFlag = (pxe.isNew && addPxIsNew) ? '&new=1' : '';
+  const res = await fetch(`${endpoint}?cam=${encodeURIComponent(pxe.cam)}&lm=${encodeURIComponent(pxe.lm)}&px=${nx}&py=${ny}${newFlag}`).then(r=>r.json());
+  if (res.ok) {
+    pxe.curPx = [nx, ny];
+    pxe.isNew = false;
+    pxe.fixMode = false;
+    pxeFixBtn.classList.remove('active');
+    pxeModeLabel.textContent = 'VIEW';
+    pxeModeLabel.className = 'pxe-mode';
+    pxeWrap.style.cursor = 'grab';
+    document.getElementById('pxe-info-cur').textContent = nx + ', ' + ny;
+    pxe.validated.add(pxe.cam + '|' + pxe.lm);
+    pxeRender();
+    // Reload projections
+    await loadProjections();
+  }
+});
+
+// Delete pixel
+document.getElementById('pxe-delete').addEventListener('click', async () => {
+  if (!pxe.cam || !pxe.lm) return;
+  if (!confirm(`Delete pixel for "${pxe.lm}" in "${pxe.cam}"?`)) return;
+  const res = await fetch(`/api/delete_pixel?cam=${encodeURIComponent(pxe.cam)}&lm=${encodeURIComponent(pxe.lm)}`).then(r=>r.json());
+  if (res.ok) {
+    pxe.validated.add(pxe.cam + '|' + pxe.lm);
+    closePxEditor();
+    await loadProjections();
+  }
+});
+
+// Toggle fix mode
+pxeFixBtn.addEventListener('click', () => {
+  pxe.fixMode = !pxe.fixMode;
+  pxeFixBtn.classList.toggle('active', pxe.fixMode);
+  pxeModeLabel.textContent = pxe.fixMode ? 'FIX' : 'VIEW';
+  pxeModeLabel.className = 'pxe-mode' + (pxe.fixMode ? ' fix' : '');
+  pxeWrap.style.cursor = pxe.fixMode ? 'crosshair' : 'grab';
+  pxeRender();
+});
+
+// Validate pixel (mark as reviewed, hide from suspicious)
+document.getElementById('pxe-validate').addEventListener('click', async () => {
+  await fetch(`/api/validate_pixel?cam=${encodeURIComponent(pxe.cam)}&lm=${encodeURIComponent(pxe.lm)}`);
+  pxe.validated.add(pxe.cam + '|' + pxe.lm);
+  closePxEditor();
+  // Refresh suspicious list if open
+  if (document.getElementById('susp-panel').style.display === 'block') {
+    btnSuspicious.click();
+  }
+});
+
+// Keyboard in pixel editor
+document.addEventListener('keydown', e => {
+  if (!pxeEditor.classList.contains('active')) return;
+  if (e.key === 'Escape') closePxEditor();
+  if (e.key === 'f' || e.key === 'F') pxeFixBtn.click();
+});
+
+window.addEventListener('resize', () => { if (pxeEditor.classList.contains('active')) pxeRender(); });
+
+// ── Add Pixel ─────────────────────────────────────────────────────────────
+let addPxSelectedLm = null;
+let addPxMode = false;
+let addPxIsNew = false;
+
+async function openAddPixel() {
+  if (!currentCam) return;
+  // Load all landmarks not already in this cam
+  const res = await fetch('/api/all_landmarks').then(r => r.json());
+  const existing = new Set(projections.map(p => p.name));
+  const available = res.landmarks.filter(l => !existing.has(l));
+
+  const modal = document.getElementById('add-px-modal');
+  const list = document.getElementById('add-px-list');
+  const search = document.getElementById('add-px-search');
+  addPxSelectedLm = null;
+  document.getElementById('add-px-selected').textContent = '—';
+
+  function renderList(filter) {
+    const filtered = available.filter(l => l.toLowerCase().includes(filter.toLowerCase()));
+    const createNew = filter.trim().length > 0 ? `
+      <div onclick="selectAddPx('${filter.trim().replace(/'/g,"\\'")}', this, true)"
+        style="padding:6px 10px;font-family:var(--mono);font-size:10px;cursor:pointer;border-bottom:1px solid #1a1a22;color:var(--green);border-left:2px solid var(--green)"
+        onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='transparent'">
+        ✚ Create new: "${filter.trim()}"
+      </div>
+    ` : '';
+    list.innerHTML = createNew + filtered.slice(0, 100).map(l => `
+      <div onclick="selectAddPx('${l.replace(/'/g,"\\'")}', this)"
+        style="padding:6px 10px;font-family:var(--mono);font-size:10px;cursor:pointer;border-bottom:1px solid #1a1a22"
+        onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background='transparent'">
+        ${l}
+      </div>
+    `).join('');
+  }
+
+  search.value = '';
+  renderList('');
+  search.addEventListener('input', () => renderList(search.value));
+  modal.style.display = 'flex';
+}
+
+function selectAddPx(lm_name, el, isNew=false) {
+  addPxSelectedLm = lm_name;
+  addPxIsNew = isNew;
+  document.getElementById('add-px-selected').textContent = (isNew ? '✚ New: ' : '') + lm_name;
+  document.querySelectorAll('#add-px-list div').forEach(d => d.style.background = 'transparent');
+  el.style.background = '#1a2820';
+}
+
+function startAddPixel() {
+  if (!addPxSelectedLm) return;
+  document.getElementById('add-px-modal').style.display = 'none';
+  // Open pixel editor in fix mode for this new landmark
+  // We pass a fake projection since landmark has no pixel yet
+  pxe.cam = currentCam;
+  pxe.lm = addPxSelectedLm;
+  pxe.fixMode = true;
+  pxe.curPx = null;
+  pxe.projPx = null;
+  pxe.err = null;
+  pxe.isNew = true; // flag for new pixel
+
+  document.getElementById('pxe-lm-name').textContent = addPxSelectedLm + ' (new)';
+  document.getElementById('pxe-info-lm').textContent = addPxSelectedLm;
+  document.getElementById('pxe-info-cam').textContent = currentCam;
+  document.getElementById('pxe-info-cur').textContent = 'not placed yet';
+  document.getElementById('pxe-info-proj').textContent = '—';
+  document.getElementById('pxe-info-err').textContent = '—';
+  document.getElementById('pxe-fix-mode').classList.add('active');
+  document.getElementById('pxe-mode-label').textContent = 'FIX';
+  document.getElementById('pxe-mode-label').className = 'pxe-mode fix';
+  pxeWrap.style.cursor = 'crosshair';
+
+  // Load image and open editor
+  pxe.img = new Image();
+  pxe.img.onload = () => {
+    pxe.imgW = pxe.img.naturalWidth;
+    pxe.imgH = pxe.img.naturalHeight;
+    // Start centered
+    pxe.panX = pxeWrap.clientWidth/2 - pxe.imgW * pxe.zoom / 2;
+    pxe.panY = pxeWrap.clientHeight/2 - pxe.imgH * pxe.zoom / 2;
+    pxeRender();
+  };
+  pxe.img.src = `/frame/${encodeURIComponent(currentCam)}`;
+  pxeEditor.classList.add('active');
+}
+
+// Handle add pixel click on main canvas
+canvasWrap.addEventListener('click', async e => {
+  if (!addPxMode) return;
+  const rect = canvasWrap.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  if (!camData?.size) return;
+  const [iw, ih] = camData.size;
+  const scale = Math.min(overlay.width/iw, overlay.height/ih);
+  const ox = (overlay.width-iw*scale)/2, oy = (overlay.height-ih*scale)/2;
+  const ix = Math.round(((mx-ox)/scale) * 10) / 10;
+  const iy = Math.round(((my-oy)/scale) * 10) / 10;
+
+  // Save pixel
+  const res = await fetch(`/api/add_pixel?cam=${encodeURIComponent(currentCam)}&lm=${encodeURIComponent(addPxSelectedLm)}&px=${ix}&py=${iy}`).then(r=>r.json());
+  if (res.ok) {
+    addPxMode = false;
+    document.getElementById('no-img').style.display = 'none';
+    canvasWrap.style.cursor = 'crosshair';
+    await loadProjections();
+  }
+});
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && addPxMode) {
+    addPxMode = false;
+    document.getElementById('no-img').style.display = 'none';
+    canvasWrap.style.cursor = 'crosshair';
+  }
+});
+
+// ── Triangulation & Ray Viz ───────────────────────────────────────────────
+async function triangulateLandmark(lm_name) {
+  // First check how many cams see this landmark
+  const src = await fetch(`/api/cam_sources?lm=${encodeURIComponent(lm_name)}`).then(r=>r.json());
+
+  if (src.cams.length < 2) {
+    showRayMap([currentCam], lm_name, `⚠ Need 2+ calibrated cams — only ${src.cams.length} found for "${lm_name}"`);
+    return;
+  }
+
+  // Show ray viz first
+  showRayMap(src.cams, lm_name, `Triangulating "${lm_name}" from ${src.cams.length} cams...`);
+
+  // Run triangulation
+  const res = await fetch(`/api/triangulate?lm=${encodeURIComponent(lm_name)}`).then(r=>r.json());
+
+  if (res.error) {
+    document.getElementById('ray-map-info').textContent = '⚠ ' + res.error;
+    return;
+  }
+
+  document.getElementById('ray-map-info').innerHTML =
+    `<span style="color:var(--green)">✓ Triangulated</span> · xyz=[${res.xyz.map(v=>v.toFixed(1)).join(', ')}] · error=${res.error_m}m · from ${res.cam_a} + ${res.cam_b}`;
+
+  // Reload projections to show updated landmark
+  await loadProjections();
+
+  // Refresh ray map with new landmark position
+  showRayMap(src.cams, lm_name, `"${lm_name}" — ${src.cams.length} source cams · error=${res.error_m}m`);
+}
+
+async function showRayMap(cam_names, lm_name, title) {
+  const modal = document.getElementById('ray-map-modal');
+  const body = document.getElementById('ray-map-body');
+  const titleEl = document.getElementById('ray-map-title');
+  const infoEl = document.getElementById('ray-map-info');
+
+  titleEl.textContent = title || 'Ray Visualization';
+  infoEl.textContent = 'Loading map...';
+  body.innerHTML = '<div style="font-family:var(--mono);font-size:11px;color:var(--dim);padding:20px">Generating map...</div>';
+  modal.style.display = 'flex';
+
+  const camsParam = cam_names.map(encodeURIComponent).join(',');
+  const lmParam = lm_name ? `&lm=${encodeURIComponent(lm_name)}` : '';
+  const data = await fetch(`/api/ray_map?cams=${camsParam}${lmParam}`).then(r=>r.json());
+
+  if (data.error) {
+    body.innerHTML = `<div style="font-family:var(--mono);font-size:11px;color:var(--red);padding:20px">Error: ${data.error}</div>`;
+    return;
+  }
+
+  body.innerHTML = `<img src="data:image/png;base64,${data.image}" style="max-width:100%;border-radius:6px">`;
+  infoEl.textContent = cam_names.join(' · ');
+}
+
+// Show ray viz after optimize
+const origOptClick = btnOpt.onclick;
+btnOpt.addEventListener('click', () => {
+  // Will be triggered after optimize completes — see optimize handler
+});
+
+// ── Keyboard ───────────────────────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT') return;
+  const s = e.shiftKey ? 1 : 0.1;
+  if (e.key === 'ArrowLeft')  onParam('yaw',   params.yaw   - s);
+  if (e.key === 'ArrowRight') onParam('yaw',   params.yaw   + s);
+  if (e.key === 'ArrowUp')    onParam('pitch', params.pitch + s * 0.2);
+  if (e.key === 'ArrowDown')  onParam('pitch', params.pitch - s * 0.2);
+  if ((e.metaKey||e.ctrlKey) && e.key === 's') { e.preventDefault(); btnSave.click(); }
+  if ((e.metaKey||e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); btnOpt.click(); }
+});
+
+init();
+</script>
+</body>
+</html>
