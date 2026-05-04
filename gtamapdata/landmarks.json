@@ -4936,17 +4936,16 @@
   },
   "Bank of America Financial Center": {
     "xyz": [
-      1703.55,
-      1381.121,
-      85.112
+      1703.5485,
+      1381.1197,
+      85.122
     ],
     "source_cameras": [
       "Beach",
       "Venetian Islands"
     ],
-    "error_m": 0.575,
-    "zone": "vice_city",
-    "author": "rlx"
+    "error_m": null,
+    "zone": "vice_city"
   },
   "Bay (A)": {
     "xyz": [
@@ -8953,5 +8952,17 @@
     ],
     "error_m": null,
     "zone": "port_gellhorn"
+  },
+  "Bank of America Financial Center (Downtown)": {
+    "xyz": [
+      -2785.5236,
+      -120.4853,
+      0.0
+    ],
+    "source_cameras": [
+      "Airport (X)"
+    ],
+    "error_m": null,
+    "zone": "vice_city"
   }
 }
