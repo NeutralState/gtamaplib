@@ -7446,17 +7446,18 @@
   },
   "The Grand": {
     "xyz": [
-      -104.731,
-      957.815,
-      169.534
+      -268.3944,
+      942.8045,
+      175.154
     ],
     "source_cameras": [
+      "Gas Station (Chase) (S)",
       "Vice Beach (A)",
-      "Vice Beach (B)"
+      "Vice Beach (B)",
+      "Vice City Postcard"
     ],
-    "error_m": 0.104,
-    "zone": "vice_city",
-    "author": "neutral_state"
+    "error_m": null,
+    "zone": "vice_city"
   },
   "The Waverly South Beach (NW)": {
     "xyz": [
