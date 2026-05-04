@@ -1,0 +1,1587 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Bundle adjust outliers — review report</title>
+<style>
+  body { font-family: -apple-system, system-ui, sans-serif; max-width: 1400px;
+         margin: 1em auto; padding: 0 1em; background: #f5f5f7; color: #222; }
+  h1 { margin: 0.2em 0; }
+  .summary { background: #fff; padding: 1em; border-radius: 8px;
+              box-shadow: 0 1px 3px rgba(0,0,0,0.08); margin-bottom: 1.5em; }
+  .summary-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1em; margin-top: 0.7em; }
+  .stat { font-size: 0.85em; color: #666; }
+  .stat b { display: block; font-size: 1.6em; color: #222; margin-top: 0.1em; }
+  .tabs { display: flex; gap: 0; margin-bottom: 1em; border-bottom: 2px solid #ddd; }
+  .tab { padding: 0.6em 1.2em; cursor: pointer; background: none; border: none;
+          font-size: 1em; color: #666; border-bottom: 2px solid transparent; margin-bottom: -2px; }
+  .tab.active { color: #0070f3; border-bottom-color: #0070f3; font-weight: 600; }
+  .pane { display: none; }
+  .pane.active { display: block; }
+  .group { background: #fff; border-radius: 8px; padding: 0.8em 1em;
+            margin-bottom: 1em; box-shadow: 0 1px 3px rgba(0,0,0,0.06); }
+  .group-header { display: flex; justify-content: space-between; align-items: baseline;
+                   margin-bottom: 0.6em; }
+  .group-header h3 { margin: 0; font-size: 1.05em; }
+  .group-stats { font-size: 0.85em; color: #666; }
+  .group-stats span { margin-left: 1em; }
+  table { width: 100%; border-collapse: collapse; font-size: 0.9em; }
+  th { text-align: left; color: #888; font-weight: 500; padding: 0.4em 0.6em;
+        border-bottom: 1px solid #eee; }
+  td { padding: 0.4em 0.6em; border-bottom: 1px solid #f5f5f5; }
+  tr:hover td { background: #fafafa; }
+  td.num { color: #aaa; width: 30px; }
+  td.err { font-variant-numeric: tabular-nums; font-weight: 600; width: 60px; }
+  td.px { color: #888; font-variant-numeric: tabular-nums; font-size: 0.85em; }
+  td.flags { text-align: right; }
+  .flag { display: inline-block; font-size: 0.7em; padding: 1px 6px;
+           background: #fff3cd; color: #856404; border-radius: 3px; margin-left: 4px; }
+  .sev-extreme td.err { color: #c00; }
+  .sev-high    td.err { color: #e60; }
+  .sev-mid     td.err { color: #b80; }
+  .sev-low     td.err { color: #888; }
+  .more { font-size: 0.8em; color: #999; padding: 0.3em 0.6em; }
+  a { color: #0070f3; text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .note { font-size: 0.85em; color: #666; margin-bottom: 1em;
+           padding: 0.6em 0.8em; background: #fff; border-left: 3px solid #0070f3;
+           border-radius: 3px; }
+</style>
+</head>
+<body>
+
+<h1>Bundle adjust — outliers review</h1>
+
+<div class="summary">
+  <div>RMS loss: <b>114.7644'</b> → <b>22.781'</b>
+       &nbsp;·&nbsp; improvement <b>80.1%</b></div>
+  <div class="summary-grid">
+    <div class="stat">p50 (median)<b>1.99'</b></div>
+    <div class="stat">p90<b>17.15'</b></div>
+    <div class="stat">p99<b>59.05'</b></div>
+    <div class="stat">max<b>846.35'</b></div>
+    <div class="stat">obs &gt; 50'<b>17</b></div>
+    <div class="stat">obs &gt; 20'<b>85</b></div>
+    <div class="stat">obs &gt; 10'<b>187</b></div>
+    <div class="stat">obs &lt; 5' (clean)<b>714 / 1026</b></div>
+  </div>
+</div>
+
+<div class="note">
+  <b>Workflow:</b> Start the calib server (<code>python3 tools/server.py</code>),
+  then click any camera link to open it in the calib tool. Cross-reference the
+  marked pixel against the actual landmark position in the frame.
+  Groups are sorted by <b>cost contribution</b> (sum of squared errors) — fixing
+  the top items has the biggest impact on the global loss.
+  <br><br>
+  <b>Triage hints:</b> If many cameras report large errors on the <i>same landmark</i>,
+  the landmark is likely mis-positioned (or the bundle adjust hasn't been applied yet).
+  If <i>one camera</i> reports large errors across many landmarks, that camera's
+  calibration is probably off. <span class="flag">FIXED LM</span> + big error =
+  pixel is almost certainly wrong (the lm cannot move to compensate).
+  <span class="flag">LEAK CAM</span> + big error = same logic for the camera side.
+</div>
+
+<div class="tabs">
+  <button class="tab active" onclick="showTab('lms', this)">By landmark (32)</button>
+  <button class="tab"        onclick="showTab('cams', this)">By camera (23)</button>
+</div>
+
+<div id="pane-lms" class="pane active">
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Bank of America Financial Center</h3>
+        <div class="group-stats">
+          <span><b>3</b> obs</span>
+          <span>worst <b>846'</b></span>
+          <span>cost <b>880322</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-extreme">
+      <td class="num">1</td>
+      <td class="err">846.4'</td>
+      <td><a href="http://localhost:8765/#cam=Airport (X)" target="_blank">Airport (X)</a></td>
+      <td class="px">[1118, 145]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr>
+<tr class="sev-extreme">
+      <td class="num">2</td>
+      <td class="err">396.8'</td>
+      <td><a href="http://localhost:8765/#cam=Venetian Islands" target="_blank">Venetian Islands</a></td>
+      <td class="px">[2332, 328]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-high">
+      <td class="num">3</td>
+      <td class="err">80.9'</td>
+      <td><a href="http://localhost:8765/#cam=Beach" target="_blank">Beach</a></td>
+      <td class="px">[1773, 738]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Trésor Tower</h3>
+        <div class="group-stats">
+          <span><b>3</b> obs</span>
+          <span>worst <b>108'</b></span>
+          <span>cost <b>29601</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-extreme">
+      <td class="num">1</td>
+      <td class="err">107.7'</td>
+      <td><a href="http://localhost:8765/#cam=Jet Ski" target="_blank">Jet Ski</a></td>
+      <td class="px">[2991, 993]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-extreme">
+      <td class="num">2</td>
+      <td class="err">101.6'</td>
+      <td><a href="http://localhost:8765/#cam=Venetian Islands" target="_blank">Venetian Islands</a></td>
+      <td class="px">[1476, 276]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-high">
+      <td class="num">3</td>
+      <td class="err">87.6'</td>
+      <td><a href="http://localhost:8765/#cam=Beach" target="_blank">Beach</a></td>
+      <td class="px">[2510, 688]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Easy Hill</h3>
+        <div class="group-stats">
+          <span><b>2</b> obs</span>
+          <span>worst <b>123'</b></span>
+          <span>cost <b>28768</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-extreme">
+      <td class="num">1</td>
+      <td class="err">123.5'</td>
+      <td><a href="http://localhost:8765/#cam=Diner (SE) (B)" target="_blank">Diner (SE) (B)</a></td>
+      <td class="px">[1177, 332]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr>
+<tr class="sev-extreme">
+      <td class="num">2</td>
+      <td class="err">116.3'</td>
+      <td><a href="http://localhost:8765/#cam=Diner (SE) (A)" target="_blank">Diner (SE) (A)</a></td>
+      <td class="px">[1230, 322]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 WDNA FM</h3>
+        <div class="group-stats">
+          <span><b>2</b> obs</span>
+          <span>worst <b>76'</b></span>
+          <span>cost <b>6976</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-high">
+      <td class="num">1</td>
+      <td class="err">75.9'</td>
+      <td><a href="http://localhost:8765/#cam=Grassrivers 02 (Watson Bay)" target="_blank">Grassrivers 02 (Watson Bay)</a></td>
+      <td class="px">[1242, 263]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">34.9'</td>
+      <td><a href="http://localhost:8765/#cam=Leonida Keys 01 (Airplane) (X)" target="_blank">Leonida Keys 01 (Airplane) (X)</a></td>
+      <td class="px">[609, 349]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Continuum on South Beach (S)</h3>
+        <div class="group-stats">
+          <span><b>3</b> obs</span>
+          <span>worst <b>55'</b></span>
+          <span>cost <b>5979</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-high">
+      <td class="num">1</td>
+      <td class="err">55.2'</td>
+      <td><a href="http://localhost:8765/#cam=Sidewalk (Jason) (E)" target="_blank">Sidewalk (Jason) (E)</a></td>
+      <td class="px">[1073, 53]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">43.2'</td>
+      <td><a href="http://localhost:8765/#cam=Grassrivers 02 (Watson Bay)" target="_blank">Grassrivers 02 (Watson Bay)</a></td>
+      <td class="px">[1168, 548]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">3</td>
+      <td class="err">32.7'</td>
+      <td><a href="http://localhost:8765/#cam=Rooftop Party" target="_blank">Rooftop Party</a></td>
+      <td class="px">[764, 579]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Flamingo South Beach (SRSW)</h3>
+        <div class="group-stats">
+          <span><b>2</b> obs</span>
+          <span>worst <b>57'</b></span>
+          <span>cost <b>5832</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-high">
+      <td class="num">1</td>
+      <td class="err">56.6'</td>
+      <td><a href="http://localhost:8765/#cam=Venetian Islands" target="_blank">Venetian Islands</a></td>
+      <td class="px">[3682, 387]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-high">
+      <td class="num">2</td>
+      <td class="err">51.3'</td>
+      <td><a href="http://localhost:8765/#cam=Sidewalk (Jason) (E)" target="_blank">Sidewalk (Jason) (E)</a></td>
+      <td class="px">[716, 84]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Southeast Financial Center (D) <span class="flag">FIXED LM</span></h3>
+        <div class="group-stats">
+          <span><b>2</b> obs</span>
+          <span>worst <b>60'</b></span>
+          <span>cost <b>5349</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-high">
+      <td class="num">1</td>
+      <td class="err">59.6'</td>
+      <td><a href="http://localhost:8765/#cam=Prison" target="_blank">Prison</a></td>
+      <td class="px">[779, 832]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">42.4'</td>
+      <td><a href="http://localhost:8765/#cam=Vice City 03 (Basketball)" target="_blank">Vice City 03 (Basketball)</a></td>
+      <td class="px">[475, 304]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Flamingo South Beach (TNE) <span class="flag">FIXED LM</span></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>67'</b></span>
+          <span>cost <b>4494</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-high">
+      <td class="num">1</td>
+      <td class="err">67.0'</td>
+      <td><a href="http://localhost:8765/#cam=Venetian Islands" target="_blank">Venetian Islands</a></td>
+      <td class="px">[3256, 249]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Akoya Condominium</h3>
+        <div class="group-stats">
+          <span><b>3</b> obs</span>
+          <span>worst <b>38'</b></span>
+          <span>cost <b>3567</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">37.7'</td>
+      <td><a href="http://localhost:8765/#cam=Venetian Islands" target="_blank">Venetian Islands</a></td>
+      <td class="px">[134, 219]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">34.8'</td>
+      <td><a href="http://localhost:8765/#cam=Highway (NE)" target="_blank">Highway (NE)</a></td>
+      <td class="px">[1685, 125]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">3</td>
+      <td class="err">30.6'</td>
+      <td><a href="http://localhost:8765/#cam=Beach" target="_blank">Beach</a></td>
+      <td class="px">[1994, 734]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Bay (A)</h3>
+        <div class="group-stats">
+          <span><b>2</b> obs</span>
+          <span>worst <b>43'</b></span>
+          <span>cost <b>3497</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">42.7'</td>
+      <td><a href="http://localhost:8765/#cam=Diner (W) (B)" target="_blank">Diner (W) (B)</a></td>
+      <td class="px">[768, 422]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">40.9'</td>
+      <td><a href="http://localhost:8765/#cam=Port Gellhorn Postcard (X)" target="_blank">Port Gellhorn Postcard (X)</a></td>
+      <td class="px">[712, 1007]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 1000 Venetian Way (2)</h3>
+        <div class="group-stats">
+          <span><b>2</b> obs</span>
+          <span>worst <b>51'</b></span>
+          <span>cost <b>3469</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-high">
+      <td class="num">1</td>
+      <td class="err">51.0'</td>
+      <td><a href="http://localhost:8765/#cam=Venetian Islands" target="_blank">Venetian Islands</a></td>
+      <td class="px">[2264, 751]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">29.4'</td>
+      <td><a href="http://localhost:8765/#cam=Skyline" target="_blank">Skyline</a></td>
+      <td class="px">[3342, 617]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Bay (B)</h3>
+        <div class="group-stats">
+          <span><b>2</b> obs</span>
+          <span>worst <b>42'</b></span>
+          <span>cost <b>3396</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">42.3'</td>
+      <td><a href="http://localhost:8765/#cam=Diner (W) (B)" target="_blank">Diner (W) (B)</a></td>
+      <td class="px">[794, 422]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">40.1'</td>
+      <td><a href="http://localhost:8765/#cam=Port Gellhorn Postcard (X)" target="_blank">Port Gellhorn Postcard (X)</a></td>
+      <td class="px">[828, 1008]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 The Grand <span class="flag">FIXED LM</span></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>57'</b></span>
+          <span>cost <b>3290</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-high">
+      <td class="num">1</td>
+      <td class="err">57.4'</td>
+      <td><a href="http://localhost:8765/#cam=Vice City Postcard" target="_blank">Vice City Postcard</a></td>
+      <td class="px">[1473, 670]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 US Sugar Mill (Factory)</h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>57'</b></span>
+          <span>cost <b>3209</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-high">
+      <td class="num">1</td>
+      <td class="err">56.6'</td>
+      <td><a href="http://localhost:8765/#cam=Glitch (A)" target="_blank">Glitch (A)</a></td>
+      <td class="px">[90, 216]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Port of Tampa Container Crane (2)</h3>
+        <div class="group-stats">
+          <span><b>2</b> obs</span>
+          <span>worst <b>40'</b></span>
+          <span>cost <b>2767</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">40.3'</td>
+      <td><a href="http://localhost:8765/#cam=Diner (W) (B)" target="_blank">Diner (W) (B)</a></td>
+      <td class="px">[501, 337]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">33.8'</td>
+      <td><a href="http://localhost:8765/#cam=Diner (W) (A)" target="_blank">Diner (W) (A)</a></td>
+      <td class="px">[248, 314]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Di Lido Island (N)</h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>50'</b></span>
+          <span>cost <b>2479</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">49.8'</td>
+      <td><a href="http://localhost:8765/#cam=Vice City 03 (Basketball)" target="_blank">Vice City 03 (Basketball)</a></td>
+      <td class="px">[2861, 661]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Four Seasons Hotel Miami (W) <span class="flag">FIXED LM</span></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>49'</b></span>
+          <span>cost <b>2425</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">49.2'</td>
+      <td><a href="http://localhost:8765/#cam=Grassrivers 02 (Watson Bay)" target="_blank">Grassrivers 02 (Watson Bay)</a></td>
+      <td class="px">[946, 497]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Jade Ocean Condos</h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>46'</b></span>
+          <span>cost <b>2088</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">45.7'</td>
+      <td><a href="http://localhost:8765/#cam=Venetian Islands" target="_blank">Venetian Islands</a></td>
+      <td class="px">[452, 131]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 The Ritz-Carlton Bal Harbour</h3>
+        <div class="group-stats">
+          <span><b>2</b> obs</span>
+          <span>worst <b>32'</b></span>
+          <span>cost <b>1962</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">32.1'</td>
+      <td><a href="http://localhost:8765/#cam=Beach" target="_blank">Beach</a></td>
+      <td class="px">[1901, 826]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">30.6'</td>
+      <td><a href="http://localhost:8765/#cam=Jet Ski" target="_blank">Jet Ski</a></td>
+      <td class="px">[1446, 756]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 1000 Venetian Way (SW)</h3>
+        <div class="group-stats">
+          <span><b>2</b> obs</span>
+          <span>worst <b>31'</b></span>
+          <span>cost <b>1958</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">31.4'</td>
+      <td><a href="http://localhost:8765/#cam=Vice City Postcard" target="_blank">Vice City Postcard</a></td>
+      <td class="px">[449, 817]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">31.1'</td>
+      <td><a href="http://localhost:8765/#cam=Tennis Court (SE)" target="_blank">Tennis Court (SE)</a></td>
+      <td class="px">[759, 92]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Port of Tampa Container Crane (3) <span class="flag">FIXED LM</span></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>43'</b></span>
+          <span>cost <b>1889</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">43.5'</td>
+      <td><a href="http://localhost:8765/#cam=Port Gellhorn Postcard (X)" target="_blank">Port Gellhorn Postcard (X)</a></td>
+      <td class="px">[1706, 889]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 New Foundation Church</h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>42'</b></span>
+          <span>cost <b>1752</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">41.9'</td>
+      <td><a href="http://localhost:8765/#cam=Chase (2) (A)" target="_blank">Chase (2) (A)</a></td>
+      <td class="px">[-2, 928]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Jenny Hostel (NE) <span class="flag">FIXED LM</span></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>38'</b></span>
+          <span>cost <b>1470</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">38.3'</td>
+      <td><a href="http://localhost:8765/#cam=Beach" target="_blank">Beach</a></td>
+      <td class="px">[1654, 832]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 12th St Lifeguard Tower</h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>35'</b></span>
+          <span>cost <b>1197</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">34.6'</td>
+      <td><a href="http://localhost:8765/#cam=Beach" target="_blank">Beach</a></td>
+      <td class="px">[3514, 986]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 The Grand (E)</h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>33'</b></span>
+          <span>cost <b>1080</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">32.9'</td>
+      <td><a href="http://localhost:8765/#cam=Prison" target="_blank">Prison</a></td>
+      <td class="px">[121, 893]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 West Venetian Causeway Bridge</h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>33'</b></span>
+          <span>cost <b>1076</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">32.8'</td>
+      <td><a href="http://localhost:8765/#cam=Sidewalk (Jason) (E)" target="_blank">Sidewalk (Jason) (E)</a></td>
+      <td class="px">[970, 101]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 6232 E Hwy 98 (NE) <span class="flag">FIXED LM</span></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>33'</b></span>
+          <span>cost <b>1069</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">32.7'</td>
+      <td><a href="http://localhost:8765/#cam=U-Turn (NW)" target="_blank">U-Turn (NW)</a></td>
+      <td class="px">[2312, 709]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Opera Tower</h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>33'</b></span>
+          <span>cost <b>1064</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">32.6'</td>
+      <td><a href="http://localhost:8765/#cam=Prison" target="_blank">Prison</a></td>
+      <td class="px">[64, 874]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Asia Brickell Key (CC1)</h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>32'</b></span>
+          <span>cost <b>1054</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">32.5'</td>
+      <td><a href="http://localhost:8765/#cam=Vice Beach (B)" target="_blank">Vice Beach (B)</a></td>
+      <td class="px">[986, 591]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📍 Jade Ocean Condos (SW)</h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>31'</b></span>
+          <span>cost <b>931</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>camera</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">30.5'</td>
+      <td><a href="http://localhost:8765/#cam=Beach" target="_blank">Beach</a></td>
+      <td class="px">[2198, 596]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+</div>
+
+<div id="pane-cams" class="pane">
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Airport (X)" target="_blank">Airport (X)</a> <span class="flag">LEAK CAM</span></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>846'</b></span>
+          <span>cost <b>716308</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-extreme">
+      <td class="num">1</td>
+      <td class="err">846.4'</td>
+      <td>Bank of America Financial Center</td>
+      <td class="px">[1118, 145]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Venetian Islands" target="_blank">Venetian Islands</a></h3>
+        <div class="group-stats">
+          <span><b>7</b> obs</span>
+          <span>worst <b>397'</b></span>
+          <span>cost <b>181605</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-extreme">
+      <td class="num">1</td>
+      <td class="err">396.8'</td>
+      <td>Bank of America Financial Center</td>
+      <td class="px">[2332, 328]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-extreme">
+      <td class="num">2</td>
+      <td class="err">101.6'</td>
+      <td>Trésor Tower</td>
+      <td class="px">[1476, 276]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-high">
+      <td class="num">3</td>
+      <td class="err">67.0'</td>
+      <td>Flamingo South Beach (TNE)</td>
+      <td class="px">[3256, 249]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr>
+<tr class="sev-high">
+      <td class="num">4</td>
+      <td class="err">56.6'</td>
+      <td>Flamingo South Beach (SRSW)</td>
+      <td class="px">[3682, 387]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-high">
+      <td class="num">5</td>
+      <td class="err">51.0'</td>
+      <td>1000 Venetian Way (2)</td>
+      <td class="px">[2264, 751]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">6</td>
+      <td class="err">45.7'</td>
+      <td>Jade Ocean Condos</td>
+      <td class="px">[452, 131]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">7</td>
+      <td class="err">37.7'</td>
+      <td>Akoya Condominium</td>
+      <td class="px">[134, 219]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Beach" target="_blank">Beach</a></h3>
+        <div class="group-stats">
+          <span><b>8</b> obs</span>
+          <span>worst <b>88'</b></span>
+          <span>cost <b>20632</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-high">
+      <td class="num">1</td>
+      <td class="err">87.6'</td>
+      <td>Trésor Tower</td>
+      <td class="px">[2510, 688]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-high">
+      <td class="num">2</td>
+      <td class="err">80.9'</td>
+      <td>Bank of America Financial Center</td>
+      <td class="px">[1773, 738]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">3</td>
+      <td class="err">38.3'</td>
+      <td>Jenny Hostel (NE)</td>
+      <td class="px">[1654, 832]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">4</td>
+      <td class="err">34.6'</td>
+      <td>12th St Lifeguard Tower</td>
+      <td class="px">[3514, 986]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">5</td>
+      <td class="err">32.1'</td>
+      <td>The Ritz-Carlton Bal Harbour</td>
+      <td class="px">[1901, 826]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">6</td>
+      <td class="err">30.6'</td>
+      <td>Akoya Condominium</td>
+      <td class="px">[1994, 734]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">7</td>
+      <td class="err">30.5'</td>
+      <td>Jade Ocean Condos (SW)</td>
+      <td class="px">[2198, 596]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">8</td>
+      <td class="err">29.1'</td>
+      <td>Loews Miami Beach</td>
+      <td class="px">[2444, 680]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Diner (SE) (B)" target="_blank">Diner (SE) (B)</a> <span class="flag">LEAK CAM</span></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>123'</b></span>
+          <span>cost <b>15242</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-extreme">
+      <td class="num">1</td>
+      <td class="err">123.5'</td>
+      <td>Easy Hill</td>
+      <td class="px">[1177, 332]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Diner (SE) (A)" target="_blank">Diner (SE) (A)</a> <span class="flag">LEAK CAM</span></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>116'</b></span>
+          <span>cost <b>13526</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-extreme">
+      <td class="num">1</td>
+      <td class="err">116.3'</td>
+      <td>Easy Hill</td>
+      <td class="px">[1230, 322]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Jet Ski" target="_blank">Jet Ski</a></h3>
+        <div class="group-stats">
+          <span><b>2</b> obs</span>
+          <span>worst <b>108'</b></span>
+          <span>cost <b>12535</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-extreme">
+      <td class="num">1</td>
+      <td class="err">107.7'</td>
+      <td>Trésor Tower</td>
+      <td class="px">[2991, 993]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">30.6'</td>
+      <td>The Ritz-Carlton Bal Harbour</td>
+      <td class="px">[1446, 756]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Grassrivers 02 (Watson Bay)" target="_blank">Grassrivers 02 (Watson Bay)</a></h3>
+        <div class="group-stats">
+          <span><b>3</b> obs</span>
+          <span>worst <b>76'</b></span>
+          <span>cost <b>10044</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-high">
+      <td class="num">1</td>
+      <td class="err">75.9'</td>
+      <td>WDNA FM</td>
+      <td class="px">[1242, 263]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">49.2'</td>
+      <td>Four Seasons Hotel Miami (W)</td>
+      <td class="px">[946, 497]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">3</td>
+      <td class="err">43.2'</td>
+      <td>Continuum on South Beach (S)</td>
+      <td class="px">[1168, 548]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Sidewalk (Jason) (E)" target="_blank">Sidewalk (Jason) (E)</a> <span class="flag">LEAK CAM</span></h3>
+        <div class="group-stats">
+          <span><b>3</b> obs</span>
+          <span>worst <b>55'</b></span>
+          <span>cost <b>6750</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-high">
+      <td class="num">1</td>
+      <td class="err">55.2'</td>
+      <td>Continuum on South Beach (S)</td>
+      <td class="px">[1073, 53]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr>
+<tr class="sev-high">
+      <td class="num">2</td>
+      <td class="err">51.3'</td>
+      <td>Flamingo South Beach (SRSW)</td>
+      <td class="px">[716, 84]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">3</td>
+      <td class="err">32.8'</td>
+      <td>West Venetian Causeway Bridge</td>
+      <td class="px">[970, 101]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Prison" target="_blank">Prison</a></h3>
+        <div class="group-stats">
+          <span><b>3</b> obs</span>
+          <span>worst <b>60'</b></span>
+          <span>cost <b>5697</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-high">
+      <td class="num">1</td>
+      <td class="err">59.6'</td>
+      <td>Southeast Financial Center (D)</td>
+      <td class="px">[779, 832]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">32.9'</td>
+      <td>The Grand (E)</td>
+      <td class="px">[121, 893]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">3</td>
+      <td class="err">32.6'</td>
+      <td>Opera Tower</td>
+      <td class="px">[64, 874]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Diner (W) (B)" target="_blank">Diner (W) (B)</a> <span class="flag">LEAK CAM</span></h3>
+        <div class="group-stats">
+          <span><b>3</b> obs</span>
+          <span>worst <b>43'</b></span>
+          <span>cost <b>5232</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">42.7'</td>
+      <td>Bay (A)</td>
+      <td class="px">[768, 422]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">42.3'</td>
+      <td>Bay (B)</td>
+      <td class="px">[794, 422]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">3</td>
+      <td class="err">40.3'</td>
+      <td>Port of Tampa Container Crane (2)</td>
+      <td class="px">[501, 337]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Port Gellhorn Postcard (X)" target="_blank">Port Gellhorn Postcard (X)</a></h3>
+        <div class="group-stats">
+          <span><b>3</b> obs</span>
+          <span>worst <b>43'</b></span>
+          <span>cost <b>5174</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">43.5'</td>
+      <td>Port of Tampa Container Crane (3)</td>
+      <td class="px">[1706, 889]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">40.9'</td>
+      <td>Bay (A)</td>
+      <td class="px">[712, 1007]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">3</td>
+      <td class="err">40.1'</td>
+      <td>Bay (B)</td>
+      <td class="px">[828, 1008]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Vice City Postcard" target="_blank">Vice City Postcard</a></h3>
+        <div class="group-stats">
+          <span><b>2</b> obs</span>
+          <span>worst <b>57'</b></span>
+          <span>cost <b>4279</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-high">
+      <td class="num">1</td>
+      <td class="err">57.4'</td>
+      <td>The Grand</td>
+      <td class="px">[1473, 670]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">31.4'</td>
+      <td>1000 Venetian Way (SW)</td>
+      <td class="px">[449, 817]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Vice City 03 (Basketball)" target="_blank">Vice City 03 (Basketball)</a></h3>
+        <div class="group-stats">
+          <span><b>2</b> obs</span>
+          <span>worst <b>50'</b></span>
+          <span>cost <b>4274</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">49.8'</td>
+      <td>Di Lido Island (N)</td>
+      <td class="px">[2861, 661]</td>
+      <td class="flags"></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">42.4'</td>
+      <td>Southeast Financial Center (D)</td>
+      <td class="px">[475, 304]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Glitch (A)" target="_blank">Glitch (A)</a> <span class="flag">LEAK CAM</span></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>57'</b></span>
+          <span>cost <b>3209</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-high">
+      <td class="num">1</td>
+      <td class="err">56.6'</td>
+      <td>US Sugar Mill (Factory)</td>
+      <td class="px">[90, 216]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Skyline" target="_blank">Skyline</a></h3>
+        <div class="group-stats">
+          <span><b>2</b> obs</span>
+          <span>worst <b>30'</b></span>
+          <span>cost <b>1757</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">29.9'</td>
+      <td>Four Seasons Hotel Miami (BE)</td>
+      <td class="px">[1078, 443]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr>
+<tr class="sev-mid">
+      <td class="num">2</td>
+      <td class="err">29.4'</td>
+      <td>1000 Venetian Way (2)</td>
+      <td class="px">[3342, 617]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Chase (2) (A)" target="_blank">Chase (2) (A)</a></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>42'</b></span>
+          <span>cost <b>1752</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">41.9'</td>
+      <td>New Foundation Church</td>
+      <td class="px">[-2, 928]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Leonida Keys 01 (Airplane) (X)" target="_blank">Leonida Keys 01 (Airplane) (X)</a></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>35'</b></span>
+          <span>cost <b>1221</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">34.9'</td>
+      <td>WDNA FM</td>
+      <td class="px">[609, 349]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Highway (NE)" target="_blank">Highway (NE)</a> <span class="flag">LEAK CAM</span></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>35'</b></span>
+          <span>cost <b>1210</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">34.8'</td>
+      <td>Akoya Condominium</td>
+      <td class="px">[1685, 125]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Diner (W) (A)" target="_blank">Diner (W) (A)</a> <span class="flag">LEAK CAM</span></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>34'</b></span>
+          <span>cost <b>1143</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">33.8'</td>
+      <td>Port of Tampa Container Crane (2)</td>
+      <td class="px">[248, 314]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=U-Turn (NW)" target="_blank">U-Turn (NW)</a></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>33'</b></span>
+          <span>cost <b>1069</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">32.7'</td>
+      <td>6232 E Hwy 98 (NE)</td>
+      <td class="px">[2312, 709]</td>
+      <td class="flags"><span class="flag">FIXED LM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Rooftop Party" target="_blank">Rooftop Party</a></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>33'</b></span>
+          <span>cost <b>1069</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">32.7'</td>
+      <td>Continuum on South Beach (S)</td>
+      <td class="px">[764, 579]</td>
+      <td class="flags"></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Vice Beach (B)" target="_blank">Vice Beach (B)</a> <span class="flag">LEAK CAM</span></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>32'</b></span>
+          <span>cost <b>1054</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">32.5'</td>
+      <td>Asia Brickell Key (CC1)</td>
+      <td class="px">[986, 591]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+
+    <div class="group">
+      <div class="group-header">
+        <h3>📷 <a href="http://localhost:8765/#cam=Tennis Court (SE)" target="_blank">Tennis Court (SE)</a> <span class="flag">LEAK CAM</span></h3>
+        <div class="group-stats">
+          <span><b>1</b> obs</span>
+          <span>worst <b>31'</b></span>
+          <span>cost <b>969</b></span>
+        </div>
+      </div>
+      <table>
+        <thead><tr><th>#</th><th>error</th><th>landmark</th><th>marked px</th><th></th></tr></thead>
+        <tbody><tr class="sev-mid">
+      <td class="num">1</td>
+      <td class="err">31.1'</td>
+      <td>1000 Venetian Way (SW)</td>
+      <td class="px">[759, 92]</td>
+      <td class="flags"><span class="flag">LEAK CAM</span></td>
+    </tr></tbody>
+      </table>
+      
+    </div>
+</div>
+
+<script>
+function showTab(name, btn) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.pane').forEach(p => p.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('pane-' + name).classList.add('active');
+}
+</script>
+
+</body>
+</html>

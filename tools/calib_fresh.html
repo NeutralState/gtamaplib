@@ -1090,10 +1090,12 @@ canvasWrap.addEventListener('click', async e => {
   const ix = Math.round(((mx-ox)/scale) * 10) / 10;
   const iy = Math.round(((my-oy)/scale) * 10) / 10;
 
-  // Save pixel
-  const res = await fetch(`/api/add_pixel?cam=${encodeURIComponent(currentCam)}&lm=${encodeURIComponent(addPxSelectedLm)}&px=${ix}&py=${iy}`).then(r=>r.json());
+  // Save pixel — pass new=1 if this is a brand-new landmark
+  const newFlag = addPxIsNew ? "&new=1" : "";
+  const res = await fetch(`/api/add_pixel?cam=${encodeURIComponent(currentCam)}&lm=${encodeURIComponent(addPxSelectedLm)}&px=${ix}&py=${iy}${newFlag}`).then(r=>r.json());
   if (res.ok) {
     addPxMode = false;
+    addPxIsNew = false;
     document.getElementById('no-img').style.display = 'none';
     canvasWrap.style.cursor = 'crosshair';
     await loadProjections();

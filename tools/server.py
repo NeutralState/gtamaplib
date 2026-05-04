@@ -711,32 +711,49 @@ area = (int(cx-padding), int(cy-padding), int(cx+padding), int(cy+padding))
 
 m = ml.get_map('yanis').open(scale=1.0, add_padding=True)
 
-color_list = [(255,68,68),(68,170,255),(255,170,0),(170,68,255),(68,255,170)]
-for idx2, cn in enumerate(cam_names):
+# Build per-landmark color palette using HSV-distributed RGB
+import colorsys
+def landmark_color(idx, total):
+    h = (idx * 0.618033988749895) % 1.0  # golden ratio for max separation
+    r, g, b = colorsys.hsv_to_rgb(h, 0.85, 1.0)
+    return (int(r*255), int(g*255), int(b*255))
+
+# Collect all unique landmarks across all cams to assign stable colors
+all_lms = set()
+for cn in cam_names:
+    all_lms.update(md.pixels.get(cn, {{}}).keys())
+lm_to_color = {{ln: landmark_color(i, len(all_lms)) for i, ln in enumerate(sorted(all_lms))}}
+
+# First pass: draw all landmark rays
+for cn in cam_names:
     try:
         cam = ml.get_camera(cn)
-        color = color_list[idx2 % len(color_list)]
-        m.draw_camera(cam, d=30000)
         cam_pixels = md.pixels.get(cn, {{}})
-        drawn = 0
         for ln in cam_pixels:
-            if drawn >= 8: break
             try:
                 d = cam.get_landmark_direction(ln)
                 if d is None: continue
                 target_xy = ml.get_point(cam.xyz, d, 30000)[:2]
-                m.draw_line((cam.xy, target_xy), color, 2)
-                drawn += 1
-            except: pass
-        if lm_name and lm_name in cam_pixels:
-            try:
-                d = cam.get_landmark_direction(lm_name)
-                if d is not None:
-                    target_xy = ml.get_point(cam.xyz, d, 30000)[:2]
-                    m.draw_line((cam.xy, target_xy), (255,255,255), 5)
+                color = lm_to_color.get(ln, (200, 200, 200))
+                width = 4 if (lm_name and ln == lm_name) else 2
+                m.draw_line((cam.xy, target_xy), color, width)
             except: pass
     except Exception as e:
-        print(f'Error {{cn}}: {{e}}')
+        print(f'Error rays {{cn}}: {{e}}')
+
+# Second pass: draw camera frustum on top in BLACK (thicker, more visible)
+for cn in cam_names:
+    try:
+        cam = ml.get_camera(cn)
+        # frustum edges (black, width 4) — manually drawn since draw_camera uses white
+        for x in (0, cam.w):
+            edge_dir = cam.get_pixel_direction((x, cam.h / 2))
+            target_xy = ml.get_point(cam.xyz, edge_dir, 30000)[:2]
+            m.draw_line((cam.xy, target_xy), (0, 0, 0), 4)
+        # cam marker
+        m.draw_circle(cam.xy, 8, (255, 255, 255), cam.color, 2, cam.name[0])
+    except Exception as e:
+        print(f'Error frustum {{cn}}: {{e}}')
 
 if lm_name and md.landmarks.get(lm_name):
     m.draw_landmark(lm_name)

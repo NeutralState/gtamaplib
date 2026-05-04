@@ -107,8 +107,9 @@ def get_landmark_sources(lm_name):
 def update_landmark(lm_name, xyz, source_cameras=None, error_m=None, zone=None):
     """
     Updates a landmark in memory and persists to the appropriate JSON file.
+    Handles xyz=None for landmarks without triangulation yet.
     """
-    landmarks[lm_name] = tuple(xyz)
+    landmarks[lm_name] = tuple(xyz) if xyz is not None else None
 
     # Determine zone
     if zone is None:
@@ -128,7 +129,7 @@ def update_landmark(lm_name, xyz, source_cameras=None, error_m=None, zone=None):
     with open(lm_path) as f:
         lm_data = json.load(f)
     lm_data[lm_name] = {
-        "xyz": list(xyz),
+        "xyz": list(xyz) if xyz is not None else None,
         "source_cameras": source_cameras or [],
         "error_m": error_m,
         "zone": zone,
