@@ -14,6 +14,7 @@ Run from gtamaplib-main/:
 
 import json
 import os
+import re
 import sys
 import time
 
@@ -29,24 +30,27 @@ import gtamapdata as md
 print("gtamaplib loaded ✓")
 
 # ── Identify leak cameras (fixed — exact positions from game engine) ──────────
+#
+# Auto-detection by source field:
+#   - LEAK    : source matches YYYY-MM-DD (date-stamped game engine capture)
+#               → locked, used as ground truth, NEVER optimized
+#   - TRAILER : source starts with "Trailer" (community-calibrated from trailers)
+#               → optimizable like other community cams
+#   - other   : optimizable
 
-LEAK_CAMS = {
-    'Tennis Stadium (4K)', 'Vice Beach (A)', 'Vice Beach (B)',
-    'Metro (SE) (A) (4K)', 'Alley (W)', 'Park', 'Port',
-    'Tennis Court (SE)', 'Tennis Court (NE)', 'Tennis Court (N)', 'Tennis Court (SW)',
-    'AI World Editor Map (4K)',
-    'Diner (W) (A)', 'Diner (W) (B)', 'Diner (N)', 'Diner (NW)', 'Diner (NE)',
-    'Diner (E)', 'Diner (SE) (A)', 'Diner (SE) (B)', 'Diner (S)', 'Diner (SW)', 'Diner',
-    'Gas Station (Lucia)', 'Gas Station (Jason)',
-    'Loading Zone near Prison (SW)', 'Loading Zone near Prison (N)',
-    'Ocean near Keys (N)', 'Ocean near Keys (E)', 'House with Boat (X)',
-    'Highway (NE)', 'Sidewalk (Jason) (E)', 'Sidewalk (Jason) (S)',
-    'Welcome Center (E)', 'Welcome Center (W)', 'Police Chase (A)', 'Police Chase (D)',
-    'Airport (X)', 'Car Wash', 'Glitch (A)', 'Grassrivers Postcard (X)',
-    'Handlebar (SE)', 'Handlebar (SW)', 'Hedge (B) (X)', 'Hotel (W)',
-    'Intersection (W)', 'Penthouse (NE)', 'Penthouse (NW)',
-    'Penthouse (SE)', 'Penthouse (SW)', 'Pool', 'Rooftop (SE)',
-}
+LEAK_RE = re.compile(r'\d{4}-\d{2}-\d{2}')
+
+def is_leak(cn):
+    src = md.cameras.get(cn, {}).get('source', '') or ''
+    return bool(LEAK_RE.match(src))
+
+def is_trailer(cn):
+    src = md.cameras.get(cn, {}).get('source', '') or ''
+    return src.startswith('Trailer')
+
+LEAK_CAMS = {n for n in md.cameras if is_leak(n)}
+print(f"Detected {len(LEAK_CAMS)} LEAK cams (locked), "
+      f"{sum(1 for n in md.cameras if is_trailer(n))} TRAILER cams (optimizable)")
 
 # ── Build candidate sets ──────────────────────────────────────────────────────
 # These are the cameras and landmarks we *would* optimize if they have
