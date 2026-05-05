@@ -676,9 +676,9 @@
   },
   "Beach (G)": {
     "xyz": [
-      5098296956366.25,
-      -4381801073548.023,
-      -3300911811581.6113
+      2266.9126352169715,
+      976.7150974880567,
+      0
     ],
     "source_cameras": [
       "Vice Beach (A)"
@@ -688,9 +688,9 @@
   },
   "Beach (H)": {
     "xyz": [
-      6883885709432.753,
-      2658336335491.5327,
-      -2320305633648.9946
+      2253.76559174304,
+      1135.7671674126711,
+      0
     ],
     "source_cameras": [
       "Vice Beach (A)"
@@ -1183,15 +1183,15 @@
   },
   "Hotel Breakwater": {
     "xyz": [
-      1949.8147,
-      563.7869,
-      25.8193
+      1950.0484506143491,
+      563.3749483254951,
+      25.77295502211009
     ],
     "source_cameras": [
       "Vice Beach (A)",
       "Park"
     ],
-    "error_m": null,
+    "error_m": 0.712,
     "zone": "vice_city"
   },
   "Jenny Hostel (NE)": {
@@ -4700,15 +4700,15 @@
   },
   "12th St Lifeguard Tower": {
     "xyz": [
-      2223.2573,
-      1031.7496,
-      6.3491
+      2223.31414681625,
+      1032.0694333839447,
+      6.074912329524091
     ],
     "source_cameras": [
       "Beach",
       "Vice Beach (A)"
     ],
-    "error_m": null,
+    "error_m": 1.324,
     "zone": "vice_city"
   },
   "1500 Ocean Dr (S) (NW)": {
@@ -5475,15 +5475,15 @@
   },
   "Flamingo South Beach (SDS)": {
     "xyz": [
-      1282.4723,
-      814.9313,
-      65.0054
+      1281.1805935703078,
+      815.1724693484181,
+      65.02259462400048
     ],
     "source_cameras": [
       "Venetian Islands",
       "Vice Beach (A)"
     ],
-    "error_m": null,
+    "error_m": 0.499,
     "zone": "vice_city"
   },
   "Flamingo South Beach (SRSW)": {
@@ -5731,15 +5731,15 @@
   },
   "Loews Miami Beach": {
     "xyz": [
-      1959.871,
-      1150.8489,
-      86.9841
+      1960.9509506976453,
+      1152.0887601623635,
+      87.0875476625608
     ],
     "source_cameras": [
       "Rooftop Party",
       "Vice Beach (A)"
     ],
-    "error_m": null,
+    "error_m": 2.712,
     "zone": "vice_city"
   },
   "Loft Downtown II": {
@@ -7029,87 +7029,87 @@
   },
   "Cardozo South Beach": {
     "xyz": [
-      2013.9357,
-      914.8974,
-      17.1741
+      2016.1727912611252,
+      916.1949397262281,
+      17.455818348974862
     ],
     "source_cameras": [
       "Vice Beach (A)",
       "Vice Beach (B)"
     ],
-    "error_m": null,
+    "error_m": 3.682,
     "zone": "vice_city"
   },
   "Cavalier Hotel": {
     "xyz": [
-      1977.2151,
-      708.3783,
-      19.9922
+      1977.398533292861,
+      708.2347248647781,
+      19.956655828164862
     ],
     "source_cameras": [
       "Vice Beach (A)",
       "Vice Beach (B)"
     ],
-    "error_m": null,
+    "error_m": 0.123,
     "zone": "vice_city"
   },
   "Construction Crane (Vice Beach)": {
     "xyz": [
-      1482.2112,
-      257.3899,
-      60.1256
+      1485.8320928641674,
+      260.74692083809623,
+      60.03442509578083
     ],
     "source_cameras": [
       "Vice Beach (A)",
       "Vice Beach (B)"
     ],
-    "error_m": null,
+    "error_m": 0.206,
     "zone": "vice_city"
   },
   "Container Crane (9)": {
     "xyz": [
-      1051.7228,
-      -239.244,
-      72.3462
+      1058.242896551992,
+      -233.42079422571027,
+      72.59283579821965
     ],
     "source_cameras": [
       "Vice Beach (A)",
       "Vice Beach (B)"
     ],
-    "error_m": null,
+    "error_m": 0.125,
     "zone": "vice_city"
   },
   "Courtyard by Marriott (NE)": {
     "xyz": [
-      1730.8266,
-      1069.7422,
-      34.7713
+      1718.6346982110942,
+      1069.4857103653874,
+      34.12106086511855
     ],
     "source_cameras": [
       "Vice Beach (A)",
       "Vice Beach (B)"
     ],
-    "error_m": null,
+    "error_m": 5.664,
     "zone": "vice_city"
   },
   "Hotel Victor (NW)": {
     "xyz": [
-      1951.1778,
-      754.952,
-      38.0517
+      1952.7078122162761,
+      756.2016713942052,
+      38.145649556746136
     ],
     "source_cameras": [
       "Vice Beach (A)",
       "Vice Beach (B)"
     ],
-    "error_m": null,
+    "error_m": 1.39,
     "zone": "vice_city"
   },
   "Icon at South Beach": {
     "xyz": [
-      1456.8568,
-      110.3626,
-      143.5535
+      1455.9757851983786,
+      108.93499231376197,
+      143.45572764544892
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7117,46 +7117,46 @@
       "Jason Duval 05 (Machine Gun)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": null,
+    "error_m": 1.634,
     "zone": "vice_city"
   },
   "Leslie Hotel": {
     "xyz": [
-      1978.0014,
-      724.7207,
-      21.7075
+      1978.344308076552,
+      724.7991555996047,
+      21.70845226380671
     ],
     "source_cameras": [
       "Vice Beach (A)",
       "Vice Beach (B)"
     ],
-    "error_m": null,
+    "error_m": 1.959,
     "zone": "vice_city"
   },
   "McAlpin Ocean Plaza": {
     "xyz": [
-      2005.8556,
-      861.1101,
-      23.6183
+      2007.9192146562696,
+      862.5914808212835,
+      23.844709155307285
     ],
     "source_cameras": [
       "Vice Beach (A)",
       "Vice Beach (B)"
     ],
-    "error_m": null,
+    "error_m": 0.957,
     "zone": "vice_city"
   },
   "Miami Beach Parking Garage (SE)": {
     "xyz": [
-      1850.1255,
-      682.3711,
-      34.1036
+      1852.5072052422606,
+      684.3199022062306,
+      34.22437921164843
     ],
     "source_cameras": [
       "Vice Beach (A)",
       "Vice Beach (B)"
     ],
-    "error_m": null,
+    "error_m": 1.629,
     "zone": "vice_city"
   },
   "Southeast Financial Center (D)": {
@@ -7174,9 +7174,9 @@
   },
   "The Grand": {
     "xyz": [
-      -272.4521,
-      950.2315,
-      177.0629
+      -272.46245804990116,
+      950.4320540172849,
+      176.99753718279953
     ],
     "source_cameras": [
       "Gas Station (Chase) (S)",
@@ -7184,33 +7184,33 @@
       "Vice Beach (B)",
       "Vice City Postcard"
     ],
-    "error_m": null,
+    "error_m": 5.03,
     "zone": "vice_city"
   },
   "The Waverly South Beach (NW)": {
     "xyz": [
-      1172.4505,
-      603.8065,
-      109.4677
+      1180.0792181174843,
+      607.1616932158863,
+      109.92409701740239
     ],
     "source_cameras": [
       "Vice Beach (A)",
       "Vice Beach (B)"
     ],
-    "error_m": null,
+    "error_m": 1.925,
     "zone": "vice_city"
   },
   "Winter Haven": {
     "xyz": [
-      2003.5084,
-      844.2922,
-      28.1129
+      2005.4400068278653,
+      845.7488986358468,
+      28.302363612906305
     ],
     "source_cameras": [
       "Vice Beach (A)",
       "Vice Beach (B)"
     ],
-    "error_m": null,
+    "error_m": 0.212,
     "zone": "vice_city"
   },
   "1111 Lincoln Rd (NW)": {
