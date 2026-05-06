@@ -11,3 +11,7 @@ frames/
 maps/
 make_zips.py
 render_all.jsonrenders/
+
+# Generated outputs
+*.png
+tools/generated/
