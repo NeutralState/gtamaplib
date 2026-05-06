@@ -411,6 +411,38 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_response(404)
                 self.end_headers()
 
+
+        elif path == '/api/lm_info':
+            # Returns source cameras + all observers for a landmark.
+            lm_name = unquote(qs.get('lm', [''])[0])
+            if lm_name not in md.landmarks_meta:
+                self.send_json({'error': 'unknown landmark'}, 404)
+                return
+            meta = md.landmarks_meta[lm_name]
+            sources = list(meta.get('source_cameras') or [])
+            error_m = meta.get('error_m')
+            has_xyz = md.landmarks.get(lm_name) is not None
+
+            # Find all cams that have a pixel for this landmark
+            observers = []
+            for cam_name, pxs in md.pixels.items():
+                if lm_name in pxs:
+                    observers.append(cam_name)
+
+            # Other observers = those with pixels who are NOT in sources
+            others = [c for c in observers if c not in sources]
+
+            self.send_json({
+                'lm': lm_name,
+                'sources': sorted(sources),
+                'others': sorted(others),
+                'n_sources': len(sources),
+                'n_others': len(others),
+                'n_total_observers': len(observers),
+                'error_m': error_m,
+                'has_xyz': has_xyz,
+            })
+
         elif path == '/api/cam_health':
             # Per-cam health metrics. Reuses compute_projections to get
             # angular residuals from the current calibration state.

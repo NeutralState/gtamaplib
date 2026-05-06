@@ -137,6 +137,21 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .genmap-legend{display:flex;gap:14px;padding:8px 14px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--mid)}
 .genmap-legend-item{display:flex;align-items:center;gap:5px}
 .genmap-legend-dot{width:10px;height:10px;border-radius:2px}
+
+/* Landmark info panel */
+.lm-info-panel{padding:9px 13px;border-bottom:1px solid var(--border);background:var(--surface2);display:none}
+.lm-info-panel.show{display:block}
+.lm-info-name{font-family:var(--mono);font-size:11px;font-weight:700;color:var(--text);margin-bottom:6px;display:flex;align-items:center;gap:6px}
+.lm-info-warn{font-family:var(--mono);font-size:9px;color:var(--red);font-weight:600}
+.lm-info-row{font-family:var(--mono);font-size:10px;color:var(--mid);margin-bottom:3px;line-height:1.4}
+.lm-info-row .lbl{color:var(--dim);text-transform:uppercase;letter-spacing:.05em;font-size:9px}
+.lm-info-row .val{color:var(--text)}
+.lm-info-cam{display:inline-block;padding:1px 5px;margin:1px 2px 1px 0;background:var(--surface);border:1px solid var(--border);border-radius:3px;font-size:9px;cursor:pointer}
+.lm-info-cam:hover{border-color:var(--blue);color:var(--blue)}
+.lm-info-cam.source{border-color:var(--green);color:var(--green)}
+.lm-info-cam.current{background:var(--blue);color:#000;border-color:var(--blue)}
+.lm-info-close{margin-left:auto;color:var(--dim);cursor:pointer;font-family:var(--mono);font-size:11px}
+.lm-info-close:hover{color:var(--red)}
 </style>
 </head>
 <body>
@@ -191,6 +206,15 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <div class="opt-result" id="opt-result">
       <div class="ol" id="opt-loss"></div>
       <div class="od" id="opt-detail"></div>
+    </div>
+    <div class="lm-info-panel" id="lm-info-panel">
+      <div class="lm-info-name">
+        <span id="lm-info-name-text">—</span>
+        <span class="lm-info-close" id="lm-info-close">✕</span>
+      </div>
+      <div class="lm-info-row" id="lm-info-status"></div>
+      <div class="lm-info-row" id="lm-info-sources"></div>
+      <div class="lm-info-row" id="lm-info-others"></div>
     </div>
     <div class="lm-hdr">
       <div class="sb-title" style="margin:0">Landmarks (<span id="lm-count">0</span>)</div>
@@ -660,7 +684,7 @@ function renderLmList() {
     });
     div.addEventListener('mouseenter', () => { hoveredLm = lm.name; draw(); });
     div.addEventListener('mouseleave', () => { hoveredLm = null; draw(); });
-    div.addEventListener('click', () => { selectedLm = selectedLm === lm.name ? null : lm.name; renderLmList(); draw(); });
+    div.addEventListener('click', () => { selectedLm = selectedLm === lm.name ? null : lm.name; renderLmList(); draw(); showLmInfo(selectedLm); });
     lmList.appendChild(div);
   });
   document.getElementById('st-n').textContent = `${losses.n_independent||0} indep / ${losses.n_total||0} total`;
@@ -1387,6 +1411,80 @@ genmapModal.addEventListener('click', e => {
 // Enable button when a cam is loaded
 document.getElementById('cam-sel').addEventListener('change', () => {
   setTimeout(() => { btnGenmap.disabled = !currentCam; }, 200);
+});
+
+// ── Landmark info panel ────────────────────────────────────────────────────
+const lmInfoPanel    = document.getElementById('lm-info-panel');
+const lmInfoNameText = document.getElementById('lm-info-name-text');
+const lmInfoStatus   = document.getElementById('lm-info-status');
+const lmInfoSources  = document.getElementById('lm-info-sources');
+const lmInfoOthers   = document.getElementById('lm-info-others');
+const lmInfoClose    = document.getElementById('lm-info-close');
+
+function renderLmInfoCam(name) {
+  const safeName = name.replace(/"/g, '&quot;');
+  const isCurrent = name === currentCam;
+  const cls = 'lm-info-cam' + (isCurrent ? ' current' : '');
+  return `<span class="${cls}" data-cam="${safeName}">${name}</span>`;
+}
+
+async function showLmInfo(lmName) {
+  if (!lmName) { lmInfoPanel.classList.remove('show'); return; }
+  try {
+    const r = await fetch('/api/lm_info?lm=' + encodeURIComponent(lmName));
+    if (!r.ok) { lmInfoPanel.classList.remove('show'); return; }
+    const info = await r.json();
+    if (info.error) { lmInfoPanel.classList.remove('show'); return; }
+
+    lmInfoNameText.textContent = info.lm;
+    // Status row
+    const statusBits = [];
+    if (!info.has_xyz) statusBits.push('<span class="lm-info-warn">⚠ no xyz (untriangulated)</span>');
+    if (info.error_m != null) statusBits.push(`<span class="lbl">err</span> <span class="val">${info.error_m.toFixed(1)}m</span>`);
+    statusBits.push(`<span class="lbl">obs</span> <span class="val">${info.n_total_observers}</span>`);
+    lmInfoStatus.innerHTML = statusBits.join(' · ');
+
+    // Sources row
+    if (info.sources.length === 0) {
+      lmInfoSources.innerHTML = '<span class="lbl">sources</span> <span class="val" style="color:var(--red)">none — fixed-position landmark or unsourced</span>';
+    } else {
+      lmInfoSources.innerHTML = '<span class="lbl">sources (★)</span> ' +
+        info.sources.map(c => renderLmInfoCam(c).replace('lm-info-cam', 'lm-info-cam source')).join('');
+    }
+
+    // Others row
+    if (info.others.length === 0) {
+      lmInfoOthers.innerHTML = '<span class="lbl">other observers</span> <span class="val" style="color:var(--dim)">none</span>';
+    } else {
+      lmInfoOthers.innerHTML = `<span class="lbl">also observed by (${info.others.length})</span> ` +
+        info.others.map(renderLmInfoCam).join('');
+    }
+
+    lmInfoPanel.classList.add('show');
+  } catch (e) {
+    console.error('lm_info failed:', e);
+    lmInfoPanel.classList.remove('show');
+  }
+}
+
+lmInfoClose.addEventListener('click', () => {
+  selectedLm = null;
+  renderLmList();
+  draw();
+  lmInfoPanel.classList.remove('show');
+});
+
+// Click a cam pill to navigate to it
+lmInfoPanel.addEventListener('click', e => {
+  const camEl = e.target.closest('.lm-info-cam[data-cam]');
+  if (!camEl) return;
+  const camName = camEl.dataset.cam;
+  if (camName === currentCam) return;
+  // Navigate via the hidden select (so cam picker stays in sync)
+  camSel.value = camName;
+  const camSearch = document.getElementById('cam-search');
+  if (camSearch) camSearch.value = camName;
+  camSel.dispatchEvent(new Event('change'));
 });
 </script>
 
