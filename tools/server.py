@@ -531,10 +531,27 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json({'ok': True})
 
         elif path == '/api/update_landmarks':
+            UPDATE_LMS_LOSS_THRESHOLD = 10.0  # arcmin — refuse if cam loss exceeds this
             cam_name = unquote(qs.get('cam', [''])[0])
             xyz = [float(qs['x'][0]), float(qs['y'][0]), float(qs['z'][0])]
             ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]), 0.0]
             hfov_val = float(qs['hfov'][0])
+
+            # Safety: refuse if cam loss is too high. A high-loss cam in a bad
+            # local minimum will propagate garbage to its observed landmarks.
+            try:
+                _projs, _losses = compute_projections(cam_name, xyz, ypr, hfov_val)
+                _check_loss = _losses.get('independent') if _losses.get('independent') is not None else _losses.get('total')
+                if _check_loss is not None and _check_loss > UPDATE_LMS_LOSS_THRESHOLD:
+                    self.send_json({
+                        'error': f"Cam loss too high ({_check_loss:.2f}' > {UPDATE_LMS_LOSS_THRESHOLD}'). "
+                                 f"Refine the cam first or use bundle adjust to avoid propagating errors to landmarks.",
+                        'loss': _check_loss,
+                        'threshold': UPDATE_LMS_LOSS_THRESHOLD,
+                    }, 400)
+                    return
+            except Exception as _e:
+                print(f"Warning: could not check loss before update: {_e}")
 
             cam = get_cam(cam_name, xyz, ypr, hfov_val)
             cam_pixels = md.pixels.get(cam_name, {})

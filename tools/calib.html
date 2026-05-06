@@ -602,6 +602,16 @@ function lossClass(v) {
 function updateLoss() {
   lossAll.textContent   = losses.total      != null ? losses.total.toFixed(3)      : '—';
   lossIndep.textContent = losses.independent != null ? losses.independent.toFixed(3) : '—';
+
+  // Safety: disable Update LMs if cam loss too high (would propagate errors)
+  const UPDATE_LMS_LOSS_THRESHOLD = 10.0;
+  const _checkLoss = losses.independent != null ? losses.independent : losses.total;
+  if (_checkLoss != null && _checkLoss > UPDATE_LMS_LOSS_THRESHOLD) {
+    btnUpdate.disabled = true;
+    btnUpdate.title = `Cam loss ${_checkLoss.toFixed(2)}' > ${UPDATE_LMS_LOSS_THRESHOLD}' — refine cam first to avoid propagating errors`;
+  } else {
+    btnUpdate.title = '';
+  }
   chipAll.className = 'chip ' + lossClass(losses.total);
 }
 
