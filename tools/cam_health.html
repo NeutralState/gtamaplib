@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>gtamaplib — Cam Health Dashboard</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap');
+:root {
+  --bg:#0a0a0c; --surface:#13131a; --surface2:#1c1c26; --border:#252535;
+  --green:#4ade80; --yellow:#f59e0b; --red:#f87171; --blue:#60a5fa; --purple:#a78bfa;
+  --text:#e2e2f0; --dim:#5a5a7a; --mid:#9090b0;
+  --mono:'JetBrains Mono',monospace; --sans:'DM Sans',sans-serif;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);min-height:100vh;padding:20px;font-size:13px}
+
+header{display:flex;align-items:center;gap:12px;margin-bottom:18px;flex-wrap:wrap}
+.logo{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--green)}
+.title{font-family:var(--mono);font-size:11px;color:var(--mid);letter-spacing:.1em;text-transform:uppercase}
+.spacer{flex:1}
+.nav-link{font-family:var(--mono);font-size:11px;color:var(--blue);text-decoration:none;padding:5px 10px;border:1px solid var(--border);border-radius:5px;transition:all .15s}
+.nav-link:hover{background:var(--surface2);border-color:var(--blue)}
+
+.summary{display:flex;gap:10px;margin-bottom:18px;flex-wrap:wrap}
+.stat{background:var(--surface);border:1px solid var(--border);border-radius:6px;padding:11px 16px;min-width:130px}
+.stat-lbl{font-family:var(--mono);font-size:9px;color:var(--dim);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px}
+.stat-val{font-family:var(--mono);font-size:20px;font-weight:700}
+.stat.healthy .stat-val{color:var(--green)}
+.stat.suspicious .stat-val{color:var(--yellow)}
+.stat.broken .stat-val{color:var(--red)}
+.stat.rms .stat-val{color:var(--blue)}
+
+.filters{display:flex;gap:10px;align-items:center;margin-bottom:14px;padding:10px 14px;background:var(--surface);border:1px solid var(--border);border-radius:6px;flex-wrap:wrap}
+.filter-grp{display:flex;gap:6px;align-items:center}
+.filter-lbl{font-family:var(--mono);font-size:10px;color:var(--dim);letter-spacing:.08em;text-transform:uppercase;margin-right:4px}
+.chip-btn{font-family:var(--mono);font-size:10px;font-weight:600;padding:5px 10px;border-radius:11px;background:var(--surface2);border:1px solid var(--border);color:var(--mid);cursor:pointer;transition:all .15s;user-select:none}
+.chip-btn:hover{color:var(--text);border-color:var(--mid)}
+.chip-btn.on{background:var(--surface);border-color:var(--green);color:var(--green)}
+.chip-btn[data-status=broken].on{border-color:var(--red);color:var(--red)}
+.chip-btn[data-status=suspicious].on{border-color:var(--yellow);color:var(--yellow)}
+.chip-btn[data-source=LEAK].on{border-color:var(--mid);color:var(--text)}
+.chip-btn[data-source="Trailer 1"].on{border-color:var(--blue);color:var(--blue)}
+.chip-btn[data-source="Trailer 2"].on{border-color:var(--green);color:var(--green)}
+.chip-btn[data-source=screenshots].on{border-color:var(--purple);color:var(--purple)}
+#search{font-family:var(--mono);font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 10px;border-radius:5px;min-width:220px;flex:1;max-width:340px}
+#search:focus{outline:none;border-color:var(--green)}
+#count-info{font-family:var(--mono);font-size:10px;color:var(--dim);margin-left:auto}
+
+.table-wrap{background:var(--surface);border:1px solid var(--border);border-radius:6px;overflow:hidden}
+table{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:11px}
+thead{background:var(--surface2);position:sticky;top:0;z-index:1}
+th{text-align:left;padding:10px 12px;color:var(--dim);font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:9px;border-bottom:1px solid var(--border);cursor:pointer;user-select:none;white-space:nowrap}
+th:hover{color:var(--text)}
+th.sorted{color:var(--green)}
+th.sorted::after{content:' ▾';font-size:8px}
+th.sorted.asc::after{content:' ▴'}
+td{padding:9px 12px;border-bottom:1px solid var(--border);white-space:nowrap}
+tr{transition:background .1s}
+tr:hover{background:var(--surface2);cursor:pointer}
+tr.broken{background:rgba(248,113,113,.04)}
+tr.broken:hover{background:rgba(248,113,113,.09)}
+tr.suspicious{background:rgba(245,158,11,.03)}
+tr.suspicious:hover{background:rgba(245,158,11,.07)}
+
+.badge{display:inline-block;padding:2px 7px;border-radius:9px;font-size:9px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.badge.healthy{background:rgba(74,222,128,.15);color:var(--green)}
+.badge.suspicious{background:rgba(245,158,11,.15);color:var(--yellow)}
+.badge.broken{background:rgba(248,113,113,.15);color:var(--red)}
+.badge.LEAK{background:rgba(160,160,180,.15);color:var(--mid)}
+.badge[class*="Trailer-1"], .badge.Trailer-1{background:rgba(96,165,250,.15);color:var(--blue)}
+.badge[class*="Trailer-2"], .badge.Trailer-2{background:rgba(74,222,128,.15);color:var(--green)}
+.badge.Trailer{background:rgba(96,165,250,.15);color:var(--blue)}
+.badge.screenshots{background:rgba(167,139,250,.15);color:var(--purple)}
+
+.cam-name{color:var(--text);font-weight:500}
+.num{text-align:right}
+.num.bad{color:var(--red);font-weight:600}
+.num.warn{color:var(--yellow)}
+.num.dim{color:var(--dim)}
+.worst-lm{color:var(--dim);font-size:10px;font-style:italic}
+
+.loading{padding:60px;text-align:center;font-family:var(--mono);font-size:12px;color:var(--dim)}
+.empty{padding:40px;text-align:center;font-family:var(--mono);font-size:11px;color:var(--dim)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo">gtamaplib</div>
+  <div class="title">Cam Health Dashboard</div>
+  <div class="spacer"></div>
+  <a href="/calib.html" class="nav-link">→ Calibration Tool</a>
+</header>
+
+<div class="summary" id="summary"></div>
+
+<div class="filters">
+  <div class="filter-grp">
+    <span class="filter-lbl">Status</span>
+    <button class="chip-btn on" data-status="broken">🔴 Broken</button>
+    <button class="chip-btn on" data-status="suspicious">⚠ Suspicious</button>
+    <button class="chip-btn on" data-status="healthy">✅ Healthy</button>
+  </div>
+  <div class="filter-grp">
+    <span class="filter-lbl">Source</span>
+    <button class="chip-btn on" data-source="LEAK">LEAK</button>
+    <button class="chip-btn on" data-source="Trailer 1">Trailer 1</button>
+    <button class="chip-btn on" data-source="Trailer 2">Trailer 2</button>
+    <button class="chip-btn on" data-source="screenshots">screenshots</button>
+  </div>
+  <input id="search" placeholder="Search cam name..." />
+  <div id="count-info"></div>
+</div>
+
+<div class="table-wrap">
+  <table>
+    <thead>
+      <tr>
+        <th data-sort="status">Status</th>
+        <th data-sort="name">Cam</th>
+        <th data-sort="source_type">Source</th>
+        <th data-sort="loss" class="sorted">Loss</th>
+        <th data-sort="median_err">Median</th>
+        <th data-sort="max_err">Max</th>
+        <th data-sort="n_pixels">Pixels</th>
+        <th data-sort="n_indep">Indep</th>
+        <th data-sort="worst_lm">Worst LM</th>
+      </tr>
+    </thead>
+    <tbody id="rows">
+      <tr><td colspan="9" class="loading">Loading…</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<script>
+let allCams = [];
+let sortKey = 'loss';
+let sortDir = 'desc';
+const filters = {
+  status: { broken: true, suspicious: true, healthy: true },
+  source: { LEAK: true, 'Trailer 1': true, 'Trailer 2': true, Trailer: true, screenshots: true },
+};
+let searchQ = '';
+
+async function load() {
+  try {
+    const r = await fetch('/api/cam_health');
+    const data = await r.json();
+    allCams = data.cams;
+    renderSummary(data.summary);
+    render();
+  } catch (e) {
+    document.getElementById('rows').innerHTML =
+      `<tr><td colspan="9" class="empty">Failed to load: ${e.message}</td></tr>`;
+  }
+}
+
+function renderSummary(s) {
+  document.getElementById('summary').innerHTML = `
+    <div class="stat rms">
+      <div class="stat-lbl">Global RMS</div>
+      <div class="stat-val">${s.global_rms}'</div>
+    </div>
+    <div class="stat healthy">
+      <div class="stat-lbl">✅ Healthy</div>
+      <div class="stat-val">${s.healthy}</div>
+    </div>
+    <div class="stat suspicious">
+      <div class="stat-lbl">⚠ Suspicious</div>
+      <div class="stat-val">${s.suspicious}</div>
+    </div>
+    <div class="stat broken">
+      <div class="stat-lbl">🔴 Broken</div>
+      <div class="stat-val">${s.broken}</div>
+    </div>
+    <div class="stat">
+      <div class="stat-lbl">Total Cams</div>
+      <div class="stat-val" style="color:var(--mid)">${s.total}</div>
+    </div>
+  `;
+}
+
+function render() {
+  // Filter
+  let rows = allCams.filter(c =>
+    filters.status[c.status] &&
+    filters.source[c.source_type] &&
+    (searchQ === '' || c.name.toLowerCase().includes(searchQ.toLowerCase()))
+  );
+
+  // Sort
+  rows.sort((a, b) => {
+    let av = a[sortKey], bv = b[sortKey];
+    if (sortKey === 'status') {
+      const order = {broken:0, suspicious:1, healthy:2};
+      av = order[av]; bv = order[bv];
+    }
+    if (typeof av === 'string') {
+      return sortDir === 'asc' ? av.localeCompare(bv) : bv.localeCompare(av);
+    }
+    return sortDir === 'asc' ? av - bv : bv - av;
+  });
+
+  // Render
+  const tbody = document.getElementById('rows');
+  if (rows.length === 0) {
+    tbody.innerHTML = `<tr><td colspan="9" class="empty">No cams match filters</td></tr>`;
+  } else {
+    tbody.innerHTML = rows.map(c => {
+      const lossClass = c.loss > 10 ? 'bad' : c.loss > 5 ? 'warn' : '';
+      const medClass = c.median_err > 5 ? 'bad' : c.median_err > 3 ? 'warn' : '';
+      const maxClass = c.max_err > 30 ? 'bad' : c.max_err > 15 ? 'warn' : '';
+      const indepClass = c.n_indep < 4 ? 'warn' : 'dim';
+      return `
+        <tr class="${c.status}" onclick="openCam('${c.name.replace(/'/g, "\\'")}')">
+          <td><span class="badge ${c.status}">${c.status}</span></td>
+          <td class="cam-name">${escapeHtml(c.name)}</td>
+          <td><span class="badge ${c.source_type.replace(/ /g, "-")}">${c.source_type}</span></td>
+          <td class="num ${lossClass}">${c.loss.toFixed(2)}'</td>
+          <td class="num ${medClass}">${c.median_err.toFixed(2)}'</td>
+          <td class="num ${maxClass}">${c.max_err.toFixed(2)}'</td>
+          <td class="num dim">${c.n_pixels}</td>
+          <td class="num ${indepClass}">${c.n_indep}</td>
+          <td class="worst-lm">${escapeHtml(c.worst_lm)}</td>
+        </tr>`;
+    }).join('');
+  }
+
+  document.getElementById('count-info').textContent = `${rows.length} / ${allCams.length} shown`;
+
+  document.querySelectorAll('th').forEach(th => {
+    th.classList.toggle('sorted', th.dataset.sort === sortKey);
+    th.classList.toggle('asc', sortDir === 'asc');
+  });
+}
+
+function openCam(name) {
+  window.location.href = '/calib.html?cam=' + encodeURIComponent(name);
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => (
+    {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]
+  ));
+}
+
+// Sort handlers
+document.querySelectorAll('th[data-sort]').forEach(th => {
+  th.addEventListener('click', () => {
+    const key = th.dataset.sort;
+    if (sortKey === key) {
+      sortDir = sortDir === 'asc' ? 'desc' : 'asc';
+    } else {
+      sortKey = key;
+      sortDir = key === 'name' || key === 'worst_lm' ? 'asc' : 'desc';
+    }
+    render();
+  });
+});
+
+// Filter chip handlers
+document.querySelectorAll('.chip-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('on');
+    if (btn.dataset.status) {
+      filters.status[btn.dataset.status] = btn.classList.contains('on');
+    } else if (btn.dataset.source) {
+      filters.source[btn.dataset.source] = btn.classList.contains('on');
+    }
+    render();
+  });
+});
+
+// Search handler
+document.getElementById('search').addEventListener('input', e => {
+  searchQ = e.target.value;
+  render();
+});
+
+load();
+</script>
+</body>
+</html>

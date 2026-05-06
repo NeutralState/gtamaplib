@@ -247,6 +247,9 @@ class Handler(BaseHTTPRequestHandler):
         if path in ('/', '/index.html', '/calib.html'):
             self.send_file(os.path.join(TOOL_DIR, 'calib.html'), 'text/html')
 
+        elif path == '/cam_health.html':
+            self.send_file(os.path.join(TOOL_DIR, 'cam_health.html'), 'text/html')
+
         elif path == '/api/cameras':
             result = []
             for name in sorted(md.cameras):
@@ -271,6 +274,213 @@ class Handler(BaseHTTPRequestHandler):
                     'is_leak': bool(__import__('re').match(r'\d{4}-\d{2}-\d{2}', data.get('source') or '')),
                 })
             self.send_json(result)
+
+
+        elif path == '/api/generate_map':
+            # Generates a top-down map showing rays from a camera to each
+            # of its observed landmarks, colored by angular residual.
+            cam_name = unquote(qs.get('cam', [''])[0])
+            if cam_name not in md.cameras:
+                self.send_json({'error': 'invalid cam'}, 400)
+                return
+            try:
+                cam = ml.get_camera(cam_name)
+            except Exception as e:
+                self.send_json({'error': f'cam load failed: {e}'}, 400)
+                return
+
+            cam_pixels = md.pixels.get(cam_name, {})
+            if not cam_pixels:
+                self.send_json({'error': 'no pixels for this cam'}, 400)
+                return
+
+            # Build (lm_xyz, color) list based on angular residual
+            cam_xyz = list(cam.xyz)
+            rays = []
+            for lm_name, marked_pixel in cam_pixels.items():
+                lm_xyz = md.landmarks.get(lm_name)
+                if lm_xyz is None:
+                    continue
+                # Angular residual
+                try:
+                    proj = cam.get_pixel(lm_xyz)
+                    if proj is None:
+                        color = (140, 140, 140)  # grey for unprojectable
+                    else:
+                        dx = (float(proj[0]) - marked_pixel[0]) * cam.hfov / cam.w * 60
+                        dy = (float(proj[1]) - marked_pixel[1]) * cam.vfov / cam.h * 60
+                        err = math.hypot(dx, dy)
+                        if err < 3:
+                            color = (74, 222, 128)   # green
+                        elif err < 10:
+                            color = (245, 158, 11)   # yellow/amber
+                        else:
+                            color = (248, 113, 113)  # red
+                except Exception:
+                    color = (140, 140, 140)
+                rays.append((list(lm_xyz), color, lm_name))
+
+            # Compute crop area: include cam + all landmarks, then expand 30%
+            # for context. Wider view shows neighborhood, makes geometry clearer.
+            xs = [cam_xyz[0]] + [r[0][0] for r in rays]
+            ys = [cam_xyz[1]] + [r[0][1] for r in rays]
+            x_min_t, x_max_t = min(xs), max(xs)
+            y_min_t, y_max_t = min(ys), max(ys)
+            world_w_t = x_max_t - x_min_t
+            world_h_t = y_max_t - y_min_t
+            # Make square-ish area to avoid extreme aspect ratios
+            world_size = max(world_w_t, world_h_t) * 1.3
+            cx = (x_min_t + x_max_t) / 2
+            cy = (y_min_t + y_max_t) / 2
+            x_min, x_max = cx - world_size / 2, cx + world_size / 2
+            y_min, y_max = cy - world_size / 2, cy + world_size / 2
+            area = (x_min, y_min, x_max, y_max)
+
+            # Scale for ~1400 px on largest dimension
+            target_px = 1400
+            scale = target_px / world_size
+            scale = max(0.05, min(0.5, scale))
+
+            try:
+                m = ml.get_map('yanis')
+                m.open(scale=scale, add_padding=False)
+
+                # Draw cam frustum bounds (FOV edges in blue)
+                import math as _math
+                frust_color = (96, 165, 250)  # blue, matches UI accent
+                yaw_rad = _math.radians(cam.ypr[0])
+                half_fov = _math.radians(cam.hfov / 2)
+                # Match longest ray to landmark
+                import math as _math2
+                max_dist = max(
+                    _math2.hypot(r[0][0] - cam_xyz[0], r[0][1] - cam_xyz[1])
+                    for r in rays
+                ) if rays else world_size * 0.4
+                ray_len = max_dist
+                for offset in [-half_fov, half_fov]:
+                    ang = yaw_rad + offset
+                    end_x = cam_xyz[0] - ray_len * _math.sin(ang)
+                    end_y = cam_xyz[1] + ray_len * _math.cos(ang)
+                    m.draw_line([(cam_xyz[0], cam_xyz[1]), (end_x, end_y)],
+                                fill=frust_color, width=2)
+
+                # Draw rays to landmarks (thinner now)
+                for lm_xyz, color, lm_name in rays:
+                    line = [(cam_xyz[0], cam_xyz[1]), (lm_xyz[0], lm_xyz[1])]
+                    m.draw_line(line, fill=color, width=1)
+                # Draw landmark markers (small)
+                for lm_xyz, color, lm_name in rays:
+                    try:
+                        m.draw_landmark(lm_name, r=4)
+                    except Exception:
+                        pass
+                # Draw cam (slightly smaller marker)
+                m.draw_camera(cam, r=8, d=80)
+
+                # Save
+                out_dir = os.path.join(TOOL_DIR, 'generated')
+                os.makedirs(out_dir, exist_ok=True)
+                # Sanitize filename
+                safe_name = ''.join(c if c.isalnum() else '_' for c in cam_name)
+                out_path = os.path.join(out_dir, f'{safe_name}_map.png')
+                m.save(out_path, crop=area)
+
+                self.send_json({
+                    'ok': True,
+                    'url': f'/api/generated_map?cam={cam_name}',
+                    'n_rays': len(rays),
+                })
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                self.send_json({'error': f'render failed: {e}'}, 500)
+
+        elif path == '/api/generated_map':
+            cam_name = unquote(qs.get('cam', [''])[0])
+            safe_name = ''.join(c if c.isalnum() else '_' for c in cam_name)
+            out_path = os.path.join(TOOL_DIR, 'generated', f'{safe_name}_map.png')
+            if os.path.exists(out_path):
+                self.send_file(out_path, 'image/png')
+            else:
+                self.send_response(404)
+                self.end_headers()
+
+        elif path == '/api/cam_health':
+            # Per-cam health metrics. Reuses compute_projections to get
+            # angular residuals from the current calibration state.
+            import statistics
+            import re as _re_local
+            result = []
+            for name in sorted(md.cameras):
+                if not md.cameras[name].get('xyz'):
+                    continue
+                try:
+                    projs, losses = compute_projections(name)
+                except Exception:
+                    continue
+
+                errs = [p['delta'] for p in projs if p['delta'] is not None]
+                indep_errs = [p['delta'] for p in projs
+                              if p['delta'] is not None and not p['is_circular']]
+
+                if not errs:
+                    continue
+
+                cam_data = md.cameras[name]
+                source = cam_data.get('source') or ''
+                is_leak = bool(_re_local.match(r'\d{4}-\d{2}-\d{2}', source))
+                if is_leak:
+                    source_type = 'LEAK'
+                elif source.startswith('Trailer 1'):
+                    source_type = 'Trailer 1'
+                elif source.startswith('Trailer 2') or source == 'Trailer 2':
+                    source_type = 'Trailer 2'
+                elif source.startswith('Trailer'):
+                    source_type = 'Trailer'
+                else:
+                    source_type = 'screenshots'
+
+                loss_val = losses['independent'] if losses['independent'] is not None else losses['total']
+                loss = round(loss_val or 0, 2)
+                median_err = round(statistics.median(errs), 2)
+                max_err = round(max(errs), 2)
+                worst_lm = max(projs, key=lambda p: p['delta'] if p['delta'] is not None else -1)['name']
+
+                if loss > 15 or max_err > 60:
+                    status = 'broken'
+                elif loss > 5 or median_err > 4 or len(indep_errs) < 4:
+                    status = 'suspicious'
+                else:
+                    status = 'healthy'
+
+                result.append({
+                    'name': name,
+                    'source_type': source_type,
+                    'loss': loss,
+                    'median_err': median_err,
+                    'max_err': max_err,
+                    'worst_lm': worst_lm,
+                    'n_pixels': len(projs),
+                    'n_indep': len(indep_errs),
+                    'status': status,
+                })
+
+            status_order = {'broken': 0, 'suspicious': 1, 'healthy': 2}
+            result.sort(key=lambda r: (status_order[r['status']], -r['loss']))
+
+            total_pixels = sum(r['n_pixels'] for r in result)
+            global_rms = (sum(r['loss']**2 * r['n_pixels'] for r in result) /
+                          max(1, total_pixels)) ** 0.5 if result else 0
+
+            summary = {
+                'total': len(result),
+                'broken': sum(1 for r in result if r['status'] == 'broken'),
+                'suspicious': sum(1 for r in result if r['status'] == 'suspicious'),
+                'healthy': sum(1 for r in result if r['status'] == 'healthy'),
+                'global_rms': round(global_rms, 3),
+            }
+
+            self.send_json({'cams': result, 'summary': summary})
 
         elif path == '/api/project':
             cam_name = unquote(qs.get('cam', [''])[0])
