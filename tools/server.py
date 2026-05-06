@@ -320,20 +320,26 @@ class Handler(BaseHTTPRequestHandler):
                     color = (140, 140, 140)
                 rays.append((list(lm_xyz), color, lm_name))
 
-            # Compute crop area: include cam + all landmarks, then expand 30%
-            # for context. Wider view shows neighborhood, makes geometry clearer.
-            xs = [cam_xyz[0]] + [r[0][0] for r in rays]
-            ys = [cam_xyz[1]] + [r[0][1] for r in rays]
-            x_min_t, x_max_t = min(xs), max(xs)
-            y_min_t, y_max_t = min(ys), max(ys)
-            world_w_t = x_max_t - x_min_t
-            world_h_t = y_max_t - y_min_t
-            # Make square-ish area to avoid extreme aspect ratios
-            world_size = max(world_w_t, world_h_t) * 1.3
-            cx = (x_min_t + x_max_t) / 2
-            cy = (y_min_t + y_max_t) / 2
-            x_min, x_max = cx - world_size / 2, cx + world_size / 2
-            y_min, y_max = cy - world_size / 2, cy + world_size / 2
+            # Compute crop area: clip to a sensible radius around the cam
+            # so a single distant landmark doesn't blow up the whole view.
+            # Use median distance × 2.5, capped at MAX_RADIUS.
+            import math as _math3
+            MAX_RADIUS = 3750.0  # max half-size of view, in meters
+            MIN_RADIUS = 800.0   # min, so very local cams still get context
+            distances = [_math3.hypot(r[0][0] - cam_xyz[0], r[0][1] - cam_xyz[1])
+                         for r in rays]
+            if distances:
+                distances.sort()
+                # Use 75th percentile × 1.5 so we cover most rays comfortably
+                # but ignore the 1-2 outlier-distance landmarks that wreck framing.
+                p75 = distances[int(len(distances) * 0.75)]
+                radius = max(MIN_RADIUS, min(MAX_RADIUS, p75 * 1.2))
+            else:
+                radius = MIN_RADIUS
+            world_size = radius * 2
+            cx, cy = cam_xyz[0], cam_xyz[1]
+            x_min, x_max = cx - radius, cx + radius
+            y_min, y_max = cy - radius, cy + radius
             area = (x_min, y_min, x_max, y_max)
 
             # Scale for ~1400 px on largest dimension
