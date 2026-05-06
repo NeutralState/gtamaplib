@@ -16,6 +16,26 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);height:100vh
 
 header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
 .logo{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green)}
+
+/* Cam search + filter */
+.cam-picker{position:relative;display:flex;align-items:center;gap:6px;flex:1;max-width:520px}
+#cam-sel{display:none}
+#cam-search{font-family:var(--mono);font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:5px;flex:1;min-width:160px}
+#cam-search:focus{outline:none;border-color:var(--green)}
+.cam-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--surface);border:1px solid var(--border);border-radius:5px;max-height:380px;overflow-y:auto;z-index:100;display:none;margin-top:3px}
+.cam-dropdown.open{display:block}
+.cam-opt{font-family:var(--mono);font-size:11px;padding:6px 10px;cursor:pointer;color:var(--text);border-bottom:1px solid var(--border)}
+.cam-opt:hover{background:var(--surface2)}
+.cam-opt.selected{background:var(--surface2);color:var(--green)}
+.cam-opt .cam-opt-tag{font-size:9px;color:var(--dim);margin-left:8px}
+.cam-opt.no-image{color:var(--dim)}
+.cam-filter-chip{font-family:var(--mono);font-size:9px;font-weight:600;padding:3px 7px;border-radius:9px;background:var(--surface2);border:1px solid var(--border);color:var(--mid);cursor:pointer;transition:all .15s;user-select:none}
+.cam-filter-chip:hover{color:var(--text)}
+.cam-filter-chip.on{background:var(--surface)}
+.cam-filter-chip[data-type=LEAK].on{border-color:var(--mid);color:var(--text)}
+.cam-filter-chip[data-type="Trailer 1"].on{border-color:var(--blue);color:var(--blue)}
+.cam-filter-chip[data-type="Trailer 2"].on{border-color:var(--green);color:var(--green)}
+.cam-filter-chip[data-type=screenshots].on{border-color:var(--purple);color:var(--purple)}
 #cam-sel{font-family:var(--mono);font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:5px;cursor:pointer;flex:1;max-width:320px}
 #cam-meta{font-family:var(--mono);font-size:10px;color:var(--dim);flex:1}
 .chip{font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:12px;background:var(--surface2);border:1px solid var(--border)}
@@ -24,6 +44,8 @@ header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(
 .btn{font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 12px;border-radius:5px;border:none;cursor:pointer;transition:all .15s}
 .btn-save{background:var(--green);color:#000}.btn-save:hover{background:#22c55e}.btn-save:disabled{opacity:.4;cursor:default}
 .btn-reset{background:var(--surface2);color:var(--mid);border:1px solid var(--border)}.btn-reset:hover{color:var(--yellow);border-color:var(--yellow)}
+.nav-link{font-family:var(--mono);font-size:11px;color:var(--blue);text-decoration:none;padding:5px 10px;border:1px solid var(--border);border-radius:5px;transition:all .15s;margin-right:6px}
+.nav-link:hover{background:var(--surface2);border-color:var(--blue)}
 .saved{font-family:var(--mono);font-size:10px;color:var(--green);display:none}
 
 .main{display:flex;flex:1;overflow:hidden}
@@ -99,13 +121,38 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .pxe-info-row span{color:var(--text);display:block;font-size:11px;font-weight:700}
 .pxe-zoom-bar{padding:6px 16px;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;color:var(--dim);flex-shrink:0}
 
+
+/* Generate Map button + modal */
+#btn-genmap{font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--blue);cursor:pointer;width:100%;margin-top:8px}
+#btn-genmap:hover{background:var(--surface);border-color:var(--blue)}
+#btn-genmap:disabled{opacity:.4;cursor:default}
+#genmap-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
+#genmap-modal.open{display:flex}
+.genmap-content{background:var(--surface);border:1px solid var(--border);border-radius:8px;max-width:95vw;max-height:95vh;display:flex;flex-direction:column;overflow:hidden}
+.genmap-header{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border)}
+.genmap-title{font-family:var(--mono);font-size:11px;color:var(--text);flex:1}
+.genmap-close{font-family:var(--mono);font-size:14px;color:var(--mid);background:none;border:none;cursor:pointer;padding:4px 8px}
+.genmap-close:hover{color:var(--red)}
+.genmap-img{max-width:90vw;max-height:80vh;object-fit:contain;display:block}
+.genmap-legend{display:flex;gap:14px;padding:8px 14px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--mid)}
+.genmap-legend-item{display:flex;align-items:center;gap:5px}
+.genmap-legend-dot{width:10px;height:10px;border-radius:2px}
 </style>
 </head>
 <body>
 
 <header>
   <div class="logo">gtamaplib</div>
+<a href="/cam_health.html" class="nav-link">→ Dashboard</a>
+  <div class="cam-picker">
+  <input id="cam-search" placeholder="Search camera..." autocomplete="off" />
+  <button class="cam-filter-chip on" data-type="LEAK">LEAK</button>
+  <button class="cam-filter-chip on" data-type="Trailer 1">T1</button>
+  <button class="cam-filter-chip on" data-type="Trailer 2">T2</button>
+  <button class="cam-filter-chip on" data-type="screenshots">SS</button>
+  <div class="cam-dropdown" id="cam-dropdown"></div>
   <select id="cam-sel"><option value="">— Select camera —</option></select>
+</div>
   <span id="cam-meta"></span>
   <div class="chip" id="chip-all"><span style="color:var(--dim)">loss </span><span class="v" id="loss-all">—</span></div>
   <button class="btn btn-reset" id="btn-reset">Reset</button>
@@ -123,6 +170,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   </div>
 
   <div class="sidebar">
+<button id="btn-genmap" disabled>🗺 Generate Map</button>
+
     <div class="sb-sec">
       <div class="sb-title">Position</div>
       <div class="sl-row"><span class="sl-lbl">X</span><input type="range" id="sl-x" min="-12000" max="12000" step="0.25"><input class="num" id="num-x" type="number" step="0.25"></div>
@@ -239,6 +288,20 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   </div>
 </div>
 
+<div id="genmap-modal">
+  <div class="genmap-content">
+    <div class="genmap-header">
+      <div class="genmap-title" id="genmap-title">Map</div>
+      <button class="genmap-close" id="genmap-close">✕</button>
+    </div>
+    <img id="genmap-img" class="genmap-img" />
+    <div class="genmap-legend">
+      <div class="genmap-legend-item"><div class="genmap-legend-dot" style="background:#4ade80"></div>&lt;3' (good)</div>
+      <div class="genmap-legend-item"><div class="genmap-legend-dot" style="background:#f59e0b"></div>3-10' (suspicious)</div>
+      <div class="genmap-legend-item"><div class="genmap-legend-dot" style="background:#f87171"></div>&gt;10' (outlier)</div>
+      <div class="genmap-legend-item"><div class="genmap-legend-dot" style="background:#8c8c8c"></div>unprojectable</div>
+    </div>
+
 <script>
 // ── State ──────────────────────────────────────────────────────────────────
 let currentCam = null, camData = null, projections = [], losses = {};
@@ -276,15 +339,83 @@ const SL_IDS  = {x:'sl-x',y:'sl-y',z:'sl-z',yaw:'sl-yaw',pitch:'sl-pitch',hfov:'
 const NUM_IDS = {x:'num-x',y:'num-y',z:'num-z',yaw:'num-yaw',pitch:'num-pitch',hfov:'num-hfov'};
 
 // ── Init ───────────────────────────────────────────────────────────────────
+// State for cam picker
+let allCams = [];
+const camFilters = { 'LEAK': true, 'Trailer 1': true, 'Trailer 2': true, 'screenshots': true };
+let camSearchQ = '';
+
+function getCamType(c) {
+  const src = c.source || '';
+  if (/^\d{4}-\d{2}-\d{2}/.test(src)) return 'LEAK';
+  if (src.startsWith('Trailer 1')) return 'Trailer 1';
+  if (src.startsWith('Trailer 2') || src === 'Trailer 2') return 'Trailer 2';
+  if (src.startsWith('Trailer')) return 'Trailer 2'; // fallback to T2 group
+  return 'screenshots';
+}
+
+function renderCamDropdown() {
+  const dd = document.getElementById('cam-dropdown');
+  const filtered = allCams.filter(c => {
+    const t = getCamType(c);
+    if (!camFilters[t]) return false;
+    if (camSearchQ && !c.name.toLowerCase().includes(camSearchQ.toLowerCase())) return false;
+    return true;
+  });
+  if (filtered.length === 0) {
+    dd.innerHTML = '<div class="cam-opt" style="color:var(--dim);cursor:default">No cams match</div>';
+  } else {
+    dd.innerHTML = filtered.map(c => {
+      const t = getCamType(c);
+      const cls = c.has_image ? 'cam-opt' : 'cam-opt no-image';
+      const sel = c.name === currentCam ? ' selected' : '';
+      return `<div class="${cls}${sel}" data-name="${c.name.replace(/"/g, '&quot;')}">
+        ${c.name}${c.has_image ? '' : ' ✗'}
+        <span class="cam-opt-tag">${t} · ${c.n_pixels}px / ${c.n_independent} indep</span>
+      </div>`;
+    }).join('');
+  }
+}
+
 async function init() {
-  const cams = await fetch('/api/cameras').then(r => r.json());
-  cams.forEach(c => {
+  allCams = await fetch('/api/cameras').then(r => r.json());
+  // Populate hidden select for compatibility
+  allCams.forEach(c => {
     const o = document.createElement('option');
     o.value = c.name;
-    o.textContent = `${c.name}${c.has_image ? '' : ' ✗'} (${c.n_pixels}px / ${c.n_independent} indep)`;
-    if (!c.has_image) o.style.color = '#444';
+    o.textContent = c.name;
     camSel.appendChild(o);
   });
+  // Wire up cam picker
+  const camSearch = document.getElementById('cam-search');
+  const camDropdown = document.getElementById('cam-dropdown');
+  camSearch.addEventListener('input', e => { camSearchQ = e.target.value; renderCamDropdown(); camDropdown.classList.add('open'); });
+  camSearch.addEventListener('focus', () => { renderCamDropdown(); camDropdown.classList.add('open'); });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.cam-picker')) camDropdown.classList.remove('open');
+  });
+  camDropdown.addEventListener('click', e => {
+    const opt = e.target.closest('.cam-opt[data-name]');
+    if (!opt) return;
+    const name = opt.dataset.name;
+    camSel.value = name;
+    camSearch.value = name;
+    camDropdown.classList.remove('open');
+    camSel.dispatchEvent(new Event('change'));
+  });
+  document.querySelectorAll('.cam-filter-chip').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('on');
+      camFilters[btn.dataset.type] = btn.classList.contains('on');
+      renderCamDropdown();
+    });
+  });
+  // Auto-load if URL has ?cam=
+  const urlCam = new URLSearchParams(window.location.search).get('cam');
+  if (urlCam && allCams.some(c => c.name === urlCam)) {
+    camSel.value = urlCam;
+    camSearch.value = urlCam;
+    setTimeout(() => camSel.dispatchEvent(new Event('change')), 100);
+  }
 }
 
 // ── Camera select ──────────────────────────────────────────────────────────
@@ -1204,6 +1335,53 @@ document.addEventListener('keydown', e => {
 });
 
 init();
+document.getElementById('cam-sel').addEventListener('change', () => {
+  const cs = document.getElementById('cam-search');
+  if (cs) cs.value = document.getElementById('cam-sel').value;
+});
+
+// ── Generate Map ────────────────────────────────────────────────────────
+const btnGenmap = document.getElementById('btn-genmap');
+const genmapModal = document.getElementById('genmap-modal');
+const genmapImg = document.getElementById('genmap-img');
+const genmapTitle = document.getElementById('genmap-title');
+const genmapClose = document.getElementById('genmap-close');
+
+btnGenmap.addEventListener('click', async () => {
+  if (!currentCam) return;
+  btnGenmap.disabled = true;
+  btnGenmap.textContent = 'Generating...';
+  try {
+    const r = await fetch('/api/generate_map?cam=' + encodeURIComponent(currentCam));
+    const data = await r.json();
+    if (data.ok) {
+      genmapTitle.textContent = `${currentCam} — ${data.n_rays} rays`;
+      genmapImg.src = data.url + '&t=' + Date.now(); // cache bust
+      genmapModal.classList.add('open');
+    } else {
+      alert('Failed: ' + (data.error || 'unknown'));
+    }
+  } catch (e) {
+    alert('Error: ' + e.message);
+  } finally {
+    btnGenmap.disabled = !currentCam;
+    btnGenmap.textContent = '🗺 Generate Map';
+  }
+});
+
+genmapClose.addEventListener('click', () => genmapModal.classList.remove('open'));
+genmapModal.addEventListener('click', e => {
+  if (e.target === genmapModal) genmapModal.classList.remove('open');
+});
+
+// Enable button when a cam is loaded
+document.getElementById('cam-sel').addEventListener('change', () => {
+  setTimeout(() => { btnGenmap.disabled = !currentCam; }, 200);
+});
 </script>
+
+
+  </div>
+</div>
 </body>
 </html>
