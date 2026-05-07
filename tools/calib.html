@@ -1332,8 +1332,13 @@ async function triangulateLandmark(lm_name) {
     return;
   }
 
+  // res now has: xyz, error_m (mean), worst_cam, worst_distance_m, n_cams
+  // (was: cam_a, cam_b before item 3 — intersect_rays uses all rays at once)
+  const detail = res.worst_cam
+    ? `from ${res.n_cams} cams · worst: ${res.worst_cam} (${res.worst_distance_m}m)`
+    : `from ${res.n_cams || 'multiple'} cams`;
   document.getElementById('ray-map-info').innerHTML =
-    `<span style="color:var(--green)">✓ Triangulated</span> · xyz=[${res.xyz.map(v=>v.toFixed(1)).join(', ')}] · error=${res.error_m}m · from ${res.cam_a} + ${res.cam_b}`;
+    `<span style="color:var(--green)">✓ Triangulated</span> · xyz=[${res.xyz.map(v=>v.toFixed(1)).join(', ')}] · mean error=${res.error_m}m · ${detail}`;
 
   // Reload projections to show updated landmark
   await loadProjections();

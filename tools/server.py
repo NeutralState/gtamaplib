@@ -930,27 +930,37 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json({'error': f'Need 2+ calibrated cams, found {len(source_cams)}'}, 400)
                 return
 
-            # Try all pairs and pick best (lowest distance)
-            best = None
-            for i in range(len(source_cams)):
-                for j in range(i+1, len(source_cams)):
-                    try:
-                        result = ml.find_landmark(source_cams[i], source_cams[j], lm_name)
-                        if result is None: continue
-                        pt, _, _, d, _ = result
-                        if best is None or d < best['error_m']:
-                            best = {
-                                'xyz': [round(float(v), 4) for v in pt],
-                                'error_m': round(float(d), 3),
-                                'cam_a': source_cams[i],
-                                'cam_b': source_cams[j],
-                                'n_cams': len(source_cams),
-                            }
-                    except Exception as e:
-                        pass
+            # Item 3 (rlx roadmap): use closed-form N-rays solver
+            # ml.intersect_rays(rays) instead of testing all 2-cam pairs.
+            # Inputs: list of (origin, direction) tuples.
+            # Outputs: (closest_point, distances) where distances[i] is the
+            # perpendicular distance from ray[i] to the closest_point.
+            try:
+                rays = []
+                used_cams = []
+                for cn in source_cams:
+                    cam = ml.get_camera(cn)
+                    direction = cam.get_landmark_direction(lm_name)
+                    rays.append((tuple(cam.xyz), tuple(direction)))
+                    used_cams.append(cn)
 
-            if best is None:
-                self.send_json({'error': 'Triangulation failed'}, 400)
+                pt, distances = ml.intersect_rays(rays)
+                # error_m = mean perpendicular distance across all rays
+                # (gives a "how well do these rays converge" metric similar to
+                # find_landmark's pair distance, but using all rays at once)
+                error_m = float(distances.mean())
+                # max distance per ray = useful for outlier identification
+                worst_idx = int(distances.argmax())
+                best = {
+                    'xyz': [round(float(v), 4) for v in pt],
+                    'error_m': round(error_m, 3),
+                    'worst_cam': used_cams[worst_idx],
+                    'worst_distance_m': round(float(distances[worst_idx]), 3),
+                    'n_cams': len(used_cams),
+                    'method': 'intersect_rays',
+                }
+            except Exception as e:
+                self.send_json({'error': f'Triangulation failed: {e}'}, 400)
                 return
 
             # Save to landmarks. update_landmark() snaps xyz[2] if z_constraint
@@ -966,7 +976,9 @@ class Handler(BaseHTTPRequestHandler):
                 best['xyz'][2] = round(float(zc['value']), 4)
                 best['z_snapped'] = True
             ml.get_camera.cache_clear()
-            print(f"Triangulated {lm_name}: xyz={best['xyz']}, err={best['error_m']}m")
+            print(f"Triangulated {lm_name}: xyz={best['xyz']}, "
+                  f"err={best['error_m']}m (worst: {best['worst_cam']} "
+                  f"@ {best['worst_distance_m']}m)")
             self.send_json(best)
 
         elif path == '/api/cam_sources':
@@ -1016,46 +1028,101 @@ area = (int(cx-padding), int(cy-padding), int(cx+padding), int(cy+padding))
 
 m = ml.get_map('yanis').open(scale=1.0, add_padding=True)
 
-# Build per-landmark color palette using HSV-distributed RGB
-import colorsys
-def landmark_color(idx, total):
-    h = (idx * 0.618033988749895) % 1.0  # golden ratio for max separation
-    r, g, b = colorsys.hsv_to_rgb(h, 0.85, 1.0)
-    return (int(r*255), int(g*255), int(b*255))
+import numpy as np
 
-# Collect all unique landmarks across all cams to assign stable colors
-all_lms = set()
-for cn in cam_names:
-    all_lms.update(md.pixels.get(cn, {{}}).keys())
-lm_to_color = {{ln: landmark_color(i, len(all_lms)) for i, ln in enumerate(sorted(all_lms))}}
+# If a target landmark is provided: triangulate it via intersect_rays and
+# color each ray by its perpendicular distance from the result (green=good,
+# red=bad — same scheme as bundle adjust).
+ray_data = []  # list of (cn, target_xy, color, width)
+if lm_name:
+    rays = []
+    valid_cams = []
+    for cn in cam_names:
+        try:
+            cam = ml.get_camera(cn)
+            if lm_name not in md.pixels.get(cn, {{}}): continue
+            d = cam.get_landmark_direction(lm_name)
+            if d is None: continue
+            rays.append((tuple(cam.xyz), tuple(d)))
+            valid_cams.append(cn)
+        except Exception:
+            pass
 
-# First pass: draw all landmark rays
-for cn in cam_names:
-    try:
-        cam = ml.get_camera(cn)
-        cam_pixels = md.pixels.get(cn, {{}})
-        for ln in cam_pixels:
-            try:
-                d = cam.get_landmark_direction(ln)
-                if d is None: continue
+    if len(rays) >= 2:
+        try:
+            pt, distances = ml.intersect_rays(rays)
+            # Determine color from distance: green<0.5m, yellow<2m, red>5m
+            def err_color(dist_m):
+                if dist_m < 0.5: return (0, 220, 80)       # green
+                if dist_m < 2.0: return (200, 220, 60)     # yellow-green
+                if dist_m < 5.0: return (255, 165, 0)      # orange
+                return (230, 60, 60)                       # red
+            for cn, dist in zip(valid_cams, distances):
+                cam = ml.get_camera(cn)
+                d = cam.get_landmark_direction(lm_name)
                 target_xy = ml.get_point(cam.xyz, d, 30000)[:2]
-                color = lm_to_color.get(ln, (200, 200, 200))
-                width = 4 if (lm_name and ln == lm_name) else 2
-                m.draw_line((cam.xy, target_xy), color, width)
-            except: pass
-    except Exception as e:
-        print(f'Error rays {{cn}}: {{e}}')
+                ray_data.append((cn, target_xy, err_color(float(dist)), 4))
+        except Exception as e:
+            print(f'intersect_rays failed: {{e}}')
 
-# Second pass: draw camera frustum on top in BLACK (thicker, more visible)
+# If no lm_name (or triangulation failed): fallback to old behavior
+# (all rays from all cams, but with much lower alpha to keep readable)
+if not ray_data:
+    import colorsys
+    def landmark_color(idx, total):
+        h = (idx * 0.618033988749895) % 1.0
+        r, g, b = colorsys.hsv_to_rgb(h, 0.85, 1.0)
+        return (int(r*255), int(g*255), int(b*255))
+    all_lms = set()
+    for cn in cam_names:
+        all_lms.update(md.pixels.get(cn, {{}}).keys())
+    lm_to_color = {{ln: landmark_color(i, len(all_lms)) for i, ln in enumerate(sorted(all_lms))}}
+    for cn in cam_names:
+        try:
+            cam = ml.get_camera(cn)
+            cam_pixels = md.pixels.get(cn, {{}})
+            for ln in cam_pixels:
+                try:
+                    d = cam.get_landmark_direction(ln)
+                    if d is None: continue
+                    target_xy = ml.get_point(cam.xyz, d, 30000)[:2]
+                    color = lm_to_color.get(ln, (200, 200, 200))
+                    width = 4 if (lm_name and ln == lm_name) else 2
+                    ray_data.append((cn, target_xy, color, width))
+                except: pass
+        except Exception as e:
+            print(f'Error rays {{cn}}: {{e}}')
+
+# Draw the rays
+for cn, target_xy, color, width in ray_data:
+    try:
+        cam = ml.get_camera(cn)
+        m.draw_line((cam.xy, target_xy), color, width)
+    except Exception:
+        pass
+
+# Camera frustum outer bounds in BLACK — better contrast in the multi-cam
+# Ray Map context where several frustums converge near the landmark.
+# Length = distance from cam to target landmark (so each cam's frustum fits
+# the relevant scope without crossing the whole map).
+FRUSTUM_BLUE = (0, 0, 0)  # name kept for compatibility, value is now black
 for cn in cam_names:
     try:
         cam = ml.get_camera(cn)
-        # frustum edges (black, width 4) — manually drawn since draw_camera uses white
+        if lm_name:
+            target_lm_xyz = md.landmarks.get(lm_name)
+            if target_lm_xyz:
+                dx = target_lm_xyz[0] - cam.xyz[0]
+                dy = target_lm_xyz[1] - cam.xyz[1]
+                ray_len = (dx*dx + dy*dy) ** 0.5
+            else:
+                ray_len = 250
+        else:
+            ray_len = 250
         for x in (0, cam.w):
             edge_dir = cam.get_pixel_direction((x, cam.h / 2))
-            target_xy = ml.get_point(cam.xyz, edge_dir, 30000)[:2]
-            m.draw_line((cam.xy, target_xy), (0, 0, 0), 4)
-        # cam marker
+            target_xy = ml.get_point(cam.xyz, edge_dir, ray_len)[:2]
+            m.draw_line((cam.xy, target_xy), FRUSTUM_BLUE, 2)
         m.draw_circle(cam.xy, 8, (255, 255, 255), cam.color, 2, cam.name[0])
     except Exception as e:
         print(f'Error frustum {{cn}}: {{e}}')

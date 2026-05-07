@@ -340,6 +340,36 @@ Other archived experiments :
 - Item 3 (intersect_rays refactor) ⏸ pending
 - Item 4 (other cam cones) ✅ shipped this session
 
-**Next** : item 3 (intersect_rays) — function already exists in
-gtamaplib.py line 2735, just needs wiring into `/api/triangulate`,
-`retriangulate_landmark.py`, `batch_retriangulate_aiwe_fixed.py`.
+**Next** : item 3 done in part — see session log entry below.
+
+### 2026-05-07 (afternoon) — Item 3: intersect_rays in /api/triangulate
+
+Replaced the 2-rays best-pair triangulation in `/api/triangulate` with
+the closed-form N-rays solver `intersect_rays()` that already existed in
+`gtamaplib.py` line 2735 (written by rlx, was unused).
+
+**Why :**
+- Uses ALL rays simultaneously instead of testing pairs and picking best
+- Closed-form analytical (instant, no iterations vs Nelder-Mead's 10000)
+- More robust to degenerate cases (e.g. co-located LEAK cams)
+- Returns per-ray perpendicular distance — exposes worst-cam outlier info
+
+**Response now includes :**
+- `error_m` : mean perpendicular distance across all rays
+- `worst_cam` + `worst_distance_m` : useful for spotting bad observations
+
+**Scope :** only `/api/triangulate` is changed. The Nelder-Mead
+implementations in `tools/refine/batch_retriangulate_aiwe_fixed.py` and
+`retriangulate_landmark.py` are intentionally kept — those use angular
+loss which is more appropriate when cam-to-landmark distances vary
+wildly (10m → 10km), and they handle batch refinement where the extra
+seconds don't matter.
+
+**Roadmap status :**
+- Item 1 (z=0 flag) ✅
+- Item 2 (precision flag) ⏸ blocked on rlx clarification
+- Item 3 (intersect_rays) ✅ shipped this session (`/api/triangulate` only)
+- Item 4 (other cam cones) ✅ shipped earlier today
+
+**Next** : item 2 once rlx clarifies, or chasse aux outliers (top 12
+observations >10' from the bundle adjust report).

@@ -5008,15 +5008,17 @@
   },
   "Akoya Condominium": {
     "xyz": [
-      1469.9829,
-      2621.2372,
-      146.2323
+      1469.568,
+      2620.4949,
+      145.546
     ],
     "source_cameras": [
+      "Highway (NE)",
+      "Beach",
       "Venetian Islands",
-      "Highway (NE)"
+      "Jet Ski"
     ],
-    "error_m": null,
+    "error_m": 1.992,
     "zone": "vice_city"
   },
   "Asia Brickell Key": {
