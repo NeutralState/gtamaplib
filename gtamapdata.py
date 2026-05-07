@@ -70,6 +70,10 @@ for lm_name, data in _landmarks_raw.items():
         "source_cameras": data.get("source_cameras", []),
         "error_m": data.get("error_m"),
         "zone": data.get("zone", "unknown"),
+        # z_constraint: None | {"type": "fixed", "value": <float>}
+        # When set to a fixed value, the solver and triangulation respect it.
+        # See tools/audit/find_z_candidates.py and tools/refine/apply_z_constraints.py.
+        "z_constraint": data.get("z_constraint"),
     }
 
 # ── Maps ─────────────────────────────────────────────────────────────────────
@@ -88,6 +92,9 @@ map_sections = {
 
 # ── Helpers ──────────────────────────────────────────────────────────────────
 
+_SENTINEL = object()  # marker for "argument not passed" in update_landmark()
+
+
 def get_independent_landmarks(cam_name):
     """
     Returns landmark names that were NOT triangulated using cam_name.
@@ -105,11 +112,37 @@ def get_landmark_sources(lm_name):
     return landmarks_meta.get(lm_name, {}).get("source_cameras", [])
 
 
-def update_landmark(lm_name, xyz, source_cameras=None, error_m=None, zone=None):
+def update_landmark(lm_name, xyz, source_cameras=None, error_m=None, zone=None,
+                    z_constraint=_SENTINEL):
     """
-    Updates a landmark in memory and persists to the appropriate JSON file.
+    Updates a landmark in memory and persists to landmarks.json.
+
+    Preserves any field not explicitly passed (z_constraint, author, etc).
+    To explicitly clear z_constraint, pass z_constraint=None.
+
+    If z_constraint = {"type": "fixed", "value": V}, snaps xyz[2] to V before
+    persisting (single source of truth — JSON xyz always matches the constraint).
+
     Handles xyz=None for landmarks without triangulation yet.
     """
+    # Read existing JSON to preserve untouched fields
+    lm_path = os.path.join(DATA_DIR, "landmarks.json")
+    with open(lm_path) as f:
+        lm_data = json.load(f)
+    existing = lm_data.get(lm_name, {})
+
+    # Determine final z_constraint (sentinel = "not passed = preserve existing")
+    if z_constraint is _SENTINEL:
+        final_z_constraint = existing.get("z_constraint")
+    else:
+        final_z_constraint = z_constraint
+
+    # Snap xyz[2] to fixed-z value if applicable (single source of truth)
+    if xyz is not None and final_z_constraint and \
+            final_z_constraint.get("type") == "fixed":
+        xyz = list(xyz)
+        xyz[2] = float(final_z_constraint["value"])
+
     landmarks[lm_name] = tuple(xyz) if xyz is not None else None
 
     # Determine zone
@@ -117,24 +150,31 @@ def update_landmark(lm_name, xyz, source_cameras=None, error_m=None, zone=None):
         if lm_name in landmarks_meta:
             zone = landmarks_meta[lm_name]["zone"]
         else:
-            zone = "misc"
+            zone = existing.get("zone", "misc")
 
     landmarks_meta[lm_name] = {
-        "source_cameras": source_cameras or [],
-        "error_m": error_m,
+        "source_cameras": source_cameras if source_cameras is not None
+                          else existing.get("source_cameras", []),
+        "error_m": error_m if error_m is not None else existing.get("error_m"),
         "zone": zone,
+        "z_constraint": final_z_constraint,
     }
 
-    # Persist to landmarks.json
-    lm_path = os.path.join(DATA_DIR, "landmarks.json")
-    with open(lm_path) as f:
-        lm_data = json.load(f)
-    lm_data[lm_name] = {
-        "xyz": list(xyz) if xyz is not None else None,
-        "source_cameras": source_cameras or [],
-        "error_m": error_m,
-        "zone": zone,
-    }
+    # Build the JSON record, preserving fields we don't touch (e.g. author)
+    new_record = dict(existing)  # start from existing to preserve all fields
+    new_record["xyz"] = list(xyz) if xyz is not None else None
+    if source_cameras is not None:
+        new_record["source_cameras"] = source_cameras
+    elif "source_cameras" not in new_record:
+        new_record["source_cameras"] = []
+    new_record["error_m"] = error_m if error_m is not None else new_record.get("error_m")
+    new_record["zone"] = zone
+    if final_z_constraint is None:
+        new_record.pop("z_constraint", None)
+    else:
+        new_record["z_constraint"] = final_z_constraint
+
+    lm_data[lm_name] = new_record
     tmp = lm_path + ".tmp"
     with open(tmp, "w") as f:
         json.dump(lm_data, f, indent=2)

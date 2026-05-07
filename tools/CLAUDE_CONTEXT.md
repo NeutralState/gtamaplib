@@ -190,11 +190,18 @@ cache en mémoire.
 
 ### Items prioritaires
 
-1. **z=0 / known-z flag pour landmarks** (coastal points, pins)
-   - Ajouter `z_constraint` au schema `landmarks_meta`
-   - `compute_projections` et `bundle_adjust` doivent respecter cette
-     contrainte
-   - Le solver fixe z et n'optimise que x, y pour ces landmarks
+1. ✅ **z=0 / known-z flag pour landmarks** (DONE 2026-05-07)
+   - Schema : `landmarks_meta[name]["z_constraint"] = {"type": "fixed", "value": <float>}`
+     ou `None` (default).
+   - `bundle_adjust.py` force z à la valeur fixée à chaque eval du résidu
+     pour les landmarks contraints (x et y restent libres).
+   - `update_landmark()` snap `xyz[2]` à la valeur fixée → JSON xyz toujours
+     en sync avec le constraint (single source of truth).
+   - Workflow d'application :
+     1. `python3 tools/audit/find_z_candidates.py` → propose les coastal/pin
+     2. Review `/tmp/z_candidates.json`, enlever les faux positifs
+     3. `python3 tools/refine/apply_z_constraints.py --apply` → écrit le constraint
+     4. `python3 tools/bundle_adjust.py` → re-run avec les contraintes actives
 
 2. **Precision flag pour cams** (Tennis Court etc.)
    - Certaines cams ont des params connus à très haute précision
@@ -258,3 +265,23 @@ cache en mémoire.
   partout au lieu des Nelder-Mead manuels".
 
 **Next** : item 1 (z=0 flag for landmarks).
+
+### 2026-05-07 — Consolidate bundle adjust + Item 1 z=0 flag
+
+- Drop `bundle_adjust_v2.py` (archived). `bundle_adjust_v3_twopass.py`
+  renommé `bundle_adjust.py` (canonical).
+- **Item 1 implémenté** :
+  - `gtamapdata.py` : charge `z_constraint` dans `landmarks_meta`.
+    `update_landmark()` accepte `z_constraint=None`, préserve les
+    fields non-touchés (au passage : fixe le bug qui détruisait le champ
+    `author` à chaque write).
+  - `bundle_adjust.py` : pré-calcule `_z_constraints`, force z dans le
+    résidu, snap z au write-out.
+  - `server.py` : `/api/triangulate` snap z, `/api/lm_info` expose
+    `z_constraint` au frontend.
+  - `tools/audit/find_z_candidates.py` (nouveau) : scan des coastal/pin.
+  - `tools/refine/apply_z_constraints.py` (nouveau) : applique le constraint
+    en batch depuis une liste.
+- Pas de regression : landmarks sans `z_constraint` restent inchangés.
+
+**Next** : item 2 (precision flag pour cams Tennis Court etc).

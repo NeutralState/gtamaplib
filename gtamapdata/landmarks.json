@@ -678,25 +678,33 @@
     "xyz": [
       2266.9125,
       976.719,
-      -0.0057
+      0.0
     ],
     "source_cameras": [
       "Vice Beach (A)"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Beach (H)": {
     "xyz": [
       2253.7922,
       1135.796,
-      0.0022
+      0.0
     ],
     "source_cameras": [
       "Vice Beach (A)"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Beige Billboard (BE)": {
     "xyz": [
@@ -874,7 +882,11 @@
     ],
     "error_m": null,
     "zone": "leonard_county",
-    "author": "rlx"
+    "author": "rlx",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "East Coast (B)": {
     "xyz": [
@@ -887,7 +899,11 @@
     ],
     "error_m": null,
     "zone": "leonard_county",
-    "author": "rlx"
+    "author": "rlx",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "East Coast (C)": {
     "xyz": [
@@ -900,7 +916,11 @@
     ],
     "error_m": null,
     "zone": "leonard_county",
-    "author": "rlx"
+    "author": "rlx",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "East Coast (D)": {
     "xyz": [
@@ -913,7 +933,11 @@
     ],
     "error_m": null,
     "zone": "leonard_county",
-    "author": "rlx"
+    "author": "rlx",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "East Coast (E)": {
     "xyz": [
@@ -926,7 +950,11 @@
     ],
     "error_m": null,
     "zone": "leonard_county",
-    "author": "rlx"
+    "author": "rlx",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "East Coast (F)": {
     "xyz": [
@@ -939,7 +967,11 @@
     ],
     "error_m": null,
     "zone": "leonard_county",
-    "author": "rlx"
+    "author": "rlx",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "East Coast (G)": {
     "xyz": [
@@ -952,7 +984,11 @@
     ],
     "error_m": null,
     "zone": "leonard_county",
-    "author": "rlx"
+    "author": "rlx",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "East Coast (H)": {
     "xyz": [
@@ -965,7 +1001,11 @@
     ],
     "error_m": null,
     "zone": "leonard_county",
-    "author": "rlx"
+    "author": "rlx",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "East Coast (I)": {
     "xyz": [
@@ -978,7 +1018,11 @@
     ],
     "error_m": null,
     "zone": "leonard_county",
-    "author": "rlx"
+    "author": "rlx",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Elephant": {
     "xyz": [
@@ -2086,13 +2130,17 @@
     "xyz": [
       -3997.487,
       -7346.079,
-      0.2201
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Blue Billboard (Key Lento)": {
     "xyz": [
@@ -2137,73 +2185,97 @@
     "xyz": [
       -2575.005,
       -5633.8232,
-      0.2071
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Island J (E)": {
     "xyz": [
       -2487.8664,
       -6562.6977,
-      -0.2868
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Island N (E)": {
     "xyz": [
       -4009.1249,
       -6973.7696,
-      -0.5726
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Island N (W)": {
     "xyz": [
       -4124.5266,
       -6898.3832,
-      -0.7301
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Island S (E)": {
     "xyz": [
       -3917.2587,
       -5515.2317,
-      -0.4829
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Island U (S)": {
     "xyz": [
       -3790.5492,
       -5621.3463,
-      -0.3776
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Island V (S)": {
     "xyz": [
@@ -2221,25 +2293,33 @@
     "xyz": [
       -2626.5572,
       -5769.6929,
-      0.0048
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Key Lento (J)": {
     "xyz": [
       -3022.1056,
       -6710.3263,
-      0.9036
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Park Grove Condominium (S)": {
     "xyz": [
@@ -2403,13 +2483,17 @@
     "xyz": [
       -3945.6288,
       -7118.1468,
-      0.001
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Seven Mile Bridge (21B)": {
     "xyz": [
@@ -2476,13 +2560,17 @@
     "xyz": [
       -3633.0644,
       -6933.3662,
-      -0.1078
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Seven Mile Bridge (6B)": {
     "xyz": [
@@ -2764,109 +2852,145 @@
     "xyz": [
       -1800.9336,
       -5734.0701,
-      0.4672
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Island F (W)": {
     "xyz": [
       -1848.8074,
       -5911.4563,
-      0.4598
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Island G (E)": {
     "xyz": [
       -2126.1172,
       -6220.908,
-      0.2952
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Island G (W)": {
     "xyz": [
       -2215.0038,
       -6305.1096,
-      -0.2893
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Island J (W)": {
     "xyz": [
       -2562.4918,
       -6638.3091,
-      -0.6637
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Island X (S)": {
     "xyz": [
       -3170.4407,
       -6042.8115,
-      0.5195
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Island Y (S)": {
     "xyz": [
       -3083.0763,
       -5985.3792,
-      0.4506
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Island Z (S)": {
     "xyz": [
       -2865.8802,
       -5720.3368,
-      0.3622
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Key Lento (E)": {
     "xyz": [
       -2206.4282,
       -5136.6866,
-      0.4284
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Key Lento (U)": {
     "xyz": [
@@ -2896,13 +3020,17 @@
     "xyz": [
       -3123.5961,
       -6431.0078,
-      0.6302
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Keys Bridge (1B)": {
     "xyz": [
@@ -3748,73 +3876,97 @@
     "xyz": [
       -3750.5956,
       -6114.5659,
-      -0.1674
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (10B)": {
     "xyz": [
       -5056.1791,
       -7152.0864,
-      0.7838
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (11B)": {
     "xyz": [
       -5073.9607,
       -7145.8119,
-      0.6825
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (12B)": {
     "xyz": [
       -5092.8398,
       -7137.7624,
-      0.5716
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (13B)": {
     "xyz": [
       -5110.7306,
       -7131.5891,
-      0.5648
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (14B)": {
     "xyz": [
       -5129.2272,
       -7125.3104,
-      0.7815
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (15B)": {
     "xyz": [
@@ -3892,37 +4044,49 @@
     "xyz": [
       -5241.2556,
       -7088.2936,
-      0.9967
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (21B)": {
     "xyz": [
       -5254.0162,
       -7082.1933,
-      0.292
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (22B)": {
     "xyz": [
       -5269.5989,
       -7076.1135,
-      -0.3913
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (23B)": {
     "xyz": [
@@ -3940,37 +4104,49 @@
     "xyz": [
       -5357.6067,
       -7047.3657,
-      -0.7514
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (28B)": {
     "xyz": [
       -5376.276,
       -7041.2293,
-      -0.6206
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (29B)": {
     "xyz": [
       -5393.0987,
       -7035.264,
-      -0.9918
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (2B)": {
     "xyz": [
@@ -4000,13 +4176,17 @@
     "xyz": [
       -5428.9668,
       -7023.2844,
-      -0.9533
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (32B)": {
     "xyz": [
@@ -4144,61 +4324,81 @@
     "xyz": [
       -4976.5472,
       -7177.679,
-      0.1229
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (7B)": {
     "xyz": [
       -4994.9899,
       -7171.258,
-      0.0187
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (8B)": {
     "xyz": [
       -5013.6502,
       -7164.987,
-      -0.0972
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "New Bahia Honda Bridge (9B)": {
     "xyz": [
       -5037.8544,
       -7158.2711,
-      0.8849
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Old Bahia Honda Bridge (1B)": {
     "xyz": [
       -5172.0312,
       -7282.4675,
-      -0.9535
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Old Bahia Honda Bridge (21B)": {
     "xyz": [
@@ -4229,25 +4429,33 @@
     "xyz": [
       -3578.823,
       -7847.7695,
-      0.0444
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Vake Island (W)": {
     "xyz": [
       -3634.2868,
       -7881.3885,
-      0.2348
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Large Billboard (Ambrosia)": {
     "xyz": [
@@ -4331,25 +4539,33 @@
     "xyz": [
       -3704.7833,
       -8011.8821,
-      -0.5508
+      0.0
     ],
     "source_cameras": [
       "Key Lento"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Island K (W)": {
     "xyz": [
       -3871.3937,
       -8185.1791,
-      -0.5717
+      0.0
     ],
     "source_cameras": [
       "Key Lento"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Marina Club at Blackwater Sound (N)": {
     "xyz": [
@@ -5145,73 +5361,97 @@
     "xyz": [
       2219.7599,
       -392.603,
-      -0.0207
+      0.0
     ],
     "source_cameras": [
       "Beach"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Beach (B)": {
     "xyz": [
       2212.6692,
       -356.1951,
-      -0.009
+      0.0
     ],
     "source_cameras": [
       "Beach"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Beach (C)": {
     "xyz": [
       2217.6581,
       -290.529,
-      0.0265
+      0.0
     ],
     "source_cameras": [
       "Beach"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Beach (D)": {
     "xyz": [
       2209.9049,
       -225.3898,
-      0.035
+      0.0
     ],
     "source_cameras": [
       "Beach"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Beach (E)": {
     "xyz": [
       2200.2037,
       9.3692,
-      0.1035
+      0.0
     ],
     "source_cameras": [
       "Beach"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Beach (F)": {
     "xyz": [
       2239.1433,
       373.7329,
-      0.1669
+      0.0
     ],
     "source_cameras": [
       "Beach"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Biscayne Island (S)": {
     "xyz": [
@@ -5773,37 +6013,49 @@
     "xyz": [
       -233.949,
       1432.6232,
-      0.4058
+      0.0
     ],
     "source_cameras": [
       "Vice City Postcard"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Marina (Stockyard) (SE)": {
     "xyz": [
       -268.519,
       1347.3307,
-      -0.7344
+      0.0
     ],
     "source_cameras": [
       "Vice City Postcard"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Marina (Stockyard) (SW)": {
     "xyz": [
       -301.0605,
       1379.671,
-      -0.7235
+      0.0
     ],
     "source_cameras": [
       "Vice City Postcard"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Marina Blue (NE)": {
     "xyz": [
@@ -7542,14 +7794,18 @@
     "xyz": [
       -2373.4484,
       -5063.9957,
-      -0.1056
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "House D (SW)": {
     "xyz": [
@@ -8310,14 +8566,18 @@
     "xyz": [
       -2988.7768,
       -7218.499,
-      -0.7148
+      0.0
     ],
     "source_cameras": [
       "Ocean near Keys (E)",
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    }
   },
   "Stack (B)": {
     "xyz": [

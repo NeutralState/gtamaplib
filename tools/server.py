@@ -441,6 +441,7 @@ class Handler(BaseHTTPRequestHandler):
                 'n_total_observers': len(observers),
                 'error_m': error_m,
                 'has_xyz': has_xyz,
+                'z_constraint': meta.get('z_constraint'),
             })
 
         elif path == '/api/cam_health':
@@ -919,12 +920,18 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json({'error': 'Triangulation failed'}, 400)
                 return
 
-            # Save to landmarks
+            # Save to landmarks. update_landmark() snaps xyz[2] if z_constraint
+            # is set on this landmark (single source of truth — see gtamapdata.py).
             meta = md.landmarks_meta.get(lm_name, {})
             md.update_landmark(lm_name, best['xyz'],
                 source_cameras=source_cams,
                 error_m=best['error_m'],
                 zone=meta.get('zone', 'unknown'))
+            # Reflect snap in the response so frontend shows the correct xyz
+            zc = meta.get('z_constraint')
+            if zc and zc.get('type') == 'fixed':
+                best['xyz'][2] = round(float(zc['value']), 4)
+                best['z_snapped'] = True
             ml.get_camera.cache_clear()
             print(f"Triangulated {lm_name}: xyz={best['xyz']}, err={best['error_m']}m")
             self.send_json(best)

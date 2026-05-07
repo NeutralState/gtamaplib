@@ -151,6 +151,20 @@ _fixed_lm_xyz = {n: tuple(md.landmarks[n])
                  for n in md.landmarks
                  if n not in lm_idx and md.landmarks.get(n) is not None}
 
+# z constraints (item 1 / rlx roadmap) :
+# {lm_name: {"type": "fixed", "value": <float>}}
+# When a landmark has z_constraint, the solver lets x and y move freely but
+# forces z to the fixed value at every residual evaluation.
+_z_constraints = {
+    n: meta['z_constraint']
+    for n, meta in md.landmarks_meta.items()
+    if meta.get('z_constraint')
+}
+n_z_fixed_in_opt = sum(1 for n in opt_lm_names if n in _z_constraints)
+if _z_constraints:
+    print(f"z constraints: {len(_z_constraints)} landmarks total, "
+          f"{n_z_fixed_in_opt} in optimization set (z forced during solve)")
+
 # ── Initial parameter vector ──────────────────────────────────────────────────
 
 cam_params_init = np.zeros((N_CAM, 6))
@@ -205,7 +219,11 @@ def pixel_residuals(x):
 
         if lm_name in lm_idx:
             lp = lm_params[lm_idx[lm_name]]
-            lm_xyz = (float(lp[0]), float(lp[1]), float(lp[2]))
+            z_val = float(lp[2])
+            zc = _z_constraints.get(lm_name)
+            if zc and zc.get('type') == 'fixed':
+                z_val = float(zc['value'])
+            lm_xyz = (float(lp[0]), float(lp[1]), z_val)
         else:
             lm_xyz = _fixed_lm_xyz[lm_name]
 
@@ -453,7 +471,14 @@ for i, cam_name in enumerate(opt_cam_names):
 
 for i, lm_name in enumerate(opt_lm_names):
     lp = lm_params_final[i]
-    output['landmarks'][lm_name] = [round(float(v), 4) for v in lp]
+    # Snap z to fixed value if constrained (single source of truth)
+    z_final = float(lp[2])
+    zc = _z_constraints.get(lm_name)
+    if zc and zc.get('type') == 'fixed':
+        z_final = float(zc['value'])
+    output['landmarks'][lm_name] = [round(float(lp[0]), 4),
+                                    round(float(lp[1]), 4),
+                                    round(z_final, 4)]
 
 out_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'bundle_adjust_result.json')
 with open(out_path, 'w') as f:
