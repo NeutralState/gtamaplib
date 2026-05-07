@@ -1100,6 +1100,64 @@ m.save('/tmp/ray_map.png', area)
             # Just acknowledge — validation state is kept client-side
             self.send_json({'ok': True})
 
+        elif path == '/api/minimap':
+            # GTA-style minimap: rectangular crop of the yanis map centered
+            # on a cam. Frontend rotates the image based on cam yaw.
+            # Uses the same render pattern as /api/generate_map.
+            cam_name = unquote(qs.get('cam', [''])[0])
+            if cam_name not in md.cameras:
+                self.send_json({'error': 'invalid cam'}, 400)
+                return
+            try:
+                cam = ml.get_camera(cam_name)
+            except Exception as e:
+                self.send_json({'error': f'cam load failed: {e}'}, 400)
+                return
+
+            try:
+                radius = float(qs.get('radius', ['200'])[0])
+            except ValueError:
+                radius = 200.0
+            try:
+                target_px = int(qs.get('size', ['480'])[0])
+            except ValueError:
+                target_px = 480
+
+            cx, cy = float(cam.xyz[0]), float(cam.xyz[1])
+            x_min, x_max = cx - radius, cx + radius
+            y_min, y_max = cy - radius, cy + radius
+            area = (x_min, y_min, x_max, y_max)
+
+            try:
+                # Open map at NATIVE scale (no global resize — that would
+                # take seconds and 24000x24000 px of memory). Crop the small
+                # area we want, then resize just the crop to target_px.
+                m = ml.get_map('yanis')
+                m.open(add_padding=False)  # no scale arg = native scale
+
+                # m.crop returns a PIL Image of just the cropped area
+                cropped = m.crop(area)
+                # Resize the small crop to target size
+                cropped = cropped.resize((target_px, target_px), 1)  # 1=LANCZOS
+
+                import io, base64
+                buf = io.BytesIO()
+                cropped.save(buf, format='PNG')
+                img_b64 = base64.b64encode(buf.getvalue()).decode('ascii')
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                self.send_json({'error': f'minimap render failed: {e}'}, 500)
+                return
+
+            self.send_json({
+                'cam': cam_name,
+                'image_b64': img_b64,
+                'yaw': float(cam.ypr[0]),
+                'radius_m': radius,
+                'image_size_px': target_px,
+            })
+
         elif path == '/api/other_cams_overlay':
             cam_name = qs.get('cam', [''])[0]
             if not cam_name or cam_name not in md.cameras:
