@@ -8,17 +8,35 @@
 :root {
   --bg:#0a0a0c; --surface:#13131a; --surface2:#1c1c26; --border:#252535;
   --green:#4ade80; --yellow:#f59e0b; --red:#f87171; --blue:#60a5fa;
+  --purple:#a78bfa;
   --text:#e2e2f0; --dim:#5a5a7a; --mid:#9090b0;
   --mono:'JetBrains Mono',monospace; --sans:'DM Sans',sans-serif;
 }
+
+/* ── SVG Map Refactor Phase 2: left sidebar styles ── */
+.cam-toggle-btn{font-family:var(--mono);font-size:14px;padding:4px 9px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--mid);cursor:pointer;line-height:1;user-select:none}
+.cam-toggle-btn:hover{color:var(--text);border-color:var(--mid)}
+.left-sidebar{width:260px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:width .18s ease-out}
+.left-sidebar.collapsed{width:0;border-right:none}
+.ls-header{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.ls-header #cam-search{font-family:var(--mono);font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 9px;border-radius:5px;width:100%}
+.ls-header #cam-search:focus{outline:none;border-color:var(--green)}
+.ls-filter-chips{display:flex;flex-wrap:wrap;gap:4px}
+.ls-list{flex:1;overflow-y:auto;background:var(--surface)}
+.ls-list::-webkit-scrollbar{width:3px}
+.ls-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+/* The .cam-dropdown rule below was originally absolute-positioned + hidden
+   by default. Phase 2 repurposes it as a permanent list inside .ls-list,
+   so we override position and display via the wrapping .left-sidebar. */
+.left-sidebar #cam-dropdown{position:static;display:block;border:none;border-radius:0;max-height:none;margin-top:0;background:transparent}
+/* ── end SVG Map Refactor Phase 2 ── */
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
 header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
 .logo{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green)}
 
-/* Cam search + filter */
-.cam-picker{position:relative;display:flex;align-items:center;gap:6px;flex:1;max-width:520px}
+/* Cam search + filter (Phase 2: .cam-picker rule dropped — moved to left sidebar) */
 #cam-sel{display:none}
 #cam-search{font-family:var(--mono);font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:5px;flex:1;min-width:160px}
 #cam-search:focus{outline:none;border-color:var(--green)}
@@ -157,17 +175,9 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 <body>
 
 <header>
+  <button class="cam-toggle-btn" id="cam-toggle-btn" title="Toggle camera list">≡</button>
   <div class="logo">gtamaplib</div>
 <a href="/cam_health.html" class="nav-link">→ Dashboard</a>
-  <div class="cam-picker">
-  <input id="cam-search" placeholder="Search camera..." autocomplete="off" />
-  <button class="cam-filter-chip on" data-type="LEAK">LEAK</button>
-  <button class="cam-filter-chip on" data-type="Trailer 1">T1</button>
-  <button class="cam-filter-chip on" data-type="Trailer 2">T2</button>
-  <button class="cam-filter-chip on" data-type="screenshots">SS</button>
-  <div class="cam-dropdown" id="cam-dropdown"></div>
-  <select id="cam-sel"><option value="">— Select camera —</option></select>
-</div>
   <span id="cam-meta"></span>
   <div class="chip" id="chip-all"><span style="color:var(--dim)">loss </span><span class="v" id="loss-all">—</span></div>
   <button class="btn btn-reset" id="btn-reset">Reset</button>
@@ -178,6 +188,21 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 </header>
 
 <div class="main">
+  <aside class="left-sidebar" id="left-sidebar">
+    <div class="ls-header">
+      <input id="cam-search" placeholder="Search camera..." autocomplete="off" />
+      <div class="ls-filter-chips">
+        <button class="cam-filter-chip on" data-type="LEAK">LEAK</button>
+        <button class="cam-filter-chip on" data-type="Trailer 1">T1</button>
+        <button class="cam-filter-chip on" data-type="Trailer 2">T2</button>
+        <button class="cam-filter-chip on" data-type="screenshots">SS</button>
+      </div>
+    </div>
+    <div class="ls-list">
+      <div class="cam-dropdown" id="cam-dropdown"></div>
+    </div>
+    <select id="cam-sel" hidden><option value="">— Select camera —</option></select>
+  </aside>
   <div class="canvas-wrap" id="canvas-wrap">
     <img id="frame-img" src="" draggable="false">
     <canvas id="overlay"></canvas>
@@ -449,23 +474,38 @@ async function init() {
     o.textContent = c.name;
     camSel.appendChild(o);
   });
-  // Wire up cam picker
+  // Wire up cam picker (Phase 2: permanent list in left sidebar — no .open class)
   const camSearch = document.getElementById('cam-search');
   const camDropdown = document.getElementById('cam-dropdown');
-  camSearch.addEventListener('input', e => { camSearchQ = e.target.value; renderCamDropdown(); camDropdown.classList.add('open'); });
-  camSearch.addEventListener('focus', () => { renderCamDropdown(); camDropdown.classList.add('open'); });
-  document.addEventListener('click', e => {
-    if (!e.target.closest('.cam-picker')) camDropdown.classList.remove('open');
-  });
+  // Initial render so the list is populated even before user interacts.
+  renderCamDropdown();
+  camSearch.addEventListener('input', e => { camSearchQ = e.target.value; renderCamDropdown(); });
   camDropdown.addEventListener('click', e => {
     const opt = e.target.closest('.cam-opt[data-name]');
     if (!opt) return;
     const name = opt.dataset.name;
     camSel.value = name;
     camSearch.value = name;
-    camDropdown.classList.remove('open');
     camSel.dispatchEvent(new Event('change'));
   });
+  // Burger toggle for the left sidebar (session-only, no localStorage)
+  const leftSidebar = document.getElementById('left-sidebar');
+  const camToggleBtn = document.getElementById('cam-toggle-btn');
+  if (camToggleBtn && leftSidebar) {
+    camToggleBtn.addEventListener('click', () => {
+      leftSidebar.classList.toggle('collapsed');
+    });
+    // Phase 2.1: also re-size the canvas overlay when the sidebar
+    // finishes collapsing/expanding. Without this, the canvas keeps
+    // its old width/height while the <img> auto-scales (object-fit:
+    // contain), so marked pixels and projections drift off the image.
+    // We listen for the 'width' transition specifically; the sidebar
+    // also sets border-right which transitions but we don't care.
+    leftSidebar.addEventListener('transitionend', e => {
+      if (e.propertyName !== 'width') return;
+      if (typeof resizeOverlay === 'function') resizeOverlay();
+    });
+  }
   document.querySelectorAll('.cam-filter-chip').forEach(btn => {
     btn.addEventListener('click', () => {
       btn.classList.toggle('on');
