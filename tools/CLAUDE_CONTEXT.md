@@ -291,3 +291,55 @@ cache en mémoire.
 - Pas de regression : landmarks sans `z_constraint` restent inchangés.
 
 **Next** : item 2 (precision flag pour cams Tennis Court etc).
+
+### 2026-05-07 (afternoon) — Item 4: other cam cones on screenshot
+
+Implemented overlay of other cameras' projected frustums on the canvas
+of calib.html, with click-to-navigate.
+
+**Final design (shipped) :**
+- `server.py` : endpoint `/api/other_cams_overlay` returns `apex` and 4
+  `corners` pixel coords for each visible cam. Filters by type
+  (leak/trailer/screenshot), max distance (5 km default), and excludes
+  cones whose quad doesn't overlap the visible image.
+- `calib.html` :
+  - Cone outlines drawn on canvas overlay (lines only, no image fill)
+  - Toggle button `⊕ cams` top-right of canvas + keyboard shortcut `O`
+  - Hover shows 240 px preview thumbnail next to cursor (adaptive
+    placement so it stays on-screen)
+  - Click on cone navigates to that cam (via cam-picker dropdown)
+  - Hooks into existing `draw()` and `toCanvas()` for zoom/pan compat
+
+**Image-in-cone alternative :**
+Tried rendering the actual image of each other cam *inside* its
+projected quad (rlx's original suggestion). Worked technically but :
+- Visually confusing on busy/dark scenes
+- Significantly laggy with 20+ cams visible (20× perspective warps
+  per draw, including on every mousemove)
+
+Code preserved at `tools/_archive/patches/patch_item4_image_in_cone.py`
++ matrix-warp helpers `_ocDrawImageInQuad` / `_ocDrawTriangle`.
+Could be reactivated as an opt-in mode (e.g. shift-click toggle) later.
+
+Other archived experiments :
+- `patch_item4_other_cams.py` : original v1, server-side image rendering
+  (way too heavy)
+- `patch_item4_v2_canvas_overlay.py` : v2 with sidebar panel (too cluttered)
+- `patch_item4_v3_auto.py` : v3 auto-on without sidebar (kept the toggle btn)
+- `patch_item4_hover_preview.py` : bottom-right preview panel (replaced
+  by cursor preview in final version)
+- `patch_item4_opacity_fix.py`, `patch_item4_skip_offscreen.py`,
+  `patch_item4_tighten_filter.py`, `patch_item4_simple_bbox.py` :
+  iterative fixes during the image-in-cone phase
+- `patch_item4_cursor_preview.py` : final patch (rolled back image-in-cone,
+  added cursor-following preview)
+
+**Roadmap status :**
+- Item 1 (z=0 flag) ✅
+- Item 2 (precision flag for cams) ⏸ blocked on rlx clarification
+- Item 3 (intersect_rays refactor) ⏸ pending
+- Item 4 (other cam cones) ✅ shipped this session
+
+**Next** : item 3 (intersect_rays) — function already exists in
+gtamaplib.py line 2735, just needs wiring into `/api/triangulate`,
+`retriangulate_landmark.py`, `batch_retriangulate_aiwe_fixed.py`.
