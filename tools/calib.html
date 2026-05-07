@@ -187,6 +187,30 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
              background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
              border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;
              font-family:JetBrains Mono,monospace">⊕ cams</button>
+    <!-- ── GTA VI-style rotating minimap (bottom-left, rounded rect) ─── -->
+    <div id="minimap-wrap" style="position:absolute;bottom:14px;left:14px;
+        z-index:10;width:260px;height:180px;border-radius:10px;
+        overflow:hidden;border:2px solid rgba(0,0,0,0.8);
+        background:rgba(0,0,0,0.4);
+        box-shadow:0 4px 14px rgba(0,0,0,0.55);
+        display:none;cursor:pointer" title="Click to toggle (M)">
+      <!-- Rotator is OVERSIZED so corners are covered when rotated -->
+      <div id="minimap-rotator" style="position:absolute;
+          width:200%;height:200%;
+          left:-50%;top:-50%;
+          transform-origin:50% 50%;transition:transform 120ms ease-out">
+        <img id="minimap-img" src="" style="position:absolute;width:100%;
+          height:100%;left:0;top:0;display:block;background:#222;
+          object-fit:cover">
+      </div>
+      <!-- Fixed view cone (always points up = cam direction) -->
+      <svg style="position:absolute;width:100%;height:100%;left:0;top:0;
+          pointer-events:none" viewBox="0 0 260 180" preserveAspectRatio="none">
+        <path d="M 130,80 L 138,96 L 130,92 L 122,96 Z"
+          fill="#ffffff" stroke="#000000"
+          stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+      </svg>
+    </div>
     <div id="oc-cursor-preview" style="position:fixed;display:none;z-index:100;
         width:240px;background:rgba(0,0,0,0.92);border:1px solid #888;
         border-radius:6px;padding:6px;pointer-events:none;
@@ -1805,6 +1829,72 @@ canvasWrap.addEventListener('click', e => {
       if (camSearch) camSearch.value = target;
       camSel.dispatchEvent(new Event('change'));
     }
+  }
+});
+
+// ── GTA-style rotating minimap (bottom-left) ────────────────────────────
+const minimapWrap = document.getElementById('minimap-wrap');
+const minimapRotator = document.getElementById('minimap-rotator');
+const minimapImg = document.getElementById('minimap-img');
+let minimapEnabled = true;
+
+async function loadMinimap() {
+  if (!currentCam || !minimapEnabled) {
+    minimapWrap.style.display = 'none';
+    return;
+  }
+  try {
+    const res = await fetch(`/api/minimap?cam=${encodeURIComponent(currentCam)}&radius=350`);
+    if (!res.ok) {
+      console.warn('minimap status', res.status);
+      minimapWrap.style.display = 'none';
+      return;
+    }
+    const data = await res.json();
+    if (data.error) {
+      console.warn('minimap error', data.error);
+      minimapWrap.style.display = 'none';
+      return;
+    }
+    minimapImg.src = 'data:image/png;base64,' + data.image_b64;
+    // Rotate so cam direction (yaw) points UP. Yaw 0 = north.
+    minimapRotator.style.transform = `rotate(${-data.yaw}deg)`;
+    minimapWrap.style.display = 'block';
+  } catch (e) {
+    console.error('minimap fetch failed', e);
+    minimapWrap.style.display = 'none';
+  }
+}
+
+// Auto-update on cam change
+let _minimapLastCam = null;
+setInterval(() => {
+  if (currentCam !== _minimapLastCam) {
+    _minimapLastCam = currentCam;
+    loadMinimap();
+  }
+}, 250);
+
+// Live yaw update from slider (instant, no fetch)
+const _slYaw = document.getElementById('sl-yaw');
+if (_slYaw) {
+  _slYaw.addEventListener('input', () => {
+    const yaw = parseFloat(_slYaw.value);
+    if (!isNaN(yaw)) minimapRotator.style.transform = `rotate(${-yaw}deg)`;
+  });
+}
+
+// Toggle on click + 'M' shortcut
+minimapWrap.addEventListener('click', () => {
+  minimapEnabled = false;
+  minimapWrap.style.display = 'none';
+});
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'm' || e.key === 'M') {
+    minimapEnabled = !minimapEnabled;
+    if (minimapEnabled) loadMinimap();
+    else minimapWrap.style.display = 'none';
   }
 });
 </script>
