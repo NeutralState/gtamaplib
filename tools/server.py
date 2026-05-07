@@ -283,6 +283,122 @@ class Handler(BaseHTTPRequestHandler):
         elif path == '/cam_health.html':
             self.send_file(os.path.join(TOOL_DIR, 'cam_health.html'), 'text/html')
 
+        # ── SVG Map Refactor (Phase 1) ─────────────────────────────
+        # Two endpoints powering the new full-screen SVG map view.
+        # See tools/CLAUDE_CONTEXT.md > "SVG Map View Refactor" for context.
+
+        elif path == '/yanis.svg':
+            # Serves the vector yanis map as a static asset.
+            # World→SVG transform: see /api/map_data response.
+            svg_path = os.path.join(TOOL_DIR, 'assets', 'yanis_v11.svg')
+            if not os.path.exists(svg_path):
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(b'yanis_v11.svg not found in tools/assets/')
+                return
+            with open(svg_path, 'rb') as f:
+                data = f.read()
+            self.send_response(200)
+            self.send_header('Content-Type', 'image/svg+xml')
+            self.send_header('Content-Length', len(data))
+            # Asset is immutable for this session — 1h cache so the browser
+            # doesn't re-download ~85MB on every reload during dev.
+            self.send_header('Cache-Control', 'public, max-age=3600')
+            self.end_headers()
+            self.wfile.write(data)
+
+        elif path == '/api/map_data':
+            # Single dump used by the SVG map view at load time. After this,
+            # all interactivity is client-side except for /api/triangulate
+            # (which already exists) and a triangulate refresh loop.
+            #
+            # Transform (world → SVG pixel space):
+            #   svg_x = world_x + 16500
+            #   svg_y = (-world_y) + 12000     [y_sign = -1]
+            # Origin sits at zero=[16500, 12000] in a 20000x20000 viewBox.
+            # Y is flipped because SVG pixel-y grows downward while world-y
+            # grows northward — confirmed by gtamaputils.find_aiwe() which
+            # maps aiwe_top=North and aiwe_bottom=South.
+            # TODO(phase1.5): load these from md.maps['yanis'] dynamically
+            #   instead of hardcoding (gtamapdata exposes the same values).
+
+            # Cameras: only those with xyz (otherwise they can't be placed
+            # on the map). For each we mirror what /api/cameras returns,
+            # plus the per-cam color used by /api/other_cams_overlay.
+            cams_out = []
+            for name, cam_data in md.cameras.items():
+                if not cam_data.get('xyz'):
+                    continue
+                cam_pixels = md.pixels.get(name, {})
+                n_indep = sum(
+                    1 for lm in cam_pixels
+                    if md.landmarks.get(lm) is not None
+                    and name not in md.landmarks_meta.get(lm, {}).get('source_cameras', [])
+                )
+                fov = cam_data.get('fov')
+                hfov = float(fov[0]) if fov and fov[0] is not None else None
+                # Color: the Camera object owns it (used by other_cams_overlay).
+                # get_camera is @lru_cache'd in gtamaplib so this is cheap.
+                try:
+                    color = [int(v) for v in ml.get_camera(name).color]
+                except Exception:
+                    color = [200, 200, 200]
+                cams_out.append({
+                    'name': name,
+                    'xyz': [float(v) for v in cam_data['xyz']],
+                    'ypr': [float(v) for v in cam_data['ypr']] if cam_data.get('ypr') else None,
+                    'hfov': hfov,
+                    'size': list(cam_data['size']) if cam_data.get('size') else None,
+                    'source': cam_data.get('source'),
+                    'type': _classify_cam(name),
+                    'color': color,
+                    'n_pixels': len(cam_pixels),
+                    'n_independent': n_indep,
+                })
+
+            # Landmarks: include ALL of them — even those without xyz, since
+            # the Map view will offer Triangulate on them. Phase 6 frontend
+            # will render unxyz'd LMs differently.
+            lms_out = []
+            for name, meta in md.landmarks_meta.items():
+                xyz = md.landmarks.get(name)
+                source_cameras = list(meta.get('source_cameras') or [])
+                lms_out.append({
+                    'name': name,
+                    'xyz': [float(v) for v in xyz] if xyz is not None else None,
+                    'source_cameras': source_cameras,
+                    'n_sources': len(source_cameras),
+                    'error_m': meta.get('error_m'),
+                    'zone': meta.get('zone'),
+                    'is_leak_anchored': name in LEAK_ANCHORED_LMS,
+                    'z_constraint': meta.get('z_constraint'),
+                })
+
+            # Sort: stable ordering helps the frontend diff updates and makes
+            # the JSON diffable for debugging. Cams by name, lms by name.
+            cams_out.sort(key=lambda c: c['name'])
+            lms_out.sort(key=lambda l: l['name'])
+
+            self.send_json({
+                'transform': {
+                    'world_offset': [16500, 12000],
+                    'world_scale': 1.0,
+                    'y_sign': -1,
+                    'svg_size': [20000, 20000],
+                    'map_name': 'yanis',
+                },
+                'cameras': cams_out,
+                'landmarks': lms_out,
+                'counts': {
+                    'cameras': len(cams_out),
+                    'landmarks': len(lms_out),
+                    'landmarks_with_xyz': sum(1 for l in lms_out if l['xyz'] is not None),
+                    'landmarks_leak_anchored': sum(1 for l in lms_out if l['is_leak_anchored']),
+                },
+            })
+
+        # ── end SVG Map Refactor (Phase 1) ─────────────────────────
+
         elif path == '/api/cameras':
             result = []
             for name in sorted(md.cameras):
