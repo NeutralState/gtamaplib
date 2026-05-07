@@ -62,8 +62,7 @@ gtamaplib-main/
 │   ├── server.py               ← HTTP server localhost:8765 — backend du calib tool
 │   ├── calib.html              ← UI de calibration interactive
 │   ├── cam_health.html         ← dashboard global de santé des cams
-│   ├── bundle_adjust_v2.py     ← solver actuel (L-BFGS-B sur cams + lms)
-│   ├── bundle_adjust_v3_twopass.py
+│   ├── bundle_adjust.py        ← solver actuel (TRF two-pass: linear → huber)
 │   ├── bundle_adjust_apply.py
 │   ├── outliers_report.py
 │   ├── regen_index_camdata.py

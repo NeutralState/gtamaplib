@@ -2,7 +2,7 @@
 """
 outliers_report.py — Generate an HTML review report from bundle_adjust_result.json
 
-Reads tools/bundle_adjust_result.json (full ranking computed by bundle_adjust_v2.py)
+Reads tools/bundle_adjust_result.json (full ranking computed by bundle_adjust.py)
 and writes tools/outliers_report.html — an interactive page to systematically
 review the worst observations after bundle adjustment.
 
@@ -37,7 +37,7 @@ CALIB_BASE = "http://localhost:8765"
 MIN_ERROR_ARCMIN = 5.0
 
 if not os.path.exists(RESULT_PATH):
-    print(f"ERROR: {RESULT_PATH} not found. Run bundle_adjust_v2.py first.")
+    print(f"ERROR: {RESULT_PATH} not found. Run bundle_adjust.py first.")
     sys.exit(1)
 
 with open(RESULT_PATH) as f:
@@ -47,7 +47,7 @@ outliers = result.get('outliers', [])
 dist     = result.get('distribution_arcmin', {})
 
 if not outliers:
-    print("No outliers in result.json — was bundle_adjust_v2.py used to generate it?")
+    print("No outliers in result.json — was bundle_adjust.py used to generate it?")
     sys.exit(1)
 
 # ── Group by landmark and by camera ───────────────────────────────────────────

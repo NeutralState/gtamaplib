@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-bundle_adjust_v3_twopass.py — Two-pass bundle adjustment.
+bundle_adjust.py — Two-pass bundle adjustment.
 
 Pass 1: linear loss (no Huber) — pulls cams/landmarks aggressively toward
         their best positions, including being influenced by outliers. Risky
@@ -13,10 +13,10 @@ already absorbs the gradient of the worst outliers from iteration 0. By
 running linear first, we let the solver actually move toward the optimum
 before applying robustness.
 
-Output JSON format identical to v1/v2 — bundle_adjust_apply.py works as-is.
+Output JSON format compatible with bundle_adjust_apply.py.
 
 Run from gtamaplib-main/:
-    python3 tools/bundle_adjust_v3_twopass.py
+    python3 tools/bundle_adjust.py
 """
 
 import json

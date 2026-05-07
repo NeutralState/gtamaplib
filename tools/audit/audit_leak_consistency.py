@@ -24,7 +24,7 @@ sys.path.insert(0, GTAMAP_DIR)
 import gtamaplib as ml
 import gtamapdata as md
 
-# ── Identify LEAK cams (same set as bundle_adjust_v2) ─────────────────────────
+# ── Identify LEAK cams (same set as bundle_adjust) ─────────────────────────
 
 LEAK_CAMS = {
     'Tennis Stadium (4K)', 'Vice Beach (A)', 'Vice Beach (B)',
