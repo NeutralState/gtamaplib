@@ -182,6 +182,22 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <img id="frame-img" src="" draggable="false">
     <canvas id="overlay"></canvas>
     <div class="no-img" id="no-img">Select a camera to begin</div>
+    <button id="oc-toggle-btn" title="Toggle other cams overlay (O)"
+      style="position:absolute;top:8px;right:8px;z-index:10;
+             background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
+             border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;
+             font-family:JetBrains Mono,monospace">⊕ cams</button>
+    <div id="oc-cursor-preview" style="position:fixed;display:none;z-index:100;
+        width:240px;background:rgba(0,0,0,0.92);border:1px solid #888;
+        border-radius:6px;padding:6px;pointer-events:none;
+        font-family:JetBrains Mono,monospace;color:#fff;font-size:11px;
+        box-shadow:0 4px 16px rgba(0,0,0,0.6)">
+      <div id="oc-cursor-name" style="margin-bottom:4px;font-weight:bold;
+        white-space:nowrap;overflow:hidden;text-overflow:ellipsis"></div>
+      <img id="oc-cursor-img" src="" style="width:100%;display:block;
+        border-radius:3px;background:#222;min-height:60px">
+      <div id="oc-cursor-meta" style="margin-top:4px;color:#aaa"></div>
+    </div>
   </div>
 
   <div class="sidebar">
@@ -1480,11 +1496,316 @@ lmInfoPanel.addEventListener('click', e => {
   if (!camEl) return;
   const camName = camEl.dataset.cam;
   if (camName === currentCam) return;
-  // Navigate via the hidden select (so cam picker stays in sync)
   camSel.value = camName;
   const camSearch = document.getElementById('cam-search');
   if (camSearch) camSearch.value = camName;
   camSel.dispatchEvent(new Event('change'));
+});
+
+// ── Other Cams overlay (item 4) — automatic, no sidebar panel ───────────
+const ocToggleBtn = document.getElementById('oc-toggle-btn');
+let ocEnabled = true;
+let otherCones = [];
+let hoveredCone = null;
+
+function ocBuildQuery() {
+  const params = new URLSearchParams({
+    cam: currentCam,
+    types: 'leak,trailer,screenshot',
+    max_dist: '5000',
+    shared_only: '0',
+  });
+  if (camData?.xyz) params.set('xyz', JSON.stringify(camData.xyz));
+  if (camData?.ypr) params.set('ypr', JSON.stringify(camData.ypr));
+  if (camData?.fov?.[0]) params.set('hfov', String(camData.fov[0]));
+  return params.toString();
+}
+
+async function ocLoadCones() {
+  if (!currentCam || !ocEnabled) {
+    otherCones = [];
+    draw();
+    return;
+  }
+  try {
+    const res = await fetch('/api/other_cams_overlay?' + ocBuildQuery());
+    if (!res.ok) return;
+    const data = await res.json();
+    if (data.error) { otherCones = []; draw(); return; }
+    otherCones = data.cones || [];
+    draw();
+  } catch (e) { console.error(e); }
+}
+
+function ocUpdateBtn() {
+  ocToggleBtn.style.background = ocEnabled ? 'rgba(80,160,80,0.7)' : 'rgba(0,0,0,0.6)';
+  ocToggleBtn.textContent = ocEnabled ? '⊖ cams' : '⊕ cams';
+}
+ocToggleBtn.addEventListener('click', () => {
+  ocEnabled = !ocEnabled;
+  ocUpdateBtn();
+  ocLoadCones();
+});
+// Keyboard shortcut: O
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'o' || e.key === 'O') {
+    ocEnabled = !ocEnabled;
+    ocUpdateBtn();
+    ocLoadCones();
+  }
+});
+ocUpdateBtn();
+
+// Auto-load cones whenever cam changes
+let _ocLastCam = null;
+setInterval(() => {
+  if (currentCam !== _ocLastCam) {
+    _ocLastCam = currentCam;
+    if (ocEnabled) ocLoadCones();
+  }
+}, 250);
+
+// ── Image preload cache for in-cone rendering ─────────────────────────────
+const _ocImgCache = new Map();    // cam_name → HTMLImageElement (loaded)
+const _ocImgPending = new Map();  // cam_name → true (loading)
+
+function _ocPreloadImg(camName) {
+  if (_ocImgCache.has(camName) || _ocImgPending.has(camName)) return;
+  _ocImgPending.set(camName, true);
+  const img = new Image();
+  img.onload = () => {
+    _ocImgCache.set(camName, img);
+    _ocImgPending.delete(camName);
+    draw();  // re-draw now that image is ready
+  };
+  img.onerror = () => {
+    _ocImgPending.delete(camName);
+    _ocImgCache.set(camName, null);  // mark as failed (no image)
+  };
+  img.src = `/frame/${encodeURIComponent(camName)}`;
+}
+
+// Sign of the quadrilateral (positive = counter-clockwise = "front-facing")
+function _ocQuadSign(corners) {
+  // Shoelace formula on first 3 points is enough to detect flip
+  const [a, b, c] = corners;
+  return (b[0] - a[0]) * (c[1] - a[1]) - (b[1] - a[1]) * (c[0] - a[0]);
+}
+
+// Draw an image into a quadrilateral by splitting into 2 triangles.
+// quad = [[x,y]x4] in canvas coords, in order TL, TR, BR, BL of the source img.
+function _ocDrawImageInQuad(img, quad, alpha) {
+  if (!img || !img.width) return;
+  const w = img.width, h = img.height;
+  const [tl, tr, br, bl] = quad;
+  ctx.save();
+  ctx.globalAlpha = alpha;
+
+  // Triangle 1: TL, TR, BR  (source: 0,0 / w,0 / w,h)
+  _ocDrawTriangle(img, [0, 0, w, 0, w, h], [...tl, ...tr, ...br]);
+  // Triangle 2: TL, BR, BL  (source: 0,0 / w,h / 0,h)
+  _ocDrawTriangle(img, [0, 0, w, h, 0, h], [...tl, ...br, ...bl]);
+
+  ctx.restore();
+}
+
+function _ocDrawTriangle(img, src, dst) {
+  // src = [sx0,sy0,sx1,sy1,sx2,sy2], dst = [dx0,dy0,dx1,dy1,dx2,dy2]
+  const [sx0, sy0, sx1, sy1, sx2, sy2] = src;
+  const [dx0, dy0, dx1, dy1, dx2, dy2] = dst;
+
+  // Solve affine transform that maps (sx,sy) → (dx,dy) for the 3 vertices.
+  // Returns matrix [a, b, c, d, e, f] for ctx.transform(a,b,c,d,e,f) which means
+  //   x' = a*x + c*y + e
+  //   y' = b*x + d*y + f
+  const denom = sx0 * (sy2 - sy1) + sx1 * (sy0 - sy2) + sx2 * (sy1 - sy0);
+  if (Math.abs(denom) < 1e-9) return;
+  const a = (dx0 * (sy2 - sy1) + dx1 * (sy0 - sy2) + dx2 * (sy1 - sy0)) / denom;
+  const b = (dy0 * (sy2 - sy1) + dy1 * (sy0 - sy2) + dy2 * (sy1 - sy0)) / denom;
+  const c = -(dx0 * (sx2 - sx1) + dx1 * (sx0 - sx2) + dx2 * (sx1 - sx0)) / denom;
+  const d = -(dy0 * (sx2 - sx1) + dy1 * (sx0 - sx2) + dy2 * (sx1 - sx0)) / denom;
+  const e = (dx0 * (sx1 * sy2 - sx2 * sy1) + dx1 * (sx2 * sy0 - sx0 * sy2) + dx2 * (sx0 * sy1 - sx1 * sy0)) / denom;
+  const f = (dy0 * (sx1 * sy2 - sx2 * sy1) + dy1 * (sx2 * sy0 - sx0 * sy2) + dy2 * (sx0 * sy1 - sx1 * sy0)) / denom;
+
+  ctx.save();
+  // Clip to triangle
+  ctx.beginPath();
+  ctx.moveTo(dx0, dy0);
+  ctx.lineTo(dx1, dy1);
+  ctx.lineTo(dx2, dy2);
+  ctx.closePath();
+  ctx.clip();
+  // Apply transform and draw the full image (clipped to triangle)
+  ctx.transform(a, b, c, d, e, f);
+  ctx.drawImage(img, 0, 0);
+  ctx.restore();
+}
+
+// Hook into draw() to render cones with image in the quad.
+const _origDraw = draw;
+draw = function() {
+  _origDraw();
+  if (!otherCones.length) return;
+
+  for (let i = 0; i < otherCones.length; i++) {
+    const cone = otherCones[i];
+    const isHover = hoveredCone === i;
+    const [r, g, b] = cone.color;
+    const stroke = `rgb(${r},${g},${b})`;
+
+    const [ax, ay] = toCanvas(cone.apex[0], cone.apex[1]);
+    let corners = cone.corners.map(c => toCanvas(c[0], c[1]));
+
+    // Detect flipped (mirrored) quad and reorder if needed.
+    // Corners come from server in order TL, TR, BR, BL of the source image.
+    // If the projected quad has negative signed area, reverse it so the
+    // image draws right-side-up (rlx's "flipped if needed").
+    if (_ocQuadSign(corners) < 0) {
+      corners = [corners[1], corners[0], corners[3], corners[2]];
+    }
+
+    // Draw frustum lines (image preview now shown next to cursor on hover)
+    ctx.strokeStyle = stroke;
+    ctx.lineWidth = isHover ? 3 : 1.5;
+    for (const [cx, cy] of corners) {
+      ctx.beginPath();
+      ctx.moveTo(ax, ay);
+      ctx.lineTo(cx, cy);
+      ctx.stroke();
+    }
+    ctx.beginPath();
+    for (let j = 0; j < 4; j++) {
+      const [x1, y1] = corners[j];
+      if (j === 0) ctx.moveTo(x1, y1);
+      else ctx.lineTo(x1, y1);
+    }
+    ctx.closePath();
+    ctx.stroke();
+
+    // Label at apex on hover
+    if (isHover) {
+      ctx.font = 'bold 11px JetBrains Mono, monospace';
+      const label = `${cone.name} · ${cone.dist_m}m`;
+      const w = ctx.measureText(label).width;
+      ctx.fillStyle = stroke;
+      ctx.fillRect(ax + 6, ay - 14, w + 8, 16);
+      ctx.fillStyle = '#fff';
+      ctx.fillText(label, ax + 10, ay - 2);
+    }
+  }
+};
+
+// Hit-test in image-pixel coords (cones are in image space)
+function _conesHitTest(mx, my) {
+  const [ix, iy] = canvasToImg(mx, my);
+  let best = null, bestArea = Infinity;
+  for (let i = 0; i < otherCones.length; i++) {
+    const cone = otherCones[i];
+    const xs = [cone.apex[0], ...cone.corners.map(c => c[0])];
+    const ys = [cone.apex[1], ...cone.corners.map(c => c[1])];
+    const xmin = Math.min(...xs), xmax = Math.max(...xs);
+    const ymin = Math.min(...ys), ymax = Math.max(...ys);
+    if (ix >= xmin && ix <= xmax && iy >= ymin && iy <= ymax) {
+      const area = (xmax - xmin) * (ymax - ymin);
+      if (area < bestArea) { bestArea = area; best = i; }
+    }
+  }
+  return best;
+}
+
+const ocCursorPreview = document.getElementById('oc-cursor-preview');
+const ocCursorName = document.getElementById('oc-cursor-name');
+const ocCursorImg = document.getElementById('oc-cursor-img');
+const ocCursorMeta = document.getElementById('oc-cursor-meta');
+let _ocCursorLastCam = null;
+
+function _ocPositionPreview(clientX, clientY) {
+  // Adaptive placement: pick the side of the cursor that doesn't overflow.
+  const PREVIEW_W = 240;
+  const PREVIEW_H = ocCursorPreview.offsetHeight || 200;
+  const PAD = 14;
+  const winW = window.innerWidth;
+  const winH = window.innerHeight;
+
+  let left = clientX + PAD;
+  let top = clientY + PAD;
+  if (left + PREVIEW_W > winW - 8) left = clientX - PREVIEW_W - PAD;
+  if (top + PREVIEW_H > winH - 8) top = clientY - PREVIEW_H - PAD;
+  if (left < 8) left = 8;
+  if (top < 8) top = 8;
+
+  ocCursorPreview.style.left = left + 'px';
+  ocCursorPreview.style.top = top + 'px';
+}
+
+function _ocShowCursorPreview(coneIdx, clientX, clientY) {
+  if (coneIdx === null) {
+    ocCursorPreview.style.display = 'none';
+    _ocCursorLastCam = null;
+    return;
+  }
+  const cone = otherCones[coneIdx];
+  if (_ocCursorLastCam !== cone.name) {
+    _ocCursorLastCam = cone.name;
+    ocCursorName.textContent = cone.name;
+    ocCursorMeta.textContent = `${cone.type} · ${cone.dist_m}m`;
+    ocCursorImg.style.display = 'block';
+    ocCursorImg.src = `/frame/${encodeURIComponent(cone.name)}`;
+    ocCursorImg.onerror = () => {
+      ocCursorImg.style.display = 'none';
+      ocCursorMeta.textContent = `${cone.type} · ${cone.dist_m}m · (no image)`;
+    };
+  }
+  ocCursorPreview.style.display = 'block';
+  _ocPositionPreview(clientX, clientY);
+}
+
+canvasWrap.addEventListener('mousemove', e => {
+  if (!otherCones.length) {
+    if (hoveredCone !== null) {
+      hoveredCone = null;
+      _ocShowCursorPreview(null);
+      draw();
+    }
+    return;
+  }
+  const rect = canvasWrap.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const hit = _conesHitTest(mx, my);
+  if (hit !== hoveredCone) {
+    hoveredCone = hit;
+    canvasWrap.style.cursor = (hit !== null) ? 'pointer' : '';
+    _ocShowCursorPreview(hit, e.clientX, e.clientY);
+    draw();
+  } else if (hit !== null) {
+    // Update position even when hovering same cone (smooth tracking)
+    _ocPositionPreview(e.clientX, e.clientY);
+  }
+});
+
+canvasWrap.addEventListener('mouseleave', () => {
+  if (hoveredCone !== null) {
+    hoveredCone = null;
+    _ocShowCursorPreview(null);
+    draw();
+  }
+});
+
+canvasWrap.addEventListener('click', e => {
+  if (!otherCones.length) return;
+  const rect = canvasWrap.getBoundingClientRect();
+  const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+  const hit = _conesHitTest(mx, my);
+  if (hit !== null) {
+    const target = otherCones[hit].name;
+    if (target && target !== currentCam) {
+      camSel.value = target;
+      const camSearch = document.getElementById('cam-search');
+      if (camSearch) camSearch.value = target;
+      camSel.dispatchEvent(new Event('change'));
+    }
+  }
 });
 </script>
 

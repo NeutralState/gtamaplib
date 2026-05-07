@@ -34,6 +34,39 @@ LEAK_ANCHORED_LMS = {
 print(f"Leak cams: {len(LEAK_CAMS)} · Leak-anchored landmarks: {len(LEAK_ANCHORED_LMS)}")
 
 
+# ── Item 4 : "Other cams" overlay (canvas-based, no image rendering) ─────────
+
+def _classify_cam(cam_name):
+    """Returns 'leak' | 'trailer' | 'screenshot'."""
+    src = md.cameras.get(cam_name, {}).get('source', '') or ''
+    if _re.match(r'\d{4}-\d{2}-\d{2}', src): return 'leak'
+    if src.startswith('Trailer'): return 'trailer'
+    return 'screenshot'
+
+def _candidates_for(cam_name, types, max_dist, shared_only):
+    """Returns list of (cam_name, dist_m) to overlay on cam_name."""
+    cam_xyz = md.cameras.get(cam_name, {}).get('xyz')
+    if not cam_xyz:
+        return []
+    cam_pixels = set(md.pixels.get(cam_name, {}).keys()) if shared_only else None
+
+    out = []
+    for other_name, other_data in md.cameras.items():
+        if other_name == cam_name: continue
+        if not other_data.get('xyz'): continue
+        if _classify_cam(other_name) not in types: continue
+        ox, oy, oz = other_data['xyz']
+        cx, cy, cz = cam_xyz
+        dist = ((ox-cx)**2 + (oy-cy)**2 + (oz-cz)**2) ** 0.5
+        if dist > max_dist: continue
+        if shared_only:
+            other_pixels = set(md.pixels.get(other_name, {}).keys())
+            if not (cam_pixels & other_pixels): continue
+        out.append((other_name, dist))
+    out.sort(key=lambda x: -x[1])  # furthest first so closer renders on top
+    return out
+
+
 def get_cam(cam_name, xyz=None, ypr=None, hfov=None):
     cam = ml.get_camera(cam_name)
     if xyz is not None:
@@ -1066,6 +1099,96 @@ m.save('/tmp/ray_map.png', area)
         elif path == '/api/validate_pixel':
             # Just acknowledge — validation state is kept client-side
             self.send_json({'ok': True})
+
+        elif path == '/api/other_cams_overlay':
+            cam_name = qs.get('cam', [''])[0]
+            if not cam_name or cam_name not in md.cameras:
+                self.send_json({'error': 'unknown cam'}, 400)
+                return
+            try:
+                xyz = json.loads(qs.get('xyz', ['null'])[0])
+                ypr = json.loads(qs.get('ypr', ['null'])[0])
+                hfov = qs.get('hfov', [None])[0]
+                hfov = float(hfov) if hfov is not None else None
+            except (ValueError, TypeError):
+                xyz, ypr, hfov = None, None, None
+            types_str = qs.get('types', ['leak,trailer,screenshot'])[0]
+            types = set(t.strip() for t in types_str.split(',') if t.strip())
+            try:
+                max_dist = float(qs.get('max_dist', ['5000'])[0])
+            except ValueError:
+                max_dist = 5000.0
+            shared_only = qs.get('shared_only', ['0'])[0] in ('1', 'true')
+
+            try:
+                cam = get_cam(cam_name, xyz, ypr, hfov)
+            except Exception as e:
+                self.send_json({'error': f'cam load failed: {e}'}, 500)
+                return
+
+            candidates = _candidates_for(cam_name, types, max_dist, shared_only)
+            d = 25  # frustum extension
+
+            cones = []
+            # Reject points outside (or just barely outside) the image —
+            # get_pixel returns aberrant coords for points behind the viewer.
+            # The cone must overlap the visible image to be useful.
+            margin = max(cam.w, cam.h) * 0.1  # 10% overflow tolerance
+            def _onscreen(p):
+                if p is None: return False
+                x, y = p
+                return -margin < x < cam.w + margin and -margin < y < cam.h + margin
+
+            def _quad_overlaps_image(apex, corners):
+                """At least one of apex or corners must be inside the image."""
+                pts = [apex] + list(corners)
+                for p in pts:
+                    if p is None: continue
+                    x, y = p
+                    if 0 <= x <= cam.w and 0 <= y <= cam.h:
+                        return True
+                return False
+
+            for other_name, dist in candidates:
+                other = md.cameras.get(other_name, {})
+                other_xyz = other.get('xyz')
+                if not other_xyz:
+                    continue
+                try:
+                    other_cam = ml.get_camera(other_name)
+                    apex = cam.get_pixel(other_xyz)
+                    if not _onscreen(apex):
+                        continue
+                    corners_3d = [
+                        ml.get_point(other_cam.xyz, other_cam.get_pixel_direction((0, 0)), d),
+                        ml.get_point(other_cam.xyz, other_cam.get_pixel_direction((other_cam.w, 0)), d),
+                        ml.get_point(other_cam.xyz, other_cam.get_pixel_direction((other_cam.w, other_cam.h)), d),
+                        ml.get_point(other_cam.xyz, other_cam.get_pixel_direction((0, other_cam.h)), d),
+                    ]
+                    corners_2d = [cam.get_pixel(c) for c in corners_3d]
+                    if not all(_onscreen(c) for c in corners_2d):
+                        continue
+                    if not _quad_overlaps_image(apex, corners_2d):
+                        continue
+                    color = list(int(v) for v in other_cam.color)
+                    cones.append({
+                        'name': other_name,
+                        'type': _classify_cam(other_name),
+                        'dist_m': round(float(dist), 1),
+                        'color': color,
+                        'apex': [round(float(apex[0]), 2), round(float(apex[1]), 2)],
+                        'corners': [[round(float(c[0]), 2), round(float(c[1]), 2)]
+                                    for c in corners_2d],
+                    })
+                except Exception:
+                    continue
+
+            self.send_json({
+                'cam': cam_name,
+                'cones': cones,
+                'n_candidates': len(candidates),
+                'n_visible': len(cones),
+            })
 
         elif path.startswith('/frame/'):
             cam_name = unquote(path[7:])
