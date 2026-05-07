@@ -28,10 +28,14 @@ import gtamapdata as md
 
 OUTPUT_PATH = '/tmp/z_candidates.json'
 
-# Patterns dans les noms qui suggèrent un objet au niveau du sol/eau
+# Patterns dans les noms qui suggèrent un objet au niveau du sol/eau.
+# NOTE : `Pin` exclu volontairement — les `Pin AXX/BXX/CXX/DXX` sont des
+# shipping lane pins triangulés depuis les cams Keys (LEAK) et ont z=2-4m,
+# pas z=0. Si on ajoute des "marina pins" plus tard, utilise un nom plus
+# explicite (ex: "Marina Pin").
 COASTAL_PATTERNS = re.compile(
     r'\b('
-    r'Pin|Marina|Pier|Beach|Coast|Boat|Dock|Buoy|'
+    r'Marina|Pier|Beach|Coast|Boat|Dock|Buoy|'
     r'Jetty|Boardwalk|Wharf|Quay|Lagoon|Inlet|Cove|'
     r'Harbor|Harbour|Mangrove|Shoreline|Surf'
     r')\b',

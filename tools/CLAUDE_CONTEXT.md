@@ -161,6 +161,12 @@ cache en mémoire.
 
 ## Gotchas / leçons apprises
 
+> **Shipping lane pins ne sont PAS coastal** — les landmarks `Pin AXX/BXX/CXX/DXX`
+> sont triangulés depuis les 2 cams Keys (LEAK) et flottent à z=2-4m, pas à
+> sea level. Le scan `find_z_candidates.py` exclut explicitement `Pin` du
+> regex. Source : feedback rlx 2026-05-07.
+
+
 1. **Le z dans `landmarks.json` est rarement fiable** — la plupart des
    cams sont à pitch faible, donc la composante z est sous-déterminée.
    Pour les coastal points / pins → z=0 est une contrainte plus précise
