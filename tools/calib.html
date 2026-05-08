@@ -53,28 +53,62 @@ body.view-map .sidebar .lm-hdr,
 body.view-map .sidebar .lm-list,
 body.view-map .sidebar .statusbar{display:none}
 
-/* The map renders as a stacked pair: a <img> for the rasterized yanis at
-   the bottom, and an <svg> overlay on top into which Phase 5+ draws camera
-   markers and landmark dots. Both share the same wrapper, so a single
-   CSS transform pans/zooms them together. The <svg> overlay's coordinate
-   system uses the SVG's native viewBox (0 0 svg_size_x svg_size_y), and
-   so does the <img> via explicit width/height on it — this means a
-   marker drawn at SVG x=12345 lines up perfectly with the same pixel in
-   the image, regardless of zoom. */
-.map-svg-wrap{position:absolute;left:0;top:0;
-  transform-origin:0 0;
-  will-change:transform}
-/* Phase 3+4 BW: full grayscale */
-.map-svg-wrap > img{display:block;
-  filter:grayscale(1) brightness(1.05) contrast(1.1);
-  /* Disable browser drag-image and selection on the bitmap */
-  user-select:none;-webkit-user-drag:none;pointer-events:none}
-.map-svg-wrap > svg{position:absolute;left:0;top:0;
-  /* The overlay is transparent except for Phase 5+ markers */
-  pointer-events:none}
+/* Phase 5.4: .map-svg-wrap kept as a positioning container only.
+   The PNG and SVG overlay are now siblings in their OWN wrappers
+   (.map-png-wrap and .map-overlay-wrap) — see the dedicated CSS rules
+   later in this file. The original Phase 3+4 single-wrapper approach
+   forced the bitmap to re-rasterize on every overlay class toggle. */
+.map-svg-wrap{position:absolute;inset:0}
 
 .map-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--dim);pointer-events:none}
 /* ── end SVG Map Refactor Phase 3+4 (PNG) ── */
+
+/* ── SVG Map Refactor Phase 5: cams + frustums on map ── */
+/* Cam markers and frustums in #map-overlay. We attach pointer events to
+   the markers so they can be hovered and clicked. The frustum polygons
+   stay non-interactive — only the apex circle is clickable. */
+/* Phase 5.4: separate GPU layers + clean dot styling
+   The bitmap (PNG) and the SVG overlay live in two sibling wrappers,
+   each forced into its own GPU compositing layer. Without this, any
+   class toggle on an overlay node invalidated the whole layer and
+   forced a 12K×12K bitmap re-upload (~90ms cost per cam switch). */
+.map-png-wrap,.map-overlay-wrap{position:absolute;left:0;top:0;
+  transform-origin:0 0;
+  will-change:transform;
+  /* Force own compositing layer so they don't share invalidation. */
+  transform:translateZ(0)}
+.map-png-wrap > img{display:block;
+  filter:grayscale(1) brightness(1.05) contrast(1.1);
+  user-select:none;-webkit-user-drag:none;pointer-events:none}
+.map-overlay-wrap > svg{display:block;pointer-events:none}
+
+/* Overlay interaction (same as Phase 5.3 but no .selected dot styling). */
+#map-overlay{pointer-events:none}
+#map-overlay .cam-marker{pointer-events:auto;cursor:pointer;transition:opacity .12s}
+#map-overlay .cam-marker:hover circle{stroke-width:50}
+#map-overlay .cam-frustum,
+#map-overlay .cam-frustum-fill{display:none;pointer-events:none}
+#map-overlay g.cam-group.selected .cam-frustum,
+#map-overlay g.cam-group:hover .cam-frustum{display:block;opacity:1}
+#map-overlay g.cam-group.selected .cam-frustum-fill,
+#map-overlay g.cam-group:hover .cam-frustum-fill{display:block;opacity:.18}
+/* Phase 5.4: no dot change on select. The cam dot keeps its base style;
+   only the frustum reveal signals selection. Cleaner, less prominent. */
+#map-overlay .ray-line{stroke:var(--blue);stroke-width:20;opacity:.45;pointer-events:none}
+
+/* "Show all rays" toggle in the header, next to the view-toggle */
+.rays-toggle{font-family:var(--mono);font-size:11px;font-weight:700;padding:5px 10px;background:var(--surface2);color:var(--mid);border:1px solid var(--border);border-radius:5px;cursor:pointer;display:none}
+body.view-map .rays-toggle{display:inline-block}
+.rays-toggle.active{background:var(--blue);color:#000;border-color:var(--blue)}
+.rays-toggle:hover{color:var(--text)}
+.rays-toggle.active:hover{color:#000}
+
+/* Map tooltip — same look as the existing .tip but distinct id so it
+   doesn't fight with the Camera view's hover tooltip. */
+.map-tip{position:fixed;background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;font-family:var(--mono);font-size:10px;pointer-events:none;display:none;z-index:101;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.map-tip .tip-name{color:var(--text);font-weight:700;margin-bottom:2px}
+.map-tip .tip-meta{color:var(--mid);font-size:9px}
+/* ── end SVG Map Refactor Phase 5 ── */
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
@@ -227,6 +261,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <button data-view="camera" class="active" title="Camera view (calibration)">Camera</button>
     <button data-view="map" title="Map view (overview)">Map</button>
   </div>
+  <button class="rays-toggle" id="rays-toggle" title="Show all rays from the selected cam to its landmarks">Rays</button>
   <span id="cam-meta"></span>
   <div class="chip" id="chip-all"><span style="color:var(--dim)">loss </span><span class="v" id="loss-all">—</span></div>
   <button class="btn btn-reset" id="btn-reset">Reset</button>
@@ -348,6 +383,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   </div>
 </div>
 <div class="tip" id="tip"></div>
+<div class="map-tip" id="map-tip">
+  <div class="tip-name" id="map-tip-name"></div>
+  <div class="tip-meta" id="map-tip-meta"></div>
+</div>
 
 
 
@@ -606,29 +645,46 @@ async function init() {
       window.mapData = dataRes;
       window.mapTransform = dataRes.transform;
       const sz = dataRes.transform.svg_size;
-      // Pin the image to the SVG's native viewBox dimensions (in CSS pixels)
-      // so SVG-user coords == image pixel coords. The wrapper transform then
-      // scales both <img> and overlay <svg> together.
+      // Phase 5.4: separate the bitmap and overlay into sibling wrappers.
+      // Each gets its own GPU layer (via CSS translateZ(0) + will-change),
+      // so toggling a class on a node inside the overlay no longer
+      // invalidates the bitmap layer.
       imgEl.setAttribute('width', String(sz[0]));
       imgEl.setAttribute('height', String(sz[1]));
-      // Build the empty overlay SVG that Phase 5+ will draw into.
       const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
       overlay.setAttribute('viewBox', `0 0 ${sz[0]} ${sz[1]}`);
       overlay.setAttribute('width', String(sz[0]));
       overlay.setAttribute('height', String(sz[1]));
       overlay.id = 'map-overlay';
-      // Insert: <img> first (bottom layer), <svg> second (top layer).
+
+      // Build two sibling wrappers, side by side, both at (0,0).
       mapSvgWrap.innerHTML = '';
-      mapSvgWrap.appendChild(imgEl);
-      mapSvgWrap.appendChild(overlay);
+      const pngWrap = document.createElement('div');
+      pngWrap.className = 'map-png-wrap';
+      pngWrap.id = 'map-png-wrap';
+      pngWrap.appendChild(imgEl);
+      const overlayWrap = document.createElement('div');
+      overlayWrap.className = 'map-overlay-wrap';
+      overlayWrap.id = 'map-overlay-wrap';
+      overlayWrap.appendChild(overlay);
+      mapSvgWrap.appendChild(pngWrap);
+      mapSvgWrap.appendChild(overlayWrap);
+
       window.mapImg = imgEl;
       window.mapOverlay = overlay;
+      window.mapPngWrap = pngWrap;
+      window.mapOverlayWrap = overlayWrap;
       mapLoading.style.display = 'none';
     } catch (e) {
       console.error('map load failed:', e);
       mapLoading.textContent = 'Failed to load map: ' + (e.message || e);
     }
   }
+
+  // Phase 5.5: detach map-view DOM when in Camera view
+  // Keep references so we can re-attach the .map-view in the right place.
+  const _mapViewParent = mapView.parentNode;
+  const _mapViewSibling = mapView.nextSibling;  // anchor for re-insert
 
   function setView(name) {
     if (name !== 'camera' && name !== 'map') return;
@@ -639,10 +695,18 @@ async function init() {
       b.classList.toggle('active', b.dataset.view === name);
     });
     if (name === 'map') {
+      // Re-attach .map-view if previously detached.
+      if (!mapView.parentNode && _mapViewParent) {
+        _mapViewParent.insertBefore(mapView, _mapViewSibling);
+      }
       ensureMapLoaded();
     } else {
-      // Returning to Camera view: re-fit the overlay since the canvas-wrap
-      // size may have been at zero while hidden.
+      // Detach .map-view entirely so its 600+ overlay nodes don't slow
+      // down the browser's style/layout pipeline while in Camera view.
+      if (mapView.parentNode) {
+        mapView.parentNode.removeChild(mapView);
+      }
+      // Re-fit the canvas overlay since canvas-wrap size may have been 0.
       if (typeof resizeOverlay === 'function') resizeOverlay();
     }
   }
@@ -661,9 +725,14 @@ async function init() {
   let mapDragging = false, mapDragStart = null, mapTxStart = null;
 
   function applyMapTx() {
-    if (!mapSvgWrap || !window.mapTx) return;
+    if (!window.mapTx) return;
     const { scale, tx, ty } = window.mapTx;
-    mapSvgWrap.style.transform = `translate(${tx}px, ${ty}px) scale(${scale})`;
+    const t = `translate(${tx}px, ${ty}px) scale(${scale})`;
+    // Phase 5.4: set transform on each layer wrapper independently. Each
+    // is its own GPU compositing layer (see CSS), so they stay in sync
+    // visually but never invalidate each other on overlay class toggles.
+    if (window.mapPngWrap)     window.mapPngWrap.style.transform = t;
+    if (window.mapOverlayWrap) window.mapOverlayWrap.style.transform = t;
   }
 
   function resetMapView() {
@@ -726,6 +795,342 @@ async function init() {
     }
   }, 100);
   // ── end Phase 3+4 (PNG) ───────────────────────────────────────────────
+
+  // ── Phase 5: cams + frustums on map ───────────────────────────────────
+  // Camera type → color. We pull from the same color palette as the rest
+  // of the app for consistency (greens for LEAK ground-truth, blue for
+  // Trailers, purple for other community sources).
+  const CAM_COLORS = {
+    'LEAK':      '#4ade80',  // green — ground truth
+    'Trailer 1': '#60a5fa',  // blue
+    'Trailer 2': '#60a5fa',
+    'screenshots': '#a78bfa', // purple
+  };
+
+  function getCamTypeForMap(c) {
+    // Match the existing getCamType() logic in the cam-picker. We can't
+    // call that one directly because it's defined later in the file as a
+    // top-level function — order is fine at runtime but we want this code
+    // to be self-contained for clarity.
+    const src = c.source || '';
+    if (/^\d{4}-\d{2}-\d{2}/.test(src)) return 'LEAK';
+    if (src.startsWith('Trailer 1')) return 'Trailer 1';
+    if (src.startsWith('Trailer 2') || src === 'Trailer 2') return 'Trailer 2';
+    if (src.startsWith('Trailer')) return 'Trailer 2';
+    return 'screenshots';
+  }
+
+  // Phase 5.1: yaw fix (-sin) + lighter style
+  // Frustum geometry — convention matches server.py /api/generate_map:
+  //   end_x = cam_x - ray_len * sin(yaw)
+  //   end_y = cam_y + ray_len * cos(yaw)
+  // i.e. yaw=0° points +Y (North), yaw=90° points -X (West in world coords).
+  // The sin is NEGATED — that's the fix vs Phase 5 v1 which used +sin and
+  // produced frustums pointing 180° opposite.
+  // Extension distance: the farthest landmark observed by this cam. This
+  // makes the frustum length self-consistent with the cam's actual coverage,
+  // and matches what /api/generate_map renders. Clamped to [600, 4000].
+  const FRUSTUM_DIST_DEFAULT = 1500;
+  const FRUSTUM_DIST_MIN = 600;
+  const FRUSTUM_DIST_MAX = 4000;
+
+  // Phase 5.2 perf: precomputed cam->landmarks index
+  // mapCamLandmarks: Map<cam_name, array<lm_record>>  (cached after first build)
+  // mapCamFrustumDist: Map<cam_name, distance>         (cached after first build)
+  // Both built lazily in buildMapIndexes(), called once when /api/map_data
+  // arrives. Subsequent calls are O(1) lookups.
+  window.mapCamLandmarks = null;
+  window.mapCamFrustumDist = null;
+
+  function buildMapIndexes() {
+    if (!window.mapData) return;
+    if (window.mapCamLandmarks && window.mapCamFrustumDist) return;  // already built
+    const camLm = new Map();
+    const camDist = new Map();
+    // Init each cam with empty array.
+    for (const c of window.mapData.cameras) {
+      camLm.set(c.name, []);
+    }
+    // Single pass over landmarks.
+    for (const lm of (window.mapData.landmarks || [])) {
+      const observers = lm.source_cameras || lm.observed_by || [];
+      for (const camName of observers) {
+        const arr = camLm.get(camName);
+        if (arr) arr.push(lm);
+      }
+    }
+    // Compute frustum distance per cam.
+    for (const c of window.mapData.cameras) {
+      if (!c.xyz) { camDist.set(c.name, FRUSTUM_DIST_DEFAULT); continue; }
+      const [cx, cy] = c.xyz;
+      let maxDist = 0;
+      for (const lm of camLm.get(c.name)) {
+        if (!lm.xyz) continue;
+        const d = Math.hypot(lm.xyz[0] - cx, lm.xyz[1] - cy);
+        if (d > maxDist) maxDist = d;
+      }
+      if (maxDist === 0) maxDist = FRUSTUM_DIST_DEFAULT;
+      camDist.set(c.name, Math.max(FRUSTUM_DIST_MIN, Math.min(FRUSTUM_DIST_MAX, maxDist)));
+    }
+    window.mapCamLandmarks = camLm;
+    window.mapCamFrustumDist = camDist;
+  }
+
+  function frustumDistanceForCam(cam) {
+    if (!window.mapCamFrustumDist) return FRUSTUM_DIST_DEFAULT;
+    return window.mapCamFrustumDist.get(cam.name) || FRUSTUM_DIST_DEFAULT;
+  }
+
+  function frustumCornersWorld(camXyz, yawDeg, hfovDeg, dist) {
+    const [wx, wy] = camXyz;
+    const halfFov = hfovDeg / 2;
+    const corners = [];
+    for (const edgeYawDeg of [yawDeg - halfFov, yawDeg + halfFov]) {
+      const r = edgeYawDeg * Math.PI / 180;
+      // Match server.py: -sin for x, +cos for y.
+      const ex = wx - dist * Math.sin(r);
+      const ey = wy + dist * Math.cos(r);
+      corners.push([ex, ey]);
+    }
+    return corners;
+  }
+
+  // The marker circle radius and stroke widths are in SVG-user units, NOT
+  // CSS pixels. The wrapper transform scales them with zoom (no fixed-pixel
+  // markers — that would require counter-scaling, doable later if wanted).
+  // Tuned for visibility at the default fit-zoom on a 12000-px-wide PNG.
+  // Phase 5.1: smaller markers, thinner outlines
+  const MARKER_RADIUS = 35;
+  const MARKER_STROKE = 12;
+  const FRUSTUM_LINE_WIDTH = 12;
+
+  // Selected cam tracking. We listen to the existing #cam-sel change event
+  // (the source of truth across the whole app) to update marker styling.
+  let mapSelectedCamName = null;
+
+  function renderCamsOnMap() {
+    if (!window.mapOverlay || !window.mapData) return;
+    // Phase 5.2 perf: build indexes once on first render.
+    buildMapIndexes();
+    // Clear any previous render.
+    while (window.mapOverlay.firstChild) {
+      window.mapOverlay.removeChild(window.mapOverlay.firstChild);
+    }
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+
+    // Cams group — append all <g class="cam-group"> children.
+    const camsGroup = document.createElementNS(SVG_NS, 'g');
+    camsGroup.setAttribute('id', 'cams-layer');
+    window.mapOverlay.appendChild(camsGroup);
+
+    // Rays group (Phase 5 toggle) — empty by default, populated by
+    // renderRaysForSelectedCam() when the toggle is on.
+    const raysGroup = document.createElementNS(SVG_NS, 'g');
+    raysGroup.setAttribute('id', 'rays-layer');
+    window.mapOverlay.appendChild(raysGroup);
+
+    for (const c of window.mapData.cameras) {
+      if (!c.xyz) continue;  // shouldn't happen since /api/map_data filters
+      const type = getCamTypeForMap(c);
+      const color = CAM_COLORS[type] || '#a78bfa';
+      const [sx, sy] = window.worldToSvg(c.xyz[0], c.xyz[1]);
+
+      // Phase 5.1: per-cam frustum length = farthest observed landmark.
+      const yaw = (c.ypr && c.ypr.length >= 1) ? c.ypr[0] : 0;
+      const hfov = c.hfov || 60;
+      const dist = frustumDistanceForCam(c);
+      const fcWorld = frustumCornersWorld(c.xyz, yaw, hfov, dist);
+      const fcSvg = fcWorld.map(([wx, wy]) => window.worldToSvg(wx, wy));
+
+      const camGroup = document.createElementNS(SVG_NS, 'g');
+      camGroup.setAttribute('class', 'cam-group');
+      camGroup.dataset.camName = c.name;
+
+      // Frustum fill (very light triangle between apex and the two edges).
+      const fill = document.createElementNS(SVG_NS, 'polygon');
+      fill.setAttribute('class', 'cam-frustum-fill');
+      fill.setAttribute('points',
+        `${sx},${sy} ${fcSvg[0][0]},${fcSvg[0][1]} ${fcSvg[1][0]},${fcSvg[1][1]}`);
+      fill.setAttribute('fill', color);
+      camGroup.appendChild(fill);
+
+      // Two FOV edge lines (the "frustum" proper, like generate_map).
+      for (let i = 0; i < 2; i++) {
+        const line = document.createElementNS(SVG_NS, 'line');
+        line.setAttribute('class', 'cam-frustum');
+        line.setAttribute('x1', String(sx));
+        line.setAttribute('y1', String(sy));
+        line.setAttribute('x2', String(fcSvg[i][0]));
+        line.setAttribute('y2', String(fcSvg[i][1]));
+        line.setAttribute('stroke', color);
+        line.setAttribute('stroke-width', String(FRUSTUM_LINE_WIDTH));
+        line.setAttribute('stroke-linecap', 'round');
+        camGroup.appendChild(line);
+      }
+
+      // Apex circle (the marker proper) — smaller, cleaner.
+      const marker = document.createElementNS(SVG_NS, 'g');
+      marker.setAttribute('class', 'cam-marker');
+      marker.dataset.camName = c.name;
+      const circle = document.createElementNS(SVG_NS, 'circle');
+      circle.setAttribute('cx', String(sx));
+      circle.setAttribute('cy', String(sy));
+      circle.setAttribute('r', String(MARKER_RADIUS));
+      circle.setAttribute('fill', color);
+      circle.setAttribute('stroke', '#000');
+      circle.setAttribute('stroke-width', String(MARKER_STROKE));
+      marker.appendChild(circle);
+      camGroup.appendChild(marker);
+
+      camsGroup.appendChild(camGroup);
+    }
+
+    // Apply current selection styling (in case we re-render after a select).
+    updateMapSelectionStyle();
+  }
+
+  function updateMapSelectionStyle() {
+    if (!window.mapOverlay) return;
+    window.mapOverlay.querySelectorAll('g.cam-group').forEach(g => {
+      g.classList.toggle('selected', g.dataset.camName === mapSelectedCamName);
+    });
+  }
+
+  // Rays from the selected cam to all its observed landmarks.
+  // Toggle-controlled. Rebuilt on every cam change while toggle is on.
+  let raysToggleOn = false;
+
+  function renderRaysForSelectedCam() {
+    if (!window.mapOverlay) return;
+    const raysLayer = document.getElementById('rays-layer');
+    if (!raysLayer) return;
+    while (raysLayer.firstChild) raysLayer.removeChild(raysLayer.firstChild);
+    if (!raysToggleOn || !mapSelectedCamName || !window.mapData) return;
+
+    const cam = window.mapData.cameras.find(c => c.name === mapSelectedCamName);
+    if (!cam || !cam.xyz) return;
+    const [ax, ay] = window.worldToSvg(cam.xyz[0], cam.xyz[1]);
+
+    // Phase 5.2 perf: O(K) lookup instead of O(M) scan.
+    const observed = window.mapCamLandmarks ? window.mapCamLandmarks.get(mapSelectedCamName) : null;
+    if (!observed) return;
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    for (const lm of observed) {
+      if (!lm.xyz) continue;
+      const [bx, by] = window.worldToSvg(lm.xyz[0], lm.xyz[1]);
+      const line = document.createElementNS(SVG_NS, 'line');
+      line.setAttribute('x1', String(ax));
+      line.setAttribute('y1', String(ay));
+      line.setAttribute('x2', String(bx));
+      line.setAttribute('y2', String(by));
+      line.setAttribute('class', 'ray-line');
+      raysLayer.appendChild(line);
+    }
+  }
+
+  // Hook the rendering into ensureMapLoaded by re-running it when the map
+  // is ready. We call it from setView('map') after ensureMapLoaded resolves.
+  // Also expose globally for Phase 6+ to trigger a re-render after data
+  // changes (e.g. after triangulating a landmark).
+  window.renderCamsOnMap = renderCamsOnMap;
+  window.renderRaysForSelectedCam = renderRaysForSelectedCam;
+
+  // Wire in: when the map first loads, render the cams; when the cam
+  // selection changes, update styling and rays.
+  const _origEnsureMapLoaded = ensureMapLoaded;
+  ensureMapLoaded = async function() {
+    await _origEnsureMapLoaded.apply(this, arguments);
+    if (window.mapData && window.mapOverlay) {
+      // Sync selected cam from the global #cam-sel.
+      const sel = document.getElementById('cam-sel');
+      mapSelectedCamName = sel && sel.value ? sel.value : null;
+      renderCamsOnMap();
+      renderRaysForSelectedCam();
+    }
+  };
+
+  // Listen to cam-sel changes to update selection styling on the map.
+  document.getElementById('cam-sel').addEventListener('change', () => {
+    mapSelectedCamName = document.getElementById('cam-sel').value || null;
+    if (window.currentView === 'map') {
+      updateMapSelectionStyle();
+      renderRaysForSelectedCam();
+    }
+  });
+
+  // Click on a cam marker = navigate to it (sync with Camera view).
+  // Use event delegation on the overlay since markers are dynamic.
+  if (window.mapOverlay) {
+    // mapOverlay isn't created yet at script-load time (it's created in
+    // ensureMapLoaded). We attach listeners on the wrapper instead, which
+    // exists from page load.
+  }
+  mapSvgWrap.addEventListener('click', e => {
+    if (window.currentView !== 'map') return;
+    // Walk up to find a .cam-marker
+    let node = e.target;
+    while (node && node !== mapSvgWrap) {
+      if (node.classList && node.classList.contains('cam-marker')) {
+        const camName = node.dataset.camName;
+        if (camName) {
+          const sel = document.getElementById('cam-sel');
+          if (sel && sel.value !== camName) {
+            sel.value = camName;
+            sel.dispatchEvent(new Event('change'));
+            // Also sync the visible search input so the cam-picker UI
+            // reflects the choice.
+            const camSearch = document.getElementById('cam-search');
+            if (camSearch) camSearch.value = camName;
+          }
+          // Stop the click from triggering the pan/drag handler.
+          e.stopPropagation();
+        }
+        return;
+      }
+      node = node.parentNode;
+    }
+  });
+
+  // Hover tooltip on cam markers.
+  const mapTip = document.getElementById('map-tip');
+  const mapTipName = document.getElementById('map-tip-name');
+  const mapTipMeta = document.getElementById('map-tip-meta');
+
+  mapSvgWrap.addEventListener('mousemove', e => {
+    if (window.currentView !== 'map') { mapTip.style.display = 'none'; return; }
+    let node = e.target;
+    let camName = null;
+    while (node && node !== mapSvgWrap) {
+      if (node.classList && node.classList.contains('cam-marker')) {
+        camName = node.dataset.camName;
+        break;
+      }
+      node = node.parentNode;
+    }
+    if (!camName) { mapTip.style.display = 'none'; return; }
+    const cam = window.mapData?.cameras.find(c => c.name === camName);
+    if (!cam) { mapTip.style.display = 'none'; return; }
+    mapTipName.textContent = cam.name;
+    const type = getCamTypeForMap(cam);
+    const bits = [type];
+    if (cam.n_pixels != null) bits.push(`${cam.n_pixels}px`);
+    if (cam.n_independent != null) bits.push(`${cam.n_independent} indep`);
+    if (cam.source) bits.push(cam.source);
+    mapTipMeta.textContent = bits.join(' · ');
+    mapTip.style.display = 'block';
+    mapTip.style.left = (e.clientX + 14) + 'px';
+    mapTip.style.top = (e.clientY - 10) + 'px';
+  });
+  mapSvgWrap.addEventListener('mouseleave', () => { mapTip.style.display = 'none'; });
+
+  // "Show all rays" toggle in the header.
+  const raysToggleBtn = document.getElementById('rays-toggle');
+  raysToggleBtn.addEventListener('click', () => {
+    raysToggleOn = !raysToggleOn;
+    raysToggleBtn.classList.toggle('active', raysToggleOn);
+    renderRaysForSelectedCam();
+  });
+  // ── end Phase 5 ───────────────────────────────────────────────────────
   document.querySelectorAll('.cam-filter-chip').forEach(btn => {
     btn.addEventListener('click', () => {
       btn.classList.toggle('on');
