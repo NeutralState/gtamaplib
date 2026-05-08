@@ -9,7 +9,8 @@ import json
 import math
 import os
 import sys
-from http.server import BaseHTTPRequestHandler, HTTPServer
+# Threading fix: parallel request handling
+from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer
 from urllib.parse import urlparse, parse_qs, unquote
 
 GTAMAP_DIR = os.path.expanduser("~/Downloads/gtamaplib-main")
@@ -1382,7 +1383,7 @@ m.save('/tmp/ray_map.png', area)
 
 if __name__ == '__main__':
     port = 8765
-    server = HTTPServer(('localhost', port), Handler)
+    server = ThreadingHTTPServer(('localhost', port), Handler)
     print(f"\n🗺  gtamaplib Calibration Tool")
     print(f"   http://localhost:{port}")
     print(f"   Ctrl+C to stop\n")
