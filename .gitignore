@@ -34,3 +34,12 @@ tools/bundle_adjust_result.json
 
 # Python
 *.pyc
+
+# Map assets (rendered from SVG, versioned for build reproducibility)
+!tools/assets/*.png
+
+# Map assets (rendered from SVG, versioned for build reproducibility)
+!tools/assets/*.png
+
+# Map assets (rendered from SVG, versioned for build reproducibility)
+!tools/assets/*.png
