@@ -31,6 +31,47 @@
 .left-sidebar #cam-dropdown{position:static;display:block;border:none;border-radius:0;max-height:none;margin-top:0;background:transparent}
 /* ── end SVG Map Refactor Phase 2 ── */
 
+/* ── SVG Map Refactor Phase 7a.1: sidebar preview slot ── */
+/* Fixed-size preview slot at the bottom of the left sidebar.
+   Hosts the minimap (Camera view) and the cam frame preview (Map view).
+   Sized so the cam list scrolls above it without resizing on cam swap. */
+.sb-preview-slot{flex-shrink:0;width:240px;height:170px;margin:8px 10px;
+  border-radius:8px;overflow:hidden;
+  border:1px solid var(--border);
+  background:#0d0d12;
+  position:relative}
+.sb-preview-slot .preview-label{position:absolute;left:8px;top:6px;z-index:11;
+  font-family:var(--mono);font-size:9px;color:var(--mid);
+  background:rgba(0,0,0,0.55);padding:2px 6px;border-radius:3px;
+  letter-spacing:.06em;text-transform:uppercase;pointer-events:none}
+/* CSS-only minimap: a positioning container whose inner element holds
+   the full /yanis.png as background-image, sized + positioned per cam. */
+#minimap-wrap-sb{position:absolute;inset:0;overflow:hidden;cursor:pointer}
+#minimap-rotator-sb{position:absolute;width:200%;height:200%;left:-50%;top:-50%;
+  transform-origin:50% 50%;transition:transform 120ms ease-out}
+#minimap-img-sb{position:absolute;inset:0;
+  background-image:url('/yanis.png');
+  background-repeat:no-repeat;
+  /* JS sets background-position and background-size per cam */
+  background-color:#222;
+  /* Phase 7a.1.1: match Map view's grayscale treatment so the
+     minimap matches the main map visually. */
+  filter:grayscale(1) brightness(1.05) contrast(1.1)}
+#minimap-pointer-sb{position:absolute;inset:0;pointer-events:none}
+/* Cam preview slot — shown only in map view */
+#cam-preview-wrap{position:absolute;inset:0;display:none;
+  align-items:center;justify-content:center;background:#000}
+#cam-preview-img{max-width:100%;max-height:100%;object-fit:contain;
+  display:block;user-select:none;-webkit-user-drag:none}
+#cam-preview-empty{font-family:var(--mono);font-size:10px;color:var(--dim);
+  padding:14px;text-align:center}
+body.view-map #minimap-wrap-sb{display:none}
+body.view-map #cam-preview-wrap{display:flex}
+/* ── end SVG Map Refactor Phase 7a.1 ── */
+/* Phase 7a.1: sidebar preview slot (minimap CSS-only + cam preview) */
+/* Phase 7a.1.1: minimap grayscale + cam preview click + PNG preload */
+/* Phase 7a.2: Generate Map UI removed */
+
 /* ── SVG Map Refactor Phase 3+4 (PNG): view toggle + map view ── */
 /* Header view toggle (Camera | Map) */
 .view-toggle{display:flex;border:1px solid var(--border);border-radius:5px;overflow:hidden}
@@ -284,21 +325,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .pxe-zoom-bar{padding:6px 16px;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;color:var(--dim);flex-shrink:0}
 
 
-/* Generate Map button + modal */
-#btn-genmap{font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--blue);cursor:pointer;width:100%;margin-top:8px}
-#btn-genmap:hover{background:var(--surface);border-color:var(--blue)}
-#btn-genmap:disabled{opacity:.4;cursor:default}
-#genmap-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
-#genmap-modal.open{display:flex}
-.genmap-content{background:var(--surface);border:1px solid var(--border);border-radius:8px;max-width:95vw;max-height:95vh;display:flex;flex-direction:column;overflow:hidden}
-.genmap-header{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border)}
-.genmap-title{font-family:var(--mono);font-size:11px;color:var(--text);flex:1}
-.genmap-close{font-family:var(--mono);font-size:14px;color:var(--mid);background:none;border:none;cursor:pointer;padding:4px 8px}
-.genmap-close:hover{color:var(--red)}
-.genmap-img{max-width:90vw;max-height:80vh;object-fit:contain;display:block}
-.genmap-legend{display:flex;gap:14px;padding:8px 14px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--mid)}
-.genmap-legend-item{display:flex;align-items:center;gap:5px}
-.genmap-legend-dot{width:10px;height:10px;border-radius:2px}
+/* Phase 7a.2: Generate Map button + modal CSS removed
+   (replaced by the always-on Map view; no server-rendered PNG needed). */
 
 /* Landmark info panel */
 .lm-info-panel{padding:9px 13px;border-bottom:1px solid var(--border);background:var(--surface2);display:none}
@@ -315,6 +343,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .lm-info-close{margin-left:auto;color:var(--dim);cursor:pointer;font-family:var(--mono);font-size:11px}
 .lm-info-close:hover{color:var(--red)}
 </style>
+<!-- Phase 7a.1.1: preload /yanis.png so the sidebar minimap is ready
+     by the time the user picks a cam. The browser fetches it in
+     parallel with the rest of the page; same response is reused by
+     the Map view <img>, the minimap background-image, etc. -->
+<link rel="preload" as="image" href="/yanis.png">
 </head>
 <body>
 
@@ -351,6 +384,25 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div class="cam-dropdown" id="cam-dropdown"></div>
     </div>
     <select id="cam-sel" hidden><option value="">— Select camera —</option></select>
+    <!-- Phase 7a.1: sidebar preview slot. Camera view shows a CSS-only
+         minimap; Map view shows the cam frame preview. Toggled by
+         body.view-map class. -->
+    <div class="sb-preview-slot" id="sb-preview-slot">
+      <div id="minimap-wrap-sb" title="Click to open Map view (M to toggle)">
+        <div id="minimap-rotator-sb">
+          <div id="minimap-img-sb"></div>
+        </div>
+        <svg id="minimap-pointer-sb" viewBox="0 0 240 170" preserveAspectRatio="none">
+          <path d="M 120,75 L 128,91 L 120,87 L 112,91 Z"
+            fill="#ffffff" stroke="#000000"
+            stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div id="cam-preview-wrap">
+        <img id="cam-preview-img" src="" alt="">
+        <div id="cam-preview-empty">No camera selected</div>
+      </div>
+    </div>
   </aside>
   <div class="canvas-wrap" id="canvas-wrap">
     <img id="frame-img" src="" draggable="false">
@@ -361,30 +413,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
              background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
              border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;
              font-family:JetBrains Mono,monospace">⊕ cams</button>
-    <!-- ── GTA VI-style rotating minimap (bottom-left, rounded rect) ─── -->
-    <div id="minimap-wrap" style="position:absolute;bottom:14px;left:14px;
-        z-index:10;width:260px;height:180px;border-radius:10px;
-        overflow:hidden;border:2px solid rgba(0,0,0,0.8);
-        background:rgba(0,0,0,0.4);
-        box-shadow:0 4px 14px rgba(0,0,0,0.55);
-        display:none;cursor:pointer" title="Click to toggle (M)">
-      <!-- Rotator is OVERSIZED so corners are covered when rotated -->
-      <div id="minimap-rotator" style="position:absolute;
-          width:200%;height:200%;
-          left:-50%;top:-50%;
-          transform-origin:50% 50%;transition:transform 120ms ease-out">
-        <img id="minimap-img" src="" style="position:absolute;width:100%;
-          height:100%;left:0;top:0;display:block;background:#222;
-          object-fit:cover">
-      </div>
-      <!-- Fixed view cone (always points up = cam direction) -->
-      <svg style="position:absolute;width:100%;height:100%;left:0;top:0;
-          pointer-events:none" viewBox="0 0 260 180" preserveAspectRatio="none">
-        <path d="M 130,80 L 138,96 L 130,92 L 122,96 Z"
-          fill="#ffffff" stroke="#000000"
-          stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
-      </svg>
-    </div>
+    <!-- Phase 7a.1: floating minimap removed — relocated to the
+         left sidebar's preview slot (#sb-preview-slot). -->
     <div id="oc-cursor-preview" style="position:fixed;display:none;z-index:100;
         width:240px;background:rgba(0,0,0,0.92);border:1px solid #888;
         border-radius:6px;padding:6px;pointer-events:none;
@@ -403,8 +433,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <div class="map-loading" id="map-loading">Loading yanis map…</div>
   </div>
   <div class="sidebar">
-<button id="btn-genmap" disabled>🗺 Generate Map</button>
-
+    <!-- Phase 7a.2: Generate Map button removed (replaced by Map view) -->
     <div class="sb-sec">
       <div class="sb-title">Position</div>
       <div class="sl-row"><span class="sl-lbl">X</span><input type="range" id="sl-x" min="-12000" max="12000" step="0.25"><input class="num" id="num-x" type="number" step="0.25"></div>
@@ -534,19 +563,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   </div>
 </div>
 
-<div id="genmap-modal">
-  <div class="genmap-content">
-    <div class="genmap-header">
-      <div class="genmap-title" id="genmap-title">Map</div>
-      <button class="genmap-close" id="genmap-close">✕</button>
-    </div>
-    <img id="genmap-img" class="genmap-img" />
-    <div class="genmap-legend">
-      <div class="genmap-legend-item"><div class="genmap-legend-dot" style="background:#4ade80"></div>&lt;3' (good)</div>
-      <div class="genmap-legend-item"><div class="genmap-legend-dot" style="background:#f59e0b"></div>3-10' (suspicious)</div>
-      <div class="genmap-legend-item"><div class="genmap-legend-dot" style="background:#f87171"></div>&gt;10' (outlier)</div>
-      <div class="genmap-legend-item"><div class="genmap-legend-dot" style="background:#8c8c8c"></div>unprojectable</div>
-    </div>
+<!-- Phase 7a.2: #genmap-modal removed (replaced by Map view) -->
 
 <script>
 // ── State ──────────────────────────────────────────────────────────────────
@@ -2576,44 +2593,9 @@ document.getElementById('cam-sel').addEventListener('change', () => {
   if (cs) cs.value = document.getElementById('cam-sel').value;
 });
 
-// ── Generate Map ────────────────────────────────────────────────────────
-const btnGenmap = document.getElementById('btn-genmap');
-const genmapModal = document.getElementById('genmap-modal');
-const genmapImg = document.getElementById('genmap-img');
-const genmapTitle = document.getElementById('genmap-title');
-const genmapClose = document.getElementById('genmap-close');
-
-btnGenmap.addEventListener('click', async () => {
-  if (!currentCam) return;
-  btnGenmap.disabled = true;
-  btnGenmap.textContent = 'Generating...';
-  try {
-    const r = await fetch('/api/generate_map?cam=' + encodeURIComponent(currentCam));
-    const data = await r.json();
-    if (data.ok) {
-      genmapTitle.textContent = `${currentCam} — ${data.n_rays} rays`;
-      genmapImg.src = data.url + '&t=' + Date.now(); // cache bust
-      genmapModal.classList.add('open');
-    } else {
-      alert('Failed: ' + (data.error || 'unknown'));
-    }
-  } catch (e) {
-    alert('Error: ' + e.message);
-  } finally {
-    btnGenmap.disabled = !currentCam;
-    btnGenmap.textContent = '🗺 Generate Map';
-  }
-});
-
-genmapClose.addEventListener('click', () => genmapModal.classList.remove('open'));
-genmapModal.addEventListener('click', e => {
-  if (e.target === genmapModal) genmapModal.classList.remove('open');
-});
-
-// Enable button when a cam is loaded
-document.getElementById('cam-sel').addEventListener('change', () => {
-  setTimeout(() => { btnGenmap.disabled = !currentCam; }, 200);
-});
+// Phase 7a.2: Generate Map button + modal logic removed.
+// The Map view (Phase 3+4) replaces this server-rendered PNG entirely.
+// The cam-sel change listener that enabled the button is also gone.
 
 // ── Landmark info panel ────────────────────────────────────────────────────
 const lmInfoPanel    = document.getElementById('lm-info-panel');
@@ -2994,46 +2976,101 @@ canvasWrap.addEventListener('click', e => {
   }
 });
 
-// ── GTA-style rotating minimap (bottom-left) ────────────────────────────
-const minimapWrap = document.getElementById('minimap-wrap');
-const minimapRotator = document.getElementById('minimap-rotator');
-const minimapImg = document.getElementById('minimap-img');
+// ── Phase 7a.1: CSS-only minimap (sidebar) + cam preview ──────────────────
+// The minimap is a CSS background-image crop of /yanis.png — no fetch.
+// In Map view, the same slot shows the cam's frame as a static <img>.
+// Both elements live in #sb-preview-slot (bottom of the left sidebar).
+//
+// CSS-only minimap math:
+//   We want to display a `radius`-meter window around the cam, scaled to
+//   fit the slot width. Given window.mapTransform (the same metadata
+//   used by Map view), the cam center in PNG-pixel space is:
+//     [px_cx, px_cy] = window.worldToSvg(cam.xyz[0], cam.xyz[1])
+//   (The PNG is rendered at viewBox 0 0 svg_size, so SVG-user coords
+//   are 1:1 with pixel coords.)
+//   The PNG is 12000 px wide in our build; window.mapTransform.svg_size
+//   gives the exact dimensions.
+//   We size the inner #minimap-img-sb so that `radius` map-units fit
+//   inside half the slot width (slot is 240 CSS px wide; we use the
+//   inner #minimap-rotator-sb which is 480×340 — 200% — so radius maps
+//   to 240 CSS px in rotator space). Then we offset so [px_cx, px_cy]
+//   lands at the rotator center.
+const minimapWrap   = document.getElementById('minimap-wrap-sb');
+const minimapRotator = document.getElementById('minimap-rotator-sb');
+const minimapBg     = document.getElementById('minimap-img-sb');
+const camPreviewImg = document.getElementById('cam-preview-img');
+const camPreviewEmpty = document.getElementById('cam-preview-empty');
 let minimapEnabled = true;
+const MINIMAP_RADIUS = 350;  // map-units around the cam to show
 
-async function loadMinimap() {
-  if (!currentCam || !minimapEnabled) {
-    minimapWrap.style.display = 'none';
-    return;
-  }
+async function ensureMapTransform() {
+  // Phase 3+4 lazy-loads /api/map_data only on first Map view visit.
+  // Phase 7a.1 needs window.mapTransform up-front for the minimap.
+  if (window.mapTransform) return;
   try {
-    const res = await fetch(`/api/minimap?cam=${encodeURIComponent(currentCam)}&radius=350`);
-    if (!res.ok) {
-      console.warn('minimap status', res.status);
-      minimapWrap.style.display = 'none';
-      return;
-    }
-    const data = await res.json();
-    if (data.error) {
-      console.warn('minimap error', data.error);
-      minimapWrap.style.display = 'none';
-      return;
-    }
-    minimapImg.src = 'data:image/png;base64,' + data.image_b64;
-    // Rotate so cam direction (yaw) points UP. Yaw 0 = north.
-    minimapRotator.style.transform = `rotate(${-data.yaw}deg)`;
-    minimapWrap.style.display = 'block';
+    const data = await fetch('/api/map_data').then(r => r.json());
+    window.mapData = window.mapData || data;
+    window.mapTransform = data.transform;
   } catch (e) {
-    console.error('minimap fetch failed', e);
-    minimapWrap.style.display = 'none';
+    console.warn('Phase 7a.1: failed to preload /api/map_data', e);
   }
 }
 
-// Auto-update on cam change
-let _minimapLastCam = null;
+function updateMinimap() {
+  if (!minimapEnabled) {
+    minimapWrap.style.display = 'none';
+    return;
+  }
+  if (!currentCam || !camData?.xyz || !window.mapTransform) {
+    minimapWrap.style.display = 'block';
+    minimapBg.style.backgroundImage = 'none';  // empty
+    return;
+  }
+  const [pxCx, pxCy] = window.worldToSvg(camData.xyz[0], camData.xyz[1]);
+  const sz = window.mapTransform.svg_size;  // [w, h] of the PNG in px
+  // Rotator is 480 CSS px wide (200% of 240). We want `2*MINIMAP_RADIUS`
+  // map-units to span 480 CSS px ⇒ scale = 480 / (2*MINIMAP_RADIUS).
+  const rotW = 480, rotH = 340;
+  const scale = rotW / (2 * MINIMAP_RADIUS);
+  const bgW = sz[0] * scale;
+  const bgH = sz[1] * scale;
+  // Background-position: we want the cam pixel to land at the rotator
+  // center (rotW/2, rotH/2). Background-position is the offset of the
+  // image's TOP-LEFT corner. So image_top_left = center - cam_px.
+  const bgX = (rotW / 2) - (pxCx * scale);
+  const bgY = (rotH / 2) - (pxCy * scale);
+  minimapBg.style.backgroundImage = "url('/yanis.png')";
+  minimapBg.style.backgroundSize = `${bgW}px ${bgH}px`;
+  minimapBg.style.backgroundPosition = `${bgX}px ${bgY}px`;
+  // Rotate so cam direction (yaw) points UP. Yaw 0 = north.
+  const yaw = (camData.ypr && camData.ypr.length >= 1) ? camData.ypr[0] : 0;
+  minimapRotator.style.transform = `rotate(${-yaw}deg)`;
+  minimapWrap.style.display = 'block';
+}
+window.updateMinimap = updateMinimap;
+
+function updateCamPreview() {
+  if (!currentCam) {
+    camPreviewImg.style.display = 'none';
+    camPreviewImg.src = '';
+    camPreviewEmpty.style.display = 'block';
+    return;
+  }
+  camPreviewEmpty.style.display = 'none';
+  camPreviewImg.style.display = 'block';
+  // Re-use the /frame/ endpoint (cached by browser).
+  camPreviewImg.src = '/frame/' + encodeURIComponent(currentCam);
+}
+window.updateCamPreview = updateCamPreview;
+
+// Auto-update on cam change. Both updaters are cheap (no fetch in
+// minimap; cam preview is browser-cached after first load).
+let _previewLastCam = null;
 setInterval(() => {
-  if (currentCam !== _minimapLastCam) {
-    _minimapLastCam = currentCam;
-    loadMinimap();
+  if (currentCam !== _previewLastCam) {
+    _previewLastCam = currentCam;
+    updateMinimap();
+    updateCamPreview();
   }
 }, 250);
 
@@ -3046,18 +3083,34 @@ if (_slYaw) {
   });
 }
 
-// Toggle on click + 'M' shortcut
+// Click on the minimap → switch to Map view (matches rlx reference UI).
 minimapWrap.addEventListener('click', () => {
-  minimapEnabled = false;
-  minimapWrap.style.display = 'none';
+  if (typeof window.setView === 'function') window.setView('map');
 });
+
+// Phase 7a.1.1: click on cam preview (Map view) → switch back to Camera view.
+const _camPreviewWrap = document.getElementById('cam-preview-wrap');
+if (_camPreviewWrap) {
+  _camPreviewWrap.style.cursor = 'pointer';
+  _camPreviewWrap.title = 'Click to switch to Camera view';
+  _camPreviewWrap.addEventListener('click', () => {
+    if (typeof window.setView === 'function') window.setView('camera');
+  });
+}
+
+// 'M' shortcut: toggle minimap visibility (kept for parity with old behaviour).
 document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
   if (e.key === 'm' || e.key === 'M') {
     minimapEnabled = !minimapEnabled;
-    if (minimapEnabled) loadMinimap();
+    if (minimapEnabled) updateMinimap();
     else minimapWrap.style.display = 'none';
   }
+});
+
+// Eagerly prefetch map metadata so the minimap works on first cam selection.
+ensureMapTransform().then(() => {
+  if (currentCam) updateMinimap();
 });
 </script>
 
