@@ -49,13 +49,14 @@
 #minimap-wrap-sb{position:absolute;inset:0;overflow:hidden;cursor:pointer}
 #minimap-rotator-sb{position:absolute;width:200%;height:200%;left:-50%;top:-50%;
   transform-origin:50% 50%;transition:transform 120ms ease-out}
-#minimap-img-sb{position:absolute;inset:0;
-  background-image:url('/yanis.png');
-  background-repeat:no-repeat;
-  /* JS sets background-position and background-size per cam */
-  background-color:#222;
-  /* Phase 7a.1.1: match Map view's grayscale treatment so the
-     minimap matches the main map visually. */
+/* Phase 7a.5: minimap is now a server-rendered 480x480 PNG fetched via
+   /api/minimap. The <img> fills the rotator at native size; rotation
+   is applied to the rotator wrapper (Phase 7a.1 layout). */
+#minimap-img-sb{position:absolute;width:100%;height:100%;left:0;top:0;
+  display:block;
+  user-select:none;-webkit-user-drag:none;pointer-events:none;
+  background:#222;object-fit:cover;
+  /* Match Map view's grayscale treatment. */
   filter:grayscale(1) brightness(1.05) contrast(1.1)}
 #minimap-pointer-sb{position:absolute;inset:0;pointer-events:none}
 /* Cam preview slot — shown only in map view */
@@ -70,6 +71,8 @@ body.view-map #cam-preview-wrap{display:flex}
 /* ── end SVG Map Refactor Phase 7a.1 ── */
 /* Phase 7a.1: sidebar preview slot (minimap CSS-only + cam preview) */
 /* Phase 7a.1.1: minimap grayscale + cam preview click + PNG preload */
+/* Phase 7a.1.2: minimap <img>+transform instead of bg-image */
+/* Phase 7a.5: minimap fetches /api/minimap (revert CSS-only) */
 /* Phase 7a.2: Generate Map UI removed */
 
 /* ── SVG Map Refactor Phase 3+4 (PNG): view toggle + map view ── */
@@ -390,7 +393,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <div class="sb-preview-slot" id="sb-preview-slot">
       <div id="minimap-wrap-sb" title="Click to open Map view (M to toggle)">
         <div id="minimap-rotator-sb">
-          <div id="minimap-img-sb"></div>
+          <!-- Phase 7a.1.2: <img> instead of <div> bg-image (Safari perf) -->
+          <img id="minimap-img-sb" src="/yanis.png" alt="">
         </div>
         <svg id="minimap-pointer-sb" viewBox="0 0 240 170" preserveAspectRatio="none">
           <path d="M 120,75 L 128,91 L 120,87 L 112,91 Z"
@@ -3016,36 +3020,43 @@ async function ensureMapTransform() {
   }
 }
 
-function updateMinimap() {
+// Phase 7a.5: fetch from /api/minimap (server crops + caches on disk).
+// Tracks an in-flight token to avoid race conditions when the user
+// clicks through cams quickly.
+let _minimapFetchToken = 0;
+async function updateMinimap() {
   if (!minimapEnabled) {
     minimapWrap.style.display = 'none';
     return;
   }
-  if (!currentCam || !camData?.xyz || !window.mapTransform) {
+  if (!currentCam) {
     minimapWrap.style.display = 'block';
-    minimapBg.style.backgroundImage = 'none';  // empty
+    minimapBg.removeAttribute('src');
     return;
   }
-  const [pxCx, pxCy] = window.worldToSvg(camData.xyz[0], camData.xyz[1]);
-  const sz = window.mapTransform.svg_size;  // [w, h] of the PNG in px
-  // Rotator is 480 CSS px wide (200% of 240). We want `2*MINIMAP_RADIUS`
-  // map-units to span 480 CSS px ⇒ scale = 480 / (2*MINIMAP_RADIUS).
-  const rotW = 480, rotH = 340;
-  const scale = rotW / (2 * MINIMAP_RADIUS);
-  const bgW = sz[0] * scale;
-  const bgH = sz[1] * scale;
-  // Background-position: we want the cam pixel to land at the rotator
-  // center (rotW/2, rotH/2). Background-position is the offset of the
-  // image's TOP-LEFT corner. So image_top_left = center - cam_px.
-  const bgX = (rotW / 2) - (pxCx * scale);
-  const bgY = (rotH / 2) - (pxCy * scale);
-  minimapBg.style.backgroundImage = "url('/yanis.png')";
-  minimapBg.style.backgroundSize = `${bgW}px ${bgH}px`;
-  minimapBg.style.backgroundPosition = `${bgX}px ${bgY}px`;
-  // Rotate so cam direction (yaw) points UP. Yaw 0 = north.
-  const yaw = (camData.ypr && camData.ypr.length >= 1) ? camData.ypr[0] : 0;
-  minimapRotator.style.transform = `rotate(${-yaw}deg)`;
   minimapWrap.style.display = 'block';
+  const myToken = ++_minimapFetchToken;
+  try {
+    const res = await fetch('/api/minimap?cam=' + encodeURIComponent(currentCam));
+    if (myToken !== _minimapFetchToken) return;  // newer request superseded
+    if (!res.ok) {
+      console.warn('minimap fetch status', res.status);
+      return;
+    }
+    const data = await res.json();
+    if (myToken !== _minimapFetchToken) return;
+    if (data.error) {
+      console.warn('minimap error', data.error);
+      return;
+    }
+    minimapBg.src = 'data:image/png;base64,' + data.image_b64;
+    // Rotate so cam direction (yaw) points UP. Yaw 0 = north.
+    minimapRotator.style.transform = `rotate(${-data.yaw}deg)`;
+  } catch (e) {
+    if (myToken === _minimapFetchToken) {
+      console.error('minimap fetch failed', e);
+    }
+  }
 }
 window.updateMinimap = updateMinimap;
 

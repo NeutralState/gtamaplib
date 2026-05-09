@@ -35,6 +35,53 @@ LEAK_ANCHORED_LMS = {
 print(f"Leak cams: {len(LEAK_CAMS)} · Leak-anchored landmarks: {len(LEAK_ANCHORED_LMS)}")
 
 
+# ── Phase 7a.4: pre-render minimaps at startup ──────────────────────────────
+# Phase 7a.4: pre-rendered minimaps at startup
+# Renders one tiny PNG per cam (~480×480) into tools/generated/minimaps/.
+# Caches on disk. Re-renders only when cameras.json is newer than the
+# cached PNG (so server restarts are fast). The /api/minimap endpoint
+# (restored below in HUNK 2) serves these cached files.
+# Phase 7a.4.1: lazy minimap render (drop startup pre-render block)
+# Helpers stay; the startup loop is removed. The endpoint renders on
+# demand the first time a cam is requested, then serves from disk
+# cache forever after. First-cam hit: ~1-2s. Subsequent: instant.
+_MINIMAP_CACHE_DIR = os.path.join(TOOL_DIR, 'generated', 'minimaps')
+os.makedirs(_MINIMAP_CACHE_DIR, exist_ok=True)
+_MINIMAP_RADIUS_M = 350.0
+_MINIMAP_SIZE_PX = 480
+
+def _minimap_safe_name(cam_name):
+    return ''.join(c if c.isalnum() else '_' for c in cam_name)
+
+def _minimap_cache_path(cam_name):
+    return os.path.join(_MINIMAP_CACHE_DIR, f'{_minimap_safe_name(cam_name)}.png')
+
+def _render_minimap_for_cam(cam_name):
+    # Render and cache a minimap for one cam. Returns the output path
+    # or None on error.
+    try:
+        cam = ml.get_camera(cam_name)
+    except Exception:
+        return None
+    if cam.xyz is None:
+        return None
+    cx, cy = float(cam.xyz[0]), float(cam.xyz[1])
+    area = (cx - _MINIMAP_RADIUS_M, cy - _MINIMAP_RADIUS_M,
+            cx + _MINIMAP_RADIUS_M, cy + _MINIMAP_RADIUS_M)
+    try:
+        m = ml.get_map('yanis')
+        m.open(add_padding=False)  # native scale
+        cropped = m.crop(area)
+        cropped = cropped.resize((_MINIMAP_SIZE_PX, _MINIMAP_SIZE_PX), 1)  # 1=LANCZOS
+        out_path = _minimap_cache_path(cam_name)
+        cropped.save(out_path, format='PNG', optimize=True)
+        return out_path
+    except Exception:
+        import traceback as _tb
+        _tb.print_exc()
+        return None
+
+
 # ── Item 4 : "Other cams" overlay (canvas-based, no image rendering) ─────────
 
 def _classify_cam(cam_name):
@@ -1090,9 +1137,46 @@ m.save('/tmp/ray_map.png', area)
             # Just acknowledge — validation state is kept client-side
             self.send_json({'ok': True})
 
-        # Phase 7a.3: /api/minimap removed. The minimap is now CSS-only
-        # in the frontend (Phase 7a.1) — a background-image crop of
-        # the cached /yanis.png.
+        # Phase 7a.3: /api/minimap removed (CSS-only) — Phase 7a.4 restores
+        # it as a static file server for pre-rendered cached PNGs.
+        # The Safari slow-path on huge PNG bg-image manipulation forced
+        # the pivot back to server-rendered minimaps. See module-top
+        # pre-render block.
+
+        elif path == '/api/minimap':
+            cam_name = unquote(qs.get('cam', [''])[0])
+            if cam_name not in md.cameras:
+                self.send_json({'error': 'invalid cam'}, 400)
+                return
+            try:
+                cam = ml.get_camera(cam_name)
+            except Exception as e:
+                self.send_json({'error': f'cam load failed: {e}'}, 400)
+                return
+            cache_path = _minimap_cache_path(cam_name)
+            if not os.path.exists(cache_path):
+                # Render on demand (fallback for any cam added after startup).
+                try:
+                    _render_minimap_for_cam(cam_name)
+                except Exception:
+                    pass
+            if not os.path.exists(cache_path):
+                self.send_json({'error': 'minimap render failed'}, 500)
+                return
+            try:
+                with open(cache_path, 'rb') as f:
+                    img_bytes = f.read()
+                import base64 as _b64
+                img_b64 = _b64.b64encode(img_bytes).decode('ascii')
+                self.send_json({
+                    'cam': cam_name,
+                    'image_b64': img_b64,
+                    'yaw': float(cam.ypr[0]) if cam.ypr is not None else 0.0,
+                    'radius_m': _MINIMAP_RADIUS_M,
+                    'image_size_px': _MINIMAP_SIZE_PX,
+                })
+            except Exception as e:
+                self.send_json({'error': f'minimap read failed: {e}'}, 500)
 
         elif path == '/api/other_cams_overlay':
             cam_name = qs.get('cam', [''])[0]
