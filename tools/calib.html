@@ -90,11 +90,20 @@ body.view-map .sidebar .statusbar{display:none}
 #map-overlay .cam-frustum-fill{display:none;pointer-events:none}
 #map-overlay g.cam-group.selected .cam-frustum,
 #map-overlay g.cam-group:hover .cam-frustum{display:block;opacity:1}
+/* Phase 6.3: frustum fill drops from .18 → .06 so the selected/hovered
+   triangle no longer washes out the underlying map and dots. */
 #map-overlay g.cam-group.selected .cam-frustum-fill,
-#map-overlay g.cam-group:hover .cam-frustum-fill{display:block;opacity:.18}
+#map-overlay g.cam-group:hover .cam-frustum-fill{display:block;opacity:.06}
 /* Phase 5.4: no dot change on select. The cam dot keeps its base style;
-   only the frustum reveal signals selection. Cleaner, less prominent. */
-#map-overlay .ray-line{stroke:var(--blue);stroke-width:20;opacity:.45;pointer-events:none}
+   only the frustum reveal signals selection. Cleaner, less prominent.
+   Phase 6.3: ray-line CSS rule no longer sets `stroke` (was overriding
+   per-ray inline strokes due to SVG presentation-attr specificity).
+   stroke-width also lowered (8 → 4) and opacity (.5 → .15) so the
+   ray bundle reads as faint context, not a wall of color. */
+#map-overlay .ray-line{stroke-width:4;opacity:.15;pointer-events:none;transition:opacity .1s,stroke-width .1s}
+#map-overlay #rays-layer.lm-hover .ray-line{opacity:.08}
+#map-overlay #rays-layer.lm-hover .ray-line.lm-hovered{opacity:.85;stroke-width:14}
+#map-overlay #rays-layer.cam-hover .ray-line{opacity:.55}
 
 /* "Show all rays" toggle in the header, next to the view-toggle */
 .rays-toggle{font-family:var(--mono);font-size:11px;font-weight:700;padding:5px 10px;background:var(--surface2);color:var(--mid);border:1px solid var(--border);border-radius:5px;cursor:pointer;display:none}
@@ -109,6 +118,62 @@ body.view-map .rays-toggle{display:inline-block}
 .map-tip .tip-name{color:var(--text);font-weight:700;margin-bottom:2px}
 .map-tip .tip-meta{color:var(--mid);font-size:9px}
 /* ── end SVG Map Refactor Phase 5 ── */
+
+/* ── SVG Map Refactor Phase 6.1: landmark dots on map ── */
+/* Landmark dots are drawn as <circle class="lm-dot"> nodes inside
+   #lm-layer. Sizing is in SVG-user units (matches the cam-marker
+   convention). Untriangulated landmarks get a hollow outline. Per-cam
+   delta-driven coloring is applied via inline `fill`/`stroke` attrs in
+   JS; the rules below provide the *base* style and the dim/leak states.
+   We deliberately do NOT add hover styles here — Phase 6.2 will do hover
+   via event delegation, not :hover, to keep node count low. */
+/* Phase 6.1 lm-layer is interactive in 6.2 — we hover-test dots via
+   event delegation on the wrapper, so the layer needs to receive
+   pointer events on its children. */
+#map-overlay #lm-layer{pointer-events:none}
+#map-overlay .lm-dot{transition:opacity .12s;pointer-events:auto;cursor:pointer}
+#map-overlay .lm-dot.untriangulated{fill:none;stroke:#5a5a7a;stroke-width:8}
+#map-overlay .lm-dot.dim{opacity:.18}
+#map-overlay .lm-dot.hovered{stroke:#fff;stroke-width:6}
+#map-overlay .lm-dot.selected{stroke:#fff;stroke-width:8}
+/* ── end SVG Map Refactor Phase 6.1 ── */
+
+/* ── SVG Map Refactor Phase 6.2: delta colors + sidebar ── */
+/* Phase 6.3: the duplicate ray-line rule that Phase 6.2 added here has
+   been removed — its `stroke:#9090b0` was overriding per-line inline
+   strokes due to SVG presentation-attribute specificity (presentation
+   attrs sit BELOW author CSS in the cascade). The Phase 5 ray-line CSS
+   rule has been updated in-place to no longer set stroke at all; per-ray
+   strokes are set inline by renderRaysForSelectedCam() and never lose
+   the cascade fight. */
+
+/* Map-only sections in the right sidebar — visible ONLY in map view.
+   Phase 3+4 already hides .sb-sec/.opt-bar/.lm-hdr/.lm-list/.statusbar
+   in map view, so we re-show our map-only ones via this rule. */
+body.view-map .sidebar .sb-sec.map-only,
+body.view-map .sidebar .lm-hdr.map-only,
+body.view-map .sidebar .lm-list.map-only,
+body.view-map .sidebar .statusbar.map-only{display:flex}
+body.view-map .sidebar .lm-list.map-only{display:block}
+body:not(.view-map) .sidebar .sb-sec.map-only,
+body:not(.view-map) .sidebar .lm-hdr.map-only,
+body:not(.view-map) .sidebar .lm-list.map-only,
+body:not(.view-map) .sidebar .statusbar.map-only{display:none}
+
+/* The map sidebar header — slightly different from Camera-view lm-hdr,
+   shows the selected cam name + total visible count. */
+.map-sb-hdr{padding:9px 13px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--mid)}
+.map-sb-hdr .cam-name{color:var(--text);font-weight:700;font-size:11px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.map-sb-hdr .meta{font-size:9px;color:var(--dim)}
+.map-sb-hdr .empty{color:var(--dim);font-style:italic}
+
+/* The list itself reuses .lm-item/.lm-dot/.lm-name/.lm-d from Camera view
+   for visual consistency. Add a .map-only modifier so we can target it
+   independently if needed. */
+.lm-list.map-only{flex:1;overflow-y:auto}
+.lm-list.map-only .lm-item.untriangulated .lm-name{color:var(--dim);font-style:italic}
+/* ── end SVG Map Refactor Phase 6.2 ── */
+/* // Phase 6.3: visual polish — fix ray colors + reduce noise */
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
@@ -900,13 +965,102 @@ async function init() {
   // markers — that would require counter-scaling, doable later if wanted).
   // Tuned for visibility at the default fit-zoom on a 12000-px-wide PNG.
   // Phase 5.1: smaller markers, thinner outlines
+  // Phase 6.3: FRUSTUM_LINE_WIDTH 12 → 6 (less visual weight on hover/select)
   const MARKER_RADIUS = 35;
   const MARKER_STROKE = 12;
-  const FRUSTUM_LINE_WIDTH = 12;
+  const FRUSTUM_LINE_WIDTH = 6;
 
   // Selected cam tracking. We listen to the existing #cam-sel change event
   // (the source of truth across the whole app) to update marker styling.
   let mapSelectedCamName = null;
+
+  // Phase 6.1: landmark dots on map
+  // Phase 6.2: aligned with Camera view's dColor() — single source of
+  // truth is window.deltaColor(), defined later alongside dColor.
+  // Dot radius in SVG-user units. Smaller than MARKER_RADIUS (35) so cams
+  // visually dominate. Tuned for the same default fit-zoom as the cams.
+  const LM_DOT_RADIUS = 16;
+  const LM_COLOR_LEAK = '#4ade80';    // leak-anchored ground truth (no cam selected)
+  const LM_COLOR_NEUTRAL = '#9090b0'; // triangulated, no cam selected, not leak-anchored
+
+  // window.mapDeltasByLm: Map<lm_name, delta_arcmin> for the current
+  // mapSelectedCamName. Populated by Phase 6.2 when it fetches /api/project.
+  // null when no cam is selected.
+  window.mapDeltasByLm = null;
+
+  // Bridge: Phase 6.2 wants delta colors but the canonical dColor() is
+  // defined later in the script (inside the Camera view block). We expose
+  // window.deltaColor in a shim here that calls it lazily — by the time
+  // any landmark is rendered, the Camera view block has run and
+  // window.deltaColor is wired up.
+  function lmColorForDelta(delta) {
+    return window.deltaColor ? window.deltaColor(delta) : null;
+  }
+
+  function renderLandmarksOnMap() {
+    if (!window.mapOverlay || !window.mapData) return;
+    const lmLayer = document.getElementById('lm-layer');
+    if (!lmLayer) return;
+    // Clear previous dots.
+    while (lmLayer.firstChild) lmLayer.removeChild(lmLayer.firstChild);
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+
+    // When a cam is selected, the set of landmarks observed by it tells
+    // us which dots to fully color vs dim. Use the precomputed index.
+    const observedSet = (mapSelectedCamName && window.mapCamLandmarks)
+      ? new Set((window.mapCamLandmarks.get(mapSelectedCamName) || []).map(l => l.name))
+      : null;
+
+    for (const lm of window.mapData.landmarks) {
+      // Untriangulated → no xyz, can't place on map. Phase 6.2 sidebar
+      // surfaces these even without map placement.
+      if (!lm.xyz) continue;
+
+      const [sx, sy] = window.worldToSvg(lm.xyz[0], lm.xyz[1]);
+      const dot = document.createElementNS(SVG_NS, 'circle');
+      dot.setAttribute('class', 'lm-dot');
+      dot.setAttribute('cx', String(sx));
+      dot.setAttribute('cy', String(sy));
+      dot.setAttribute('r',  String(LM_DOT_RADIUS));
+      dot.dataset.lmName = lm.name;
+
+      // Color logic
+      let fill = LM_COLOR_NEUTRAL;
+      let dim = false;
+      if (observedSet) {
+        if (observedSet.has(lm.name)) {
+          // Cam-observed: color by delta if available (Phase 6.2 fetches
+          // /api/project on cam change to populate window.mapDeltasByLm).
+          const delta = window.mapDeltasByLm
+            ? window.mapDeltasByLm.get(lm.name)
+            : undefined;
+          if (delta != null) {
+            fill = window.deltaColor(delta);
+          } else {
+            // Either deltas not yet fetched OR the projection failed for
+            // this lm (e.g. behind cam). Use neutral; not dimmed since
+            // this cam DOES observe it.
+            fill = LM_COLOR_NEUTRAL;
+          }
+        } else {
+          // Not observed by selected cam → dim grey.
+          fill = LM_COLOR_NEUTRAL;
+          dim = true;
+        }
+      } else {
+        // No cam selected → leak-anchored gets the green tint, others neutral.
+        fill = lm.is_leak_anchored ? LM_COLOR_LEAK : LM_COLOR_NEUTRAL;
+      }
+
+      dot.setAttribute('fill', fill);
+      if (dim) dot.classList.add('dim');
+      // Re-apply hover/select markers if they survived a re-render.
+      if (mapHoveredLm === lm.name)  dot.classList.add('hovered');
+      if (mapSelectedLm === lm.name) dot.classList.add('selected');
+      lmLayer.appendChild(dot);
+    }
+  }
+  window.renderLandmarksOnMap = renderLandmarksOnMap;
 
   function renderCamsOnMap() {
     if (!window.mapOverlay || !window.mapData) return;
@@ -917,6 +1071,13 @@ async function init() {
       window.mapOverlay.removeChild(window.mapOverlay.firstChild);
     }
     const SVG_NS = 'http://www.w3.org/2000/svg';
+
+    // Phase 6.1: landmark dots layer — created FIRST so it sits below
+    // cams + rays in document order (and thus in paint order). Populated
+    // by renderLandmarksOnMap() which is called at the end of this fn.
+    const lmGroup = document.createElementNS(SVG_NS, 'g');
+    lmGroup.setAttribute('id', 'lm-layer');
+    window.mapOverlay.appendChild(lmGroup);
 
     // Cams group — append all <g class="cam-group"> children.
     const camsGroup = document.createElementNS(SVG_NS, 'g');
@@ -985,6 +1146,10 @@ async function init() {
       camsGroup.appendChild(camGroup);
     }
 
+    // Phase 6.1: render landmark dots. Done after cams so any future
+    // shared state (e.g. dim-on-cam-hover) flows in the right direction.
+    renderLandmarksOnMap();
+
     // Apply current selection styling (in case we re-render after a select).
     updateMapSelectionStyle();
   }
@@ -1015,6 +1180,11 @@ async function init() {
     const observed = window.mapCamLandmarks ? window.mapCamLandmarks.get(mapSelectedCamName) : null;
     if (!observed) return;
     const SVG_NS = 'http://www.w3.org/2000/svg';
+    // Phase 6.3: neutral grey fallback color when delta is unavailable.
+    // window.deltaColor(null) already returns '#333' (very dark) — that
+    // disappears against the dim map. Use the LM_COLOR_NEUTRAL we already
+    // defined in 6.1 (#9090b0) for visual consistency with neutral dots.
+    const NULL_DELTA_COLOR = '#9090b0';
     for (const lm of observed) {
       if (!lm.xyz) continue;
       const [bx, by] = window.worldToSvg(lm.xyz[0], lm.xyz[1]);
@@ -1024,6 +1194,17 @@ async function init() {
       line.setAttribute('x2', String(bx));
       line.setAttribute('y2', String(by));
       line.setAttribute('class', 'ray-line');
+      // Phase 6.3: tag with data-lm-name so the hover boost CSS can
+      // target this specific ray when its landmark is hovered.
+      line.dataset.lmName = lm.name;
+      // Phase 6.2/6.3: per-ray color matches the dot's delta color.
+      // ALWAYS set stroke inline — Phase 5's CSS rule no longer sets
+      // stroke (Phase 6.3 hunk 1), so inline always wins. Fallback
+      // grey for null deltas (delta hasn't loaded, or projection
+      // failed, or cam can't see this landmark).
+      const delta = window.mapDeltasByLm ? window.mapDeltasByLm.get(lm.name) : undefined;
+      const color = (delta != null) ? window.deltaColor(delta) : NULL_DELTA_COLOR;
+      line.setAttribute('stroke', color);
       raysLayer.appendChild(line);
     }
   }
@@ -1055,8 +1236,302 @@ async function init() {
     if (window.currentView === 'map') {
       updateMapSelectionStyle();
       renderRaysForSelectedCam();
+      // Phase 6.1: invalidate per-cam delta cache and re-render dots in
+      // their new "observed vs dim" coloring. Phase 6.2 will async-fetch
+      // /api/project and call renderLandmarksOnMap() again with deltas.
+      window.mapDeltasByLm = null;
+      renderLandmarksOnMap();
     }
   });
+
+  // ── Phase 6.2: delta-colored dots/rays + landmark sidebar ──────────────
+
+  // Hover/select state for landmark dots on the map.
+  let mapHoveredLm = null;
+  let mapSelectedLm = null;
+
+  // Fetch /api/project for the currently selected cam, populate
+  // window.mapDeltasByLm, then re-render dots + rays + sidebar.
+  // Debounced to coalesce rapid cam flicks.
+  let _deltasFetchTimer = null;
+  let _deltasFetchToken = 0;
+  async function fetchDeltasForSelectedCam() {
+    if (!mapSelectedCamName) {
+      window.mapDeltasByLm = null;
+      renderLandmarksOnMap();
+      renderRaysForSelectedCam();
+      renderMapSidebar();
+      return;
+    }
+    const myToken = ++_deltasFetchToken;
+    try {
+      const url = '/api/project?cam=' + encodeURIComponent(mapSelectedCamName);
+      const data = await fetch(url).then(r => r.json());
+      // Bail if the user changed cams while we were waiting.
+      if (myToken !== _deltasFetchToken) return;
+      const m = new Map();
+      for (const p of (data.projections || [])) {
+        if (p.delta != null) m.set(p.name, p.delta);
+      }
+      window.mapDeltasByLm = m;
+      renderLandmarksOnMap();
+      renderRaysForSelectedCam();
+      renderMapSidebar();
+    } catch (e) {
+      console.error('Phase 6.2 delta fetch failed:', e);
+    }
+  }
+  function scheduleDeltasFetch() {
+    clearTimeout(_deltasFetchTimer);
+    _deltasFetchTimer = setTimeout(fetchDeltasForSelectedCam, 80);
+  }
+  window.scheduleMapDeltasFetch = scheduleDeltasFetch;
+
+  // Sidebar — populated by renderMapSidebar.
+  // Structure:
+  //   <div class="map-sb-hdr map-only">…</div>
+  //   <div class="lm-list map-only">…</div>
+  // Inserted into .sidebar so it shares the right-side container with
+  // Camera view content (which is hidden in map view via Phase 3+4 CSS).
+  const _mapSidebarHdr = document.createElement('div');
+  _mapSidebarHdr.className = 'map-sb-hdr map-only sb-sec';
+  _mapSidebarHdr.id = 'map-sb-hdr';
+  const _mapSidebarList = document.createElement('div');
+  _mapSidebarList.className = 'lm-list map-only';
+  _mapSidebarList.id = 'map-lm-list';
+  // Insert right after the Generate Map button so the sidebar reads
+  // top-to-bottom: genmap btn → map header → map list.
+  const _rightSidebar = document.querySelector('.sidebar');
+  if (_rightSidebar) {
+    const genmapBtn = document.getElementById('btn-genmap');
+    if (genmapBtn && genmapBtn.parentNode === _rightSidebar) {
+      _rightSidebar.insertBefore(_mapSidebarHdr, genmapBtn.nextSibling);
+      _rightSidebar.insertBefore(_mapSidebarList, _mapSidebarHdr.nextSibling);
+    } else {
+      _rightSidebar.insertBefore(_mapSidebarHdr, _rightSidebar.firstChild);
+      _rightSidebar.insertBefore(_mapSidebarList, _mapSidebarHdr.nextSibling);
+    }
+  }
+
+  function renderMapSidebar() {
+    if (!window.mapData) return;
+    // Header
+    if (!mapSelectedCamName) {
+      _mapSidebarHdr.innerHTML = '<div class="empty">No camera selected</div>'
+        + '<div class="meta" style="margin-top:4px">Click a cam on the map to see its landmarks</div>';
+      _mapSidebarList.innerHTML = '';
+      return;
+    }
+
+    const observed = (window.mapCamLandmarks && window.mapCamLandmarks.get(mapSelectedCamName)) || [];
+    // Sort by delta desc (worst first), nulls/missing at the bottom.
+    const decorated = observed.map(lm => {
+      const delta = window.mapDeltasByLm ? window.mapDeltasByLm.get(lm.name) : undefined;
+      return { lm, delta: (delta == null) ? null : delta };
+    });
+    decorated.sort((a, b) => {
+      if (a.delta == null && b.delta == null) return a.lm.name.localeCompare(b.lm.name);
+      if (a.delta == null) return 1;
+      if (b.delta == null) return -1;
+      return b.delta - a.delta;
+    });
+
+    // Counts
+    const n = decorated.length;
+    const nWith = decorated.filter(d => d.delta != null).length;
+    const fetching = window.mapDeltasByLm == null;
+    const meta = fetching
+      ? `${n} observed · loading deltas…`
+      : `${n} observed · ${nWith} with delta`;
+    _mapSidebarHdr.innerHTML =
+      `<div class="cam-name">${escapeHtml(mapSelectedCamName)}</div>` +
+      `<div class="meta">${meta}</div>`;
+
+    // List
+    if (n === 0) {
+      _mapSidebarList.innerHTML = '<div style="padding:10px 13px;font-family:var(--mono);font-size:10px;color:var(--dim)">No observed landmarks</div>';
+      return;
+    }
+    const html = decorated.map(({ lm, delta }) => {
+      const color = window.deltaColor(delta);
+      const deltaStr = delta != null ? delta.toFixed(2) : '—';
+      const cls = 'lm-item' + (mapSelectedLm === lm.name ? ' sel' : '')
+                            + (!lm.xyz ? ' untriangulated' : '');
+      const safeName = escapeHtml(lm.name);
+      return `<div class="${cls}" data-lm-name="${safeName}">
+        <div class="lm-dot" style="background:${color}"></div>
+        <span class="lm-name">${safeName}</span>
+        <span class="lm-d" style="color:${color}">${deltaStr}</span>
+      </div>`;
+    }).join('');
+    _mapSidebarList.innerHTML = html;
+  }
+  window.renderMapSidebar = renderMapSidebar;
+
+  // Tiny html escape — we already use escapeHtml in cam_health but it's
+  // not in calib.html scope. Define a small one here.
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => (
+      { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]
+    ));
+  }
+
+  // Sidebar: hover/click delegation
+  _mapSidebarList.addEventListener('mouseover', e => {
+    const item = e.target.closest('.lm-item[data-lm-name]');
+    if (!item) return;
+    setMapHoveredLm(item.dataset.lmName);
+  });
+  _mapSidebarList.addEventListener('mouseleave', () => {
+    setMapHoveredLm(null);
+  });
+  _mapSidebarList.addEventListener('click', e => {
+    const item = e.target.closest('.lm-item[data-lm-name]');
+    if (!item) return;
+    const name = item.dataset.lmName;
+    setMapSelectedLm(mapSelectedLm === name ? null : name);
+  });
+
+  // Map dots: hover tooltip + click select via delegation on the wrapper.
+  // Phase 6.3: also boost the matching ray via .lm-hovered class on the
+  // specific <line>, gated by a .lm-hover class on #rays-layer (so we
+  // don't have to selector-target every other ray to dim it).
+  function setMapHoveredLm(name) {
+    if (mapHoveredLm === name) return;
+    if (window.mapOverlay) {
+      // Dot
+      const prev = window.mapOverlay.querySelector(`.lm-dot.hovered`);
+      if (prev) prev.classList.remove('hovered');
+      if (name) {
+        const cur = window.mapOverlay.querySelector(`.lm-dot[data-lm-name="${CSS.escape(name)}"]`);
+        if (cur) cur.classList.add('hovered');
+      }
+      // Phase 6.3: matching ray boost
+      const raysLayer = document.getElementById('rays-layer');
+      if (raysLayer) {
+        const prevRay = raysLayer.querySelector('.ray-line.lm-hovered');
+        if (prevRay) prevRay.classList.remove('lm-hovered');
+        if (name) {
+          raysLayer.classList.add('lm-hover');
+          const ray = raysLayer.querySelector(`.ray-line[data-lm-name="${CSS.escape(name)}"]`);
+          if (ray) ray.classList.add('lm-hovered');
+        } else {
+          raysLayer.classList.remove('lm-hover');
+        }
+      }
+    }
+    mapHoveredLm = name;
+  }
+  // Phase 6.3: cam-hover sets a class on #rays-layer to bump ALL rays
+  // for the currently selected cam. Tied to the existing cam-marker
+  // hover via :hover in CSS would have been cleanest, but the rays
+  // and cams live in different SVG groups so we drive it from JS.
+  function setMapCamHovered(isHovered) {
+    const raysLayer = document.getElementById('rays-layer');
+    if (!raysLayer) return;
+    raysLayer.classList.toggle('cam-hover', !!isHovered);
+  }
+  window.setMapCamHovered = setMapCamHovered;
+  function setMapSelectedLm(name) {
+    if (window.mapOverlay) {
+      const prev = window.mapOverlay.querySelector(`.lm-dot.selected`);
+      if (prev) prev.classList.remove('selected');
+      if (name) {
+        const cur = window.mapOverlay.querySelector(`.lm-dot[data-lm-name="${CSS.escape(name)}"]`);
+        if (cur) cur.classList.add('selected');
+      }
+    }
+    mapSelectedLm = name;
+    // Re-render sidebar so the .sel class lands on the right item.
+    renderMapSidebar();
+    // Sync with Camera view's lm-info-panel so picking on the map opens
+    // the same landmark info as picking from the Camera-view list.
+    if (typeof showLmInfo === 'function') showLmInfo(name);
+  }
+
+  // Hover tooltip on dots — reuses .map-tip from Phase 5 to stay
+  // visually consistent with cam-marker tooltips.
+  mapSvgWrap.addEventListener('mousemove', e => {
+    if (window.currentView !== 'map') return;
+    // Only react to landmark dots (cam markers have their own tooltip
+    // logic earlier in the file that's wired to the same wrapper).
+    let node = e.target;
+    let dotEl = null;
+    while (node && node !== mapSvgWrap) {
+      if (node.classList && node.classList.contains('lm-dot')) {
+        dotEl = node;
+        break;
+      }
+      node = node.parentNode;
+    }
+    if (!dotEl) {
+      // Don't fight cam-marker tooltips — those clear .map-tip elsewhere.
+      // We only set when we actually hovered a dot.
+      if (mapHoveredLm) setMapHoveredLm(null);
+      return;
+    }
+    const name = dotEl.dataset.lmName;
+    setMapHoveredLm(name);
+    const delta = window.mapDeltasByLm ? window.mapDeltasByLm.get(name) : undefined;
+    const lm = window.mapData.landmarks.find(l => l.name === name);
+    mapTipName.textContent = name;
+    const bits = [];
+    if (delta != null) {
+      bits.push(`Δ ${delta.toFixed(2)}'`);
+    } else if (mapSelectedCamName) {
+      bits.push('not observed');
+    }
+    if (lm && lm.is_leak_anchored) bits.push('★ leak-anchored');
+    if (lm && lm.error_m != null) bits.push(`err ${lm.error_m.toFixed(1)}m`);
+    mapTipMeta.textContent = bits.join(' · ');
+    mapTip.style.display = 'block';
+    mapTip.style.left = (e.clientX + 14) + 'px';
+    mapTip.style.top = (e.clientY - 10) + 'px';
+  });
+
+  // Click on a dot → select it (also handled by the cam-marker click
+  // delegation which stop-propagates, so a click on a dot that's behind
+  // a cam still goes to the cam — desirable since cams are smaller and
+  // intentional clicks).
+  mapSvgWrap.addEventListener('click', e => {
+    if (window.currentView !== 'map') return;
+    let node = e.target;
+    while (node && node !== mapSvgWrap) {
+      if (node.classList && node.classList.contains('lm-dot')) {
+        const name = node.dataset.lmName;
+        if (name) {
+          setMapSelectedLm(mapSelectedLm === name ? null : name);
+          e.stopPropagation();
+        }
+        return;
+      }
+      node = node.parentNode;
+    }
+  });
+
+  // Trigger a deltas fetch on every cam change (debounced inside).
+  // Phase 6.1 already wired the cam-sel listener to call
+  // renderLandmarksOnMap(); we extend it via a separate listener so the
+  // fetch runs in parallel with the Phase 6.1 dim re-render.
+  document.getElementById('cam-sel').addEventListener('change', () => {
+    if (window.currentView === 'map') {
+      mapSelectedLm = null;  // clear lm selection on cam change
+      scheduleDeltasFetch();
+      // renderMapSidebar() runs immediately to show "loading deltas…"
+      renderMapSidebar();
+    }
+  });
+
+  // Also kick the sidebar render when the map first loads + initial fetch
+  // if a cam was already selected (e.g. via ?cam= URL param).
+  const _origEnsureMapLoadedForPhase62 = ensureMapLoaded;
+  ensureMapLoaded = async function() {
+    await _origEnsureMapLoadedForPhase62.apply(this, arguments);
+    renderMapSidebar();
+    if (mapSelectedCamName) scheduleDeltasFetch();
+  };
+
+  // ── end Phase 6.2 ──────────────────────────────────────────────────────
 
   // Click on a cam marker = navigate to it (sync with Camera view).
   // Use event delegation on the overlay since markers are dynamic.
@@ -1107,7 +1582,18 @@ async function init() {
       }
       node = node.parentNode;
     }
-    if (!camName) { mapTip.style.display = 'none'; return; }
+    if (!camName) {
+      mapTip.style.display = 'none';
+      // Phase 6.3: clear cam-hover ray boost if we left the cam marker.
+      if (typeof setMapCamHovered === 'function') setMapCamHovered(false);
+      return;
+    }
+    // Phase 6.3: only boost rays for the SELECTED cam (rays are only
+    // rendered for the selected cam), so hovering a non-selected cam
+    // shouldn't tint other rays.
+    if (typeof setMapCamHovered === 'function') {
+      setMapCamHovered(camName === mapSelectedCamName);
+    }
     const cam = window.mapData?.cameras.find(c => c.name === camName);
     if (!cam) { mapTip.style.display = 'none'; return; }
     mapTipName.textContent = cam.name;
@@ -1121,7 +1607,12 @@ async function init() {
     mapTip.style.left = (e.clientX + 14) + 'px';
     mapTip.style.top = (e.clientY - 10) + 'px';
   });
-  mapSvgWrap.addEventListener('mouseleave', () => { mapTip.style.display = 'none'; });
+  mapSvgWrap.addEventListener('mouseleave', () => {
+    mapTip.style.display = 'none';
+    // Phase 6.3: clear ray boost states on leave.
+    if (typeof setMapCamHovered === 'function') setMapCamHovered(false);
+    if (typeof setMapHoveredLm === 'function') setMapHoveredLm(null);
+  });
 
   // "Show all rays" toggle in the header.
   const raysToggleBtn = document.getElementById('rays-toggle');
@@ -1345,13 +1836,16 @@ function updateLoss() {
 }
 
 // ── Landmark list ──────────────────────────────────────────────────────────
-function dColor(d) {
+// Phase 6.2: dColor delegates to window.deltaColor — the Map view uses
+// the same thresholds. Single source of truth for delta coloring.
+window.deltaColor = function(d) {
   if (d == null) return '#333';
   if (d < 1) return '#4ade80';
   if (d < 3) return '#a3e635';
   if (d < 8) return '#f59e0b';
   return '#f87171';
-}
+};
+function dColor(d) { return window.deltaColor(d); }
 
 function setFilter(f, btn) {
   lmFilter = f;
