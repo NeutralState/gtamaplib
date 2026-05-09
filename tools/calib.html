@@ -245,6 +245,7 @@ body:not(.view-map) .sidebar .statusbar.map-only{display:none}
   to{opacity:1;transform:translateX(-50%)}}
 /* ── end SVG Map Refactor Phase 8.1 ── */
 /* Phase 8.1: triangulate on Map view + drop showRayMap callsites */
+/* Phase 8.1.1: fix mapData.cams → mapData.cameras */
 /* // Phase 6.3: visual polish — fix ray colors + reduce noise */
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
@@ -2607,7 +2608,8 @@ function showTriangulationOnMap(lmName, sourceCams, lmXyz, errorM) {
 
   // Cam-type → color (matches Phase 5/6 cam-marker palette).
   function camColor(camName) {
-    const cam = (window.mapData?.cams || []).find(c => c.name === camName);
+    // Phase 8.1.1: window.mapData.cameras (not .cams)
+    const cam = (window.mapData?.cameras || []).find(c => c.name === camName);
     if (!cam) return '#9090b0';
     const t = (cam.type || '').toLowerCase();
     if (t === 'leak') return '#4ade80';      // green
@@ -2617,9 +2619,12 @@ function showTriangulationOnMap(lmName, sourceCams, lmXyz, errorM) {
     return '#fbbf24';
   }
   // Render one ray per source cam.
+  // Phase 8.1.1: window.mapData.cameras (not .cams)
+  let _triRaysDrawn = 0;
   for (const camName of sourceCams) {
-    const cam = (window.mapData?.cams || []).find(c => c.name === camName);
+    const cam = (window.mapData?.cameras || []).find(c => c.name === camName);
     if (!cam || !cam.xyz) continue;
+    _triRaysDrawn++;
     const [csx, csy] = window.worldToSvg(cam.xyz[0], cam.xyz[1]);
     const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     line.setAttribute('class', 'tri-ray');
@@ -2629,6 +2634,12 @@ function showTriangulationOnMap(lmName, sourceCams, lmXyz, errorM) {
     line.setAttribute('y2', String(lmSy));
     line.setAttribute('stroke', camColor(camName));
     layer.appendChild(line);
+  }
+  // Phase 8.1.1: defensive log — if 0 rays drawn, something is wrong.
+  if (_triRaysDrawn === 0) {
+    console.warn('[tri-rays] drew 0 rays for', lmName,
+      '— sourceCams:', sourceCams,
+      '· mapData.cameras count:', window.mapData?.cameras?.length);
   }
   // Pulse ring around the landmark.
   const pulse = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
