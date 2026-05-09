@@ -217,6 +217,34 @@ body:not(.view-map) .sidebar .statusbar.map-only{display:none}
 .lm-list.map-only{flex:1;overflow-y:auto}
 .lm-list.map-only .lm-item.untriangulated .lm-name{color:var(--dim);font-style:italic}
 /* ── end SVG Map Refactor Phase 6.2 ── */
+
+/* ── SVG Map Refactor Phase 8.1: triangulation viz on map ── */
+/* Triangulation rays — rendered in #tri-rays-layer. Each ray is a
+   <line> from cam apex → landmark xyz, color-coded by source-cam type
+   (LEAK/T1/T2/SS), with a final pulse ring around the landmark. */
+#map-overlay #tri-rays-layer{pointer-events:none}
+#map-overlay .tri-ray{stroke-width:18;stroke-linecap:round;opacity:.85;
+  filter:drop-shadow(0 0 6px rgba(255,255,255,0.3))}
+#map-overlay .tri-pulse{fill:none;stroke:#ffffff;stroke-width:8;
+  opacity:.85}
+/* Toast at the top-center of the Map view. Sits above the SVG overlay
+   so it's always visible. Auto-fades; CSS handles the fade animation. */
+#tri-toast{position:absolute;top:18px;left:50%;transform:translateX(-50%);
+  z-index:200;background:rgba(15,15,22,0.94);color:#fff;
+  border:1px solid var(--border);border-radius:8px;padding:10px 16px;
+  font-family:var(--mono);font-size:11px;line-height:1.5;
+  box-shadow:0 6px 24px rgba(0,0,0,0.5);
+  display:none;cursor:pointer;
+  max-width:560px;text-align:center}
+#tri-toast.show{display:block;animation:triToastIn .22s ease-out}
+#tri-toast .tri-toast-title{font-weight:700;color:var(--green);
+  margin-bottom:3px;font-size:12px}
+#tri-toast .tri-toast-meta{color:var(--mid);font-size:10px}
+#tri-toast.error .tri-toast-title{color:var(--red)}
+@keyframes triToastIn{from{opacity:0;transform:translate(-50%,-8px)}
+  to{opacity:1;transform:translateX(-50%)}}
+/* ── end SVG Map Refactor Phase 8.1 ── */
+/* Phase 8.1: triangulate on Map view + drop showRayMap callsites */
 /* // Phase 6.3: visual polish — fix ray colors + reduce noise */
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
@@ -1821,7 +1849,8 @@ btnOpt.addEventListener('click', async () => {
 
   await loadProjections();
   // Show ray map after optimize
-  showRayMap([currentCam], null, `Ray viz: ${currentCam} · loss ${data.loss_before} → ${data.loss} arcmin`);
+  // Phase 8.1: showRayMap call removed. The loss chip in the header now
+  // shows the new value; no modal is needed.
 });
 
 // ── Save ───────────────────────────────────────────────────────────────────
@@ -2518,36 +2547,151 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// ── Triangulation & Ray Viz ───────────────────────────────────────────────
+// ── Phase 8.1: Triangulation on Map view ──────────────────────────────────
+// Click ⊕ on a landmark → fetch /api/triangulate (persists xyz),
+// switch to Map view, render rays from ALL source cams converging on
+// the landmark, pan map to it, show toast.
 async function triangulateLandmark(lm_name) {
-  // First check how many cams see this landmark
+  // First check how many cams see this landmark.
   const src = await fetch(`/api/cam_sources?lm=${encodeURIComponent(lm_name)}`).then(r=>r.json());
-
   if (src.cams.length < 2) {
-    showRayMap([currentCam], lm_name, `⚠ Need 2+ calibrated cams — only ${src.cams.length} found for "${lm_name}"`);
+    showTriToast(`Cannot triangulate "${lm_name}"`,
+      `Need 2+ calibrated cams — only ${src.cams.length} found.`,
+      true);
     return;
   }
+  // Switch to map view immediately so the user sees something happening.
+  if (typeof window.setView === 'function') window.setView('map');
+  showTriToast(`Triangulating "${lm_name}"...`,
+    `From ${src.cams.length} source cams.`, false);
 
-  // Show ray viz first
-  showRayMap(src.cams, lm_name, `Triangulating "${lm_name}" from ${src.cams.length} cams...`);
-
-  // Run triangulation
+  // Run triangulation (persists xyz on success).
   const res = await fetch(`/api/triangulate?lm=${encodeURIComponent(lm_name)}`).then(r=>r.json());
-
   if (res.error) {
-    document.getElementById('ray-map-info').textContent = '⚠ ' + res.error;
+    showTriToast(`Triangulation failed for "${lm_name}"`, res.error, true);
     return;
   }
-
-  document.getElementById('ray-map-info').innerHTML =
-    `<span style="color:var(--green)">✓ Triangulated</span> · xyz=[${res.xyz.map(v=>v.toFixed(1)).join(', ')}] · error=${res.error_m}m · from ${res.cam_a} + ${res.cam_b}`;
-
-  // Reload projections to show updated landmark
+  // Reload projections so the camera-view canvas reflects the new xyz
+  // when the user switches back.
   await loadProjections();
-
-  // Refresh ray map with new landmark position
-  showRayMap(src.cams, lm_name, `"${lm_name}" — ${src.cams.length} source cams · error=${res.error_m}m`);
+  // Refresh map data so #lm-layer + #cams-layer reflect the new state.
+  if (typeof window.reloadMapData === 'function') {
+    try { await window.reloadMapData(); } catch (e) {}
+  }
+  // Render the converging rays + pulse on the map.
+  showTriangulationOnMap(lm_name, src.cams, res.xyz, res.error_m);
+  // Show the result toast.
+  const xyzStr = res.xyz.map(v => v.toFixed(1)).join(', ');
+  showTriToast(`✓ Triangulated "${lm_name}"`,
+    `error=${res.error_m}m · xyz=[${xyzStr}] · ${res.cam_a} + ${res.cam_b} (best pair of ${res.n_cams})`,
+    false);
 }
+
+// Phase 8.1: render rays from source cams converging on a landmark in
+// the map overlay. Lazy-creates the #tri-rays-layer if absent.
+function showTriangulationOnMap(lmName, sourceCams, lmXyz, errorM) {
+  const overlay = window.mapOverlay || document.getElementById('map-overlay');
+  if (!overlay) return;
+  let layer = document.getElementById('tri-rays-layer');
+  if (!layer) {
+    layer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    layer.setAttribute('id', 'tri-rays-layer');
+    layer.style.pointerEvents = 'none';
+    overlay.appendChild(layer);
+  }
+  // Clear prior tri-rays.
+  while (layer.firstChild) layer.removeChild(layer.firstChild);
+
+  // Compute landmark SVG coords.
+  const [lmSx, lmSy] = window.worldToSvg(lmXyz[0], lmXyz[1]);
+
+  // Cam-type → color (matches Phase 5/6 cam-marker palette).
+  function camColor(camName) {
+    const cam = (window.mapData?.cams || []).find(c => c.name === camName);
+    if (!cam) return '#9090b0';
+    const t = (cam.type || '').toLowerCase();
+    if (t === 'leak') return '#4ade80';      // green
+    if (t === 'trailer1' || t === 'trailer 1') return '#60a5fa';
+    if (t === 'trailer2' || t === 'trailer 2') return '#60a5fa';
+    if (t === 'screenshots' || t === 'screenshot') return '#a78bfa'; // purple
+    return '#fbbf24';
+  }
+  // Render one ray per source cam.
+  for (const camName of sourceCams) {
+    const cam = (window.mapData?.cams || []).find(c => c.name === camName);
+    if (!cam || !cam.xyz) continue;
+    const [csx, csy] = window.worldToSvg(cam.xyz[0], cam.xyz[1]);
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('class', 'tri-ray');
+    line.setAttribute('x1', String(csx));
+    line.setAttribute('y1', String(csy));
+    line.setAttribute('x2', String(lmSx));
+    line.setAttribute('y2', String(lmSy));
+    line.setAttribute('stroke', camColor(camName));
+    layer.appendChild(line);
+  }
+  // Pulse ring around the landmark.
+  const pulse = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  pulse.setAttribute('class', 'tri-pulse');
+  pulse.setAttribute('cx', String(lmSx));
+  pulse.setAttribute('cy', String(lmSy));
+  pulse.setAttribute('r', '60');
+  layer.appendChild(pulse);
+
+  // Pan map to center on the landmark. resetMapView centers + fits all,
+  // we want a soft pan: set translate so landmark appears at viewport
+  // center. Use existing window.mapTx if it exposes a setter; otherwise
+  // call resetMapView which at least makes sure everything is visible.
+  if (typeof window.panMapToWorld === 'function') {
+    try { window.panMapToWorld(lmXyz[0], lmXyz[1]); } catch (e) {}
+  }
+}
+
+// Phase 8.1: dismiss tri-rays layer + toast.
+function dismissTriangulation() {
+  const layer = document.getElementById('tri-rays-layer');
+  if (layer) {
+    while (layer.firstChild) layer.removeChild(layer.firstChild);
+  }
+  const toast = document.getElementById('tri-toast');
+  if (toast) {
+    toast.classList.remove('show');
+    if (window._triToastTimer) {
+      clearTimeout(window._triToastTimer);
+      window._triToastTimer = null;
+    }
+  }
+}
+window.dismissTriangulation = dismissTriangulation;
+
+// Phase 8.1: show / hide the toast.
+function showTriToast(title, meta, isError) {
+  const toast = document.getElementById('tri-toast');
+  if (!toast) return;
+  document.getElementById('tri-toast-title').textContent = title;
+  document.getElementById('tri-toast-meta').textContent = meta || '';
+  toast.classList.toggle('error', !!isError);
+  toast.classList.add('show');
+  if (window._triToastTimer) clearTimeout(window._triToastTimer);
+  window._triToastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+    window._triToastTimer = null;
+  }, 6000);
+}
+
+// Phase 8.1: clear the tri-rays on most subsequent interactions.
+// (User scrolled, picked a different cam/landmark, etc.)
+document.addEventListener('click', e => {
+  if (e.target.closest('#tri-toast')) return;  // toast click handled by toast itself
+  // Only clear if there's something to clear, and if the click is in
+  // the map area, sidebar list, etc. — not on the lm-list ⊕ button (
+  // which calls triangulateLandmark and would immediately self-clear).
+  if (e.target.closest('.lm-action-tri')) return;
+  const layer = document.getElementById('tri-rays-layer');
+  if (layer && layer.firstChild) {
+    while (layer.firstChild) layer.removeChild(layer.firstChild);
+  }
+});
 
 async function showRayMap(cam_names, lm_name, title) {
   const modal = document.getElementById('ray-map-modal');
@@ -3125,6 +3269,11 @@ ensureMapTransform().then(() => {
 });
 </script>
 
+<!-- Phase 8.1: triangulation toast (top-center over map view). -->
+<div id="tri-toast" onclick="dismissTriangulation()">
+  <div class="tri-toast-title" id="tri-toast-title">Triangulated</div>
+  <div class="tri-toast-meta" id="tri-toast-meta">—</div>
+</div>
 
   </div>
 </div>
