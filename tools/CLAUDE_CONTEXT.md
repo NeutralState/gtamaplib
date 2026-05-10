@@ -13,8 +13,8 @@
 
 - **Repo** : `~/Downloads/gtamaplib-main` · GitHub : `NeutralState/gtamaplib`
 - **Branch active** : `feature-svg-map`
-- **Bundle adjust RMS** : 2.26' (clean state, post-revert of Mount Kalaga experiment)
-- **Last session** : 2026-05-09 — Phases 5-8.2 + Phase 9.1 shipped, minimap pre-render script, rlx port investigation (parked)
+- **Bundle adjust RMS** : 2.28' (clean state post Phase 10 + Ocean near Keys roll refinement)
+- **Last session** : 2026-05-10 — Phase A (confidence tiers) + Phase B (intake_camera) + Phase 10 (roll end-to-end). Ocean near Keys (N) refined 2.21' → 1.64' as Phase 10 validation.
 
 ---
 
@@ -210,6 +210,25 @@ ils gèrent l'écriture atomique (`.tmp` + `os.replace`) et le cache.
 
 ### Items shipped
 
+**2026-05-10 (Phase A + B + Phase 10 day):**
+- ✅ **Phase A — confidence tiering** (`compute_confidence_tiers.py`).
+  Classifies cams and landmarks into anchor/high/medium/low/unverified.
+  Output `tools/generated/confidence_tiers.json` is the truth source
+  for downstream tooling. Iterated v1 → v2 → v3 to get sensible tier
+  distribution on real data: 79 anchor cams (LEAK), 156 anchor LMs.
+- ✅ **Phase B — intake gate** (`intake_camera.py`). Read-only validator
+  that solves a cam's params against the trustworthy LM skeleton
+  (anchor+high tier), with a medium-LM fallback for sparse-anchor
+  regions. Reports verdict (commit/review/reject) without modifying
+  cameras.json. JSON audit record at `tools/generated/intake/<cam>.json`.
+  Discovered Pylon (3) LM bug in first test (see Items pending).
+- ✅ **Phase 10 — roll end-to-end**. Roll is now a real optimizable
+  parameter across the entire pipeline. Five files patched, single
+  atomic commit. Backward-compatible (cams without roll default to 0).
+- ✅ **Bug fixes** committed: `tools/refine/refine_camera.py` path
+  was off-by-one (dirname depth), and intake_camera's recommendation
+  prose pointed at `tools/refine_camera.py` (doesn't exist).
+
 - ✅ z=0 / known-z flag pour landmarks (2026-05-07)
 - ✅ intersect_rays() refactor (2026-05-07)
 - ✅ Other cam cones overlay (2026-05-07)
@@ -228,22 +247,36 @@ ils gèrent l'écriture atomique (`.tmp` + `os.replace`) et le cache.
 
 #### High priority (T3 critical path)
 
-- ⏸ **Roll slider integration (Phase 10)** — full pipeline refactor.
-  YANIS confirmed needed for Jason at sea + Chase 2. Touche save +
-  optimize + bundle_adjust. ~2-3h focused work.
+- ✅ **Roll slider integration (Phase 10) — DONE 2026-05-10.** Full
+  end-to-end: refine_camera, intake_camera, bundle_adjust, server.py
+  /api/{project,optimize,save,update_landmarks}, calib.html slider.
+  Ocean near Keys (N) validated 2.21' → 1.64' (26% improvement).
 - ⏸ **Vanishing points + verticals UX** — rlx + martipk both push.
   Single biggest T3 unlock. Replace landmarks for fresh cam bootstrap.
   Multi-session feature.
-- ⏸ **Port rlx upstream cams** — 24 new cams chez rlx pas chez nous
-  (Auto Shop SE/SW, Police Chase B-I, Yacht 1/2, Tennis Court E/N/SW,
-  Jason Duval 03 Boat, etc). Requires schema mapping (rlx vs ours,
-  voir section dédiée plus bas).
+- ⏸ **Port rlx upstream cams** — 24 new cams chez rlx pas chez nous.
+  **UNBLOCKED 2026-05-10** by Phase 10 + intake_camera. Schema reality
+  check: rlx's data is in `gtamapdata.py` (Python dicts, not JSON like
+  ours). Format:
+  ```python
+  "[L1/N] Name": ((px,py,pz), (cx,cy,cz), (yaw,pitch,roll),
+                  (hfov,vfov), (w,h), "source string")
+  ```
+  Roll is the 3rd ypr component (we now handle it).
+- ⏸ **Pylon (3) landmark — bad pixels** (discovered 2026-05-10).
+  Affects Chase (2) (A) calibration. The LM was triangulated with
+  some bad pixel observations, polluting its xyz position. Causes
+  ~6-8' residuals on cams that look at it. Manual fix needed:
+  identify and remove/correct the bad source-cam pixels.
 
 #### Medium
 
-- ⏸ **Roll slider** — slider only (no pipeline integration), live
-  preview mode. Could be done before Phase 10.
 - ⏸ Search and sort landmarks (sort done in Phase 9.1, search exists)
+- ⏸ **intake_camera v2 refinements** (post-T3 if needed). v1 works
+  but verdict logic doesn't surface "solve made things worse" cases
+  (Chase 2 A: anchor+high improved but medium-LM residuals exploded
+  20×). Could add suspect-LM surfacing when sanity-residuals degrade
+  significantly. Defer until T3 batch experience reveals if needed.
 
 #### Parked
 
@@ -444,7 +477,94 @@ What this taught us about the actual problem:
 
 ## Last session log
 
-### 2026-05-10 — Multi-seed bundle_adjust experiment (ruled out)
+<!-- PATCH-2026-05-10-PM-FULL-SESSION -->
+
+### 2026-05-10 (afternoon) — Phase A + B + Phase 10: confidence tiering, intake gate, roll end-to-end
+
+**Goal**: build the T3 intake pipeline foundation. Establish a confidence
+tier system, then a per-cam intake validator, then finally complete the
+roll integration that yesterday's multi-seed detour distracted from.
+
+**Phase A — confidence tiering (`compute_confidence_tiers.py`)**:
+Classifies cams and LMs into 5 tiers. Started with strict criteria;
+iterated through v1 → v2 → v3 to match the reality of the dataset.
+Key finding: 244 single-source non-LEAK LMs were initially flagged
+"low" (= problematic) but semantically belong in "unverified" (= can't
+cross-validate yet). v3 split fixes this — `low` is now just the
+genuinely-bad LMs (high residuals), `unverified` is single-source.
+
+Final distribution on clean state:
+```
+anchor    79 cams  156 LMs
+high       1 cam    2 LMs
+medium    19 cams  273 LMs
+low        1 cam    6 LMs    ← actually problematic (Starlet Motel Sign,
+unverified 47 cams  243 LMs    ←   Oval Yellow, Radio Tower #1, Flamingo SRSW,
+                              ←   Red Billboard, 1111 Lincoln Rd)
+```
+
+**Phase B — intake gate (`intake_camera.py`)**:
+Per-cam read-only validator. Takes a cam name, filters its pixel
+observations to anchor+high LMs (with medium fallback), runs scipy
+optimization, reports verdict + audit JSON. Three verdicts: commit,
+review, reject. Doesn't modify cameras.json — that step is still
+`refine_camera.py --apply`.
+
+First diagnostic test: Chase (2) (A) revealed that the cam fits
+medium LMs (Juice Fruit Signs) at 0.9' but anchor+high LMs
+(Pylon 3, Wildfire Scooters) at 6.86'. Two interpretations: bad cam,
+or mis-positioned anchor LMs. User confirmed: Pylon (3) has known
+bad pixels never fixed. **The intake tool diagnosed a real data bug
+on its first non-trivial use.**
+
+**Phase 10 — roll end-to-end** (the actual goal that yesterday's
+multi-seed detour pushed):
+- `tools/refine/refine_camera.py`: roll as 7th param, --no-roll flag
+- `tools/intake_camera.py`: same, with audit JSON including roll
+- `tools/bundle_adjust.py`: CAM_BLOCK 6→7, jacobian sparsity, output JSON
+- `tools/server.py`: 4 query-string parsers, optimize_camera function
+- `tools/calib.html`: Roll slider in UI between Pitch and hFOV
+
+Critical test: bundle_adjust on the clean state (all rolls=0) gives
+**identical RMS 2.2842'**, confirming the patch doesn't destabilize
+the converged state. Vice Beach (A) refine: roll converges to 0.001°
+(no spurious roll). Chase (2) (A): roll converges to -0.004° (not
+the bug). Ocean near Keys (N): existing roll=-1.300° from manual
+adjustment is now preserved + refined to -1.342°, **RMS 2.21' → 1.64'**
+(26% improvement). This is the first concrete payoff of Phase 10.
+
+**Pylon (3) bug surfaced**: medium LMs (Juice Fruit Sign group)
+disagree with anchor+high LMs (Pylon (3), Wildfire Scooters) on
+where Chase (2) (A) is pointed. Root cause: Pylon (3) has bad
+source-cam pixels never fixed. Affects all cams looking at Pylon.
+Filed under Items pending for next session.
+
+**Things ruled out today**:
+- Aggressive roll prior (option C from yesterday's A/B/C debate) —
+  not needed. v1 of roll integration doesn't show micro-roll
+  absorption on the clean state, confirming rlx's concern was
+  hypothetical for our dataset.
+- Investigating Pylon today — chosen to keep momentum on Phase 10.
+
+**Final state**:
+- 4 commits: Phase A (`435e87d`), Phase B (`7afd06d`), path fixes
+  (`c9bae29`), Phase 10 atomic (`1844f23`)
+- Ocean near Keys (N) refined and applied (cameras.json modified)
+- All tooling now roll-aware end-to-end
+- Next session is unblocked for rlx port v2
+
+**Next session priorities** (updated 2026-05-10 PM):
+1. **rlx port v2** — finally do it. Schema is now understood
+   (`gtamapdata.py` Python dicts, roll in 3rd ypr position). 24
+   cams unique to rlx, 5 new landmarks, 21 new pixels. Each ported
+   cam → run intake_camera to validate against our skeleton →
+   commit or defer.
+2. **Pylon (3) LM bug** — investigate + fix the bad source pixels.
+   Concrete, ~30-45 min, autonomous.
+3. **Vanishing points + verticals UX** — biggest T3 unlock per
+   Discord feedback. Multi-session.
+
+### 2026-05-10 (morning) — Multi-seed bundle_adjust experiment (ruled out)
 
 **Goal**: address T3 batch-absorption problem (option 3 from strategy list).
 Approach: wrap bundle_adjust in a multi-seed driver that runs N optimizations
