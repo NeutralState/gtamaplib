@@ -15,31 +15,19 @@ render_all.jsonrenders/
 # Generated outputs
 *.png
 tools/generated/
-
 # Backups locaux (post-cleanup 2026-05-07)
 tools/_archive/backups/
 *.bak
 *.bak[0-9]
 *.bak_*
-
 # Generated artifacts
 tools/bundle_adjust_result.json
-
 # Outputs de tests à la racine
 /*.png
 /render_camera_out/*.png
-
 # macOS
 **/.DS_Store
-
 # Python
 *.pyc
-
-# Map assets (rendered from SVG, versioned for build reproducibility)
-!tools/assets/*.png
-
-# Map assets (rendered from SVG, versioned for build reproducibility)
-!tools/assets/*.png
-
 # Map assets (rendered from SVG, versioned for build reproducibility)
 !tools/assets/*.png
