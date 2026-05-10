@@ -236,12 +236,14 @@ def optimize_camera(cam_name, xyz, ypr, hfov):
     indep_errs = [pixel_error(cam_before, c[1], c[2]) for c in constraints if not c[4]]
     loss_before = math.sqrt(sum(e*e for e in indep_errs) / max(1, len(indep_errs)))
 
-    x0 = np.array([xyz[0], xyz[1], xyz[2], ypr[0], ypr[1], hfov], dtype=float)
+    # V1-ROLL: x0 now has 7 params — xyz + yaw + pitch + roll + hfov
+    x0 = np.array([xyz[0], xyz[1], xyz[2], ypr[0], ypr[1], ypr[2], hfov], dtype=float)
 
     # Residual function — returns vector of weighted angular errors (arcmin)
     def residuals(p):
         try:
-            cam = get_cam(cam_name, list(p[:3]), [p[3], p[4], 0.0], float(p[5]))
+            # V1-ROLL: roll is now p[5], hfov is p[6]
+            cam = get_cam(cam_name, list(p[:3]), [p[3], p[4], p[5]], float(p[6]))
         except Exception:
             return np.full(2 * n_total, 1000.0)
         out = []
@@ -258,11 +260,12 @@ def optimize_camera(cam_name, xyz, ypr, hfov):
                 out.append(500.0); out.append(500.0)
         return np.array(out, dtype=float)
 
-    # Bounds: xyz ±300m, yaw ±90°, pitch ±60°, hfov 20°-130°
+    # Bounds: xyz ±300m, yaw ±90°, pitch ±60°, roll ±5°, hfov 20°-130°
+    # V1-ROLL: roll bounded tightly to ±5° — physical camera tilt is rarely larger
     lb = np.array([xyz[0]-300, xyz[1]-300, xyz[2]-50,
-                   ypr[0]-90, ypr[1]-60, 20.0])
+                   ypr[0]-90, ypr[1]-60, ypr[2]-5.0, 20.0])
     ub = np.array([xyz[0]+300, xyz[1]+300, xyz[2]+50,
-                   ypr[0]+90, ypr[1]+60, 130.0])
+                   ypr[0]+90, ypr[1]+60, ypr[2]+5.0, 130.0])
 
     try:
         result = least_squares(
@@ -277,8 +280,10 @@ def optimize_camera(cam_name, xyz, ypr, hfov):
         return None, f"Optimization failed: {e}"
 
     # Loss after (RMS over indep only)
+    # V1-ROLL: roll is at result.x[5], hfov at result.x[6]
     cam_after = get_cam(cam_name, list(result.x[:3]),
-                         [result.x[3], result.x[4], 0.0], float(result.x[5]))
+                         [result.x[3], result.x[4], result.x[5]],
+                         float(result.x[6]))
     indep_errs_after = [pixel_error(cam_after, c[1], c[2]) for c in constraints if not c[4]]
     loss_after = math.sqrt(sum(e*e for e in indep_errs_after) / max(1, len(indep_errs_after)))
 
@@ -286,8 +291,10 @@ def optimize_camera(cam_name, xyz, ypr, hfov):
 
     return {
         'xyz': [round(float(v), 4) for v in result.x[:3]],
-        'ypr': [round(float(result.x[3]), 4), round(float(result.x[4]), 4), 0.0],
-        'hfov': round(float(result.x[5]), 4),
+        # V1-ROLL: roll is now optimized (result.x[5]), hfov moved to result.x[6]
+        'ypr': [round(float(result.x[3]), 4), round(float(result.x[4]), 4),
+                round(float(result.x[5]), 4)],
+        'hfov': round(float(result.x[6]), 4),
         'loss_before': round(loss_before, 4),
         'loss': round(loss_after, 4),
         'improvement_pct': improvement,
@@ -594,7 +601,10 @@ class Handler(BaseHTTPRequestHandler):
         elif path == '/api/project':
             cam_name = unquote(qs.get('cam', [''])[0])
             xyz = [float(qs['x'][0]), float(qs['y'][0]), float(qs['z'][0])] if 'x' in qs else None
-            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]), 0.0] if 'yaw' in qs else None
+# ── SERVER-ROLL-PATCH-V1 ──
+            # V1-ROLL: parse roll from query string (defaults to 0 for backward compat)
+            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]),
+                   float(qs.get('roll', ['0.0'])[0])] if 'yaw' in qs else None
             hfov = float(qs['hfov'][0]) if 'hfov' in qs else None
 
             projs, losses = compute_projections(cam_name, xyz, ypr, hfov)
@@ -616,7 +626,9 @@ class Handler(BaseHTTPRequestHandler):
         elif path == '/api/optimize':
             cam_name = unquote(qs.get('cam', [''])[0])
             xyz = [float(qs['x'][0]), float(qs['y'][0]), float(qs['z'][0])]
-            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]), 0.0]
+            # V1-ROLL: parse roll from query string (defaults to 0 for backward compat)
+            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]),
+                   float(qs.get('roll', ['0.0'])[0])]
             hfov = float(qs['hfov'][0])
             print(f"Optimizing {cam_name}...")
             res, err = optimize_camera(cam_name, xyz, ypr, hfov)
@@ -632,7 +644,9 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json({'error': 'invalid cam'}, 400)
                 return
             xyz = [float(qs['x'][0]), float(qs['y'][0]), float(qs['z'][0])]
-            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]), 0.0]
+            # V1-ROLL: parse roll from query string (defaults to 0 for backward compat)
+            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]),
+                   float(qs.get('roll', ['0.0'])[0])]
             hfov_val = float(qs['hfov'][0])
             md.update_camera(cam_name, xyz, ypr, [hfov_val, None])
             ml.get_camera.cache_clear()
@@ -643,7 +657,9 @@ class Handler(BaseHTTPRequestHandler):
             UPDATE_LMS_LOSS_THRESHOLD = 10.0  # arcmin — refuse if cam loss exceeds this
             cam_name = unquote(qs.get('cam', [''])[0])
             xyz = [float(qs['x'][0]), float(qs['y'][0]), float(qs['z'][0])]
-            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]), 0.0]
+            # V1-ROLL: parse roll from query string (defaults to 0 for backward compat)
+            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]),
+                   float(qs.get('roll', ['0.0'])[0])]
             hfov_val = float(qs['hfov'][0])
 
             # Safety: refuse if cam loss is too high. A high-loss cam in a bad

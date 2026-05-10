@@ -56,7 +56,9 @@ ap = argparse.ArgumentParser(description=__doc__,
                              formatter_class=argparse.RawDescriptionHelpFormatter)
 ap.add_argument('cam_name')
 ap.add_argument('--no-hfov', action='store_true',
-                help='Keep hfov fixed (only refine yaw + pitch [+ xyz if --refine-xyz])')
+                help='Keep hfov fixed (only refine yaw + pitch [+ roll, + xyz if --refine-xyz])')
+ap.add_argument('--no-roll', action='store_true',
+                help='Keep roll fixed at cam\'s current value (default: roll IS optimized)')
 ap.add_argument('--refine-xyz', action='store_true',
                 help='Also refine x, y, z within ±xyz_radius m')
 ap.add_argument('--xyz-radius', type=float, default=300.0,
@@ -181,9 +183,14 @@ if n_total_usable < 3:
 # only, one against all medium-or-better. The first is the "trust" verdict;
 # the second is reported as a sanity-check (should be similar).
 
+# ── INTAKE-ROLL-PATCH-V1 ──
 cam = ml.get_camera(CAM_NAME)
 xyz0 = tuple(cam_data['xyz'])
 ypr0 = list(cam_data.get('ypr') or [0.0, 0.0, 0.0])
+# Ensure ypr0 has 3 components even for older cam data
+while len(ypr0) < 3:
+    ypr0.append(0.0)
+roll0 = float(ypr0[2])  # roll starting value (was hardcoded 0 before V1-ROLL patch)
 fov0 = cam_data.get('fov') or [60.0, None]
 hfov0 = fov0[0]
 size = cam_data.get('size') or [1920, 1080]
@@ -194,21 +201,32 @@ if hfov0 is None:
 def loss_fn_factory(obs_list):
     """Build a loss function that evaluates against a specific obs list."""
     def loss(params, return_residuals=False):
+        # V1-ROLL: roll inserted between yaw/pitch and hfov in the param vector
+        base = 3 if args.refine_xyz else 0
         if args.refine_xyz:
             x, y, z = params[0], params[1], params[2]
-            yaw, pitch = params[3], params[4]
-            hfov = params[5] if len(params) > 5 else hfov0
             cur_xyz = (x, y, z)
             dist_sq = ((x - xyz0[0])**2 + (y - xyz0[1])**2 + (z - xyz0[2])**2)
             penalty = (dist_sq - args.xyz_radius**2) * 1e3 if dist_sq > args.xyz_radius**2 else 0.0
         else:
             cur_xyz = xyz0
-            yaw, pitch = params[0], params[1]
-            hfov = params[2] if len(params) > 2 else hfov0
             penalty = 0.0
 
+        yaw = params[base + 0]
+        pitch = params[base + 1]
+        idx = base + 2
+        if args.no_roll:
+            roll = roll0
+        else:
+            roll = params[idx]
+            idx += 1
+        if args.no_hfov:
+            hfov = hfov0
+        else:
+            hfov = params[idx] if idx < len(params) else hfov0
+
         cam.set_xyz(cur_xyz)
-        cam.set_ypr((yaw, pitch, 0.0))
+        cam.set_ypr((yaw, pitch, roll))
         cam.set_fov((hfov, None))
         cam.clear_landmark_directions()
 
@@ -231,32 +249,44 @@ def loss_fn_factory(obs_list):
     return loss
 
 
-def build_x0(use_hfov):
+def build_x0(use_roll, use_hfov):
     if args.refine_xyz:
-        base = [xyz0[0], xyz0[1], xyz0[2], ypr0[0], ypr0[1]]
+        v = [xyz0[0], xyz0[1], xyz0[2], ypr0[0], ypr0[1]]
     else:
-        base = [ypr0[0], ypr0[1]]
+        v = [ypr0[0], ypr0[1]]
+    if use_roll:
+        v.append(roll0)
     if use_hfov:
-        base.append(hfov0)
-    return base
+        v.append(hfov0)
+    return v
 
 
 def unpack(x):
-    """Unpack solver result vector into named params."""
+    """Unpack solver result vector into named params (V1-ROLL adds roll)."""
+    base = 3 if args.refine_xyz else 0
     if args.refine_xyz:
         new_xyz = (x[0], x[1], x[2])
-        yaw, pitch = x[3], x[4]
-        hfov = x[5] if len(x) > 5 else hfov0
     else:
         new_xyz = xyz0
-        yaw, pitch = x[0], x[1]
-        hfov = x[2] if len(x) > 2 else hfov0
-    return new_xyz, yaw, pitch, hfov
+    yaw = x[base + 0]
+    pitch = x[base + 1]
+    idx = base + 2
+    if args.no_roll:
+        roll = roll0
+    else:
+        roll = float(x[idx])
+        idx += 1
+    if args.no_hfov:
+        hfov = hfov0
+    else:
+        hfov = float(x[idx]) if idx < len(x) else hfov0
+    return new_xyz, yaw, pitch, roll, hfov
 
 
 # ── Compute pre-solve residuals (current cameras.json state) ────────────────
 
-x0_init = build_x0(use_hfov=True)
+# V1-ROLL: pre-solve evaluation uses current roll value as well
+x0_init = build_x0(use_roll=True, use_hfov=True)
 pre_loss_ah = loss_fn_factory(ah_obs)
 pre_loss_mob = loss_fn_factory(ah_obs + med_obs)
 pre_rms_ah, pre_resids_ah = pre_loss_ah(x0_init, return_residuals=True) if ah_obs else (None, [])
@@ -278,7 +308,7 @@ print()
 def solve(obs_list, label):
     """Run the solver against an obs list; return (params, rms, residuals)."""
     loss_for = loss_fn_factory(obs_list)
-    x0 = build_x0(use_hfov=not args.no_hfov)
+    x0 = build_x0(use_roll=not args.no_roll, use_hfov=not args.no_hfov)
     print(f"Solving against {len(obs_list)} {label} observations...")
     t0 = time.time()
     result = minimize(loss_for, x0, method='Nelder-Mead',
@@ -315,14 +345,15 @@ else:
 
 # ── Compute verdict ─────────────────────────────────────────────────────────
 
-new_xyz, yaw_new, pitch_new, hfov_new = unpack(solve_x)
+new_xyz, yaw_new, pitch_new, roll_new, hfov_new = unpack(solve_x)
 post_med = np.median([r for _, r in solve_resids])
 post_max = max(r for _, r in solve_resids) if solve_resids else None
 
-# Movement summary
+# Movement summary (V1-ROLL adds roll_delta)
 xyz_delta = math.sqrt(sum((a - b)**2 for a, b in zip(new_xyz, xyz0)))
 yaw_delta = yaw_new - ypr0[0]
 pitch_delta = pitch_new - ypr0[1]
+roll_delta = roll_new - roll0
 hfov_delta = hfov_new - hfov0
 
 # Verdict logic
@@ -368,6 +399,8 @@ if args.refine_xyz:
     print(f"  total xyz movement: {xyz_delta:.1f} m")
 print(f"  yaw    {ypr0[0]:>10.3f}  →  {yaw_new:>10.3f}   (Δ {yaw_delta:+.3f}°)")
 print(f"  pitch  {ypr0[1]:>10.3f}  →  {pitch_new:>10.3f}   (Δ {pitch_delta:+.3f}°)")
+if not args.no_roll:
+    print(f"  roll   {roll0:>10.3f}  →  {roll_new:>10.3f}   (Δ {roll_delta:+.3f}°)")
 if not args.no_hfov:
     print(f"  hfov   {hfov0:>10.3f}  →  {hfov_new:>10.3f}   (Δ {hfov_delta:+.3f}°)")
 print()
@@ -427,6 +460,7 @@ if verdict == 'commit':
     print(f"→ Recommended action: COMMIT")
     print(f"  Run: python3 tools/refine/refine_camera.py \"{CAM_NAME}\"" +
           (' --refine-xyz' if args.refine_xyz else '') +
+          (' --no-roll' if args.no_roll else '') +
           (' --no-hfov' if args.no_hfov else '') +
           ' --apply')
     print(f"  Or apply manually via the calib UI.")
@@ -479,15 +513,17 @@ record = {
     },
     'refined_params': {
         'xyz': [round(v, 4) for v in new_xyz],
-        'ypr': [round(yaw_new, 4), round(pitch_new, 4), 0.0],
+        'ypr': [round(yaw_new, 4), round(pitch_new, 4), round(roll_new, 4)],
         'hfov': round(hfov_new, 4),
         'xyz_was_refined': args.refine_xyz,
+        'roll_was_refined': not args.no_roll,
         'hfov_was_refined': not args.no_hfov,
     },
     'movement': {
         'xyz_delta_m': round(xyz_delta, 4),
         'yaw_delta_deg': round(yaw_delta, 4),
         'pitch_delta_deg': round(pitch_delta, 4),
+        'roll_delta_deg': round(roll_delta, 4),
         'hfov_delta_deg': round(hfov_delta, 4),
     },
 }

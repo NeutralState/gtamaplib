@@ -485,6 +485,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div class="sb-title">Orientation & FOV</div>
       <div class="sl-row"><span class="sl-lbl">Yaw</span><input type="range" id="sl-yaw" min="-180" max="360" step="0.01"><input class="num" id="num-yaw" type="number" step="0.01"></div>
       <div class="sl-row"><span class="sl-lbl">Pitch</span><input type="range" id="sl-pitch" min="-90" max="90" step="0.01"><input class="num" id="num-pitch" type="number" step="0.01"></div>
+      <!-- CALIB-ROLL-PATCH-V1 -->
+      <div class="sl-row"><span class="sl-lbl">Roll</span><input type="range" id="sl-roll" min="-15" max="15" step="0.01"><input class="num" id="num-roll" type="number" step="0.01"></div>
       <div class="sl-row"><span class="sl-lbl">hFOV</span><input type="range" id="sl-hfov" min="10" max="130" step="0.01"><input class="num" id="num-hfov" type="number" step="0.01"></div>
     </div>
     <div class="opt-bar">
@@ -613,7 +615,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 <script>
 // ── State ──────────────────────────────────────────────────────────────────
 let currentCam = null, camData = null, projections = [], losses = {};
-let params = {x:0,y:0,z:0,yaw:0,pitch:0,hfov:60};
+let params = {x:0,y:0,z:0,yaw:0,pitch:0,roll:0,hfov:60};
 let origParams = null;
 let hoveredLm = null, selectedLm = null;
 let dirty = false, optimizing = false, lmFilter = 'all';
@@ -748,8 +750,8 @@ const optLoss    = document.getElementById('opt-loss');
 const optDetail  = document.getElementById('opt-detail');
 const tip        = document.getElementById('tip');
 
-const SL_IDS  = {x:'sl-x',y:'sl-y',z:'sl-z',yaw:'sl-yaw',pitch:'sl-pitch',hfov:'sl-hfov'};
-const NUM_IDS = {x:'num-x',y:'num-y',z:'num-z',yaw:'num-yaw',pitch:'num-pitch',hfov:'num-hfov'};
+const SL_IDS  = {x:'sl-x',y:'sl-y',z:'sl-z',yaw:'sl-yaw',pitch:'sl-pitch',roll:'sl-roll',hfov:'sl-hfov'};
+const NUM_IDS = {x:'num-x',y:'num-y',z:'num-z',yaw:'num-yaw',pitch:'num-pitch',roll:'num-roll',hfov:'num-hfov'};
 
 // ── Init ───────────────────────────────────────────────────────────────────
 // State for cam picker
@@ -1849,7 +1851,7 @@ async function loadProjections() {
   const isFirst = !origParams;
   let url = `/api/project?cam=${encodeURIComponent(currentCam)}`;
   if (!isFirst) {
-    url += `&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&hfov=${params.hfov}`;
+    url += `&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&roll=${params.roll}&hfov=${params.hfov}`;
   }
 
   const data = await fetch(url).then(r => r.json());
@@ -1858,7 +1860,7 @@ async function loadProjections() {
   if (isFirst) {
     params = {
       x: camData.xyz[0], y: camData.xyz[1], z: camData.xyz[2],
-      yaw: camData.ypr[0], pitch: camData.ypr[1], hfov: camData.hfov
+      yaw: camData.ypr[0], pitch: camData.ypr[1], roll: (camData.ypr[2] !== undefined ? camData.ypr[2] : 0), hfov: camData.hfov
     };
     origParams = {...params};
     syncSliders();
@@ -1946,7 +1948,7 @@ btnOpt.addEventListener('click', async () => {
   btnOpt.classList.add('running');
   btnOpt.disabled = true;
 
-  const url = `/api/optimize?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&hfov=${params.hfov}`;
+  const url = `/api/optimize?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&roll=${params.roll}&hfov=${params.hfov}`;
   const data = await fetch(url).then(r => r.json());
 
   optimizing = false;
@@ -1962,7 +1964,7 @@ btnOpt.addEventListener('click', async () => {
   }
 
   params = {x: data.xyz[0], y: data.xyz[1], z: data.xyz[2],
-            yaw: data.ypr[0], pitch: data.ypr[1], hfov: data.hfov};
+            yaw: data.ypr[0], pitch: data.ypr[1], roll: (data.ypr[2] !== undefined ? data.ypr[2] : 0), hfov: data.hfov};
   syncSliders();
   dirty = true;
   btnSave.disabled = false;
@@ -1982,7 +1984,7 @@ btnOpt.addEventListener('click', async () => {
 // ── Save ───────────────────────────────────────────────────────────────────
 btnSave.addEventListener('click', async () => {
   if (!currentCam) return;
-  await fetch(`/api/save?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&hfov=${params.hfov}`);
+  await fetch(`/api/save?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&roll=${params.roll}&hfov=${params.hfov}`);
   dirty = false;
   btnSave.disabled = true;
   origParams = {...params};
@@ -2236,7 +2238,7 @@ btnUpdate.addEventListener('click', async () => {
   btnUpdate.textContent = '⏳ Updating...';
   btnUpdate.disabled = true;
 
-  const url = `/api/update_landmarks?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&hfov=${params.hfov}`;
+  const url = `/api/update_landmarks?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&roll=${params.roll}&hfov=${params.hfov}`;
   const data = await fetch(url).then(r => r.json());
 
   btnUpdate.textContent = 'Update LMs';
