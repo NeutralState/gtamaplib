@@ -327,6 +327,78 @@ landmarks, on devrait soit set des defaults soit générer ces fields.
 
 ---
 
+---
+
+## ⚠ CRITICAL T3 PROBLEM (discovered 2026-05-09 late-night)
+
+**The current bundle_adjust workflow does not handle batches of new cams.**
+
+When the system has converged to RMS 2.32' on the existing 147 cams + their
+landmarks, adding 24 new cams from rlx upstream:
+- Initial RMS jumps to 15.42' (6.6× worse)
+- Bundle adjust can only improve to 11.87' (23% improvement)
+- The optimizer is **trapped near the old local optimum**
+- Many existing cams that worked fine now show >100' outliers
+  (e.g. Convertible 170', Port Gellhorn 01 123', Gas Station Chase 63')
+
+**Root cause analysis**:
+- Old optimum was tightly fitted to a specific set of cam params + landmark
+  positions. New cams come with their OWN optimization (rlx's params), and
+  those params point toward landmarks at OUR positions, which differ from
+  rlx's positions by a median ~3m (max 948m for some entries).
+- The optimizer cannot escape the old basin without large perturbations,
+  which it doesn't try (xtol termination after 2 nfev when stuck).
+
+**Schema divergence with rlx**:
+- 447 of 685 landmarks (65%) differ by >0.5m between our state and rlx's
+- 66 differ by >50m
+- Our 69 unique landmarks not in rlx + rlx's 5 newer landmarks not in us
+- This is 7 months of divergent optimization between two forks
+
+**Why this matters for T3**:
+T3 will bring 50-100+ new cams from leaks/trailers/screenshots simultaneously.
+Each will come with pixel observations against landmarks. Our current
+workflow cannot absorb this gracefully — the same dynamic we hit tonight
+with 24 cams will be much worse with T3's volume.
+
+**Possible solutions to explore (NEXT SESSION priority)**:
+
+1. **Incremental workflow** — each new cam passes through `refine_camera.py`
+   solo (with wide search radius) BEFORE being added to bundle_adjust pool.
+   Validates each cam against the current system before introducing it.
+
+2. **Cold-start mode in bundle_adjust** — flag to re-initialize all cam
+   params from approximate values, allowing the optimizer to find a new
+   global optimum instead of staying near the old one.
+
+3. **Multi-seed bundle_adjust** — multiple random restarts of the
+   optimizer with perturbations, keep the best result. Computationally
+   expensive but escapes local optima.
+
+4. **Confidence scoring + auto-refine** — after bundle_adjust, auto-detect
+   cams with residuals >threshold and force a refine on them, then re-run.
+
+5. **Sync strategy with rlx** — workflow to pull rlx's landmark updates
+   regularly without breaking the local state. This is upstream of all
+   the above — if our landmarks stay in sync with rlx, the new cams
+   from any source will fit cleanly.
+
+6. **Confidence-based bundle_adjust** — give different weight to
+   constraints based on how trusted each cam/landmark is. New unverified
+   cams get low weight initially, high-confidence LEAK cams get high weight.
+
+**Workflow attempted tonight (FAILED — reverted)**:
+- v1 port: copied rlx schema directly → server crashed (schema mismatch)
+- v2 port: correct schema mapping, ported 24 cams + 5 landmarks +
+  21 pixels → bundle adjust regressed to 11.87' RMS
+- Full sync to rlx: replaced all landmarks with rlx's positions →
+  Suspicious flag on LEAK cams (broken)
+
+**Final state of session 2026-05-09**:
+- Reverted to clean state (RMS 2.32', 147 cams)
+- All session artifacts cleaned up
+- This problem documented for next session
+
 ## Last session log
 
 ### 2026-05-09 — Big day: Phases 6-8.2 + 9.1 + cleanup + rlx port investigation
