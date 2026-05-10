@@ -425,7 +425,7 @@ print()
 # Recommendation prose
 if verdict == 'commit':
     print(f"→ Recommended action: COMMIT")
-    print(f"  Run: python3 tools/refine_camera.py \"{CAM_NAME}\"" +
+    print(f"  Run: python3 tools/refine/refine_camera.py \"{CAM_NAME}\"" +
           (' --refine-xyz' if args.refine_xyz else '') +
           (' --no-hfov' if args.no_hfov else '') +
           ' --apply')
