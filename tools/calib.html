@@ -318,6 +318,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .f-btn.on{background:var(--surface2);color:var(--text);border-color:var(--mid)}
 
 .lm-list{flex:1;overflow-y:auto}
+/* Phase 9.1: sort dropdown styling */
+.lm-sort-wrap{display:inline-flex;align-items:center;gap:4px;margin-left:6px}
+.lm-sort-wrap select{font-family:var(--mono);font-size:10px;
+  background:var(--surface2);color:var(--text);
+  border:1px solid var(--border);border-radius:4px;
+  padding:2px 4px;outline:none;cursor:pointer}
+.lm-sort-wrap select:hover{border-color:var(--mid)}
+.lm-sort-wrap .sort-lbl{font-size:9px;color:var(--dim)}
 .lm-list::-webkit-scrollbar{width:3px}
 .lm-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 .lm-item{display:flex;align-items:center;gap:6px;padding:5px 13px;border-bottom:1px solid #111118;cursor:pointer;transition:background .1s}
@@ -497,12 +505,23 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div class="lm-info-row" id="lm-info-others"></div>
     </div>
     <div class="lm-hdr">
-      <div class="sb-title" style="margin:0">Landmarks (<span id="lm-count">0</span>)</div>
+      <div class="sb-title" style="margin:0;display:flex;align-items:center;gap:8px;flex:1">
+        <span>Landmarks (<span id="lm-count">0</span>)</span>
+        <button class="f-btn" id="btn-add-px" onclick="openAddPixel()" style="color:var(--green);border-color:var(--green);font-size:10px;padding:2px 6px">+ Add</button>
+      </div>
+      <!-- Phase 9.1.2: dropped Bad filter (sort by error ↓ does the same) -->
       <div class="lm-filters">
         <button class="f-btn on" onclick="setFilter('all',this)">All</button>
         <button class="f-btn" onclick="setFilter('indep',this)">Indep</button>
-        <button class="f-btn" onclick="setFilter('bad',this)">Bad</button>
-        <button class="f-btn" id="btn-add-px" onclick="openAddPixel()" style="color:var(--green);border-color:var(--green)">+ Add</button>
+        <span class="lm-sort-wrap">
+          <span class="sort-lbl">sort</span>
+          <select id="lm-sort" onchange="setLmSort(this.value)">
+            <option value="original">original</option>
+            <option value="name">name</option>
+            <option value="error">error ↓</option>
+            <option value="indep">indep first</option>
+          </select>
+        </span>
       </div>
     </div>
     <div class="lm-list" id="lm-list"></div>
@@ -517,6 +536,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 
 
 
+<!-- Phase 9.1: URL hash state + landmark sort -->
+<!-- Phase 9.1.1: fix window.currentCam ref -->
+<!-- Phase 9.1.2: declutter filter row -->
+<!-- Phase 9.1.3: fix sentinel leak -->
 <!-- Phase 8.2: #ray-map-modal removed (replaced by Phase 8.1 Map view tri-rays). -->
 
 <div id="add-px-modal" style="display:none;position:fixed;inset:0;background:#000a;z-index:250;align-items:center;justify-content:center">
@@ -594,6 +617,111 @@ let params = {x:0,y:0,z:0,yaw:0,pitch:0,hfov:60};
 let origParams = null;
 let hoveredLm = null, selectedLm = null;
 let dirty = false, optimizing = false, lmFilter = 'all';
+// Phase 9.1: sort observer — reorders #lm-list children based on lmSort.
+// Triggers whenever lm-list children change (the existing render code
+// blindly innerHTML='' and rebuilds). We just reorder after the fact.
+function _applyLmSort() {
+  if (lmSort === 'original') return;
+  const list = document.getElementById('lm-list');
+  if (!list || !list.children.length) return;
+  const items = Array.from(list.children).filter(el => el.classList.contains('lm-item'));
+  if (items.length < 2) return;
+  // Extract sort key from each item.
+  function getKey(el) {
+    const name = (el.querySelector('.lm-name')?.textContent || '').trim();
+    // Error: parse the visible delta number (e.g. "5.60") from the right side.
+    // It's typically the last numeric content node, formatted like "5.60" or "—".
+    const errText = (el.querySelector('.lm-err, .lm-delta')?.textContent
+      || el.textContent.match(/\b(\d+\.\d+)\b\s*$/)?.[0] || '').trim();
+    const err = parseFloat(errText);
+    const isIndep = el.classList.contains('lm-indep') ||
+                    !!el.querySelector('.lm-indep') ||
+                    /indep/i.test(el.className);
+    const isUntri = el.classList.contains('untriangulated');
+    return { name: name.toLowerCase(), err: isNaN(err) ? Infinity : err, isIndep, isUntri };
+  }
+  const sorted = items.slice().sort((a, b) => {
+    const ka = getKey(a), kb = getKey(b);
+    if (lmSort === 'name') return ka.name.localeCompare(kb.name);
+    if (lmSort === 'error') {
+      // Untriangulated last, then highest error first.
+      if (ka.isUntri !== kb.isUntri) return ka.isUntri ? 1 : -1;
+      return kb.err - ka.err;
+    }
+    if (lmSort === 'indep') {
+      if (ka.isIndep !== kb.isIndep) return ka.isIndep ? -1 : 1;
+      return kb.err - ka.err;
+    }
+    return 0;
+  });
+  // Only reorder if the order actually changed (avoid infinite observer loop).
+  let changed = false;
+  for (let i = 0; i < sorted.length; i++) {
+    if (items[i] !== sorted[i]) { changed = true; break; }
+  }
+  if (!changed) return;
+  // Re-append in new order.
+  const frag = document.createDocumentFragment();
+  for (const el of sorted) frag.appendChild(el);
+  list.appendChild(frag);
+}
+// Hook MutationObserver to re-sort whenever lm-list children change.
+window.addEventListener('load', () => {
+  const list = document.getElementById('lm-list');
+  if (!list) return;
+  const obs = new MutationObserver(() => {
+    // Defer to next tick to avoid sorting mid-render.
+    if (window._lmSortPending) return;
+    window._lmSortPending = true;
+    setTimeout(() => {
+      window._lmSortPending = false;
+      _applyLmSort();
+    }, 0);
+  });
+  obs.observe(list, { childList: true });
+});
+window._applyLmSort = _applyLmSort;
+// Phase 9.1: URL hash state + landmark sort
+let lmSort = 'original';
+function _readUrlHash() {
+  const h = location.hash.replace(/^#/, '');
+  if (!h) return {};
+  const out = {};
+  for (const part of h.split('&')) {
+    const [k, v] = part.split('=');
+    if (k && v !== undefined) out[k] = decodeURIComponent(v);
+  }
+  return out;
+}
+function _writeUrlHash(state) {
+  // Only include non-default values to keep URL clean.
+  const parts = [];
+  if (state.cam) parts.push('cam=' + encodeURIComponent(state.cam));
+  if (state.view && state.view !== 'camera') parts.push('view=' + encodeURIComponent(state.view));
+  if (state.sort && state.sort !== 'original') parts.push('sort=' + encodeURIComponent(state.sort));
+  const h = parts.length ? '#' + parts.join('&') : '';
+  if (location.hash !== h) {
+    history.replaceState(null, '', location.pathname + location.search + h);
+  }
+}
+function _syncUrlHash() {
+  // Phase 9.1.1: currentCam is a script-local var, not on window.
+  _writeUrlHash({
+    cam: (typeof currentCam !== 'undefined' ? currentCam : null) || null,
+    view: document.body.classList.contains('view-map') ? 'map' : 'camera',
+    sort: lmSort
+  });
+}
+function setLmSort(value) {
+  lmSort = value || 'original';
+  _syncUrlHash();
+  // Re-render the lm-list with the new sort.
+  if (typeof window.loadProjections === 'function') {
+    window.loadProjections();
+  }
+}
+window.setLmSort = setLmSort;
+window._syncUrlHash = _syncUrlHash;
 let mainZoom = 1, mainPanX = 0, mainPanY = 0, mainDragging = false, mainDragStart = null, mainPanStart = null;
 
 // ── DOM ────────────────────────────────────────────────────────────────────
@@ -815,6 +943,12 @@ async function init() {
     }
   }
   window.setView = setView;
+  // Phase 9.1: sync URL hash whenever view changes.
+  const _origSetView = setView;
+  window.setView = function(name) {
+    _origSetView(name);
+    if (typeof window._syncUrlHash === 'function') window._syncUrlHash();
+  };
 
   viewToggle.addEventListener('click', e => {
     const btn = e.target.closest('button[data-view]');
@@ -1680,6 +1814,8 @@ async function init() {
 // ── Camera select ──────────────────────────────────────────────────────────
 camSel.addEventListener('change', async () => {
   currentCam = camSel.value || null;
+  // Phase 9.1: sync URL hash on cam change.
+  if (typeof window._syncUrlHash === 'function') window._syncUrlHash();
   if (!currentCam) return;
 
   origParams = null;
@@ -3266,6 +3402,48 @@ document.addEventListener('keydown', e => {
 // Eagerly prefetch map metadata so the minimap works on first cam selection.
 ensureMapTransform().then(() => {
   if (currentCam) updateMinimap();
+});
+</script>
+
+<script>
+// Phase 9.1: restore state from URL hash on initial load.
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    try {
+      const state = (function(){
+        const h = location.hash.replace(/^#/, '');
+        if (!h) return {};
+        const out = {};
+        for (const part of h.split('&')) {
+          const [k, v] = part.split('=');
+          if (k && v !== undefined) out[k] = decodeURIComponent(v);
+        }
+        return out;
+      })();
+      // Restore sort first (cheap, doesn't trigger a fetch).
+      if (state.sort) {
+        const sel = document.getElementById('lm-sort');
+        if (sel) {
+          sel.value = state.sort;
+          if (typeof window.setLmSort === 'function') window.setLmSort(state.sort);
+        }
+      }
+      // Restore cam (will trigger frame load + projections).
+      if (state.cam) {
+        const camSel = document.getElementById('cam-sel');
+        if (camSel) {
+          camSel.value = state.cam;
+          camSel.dispatchEvent(new Event('change'));
+        }
+      }
+      // Restore view (toggle map view if requested).
+      if (state.view === 'map') {
+        if (typeof window.setView === 'function') window.setView('map');
+      }
+    } catch (e) {
+      console.warn('[hash-restore] failed:', e);
+    }
+  }, 200);
 });
 </script>
 
