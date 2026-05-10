@@ -399,7 +399,94 @@ with 24 cams will be much worse with T3's volume.
 - All session artifacts cleaned up
 - This problem documented for next session
 
+<!-- PATCH-2026-05-10-MULTISEED-LESSONS -->
+
+**2026-05-10 update — multi-seed bundle_adjust ruled out**:
+
+Tested option (3) "multi-seed bundle_adjust" from the strategy list above.
+Two patches written and applied (multi-seed wrapper + budget tuning), both
+technically correct; both confirmed the approach **does not fit the problem**.
+
+What we observed:
+- σ_xyz=5m, σ_angle=1°, σ_lm=2m perturbations produce initial RMS in the
+  80-400' range. The TRF solver cannot recover from those magnitudes
+  regardless of `xtol` (tested 1e-7 and 1e-4) or `max_nfev` (tested 200
+  and 2000). Pass 1 quits at 2 nfev because the cost surface is too
+  non-convex at that scale; the linear approximation TRF uses is wildly
+  off, every trial step looks worse, trust region collapses.
+- The bit-for-bit identical seed results between the v1 (tight) and v2
+  (loose) tolerance runs proved the issue isn't tolerances — it's that
+  perturbations large enough to escape basins create starting points the
+  solver simply cannot traverse.
+
+What this taught us about the actual problem:
+- The 24-cam rlx-port trap (RMS 11.87') was NOT a local-optimum problem.
+- It was a **data inconsistency** problem: rlx's cams point at where rlx's
+  landmarks are, our landmarks differ from his by meters (447/685 LMs
+  differ by >0.5m, 66 by >50m), so the optimizer faces literally
+  contradictory constraints. No restart strategy fixes that.
+
+**Strategies still on the table for T3**:
+- (1) **Incremental refine-before-add** — each new cam validated solo
+  against current LMs via `refine_camera.py` BEFORE entering the bundle.
+  This forces new cams to fit OUR positions before they can affect
+  anything else. Most aligned with the actual root cause.
+- (5) **Sync with rlx landmarks** — periodically pull rlx's landmark
+  deltas, accept whichever side has higher confidence per LM. Reduces
+  divergence at the source.
+- (6) **Confidence-based weighting** — new cams arrive with low weight,
+  ramp up as residuals validate.
+
+**Strategies removed from consideration**:
+- (3) Multi-seed bundle_adjust (this session)
+- (2) Cold-start mode (would have the same large-perturbation problem)
+- (4) Auto-refine outliers (refine also fails from bad starting points)
+
 ## Last session log
+
+### 2026-05-10 — Multi-seed bundle_adjust experiment (ruled out)
+
+**Goal**: address T3 batch-absorption problem (option 3 from strategy list).
+Approach: wrap bundle_adjust in a multi-seed driver that runs N optimizations
+from perturbed starting points, keeps the best result. Hypothesis: random
+restarts let the solver escape local optima the 24-cam port got trapped in.
+
+**Patches written (both reverted at end of session)**:
+- `patch_bundle_adjust_multiseed.py` — adds `--multi-seed N`, `--seed S`,
+  `--sigma-xyz/angle/lm` flags. Wraps optimization in `run_optimization()`,
+  outer loop runs seeds 0..N-1 (seed 0 = current values, others perturbed),
+  picks lowest-RMS winner. Idempotent via sentinel V1.
+- `patch_bundle_adjust_seed_budget.py` — diagnostic follow-up after seed 0
+  results showed perturbed seeds quitting at 2 nfev. Adds
+  `--max-nfev-perturbed 2000`, `--xtol-perturbed 1e-4`, separate solver
+  budgets for seed 0 (tight) vs perturbed seeds (loose). Sentinel V2.
+
+**Results on clean state (RMS 2.28')**:
+- All 8 seeds: seed 0 won at 2.2842' (correctly — clean state already converged)
+- Perturbed seeds (1-7) ranged from 19.5763' to 204.3197' final RMS
+- Bit-for-bit identical results between v1 (tight) and v2 (loose) tolerances
+  → tolerances were not the bottleneck; large initial residuals are the issue
+- Total runtime: 0.1-0.2 min for 8 seeds (very fast)
+
+**Diagnosis (see T3 critical section above for full writeup)**:
+The multi-seed approach assumed the T3 problem was local-optimum trapping.
+It isn't. The actual problem is data inconsistency between our landmarks and
+rlx's — no restart strategy fixes contradictory constraints. Multi-seed,
+cold-start, and auto-refine all share the same flaw and are removed from
+the strategy list.
+
+**Strategies still viable**: incremental refine-before-add, rlx landmark sync,
+confidence-based weighting. See T3 critical section for details.
+
+**Roll integration**: not started this session (planned, deprioritized in
+favor of investigating T3 root cause). Still on the next-session list.
+
+**Final state**:
+- Reverted both patches via `cp tools/bundle_adjust.py.bak_pre_multiseed
+  tools/bundle_adjust.py`, deleted both backups + both patch scripts.
+- Working tree clean, nothing committed.
+- CLAUDE_CONTEXT updated with multi-seed lesson learned (this entry +
+  T3 section update).
 
 ### 2026-05-09 — Big day: Phases 6-8.2 + 9.1 + cleanup + rlx port investigation
 
@@ -458,8 +545,16 @@ with 24 cams will be much worse with T3's volume.
 - bundle_adjust_result.json untracked (gitignore'd)
 - `.gitignore` deduped
 
-**Next session priorities**:
-1. **Roll slider** (Phase 10 if full integration, or just live preview
-   slider if we want quick win)
-2. **rlx port v2** (with correct schema mapping)
-3. **Vanishing points + verticals UX** (T3 critical path)
+**Next session priorities** (updated 2026-05-10):
+1. **Roll slider Phase 10** — full pipeline integration. YANIS confirmed
+   needed for Jason at sea + Chase 2. Touches save + optimize +
+   bundle_adjust. ~2-3h focused work. Originally the goal of 2026-05-10
+   session before multi-seed detour.
+2. **Incremental refine-before-add for T3 absorption** — workflow that
+   validates each new cam solo via `refine_camera.py` before bundle
+   adjust pool entry. The leading T3 strategy after multi-seed was ruled
+   out. Directly addresses data-inconsistency root cause.
+3. **rlx port v2** — schema mapping written, port the 24 cams. Will
+   exercise the incremental-refine workflow if (2) is done first.
+4. **Vanishing points + verticals UX** — highest impact T3 feature per
+   rlx + martipk Discord feedback. Multi-session.
