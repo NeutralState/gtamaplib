@@ -623,6 +623,55 @@ class Handler(BaseHTTPRequestHandler):
                 'losses': losses,
             })
 
+        elif path == '/api/verticals':  # ── VERTICALS-V1 ──  # ── VERTICALS-V1-FIX ──
+            # Phase 11: project world-vertical lines through the cam and
+            # return their pixel coords. Frontend overlays these as yellow
+            # lines on the screenshot — if calib is correct, they align
+            # with real-world verticals (poles, building edges, etc.).
+            cam_name = qs.get('cam', [None])[0]
+            if cam_name is None or cam_name not in md.cameras:
+                self.send_json({'error': 'invalid cam'}, status=400)
+                return
+            try:
+                xyz = [float(v) for v in qs.get('xyz', ['0,0,0'])[0].split(',')]
+                ypr = [float(v) for v in qs.get('ypr', ['0,0,0'])[0].split(',')]
+                hfov = float(qs.get('hfov', ['60'])[0])
+            except Exception:
+                self.send_json({'error': 'bad params'}, status=400)
+                return
+
+            import math as _math
+            try:
+                cam = get_cam(cam_name, xyz, ypr, hfov)
+            except Exception as e:
+                self.send_json({'error': f'get_cam failed: {e}'}, status=500)
+                return
+
+            yaw = ypr[0]
+            cx, cy, cz = xyz[0], xyz[1], xyz[2]
+            lines = []
+            # rlx's algo: sweep degree from yaw-60 to yaw+60, step 0.5
+            # For each deg, build vertical line in world at distance 10
+            # from cam, from z-10 to z+10 (20m tall).
+            deg = yaw - 60.0
+            while deg < yaw + 60.0:
+                rad = _math.radians(deg + 90.0)
+                wx = cx + _math.cos(rad) * 10.0
+                wy = cy + _math.sin(rad) * 10.0
+                try:
+                    p1 = cam.get_pixel((wx, wy, cz - 10.0))
+                    p2 = cam.get_pixel((wx, wy, cz + 10.0))
+                    if p1 is not None and p2 is not None:
+                        lines.append([
+                            [float(p1[0]), float(p1[1])],
+                            [float(p2[0]), float(p2[1])],
+                        ])
+                except Exception:
+                    pass
+                deg += 0.5
+
+            self.send_json({'lines': lines})
+
         elif path == '/api/optimize':
             cam_name = unquote(qs.get('cam', [''])[0])
             xyz = [float(qs['x'][0]), float(qs['y'][0]), float(qs['z'][0])]
