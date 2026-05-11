@@ -454,6 +454,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
              background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
              border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;
              font-family:JetBrains Mono,monospace">⊕ cams</button>
+    <!-- ── VERTICALS-FE-V1 ── -->
+    <button id="verts-toggle-btn" title="Toggle vertical-lines overlay (V)"
+      style="position:absolute;top:8px;right:88px;z-index:10;
+             background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
+             border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;
+             font-family:JetBrains Mono,monospace">⊕ verts</button>
     <!-- Phase 7a.1: floating minimap removed — relocated to the
          left sidebar's preview slot (#sb-preview-slot). -->
     <div id="oc-cursor-preview" style="position:fixed;display:none;z-index:100;
@@ -1910,6 +1916,9 @@ function onParam(key, val) {
   btnSave.disabled = false;
   savedEl.style.display = 'none';
   scheduleLoad();
+  if (vertsOn) {                                        // VERTICALS-FE-V1
+    fetchVerticals().then(() => draw());
+  }
 }
 
 Object.keys(SL_IDS).forEach(key => {
@@ -2106,8 +2115,80 @@ function resetMainZoom() {
   mainZoom = 1; mainPanX = 0; mainPanY = 0;
 }
 
+// ── VERTICALS-FE-V1: vanishing-points overlay state ─────────────────
+// Using var to avoid temporal dead zone (draw() is called by
+// resizeOverlay() at load before this block runs with let/const).
+<!-- ── VERTICALS-FE-V1-TDZ-FIX ── -->
+var vertsOn    = false;
+var vertsLines = null;       // last fetched [[ [x1,y1],[x2,y2] ], ...]
+var vertsReq   = 0;          // request counter to ignore stale responses
+
+async function fetchVerticals() {
+  if (!currentCam || !camData) { vertsLines = null; return; }
+  const my = ++vertsReq;
+  const qs = new URLSearchParams({
+    cam: currentCam,
+    xyz: [params.x, params.y, params.z].join(','),
+    ypr: [params.yaw, params.pitch, params.roll].join(','),
+    hfov: String(params.hfov),
+  });
+  try {
+    const r = await fetch('/api/verticals?' + qs.toString());
+    if (!r.ok) { vertsLines = null; return; }
+    const d = await r.json();
+    if (my !== vertsReq) return;       // a newer request superseded us
+    vertsLines = d.lines || [];
+  } catch (e) {
+    vertsLines = null;
+  }
+}
+
+function drawVerticals() {
+  if (!vertsOn || !vertsLines || !vertsLines.length) return;
+  ctx.save();
+  ctx.strokeStyle = 'rgba(255,255,0,0.75)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([]);
+  for (const [a, b] of vertsLines) {
+    const [x1, y1] = toCanvas(a[0], a[1]);
+    const [x2, y2] = toCanvas(b[0], b[1]);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// Hook the toggle button (initialized on DOMContentLoaded so the element exists)
+window.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('verts-toggle-btn');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    vertsOn = !vertsOn;
+    btn.style.background = vertsOn ? 'rgba(255,200,0,0.7)' : 'rgba(0,0,0,0.6)';
+    btn.style.color = vertsOn ? '#000' : '#fff';
+    if (vertsOn) {
+      await fetchVerticals();
+    } else {
+      vertsLines = null;
+    }
+    draw();
+  });
+});
+
+// Keyboard shortcut: V to toggle
+window.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'v' || e.key === 'V') {
+    const btn = document.getElementById('verts-toggle-btn');
+    if (btn) btn.click();
+  }
+});
+
 function draw() {
   ctx.clearRect(0, 0, overlay.width, overlay.height);
+  drawVerticals();  // VERTICALS-FE-V1
   // Sync frame image with zoom/pan
   if (camData?.size) {
     const {scale, ox, oy} = baseScale();
