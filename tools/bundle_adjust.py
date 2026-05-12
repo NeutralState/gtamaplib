@@ -102,6 +102,24 @@ for cam_name, cam_pixels in md.pixels.items():
         if cam_is_candidate: used_cams.add(cam_name)
         if lm_is_candidate:  used_lms.add(lm_name)
 
+# ── BA-MIN-OBS-V1 ──
+# Filter out cams with <3 observations (under-constrained, would drift).
+# Count observations per cam.
+_obs_count = {}
+for _cn, _ln, _, _ in observations:
+    _obs_count[_cn] = _obs_count.get(_cn, 0) + 1
+MIN_OBS = 3
+_under_constrained = {c for c in used_cams if _obs_count.get(c, 0) < MIN_OBS}
+if _under_constrained:
+    print(f"  Excluded {len(_under_constrained)} cams with <{MIN_OBS} obs:")
+    for _c in sorted(_under_constrained):
+        print(f"    {_obs_count.get(_c, 0)} obs  {_c}")
+    used_cams = used_cams - _under_constrained
+    # Also drop their observations
+    observations = [o for o in observations if o[0] not in _under_constrained]
+    # Rebuild used_lms in case some LMs only appeared in dropped cams
+    used_lms = {o[1] for o in observations if o[1] in candidate_lms}
+
 # Prune to constrained-only
 opt_cam_names = sorted(used_cams)
 opt_lm_names  = sorted(used_lms)
