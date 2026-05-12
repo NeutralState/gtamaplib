@@ -262,9 +262,13 @@ def optimize_camera(cam_name, xyz, ypr, hfov):
 
     # Bounds: xyz ±300m, yaw ±90°, pitch ±60°, roll ±5°, hfov 20°-130°
     # V1-ROLL: roll bounded tightly to ±5° — physical camera tilt is rarely larger
-    lb = np.array([xyz[0]-300, xyz[1]-300, xyz[2]-50,
+    # ── PHYSICAL-BOUNDS-V1 ──
+    # Absolute z clipping: never below -5m (sea level + tolerance) or
+    # above 500m. This prevents under-constrained cams (e.g. 3 obs) from
+    # finding solutions like z=-24m (submarine yacht).
+    lb = np.array([xyz[0]-300, xyz[1]-300, max(xyz[2]-50, -5.0),
                    ypr[0]-90, ypr[1]-60, ypr[2]-5.0, 20.0])
-    ub = np.array([xyz[0]+300, xyz[1]+300, xyz[2]+50,
+    ub = np.array([xyz[0]+300, xyz[1]+300, min(xyz[2]+50, 500.0),
                    ypr[0]+90, ypr[1]+60, ypr[2]+5.0, 130.0])
 
     try:
