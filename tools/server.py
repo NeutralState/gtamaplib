@@ -215,15 +215,40 @@ def optimize_camera(cam_name, xyz, ypr, hfov):
 
     cam_pixels = md.pixels.get(cam_name, {})
 
-    # Build constraint set with weight info
-    # weight 1.0 for independent, 0.3 for self-source (avoid trivial fit)
+    # ── TIER-WEIGHTS-V1 ──
+    # Tier-based weights — each LM is weighted by how trustworthy its
+    # position is. Unverified LMs are dropped (weight=0). Self-source
+    # LMs get ×0.3 to preserve the anti-circular safeguard.
+    TIER_WEIGHTS = {
+        'anchor':     1.0,
+        'high':       0.8,
+        'medium':     0.4,
+        'low':        0.1,
+        'unverified': 0.0,
+    }
+
+    # Load tier data if available (graceful fallback if missing)
+    _tiers_path = os.path.join(os.path.dirname(__file__), 'generated', 'confidence_tiers.json')
+    try:
+        with open(_tiers_path) as _f:
+            _tier_data = json.load(_f)
+        _lm_tiers = {n: (d.get('tier') if isinstance(d, dict) else d)
+                     for n, d in _tier_data.get('landmarks', {}).items()}
+    except Exception:
+        _lm_tiers = {}
+
+    # Build constraint set with tier-based weights
     constraints = []
     for lm, mp in cam_pixels.items():
         lm_xyz = md.landmarks.get(lm)
         if lm_xyz is None:
             continue
         is_self_source = cam_name in md.landmarks_meta.get(lm, {}).get('source_cameras', [])
-        weight = 0.3 if is_self_source else 1.0
+        tier = _lm_tiers.get(lm, 'unverified')
+        base_weight = TIER_WEIGHTS.get(tier, 0.0)
+        if base_weight == 0.0:
+            continue  # unverified LM — skip entirely
+        weight = base_weight * (0.3 if is_self_source else 1.0)
         constraints.append((lm, list(lm_xyz), list(mp), weight, is_self_source))
 
     n_total = len(constraints)
