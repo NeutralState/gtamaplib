@@ -95,6 +95,11 @@ def main():
                     help='Also call /api/update_landmarks after optimize (default: skip)')
     ap.add_argument('--update-threshold', type=float, default=5.0,
                     help='Only update LMs if loss < this arcmin (default: 5.0, server default is 10.0)')
+    # ── BATCH-SAFETY-V1 ──
+    ap.add_argument('--save-threshold', type=float, default=10.0,
+                    help='Refuse save if loss_after > this arcmin (default: 10.0)')
+    ap.add_argument('--regression-tolerance', type=float, default=1.05,
+                    help='Refuse save if loss_after > loss_before * this (default: 1.05)')
     ap.add_argument('--polish', action='store_true',
                     help='Run bundle_adjust after all cams optimized')
     ap.add_argument('--limit', type=int, help='Limit to N cams (for testing)')
@@ -180,6 +185,17 @@ def main():
             n_skipped += 1
             continue
 
+        # Safety checks before save  # ── BATCH-SAFETY-V1 ──
+        delta = loss_before - loss_after
+        if loss_after > args.save_threshold:
+            print(f"  {cam_name[:33]:<33} {tier:<10} {loss_before:>10.3f} {loss_after:>10.3f} {delta:>+10.3f}  REFUSED (loss > {args.save_threshold}')")
+            n_skipped += 1
+            continue
+        if loss_after > loss_before * args.regression_tolerance:
+            print(f"  {cam_name[:33]:<33} {tier:<10} {loss_before:>10.3f} {loss_after:>10.3f} {delta:>+10.3f}  REFUSED (regression)")
+            n_skipped += 1
+            continue
+
         # Save params
         new_xyz = res['xyz']
         new_ypr = res['ypr']
@@ -190,7 +206,6 @@ def main():
             n_failed += 1
             continue
 
-        delta = loss_before - loss_after
         status = f"saved"
 
         # Optionally update LMs
