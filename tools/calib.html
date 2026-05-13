@@ -8,17 +8,252 @@
 :root {
   --bg:#0a0a0c; --surface:#13131a; --surface2:#1c1c26; --border:#252535;
   --green:#4ade80; --yellow:#f59e0b; --red:#f87171; --blue:#60a5fa;
+  --purple:#a78bfa;
   --text:#e2e2f0; --dim:#5a5a7a; --mid:#9090b0;
   --mono:'JetBrains Mono',monospace; --sans:'DM Sans',sans-serif;
 }
+
+/* ── SVG Map Refactor Phase 2: left sidebar styles ── */
+.cam-toggle-btn{font-family:var(--mono);font-size:14px;padding:4px 9px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--mid);cursor:pointer;line-height:1;user-select:none}
+.cam-toggle-btn:hover{color:var(--text);border-color:var(--mid)}
+.left-sidebar{width:260px;flex-shrink:0;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:width .18s ease-out}
+.left-sidebar.collapsed{width:0;border-right:none}
+.ls-header{padding:10px 12px;border-bottom:1px solid var(--border);display:flex;flex-direction:column;gap:8px;flex-shrink:0}
+.ls-header #cam-search{font-family:var(--mono);font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 9px;border-radius:5px;width:100%}
+.ls-header #cam-search:focus{outline:none;border-color:var(--green)}
+.ls-filter-chips{display:flex;flex-wrap:wrap;gap:4px}
+.ls-list{flex:1;overflow-y:auto;background:var(--surface)}
+.ls-list::-webkit-scrollbar{width:3px}
+.ls-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+/* The .cam-dropdown rule below was originally absolute-positioned + hidden
+   by default. Phase 2 repurposes it as a permanent list inside .ls-list,
+   so we override position and display via the wrapping .left-sidebar. */
+.left-sidebar #cam-dropdown{position:static;display:block;border:none;border-radius:0;max-height:none;margin-top:0;background:transparent}
+/* ── end SVG Map Refactor Phase 2 ── */
+
+/* ── SVG Map Refactor Phase 7a.1: sidebar preview slot ── */
+/* Fixed-size preview slot at the bottom of the left sidebar.
+   Hosts the minimap (Camera view) and the cam frame preview (Map view).
+   Sized so the cam list scrolls above it without resizing on cam swap. */
+.sb-preview-slot{flex-shrink:0;width:240px;height:170px;margin:8px 10px;
+  border-radius:8px;overflow:hidden;
+  border:1px solid var(--border);
+  background:#0d0d12;
+  position:relative}
+.sb-preview-slot .preview-label{position:absolute;left:8px;top:6px;z-index:11;
+  font-family:var(--mono);font-size:9px;color:var(--mid);
+  background:rgba(0,0,0,0.55);padding:2px 6px;border-radius:3px;
+  letter-spacing:.06em;text-transform:uppercase;pointer-events:none}
+/* CSS-only minimap: a positioning container whose inner element holds
+   the full /yanis.png as background-image, sized + positioned per cam. */
+#minimap-wrap-sb{position:absolute;inset:0;overflow:hidden;cursor:pointer}
+#minimap-rotator-sb{position:absolute;width:200%;height:200%;left:-50%;top:-50%;
+  transform-origin:50% 50%;transition:transform 120ms ease-out}
+/* Phase 7a.5: minimap is now a server-rendered 480x480 PNG fetched via
+   /api/minimap. The <img> fills the rotator at native size; rotation
+   is applied to the rotator wrapper (Phase 7a.1 layout). */
+#minimap-img-sb{position:absolute;width:100%;height:100%;left:0;top:0;
+  display:block;
+  user-select:none;-webkit-user-drag:none;pointer-events:none;
+  background:#222;object-fit:cover;
+  /* Match Map view's grayscale treatment. */
+  filter:grayscale(1) brightness(1.05) contrast(1.1)}
+#minimap-pointer-sb{position:absolute;inset:0;pointer-events:none}
+/* Cam preview slot — shown only in map view */
+#cam-preview-wrap{position:absolute;inset:0;display:none;
+  align-items:center;justify-content:center;background:#000}
+#cam-preview-img{max-width:100%;max-height:100%;object-fit:contain;
+  display:block;user-select:none;-webkit-user-drag:none}
+#cam-preview-empty{font-family:var(--mono);font-size:10px;color:var(--dim);
+  padding:14px;text-align:center}
+body.view-map #minimap-wrap-sb{display:none}
+body.view-map #cam-preview-wrap{display:flex}
+/* ── end SVG Map Refactor Phase 7a.1 ── */
+/* Phase 7a.1: sidebar preview slot (minimap CSS-only + cam preview) */
+/* Phase 7a.1.1: minimap grayscale + cam preview click + PNG preload */
+/* Phase 7a.1.2: minimap <img>+transform instead of bg-image */
+/* Phase 7a.5: minimap fetches /api/minimap (revert CSS-only) */
+/* Phase 7a.2: Generate Map UI removed */
+
+/* ── SVG Map Refactor Phase 3+4 (PNG): view toggle + map view ── */
+/* Header view toggle (Camera | Map) */
+.view-toggle{display:flex;border:1px solid var(--border);border-radius:5px;overflow:hidden}
+.view-toggle button{font-family:var(--mono);font-size:11px;font-weight:700;padding:5px 12px;background:var(--surface2);color:var(--mid);border:none;cursor:pointer;transition:all .12s}
+.view-toggle button:hover{color:var(--text)}
+.view-toggle button.active{background:var(--green);color:#000}
+.view-toggle button + button{border-left:1px solid var(--border)}
+
+/* Map view container — fills the canvas-wrap slot when active. Toggled via
+   body.view-map class (set by setView() in JS). Camera-view-only sections
+   in the right sidebar are hidden in Map view. */
+.map-view{flex:1;position:relative;background:#0a0a0c;overflow:hidden;display:none;cursor:grab}
+.map-view.dragging{cursor:grabbing}
+body.view-map .canvas-wrap{display:none}
+body.view-map .map-view{display:block}
+body.view-map .sidebar .sb-sec,
+body.view-map .sidebar .opt-bar,
+body.view-map .sidebar .opt-result,
+body.view-map .sidebar .lm-hdr,
+body.view-map .sidebar .lm-list,
+body.view-map .sidebar .statusbar{display:none}
+
+/* Phase 5.4: .map-svg-wrap kept as a positioning container only.
+   The PNG and SVG overlay are now siblings in their OWN wrappers
+   (.map-png-wrap and .map-overlay-wrap) — see the dedicated CSS rules
+   later in this file. The original Phase 3+4 single-wrapper approach
+   forced the bitmap to re-rasterize on every overlay class toggle. */
+.map-svg-wrap{position:absolute;inset:0}
+
+.map-loading{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--dim);pointer-events:none}
+/* ── end SVG Map Refactor Phase 3+4 (PNG) ── */
+
+/* ── SVG Map Refactor Phase 5: cams + frustums on map ── */
+/* Cam markers and frustums in #map-overlay. We attach pointer events to
+   the markers so they can be hovered and clicked. The frustum polygons
+   stay non-interactive — only the apex circle is clickable. */
+/* Phase 5.4: separate GPU layers + clean dot styling
+   The bitmap (PNG) and the SVG overlay live in two sibling wrappers,
+   each forced into its own GPU compositing layer. Without this, any
+   class toggle on an overlay node invalidated the whole layer and
+   forced a 12K×12K bitmap re-upload (~90ms cost per cam switch). */
+.map-png-wrap,.map-overlay-wrap{position:absolute;left:0;top:0;
+  transform-origin:0 0;
+  will-change:transform;
+  /* Force own compositing layer so they don't share invalidation. */
+  transform:translateZ(0)}
+.map-png-wrap > img{display:block;
+  filter:grayscale(1) brightness(1.05) contrast(1.1);
+  user-select:none;-webkit-user-drag:none;pointer-events:none}
+.map-overlay-wrap > svg{display:block;pointer-events:none}
+
+/* Overlay interaction (same as Phase 5.3 but no .selected dot styling). */
+#map-overlay{pointer-events:none}
+#map-overlay .cam-marker{pointer-events:auto;cursor:pointer;transition:opacity .12s}
+#map-overlay .cam-marker:hover circle{stroke-width:50}
+#map-overlay .cam-frustum,
+#map-overlay .cam-frustum-fill{display:none;pointer-events:none}
+#map-overlay g.cam-group.selected .cam-frustum,
+#map-overlay g.cam-group:hover .cam-frustum{display:block;opacity:1}
+/* Phase 6.3: frustum fill drops from .18 → .06 so the selected/hovered
+   triangle no longer washes out the underlying map and dots. */
+#map-overlay g.cam-group.selected .cam-frustum-fill,
+#map-overlay g.cam-group:hover .cam-frustum-fill{display:block;opacity:.06}
+/* Phase 5.4: no dot change on select. The cam dot keeps its base style;
+   only the frustum reveal signals selection. Cleaner, less prominent.
+   Phase 6.3: ray-line CSS rule no longer sets `stroke` (was overriding
+   per-ray inline strokes due to SVG presentation-attr specificity).
+   stroke-width also lowered (8 → 4) and opacity (.5 → .15) so the
+   ray bundle reads as faint context, not a wall of color. */
+#map-overlay .ray-line{stroke-width:4;opacity:.15;pointer-events:none;transition:opacity .1s,stroke-width .1s}
+#map-overlay #rays-layer.lm-hover .ray-line{opacity:.08}
+#map-overlay #rays-layer.lm-hover .ray-line.lm-hovered{opacity:.85;stroke-width:14}
+#map-overlay #rays-layer.cam-hover .ray-line{opacity:.55}
+
+/* "Show all rays" toggle in the header, next to the view-toggle */
+.rays-toggle{font-family:var(--mono);font-size:11px;font-weight:700;padding:5px 10px;background:var(--surface2);color:var(--mid);border:1px solid var(--border);border-radius:5px;cursor:pointer;display:none}
+body.view-map .rays-toggle{display:inline-block}
+.rays-toggle.active{background:var(--blue);color:#000;border-color:var(--blue)}
+.rays-toggle:hover{color:var(--text)}
+.rays-toggle.active:hover{color:#000}
+
+/* Map tooltip — same look as the existing .tip but distinct id so it
+   doesn't fight with the Camera view's hover tooltip. */
+.map-tip{position:fixed;background:var(--surface2);border:1px solid var(--border);border-radius:5px;padding:6px 10px;font-family:var(--mono);font-size:10px;pointer-events:none;display:none;z-index:101;white-space:nowrap;box-shadow:0 2px 8px rgba(0,0,0,.5)}
+.map-tip .tip-name{color:var(--text);font-weight:700;margin-bottom:2px}
+.map-tip .tip-meta{color:var(--mid);font-size:9px}
+/* ── end SVG Map Refactor Phase 5 ── */
+
+/* ── SVG Map Refactor Phase 6.1: landmark dots on map ── */
+/* Landmark dots are drawn as <circle class="lm-dot"> nodes inside
+   #lm-layer. Sizing is in SVG-user units (matches the cam-marker
+   convention). Untriangulated landmarks get a hollow outline. Per-cam
+   delta-driven coloring is applied via inline `fill`/`stroke` attrs in
+   JS; the rules below provide the *base* style and the dim/leak states.
+   We deliberately do NOT add hover styles here — Phase 6.2 will do hover
+   via event delegation, not :hover, to keep node count low. */
+/* Phase 6.1 lm-layer is interactive in 6.2 — we hover-test dots via
+   event delegation on the wrapper, so the layer needs to receive
+   pointer events on its children. */
+#map-overlay #lm-layer{pointer-events:none}
+#map-overlay .lm-dot{transition:opacity .12s;pointer-events:auto;cursor:pointer}
+#map-overlay .lm-dot.untriangulated{fill:none;stroke:#5a5a7a;stroke-width:8}
+#map-overlay .lm-dot.dim{opacity:.18}
+#map-overlay .lm-dot.hovered{stroke:#fff;stroke-width:6}
+#map-overlay .lm-dot.selected{stroke:#fff;stroke-width:8}
+/* ── end SVG Map Refactor Phase 6.1 ── */
+
+/* ── SVG Map Refactor Phase 6.2: delta colors + sidebar ── */
+/* Phase 6.3: the duplicate ray-line rule that Phase 6.2 added here has
+   been removed — its `stroke:#9090b0` was overriding per-line inline
+   strokes due to SVG presentation-attribute specificity (presentation
+   attrs sit BELOW author CSS in the cascade). The Phase 5 ray-line CSS
+   rule has been updated in-place to no longer set stroke at all; per-ray
+   strokes are set inline by renderRaysForSelectedCam() and never lose
+   the cascade fight. */
+
+/* Map-only sections in the right sidebar — visible ONLY in map view.
+   Phase 3+4 already hides .sb-sec/.opt-bar/.lm-hdr/.lm-list/.statusbar
+   in map view, so we re-show our map-only ones via this rule. */
+body.view-map .sidebar .sb-sec.map-only,
+body.view-map .sidebar .lm-hdr.map-only,
+body.view-map .sidebar .lm-list.map-only,
+body.view-map .sidebar .statusbar.map-only{display:flex}
+body.view-map .sidebar .lm-list.map-only{display:block}
+body:not(.view-map) .sidebar .sb-sec.map-only,
+body:not(.view-map) .sidebar .lm-hdr.map-only,
+body:not(.view-map) .sidebar .lm-list.map-only,
+body:not(.view-map) .sidebar .statusbar.map-only{display:none}
+
+/* The map sidebar header — slightly different from Camera-view lm-hdr,
+   shows the selected cam name + total visible count. */
+.map-sb-hdr{padding:9px 13px;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--mid)}
+.map-sb-hdr .cam-name{color:var(--text);font-weight:700;font-size:11px;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.map-sb-hdr .meta{font-size:9px;color:var(--dim)}
+.map-sb-hdr .empty{color:var(--dim);font-style:italic}
+
+/* The list itself reuses .lm-item/.lm-dot/.lm-name/.lm-d from Camera view
+   for visual consistency. Add a .map-only modifier so we can target it
+   independently if needed. */
+.lm-list.map-only{flex:1;overflow-y:auto}
+.lm-list.map-only .lm-item.untriangulated .lm-name{color:var(--dim);font-style:italic}
+/* ── end SVG Map Refactor Phase 6.2 ── */
+
+/* ── SVG Map Refactor Phase 8.1: triangulation viz on map ── */
+/* Triangulation rays — rendered in #tri-rays-layer. Each ray is a
+   <line> from cam apex → landmark xyz, color-coded by source-cam type
+   (LEAK/T1/T2/SS), with a final pulse ring around the landmark. */
+#map-overlay #tri-rays-layer{pointer-events:none}
+#map-overlay .tri-ray{stroke-width:18;stroke-linecap:round;opacity:.85;
+  filter:drop-shadow(0 0 6px rgba(255,255,255,0.3))}
+#map-overlay .tri-pulse{fill:none;stroke:#ffffff;stroke-width:8;
+  opacity:.85}
+/* Toast at the top-center of the Map view. Sits above the SVG overlay
+   so it's always visible. Auto-fades; CSS handles the fade animation. */
+#tri-toast{position:absolute;top:18px;left:50%;transform:translateX(-50%);
+  z-index:200;background:rgba(15,15,22,0.94);color:#fff;
+  border:1px solid var(--border);border-radius:8px;padding:10px 16px;
+  font-family:var(--mono);font-size:11px;line-height:1.5;
+  box-shadow:0 6px 24px rgba(0,0,0,0.5);
+  display:none;cursor:pointer;
+  max-width:560px;text-align:center}
+#tri-toast.show{display:block;animation:triToastIn .22s ease-out}
+#tri-toast .tri-toast-title{font-weight:700;color:var(--green);
+  margin-bottom:3px;font-size:12px}
+#tri-toast .tri-toast-meta{color:var(--mid);font-size:10px}
+#tri-toast.error .tri-toast-title{color:var(--red)}
+@keyframes triToastIn{from{opacity:0;transform:translate(-50%,-8px)}
+  to{opacity:1;transform:translateX(-50%)}}
+/* ── end SVG Map Refactor Phase 8.1 ── */
+/* Phase 8.1: triangulate on Map view + drop showRayMap callsites */
+/* Phase 8.1.1: fix mapData.cams → mapData.cameras */
+/* // Phase 6.3: visual polish — fix ray colors + reduce noise */
 *{box-sizing:border-box;margin:0;padding:0}
 body{font-family:var(--sans);background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
 
 header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
 .logo{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green)}
 
-/* Cam search + filter */
-.cam-picker{position:relative;display:flex;align-items:center;gap:6px;flex:1;max-width:520px}
+/* Cam search + filter (Phase 2: .cam-picker rule dropped — moved to left sidebar) */
 #cam-sel{display:none}
 #cam-search{font-family:var(--mono);font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:5px;flex:1;min-width:160px}
 #cam-search:focus{outline:none;border-color:var(--green)}
@@ -83,6 +318,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .f-btn.on{background:var(--surface2);color:var(--text);border-color:var(--mid)}
 
 .lm-list{flex:1;overflow-y:auto}
+/* Phase 9.1: sort dropdown styling */
+.lm-sort-wrap{display:inline-flex;align-items:center;gap:4px;margin-left:6px}
+.lm-sort-wrap select{font-family:var(--mono);font-size:10px;
+  background:var(--surface2);color:var(--text);
+  border:1px solid var(--border);border-radius:4px;
+  padding:2px 4px;outline:none;cursor:pointer}
+.lm-sort-wrap select:hover{border-color:var(--mid)}
+.lm-sort-wrap .sort-lbl{font-size:9px;color:var(--dim)}
 .lm-list::-webkit-scrollbar{width:3px}
 .lm-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 .lm-item{display:flex;align-items:center;gap:6px;padding:5px 13px;border-bottom:1px solid #111118;cursor:pointer;transition:background .1s}
@@ -122,21 +365,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .pxe-zoom-bar{padding:6px 16px;background:var(--surface);border-top:1px solid var(--border);display:flex;align-items:center;gap:10px;font-family:var(--mono);font-size:10px;color:var(--dim);flex-shrink:0}
 
 
-/* Generate Map button + modal */
-#btn-genmap{font-family:var(--mono);font-size:11px;font-weight:700;padding:6px 10px;border-radius:5px;border:1px solid var(--border);background:var(--surface2);color:var(--blue);cursor:pointer;width:100%;margin-top:8px}
-#btn-genmap:hover{background:var(--surface);border-color:var(--blue)}
-#btn-genmap:disabled{opacity:.4;cursor:default}
-#genmap-modal{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:1000;display:none;align-items:center;justify-content:center;padding:20px}
-#genmap-modal.open{display:flex}
-.genmap-content{background:var(--surface);border:1px solid var(--border);border-radius:8px;max-width:95vw;max-height:95vh;display:flex;flex-direction:column;overflow:hidden}
-.genmap-header{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border)}
-.genmap-title{font-family:var(--mono);font-size:11px;color:var(--text);flex:1}
-.genmap-close{font-family:var(--mono);font-size:14px;color:var(--mid);background:none;border:none;cursor:pointer;padding:4px 8px}
-.genmap-close:hover{color:var(--red)}
-.genmap-img{max-width:90vw;max-height:80vh;object-fit:contain;display:block}
-.genmap-legend{display:flex;gap:14px;padding:8px 14px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--mid)}
-.genmap-legend-item{display:flex;align-items:center;gap:5px}
-.genmap-legend-dot{width:10px;height:10px;border-radius:2px}
+/* Phase 7a.2: Generate Map button + modal CSS removed
+   (replaced by the always-on Map view; no server-rendered PNG needed). */
 
 /* Landmark info panel */
 .lm-info-panel{padding:9px 13px;border-bottom:1px solid var(--border);background:var(--surface2);display:none}
@@ -153,21 +383,23 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .lm-info-close{margin-left:auto;color:var(--dim);cursor:pointer;font-family:var(--mono);font-size:11px}
 .lm-info-close:hover{color:var(--red)}
 </style>
+<!-- Phase 7a.1.1: preload /yanis.png so the sidebar minimap is ready
+     by the time the user picks a cam. The browser fetches it in
+     parallel with the rest of the page; same response is reused by
+     the Map view <img>, the minimap background-image, etc. -->
+<link rel="preload" as="image" href="/yanis.png">
 </head>
 <body>
 
 <header>
+  <button class="cam-toggle-btn" id="cam-toggle-btn" title="Toggle camera list">≡</button>
   <div class="logo">gtamaplib</div>
 <a href="/cam_health.html" class="nav-link">→ Dashboard</a>
-  <div class="cam-picker">
-  <input id="cam-search" placeholder="Search camera..." autocomplete="off" />
-  <button class="cam-filter-chip on" data-type="LEAK">LEAK</button>
-  <button class="cam-filter-chip on" data-type="Trailer 1">T1</button>
-  <button class="cam-filter-chip on" data-type="Trailer 2">T2</button>
-  <button class="cam-filter-chip on" data-type="screenshots">SS</button>
-  <div class="cam-dropdown" id="cam-dropdown"></div>
-  <select id="cam-sel"><option value="">— Select camera —</option></select>
-</div>
+  <div class="view-toggle" id="view-toggle">
+    <button data-view="camera" class="active" title="Camera view (calibration)">Camera</button>
+    <button data-view="map" title="Map view (overview)">Map</button>
+  </div>
+  <button class="rays-toggle" id="rays-toggle" title="Show all rays from the selected cam to its landmarks">Rays</button>
   <span id="cam-meta"></span>
   <div class="chip" id="chip-all"><span style="color:var(--dim)">loss </span><span class="v" id="loss-all">—</span></div>
   <button class="btn btn-reset" id="btn-reset">Reset</button>
@@ -178,6 +410,41 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 </header>
 
 <div class="main">
+  <aside class="left-sidebar" id="left-sidebar">
+    <div class="ls-header">
+      <input id="cam-search" placeholder="Search camera..." autocomplete="off" />
+      <div class="ls-filter-chips">
+        <button class="cam-filter-chip on" data-type="LEAK">LEAK</button>
+        <button class="cam-filter-chip on" data-type="Trailer 1">T1</button>
+        <button class="cam-filter-chip on" data-type="Trailer 2">T2</button>
+        <button class="cam-filter-chip on" data-type="screenshots">SS</button>
+      </div>
+    </div>
+    <div class="ls-list">
+      <div class="cam-dropdown" id="cam-dropdown"></div>
+    </div>
+    <select id="cam-sel" hidden><option value="">— Select camera —</option></select>
+    <!-- Phase 7a.1: sidebar preview slot. Camera view shows a CSS-only
+         minimap; Map view shows the cam frame preview. Toggled by
+         body.view-map class. -->
+    <div class="sb-preview-slot" id="sb-preview-slot">
+      <div id="minimap-wrap-sb" title="Click to open Map view (M to toggle)">
+        <div id="minimap-rotator-sb">
+          <!-- Phase 7a.1.2: <img> instead of <div> bg-image (Safari perf) -->
+          <img id="minimap-img-sb" src="/yanis.png" alt="">
+        </div>
+        <svg id="minimap-pointer-sb" viewBox="0 0 240 170" preserveAspectRatio="none">
+          <path d="M 120,75 L 128,91 L 120,87 L 112,91 Z"
+            fill="#ffffff" stroke="#000000"
+            stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div id="cam-preview-wrap">
+        <img id="cam-preview-img" src="" alt="">
+        <div id="cam-preview-empty">No camera selected</div>
+      </div>
+    </div>
+  </aside>
   <div class="canvas-wrap" id="canvas-wrap">
     <img id="frame-img" src="" draggable="false">
     <canvas id="overlay"></canvas>
@@ -187,30 +454,14 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
              background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
              border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;
              font-family:JetBrains Mono,monospace">⊕ cams</button>
-    <!-- ── GTA VI-style rotating minimap (bottom-left, rounded rect) ─── -->
-    <div id="minimap-wrap" style="position:absolute;bottom:14px;left:14px;
-        z-index:10;width:260px;height:180px;border-radius:10px;
-        overflow:hidden;border:2px solid rgba(0,0,0,0.8);
-        background:rgba(0,0,0,0.4);
-        box-shadow:0 4px 14px rgba(0,0,0,0.55);
-        display:none;cursor:pointer" title="Click to toggle (M)">
-      <!-- Rotator is OVERSIZED so corners are covered when rotated -->
-      <div id="minimap-rotator" style="position:absolute;
-          width:200%;height:200%;
-          left:-50%;top:-50%;
-          transform-origin:50% 50%;transition:transform 120ms ease-out">
-        <img id="minimap-img" src="" style="position:absolute;width:100%;
-          height:100%;left:0;top:0;display:block;background:#222;
-          object-fit:cover">
-      </div>
-      <!-- Fixed view cone (always points up = cam direction) -->
-      <svg style="position:absolute;width:100%;height:100%;left:0;top:0;
-          pointer-events:none" viewBox="0 0 260 180" preserveAspectRatio="none">
-        <path d="M 130,80 L 138,96 L 130,92 L 122,96 Z"
-          fill="#ffffff" stroke="#000000"
-          stroke-width="1.2" stroke-linejoin="round" stroke-linecap="round"/>
-      </svg>
-    </div>
+    <!-- ── VERTICALS-FE-V1 ── -->
+    <button id="verts-toggle-btn" title="Toggle vertical-lines overlay (V)"
+      style="position:absolute;top:8px;right:88px;z-index:10;
+             background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
+             border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;
+             font-family:JetBrains Mono,monospace">⊕ verts</button>
+    <!-- Phase 7a.1: floating minimap removed — relocated to the
+         left sidebar's preview slot (#sb-preview-slot). -->
     <div id="oc-cursor-preview" style="position:fixed;display:none;z-index:100;
         width:240px;background:rgba(0,0,0,0.92);border:1px solid #888;
         border-radius:6px;padding:6px;pointer-events:none;
@@ -224,9 +475,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     </div>
   </div>
 
+  <div class="map-view" id="map-view">
+    <div class="map-svg-wrap" id="map-svg-wrap"></div>
+    <div class="map-loading" id="map-loading">Loading yanis map…</div>
+  </div>
   <div class="sidebar">
-<button id="btn-genmap" disabled>🗺 Generate Map</button>
-
+    <!-- Phase 7a.2: Generate Map button removed (replaced by Map view) -->
     <div class="sb-sec">
       <div class="sb-title">Position</div>
       <div class="sl-row"><span class="sl-lbl">X</span><input type="range" id="sl-x" min="-12000" max="12000" step="0.25"><input class="num" id="num-x" type="number" step="0.25"></div>
@@ -237,6 +491,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div class="sb-title">Orientation & FOV</div>
       <div class="sl-row"><span class="sl-lbl">Yaw</span><input type="range" id="sl-yaw" min="-180" max="360" step="0.01"><input class="num" id="num-yaw" type="number" step="0.01"></div>
       <div class="sl-row"><span class="sl-lbl">Pitch</span><input type="range" id="sl-pitch" min="-90" max="90" step="0.01"><input class="num" id="num-pitch" type="number" step="0.01"></div>
+      <!-- CALIB-ROLL-PATCH-V1 -->
+      <div class="sl-row"><span class="sl-lbl">Roll</span><input type="range" id="sl-roll" min="-15" max="15" step="0.01"><input class="num" id="num-roll" type="number" step="0.01"></div>
       <div class="sl-row"><span class="sl-lbl">hFOV</span><input type="range" id="sl-hfov" min="10" max="130" step="0.01"><input class="num" id="num-hfov" type="number" step="0.01"></div>
     </div>
     <div class="opt-bar">
@@ -257,12 +513,23 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div class="lm-info-row" id="lm-info-others"></div>
     </div>
     <div class="lm-hdr">
-      <div class="sb-title" style="margin:0">Landmarks (<span id="lm-count">0</span>)</div>
+      <div class="sb-title" style="margin:0;display:flex;align-items:center;gap:8px;flex:1">
+        <span>Landmarks (<span id="lm-count">0</span>)</span>
+        <button class="f-btn" id="btn-add-px" onclick="openAddPixel()" style="color:var(--green);border-color:var(--green);font-size:10px;padding:2px 6px">+ Add</button>
+      </div>
+      <!-- Phase 9.1.2: dropped Bad filter (sort by error ↓ does the same) -->
       <div class="lm-filters">
         <button class="f-btn on" onclick="setFilter('all',this)">All</button>
         <button class="f-btn" onclick="setFilter('indep',this)">Indep</button>
-        <button class="f-btn" onclick="setFilter('bad',this)">Bad</button>
-        <button class="f-btn" id="btn-add-px" onclick="openAddPixel()" style="color:var(--green);border-color:var(--green)">+ Add</button>
+        <span class="lm-sort-wrap">
+          <span class="sort-lbl">sort</span>
+          <select id="lm-sort" onchange="setLmSort(this.value)">
+            <option value="original">original</option>
+            <option value="name">name</option>
+            <option value="error">error ↓</option>
+            <option value="indep">indep first</option>
+          </select>
+        </span>
       </div>
     </div>
     <div class="lm-list" id="lm-list"></div>
@@ -270,21 +537,18 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   </div>
 </div>
 <div class="tip" id="tip"></div>
-
-
-
-<div id="ray-map-modal" style="display:none;position:fixed;inset:0;background:#000d;z-index:350;align-items:center;justify-content:center">
-  <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:0;width:700px;max-width:95vw;overflow:hidden">
-    <div style="display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--border)">
-      <div style="font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green);flex:1" id="ray-map-title">Ray Visualization</div>
-      <button onclick="document.getElementById('ray-map-modal').style.display='none'" style="background:transparent;border:none;color:var(--dim);font-size:18px;cursor:pointer">✕</button>
-    </div>
-    <div id="ray-map-body" style="padding:16px;text-align:center">
-      <div style="font-family:var(--mono);font-size:11px;color:var(--dim)">Loading map...</div>
-    </div>
-    <div style="padding:10px 16px;border-top:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--dim)" id="ray-map-info">—</div>
-  </div>
+<div class="map-tip" id="map-tip">
+  <div class="tip-name" id="map-tip-name"></div>
+  <div class="tip-meta" id="map-tip-meta"></div>
 </div>
+
+
+
+<!-- Phase 9.1: URL hash state + landmark sort -->
+<!-- Phase 9.1.1: fix window.currentCam ref -->
+<!-- Phase 9.1.2: declutter filter row -->
+<!-- Phase 9.1.3: fix sentinel leak -->
+<!-- Phase 8.2: #ray-map-modal removed (replaced by Phase 8.1 Map view tri-rays). -->
 
 <div id="add-px-modal" style="display:none;position:fixed;inset:0;background:#000a;z-index:250;align-items:center;justify-content:center">
   <div style="background:var(--surface);border:1px solid var(--border);border-radius:10px;padding:20px;width:400px">
@@ -352,27 +616,120 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   </div>
 </div>
 
-<div id="genmap-modal">
-  <div class="genmap-content">
-    <div class="genmap-header">
-      <div class="genmap-title" id="genmap-title">Map</div>
-      <button class="genmap-close" id="genmap-close">✕</button>
-    </div>
-    <img id="genmap-img" class="genmap-img" />
-    <div class="genmap-legend">
-      <div class="genmap-legend-item"><div class="genmap-legend-dot" style="background:#4ade80"></div>&lt;3' (good)</div>
-      <div class="genmap-legend-item"><div class="genmap-legend-dot" style="background:#f59e0b"></div>3-10' (suspicious)</div>
-      <div class="genmap-legend-item"><div class="genmap-legend-dot" style="background:#f87171"></div>&gt;10' (outlier)</div>
-      <div class="genmap-legend-item"><div class="genmap-legend-dot" style="background:#8c8c8c"></div>unprojectable</div>
-    </div>
+<!-- Phase 7a.2: #genmap-modal removed (replaced by Map view) -->
 
 <script>
 // ── State ──────────────────────────────────────────────────────────────────
 let currentCam = null, camData = null, projections = [], losses = {};
-let params = {x:0,y:0,z:0,yaw:0,pitch:0,hfov:60};
+let params = {x:0,y:0,z:0,yaw:0,pitch:0,roll:0,hfov:60};
 let origParams = null;
 let hoveredLm = null, selectedLm = null;
 let dirty = false, optimizing = false, lmFilter = 'all';
+// Phase 9.1: sort observer — reorders #lm-list children based on lmSort.
+// Triggers whenever lm-list children change (the existing render code
+// blindly innerHTML='' and rebuilds). We just reorder after the fact.
+function _applyLmSort() {
+  if (lmSort === 'original') return;
+  const list = document.getElementById('lm-list');
+  if (!list || !list.children.length) return;
+  const items = Array.from(list.children).filter(el => el.classList.contains('lm-item'));
+  if (items.length < 2) return;
+  // Extract sort key from each item.
+  function getKey(el) {
+    const name = (el.querySelector('.lm-name')?.textContent || '').trim();
+    // Error: parse the visible delta number (e.g. "5.60") from the right side.
+    // It's typically the last numeric content node, formatted like "5.60" or "—".
+    const errText = (el.querySelector('.lm-err, .lm-delta')?.textContent
+      || el.textContent.match(/\b(\d+\.\d+)\b\s*$/)?.[0] || '').trim();
+    const err = parseFloat(errText);
+    const isIndep = el.classList.contains('lm-indep') ||
+                    !!el.querySelector('.lm-indep') ||
+                    /indep/i.test(el.className);
+    const isUntri = el.classList.contains('untriangulated');
+    return { name: name.toLowerCase(), err: isNaN(err) ? Infinity : err, isIndep, isUntri };
+  }
+  const sorted = items.slice().sort((a, b) => {
+    const ka = getKey(a), kb = getKey(b);
+    if (lmSort === 'name') return ka.name.localeCompare(kb.name);
+    if (lmSort === 'error') {
+      // Untriangulated last, then highest error first.
+      if (ka.isUntri !== kb.isUntri) return ka.isUntri ? 1 : -1;
+      return kb.err - ka.err;
+    }
+    if (lmSort === 'indep') {
+      if (ka.isIndep !== kb.isIndep) return ka.isIndep ? -1 : 1;
+      return kb.err - ka.err;
+    }
+    return 0;
+  });
+  // Only reorder if the order actually changed (avoid infinite observer loop).
+  let changed = false;
+  for (let i = 0; i < sorted.length; i++) {
+    if (items[i] !== sorted[i]) { changed = true; break; }
+  }
+  if (!changed) return;
+  // Re-append in new order.
+  const frag = document.createDocumentFragment();
+  for (const el of sorted) frag.appendChild(el);
+  list.appendChild(frag);
+}
+// Hook MutationObserver to re-sort whenever lm-list children change.
+window.addEventListener('load', () => {
+  const list = document.getElementById('lm-list');
+  if (!list) return;
+  const obs = new MutationObserver(() => {
+    // Defer to next tick to avoid sorting mid-render.
+    if (window._lmSortPending) return;
+    window._lmSortPending = true;
+    setTimeout(() => {
+      window._lmSortPending = false;
+      _applyLmSort();
+    }, 0);
+  });
+  obs.observe(list, { childList: true });
+});
+window._applyLmSort = _applyLmSort;
+// Phase 9.1: URL hash state + landmark sort
+let lmSort = 'original';
+function _readUrlHash() {
+  const h = location.hash.replace(/^#/, '');
+  if (!h) return {};
+  const out = {};
+  for (const part of h.split('&')) {
+    const [k, v] = part.split('=');
+    if (k && v !== undefined) out[k] = decodeURIComponent(v);
+  }
+  return out;
+}
+function _writeUrlHash(state) {
+  // Only include non-default values to keep URL clean.
+  const parts = [];
+  if (state.cam) parts.push('cam=' + encodeURIComponent(state.cam));
+  if (state.view && state.view !== 'camera') parts.push('view=' + encodeURIComponent(state.view));
+  if (state.sort && state.sort !== 'original') parts.push('sort=' + encodeURIComponent(state.sort));
+  const h = parts.length ? '#' + parts.join('&') : '';
+  if (location.hash !== h) {
+    history.replaceState(null, '', location.pathname + location.search + h);
+  }
+}
+function _syncUrlHash() {
+  // Phase 9.1.1: currentCam is a script-local var, not on window.
+  _writeUrlHash({
+    cam: (typeof currentCam !== 'undefined' ? currentCam : null) || null,
+    view: document.body.classList.contains('view-map') ? 'map' : 'camera',
+    sort: lmSort
+  });
+}
+function setLmSort(value) {
+  lmSort = value || 'original';
+  _syncUrlHash();
+  // Re-render the lm-list with the new sort.
+  if (typeof window.loadProjections === 'function') {
+    window.loadProjections();
+  }
+}
+window.setLmSort = setLmSort;
+window._syncUrlHash = _syncUrlHash;
 let mainZoom = 1, mainPanX = 0, mainPanY = 0, mainDragging = false, mainDragStart = null, mainPanStart = null;
 
 // ── DOM ────────────────────────────────────────────────────────────────────
@@ -399,8 +756,8 @@ const optLoss    = document.getElementById('opt-loss');
 const optDetail  = document.getElementById('opt-detail');
 const tip        = document.getElementById('tip');
 
-const SL_IDS  = {x:'sl-x',y:'sl-y',z:'sl-z',yaw:'sl-yaw',pitch:'sl-pitch',hfov:'sl-hfov'};
-const NUM_IDS = {x:'num-x',y:'num-y',z:'num-z',yaw:'num-yaw',pitch:'num-pitch',hfov:'num-hfov'};
+const SL_IDS  = {x:'sl-x',y:'sl-y',z:'sl-z',yaw:'sl-yaw',pitch:'sl-pitch',roll:'sl-roll',hfov:'sl-hfov'};
+const NUM_IDS = {x:'num-x',y:'num-y',z:'num-z',yaw:'num-yaw',pitch:'num-pitch',roll:'num-roll',hfov:'num-hfov'};
 
 // ── Init ───────────────────────────────────────────────────────────────────
 // State for cam picker
@@ -449,23 +806,1003 @@ async function init() {
     o.textContent = c.name;
     camSel.appendChild(o);
   });
-  // Wire up cam picker
+  // Wire up cam picker (Phase 2: permanent list in left sidebar — no .open class)
   const camSearch = document.getElementById('cam-search');
   const camDropdown = document.getElementById('cam-dropdown');
-  camSearch.addEventListener('input', e => { camSearchQ = e.target.value; renderCamDropdown(); camDropdown.classList.add('open'); });
-  camSearch.addEventListener('focus', () => { renderCamDropdown(); camDropdown.classList.add('open'); });
-  document.addEventListener('click', e => {
-    if (!e.target.closest('.cam-picker')) camDropdown.classList.remove('open');
-  });
+  // Initial render so the list is populated even before user interacts.
+  renderCamDropdown();
+  camSearch.addEventListener('input', e => { camSearchQ = e.target.value; renderCamDropdown(); });
   camDropdown.addEventListener('click', e => {
     const opt = e.target.closest('.cam-opt[data-name]');
     if (!opt) return;
     const name = opt.dataset.name;
     camSel.value = name;
     camSearch.value = name;
-    camDropdown.classList.remove('open');
     camSel.dispatchEvent(new Event('change'));
   });
+  // Burger toggle for the left sidebar (session-only, no localStorage)
+  const leftSidebar = document.getElementById('left-sidebar');
+  const camToggleBtn = document.getElementById('cam-toggle-btn');
+  if (camToggleBtn && leftSidebar) {
+    camToggleBtn.addEventListener('click', () => {
+      leftSidebar.classList.toggle('collapsed');
+    });
+    // Phase 2.1: also re-size the canvas overlay when the sidebar
+    // finishes collapsing/expanding. Without this, the canvas keeps
+    // its old width/height while the <img> auto-scales (object-fit:
+    // contain), so marked pixels and projections drift off the image.
+    // We listen for the 'width' transition specifically; the sidebar
+    // also sets border-right which transitions but we don't care.
+    leftSidebar.addEventListener('transitionend', e => {
+      if (e.propertyName !== 'width') return;
+      if (typeof resizeOverlay === 'function') resizeOverlay();
+    });
+  }
+
+  // ── Phase 3+4 (PNG): view toggle + map view ───────────────────────────
+  // Globals exposed on window so Phase 5+ overlays can access them cleanly.
+  window.currentView = 'camera';
+  window.mapData = null;        // populated on first switch to Map view
+  window.mapImg = null;         // the <img> element once loaded
+  window.mapOverlay = null;     // empty <svg> overlay where Phase 5+ draws
+  window.mapTransform = null;   // {world_offset, y_sign, scale, svg_size}
+
+  // World <-> map-pixel coord helpers, used by Phase 5+ to place markers.
+  // The PNG is rendered from the SVG at viewBox 0 0 svg_size, so SVG-user
+  // coords and image pixel coords are 1:1 (we set the <img>'s explicit
+  // width/height to match svg_size).
+  window.worldToSvg = function(wx, wy) {
+    const t = window.mapTransform;
+    if (!t) return [0, 0];
+    return [wx + t.world_offset[0], (t.y_sign * wy) + t.world_offset[1]];
+  };
+  window.svgToWorld = function(sx, sy) {
+    const t = window.mapTransform;
+    if (!t) return [0, 0];
+    return [sx - t.world_offset[0], (sy - t.world_offset[1]) / t.y_sign];
+  };
+
+  const viewToggle = document.getElementById('view-toggle');
+  const mapView = document.getElementById('map-view');
+  const mapSvgWrap = document.getElementById('map-svg-wrap');
+  const mapLoading = document.getElementById('map-loading');
+
+  async function ensureMapLoaded() {
+    if (window.mapImg && window.mapData) return;
+    mapLoading.style.display = 'flex';
+    mapLoading.textContent = 'Loading yanis map…';
+    try {
+      // Fetch metadata + image in parallel.
+      const [dataRes, imgEl] = await Promise.all([
+        fetch('/api/map_data').then(r => r.json()),
+        new Promise((resolve, reject) => {
+          const img = new Image();
+          img.onload = () => resolve(img);
+          img.onerror = () => reject(new Error('failed to load /yanis.png'));
+          img.src = '/yanis.png';
+        }),
+      ]);
+      window.mapData = dataRes;
+      window.mapTransform = dataRes.transform;
+      const sz = dataRes.transform.svg_size;
+      // Phase 5.4: separate the bitmap and overlay into sibling wrappers.
+      // Each gets its own GPU layer (via CSS translateZ(0) + will-change),
+      // so toggling a class on a node inside the overlay no longer
+      // invalidates the bitmap layer.
+      imgEl.setAttribute('width', String(sz[0]));
+      imgEl.setAttribute('height', String(sz[1]));
+      const overlay = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      overlay.setAttribute('viewBox', `0 0 ${sz[0]} ${sz[1]}`);
+      overlay.setAttribute('width', String(sz[0]));
+      overlay.setAttribute('height', String(sz[1]));
+      overlay.id = 'map-overlay';
+
+      // Build two sibling wrappers, side by side, both at (0,0).
+      mapSvgWrap.innerHTML = '';
+      const pngWrap = document.createElement('div');
+      pngWrap.className = 'map-png-wrap';
+      pngWrap.id = 'map-png-wrap';
+      pngWrap.appendChild(imgEl);
+      const overlayWrap = document.createElement('div');
+      overlayWrap.className = 'map-overlay-wrap';
+      overlayWrap.id = 'map-overlay-wrap';
+      overlayWrap.appendChild(overlay);
+      mapSvgWrap.appendChild(pngWrap);
+      mapSvgWrap.appendChild(overlayWrap);
+
+      window.mapImg = imgEl;
+      window.mapOverlay = overlay;
+      window.mapPngWrap = pngWrap;
+      window.mapOverlayWrap = overlayWrap;
+      mapLoading.style.display = 'none';
+    } catch (e) {
+      console.error('map load failed:', e);
+      mapLoading.textContent = 'Failed to load map: ' + (e.message || e);
+    }
+  }
+
+  // Phase 5.5: detach map-view DOM when in Camera view
+  // Keep references so we can re-attach the .map-view in the right place.
+  const _mapViewParent = mapView.parentNode;
+  const _mapViewSibling = mapView.nextSibling;  // anchor for re-insert
+
+  function setView(name) {
+    if (name !== 'camera' && name !== 'map') return;
+    if (window.currentView === name) return;
+    window.currentView = name;
+    document.body.classList.toggle('view-map', name === 'map');
+    viewToggle.querySelectorAll('button[data-view]').forEach(b => {
+      b.classList.toggle('active', b.dataset.view === name);
+    });
+    if (name === 'map') {
+      // Re-attach .map-view if previously detached.
+      if (!mapView.parentNode && _mapViewParent) {
+        _mapViewParent.insertBefore(mapView, _mapViewSibling);
+      }
+      ensureMapLoaded();
+    } else {
+      // Detach .map-view entirely so its 600+ overlay nodes don't slow
+      // down the browser's style/layout pipeline while in Camera view.
+      if (mapView.parentNode) {
+        mapView.parentNode.removeChild(mapView);
+      }
+      // Re-fit the canvas overlay since canvas-wrap size may have been 0.
+      if (typeof resizeOverlay === 'function') resizeOverlay();
+    }
+  }
+  window.setView = setView;
+  // Phase 9.1: sync URL hash whenever view changes.
+  const _origSetView = setView;
+  window.setView = function(name) {
+    _origSetView(name);
+    if (typeof window._syncUrlHash === 'function') window._syncUrlHash();
+  };
+
+  viewToggle.addEventListener('click', e => {
+    const btn = e.target.closest('button[data-view]');
+    if (!btn) return;
+    setView(btn.dataset.view);
+  });
+
+  // Pan/zoom via CSS transform on the wrapper (GPU-composited, fluid).
+  // window.mapTx holds the current transform: { scale, tx, ty }
+  // Screen coord = wrapper origin + (svg_x * scale, svg_y * scale) + (tx, ty)
+  window.mapTx = null;
+  let mapDragging = false, mapDragStart = null, mapTxStart = null;
+
+  function applyMapTx() {
+    if (!window.mapTx) return;
+    const { scale, tx, ty } = window.mapTx;
+    const t = `translate(${tx}px, ${ty}px) scale(${scale})`;
+    // Phase 5.4: set transform on each layer wrapper independently. Each
+    // is its own GPU compositing layer (see CSS), so they stay in sync
+    // visually but never invalidate each other on overlay class toggles.
+    if (window.mapPngWrap)     window.mapPngWrap.style.transform = t;
+    if (window.mapOverlayWrap) window.mapOverlayWrap.style.transform = t;
+  }
+
+  function resetMapView() {
+    if (!window.mapData) return;
+    const sz = window.mapData.transform.svg_size;
+    const rect = mapView.getBoundingClientRect();
+    const scale = Math.min(rect.width / sz[0], rect.height / sz[1]);
+    const tx = (rect.width  - sz[0] * scale) / 2;
+    const ty = (rect.height - sz[1] * scale) / 2;
+    window.mapTx = { scale, tx, ty };
+    applyMapTx();
+  }
+  window.resetMapView = resetMapView;
+
+  mapView.addEventListener('wheel', e => {
+    if (window.currentView !== 'map' || !window.mapImg) return;
+    e.preventDefault();
+    if (!window.mapTx) resetMapView();
+    const { scale: s, tx, ty } = window.mapTx;
+    const rect = mapView.getBoundingClientRect();
+    const mx = e.clientX - rect.left;
+    const my = e.clientY - rect.top;
+    const factor = e.deltaY < 0 ? 1.2 : 1 / 1.2;
+    const sz = window.mapData.transform.svg_size;
+    const minScale = Math.min(rect.width / sz[0], rect.height / sz[1]) * 0.5;
+    const maxScale = 50;
+    let ns = Math.max(minScale, Math.min(maxScale, s * factor));
+    // Adjust translate so the cursor stays over the same map point.
+    const ntx = mx - (mx - tx) * (ns / s);
+    const nty = my - (my - ty) * (ns / s);
+    window.mapTx = { scale: ns, tx: ntx, ty: nty };
+    applyMapTx();
+  }, { passive: false });
+
+  mapView.addEventListener('mousedown', e => {
+    if (window.currentView !== 'map' || !window.mapImg) return;
+    if (!window.mapTx) resetMapView();
+    mapDragging = true;
+    mapDragStart = [e.clientX, e.clientY];
+    mapTxStart = { ...window.mapTx };
+    mapView.classList.add('dragging');
+  });
+  window.addEventListener('mousemove', e => {
+    if (!mapDragging) return;
+    const dx = e.clientX - mapDragStart[0];
+    const dy = e.clientY - mapDragStart[1];
+    window.mapTx = { scale: mapTxStart.scale, tx: mapTxStart.tx + dx, ty: mapTxStart.ty + dy };
+    applyMapTx();
+  });
+  window.addEventListener('mouseup', () => {
+    if (mapDragging) { mapDragging = false; mapView.classList.remove('dragging'); }
+  });
+  mapView.addEventListener('dblclick', () => { resetMapView(); });
+
+  // Initial fit once both image and metadata are loaded.
+  const _vbInit = setInterval(() => {
+    if (window.mapImg && !window.mapTx) {
+      resetMapView();
+      clearInterval(_vbInit);
+    }
+  }, 100);
+  // ── end Phase 3+4 (PNG) ───────────────────────────────────────────────
+
+  // ── Phase 5: cams + frustums on map ───────────────────────────────────
+  // Camera type → color. We pull from the same color palette as the rest
+  // of the app for consistency (greens for LEAK ground-truth, blue for
+  // Trailers, purple for other community sources).
+  const CAM_COLORS = {
+    'LEAK':      '#4ade80',  // green — ground truth
+    'Trailer 1': '#60a5fa',  // blue
+    'Trailer 2': '#60a5fa',
+    'screenshots': '#a78bfa', // purple
+  };
+
+  function getCamTypeForMap(c) {
+    // Match the existing getCamType() logic in the cam-picker. We can't
+    // call that one directly because it's defined later in the file as a
+    // top-level function — order is fine at runtime but we want this code
+    // to be self-contained for clarity.
+    const src = c.source || '';
+    if (/^\d{4}-\d{2}-\d{2}/.test(src)) return 'LEAK';
+    if (src.startsWith('Trailer 1')) return 'Trailer 1';
+    if (src.startsWith('Trailer 2') || src === 'Trailer 2') return 'Trailer 2';
+    if (src.startsWith('Trailer')) return 'Trailer 2';
+    return 'screenshots';
+  }
+
+  // Phase 5.1: yaw fix (-sin) + lighter style
+  // Frustum geometry — convention matches server.py /api/generate_map:
+  //   end_x = cam_x - ray_len * sin(yaw)
+  //   end_y = cam_y + ray_len * cos(yaw)
+  // i.e. yaw=0° points +Y (North), yaw=90° points -X (West in world coords).
+  // The sin is NEGATED — that's the fix vs Phase 5 v1 which used +sin and
+  // produced frustums pointing 180° opposite.
+  // Extension distance: the farthest landmark observed by this cam. This
+  // makes the frustum length self-consistent with the cam's actual coverage,
+  // and matches what /api/generate_map renders. Clamped to [600, 4000].
+  const FRUSTUM_DIST_DEFAULT = 1500;
+  const FRUSTUM_DIST_MIN = 600;
+  const FRUSTUM_DIST_MAX = 4000;
+
+  // Phase 5.2 perf: precomputed cam->landmarks index
+  // mapCamLandmarks: Map<cam_name, array<lm_record>>  (cached after first build)
+  // mapCamFrustumDist: Map<cam_name, distance>         (cached after first build)
+  // Both built lazily in buildMapIndexes(), called once when /api/map_data
+  // arrives. Subsequent calls are O(1) lookups.
+  window.mapCamLandmarks = null;
+  window.mapCamFrustumDist = null;
+
+  function buildMapIndexes() {
+    if (!window.mapData) return;
+    if (window.mapCamLandmarks && window.mapCamFrustumDist) return;  // already built
+    const camLm = new Map();
+    const camDist = new Map();
+    // Init each cam with empty array.
+    for (const c of window.mapData.cameras) {
+      camLm.set(c.name, []);
+    }
+    // Single pass over landmarks.
+    for (const lm of (window.mapData.landmarks || [])) {
+      const observers = lm.source_cameras || lm.observed_by || [];
+      for (const camName of observers) {
+        const arr = camLm.get(camName);
+        if (arr) arr.push(lm);
+      }
+    }
+    // Compute frustum distance per cam.
+    for (const c of window.mapData.cameras) {
+      if (!c.xyz) { camDist.set(c.name, FRUSTUM_DIST_DEFAULT); continue; }
+      const [cx, cy] = c.xyz;
+      let maxDist = 0;
+      for (const lm of camLm.get(c.name)) {
+        if (!lm.xyz) continue;
+        const d = Math.hypot(lm.xyz[0] - cx, lm.xyz[1] - cy);
+        if (d > maxDist) maxDist = d;
+      }
+      if (maxDist === 0) maxDist = FRUSTUM_DIST_DEFAULT;
+      camDist.set(c.name, Math.max(FRUSTUM_DIST_MIN, Math.min(FRUSTUM_DIST_MAX, maxDist)));
+    }
+    window.mapCamLandmarks = camLm;
+    window.mapCamFrustumDist = camDist;
+  }
+
+  function frustumDistanceForCam(cam) {
+    if (!window.mapCamFrustumDist) return FRUSTUM_DIST_DEFAULT;
+    return window.mapCamFrustumDist.get(cam.name) || FRUSTUM_DIST_DEFAULT;
+  }
+
+  function frustumCornersWorld(camXyz, yawDeg, hfovDeg, dist) {
+    const [wx, wy] = camXyz;
+    const halfFov = hfovDeg / 2;
+    const corners = [];
+    for (const edgeYawDeg of [yawDeg - halfFov, yawDeg + halfFov]) {
+      const r = edgeYawDeg * Math.PI / 180;
+      // Match server.py: -sin for x, +cos for y.
+      const ex = wx - dist * Math.sin(r);
+      const ey = wy + dist * Math.cos(r);
+      corners.push([ex, ey]);
+    }
+    return corners;
+  }
+
+  // The marker circle radius and stroke widths are in SVG-user units, NOT
+  // CSS pixels. The wrapper transform scales them with zoom (no fixed-pixel
+  // markers — that would require counter-scaling, doable later if wanted).
+  // Tuned for visibility at the default fit-zoom on a 12000-px-wide PNG.
+  // Phase 5.1: smaller markers, thinner outlines
+  // Phase 6.3: FRUSTUM_LINE_WIDTH 12 → 6 (less visual weight on hover/select)
+  const MARKER_RADIUS = 35;
+  const MARKER_STROKE = 12;
+  const FRUSTUM_LINE_WIDTH = 6;
+
+  // Selected cam tracking. We listen to the existing #cam-sel change event
+  // (the source of truth across the whole app) to update marker styling.
+  let mapSelectedCamName = null;
+
+  // Phase 6.1: landmark dots on map
+  // Phase 6.2: aligned with Camera view's dColor() — single source of
+  // truth is window.deltaColor(), defined later alongside dColor.
+  // Dot radius in SVG-user units. Smaller than MARKER_RADIUS (35) so cams
+  // visually dominate. Tuned for the same default fit-zoom as the cams.
+  const LM_DOT_RADIUS = 16;
+  const LM_COLOR_LEAK = '#4ade80';    // leak-anchored ground truth (no cam selected)
+  const LM_COLOR_NEUTRAL = '#9090b0'; // triangulated, no cam selected, not leak-anchored
+
+  // window.mapDeltasByLm: Map<lm_name, delta_arcmin> for the current
+  // mapSelectedCamName. Populated by Phase 6.2 when it fetches /api/project.
+  // null when no cam is selected.
+  window.mapDeltasByLm = null;
+
+  // Bridge: Phase 6.2 wants delta colors but the canonical dColor() is
+  // defined later in the script (inside the Camera view block). We expose
+  // window.deltaColor in a shim here that calls it lazily — by the time
+  // any landmark is rendered, the Camera view block has run and
+  // window.deltaColor is wired up.
+  function lmColorForDelta(delta) {
+    return window.deltaColor ? window.deltaColor(delta) : null;
+  }
+
+  function renderLandmarksOnMap() {
+    if (!window.mapOverlay || !window.mapData) return;
+    const lmLayer = document.getElementById('lm-layer');
+    if (!lmLayer) return;
+    // Clear previous dots.
+    while (lmLayer.firstChild) lmLayer.removeChild(lmLayer.firstChild);
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+
+    // When a cam is selected, the set of landmarks observed by it tells
+    // us which dots to fully color vs dim. Use the precomputed index.
+    const observedSet = (mapSelectedCamName && window.mapCamLandmarks)
+      ? new Set((window.mapCamLandmarks.get(mapSelectedCamName) || []).map(l => l.name))
+      : null;
+
+    for (const lm of window.mapData.landmarks) {
+      // Untriangulated → no xyz, can't place on map. Phase 6.2 sidebar
+      // surfaces these even without map placement.
+      if (!lm.xyz) continue;
+
+      const [sx, sy] = window.worldToSvg(lm.xyz[0], lm.xyz[1]);
+      const dot = document.createElementNS(SVG_NS, 'circle');
+      dot.setAttribute('class', 'lm-dot');
+      dot.setAttribute('cx', String(sx));
+      dot.setAttribute('cy', String(sy));
+      dot.setAttribute('r',  String(LM_DOT_RADIUS));
+      dot.dataset.lmName = lm.name;
+
+      // Color logic
+      let fill = LM_COLOR_NEUTRAL;
+      let dim = false;
+      if (observedSet) {
+        if (observedSet.has(lm.name)) {
+          // Cam-observed: color by delta if available (Phase 6.2 fetches
+          // /api/project on cam change to populate window.mapDeltasByLm).
+          const delta = window.mapDeltasByLm
+            ? window.mapDeltasByLm.get(lm.name)
+            : undefined;
+          if (delta != null) {
+            fill = window.deltaColor(delta);
+          } else {
+            // Either deltas not yet fetched OR the projection failed for
+            // this lm (e.g. behind cam). Use neutral; not dimmed since
+            // this cam DOES observe it.
+            fill = LM_COLOR_NEUTRAL;
+          }
+        } else {
+          // Not observed by selected cam → dim grey.
+          fill = LM_COLOR_NEUTRAL;
+          dim = true;
+        }
+      } else {
+        // No cam selected → leak-anchored gets the green tint, others neutral.
+        fill = lm.is_leak_anchored ? LM_COLOR_LEAK : LM_COLOR_NEUTRAL;
+      }
+
+      dot.setAttribute('fill', fill);
+      if (dim) dot.classList.add('dim');
+      // Re-apply hover/select markers if they survived a re-render.
+      if (mapHoveredLm === lm.name)  dot.classList.add('hovered');
+      if (mapSelectedLm === lm.name) dot.classList.add('selected');
+      lmLayer.appendChild(dot);
+    }
+  }
+  window.renderLandmarksOnMap = renderLandmarksOnMap;
+
+  function renderCamsOnMap() {
+    if (!window.mapOverlay || !window.mapData) return;
+    // Phase 5.2 perf: build indexes once on first render.
+    buildMapIndexes();
+    // Clear any previous render.
+    while (window.mapOverlay.firstChild) {
+      window.mapOverlay.removeChild(window.mapOverlay.firstChild);
+    }
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+
+    // Phase 6.1: landmark dots layer — created FIRST so it sits below
+    // cams + rays in document order (and thus in paint order). Populated
+    // by renderLandmarksOnMap() which is called at the end of this fn.
+    const lmGroup = document.createElementNS(SVG_NS, 'g');
+    lmGroup.setAttribute('id', 'lm-layer');
+    window.mapOverlay.appendChild(lmGroup);
+
+    // Cams group — append all <g class="cam-group"> children.
+    const camsGroup = document.createElementNS(SVG_NS, 'g');
+    camsGroup.setAttribute('id', 'cams-layer');
+    window.mapOverlay.appendChild(camsGroup);
+
+    // Rays group (Phase 5 toggle) — empty by default, populated by
+    // renderRaysForSelectedCam() when the toggle is on.
+    const raysGroup = document.createElementNS(SVG_NS, 'g');
+    raysGroup.setAttribute('id', 'rays-layer');
+    window.mapOverlay.appendChild(raysGroup);
+
+    for (const c of window.mapData.cameras) {
+      if (!c.xyz) continue;  // shouldn't happen since /api/map_data filters
+      const type = getCamTypeForMap(c);
+      const color = CAM_COLORS[type] || '#a78bfa';
+      const [sx, sy] = window.worldToSvg(c.xyz[0], c.xyz[1]);
+
+      // Phase 5.1: per-cam frustum length = farthest observed landmark.
+      const yaw = (c.ypr && c.ypr.length >= 1) ? c.ypr[0] : 0;
+      const hfov = c.hfov || 60;
+      const dist = frustumDistanceForCam(c);
+      const fcWorld = frustumCornersWorld(c.xyz, yaw, hfov, dist);
+      const fcSvg = fcWorld.map(([wx, wy]) => window.worldToSvg(wx, wy));
+
+      const camGroup = document.createElementNS(SVG_NS, 'g');
+      camGroup.setAttribute('class', 'cam-group');
+      camGroup.dataset.camName = c.name;
+
+      // Frustum fill (very light triangle between apex and the two edges).
+      const fill = document.createElementNS(SVG_NS, 'polygon');
+      fill.setAttribute('class', 'cam-frustum-fill');
+      fill.setAttribute('points',
+        `${sx},${sy} ${fcSvg[0][0]},${fcSvg[0][1]} ${fcSvg[1][0]},${fcSvg[1][1]}`);
+      fill.setAttribute('fill', color);
+      camGroup.appendChild(fill);
+
+      // Two FOV edge lines (the "frustum" proper, like generate_map).
+      for (let i = 0; i < 2; i++) {
+        const line = document.createElementNS(SVG_NS, 'line');
+        line.setAttribute('class', 'cam-frustum');
+        line.setAttribute('x1', String(sx));
+        line.setAttribute('y1', String(sy));
+        line.setAttribute('x2', String(fcSvg[i][0]));
+        line.setAttribute('y2', String(fcSvg[i][1]));
+        line.setAttribute('stroke', color);
+        line.setAttribute('stroke-width', String(FRUSTUM_LINE_WIDTH));
+        line.setAttribute('stroke-linecap', 'round');
+        camGroup.appendChild(line);
+      }
+
+      // Apex circle (the marker proper) — smaller, cleaner.
+      const marker = document.createElementNS(SVG_NS, 'g');
+      marker.setAttribute('class', 'cam-marker');
+      marker.dataset.camName = c.name;
+      const circle = document.createElementNS(SVG_NS, 'circle');
+      circle.setAttribute('cx', String(sx));
+      circle.setAttribute('cy', String(sy));
+      circle.setAttribute('r', String(MARKER_RADIUS));
+      circle.setAttribute('fill', color);
+      circle.setAttribute('stroke', '#000');
+      circle.setAttribute('stroke-width', String(MARKER_STROKE));
+      marker.appendChild(circle);
+      camGroup.appendChild(marker);
+
+      camsGroup.appendChild(camGroup);
+    }
+
+    // Phase 6.1: render landmark dots. Done after cams so any future
+    // shared state (e.g. dim-on-cam-hover) flows in the right direction.
+    renderLandmarksOnMap();
+
+    // Apply current selection styling (in case we re-render after a select).
+    updateMapSelectionStyle();
+  }
+
+  function updateMapSelectionStyle() {
+    if (!window.mapOverlay) return;
+    window.mapOverlay.querySelectorAll('g.cam-group').forEach(g => {
+      g.classList.toggle('selected', g.dataset.camName === mapSelectedCamName);
+    });
+  }
+
+  // Rays from the selected cam to all its observed landmarks.
+  // Toggle-controlled. Rebuilt on every cam change while toggle is on.
+  let raysToggleOn = false;
+
+  function renderRaysForSelectedCam() {
+    if (!window.mapOverlay) return;
+    const raysLayer = document.getElementById('rays-layer');
+    if (!raysLayer) return;
+    while (raysLayer.firstChild) raysLayer.removeChild(raysLayer.firstChild);
+    if (!raysToggleOn || !mapSelectedCamName || !window.mapData) return;
+
+    const cam = window.mapData.cameras.find(c => c.name === mapSelectedCamName);
+    if (!cam || !cam.xyz) return;
+    const [ax, ay] = window.worldToSvg(cam.xyz[0], cam.xyz[1]);
+
+    // Phase 5.2 perf: O(K) lookup instead of O(M) scan.
+    const observed = window.mapCamLandmarks ? window.mapCamLandmarks.get(mapSelectedCamName) : null;
+    if (!observed) return;
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    // Phase 6.3: neutral grey fallback color when delta is unavailable.
+    // window.deltaColor(null) already returns '#333' (very dark) — that
+    // disappears against the dim map. Use the LM_COLOR_NEUTRAL we already
+    // defined in 6.1 (#9090b0) for visual consistency with neutral dots.
+    const NULL_DELTA_COLOR = '#9090b0';
+    for (const lm of observed) {
+      if (!lm.xyz) continue;
+      const [bx, by] = window.worldToSvg(lm.xyz[0], lm.xyz[1]);
+      const line = document.createElementNS(SVG_NS, 'line');
+      line.setAttribute('x1', String(ax));
+      line.setAttribute('y1', String(ay));
+      line.setAttribute('x2', String(bx));
+      line.setAttribute('y2', String(by));
+      line.setAttribute('class', 'ray-line');
+      // Phase 6.3: tag with data-lm-name so the hover boost CSS can
+      // target this specific ray when its landmark is hovered.
+      line.dataset.lmName = lm.name;
+      // Phase 6.2/6.3: per-ray color matches the dot's delta color.
+      // ALWAYS set stroke inline — Phase 5's CSS rule no longer sets
+      // stroke (Phase 6.3 hunk 1), so inline always wins. Fallback
+      // grey for null deltas (delta hasn't loaded, or projection
+      // failed, or cam can't see this landmark).
+      const delta = window.mapDeltasByLm ? window.mapDeltasByLm.get(lm.name) : undefined;
+      const color = (delta != null) ? window.deltaColor(delta) : NULL_DELTA_COLOR;
+      line.setAttribute('stroke', color);
+      raysLayer.appendChild(line);
+    }
+  }
+
+  // Hook the rendering into ensureMapLoaded by re-running it when the map
+  // is ready. We call it from setView('map') after ensureMapLoaded resolves.
+  // Also expose globally for Phase 6+ to trigger a re-render after data
+  // changes (e.g. after triangulating a landmark).
+  window.renderCamsOnMap = renderCamsOnMap;
+  window.renderRaysForSelectedCam = renderRaysForSelectedCam;
+
+  // Wire in: when the map first loads, render the cams; when the cam
+  // selection changes, update styling and rays.
+  const _origEnsureMapLoaded = ensureMapLoaded;
+  ensureMapLoaded = async function() {
+    await _origEnsureMapLoaded.apply(this, arguments);
+    if (window.mapData && window.mapOverlay) {
+      // Sync selected cam from the global #cam-sel.
+      const sel = document.getElementById('cam-sel');
+      mapSelectedCamName = sel && sel.value ? sel.value : null;
+      renderCamsOnMap();
+      renderRaysForSelectedCam();
+    }
+  };
+
+  // Listen to cam-sel changes to update selection styling on the map.
+  document.getElementById('cam-sel').addEventListener('change', () => {
+    mapSelectedCamName = document.getElementById('cam-sel').value || null;
+    if (window.currentView === 'map') {
+      updateMapSelectionStyle();
+      renderRaysForSelectedCam();
+      // Phase 6.1: invalidate per-cam delta cache and re-render dots in
+      // their new "observed vs dim" coloring. Phase 6.2 will async-fetch
+      // /api/project and call renderLandmarksOnMap() again with deltas.
+      window.mapDeltasByLm = null;
+      renderLandmarksOnMap();
+    }
+  });
+
+  // ── Phase 6.2: delta-colored dots/rays + landmark sidebar ──────────────
+
+  // Hover/select state for landmark dots on the map.
+  let mapHoveredLm = null;
+  let mapSelectedLm = null;
+
+  // Fetch /api/project for the currently selected cam, populate
+  // window.mapDeltasByLm, then re-render dots + rays + sidebar.
+  // Debounced to coalesce rapid cam flicks.
+  let _deltasFetchTimer = null;
+  let _deltasFetchToken = 0;
+  async function fetchDeltasForSelectedCam() {
+    if (!mapSelectedCamName) {
+      window.mapDeltasByLm = null;
+      renderLandmarksOnMap();
+      renderRaysForSelectedCam();
+      renderMapSidebar();
+      return;
+    }
+    const myToken = ++_deltasFetchToken;
+    try {
+      const url = '/api/project?cam=' + encodeURIComponent(mapSelectedCamName);
+      const data = await fetch(url).then(r => r.json());
+      // Bail if the user changed cams while we were waiting.
+      if (myToken !== _deltasFetchToken) return;
+      const m = new Map();
+      for (const p of (data.projections || [])) {
+        if (p.delta != null) m.set(p.name, p.delta);
+      }
+      window.mapDeltasByLm = m;
+      renderLandmarksOnMap();
+      renderRaysForSelectedCam();
+      renderMapSidebar();
+    } catch (e) {
+      console.error('Phase 6.2 delta fetch failed:', e);
+    }
+  }
+  function scheduleDeltasFetch() {
+    clearTimeout(_deltasFetchTimer);
+    _deltasFetchTimer = setTimeout(fetchDeltasForSelectedCam, 80);
+  }
+  window.scheduleMapDeltasFetch = scheduleDeltasFetch;
+
+  // Sidebar — populated by renderMapSidebar.
+  // Structure:
+  //   <div class="map-sb-hdr map-only">…</div>
+  //   <div class="lm-list map-only">…</div>
+  // Inserted into .sidebar so it shares the right-side container with
+  // Camera view content (which is hidden in map view via Phase 3+4 CSS).
+  const _mapSidebarHdr = document.createElement('div');
+  _mapSidebarHdr.className = 'map-sb-hdr map-only sb-sec';
+  _mapSidebarHdr.id = 'map-sb-hdr';
+  const _mapSidebarList = document.createElement('div');
+  _mapSidebarList.className = 'lm-list map-only';
+  _mapSidebarList.id = 'map-lm-list';
+  // Insert right after the Generate Map button so the sidebar reads
+  // top-to-bottom: genmap btn → map header → map list.
+  const _rightSidebar = document.querySelector('.sidebar');
+  if (_rightSidebar) {
+    const genmapBtn = document.getElementById('btn-genmap');
+    if (genmapBtn && genmapBtn.parentNode === _rightSidebar) {
+      _rightSidebar.insertBefore(_mapSidebarHdr, genmapBtn.nextSibling);
+      _rightSidebar.insertBefore(_mapSidebarList, _mapSidebarHdr.nextSibling);
+    } else {
+      _rightSidebar.insertBefore(_mapSidebarHdr, _rightSidebar.firstChild);
+      _rightSidebar.insertBefore(_mapSidebarList, _mapSidebarHdr.nextSibling);
+    }
+  }
+
+  function renderMapSidebar() {
+    if (!window.mapData) return;
+    // Header
+    if (!mapSelectedCamName) {
+      _mapSidebarHdr.innerHTML = '<div class="empty">No camera selected</div>'
+        + '<div class="meta" style="margin-top:4px">Click a cam on the map to see its landmarks</div>';
+      _mapSidebarList.innerHTML = '';
+      return;
+    }
+
+    const observed = (window.mapCamLandmarks && window.mapCamLandmarks.get(mapSelectedCamName)) || [];
+    // Sort by delta desc (worst first), nulls/missing at the bottom.
+    const decorated = observed.map(lm => {
+      const delta = window.mapDeltasByLm ? window.mapDeltasByLm.get(lm.name) : undefined;
+      return { lm, delta: (delta == null) ? null : delta };
+    });
+    decorated.sort((a, b) => {
+      if (a.delta == null && b.delta == null) return a.lm.name.localeCompare(b.lm.name);
+      if (a.delta == null) return 1;
+      if (b.delta == null) return -1;
+      return b.delta - a.delta;
+    });
+
+    // Counts
+    const n = decorated.length;
+    const nWith = decorated.filter(d => d.delta != null).length;
+    const fetching = window.mapDeltasByLm == null;
+    const meta = fetching
+      ? `${n} observed · loading deltas…`
+      : `${n} observed · ${nWith} with delta`;
+    _mapSidebarHdr.innerHTML =
+      `<div class="cam-name">${escapeHtml(mapSelectedCamName)}</div>` +
+      `<div class="meta">${meta}</div>`;
+
+    // List
+    if (n === 0) {
+      _mapSidebarList.innerHTML = '<div style="padding:10px 13px;font-family:var(--mono);font-size:10px;color:var(--dim)">No observed landmarks</div>';
+      return;
+    }
+    const html = decorated.map(({ lm, delta }) => {
+      const color = window.deltaColor(delta);
+      const deltaStr = delta != null ? delta.toFixed(2) : '—';
+      const cls = 'lm-item' + (mapSelectedLm === lm.name ? ' sel' : '')
+                            + (!lm.xyz ? ' untriangulated' : '');
+      const safeName = escapeHtml(lm.name);
+      return `<div class="${cls}" data-lm-name="${safeName}">
+        <div class="lm-dot" style="background:${color}"></div>
+        <span class="lm-name">${safeName}</span>
+        <span class="lm-d" style="color:${color}">${deltaStr}</span>
+      </div>`;
+    }).join('');
+    _mapSidebarList.innerHTML = html;
+  }
+  window.renderMapSidebar = renderMapSidebar;
+
+  // Tiny html escape — we already use escapeHtml in cam_health but it's
+  // not in calib.html scope. Define a small one here.
+  function escapeHtml(s) {
+    return String(s).replace(/[&<>"']/g, c => (
+      { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]
+    ));
+  }
+
+  // Sidebar: hover/click delegation
+  _mapSidebarList.addEventListener('mouseover', e => {
+    const item = e.target.closest('.lm-item[data-lm-name]');
+    if (!item) return;
+    setMapHoveredLm(item.dataset.lmName);
+  });
+  _mapSidebarList.addEventListener('mouseleave', () => {
+    setMapHoveredLm(null);
+  });
+  _mapSidebarList.addEventListener('click', e => {
+    const item = e.target.closest('.lm-item[data-lm-name]');
+    if (!item) return;
+    const name = item.dataset.lmName;
+    setMapSelectedLm(mapSelectedLm === name ? null : name);
+  });
+
+  // Map dots: hover tooltip + click select via delegation on the wrapper.
+  // Phase 6.3: also boost the matching ray via .lm-hovered class on the
+  // specific <line>, gated by a .lm-hover class on #rays-layer (so we
+  // don't have to selector-target every other ray to dim it).
+  function setMapHoveredLm(name) {
+    if (mapHoveredLm === name) return;
+    if (window.mapOverlay) {
+      // Dot
+      const prev = window.mapOverlay.querySelector(`.lm-dot.hovered`);
+      if (prev) prev.classList.remove('hovered');
+      if (name) {
+        const cur = window.mapOverlay.querySelector(`.lm-dot[data-lm-name="${CSS.escape(name)}"]`);
+        if (cur) cur.classList.add('hovered');
+      }
+      // Phase 6.3: matching ray boost
+      const raysLayer = document.getElementById('rays-layer');
+      if (raysLayer) {
+        const prevRay = raysLayer.querySelector('.ray-line.lm-hovered');
+        if (prevRay) prevRay.classList.remove('lm-hovered');
+        if (name) {
+          raysLayer.classList.add('lm-hover');
+          const ray = raysLayer.querySelector(`.ray-line[data-lm-name="${CSS.escape(name)}"]`);
+          if (ray) ray.classList.add('lm-hovered');
+        } else {
+          raysLayer.classList.remove('lm-hover');
+        }
+      }
+    }
+    mapHoveredLm = name;
+  }
+  // Phase 6.3: cam-hover sets a class on #rays-layer to bump ALL rays
+  // for the currently selected cam. Tied to the existing cam-marker
+  // hover via :hover in CSS would have been cleanest, but the rays
+  // and cams live in different SVG groups so we drive it from JS.
+  function setMapCamHovered(isHovered) {
+    const raysLayer = document.getElementById('rays-layer');
+    if (!raysLayer) return;
+    raysLayer.classList.toggle('cam-hover', !!isHovered);
+  }
+  window.setMapCamHovered = setMapCamHovered;
+  function setMapSelectedLm(name) {
+    if (window.mapOverlay) {
+      const prev = window.mapOverlay.querySelector(`.lm-dot.selected`);
+      if (prev) prev.classList.remove('selected');
+      if (name) {
+        const cur = window.mapOverlay.querySelector(`.lm-dot[data-lm-name="${CSS.escape(name)}"]`);
+        if (cur) cur.classList.add('selected');
+      }
+    }
+    mapSelectedLm = name;
+    // Re-render sidebar so the .sel class lands on the right item.
+    renderMapSidebar();
+    // Sync with Camera view's lm-info-panel so picking on the map opens
+    // the same landmark info as picking from the Camera-view list.
+    if (typeof showLmInfo === 'function') showLmInfo(name);
+  }
+
+  // Hover tooltip on dots — reuses .map-tip from Phase 5 to stay
+  // visually consistent with cam-marker tooltips.
+  mapSvgWrap.addEventListener('mousemove', e => {
+    if (window.currentView !== 'map') return;
+    // Only react to landmark dots (cam markers have their own tooltip
+    // logic earlier in the file that's wired to the same wrapper).
+    let node = e.target;
+    let dotEl = null;
+    while (node && node !== mapSvgWrap) {
+      if (node.classList && node.classList.contains('lm-dot')) {
+        dotEl = node;
+        break;
+      }
+      node = node.parentNode;
+    }
+    if (!dotEl) {
+      // Don't fight cam-marker tooltips — those clear .map-tip elsewhere.
+      // We only set when we actually hovered a dot.
+      if (mapHoveredLm) setMapHoveredLm(null);
+      return;
+    }
+    const name = dotEl.dataset.lmName;
+    setMapHoveredLm(name);
+    const delta = window.mapDeltasByLm ? window.mapDeltasByLm.get(name) : undefined;
+    const lm = window.mapData.landmarks.find(l => l.name === name);
+    mapTipName.textContent = name;
+    const bits = [];
+    if (delta != null) {
+      bits.push(`Δ ${delta.toFixed(2)}'`);
+    } else if (mapSelectedCamName) {
+      bits.push('not observed');
+    }
+    if (lm && lm.is_leak_anchored) bits.push('★ leak-anchored');
+    if (lm && lm.error_m != null) bits.push(`err ${lm.error_m.toFixed(1)}m`);
+    mapTipMeta.textContent = bits.join(' · ');
+    mapTip.style.display = 'block';
+    mapTip.style.left = (e.clientX + 14) + 'px';
+    mapTip.style.top = (e.clientY - 10) + 'px';
+  });
+
+  // Click on a dot → select it (also handled by the cam-marker click
+  // delegation which stop-propagates, so a click on a dot that's behind
+  // a cam still goes to the cam — desirable since cams are smaller and
+  // intentional clicks).
+  mapSvgWrap.addEventListener('click', e => {
+    if (window.currentView !== 'map') return;
+    let node = e.target;
+    while (node && node !== mapSvgWrap) {
+      if (node.classList && node.classList.contains('lm-dot')) {
+        const name = node.dataset.lmName;
+        if (name) {
+          setMapSelectedLm(mapSelectedLm === name ? null : name);
+          e.stopPropagation();
+        }
+        return;
+      }
+      node = node.parentNode;
+    }
+  });
+
+  // Trigger a deltas fetch on every cam change (debounced inside).
+  // Phase 6.1 already wired the cam-sel listener to call
+  // renderLandmarksOnMap(); we extend it via a separate listener so the
+  // fetch runs in parallel with the Phase 6.1 dim re-render.
+  document.getElementById('cam-sel').addEventListener('change', () => {
+    if (window.currentView === 'map') {
+      mapSelectedLm = null;  // clear lm selection on cam change
+      scheduleDeltasFetch();
+      // renderMapSidebar() runs immediately to show "loading deltas…"
+      renderMapSidebar();
+    }
+  });
+
+  // Also kick the sidebar render when the map first loads + initial fetch
+  // if a cam was already selected (e.g. via ?cam= URL param).
+  const _origEnsureMapLoadedForPhase62 = ensureMapLoaded;
+  ensureMapLoaded = async function() {
+    await _origEnsureMapLoadedForPhase62.apply(this, arguments);
+    renderMapSidebar();
+    if (mapSelectedCamName) scheduleDeltasFetch();
+  };
+
+  // ── end Phase 6.2 ──────────────────────────────────────────────────────
+
+  // Click on a cam marker = navigate to it (sync with Camera view).
+  // Use event delegation on the overlay since markers are dynamic.
+  if (window.mapOverlay) {
+    // mapOverlay isn't created yet at script-load time (it's created in
+    // ensureMapLoaded). We attach listeners on the wrapper instead, which
+    // exists from page load.
+  }
+  mapSvgWrap.addEventListener('click', e => {
+    if (window.currentView !== 'map') return;
+    // Walk up to find a .cam-marker
+    let node = e.target;
+    while (node && node !== mapSvgWrap) {
+      if (node.classList && node.classList.contains('cam-marker')) {
+        const camName = node.dataset.camName;
+        if (camName) {
+          const sel = document.getElementById('cam-sel');
+          if (sel && sel.value !== camName) {
+            sel.value = camName;
+            sel.dispatchEvent(new Event('change'));
+            // Also sync the visible search input so the cam-picker UI
+            // reflects the choice.
+            const camSearch = document.getElementById('cam-search');
+            if (camSearch) camSearch.value = camName;
+          }
+          // Stop the click from triggering the pan/drag handler.
+          e.stopPropagation();
+        }
+        return;
+      }
+      node = node.parentNode;
+    }
+  });
+
+  // Hover tooltip on cam markers.
+  const mapTip = document.getElementById('map-tip');
+  const mapTipName = document.getElementById('map-tip-name');
+  const mapTipMeta = document.getElementById('map-tip-meta');
+
+  mapSvgWrap.addEventListener('mousemove', e => {
+    if (window.currentView !== 'map') { mapTip.style.display = 'none'; return; }
+    let node = e.target;
+    let camName = null;
+    while (node && node !== mapSvgWrap) {
+      if (node.classList && node.classList.contains('cam-marker')) {
+        camName = node.dataset.camName;
+        break;
+      }
+      node = node.parentNode;
+    }
+    if (!camName) {
+      mapTip.style.display = 'none';
+      // Phase 6.3: clear cam-hover ray boost if we left the cam marker.
+      if (typeof setMapCamHovered === 'function') setMapCamHovered(false);
+      return;
+    }
+    // Phase 6.3: only boost rays for the SELECTED cam (rays are only
+    // rendered for the selected cam), so hovering a non-selected cam
+    // shouldn't tint other rays.
+    if (typeof setMapCamHovered === 'function') {
+      setMapCamHovered(camName === mapSelectedCamName);
+    }
+    const cam = window.mapData?.cameras.find(c => c.name === camName);
+    if (!cam) { mapTip.style.display = 'none'; return; }
+    mapTipName.textContent = cam.name;
+    const type = getCamTypeForMap(cam);
+    const bits = [type];
+    if (cam.n_pixels != null) bits.push(`${cam.n_pixels}px`);
+    if (cam.n_independent != null) bits.push(`${cam.n_independent} indep`);
+    if (cam.source) bits.push(cam.source);
+    mapTipMeta.textContent = bits.join(' · ');
+    mapTip.style.display = 'block';
+    mapTip.style.left = (e.clientX + 14) + 'px';
+    mapTip.style.top = (e.clientY - 10) + 'px';
+  });
+  mapSvgWrap.addEventListener('mouseleave', () => {
+    mapTip.style.display = 'none';
+    // Phase 6.3: clear ray boost states on leave.
+    if (typeof setMapCamHovered === 'function') setMapCamHovered(false);
+    if (typeof setMapHoveredLm === 'function') setMapHoveredLm(null);
+  });
+
+  // "Show all rays" toggle in the header.
+  const raysToggleBtn = document.getElementById('rays-toggle');
+  raysToggleBtn.addEventListener('click', () => {
+    raysToggleOn = !raysToggleOn;
+    raysToggleBtn.classList.toggle('active', raysToggleOn);
+    renderRaysForSelectedCam();
+  });
+  // ── end Phase 5 ───────────────────────────────────────────────────────
   document.querySelectorAll('.cam-filter-chip').forEach(btn => {
     btn.addEventListener('click', () => {
       btn.classList.toggle('on');
@@ -485,6 +1822,8 @@ async function init() {
 // ── Camera select ──────────────────────────────────────────────────────────
 camSel.addEventListener('change', async () => {
   currentCam = camSel.value || null;
+  // Phase 9.1: sync URL hash on cam change.
+  if (typeof window._syncUrlHash === 'function') window._syncUrlHash();
   if (!currentCam) return;
 
   origParams = null;
@@ -518,7 +1857,7 @@ async function loadProjections() {
   const isFirst = !origParams;
   let url = `/api/project?cam=${encodeURIComponent(currentCam)}`;
   if (!isFirst) {
-    url += `&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&hfov=${params.hfov}`;
+    url += `&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&roll=${params.roll}&hfov=${params.hfov}`;
   }
 
   const data = await fetch(url).then(r => r.json());
@@ -527,7 +1866,7 @@ async function loadProjections() {
   if (isFirst) {
     params = {
       x: camData.xyz[0], y: camData.xyz[1], z: camData.xyz[2],
-      yaw: camData.ypr[0], pitch: camData.ypr[1], hfov: camData.hfov
+      yaw: camData.ypr[0], pitch: camData.ypr[1], roll: (camData.ypr[2] !== undefined ? camData.ypr[2] : 0), hfov: camData.hfov
     };
     origParams = {...params};
     syncSliders();
@@ -577,6 +1916,9 @@ function onParam(key, val) {
   btnSave.disabled = false;
   savedEl.style.display = 'none';
   scheduleLoad();
+  if (vertsOn) {                                        // VERTICALS-FE-V1
+    fetchVerticals().then(() => draw());
+  }
 }
 
 Object.keys(SL_IDS).forEach(key => {
@@ -615,7 +1957,7 @@ btnOpt.addEventListener('click', async () => {
   btnOpt.classList.add('running');
   btnOpt.disabled = true;
 
-  const url = `/api/optimize?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&hfov=${params.hfov}`;
+  const url = `/api/optimize?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&roll=${params.roll}&hfov=${params.hfov}`;
   const data = await fetch(url).then(r => r.json());
 
   optimizing = false;
@@ -631,7 +1973,7 @@ btnOpt.addEventListener('click', async () => {
   }
 
   params = {x: data.xyz[0], y: data.xyz[1], z: data.xyz[2],
-            yaw: data.ypr[0], pitch: data.ypr[1], hfov: data.hfov};
+            yaw: data.ypr[0], pitch: data.ypr[1], roll: (data.ypr[2] !== undefined ? data.ypr[2] : 0), hfov: data.hfov};
   syncSliders();
   dirty = true;
   btnSave.disabled = false;
@@ -644,13 +1986,14 @@ btnOpt.addEventListener('click', async () => {
 
   await loadProjections();
   // Show ray map after optimize
-  showRayMap([currentCam], null, `Ray viz: ${currentCam} · loss ${data.loss_before} → ${data.loss} arcmin`);
+  // Phase 8.1: showRayMap call removed. The loss chip in the header now
+  // shows the new value; no modal is needed.
 });
 
 // ── Save ───────────────────────────────────────────────────────────────────
 btnSave.addEventListener('click', async () => {
   if (!currentCam) return;
-  await fetch(`/api/save?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&hfov=${params.hfov}`);
+  await fetch(`/api/save?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&roll=${params.roll}&hfov=${params.hfov}`);
   dirty = false;
   btnSave.disabled = true;
   origParams = {...params};
@@ -680,13 +2023,16 @@ function updateLoss() {
 }
 
 // ── Landmark list ──────────────────────────────────────────────────────────
-function dColor(d) {
+// Phase 6.2: dColor delegates to window.deltaColor — the Map view uses
+// the same thresholds. Single source of truth for delta coloring.
+window.deltaColor = function(d) {
   if (d == null) return '#333';
   if (d < 1) return '#4ade80';
   if (d < 3) return '#a3e635';
   if (d < 8) return '#f59e0b';
   return '#f87171';
-}
+};
+function dColor(d) { return window.deltaColor(d); }
 
 function setFilter(f, btn) {
   lmFilter = f;
@@ -732,6 +2078,9 @@ function renderLmList() {
 
 // ── Canvas ─────────────────────────────────────────────────────────────────
 function resizeOverlay() {
+  // Phase 3+4: skip if Camera view is hidden — clientWidth/Height would be 0
+  // and we'd zero out the overlay, breaking marked-pixel layout on switch back.
+  if (window.currentView === 'map') return;
   overlay.width  = canvasWrap.clientWidth;
   overlay.height = canvasWrap.clientHeight;
   draw();
@@ -766,8 +2115,80 @@ function resetMainZoom() {
   mainZoom = 1; mainPanX = 0; mainPanY = 0;
 }
 
+// ── VERTICALS-FE-V1: vanishing-points overlay state ─────────────────
+// Using var to avoid temporal dead zone (draw() is called by
+// resizeOverlay() at load before this block runs with let/const).
+<!-- ── VERTICALS-FE-V1-TDZ-FIX ── -->
+var vertsOn    = false;
+var vertsLines = null;       // last fetched [[ [x1,y1],[x2,y2] ], ...]
+var vertsReq   = 0;          // request counter to ignore stale responses
+
+async function fetchVerticals() {
+  if (!currentCam || !camData) { vertsLines = null; return; }
+  const my = ++vertsReq;
+  const qs = new URLSearchParams({
+    cam: currentCam,
+    xyz: [params.x, params.y, params.z].join(','),
+    ypr: [params.yaw, params.pitch, params.roll].join(','),
+    hfov: String(params.hfov),
+  });
+  try {
+    const r = await fetch('/api/verticals?' + qs.toString());
+    if (!r.ok) { vertsLines = null; return; }
+    const d = await r.json();
+    if (my !== vertsReq) return;       // a newer request superseded us
+    vertsLines = d.lines || [];
+  } catch (e) {
+    vertsLines = null;
+  }
+}
+
+function drawVerticals() {
+  if (!vertsOn || !vertsLines || !vertsLines.length) return;
+  ctx.save();
+  ctx.strokeStyle = 'rgba(255,255,0,0.75)';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([]);
+  for (const [a, b] of vertsLines) {
+    const [x1, y1] = toCanvas(a[0], a[1]);
+    const [x2, y2] = toCanvas(b[0], b[1]);
+    ctx.beginPath();
+    ctx.moveTo(x1, y1);
+    ctx.lineTo(x2, y2);
+    ctx.stroke();
+  }
+  ctx.restore();
+}
+
+// Hook the toggle button (initialized on DOMContentLoaded so the element exists)
+window.addEventListener('DOMContentLoaded', () => {
+  const btn = document.getElementById('verts-toggle-btn');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    vertsOn = !vertsOn;
+    btn.style.background = vertsOn ? 'rgba(255,200,0,0.7)' : 'rgba(0,0,0,0.6)';
+    btn.style.color = vertsOn ? '#000' : '#fff';
+    if (vertsOn) {
+      await fetchVerticals();
+    } else {
+      vertsLines = null;
+    }
+    draw();
+  });
+});
+
+// Keyboard shortcut: V to toggle
+window.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  if (e.key === 'v' || e.key === 'V') {
+    const btn = document.getElementById('verts-toggle-btn');
+    if (btn) btn.click();
+  }
+});
+
 function draw() {
   ctx.clearRect(0, 0, overlay.width, overlay.height);
+  drawVerticals();  // VERTICALS-FE-V1
   // Sync frame image with zoom/pan
   if (camData?.size) {
     const {scale, ox, oy} = baseScale();
@@ -898,7 +2319,7 @@ btnUpdate.addEventListener('click', async () => {
   btnUpdate.textContent = '⏳ Updating...';
   btnUpdate.disabled = true;
 
-  const url = `/api/update_landmarks?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&hfov=${params.hfov}`;
+  const url = `/api/update_landmarks?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&roll=${params.roll}&hfov=${params.hfov}`;
   const data = await fetch(url).then(r => r.json());
 
   btnUpdate.textContent = 'Update LMs';
@@ -1335,36 +2756,161 @@ document.addEventListener('keydown', e => {
   }
 });
 
-// ── Triangulation & Ray Viz ───────────────────────────────────────────────
+// ── Phase 8.1: Triangulation on Map view ──────────────────────────────────
+// Click ⊕ on a landmark → fetch /api/triangulate (persists xyz),
+// switch to Map view, render rays from ALL source cams converging on
+// the landmark, pan map to it, show toast.
 async function triangulateLandmark(lm_name) {
-  // First check how many cams see this landmark
+  // First check how many cams see this landmark.
   const src = await fetch(`/api/cam_sources?lm=${encodeURIComponent(lm_name)}`).then(r=>r.json());
-
   if (src.cams.length < 2) {
-    showRayMap([currentCam], lm_name, `⚠ Need 2+ calibrated cams — only ${src.cams.length} found for "${lm_name}"`);
+    showTriToast(`Cannot triangulate "${lm_name}"`,
+      `Need 2+ calibrated cams — only ${src.cams.length} found.`,
+      true);
     return;
   }
+  // Switch to map view immediately so the user sees something happening.
+  if (typeof window.setView === 'function') window.setView('map');
+  showTriToast(`Triangulating "${lm_name}"...`,
+    `From ${src.cams.length} source cams.`, false);
 
-  // Show ray viz first
-  showRayMap(src.cams, lm_name, `Triangulating "${lm_name}" from ${src.cams.length} cams...`);
-
-  // Run triangulation
+  // Run triangulation (persists xyz on success).
   const res = await fetch(`/api/triangulate?lm=${encodeURIComponent(lm_name)}`).then(r=>r.json());
-
   if (res.error) {
-    document.getElementById('ray-map-info').textContent = '⚠ ' + res.error;
+    showTriToast(`Triangulation failed for "${lm_name}"`, res.error, true);
     return;
   }
-
-  document.getElementById('ray-map-info').innerHTML =
-    `<span style="color:var(--green)">✓ Triangulated</span> · xyz=[${res.xyz.map(v=>v.toFixed(1)).join(', ')}] · error=${res.error_m}m · from ${res.cam_a} + ${res.cam_b}`;
-
-  // Reload projections to show updated landmark
+  // Reload projections so the camera-view canvas reflects the new xyz
+  // when the user switches back.
   await loadProjections();
-
-  // Refresh ray map with new landmark position
-  showRayMap(src.cams, lm_name, `"${lm_name}" — ${src.cams.length} source cams · error=${res.error_m}m`);
+  // Refresh map data so #lm-layer + #cams-layer reflect the new state.
+  if (typeof window.reloadMapData === 'function') {
+    try { await window.reloadMapData(); } catch (e) {}
+  }
+  // Render the converging rays + pulse on the map.
+  showTriangulationOnMap(lm_name, src.cams, res.xyz, res.error_m);
+  // Show the result toast.
+  const xyzStr = res.xyz.map(v => v.toFixed(1)).join(', ');
+  showTriToast(`✓ Triangulated "${lm_name}"`,
+    `error=${res.error_m}m · xyz=[${xyzStr}] · ${res.cam_a} + ${res.cam_b} (best pair of ${res.n_cams})`,
+    false);
 }
+
+// Phase 8.1: render rays from source cams converging on a landmark in
+// the map overlay. Lazy-creates the #tri-rays-layer if absent.
+function showTriangulationOnMap(lmName, sourceCams, lmXyz, errorM) {
+  const overlay = window.mapOverlay || document.getElementById('map-overlay');
+  if (!overlay) return;
+  let layer = document.getElementById('tri-rays-layer');
+  if (!layer) {
+    layer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
+    layer.setAttribute('id', 'tri-rays-layer');
+    layer.style.pointerEvents = 'none';
+    overlay.appendChild(layer);
+  }
+  // Clear prior tri-rays.
+  while (layer.firstChild) layer.removeChild(layer.firstChild);
+
+  // Compute landmark SVG coords.
+  const [lmSx, lmSy] = window.worldToSvg(lmXyz[0], lmXyz[1]);
+
+  // Cam-type → color (matches Phase 5/6 cam-marker palette).
+  function camColor(camName) {
+    // Phase 8.1.1: window.mapData.cameras (not .cams)
+    const cam = (window.mapData?.cameras || []).find(c => c.name === camName);
+    if (!cam) return '#9090b0';
+    const t = (cam.type || '').toLowerCase();
+    if (t === 'leak') return '#4ade80';      // green
+    if (t === 'trailer1' || t === 'trailer 1') return '#60a5fa';
+    if (t === 'trailer2' || t === 'trailer 2') return '#60a5fa';
+    if (t === 'screenshots' || t === 'screenshot') return '#a78bfa'; // purple
+    return '#fbbf24';
+  }
+  // Render one ray per source cam.
+  // Phase 8.1.1: window.mapData.cameras (not .cams)
+  let _triRaysDrawn = 0;
+  for (const camName of sourceCams) {
+    const cam = (window.mapData?.cameras || []).find(c => c.name === camName);
+    if (!cam || !cam.xyz) continue;
+    _triRaysDrawn++;
+    const [csx, csy] = window.worldToSvg(cam.xyz[0], cam.xyz[1]);
+    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    line.setAttribute('class', 'tri-ray');
+    line.setAttribute('x1', String(csx));
+    line.setAttribute('y1', String(csy));
+    line.setAttribute('x2', String(lmSx));
+    line.setAttribute('y2', String(lmSy));
+    line.setAttribute('stroke', camColor(camName));
+    layer.appendChild(line);
+  }
+  // Phase 8.1.1: defensive log — if 0 rays drawn, something is wrong.
+  if (_triRaysDrawn === 0) {
+    console.warn('[tri-rays] drew 0 rays for', lmName,
+      '— sourceCams:', sourceCams,
+      '· mapData.cameras count:', window.mapData?.cameras?.length);
+  }
+  // Pulse ring around the landmark.
+  const pulse = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+  pulse.setAttribute('class', 'tri-pulse');
+  pulse.setAttribute('cx', String(lmSx));
+  pulse.setAttribute('cy', String(lmSy));
+  pulse.setAttribute('r', '60');
+  layer.appendChild(pulse);
+
+  // Pan map to center on the landmark. resetMapView centers + fits all,
+  // we want a soft pan: set translate so landmark appears at viewport
+  // center. Use existing window.mapTx if it exposes a setter; otherwise
+  // call resetMapView which at least makes sure everything is visible.
+  if (typeof window.panMapToWorld === 'function') {
+    try { window.panMapToWorld(lmXyz[0], lmXyz[1]); } catch (e) {}
+  }
+}
+
+// Phase 8.1: dismiss tri-rays layer + toast.
+function dismissTriangulation() {
+  const layer = document.getElementById('tri-rays-layer');
+  if (layer) {
+    while (layer.firstChild) layer.removeChild(layer.firstChild);
+  }
+  const toast = document.getElementById('tri-toast');
+  if (toast) {
+    toast.classList.remove('show');
+    if (window._triToastTimer) {
+      clearTimeout(window._triToastTimer);
+      window._triToastTimer = null;
+    }
+  }
+}
+window.dismissTriangulation = dismissTriangulation;
+
+// Phase 8.1: show / hide the toast.
+function showTriToast(title, meta, isError) {
+  const toast = document.getElementById('tri-toast');
+  if (!toast) return;
+  document.getElementById('tri-toast-title').textContent = title;
+  document.getElementById('tri-toast-meta').textContent = meta || '';
+  toast.classList.toggle('error', !!isError);
+  toast.classList.add('show');
+  if (window._triToastTimer) clearTimeout(window._triToastTimer);
+  window._triToastTimer = setTimeout(() => {
+    toast.classList.remove('show');
+    window._triToastTimer = null;
+  }, 6000);
+}
+
+// Phase 8.1: clear the tri-rays on most subsequent interactions.
+// (User scrolled, picked a different cam/landmark, etc.)
+document.addEventListener('click', e => {
+  if (e.target.closest('#tri-toast')) return;  // toast click handled by toast itself
+  // Only clear if there's something to clear, and if the click is in
+  // the map area, sidebar list, etc. — not on the lm-list ⊕ button (
+  // which calls triangulateLandmark and would immediately self-clear).
+  if (e.target.closest('.lm-action-tri')) return;
+  const layer = document.getElementById('tri-rays-layer');
+  if (layer && layer.firstChild) {
+    while (layer.firstChild) layer.removeChild(layer.firstChild);
+  }
+});
 
 async function showRayMap(cam_names, lm_name, title) {
   const modal = document.getElementById('ray-map-modal');
@@ -1414,44 +2960,9 @@ document.getElementById('cam-sel').addEventListener('change', () => {
   if (cs) cs.value = document.getElementById('cam-sel').value;
 });
 
-// ── Generate Map ────────────────────────────────────────────────────────
-const btnGenmap = document.getElementById('btn-genmap');
-const genmapModal = document.getElementById('genmap-modal');
-const genmapImg = document.getElementById('genmap-img');
-const genmapTitle = document.getElementById('genmap-title');
-const genmapClose = document.getElementById('genmap-close');
-
-btnGenmap.addEventListener('click', async () => {
-  if (!currentCam) return;
-  btnGenmap.disabled = true;
-  btnGenmap.textContent = 'Generating...';
-  try {
-    const r = await fetch('/api/generate_map?cam=' + encodeURIComponent(currentCam));
-    const data = await r.json();
-    if (data.ok) {
-      genmapTitle.textContent = `${currentCam} — ${data.n_rays} rays`;
-      genmapImg.src = data.url + '&t=' + Date.now(); // cache bust
-      genmapModal.classList.add('open');
-    } else {
-      alert('Failed: ' + (data.error || 'unknown'));
-    }
-  } catch (e) {
-    alert('Error: ' + e.message);
-  } finally {
-    btnGenmap.disabled = !currentCam;
-    btnGenmap.textContent = '🗺 Generate Map';
-  }
-});
-
-genmapClose.addEventListener('click', () => genmapModal.classList.remove('open'));
-genmapModal.addEventListener('click', e => {
-  if (e.target === genmapModal) genmapModal.classList.remove('open');
-});
-
-// Enable button when a cam is loaded
-document.getElementById('cam-sel').addEventListener('change', () => {
-  setTimeout(() => { btnGenmap.disabled = !currentCam; }, 200);
-});
+// Phase 7a.2: Generate Map button + modal logic removed.
+// The Map view (Phase 3+4) replaces this server-rendered PNG entirely.
+// The cam-sel change listener that enabled the button is also gone.
 
 // ── Landmark info panel ────────────────────────────────────────────────────
 const lmInfoPanel    = document.getElementById('lm-info-panel');
@@ -1832,46 +3343,108 @@ canvasWrap.addEventListener('click', e => {
   }
 });
 
-// ── GTA-style rotating minimap (bottom-left) ────────────────────────────
-const minimapWrap = document.getElementById('minimap-wrap');
-const minimapRotator = document.getElementById('minimap-rotator');
-const minimapImg = document.getElementById('minimap-img');
+// ── Phase 7a.1: CSS-only minimap (sidebar) + cam preview ──────────────────
+// The minimap is a CSS background-image crop of /yanis.png — no fetch.
+// In Map view, the same slot shows the cam's frame as a static <img>.
+// Both elements live in #sb-preview-slot (bottom of the left sidebar).
+//
+// CSS-only minimap math:
+//   We want to display a `radius`-meter window around the cam, scaled to
+//   fit the slot width. Given window.mapTransform (the same metadata
+//   used by Map view), the cam center in PNG-pixel space is:
+//     [px_cx, px_cy] = window.worldToSvg(cam.xyz[0], cam.xyz[1])
+//   (The PNG is rendered at viewBox 0 0 svg_size, so SVG-user coords
+//   are 1:1 with pixel coords.)
+//   The PNG is 12000 px wide in our build; window.mapTransform.svg_size
+//   gives the exact dimensions.
+//   We size the inner #minimap-img-sb so that `radius` map-units fit
+//   inside half the slot width (slot is 240 CSS px wide; we use the
+//   inner #minimap-rotator-sb which is 480×340 — 200% — so radius maps
+//   to 240 CSS px in rotator space). Then we offset so [px_cx, px_cy]
+//   lands at the rotator center.
+const minimapWrap   = document.getElementById('minimap-wrap-sb');
+const minimapRotator = document.getElementById('minimap-rotator-sb');
+const minimapBg     = document.getElementById('minimap-img-sb');
+const camPreviewImg = document.getElementById('cam-preview-img');
+const camPreviewEmpty = document.getElementById('cam-preview-empty');
 let minimapEnabled = true;
+const MINIMAP_RADIUS = 350;  // map-units around the cam to show
 
-async function loadMinimap() {
-  if (!currentCam || !minimapEnabled) {
-    minimapWrap.style.display = 'none';
-    return;
-  }
+async function ensureMapTransform() {
+  // Phase 3+4 lazy-loads /api/map_data only on first Map view visit.
+  // Phase 7a.1 needs window.mapTransform up-front for the minimap.
+  if (window.mapTransform) return;
   try {
-    const res = await fetch(`/api/minimap?cam=${encodeURIComponent(currentCam)}&radius=350`);
-    if (!res.ok) {
-      console.warn('minimap status', res.status);
-      minimapWrap.style.display = 'none';
-      return;
-    }
-    const data = await res.json();
-    if (data.error) {
-      console.warn('minimap error', data.error);
-      minimapWrap.style.display = 'none';
-      return;
-    }
-    minimapImg.src = 'data:image/png;base64,' + data.image_b64;
-    // Rotate so cam direction (yaw) points UP. Yaw 0 = north.
-    minimapRotator.style.transform = `rotate(${-data.yaw}deg)`;
-    minimapWrap.style.display = 'block';
+    const data = await fetch('/api/map_data').then(r => r.json());
+    window.mapData = window.mapData || data;
+    window.mapTransform = data.transform;
   } catch (e) {
-    console.error('minimap fetch failed', e);
-    minimapWrap.style.display = 'none';
+    console.warn('Phase 7a.1: failed to preload /api/map_data', e);
   }
 }
 
-// Auto-update on cam change
-let _minimapLastCam = null;
+// Phase 7a.5: fetch from /api/minimap (server crops + caches on disk).
+// Tracks an in-flight token to avoid race conditions when the user
+// clicks through cams quickly.
+let _minimapFetchToken = 0;
+async function updateMinimap() {
+  if (!minimapEnabled) {
+    minimapWrap.style.display = 'none';
+    return;
+  }
+  if (!currentCam) {
+    minimapWrap.style.display = 'block';
+    minimapBg.removeAttribute('src');
+    return;
+  }
+  minimapWrap.style.display = 'block';
+  const myToken = ++_minimapFetchToken;
+  try {
+    const res = await fetch('/api/minimap?cam=' + encodeURIComponent(currentCam));
+    if (myToken !== _minimapFetchToken) return;  // newer request superseded
+    if (!res.ok) {
+      console.warn('minimap fetch status', res.status);
+      return;
+    }
+    const data = await res.json();
+    if (myToken !== _minimapFetchToken) return;
+    if (data.error) {
+      console.warn('minimap error', data.error);
+      return;
+    }
+    minimapBg.src = 'data:image/png;base64,' + data.image_b64;
+    // Rotate so cam direction (yaw) points UP. Yaw 0 = north.
+    minimapRotator.style.transform = `rotate(${-data.yaw}deg)`;
+  } catch (e) {
+    if (myToken === _minimapFetchToken) {
+      console.error('minimap fetch failed', e);
+    }
+  }
+}
+window.updateMinimap = updateMinimap;
+
+function updateCamPreview() {
+  if (!currentCam) {
+    camPreviewImg.style.display = 'none';
+    camPreviewImg.src = '';
+    camPreviewEmpty.style.display = 'block';
+    return;
+  }
+  camPreviewEmpty.style.display = 'none';
+  camPreviewImg.style.display = 'block';
+  // Re-use the /frame/ endpoint (cached by browser).
+  camPreviewImg.src = '/frame/' + encodeURIComponent(currentCam);
+}
+window.updateCamPreview = updateCamPreview;
+
+// Auto-update on cam change. Both updaters are cheap (no fetch in
+// minimap; cam preview is browser-cached after first load).
+let _previewLastCam = null;
 setInterval(() => {
-  if (currentCam !== _minimapLastCam) {
-    _minimapLastCam = currentCam;
-    loadMinimap();
+  if (currentCam !== _previewLastCam) {
+    _previewLastCam = currentCam;
+    updateMinimap();
+    updateCamPreview();
   }
 }, 250);
 
@@ -1884,21 +3457,84 @@ if (_slYaw) {
   });
 }
 
-// Toggle on click + 'M' shortcut
+// Click on the minimap → switch to Map view (matches rlx reference UI).
 minimapWrap.addEventListener('click', () => {
-  minimapEnabled = false;
-  minimapWrap.style.display = 'none';
+  if (typeof window.setView === 'function') window.setView('map');
 });
+
+// Phase 7a.1.1: click on cam preview (Map view) → switch back to Camera view.
+const _camPreviewWrap = document.getElementById('cam-preview-wrap');
+if (_camPreviewWrap) {
+  _camPreviewWrap.style.cursor = 'pointer';
+  _camPreviewWrap.title = 'Click to switch to Camera view';
+  _camPreviewWrap.addEventListener('click', () => {
+    if (typeof window.setView === 'function') window.setView('camera');
+  });
+}
+
+// 'M' shortcut: toggle minimap visibility (kept for parity with old behaviour).
 document.addEventListener('keydown', e => {
   if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
   if (e.key === 'm' || e.key === 'M') {
     minimapEnabled = !minimapEnabled;
-    if (minimapEnabled) loadMinimap();
+    if (minimapEnabled) updateMinimap();
     else minimapWrap.style.display = 'none';
   }
 });
+
+// Eagerly prefetch map metadata so the minimap works on first cam selection.
+ensureMapTransform().then(() => {
+  if (currentCam) updateMinimap();
+});
 </script>
 
+<script>
+// Phase 9.1: restore state from URL hash on initial load.
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    try {
+      const state = (function(){
+        const h = location.hash.replace(/^#/, '');
+        if (!h) return {};
+        const out = {};
+        for (const part of h.split('&')) {
+          const [k, v] = part.split('=');
+          if (k && v !== undefined) out[k] = decodeURIComponent(v);
+        }
+        return out;
+      })();
+      // Restore sort first (cheap, doesn't trigger a fetch).
+      if (state.sort) {
+        const sel = document.getElementById('lm-sort');
+        if (sel) {
+          sel.value = state.sort;
+          if (typeof window.setLmSort === 'function') window.setLmSort(state.sort);
+        }
+      }
+      // Restore cam (will trigger frame load + projections).
+      if (state.cam) {
+        const camSel = document.getElementById('cam-sel');
+        if (camSel) {
+          camSel.value = state.cam;
+          camSel.dispatchEvent(new Event('change'));
+        }
+      }
+      // Restore view (toggle map view if requested).
+      if (state.view === 'map') {
+        if (typeof window.setView === 'function') window.setView('map');
+      }
+    } catch (e) {
+      console.warn('[hash-restore] failed:', e);
+    }
+  }, 200);
+});
+</script>
+
+<!-- Phase 8.1: triangulation toast (top-center over map view). -->
+<div id="tri-toast" onclick="dismissTriangulation()">
+  <div class="tri-toast-title" id="tri-toast-title">Triangulated</div>
+  <div class="tri-toast-meta" id="tri-toast-meta">—</div>
+</div>
 
   </div>
 </div>

@@ -26,7 +26,7 @@ from collections import defaultdict
 import numpy as np
 from scipy.optimize import minimize
 
-GTAMAP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+GTAMAP_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, GTAMAP_DIR)
 import gtamaplib as ml
 import gtamapdata as md
@@ -40,7 +40,9 @@ parser.add_argument('cam_name')
 parser.add_argument('--apply', action='store_true',
                     help='Write the refined values to cameras.json')
 parser.add_argument('--no-hfov', action='store_true',
-                    help='Keep hfov fixed (only refine yaw + pitch)')
+                    help='Keep hfov fixed (only refine yaw + pitch [+ roll])')
+parser.add_argument('--no-roll', action='store_true',
+                    help='Keep roll fixed at cam\'s current value (default: roll IS optimized)')
 parser.add_argument('--refine-xyz', action='store_true',
                     help='Also refine x, y, z (allows up to ±xyz_radius m of movement)')
 parser.add_argument('--xyz-radius', type=float, default=300.0,
@@ -110,42 +112,59 @@ if len(consensus_lms) < 3:
 
 # ── Refinement ────────────────────────────────────────────────────────────────
 
+# ── ROLL-PATCH-V1 ──
 cam = ml.get_camera(CAM_NAME)
 xyz = tuple(cam_data['xyz'])
 ypr0 = list(cam_data.get('ypr') or [0, 0, 0])
+# Ensure ypr0 has 3 components even for older cam data that may have stored 2
+while len(ypr0) < 3:
+    ypr0.append(0.0)
+roll0 = float(ypr0[2])  # roll starting value (was hardcoded 0 before V1-ROLL patch)
 fov0 = cam_data.get('fov') or [60, None]
 hfov0 = fov0[0]
 size = cam_data.get('size') or [1920, 1080]
 if hfov0 is None:
     hfov0 = ml.get_hfov(fov0[1], size) if fov0[1] is not None else 60.0
 
-print(f"\nInitial: yaw={ypr0[0]:.3f}, pitch={ypr0[1]:.3f}, hfov={hfov0:.3f}")
+print(f"\nInitial: yaw={ypr0[0]:.3f}, pitch={ypr0[1]:.3f}, "
+      f"roll={roll0:.3f}, hfov={hfov0:.3f}")
 
 def loss_fn(params, return_residuals=False):
     """
-    params layout depends on flags:
-       no-hfov, no-xyz : [yaw, pitch]
-       hfov,    no-xyz : [yaw, pitch, hfov]
-       no-hfov, xyz    : [x, y, z, yaw, pitch]
-       hfov,    xyz    : [x, y, z, yaw, pitch, hfov]
+    params layout depends on flags (V1-ROLL adds roll as an optional param):
+       (--no-roll, --no-hfov, no-xyz) : [yaw, pitch]
+       (--no-roll,           , no-xyz) : [yaw, pitch, hfov]
+       (         , --no-hfov, no-xyz) : [yaw, pitch, roll]
+       (         ,           , no-xyz) : [yaw, pitch, roll, hfov]
+       (with xyz prefix [x, y, z, ...] in all four cases above)
+    Roll uses cam's current ypr[2] when --no-roll, else is optimized.
     """
+    # Determine where in `params` the angle block starts
+    base = 3 if args.refine_xyz else 0
     if args.refine_xyz:
-        x, y, z, yaw, pitch = params[0], params[1], params[2], params[3], params[4]
-        hfov = params[5] if len(params) > 5 else hfov0
+        x, y, z = params[0], params[1], params[2]
         cur_xyz = (x, y, z)
-        # Penalty if outside xyz_radius
         dist_sq = (x - xyz[0])**2 + (y - xyz[1])**2 + (z - xyz[2])**2
-        penalty = 0.0
-        if dist_sq > args.xyz_radius**2:
-            penalty = (dist_sq - args.xyz_radius**2) * 1e3
+        penalty = (dist_sq - args.xyz_radius**2) * 1e3 if dist_sq > args.xyz_radius**2 else 0.0
     else:
         cur_xyz = xyz
-        yaw, pitch = params[0], params[1]
-        hfov = params[2] if len(params) > 2 else hfov0
         penalty = 0.0
 
+    yaw = params[base + 0]
+    pitch = params[base + 1]
+    idx = base + 2
+    if args.no_roll:
+        roll = roll0
+    else:
+        roll = params[idx]
+        idx += 1
+    if args.no_hfov:
+        hfov = hfov0
+    else:
+        hfov = params[idx] if idx < len(params) else hfov0
+
     cam.set_xyz(cur_xyz)
-    cam.set_ypr((yaw, pitch, 0.0))
+    cam.set_ypr((yaw, pitch, roll))
     cam.set_fov((hfov, None))
     cam.clear_landmark_directions()
     total = 0.0
@@ -173,41 +192,54 @@ def loss_fn(params, return_residuals=False):
     return rms + penalty
 
 # Build initial guess + final guess
-def build_x0_with_hfov(use_hfov):
+def build_x0(use_roll, use_hfov):
     if args.refine_xyz:
-        base = [xyz[0], xyz[1], xyz[2], ypr0[0], ypr0[1]]
+        v = [xyz[0], xyz[1], xyz[2], ypr0[0], ypr0[1]]
     else:
-        base = [ypr0[0], ypr0[1]]
+        v = [ypr0[0], ypr0[1]]
+    if use_roll:
+        v.append(roll0)
     if use_hfov:
-        base.append(hfov0)
-    return base
+        v.append(hfov0)
+    return v
 
-# Compute initial loss
-x0_init = build_x0_with_hfov(use_hfov=True)
+# Compute initial loss (with both roll and hfov as "current values" — this
+# gives a fair pre/post comparison)
+x0_init = build_x0(use_roll=True, use_hfov=True)
 initial_rms, initial_resids = loss_fn(x0_init, return_residuals=True)
 print(f"Initial RMS on consensus landmarks: {initial_rms:.2f}'")
 
 # Optimize
-x0 = build_x0_with_hfov(use_hfov=not args.no_hfov)
+x0 = build_x0(use_roll=not args.no_roll, use_hfov=not args.no_hfov)
 
 flags = []
 if args.refine_xyz: flags.append(f'xyz (±{args.xyz_radius:.0f}m)')
 flags.append('yaw, pitch')
+if not args.no_roll: flags.append('roll')
 if not args.no_hfov: flags.append('hfov')
 print(f"\nOptimizing {', '.join(flags)}...")
 
 result = minimize(loss_fn, x0, method='Nelder-Mead',
                   options={'xatol': 1e-5, 'fatol': 1e-6, 'maxiter': 20000, 'adaptive': True})
 
-# Unpack
+# Unpack (V1-ROLL: roll inserted between yaw/pitch and hfov)
+base = 3 if args.refine_xyz else 0
 if args.refine_xyz:
     x_new, y_new, z_new = result.x[0], result.x[1], result.x[2]
-    yaw_new, pitch_new = result.x[3], result.x[4]
-    hfov_new = result.x[5] if len(result.x) > 5 else hfov0
 else:
     x_new, y_new, z_new = xyz
-    yaw_new, pitch_new = result.x[0], result.x[1]
-    hfov_new = result.x[2] if len(result.x) > 2 else hfov0
+yaw_new = result.x[base + 0]
+pitch_new = result.x[base + 1]
+idx = base + 2
+if args.no_roll:
+    roll_new = roll0
+else:
+    roll_new = float(result.x[idx])
+    idx += 1
+if args.no_hfov:
+    hfov_new = hfov0
+else:
+    hfov_new = float(result.x[idx]) if idx < len(result.x) else hfov0
 
 # Compute final loss + residuals (using the same param layout)
 final_rms, final_resids = loss_fn(result.x, return_residuals=True)
@@ -223,6 +255,8 @@ if args.refine_xyz:
     print(f"  total xyz movement: {dist:.1f} m")
 print(f"  yaw   {ypr0[0]:>9.3f}  →  {yaw_new:>9.3f}   (Δ {yaw_new - ypr0[0]:+.3f}°)")
 print(f"  pitch {ypr0[1]:>9.3f}  →  {pitch_new:>9.3f}   (Δ {pitch_new - ypr0[1]:+.3f}°)")
+if not args.no_roll:
+    print(f"  roll  {roll0:>9.3f}  →  {roll_new:>9.3f}   (Δ {roll_new - roll0:+.3f}°)")
 if not args.no_hfov:
     print(f"  hfov  {hfov0:>9.3f}  →  {hfov_new:>9.3f}   (Δ {hfov_new - hfov0:+.3f}°)")
 
@@ -245,7 +279,7 @@ if args.apply:
     md.update_camera(
         CAM_NAME,
         xyz=new_xyz,
-        ypr=[round(yaw_new, 4), round(pitch_new, 4), 0.0],
+        ypr=[round(yaw_new, 4), round(pitch_new, 4), round(roll_new, 4)],
         fov=new_fov,
     )
     print(f"  Done. Changes written to {os.path.join(GTAMAP_DIR, 'gtamapdata', 'cameras.json')}")

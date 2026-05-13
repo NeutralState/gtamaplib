@@ -102,6 +102,24 @@ for cam_name, cam_pixels in md.pixels.items():
         if cam_is_candidate: used_cams.add(cam_name)
         if lm_is_candidate:  used_lms.add(lm_name)
 
+# ── BA-MIN-OBS-V1 ──
+# Filter out cams with <3 observations (under-constrained, would drift).
+# Count observations per cam.
+_obs_count = {}
+for _cn, _ln, _, _ in observations:
+    _obs_count[_cn] = _obs_count.get(_cn, 0) + 1
+MIN_OBS = 3
+_under_constrained = {c for c in used_cams if _obs_count.get(c, 0) < MIN_OBS}
+if _under_constrained:
+    print(f"  Excluded {len(_under_constrained)} cams with <{MIN_OBS} obs:")
+    for _c in sorted(_under_constrained):
+        print(f"    {_obs_count.get(_c, 0)} obs  {_c}")
+    used_cams = used_cams - _under_constrained
+    # Also drop their observations
+    observations = [o for o in observations if o[0] not in _under_constrained]
+    # Rebuild used_lms in case some LMs only appeared in dropped cams
+    used_lms = {o[1] for o in observations if o[1] in candidate_lms}
+
 # Prune to constrained-only
 opt_cam_names = sorted(used_cams)
 opt_lm_names  = sorted(used_lms)
@@ -119,9 +137,11 @@ print(f"Observations         : {len(observations)}  "
 cam_idx = {n: i for i, n in enumerate(opt_cam_names)}
 lm_idx  = {n: i for i, n in enumerate(opt_lm_names)}
 
+# ── BUNDLE-ADJUST-ROLL-V1 ──
+# V1-ROLL: each cam now has 7 optimized params (was 6): xyz + yaw + pitch + roll + hfov
 N_CAM     = len(opt_cam_names)
 N_LM      = len(opt_lm_names)
-CAM_BLOCK = N_CAM * 6
+CAM_BLOCK = N_CAM * 7
 N_VARS    = CAM_BLOCK + N_LM * 3
 n_obs       = len(observations)
 n_residuals = n_obs * 2
@@ -167,12 +187,15 @@ if _z_constraints:
 
 # ── Initial parameter vector ──────────────────────────────────────────────────
 
-cam_params_init = np.zeros((N_CAM, 6))
+cam_params_init = np.zeros((N_CAM, 7))  # V1-ROLL: 7 params (was 6)
 n_derived_hfov = 0
 for i, cam_name in enumerate(opt_cam_names):
     cam = md.cameras[cam_name]
     xyz = cam.get('xyz') or [0, 0, 0]
-    ypr = cam.get('ypr') or [0, 0, 0]
+    ypr = list(cam.get('ypr') or [0, 0, 0])
+    # V1-ROLL: ensure ypr has 3 components (older entries may have just 2)
+    while len(ypr) < 3:
+        ypr.append(0.0)
     fov = cam.get('fov') or [60, None]
     size = cam.get('size') or [1920, 1080]
 
@@ -186,7 +209,8 @@ for i, cam_name in enumerate(opt_cam_names):
             hfov = ml.get_hfov(fov[1], size)
             n_derived_hfov += 1
 
-    cam_params_init[i] = [xyz[0], xyz[1], xyz[2], ypr[0], ypr[1], hfov]
+    # V1-ROLL: roll (ypr[2]) inserted between pitch and hfov
+    cam_params_init[i] = [xyz[0], xyz[1], xyz[2], ypr[0], ypr[1], ypr[2], hfov]
 
 if n_derived_hfov:
     print(f"  ℹ Derived hfov from vfov for {n_derived_hfov} camera(s)")
@@ -203,7 +227,8 @@ x0 = np.concatenate([cam_params_init.ravel(), lm_params_init.ravel()])
 _failed_obs_logged = set()
 
 def pixel_residuals(x):
-    cam_params = x[:CAM_BLOCK].reshape(N_CAM, 6)
+    # V1-ROLL: 7 params per cam (was 6) — roll at cp[5], hfov at cp[6]
+    cam_params = x[:CAM_BLOCK].reshape(N_CAM, 7)
     lm_params  = x[CAM_BLOCK:].reshape(N_LM, 3)
 
     out = np.zeros(n_residuals, dtype=np.float64)
@@ -212,8 +237,8 @@ def pixel_residuals(x):
         if cam_name in cam_idx:
             cp = cam_params[cam_idx[cam_name]]
             xyz = (float(cp[0]), float(cp[1]), float(cp[2]))
-            ypr = (float(cp[3]), float(cp[4]), 0.0)
-            hfov = float(cp[5])
+            ypr = (float(cp[3]), float(cp[4]), float(cp[5]))
+            hfov = float(cp[6])
         else:
             xyz, ypr, hfov = _leak_params[cam_name]
 
@@ -257,7 +282,8 @@ for k, (cam_name, lm_name, _, _) in enumerate(observations):
     if cam_name in cam_idx:
         c = cam_idx[cam_name]
         for r in rows:
-            for col in range(6*c, 6*c + 6):
+            # V1-ROLL: 7 cols per cam (was 6) — every cam param affects every obs of it
+            for col in range(7*c, 7*c + 7):
                 J_sparsity[r, col] = 1
 
     if lm_name in lm_idx:
@@ -303,8 +329,8 @@ print(f"  any Inf: {np.any(np.isinf(x0))}")
 
 def _describe_idx(i):
     if i < CAM_BLOCK:
-        cam_i = i // 6
-        param = ['x','y','z','yaw','pitch','hfov'][i % 6]
+        cam_i = i // 7  # V1-ROLL: 7 params per cam (was 6)
+        param = ['x','y','z','yaw','pitch','roll','hfov'][i % 7]
         return f"cam '{opt_cam_names[cam_i]}'.{param}"
     else:
         lm_i = (i - CAM_BLOCK) // 3
@@ -438,7 +464,8 @@ print(f"  obs <  5 arcmin: {int((res_per_obs <  5).sum())} / {len(res_per_obs)}"
 
 # ── Save results (v1-compatible format) ───────────────────────────────────────
 
-cam_params_final = result.x[:CAM_BLOCK].reshape(N_CAM, 6)
+# V1-ROLL: 7 params per cam (was 6)
+cam_params_final = result.x[:CAM_BLOCK].reshape(N_CAM, 7)
 lm_params_final  = result.x[CAM_BLOCK:].reshape(N_LM, 3)
 
 output = {
@@ -465,8 +492,9 @@ for i, cam_name in enumerate(opt_cam_names):
     cp = cam_params_final[i]
     output['cameras'][cam_name] = {
         'xyz': [round(float(v), 4) for v in cp[:3]],
-        'ypr': [round(float(cp[3]), 4), round(float(cp[4]), 4), 0.0],
-        'hfov': round(float(cp[5]), 4),
+        # V1-ROLL: roll is now optimized (cp[5]), hfov moved to cp[6]
+        'ypr': [round(float(cp[3]), 4), round(float(cp[4]), 4), round(float(cp[5]), 4)],
+        'hfov': round(float(cp[6]), 4),
     }
 
 for i, lm_name in enumerate(opt_lm_names):

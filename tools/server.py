@@ -9,7 +9,8 @@ import json
 import math
 import os
 import sys
-from http.server import BaseHTTPRequestHandler, HTTPServer
+# Threading fix: parallel request handling
+from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer
 from urllib.parse import urlparse, parse_qs, unquote
 
 GTAMAP_DIR = os.path.expanduser("~/Downloads/gtamaplib-main")
@@ -32,6 +33,53 @@ LEAK_ANCHORED_LMS = {
     and len([c for c in meta.get('source_cameras', []) if c in LEAK_CAMS]) >= 2
 }
 print(f"Leak cams: {len(LEAK_CAMS)} · Leak-anchored landmarks: {len(LEAK_ANCHORED_LMS)}")
+
+
+# ── Phase 7a.4: pre-render minimaps at startup ──────────────────────────────
+# Phase 7a.4: pre-rendered minimaps at startup
+# Renders one tiny PNG per cam (~480×480) into tools/generated/minimaps/.
+# Caches on disk. Re-renders only when cameras.json is newer than the
+# cached PNG (so server restarts are fast). The /api/minimap endpoint
+# (restored below in HUNK 2) serves these cached files.
+# Phase 7a.4.1: lazy minimap render (drop startup pre-render block)
+# Helpers stay; the startup loop is removed. The endpoint renders on
+# demand the first time a cam is requested, then serves from disk
+# cache forever after. First-cam hit: ~1-2s. Subsequent: instant.
+_MINIMAP_CACHE_DIR = os.path.join(TOOL_DIR, 'generated', 'minimaps')
+os.makedirs(_MINIMAP_CACHE_DIR, exist_ok=True)
+_MINIMAP_RADIUS_M = 350.0
+_MINIMAP_SIZE_PX = 480
+
+def _minimap_safe_name(cam_name):
+    return ''.join(c if c.isalnum() else '_' for c in cam_name)
+
+def _minimap_cache_path(cam_name):
+    return os.path.join(_MINIMAP_CACHE_DIR, f'{_minimap_safe_name(cam_name)}.png')
+
+def _render_minimap_for_cam(cam_name):
+    # Render and cache a minimap for one cam. Returns the output path
+    # or None on error.
+    try:
+        cam = ml.get_camera(cam_name)
+    except Exception:
+        return None
+    if cam.xyz is None:
+        return None
+    cx, cy = float(cam.xyz[0]), float(cam.xyz[1])
+    area = (cx - _MINIMAP_RADIUS_M, cy - _MINIMAP_RADIUS_M,
+            cx + _MINIMAP_RADIUS_M, cy + _MINIMAP_RADIUS_M)
+    try:
+        m = ml.get_map('yanis')
+        m.open(add_padding=False)  # native scale
+        cropped = m.crop(area)
+        cropped = cropped.resize((_MINIMAP_SIZE_PX, _MINIMAP_SIZE_PX), 1)  # 1=LANCZOS
+        out_path = _minimap_cache_path(cam_name)
+        cropped.save(out_path, format='PNG', optimize=True)
+        return out_path
+    except Exception:
+        import traceback as _tb
+        _tb.print_exc()
+        return None
 
 
 # ── Item 4 : "Other cams" overlay (canvas-based, no image rendering) ─────────
@@ -167,15 +215,40 @@ def optimize_camera(cam_name, xyz, ypr, hfov):
 
     cam_pixels = md.pixels.get(cam_name, {})
 
-    # Build constraint set with weight info
-    # weight 1.0 for independent, 0.3 for self-source (avoid trivial fit)
+    # ── TIER-WEIGHTS-V1 ──
+    # Tier-based weights — each LM is weighted by how trustworthy its
+    # position is. Unverified LMs are dropped (weight=0). Self-source
+    # LMs get ×0.3 to preserve the anti-circular safeguard.
+    TIER_WEIGHTS = {
+        'anchor':     1.0,
+        'high':       0.8,
+        'medium':     0.4,
+        'low':        0.1,
+        'unverified': 0.0,
+    }
+
+    # Load tier data if available (graceful fallback if missing)
+    _tiers_path = os.path.join(os.path.dirname(__file__), 'generated', 'confidence_tiers.json')
+    try:
+        with open(_tiers_path) as _f:
+            _tier_data = json.load(_f)
+        _lm_tiers = {n: (d.get('tier') if isinstance(d, dict) else d)
+                     for n, d in _tier_data.get('landmarks', {}).items()}
+    except Exception:
+        _lm_tiers = {}
+
+    # Build constraint set with tier-based weights
     constraints = []
     for lm, mp in cam_pixels.items():
         lm_xyz = md.landmarks.get(lm)
         if lm_xyz is None:
             continue
         is_self_source = cam_name in md.landmarks_meta.get(lm, {}).get('source_cameras', [])
-        weight = 0.3 if is_self_source else 1.0
+        tier = _lm_tiers.get(lm, 'unverified')
+        base_weight = TIER_WEIGHTS.get(tier, 0.0)
+        if base_weight == 0.0:
+            continue  # unverified LM — skip entirely
+        weight = base_weight * (0.3 if is_self_source else 1.0)
         constraints.append((lm, list(lm_xyz), list(mp), weight, is_self_source))
 
     n_total = len(constraints)
@@ -188,12 +261,14 @@ def optimize_camera(cam_name, xyz, ypr, hfov):
     indep_errs = [pixel_error(cam_before, c[1], c[2]) for c in constraints if not c[4]]
     loss_before = math.sqrt(sum(e*e for e in indep_errs) / max(1, len(indep_errs)))
 
-    x0 = np.array([xyz[0], xyz[1], xyz[2], ypr[0], ypr[1], hfov], dtype=float)
+    # V1-ROLL: x0 now has 7 params — xyz + yaw + pitch + roll + hfov
+    x0 = np.array([xyz[0], xyz[1], xyz[2], ypr[0], ypr[1], ypr[2], hfov], dtype=float)
 
     # Residual function — returns vector of weighted angular errors (arcmin)
     def residuals(p):
         try:
-            cam = get_cam(cam_name, list(p[:3]), [p[3], p[4], 0.0], float(p[5]))
+            # V1-ROLL: roll is now p[5], hfov is p[6]
+            cam = get_cam(cam_name, list(p[:3]), [p[3], p[4], p[5]], float(p[6]))
         except Exception:
             return np.full(2 * n_total, 1000.0)
         out = []
@@ -210,11 +285,16 @@ def optimize_camera(cam_name, xyz, ypr, hfov):
                 out.append(500.0); out.append(500.0)
         return np.array(out, dtype=float)
 
-    # Bounds: xyz ±300m, yaw ±90°, pitch ±60°, hfov 20°-130°
-    lb = np.array([xyz[0]-300, xyz[1]-300, xyz[2]-50,
-                   ypr[0]-90, ypr[1]-60, 20.0])
-    ub = np.array([xyz[0]+300, xyz[1]+300, xyz[2]+50,
-                   ypr[0]+90, ypr[1]+60, 130.0])
+    # Bounds: xyz ±300m, yaw ±90°, pitch ±60°, roll ±5°, hfov 20°-130°
+    # V1-ROLL: roll bounded tightly to ±5° — physical camera tilt is rarely larger
+    # ── PHYSICAL-BOUNDS-V1 ──
+    # Absolute z clipping: never below -5m (sea level + tolerance) or
+    # above 500m. This prevents under-constrained cams (e.g. 3 obs) from
+    # finding solutions like z=-24m (submarine yacht).
+    lb = np.array([xyz[0]-300, xyz[1]-300, max(xyz[2]-50, -5.0),
+                   ypr[0]-90, ypr[1]-60, ypr[2]-5.0, 20.0])
+    ub = np.array([xyz[0]+300, xyz[1]+300, min(xyz[2]+50, 500.0),
+                   ypr[0]+90, ypr[1]+60, ypr[2]+5.0, 130.0])
 
     try:
         result = least_squares(
@@ -229,8 +309,10 @@ def optimize_camera(cam_name, xyz, ypr, hfov):
         return None, f"Optimization failed: {e}"
 
     # Loss after (RMS over indep only)
+    # V1-ROLL: roll is at result.x[5], hfov at result.x[6]
     cam_after = get_cam(cam_name, list(result.x[:3]),
-                         [result.x[3], result.x[4], 0.0], float(result.x[5]))
+                         [result.x[3], result.x[4], result.x[5]],
+                         float(result.x[6]))
     indep_errs_after = [pixel_error(cam_after, c[1], c[2]) for c in constraints if not c[4]]
     loss_after = math.sqrt(sum(e*e for e in indep_errs_after) / max(1, len(indep_errs_after)))
 
@@ -238,8 +320,10 @@ def optimize_camera(cam_name, xyz, ypr, hfov):
 
     return {
         'xyz': [round(float(v), 4) for v in result.x[:3]],
-        'ypr': [round(float(result.x[3]), 4), round(float(result.x[4]), 4), 0.0],
-        'hfov': round(float(result.x[5]), 4),
+        # V1-ROLL: roll is now optimized (result.x[5]), hfov moved to result.x[6]
+        'ypr': [round(float(result.x[3]), 4), round(float(result.x[4]), 4),
+                round(float(result.x[5]), 4)],
+        'hfov': round(float(result.x[6]), 4),
         'loss_before': round(loss_before, 4),
         'loss': round(loss_after, 4),
         'improvement_pct': improvement,
@@ -287,22 +371,24 @@ class Handler(BaseHTTPRequestHandler):
         # Two endpoints powering the new full-screen SVG map view.
         # See tools/CLAUDE_CONTEXT.md > "SVG Map View Refactor" for context.
 
-        elif path == '/yanis.svg':
-            # Serves the vector yanis map as a static asset.
-            # World→SVG transform: see /api/map_data response.
-            svg_path = os.path.join(TOOL_DIR, 'assets', 'yanis_v11.svg')
-            if not os.path.exists(svg_path):
+        elif path == '/yanis.png':
+            # Phase 3+4 PNG: serves the rasterized 4K map (replaces the
+            # original /yanis.svg endpoint — the 85MB vector was too heavy
+            # for the browser to pan/zoom interactively. The PNG is rendered
+            # offline with rsvg-convert from the original SVG and committed
+            # to the repo. World→image transform: see /api/map_data response.
+            png_path = os.path.join(TOOL_DIR, 'assets', 'yanis_v11.png')
+            if not os.path.exists(png_path):
                 self.send_response(404)
                 self.end_headers()
-                self.wfile.write(b'yanis_v11.svg not found in tools/assets/')
+                self.wfile.write(b'yanis_v11.png not found in tools/assets/')
                 return
-            with open(svg_path, 'rb') as f:
+            with open(png_path, 'rb') as f:
                 data = f.read()
             self.send_response(200)
-            self.send_header('Content-Type', 'image/svg+xml')
+            self.send_header('Content-Type', 'image/png')
             self.send_header('Content-Length', len(data))
-            # Asset is immutable for this session — 1h cache so the browser
-            # doesn't re-download ~85MB on every reload during dev.
+            # Asset is immutable — 1h cache.
             self.send_header('Cache-Control', 'public, max-age=3600')
             self.end_headers()
             self.wfile.write(data)
@@ -425,141 +511,12 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json(result)
 
 
-        elif path == '/api/generate_map':
-            # Generates a top-down map showing rays from a camera to each
-            # of its observed landmarks, colored by angular residual.
-            cam_name = unquote(qs.get('cam', [''])[0])
-            if cam_name not in md.cameras:
-                self.send_json({'error': 'invalid cam'}, 400)
-                return
-            try:
-                cam = ml.get_camera(cam_name)
-            except Exception as e:
-                self.send_json({'error': f'cam load failed: {e}'}, 400)
-                return
+        # Phase 7a.3: /api/generate_map and /api/generated_map removed.
+        # The Map view (Phase 3+4 onwards) replaces this server-rendered
+        # top-down PNG entirely. The Generate Map button was removed
+        # from the frontend in Phase 7a.2.
 
-            cam_pixels = md.pixels.get(cam_name, {})
-            if not cam_pixels:
-                self.send_json({'error': 'no pixels for this cam'}, 400)
-                return
-
-            # Build (lm_xyz, color) list based on angular residual
-            cam_xyz = list(cam.xyz)
-            rays = []
-            for lm_name, marked_pixel in cam_pixels.items():
-                lm_xyz = md.landmarks.get(lm_name)
-                if lm_xyz is None:
-                    continue
-                # Angular residual
-                try:
-                    proj = cam.get_pixel(lm_xyz)
-                    if proj is None:
-                        color = (140, 140, 140)  # grey for unprojectable
-                    else:
-                        dx = (float(proj[0]) - marked_pixel[0]) * cam.hfov / cam.w * 60
-                        dy = (float(proj[1]) - marked_pixel[1]) * cam.vfov / cam.h * 60
-                        err = math.hypot(dx, dy)
-                        if err < 3:
-                            color = (74, 222, 128)   # green
-                        elif err < 10:
-                            color = (245, 158, 11)   # yellow/amber
-                        else:
-                            color = (248, 113, 113)  # red
-                except Exception:
-                    color = (140, 140, 140)
-                rays.append((list(lm_xyz), color, lm_name))
-
-            # Compute crop area: clip to a sensible radius around the cam
-            # so a single distant landmark doesn't blow up the whole view.
-            # Use median distance × 2.5, capped at MAX_RADIUS.
-            import math as _math3
-            MAX_RADIUS = 3750.0  # max half-size of view, in meters
-            MIN_RADIUS = 800.0   # min, so very local cams still get context
-            distances = [_math3.hypot(r[0][0] - cam_xyz[0], r[0][1] - cam_xyz[1])
-                         for r in rays]
-            if distances:
-                distances.sort()
-                # Use 75th percentile × 1.5 so we cover most rays comfortably
-                # but ignore the 1-2 outlier-distance landmarks that wreck framing.
-                p75 = distances[int(len(distances) * 0.75)]
-                radius = max(MIN_RADIUS, min(MAX_RADIUS, p75 * 1.2))
-            else:
-                radius = MIN_RADIUS
-            world_size = radius * 2
-            cx, cy = cam_xyz[0], cam_xyz[1]
-            x_min, x_max = cx - radius, cx + radius
-            y_min, y_max = cy - radius, cy + radius
-            area = (x_min, y_min, x_max, y_max)
-
-            # Scale for ~1400 px on largest dimension
-            target_px = 1400
-            scale = target_px / world_size
-            scale = max(0.05, min(0.5, scale))
-
-            try:
-                m = ml.get_map('yanis')
-                m.open(scale=scale, add_padding=False)
-
-                # Draw cam frustum bounds (FOV edges in blue)
-                import math as _math
-                frust_color = (96, 165, 250)  # blue, matches UI accent
-                yaw_rad = _math.radians(cam.ypr[0])
-                half_fov = _math.radians(cam.hfov / 2)
-                # Match longest ray to landmark
-                import math as _math2
-                max_dist = max(
-                    _math2.hypot(r[0][0] - cam_xyz[0], r[0][1] - cam_xyz[1])
-                    for r in rays
-                ) if rays else world_size * 0.4
-                ray_len = max_dist
-                for offset in [-half_fov, half_fov]:
-                    ang = yaw_rad + offset
-                    end_x = cam_xyz[0] - ray_len * _math.sin(ang)
-                    end_y = cam_xyz[1] + ray_len * _math.cos(ang)
-                    m.draw_line([(cam_xyz[0], cam_xyz[1]), (end_x, end_y)],
-                                fill=frust_color, width=2)
-
-                # Draw rays to landmarks (thinner now)
-                for lm_xyz, color, lm_name in rays:
-                    line = [(cam_xyz[0], cam_xyz[1]), (lm_xyz[0], lm_xyz[1])]
-                    m.draw_line(line, fill=color, width=1)
-                # Draw landmark markers (small)
-                for lm_xyz, color, lm_name in rays:
-                    try:
-                        m.draw_landmark(lm_name, r=4)
-                    except Exception:
-                        pass
-                # Draw cam (slightly smaller marker)
-                m.draw_camera(cam, r=8, d=80)
-
-                # Save
-                out_dir = os.path.join(TOOL_DIR, 'generated')
-                os.makedirs(out_dir, exist_ok=True)
-                # Sanitize filename
-                safe_name = ''.join(c if c.isalnum() else '_' for c in cam_name)
-                out_path = os.path.join(out_dir, f'{safe_name}_map.png')
-                m.save(out_path, crop=area)
-
-                self.send_json({
-                    'ok': True,
-                    'url': f'/api/generated_map?cam={cam_name}',
-                    'n_rays': len(rays),
-                })
-            except Exception as e:
-                import traceback
-                traceback.print_exc()
-                self.send_json({'error': f'render failed: {e}'}, 500)
-
-        elif path == '/api/generated_map':
-            cam_name = unquote(qs.get('cam', [''])[0])
-            safe_name = ''.join(c if c.isalnum() else '_' for c in cam_name)
-            out_path = os.path.join(TOOL_DIR, 'generated', f'{safe_name}_map.png')
-            if os.path.exists(out_path):
-                self.send_file(out_path, 'image/png')
-            else:
-                self.send_response(404)
-                self.end_headers()
-
+        # Phase 7a.3: /api/minimap + /api/generate_map + /api/generated_map removed
 
         elif path == '/api/lm_info':
             # Returns source cameras + all observers for a landmark.
@@ -673,7 +630,10 @@ class Handler(BaseHTTPRequestHandler):
         elif path == '/api/project':
             cam_name = unquote(qs.get('cam', [''])[0])
             xyz = [float(qs['x'][0]), float(qs['y'][0]), float(qs['z'][0])] if 'x' in qs else None
-            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]), 0.0] if 'yaw' in qs else None
+# ── SERVER-ROLL-PATCH-V1 ──
+            # V1-ROLL: parse roll from query string (defaults to 0 for backward compat)
+            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]),
+                   float(qs.get('roll', ['0.0'])[0])] if 'yaw' in qs else None
             hfov = float(qs['hfov'][0]) if 'hfov' in qs else None
 
             projs, losses = compute_projections(cam_name, xyz, ypr, hfov)
@@ -692,10 +652,61 @@ class Handler(BaseHTTPRequestHandler):
                 'losses': losses,
             })
 
+        elif path == '/api/verticals':  # ── VERTICALS-V1 ──  # ── VERTICALS-V1-FIX ──
+            # Phase 11: project world-vertical lines through the cam and
+            # return their pixel coords. Frontend overlays these as yellow
+            # lines on the screenshot — if calib is correct, they align
+            # with real-world verticals (poles, building edges, etc.).
+            cam_name = qs.get('cam', [None])[0]
+            if cam_name is None or cam_name not in md.cameras:
+                self.send_json({'error': 'invalid cam'}, status=400)
+                return
+            try:
+                xyz = [float(v) for v in qs.get('xyz', ['0,0,0'])[0].split(',')]
+                ypr = [float(v) for v in qs.get('ypr', ['0,0,0'])[0].split(',')]
+                hfov = float(qs.get('hfov', ['60'])[0])
+            except Exception:
+                self.send_json({'error': 'bad params'}, status=400)
+                return
+
+            import math as _math
+            try:
+                cam = get_cam(cam_name, xyz, ypr, hfov)
+            except Exception as e:
+                self.send_json({'error': f'get_cam failed: {e}'}, status=500)
+                return
+
+            yaw = ypr[0]
+            cx, cy, cz = xyz[0], xyz[1], xyz[2]
+            lines = []
+            # rlx's algo: sweep degree from yaw-60 to yaw+60, step 0.5
+            # For each deg, build vertical line in world at distance 10
+            # from cam, from z-10 to z+10 (20m tall).
+            deg = yaw - 60.0
+            while deg < yaw + 60.0:
+                rad = _math.radians(deg + 90.0)
+                wx = cx + _math.cos(rad) * 10.0
+                wy = cy + _math.sin(rad) * 10.0
+                try:
+                    p1 = cam.get_pixel((wx, wy, cz - 10.0))
+                    p2 = cam.get_pixel((wx, wy, cz + 10.0))
+                    if p1 is not None and p2 is not None:
+                        lines.append([
+                            [float(p1[0]), float(p1[1])],
+                            [float(p2[0]), float(p2[1])],
+                        ])
+                except Exception:
+                    pass
+                deg += 0.5
+
+            self.send_json({'lines': lines})
+
         elif path == '/api/optimize':
             cam_name = unquote(qs.get('cam', [''])[0])
             xyz = [float(qs['x'][0]), float(qs['y'][0]), float(qs['z'][0])]
-            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]), 0.0]
+            # V1-ROLL: parse roll from query string (defaults to 0 for backward compat)
+            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]),
+                   float(qs.get('roll', ['0.0'])[0])]
             hfov = float(qs['hfov'][0])
             print(f"Optimizing {cam_name}...")
             res, err = optimize_camera(cam_name, xyz, ypr, hfov)
@@ -711,7 +722,9 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json({'error': 'invalid cam'}, 400)
                 return
             xyz = [float(qs['x'][0]), float(qs['y'][0]), float(qs['z'][0])]
-            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]), 0.0]
+            # V1-ROLL: parse roll from query string (defaults to 0 for backward compat)
+            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]),
+                   float(qs.get('roll', ['0.0'])[0])]
             hfov_val = float(qs['hfov'][0])
             md.update_camera(cam_name, xyz, ypr, [hfov_val, None])
             ml.get_camera.cache_clear()
@@ -722,7 +735,9 @@ class Handler(BaseHTTPRequestHandler):
             UPDATE_LMS_LOSS_THRESHOLD = 10.0  # arcmin — refuse if cam loss exceeds this
             cam_name = unquote(qs.get('cam', [''])[0])
             xyz = [float(qs['x'][0]), float(qs['y'][0]), float(qs['z'][0])]
-            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]), 0.0]
+            # V1-ROLL: parse roll from query string (defaults to 0 for backward compat)
+            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]),
+                   float(qs.get('roll', ['0.0'])[0])]
             hfov_val = float(qs['hfov'][0])
 
             # Safety: refuse if cam loss is too high. A high-loss cam in a bad
@@ -1095,104 +1110,8 @@ class Handler(BaseHTTPRequestHandler):
                 sources.append(cn)
             self.send_json({'cams': sources})
 
-        elif path == '/api/ray_map':
-            # Generate map image with rays from specified cameras
-            import subprocess, tempfile, base64
-            cam_names = qs.get('cams', [''])[0].split(',')
-            cam_names = [unquote(c) for c in cam_names if c]
-            lm_name = unquote(qs.get('lm', [''])[0]) if 'lm' in qs else None
-
-            script = f"""
-import sys
-sys.path.insert(0, '{GTAMAP_DIR}')
-import gtamaplib as ml
-import gtamapdata as md
-
-cam_names = {cam_names!r}
-lm_name = {lm_name!r}
-
-xs, ys = [], []
-for cn in cam_names:
-    try:
-        cam = ml.get_camera(cn)
-        xs.append(cam.xyz[0])
-        ys.append(cam.xyz[1])
-    except: pass
-
-if lm_name:
-    lm_xyz = md.landmarks.get(lm_name)
-    if lm_xyz:
-        xs.append(lm_xyz[0])
-        ys.append(lm_xyz[1])
-
-cx = sum(xs)/len(xs) if xs else 0
-cy = sum(ys)/len(ys) if ys else 0
-padding = 3000
-area = (int(cx-padding), int(cy-padding), int(cx+padding), int(cy+padding))
-
-m = ml.get_map('yanis').open(scale=1.0, add_padding=True)
-
-# Build per-landmark color palette using HSV-distributed RGB
-import colorsys
-def landmark_color(idx, total):
-    h = (idx * 0.618033988749895) % 1.0  # golden ratio for max separation
-    r, g, b = colorsys.hsv_to_rgb(h, 0.85, 1.0)
-    return (int(r*255), int(g*255), int(b*255))
-
-# Collect all unique landmarks across all cams to assign stable colors
-all_lms = set()
-for cn in cam_names:
-    all_lms.update(md.pixels.get(cn, {{}}).keys())
-lm_to_color = {{ln: landmark_color(i, len(all_lms)) for i, ln in enumerate(sorted(all_lms))}}
-
-# First pass: draw all landmark rays
-for cn in cam_names:
-    try:
-        cam = ml.get_camera(cn)
-        cam_pixels = md.pixels.get(cn, {{}})
-        for ln in cam_pixels:
-            try:
-                d = cam.get_landmark_direction(ln)
-                if d is None: continue
-                target_xy = ml.get_point(cam.xyz, d, 30000)[:2]
-                color = lm_to_color.get(ln, (200, 200, 200))
-                width = 4 if (lm_name and ln == lm_name) else 2
-                m.draw_line((cam.xy, target_xy), color, width)
-            except: pass
-    except Exception as e:
-        print(f'Error rays {{cn}}: {{e}}')
-
-# Second pass: draw camera frustum on top in BLACK (thicker, more visible)
-for cn in cam_names:
-    try:
-        cam = ml.get_camera(cn)
-        # frustum edges (black, width 4) — manually drawn since draw_camera uses white
-        for x in (0, cam.w):
-            edge_dir = cam.get_pixel_direction((x, cam.h / 2))
-            target_xy = ml.get_point(cam.xyz, edge_dir, 30000)[:2]
-            m.draw_line((cam.xy, target_xy), (0, 0, 0), 4)
-        # cam marker
-        m.draw_circle(cam.xy, 8, (255, 255, 255), cam.color, 2, cam.name[0])
-    except Exception as e:
-        print(f'Error frustum {{cn}}: {{e}}')
-
-if lm_name and md.landmarks.get(lm_name):
-    m.draw_landmark(lm_name)
-
-m.save('/tmp/ray_map.png', area)
-"""
-            try:
-                import subprocess
-                result = subprocess.run(['python3', '-c', script],
-                    capture_output=True, text=True, timeout=30)
-                if result.returncode != 0:
-                    self.send_json({'error': result.stderr[:200]}, 500)
-                    return
-                with open('/tmp/ray_map.png', 'rb') as f:
-                    img_b64 = base64.b64encode(f.read()).decode()
-                self.send_json({'image': img_b64})
-            except Exception as e:
-                self.send_json({'error': str(e)}, 500)
+        # Phase 8.2: /api/ray_map removed. Triangulation viz now lives
+        # in the Map view (Phase 8.1: showTriangulationOnMap in calib.html).
 
         elif path == '/api/delete_pixel':
             cam_name = unquote(qs.get('cam', [''])[0])
@@ -1216,10 +1135,13 @@ m.save('/tmp/ray_map.png', area)
             # Just acknowledge — validation state is kept client-side
             self.send_json({'ok': True})
 
+        # Phase 7a.3: /api/minimap removed (CSS-only) — Phase 7a.4 restores
+        # it as a static file server for pre-rendered cached PNGs.
+        # The Safari slow-path on huge PNG bg-image manipulation forced
+        # the pivot back to server-rendered minimaps. See module-top
+        # pre-render block.
+
         elif path == '/api/minimap':
-            # GTA-style minimap: rectangular crop of the yanis map centered
-            # on a cam. Frontend rotates the image based on cam yaw.
-            # Uses the same render pattern as /api/generate_map.
             cam_name = unquote(qs.get('cam', [''])[0])
             if cam_name not in md.cameras:
                 self.send_json({'error': 'invalid cam'}, 400)
@@ -1229,50 +1151,30 @@ m.save('/tmp/ray_map.png', area)
             except Exception as e:
                 self.send_json({'error': f'cam load failed: {e}'}, 400)
                 return
-
-            try:
-                radius = float(qs.get('radius', ['200'])[0])
-            except ValueError:
-                radius = 200.0
-            try:
-                target_px = int(qs.get('size', ['480'])[0])
-            except ValueError:
-                target_px = 480
-
-            cx, cy = float(cam.xyz[0]), float(cam.xyz[1])
-            x_min, x_max = cx - radius, cx + radius
-            y_min, y_max = cy - radius, cy + radius
-            area = (x_min, y_min, x_max, y_max)
-
-            try:
-                # Open map at NATIVE scale (no global resize — that would
-                # take seconds and 24000x24000 px of memory). Crop the small
-                # area we want, then resize just the crop to target_px.
-                m = ml.get_map('yanis')
-                m.open(add_padding=False)  # no scale arg = native scale
-
-                # m.crop returns a PIL Image of just the cropped area
-                cropped = m.crop(area)
-                # Resize the small crop to target size
-                cropped = cropped.resize((target_px, target_px), 1)  # 1=LANCZOS
-
-                import io, base64
-                buf = io.BytesIO()
-                cropped.save(buf, format='PNG')
-                img_b64 = base64.b64encode(buf.getvalue()).decode('ascii')
-            except Exception as e:
-                import traceback
-                traceback.print_exc()
-                self.send_json({'error': f'minimap render failed: {e}'}, 500)
+            cache_path = _minimap_cache_path(cam_name)
+            if not os.path.exists(cache_path):
+                # Render on demand (fallback for any cam added after startup).
+                try:
+                    _render_minimap_for_cam(cam_name)
+                except Exception:
+                    pass
+            if not os.path.exists(cache_path):
+                self.send_json({'error': 'minimap render failed'}, 500)
                 return
-
-            self.send_json({
-                'cam': cam_name,
-                'image_b64': img_b64,
-                'yaw': float(cam.ypr[0]),
-                'radius_m': radius,
-                'image_size_px': target_px,
-            })
+            try:
+                with open(cache_path, 'rb') as f:
+                    img_bytes = f.read()
+                import base64 as _b64
+                img_b64 = _b64.b64encode(img_bytes).decode('ascii')
+                self.send_json({
+                    'cam': cam_name,
+                    'image_b64': img_b64,
+                    'yaw': float(cam.ypr[0]) if cam.ypr is not None else 0.0,
+                    'radius_m': _MINIMAP_RADIUS_M,
+                    'image_size_px': _MINIMAP_SIZE_PX,
+                })
+            except Exception as e:
+                self.send_json({'error': f'minimap read failed: {e}'}, 500)
 
         elif path == '/api/other_cams_overlay':
             cam_name = qs.get('cam', [''])[0]
@@ -1380,7 +1282,7 @@ m.save('/tmp/ray_map.png', area)
 
 if __name__ == '__main__':
     port = 8765
-    server = HTTPServer(('localhost', port), Handler)
+    server = ThreadingHTTPServer(('localhost', port), Handler)
     print(f"\n🗺  gtamaplib Calibration Tool")
     print(f"   http://localhost:{port}")
     print(f"   Ctrl+C to stop\n")
