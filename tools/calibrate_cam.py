@@ -31,6 +31,7 @@ LANDMARKS_JSON = os.path.join(DATA_DIR, 'landmarks.json')
 TIERS_JSON = os.path.join(GEN_DIR, 'confidence_tiers.json')
 
 sys.path.insert(0, REPO_DIR)
+import gtamaplib_setup  # noqa: F401  [vendor-hijack-V1]
 import gtamaplib as ml
 
 

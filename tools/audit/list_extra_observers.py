@@ -6,8 +6,9 @@ candidats a investiguer:
 - Soit drift xyz a fix par retriangulate
 """
 import os, sys
-GTAMAP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+GTAMAP_DIR = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, GTAMAP_DIR)
+import gtamaplib_setup  # noqa: F401  [vendor-hijack-V1]
 import gtamapdata as md
 import gtamaplib as ml
 import math

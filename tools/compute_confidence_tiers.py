@@ -60,6 +60,7 @@ from collections import Counter, defaultdict
 
 GTAMAP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, GTAMAP_DIR)
+import gtamaplib_setup  # noqa: F401  [vendor-hijack-V1]
 
 import gtamaplib as ml
 import gtamapdata as md
