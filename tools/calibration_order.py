@@ -33,6 +33,7 @@ DATA_DIR = os.path.join(REPO_DIR, 'gtamapdata')
 GEN_DIR = os.path.join(THIS_DIR, 'generated')
 
 sys.path.insert(0, REPO_DIR)
+import gtamaplib_setup  # noqa: F401  [vendor-hijack-V1]
 import gtamaplib as ml
 
 CAMERAS_JSON = os.path.join(DATA_DIR, 'cameras.json')
