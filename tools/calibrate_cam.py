@@ -18,6 +18,7 @@ import argparse
 import json
 import math
 import os
+import re  # [ANCESTRY-V1]
 import sys
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -96,6 +97,37 @@ def find_likely_visible(cam, landmarks, lm_tiers, cam_pixels_set,
             continue
     candidates.sort(key=lambda x: x[3])  # nearest first
     return candidates[:max_count]
+
+
+# ── LEAK ancestry helper ──────────────────────────────────────────────────  [ANCESTRY-V1]
+
+def compute_lm_ancestry(cameras, landmarks):
+    """For each LM, classify by its source_cameras:
+       all_leak / partial_leak / no_leak / no_source.
+       LEAK cam = source field starts with 'YYYY-MM-DD' (real game recording)."""
+    leak_cams = set()
+    for cam_name, cam_data in cameras.items():
+        src = cam_data.get('source', '') if isinstance(cam_data, dict) else ''
+        if re.match(r'\d{4}-\d{2}-\d{2}', src):
+            leak_cams.add(cam_name)
+
+    ancestry = {}
+    for lm_name, lm_data in landmarks.items():
+        if not isinstance(lm_data, dict):
+            ancestry[lm_name] = 'no_source'
+            continue
+        src = lm_data.get('source_cameras', [])
+        if not src:
+            ancestry[lm_name] = 'no_source'
+            continue
+        leak_count = sum(1 for c in src if c in leak_cams)
+        if leak_count == len(src):
+            ancestry[lm_name] = 'all_leak'
+        elif leak_count > 0:
+            ancestry[lm_name] = 'partial_leak'
+        else:
+            ancestry[lm_name] = 'no_leak'
+    return ancestry
 
 
 def main():
@@ -245,11 +277,22 @@ def main():
                                    only_tiers=tiers_filter, max_count=args.max_visible)
 
     if visible:
+        # ── ANCESTRY-V1 ── tag suggestions by LEAK ancestry, re-sort
+        ancestry = compute_lm_ancestry(cameras, landmarks)
+        anc_order = {'all_leak': 0, 'partial_leak': 1, 'no_leak': 2, 'no_source': 3}
+        anc_label = {'all_leak': 'LEAK', 'partial_leak': 'part',
+                     'no_leak': '----', 'no_source': '????'}
+        visible_tagged = []
+        for lm_name, tier, pxpy, dist in visible:
+            a = ancestry.get(lm_name, 'no_source')
+            visible_tagged.append((lm_name, tier, pxpy, dist, a))
+        visible_tagged.sort(key=lambda v: (anc_order[v[4]], v[3]))
+
         print("─" * 70)
-        print(f"  LIKELY VISIBLE LMS (not yet marked, sorted by distance)")
+        print(f"  LIKELY VISIBLE LMS (not yet marked — LEAK ancestry first, then distance)")
         print("─" * 70)
-        for lm_name, tier, (px, py), dist in visible:
-            print(f"    [{tier:<6}]  dist={dist:>6.0f}m  px≈({px:>5.0f}, {py:>4.0f})  {lm_name}")
+        for lm_name, tier, (px, py), dist, anc in visible_tagged:
+            print(f"    [{tier:<6} {anc_label[anc]}]  dist={dist:>6.0f}m  px≈({px:>5.0f}, {py:>4.0f})  {lm_name}")
         print()
         print(f"  Note: these are PROJECTED positions assuming current cam params are roughly correct.")
         print(f"  If cam params are very wrong, these projections won't help. Calibrate first with what you can see.")
