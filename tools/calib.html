@@ -130,7 +130,7 @@ body.view-map .sidebar .statusbar{display:none}
 /* Overlay interaction (same as Phase 5.3 but no .selected dot styling). */
 #map-overlay{pointer-events:none}
 #map-overlay .cam-marker{pointer-events:auto;cursor:pointer;transition:opacity .12s}
-#map-overlay .cam-marker:hover circle{stroke-width:50}
+#map-overlay .cam-marker:hover circle{stroke-width:20}
 #map-overlay .cam-frustum,
 #map-overlay .cam-frustum-fill{display:none;pointer-events:none}
 #map-overlay g.cam-group.selected .cam-frustum,
@@ -971,6 +971,35 @@ async function init() {
   window.mapTx = null;
   let mapDragging = false, mapDragStart = null, mapTxStart = null;
 
+  // [CAM-DOT-ADAPTIVE]: keep cam/lm dot sizes constant in screen pixels regardless
+  // of zoom. The CSS transform: scale() on the wrapper would otherwise make
+  // them grow with zoom-in, hiding the underlying map detail.
+  //
+  // Base sizes assume mapTx.scale equals the fit-to-screen baseline (the
+  // scale value produced by resetMapView). When zoom-in happens, scale grows,
+  // and we shrink the dots by the inverse factor.
+  function updateDotSizes() {
+    if (!window.mapTx || !window.mapBaselineScale) return;
+    const factor = Math.pow(window.mapBaselineScale / window.mapTx.scale, 0.5);
+    const overlay = window.mapOverlay;
+    if (!overlay) return;
+    overlay.querySelectorAll('.cam-marker circle').forEach(c => {
+      const baseR = parseFloat(c.dataset.baseR || c.getAttribute('r'));
+      if (!c.dataset.baseR) c.dataset.baseR = String(baseR);
+      const baseSw = parseFloat(c.dataset.baseSw || c.getAttribute('stroke-width'));
+      if (!c.dataset.baseSw) c.dataset.baseSw = String(baseSw);
+      c.setAttribute('r', String(baseR * factor));
+      c.setAttribute('stroke-width', String(baseSw * factor));
+    });
+    overlay.querySelectorAll('.lm-dot').forEach(c => {
+      const baseR = parseFloat(c.dataset.baseR || c.getAttribute('r'));
+      if (!c.dataset.baseR) c.dataset.baseR = String(baseR);
+      // Bump observed-by-selected LMs to 1.6x for visibility on the cam frustum.
+      const bump = c.classList.contains('observed-by-selected') ? 1.6 : 1.0;
+      c.setAttribute('r', String(baseR * factor * bump));
+    });
+  }
+
   function applyMapTx() {
     if (!window.mapTx) return;
     const { scale, tx, ty } = window.mapTx;
@@ -980,6 +1009,7 @@ async function init() {
     // visually but never invalidate each other on overlay class toggles.
     if (window.mapPngWrap)     window.mapPngWrap.style.transform = t;
     if (window.mapOverlayWrap) window.mapOverlayWrap.style.transform = t;
+    updateDotSizes();
   }
 
   function resetMapView() {
@@ -990,6 +1020,9 @@ async function init() {
     const tx = (rect.width  - sz[0] * scale) / 2;
     const ty = (rect.height - sz[1] * scale) / 2;
     window.mapTx = { scale, tx, ty };
+    // [CAM-DOT-ADAPTIVE]: baseline scale = fit-to-screen scale; dot sizes
+    // are kept constant at this scale.
+    window.mapBaselineScale = scale;
     applyMapTx();
   }
   window.resetMapView = resetMapView;
@@ -1205,6 +1238,11 @@ async function init() {
       dot.setAttribute('cy', String(sy));
       dot.setAttribute('r',  String(LM_DOT_RADIUS));
       dot.dataset.lmName = lm.name;
+      // [OBSERVED-LM-BIGGER]: mark dots observed by the selected cam so they
+      // can be sized up in updateDotSizes() for better visibility.
+      if (observedSet && observedSet.has(lm.name)) {
+        dot.classList.add('observed-by-selected');
+      }
 
       // Color logic
       let fill = LM_COLOR_NEUTRAL;
