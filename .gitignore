@@ -31,3 +31,6 @@ tools/bundle_adjust_result.json
 *.pyc
 # Map assets (rendered from SVG, versioned for build reproducibility)
 !tools/assets/*.png
+
+# Local vendor clone (rlx upstream) — LFS files pulled manually, do not commit
+vendor/

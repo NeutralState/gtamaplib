@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>gtamaplib — Calibration Tool</title>
+<!-- [YANIS-V12] yanis_v12 JPG -->
 <style>
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap');
 :root {
@@ -45,7 +46,7 @@
   background:rgba(0,0,0,0.55);padding:2px 6px;border-radius:3px;
   letter-spacing:.06em;text-transform:uppercase;pointer-events:none}
 /* CSS-only minimap: a positioning container whose inner element holds
-   the full /yanis.png as background-image, sized + positioned per cam. */
+   the full /yanis.jpg as background-image, sized + positioned per cam. */
 #minimap-wrap-sb{position:absolute;inset:0;overflow:hidden;cursor:pointer}
 #minimap-rotator-sb{position:absolute;width:200%;height:200%;left:-50%;top:-50%;
   transform-origin:50% 50%;transition:transform 120ms ease-out}
@@ -383,11 +384,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .lm-info-close{margin-left:auto;color:var(--dim);cursor:pointer;font-family:var(--mono);font-size:11px}
 .lm-info-close:hover{color:var(--red)}
 </style>
-<!-- Phase 7a.1.1: preload /yanis.png so the sidebar minimap is ready
+<!-- Phase 7a.1.1: preload /yanis.jpg so the sidebar minimap is ready
      by the time the user picks a cam. The browser fetches it in
      parallel with the rest of the page; same response is reused by
      the Map view <img>, the minimap background-image, etc. -->
-<link rel="preload" as="image" href="/yanis.png">
+<link rel="preload" as="image" href="/yanis.jpg">
 </head>
 <body>
 
@@ -431,7 +432,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div id="minimap-wrap-sb" title="Click to open Map view (M to toggle)">
         <div id="minimap-rotator-sb">
           <!-- Phase 7a.1.2: <img> instead of <div> bg-image (Safari perf) -->
-          <img id="minimap-img-sb" src="/yanis.png" alt="">
+          <img id="minimap-img-sb" src="/yanis.jpg" alt="">
         </div>
         <svg id="minimap-pointer-sb" viewBox="0 0 240 170" preserveAspectRatio="none">
           <path d="M 120,75 L 128,91 L 120,87 L 112,91 Z"
@@ -878,8 +879,8 @@ async function init() {
         new Promise((resolve, reject) => {
           const img = new Image();
           img.onload = () => resolve(img);
-          img.onerror = () => reject(new Error('failed to load /yanis.png'));
-          img.src = '/yanis.png';
+          img.onerror = () => reject(new Error('failed to load /yanis.jpg'));
+          img.src = '/yanis.jpg';
         }),
       ]);
       window.mapData = dataRes;
@@ -3344,7 +3345,7 @@ canvasWrap.addEventListener('click', e => {
 });
 
 // ── Phase 7a.1: CSS-only minimap (sidebar) + cam preview ──────────────────
-// The minimap is a CSS background-image crop of /yanis.png — no fetch.
+// The minimap is a CSS background-image crop of /yanis.jpg — no fetch.
 // In Map view, the same slot shows the cam's frame as a static <img>.
 // Both elements live in #sb-preview-slot (bottom of the left sidebar).
 //
