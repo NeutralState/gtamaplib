@@ -1078,27 +1078,29 @@
   },
   "Four Seasons Hotel Miami (BE)": {
     "xyz": [
-      -818.9597,
-      -1307.525,
-      263.3155
+      -814.289,
+      -1306.504,
+      263.568
     ],
     "source_cameras": [
       "Handlebar (SE)"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
   },
   "Four Seasons Hotel Miami (BW)": {
     "xyz": [
-      -858.4603,
-      -1288.0785,
-      263.211
+      -859.9040210126308,
+      -1289.4490562001145,
+      263.568
     ],
     "source_cameras": [
       "Handlebar (SW)"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
   },
   "Four Seasons Hotel Miami (E)": {
     "xyz": [
@@ -1127,27 +1129,29 @@
   },
   "Four Seasons Hotel Miami (NW)": {
     "xyz": [
-      -849.9365,
-      -1258.8571,
-      257.9834
+      -847.739,
+      -1256.913,
+      258.306
     ],
     "source_cameras": [
       "Penthouse (NW)"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
   },
   "Four Seasons Hotel Miami (SE)": {
     "xyz": [
-      -819.0977,
-      -1315.608,
-      253.6489
+      -817.997,
+      -1316.422,
+      253.608
     ],
     "source_cameras": [
       "Rooftop (SE)"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
   },
   "Four Seasons Hotel Miami (SW)": {
     "xyz": [
@@ -1163,15 +1167,16 @@
   },
   "Four Seasons Hotel Miami (W)": {
     "xyz": [
-      -250000001960806.25,
-      131617256274501.66,
-      -113266112852637.45
+      -817.997,
+      -1316.422,
+      258.306
     ],
     "source_cameras": [
       "Penthouse (SW)"
     ],
     "error_m": null,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
   },
   "Golf Course (E)": {
     "xyz": [
@@ -8895,5 +8900,113 @@
     "source_cameras": [],
     "error_m": null,
     "zone": "unknown"
+  },
+  "Four Seasons Hotel Miami (40NW)": {
+    "xyz": [
+      -848.707,
+      -1254.789,
+      189.137
+    ],
+    "source_cameras": [
+      "Metro (SE) (A) (4K)"
+    ],
+    "author": "rlx",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 40th floor NW corner"
+  },
+  "Four Seasons Hotel Miami (40W)": {
+    "xyz": [
+      -858.163,
+      -1280.079,
+      189.137
+    ],
+    "source_cameras": [
+      "Metro (SE) (A) (4K)"
+    ],
+    "author": "rlx",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 40th floor W corner"
+  },
+  "Four Seasons Hotel Miami (40E)": {
+    "xyz": [
+      -809.456,
+      -1298.29,
+      189.137
+    ],
+    "source_cameras": [
+      "Tennis Stadium (4K)"
+    ],
+    "author": "rlx",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 40th floor E corner"
+  },
+  "Four Seasons Hotel Miami (32NE)": {
+    "xyz": [
+      -800.0,
+      -1273.0,
+      156.9015
+    ],
+    "source_cameras": [
+      "Tennis Stadium (4K)"
+    ],
+    "author": "rlx",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 32nd floor NE corner"
+  },
+  "Four Seasons Hotel Miami (56NE)": {
+    "xyz": [
+      -802.124,
+      -1273.968,
+      253.608
+    ],
+    "source_cameras": [
+      "Tennis Stadium (4K)"
+    ],
+    "author": "rlx",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 56th floor NE (rooftop)"
+  },
+  "Four Seasons Hotel Miami (HB28SE)": {
+    "xyz": [
+      -816.865,
+      -1313.394,
+      140.784
+    ],
+    "source_cameras": [
+      "Tennis Stadium (4K)"
+    ],
+    "author": "rlx",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 28 SE"
+  },
+  "Four Seasons Hotel Miami (HB8SE)": {
+    "xyz": [
+      -815.574,
+      -1309.942,
+      60.196
+    ],
+    "source_cameras": [
+      "Tennis Stadium (4K)"
+    ],
+    "author": "rlx",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 8 SE"
+  },
+  "Four Seasons Hotel Miami (HB58SE)": {
+    "xyz": [
+      -814.289,
+      -1306.504,
+      263.568
+    ],
+    "source_cameras": [
+      "Tennis Stadium (4K)"
+    ],
+    "author": "rlx",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 58 SE"
+  },
+  "Four Seasons Hotel Miami (HB58NE)": {
+    "xyz": [
+      -813.449,
+      -1304.257,
+      262.428
+    ],
+    "source_cameras": [
+      "Tennis Stadium (4K)"
+    ],
+    "author": "rlx",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 58 NE"
   }
 }
