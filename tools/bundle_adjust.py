@@ -137,12 +137,89 @@ print(f"Observations         : {len(observations)}  "
 cam_idx = {n: i for i, n in enumerate(opt_cam_names)}
 lm_idx  = {n: i for i, n in enumerate(opt_lm_names)}
 
+# ── [RIGID-BODY-V1] Rigid body setup ──────────────────────────────────────────
+# Some LMs form rigid 3D structures (e.g. Four Seasons Hotel Miami).
+# Instead of optimizing each LM xyz independently (3 DOF each), we treat
+# the whole structure as 6 DOFs (3 translation + 3 rotation around centroid).
+# See tools/RIGID_BODY_DESIGN.md for the full design.
+# Hardcoded Four Seasons LM xyz from rlx vendor model (avoids namespace collision)
+_FS_LM_MAP = {
+    "Four Seasons Hotel Miami (BE)":     (-814.289000, -1306.504000, 263.568000),
+    "Four Seasons Hotel Miami (BW)":     (-859.904021, -1289.449056, 263.568000),
+    "Four Seasons Hotel Miami (E)":      (-817.997000, -1316.422000, 258.306000),
+    "Four Seasons Hotel Miami (NE)":     (-802.124000, -1273.968000, 258.306000),
+    "Four Seasons Hotel Miami (NW)":     (-847.739000, -1256.913000, 258.306000),
+    "Four Seasons Hotel Miami (SE)":     (-817.997000, -1316.422000, 253.608000),
+    "Four Seasons Hotel Miami (SW)":     (-863.612000, -1299.367000, 253.608000),
+    "Four Seasons Hotel Miami (W)":      (-817.997000, -1316.422000, 258.306000),
+    "Four Seasons Hotel Miami (40NE)":   (-800.000000, -1273.000000, 189.137000),
+    "Four Seasons Hotel Miami (40NW)":   (-848.707000, -1254.789000, 189.137000),
+    "Four Seasons Hotel Miami (40W)":    (-858.163000, -1280.079000, 189.137000),
+    "Four Seasons Hotel Miami (40E)":    (-809.456000, -1298.290000, 189.137000),
+    "Four Seasons Hotel Miami (32NE)":   (-800.000000, -1273.000000, 156.901500),
+    "Four Seasons Hotel Miami (56NE)":   (-802.124000, -1273.968000, 253.608000),
+    "Four Seasons Hotel Miami (HB28SE)": (-816.865000, -1313.394000, 140.784000),
+    "Four Seasons Hotel Miami (HB8SE)":  (-815.574000, -1309.942000, 60.196000),
+    "Four Seasons Hotel Miami (HB58SE)": (-814.289000, -1306.504000, 263.568000),
+    "Four Seasons Hotel Miami (HB58NE)": (-813.449000, -1304.257000, 262.428000),
+}
+_fs_lms_present = {n: np.array(xyz) for n, xyz in _FS_LM_MAP.items() if n in md.landmarks}
+if _fs_lms_present:
+    _centroid_fs = np.mean(list(_fs_lms_present.values()), axis=0)
+    _local_coords_fs = {n: xyz - _centroid_fs for n, xyz in _fs_lms_present.items()}
+    _rigid_bodies = {
+        "four_seasons": {
+            "centroid": _centroid_fs,
+            "lm_local_coords": _local_coords_fs,
+        }
+    }
+    _lm_to_rigid_body = {n: "four_seasons" for n in _fs_lms_present}
+    print(f"  [RIGID-BODY-V1] Registered 'four_seasons' with {len(_fs_lms_present)} LMs, "
+          f"centroid=({_centroid_fs[0]:.1f},{_centroid_fs[1]:.1f},{_centroid_fs[2]:.1f})")
+else:
+    _rigid_bodies = {}
+    _lm_to_rigid_body = {}
+    print(f"  [RIGID-BODY-V1] No FourSeasons LMs in optimizable set; rigid body skipped")
+
+# Remove rigid LMs from lm_idx and opt_lm_names; computed via rigid body params instead
+_rigid_lm_names = set(_lm_to_rigid_body.keys())
+_free_lm_names = [n for n in opt_lm_names if n not in _rigid_lm_names]
+lm_idx = {n: i for i, n in enumerate(_free_lm_names)}
+opt_lm_names = _free_lm_names
+
+N_RIGID_BODIES = len(_rigid_bodies)
+RIGID_BLOCK = N_RIGID_BODIES * 6
+# [RIGID-BODY-V1-EDIT2]: rebind N_LM to reflect the rigid-LM-excluded opt_lm_names
+N_LM = len(opt_lm_names)
+LM_BLOCK = N_LM * 3
+# ── End [RIGID-BODY-V1] setup ─────────────────────────────────────────────────
+
+# ── [RIGID-BODY-V1-EDIT2] helpers ──────────────────────────────────────────────
+def _rotation_matrix_xyz(rx, ry, rz):
+    """Euler XYZ rotation matrix (Rz @ Ry @ Rx) for world axes."""
+    cx, sx = np.cos(rx), np.sin(rx)
+    cy, sy = np.cos(ry), np.sin(ry)
+    cz, sz = np.cos(rz), np.sin(rz)
+    Rx = np.array([[1, 0, 0], [0, cx, -sx], [0, sx, cx]])
+    Ry = np.array([[cy, 0, sy], [0, 1, 0], [-sy, 0, cy]])
+    Rz = np.array([[cz, -sz, 0], [sz, cz, 0], [0, 0, 1]])
+    return Rz @ Ry @ Rx
+
+
+def _transform_rigid_to_world(local_xyz, centroid, params6):
+    """Apply rigid transform to a local coord. params6 = (tx, ty, tz, rx, ry, rz)."""
+    tx, ty, tz, rx, ry, rz = params6
+    R = _rotation_matrix_xyz(rx, ry, rz)
+    return R @ local_xyz + centroid + np.array([tx, ty, tz])
+
+
+
 # ── BUNDLE-ADJUST-ROLL-V1 ──
 # V1-ROLL: each cam now has 7 optimized params (was 6): xyz + yaw + pitch + roll + hfov
 N_CAM     = len(opt_cam_names)
 N_LM      = len(opt_lm_names)
 CAM_BLOCK = N_CAM * 7
-N_VARS    = CAM_BLOCK + N_LM * 3
+N_VARS    = CAM_BLOCK + LM_BLOCK + RIGID_BLOCK  # [RIGID-BODY-V1-EDIT2]
 n_obs       = len(observations)
 n_residuals = n_obs * 2
 print(f"Variables : {N_VARS}")
@@ -220,7 +297,9 @@ for i, lm_name in enumerate(opt_lm_names):
     xyz = md.landmarks[lm_name]
     lm_params_init[i] = [xyz[0], xyz[1], xyz[2]]
 
-x0 = np.concatenate([cam_params_init.ravel(), lm_params_init.ravel()])
+# [RIGID-BODY-V1-EDIT2]: add rigid body params (init at zero = identity transform)
+rigid_params_init = np.zeros(RIGID_BLOCK)
+x0 = np.concatenate([cam_params_init.ravel(), lm_params_init.ravel(), rigid_params_init])
 
 # ── Residual function ─────────────────────────────────────────────────────────
 
@@ -229,7 +308,7 @@ _failed_obs_logged = set()
 def pixel_residuals(x):
     # V1-ROLL: 7 params per cam (was 6) — roll at cp[5], hfov at cp[6]
     cam_params = x[:CAM_BLOCK].reshape(N_CAM, 7)
-    lm_params  = x[CAM_BLOCK:].reshape(N_LM, 3)
+    lm_params  = x[CAM_BLOCK:CAM_BLOCK + LM_BLOCK].reshape(N_LM, 3)  # [RIGID-BODY-V1-EDIT2]
 
     out = np.zeros(n_residuals, dtype=np.float64)
 
@@ -249,6 +328,17 @@ def pixel_residuals(x):
             if zc and zc.get('type') == 'fixed':
                 z_val = float(zc['value'])
             lm_xyz = (float(lp[0]), float(lp[1]), z_val)
+        elif lm_name in _lm_to_rigid_body:
+            # [RIGID-BODY-V1-EDIT2]: compute LM xyz from rigid body 6 DOFs
+            body_id = _lm_to_rigid_body[lm_name]
+            body_keys = list(_rigid_bodies.keys())
+            body_idx = body_keys.index(body_id)
+            rigid_offset = CAM_BLOCK + LM_BLOCK + body_idx * 6
+            body_params = x[rigid_offset:rigid_offset + 6]
+            body = _rigid_bodies[body_id]
+            local = body['lm_local_coords'][lm_name]
+            world = _transform_rigid_to_world(local, body['centroid'], body_params)
+            lm_xyz = (float(world[0]), float(world[1]), float(world[2]))
         else:
             lm_xyz = _fixed_lm_xyz[lm_name]
 
@@ -290,6 +380,14 @@ for k, (cam_name, lm_name, _, _) in enumerate(observations):
         l = lm_idx[lm_name]
         for r in rows:
             for col in range(CAM_BLOCK + 3*l, CAM_BLOCK + 3*l + 3):
+                J_sparsity[r, col] = 1
+    elif lm_name in _lm_to_rigid_body:
+        # [RIGID-BODY-V1-EDIT2]: rigid LM depends on 6 body DOFs
+        body_keys = list(_rigid_bodies.keys())
+        body_idx = body_keys.index(_lm_to_rigid_body[lm_name])
+        rigid_offset = CAM_BLOCK + LM_BLOCK + body_idx * 6
+        for r in rows:
+            for col in range(rigid_offset, rigid_offset + 6):
                 J_sparsity[r, col] = 1
 
 J_sparsity = J_sparsity.tocsr()
@@ -466,7 +564,7 @@ print(f"  obs <  5 arcmin: {int((res_per_obs <  5).sum())} / {len(res_per_obs)}"
 
 # V1-ROLL: 7 params per cam (was 6)
 cam_params_final = result.x[:CAM_BLOCK].reshape(N_CAM, 7)
-lm_params_final  = result.x[CAM_BLOCK:].reshape(N_LM, 3)
+lm_params_final  = result.x[CAM_BLOCK:CAM_BLOCK + LM_BLOCK].reshape(N_LM, 3)  # [RIGID-BODY-V1-EDIT3]
 
 output = {
     'initial_loss': round(initial_loss, 4),
@@ -507,6 +605,19 @@ for i, lm_name in enumerate(opt_lm_names):
     output['landmarks'][lm_name] = [round(float(lp[0]), 4),
                                     round(float(lp[1]), 4),
                                     round(z_final, 4)]
+
+# [RIGID-BODY-V1-EDIT4]: write rigid body LMs to output
+rigid_params_final = result.x[CAM_BLOCK + LM_BLOCK:]
+for body_idx, (body_id, body) in enumerate(_rigid_bodies.items()):
+    body_params = rigid_params_final[body_idx*6:body_idx*6 + 6]
+    tx, ty, tz, rx, ry, rz = body_params
+    print(f"  [RIGID-BODY-V1] {body_id} final pose: "
+          f"t=({tx:.3f},{ty:.3f},{tz:.3f})m rot=({np.degrees(rx):.2f},{np.degrees(ry):.2f},{np.degrees(rz):.2f})deg")
+    for lm_name, local_xyz in body['lm_local_coords'].items():
+        world_xyz = _transform_rigid_to_world(local_xyz, body['centroid'], body_params)
+        output['landmarks'][lm_name] = [round(float(world_xyz[0]), 4),
+                                        round(float(world_xyz[1]), 4),
+                                        round(float(world_xyz[2]), 4)]
 
 out_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'bundle_adjust_result.json')
 with open(out_path, 'w') as f:
