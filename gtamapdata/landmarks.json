@@ -1165,19 +1165,6 @@
     "error_m": null,
     "zone": "vice_city"
   },
-  "Four Seasons Hotel Miami (W)": {
-    "xyz": [
-      -817.997,
-      -1316.422,
-      258.306
-    ],
-    "source_cameras": [
-      "Penthouse (SW)"
-    ],
-    "error_m": null,
-    "zone": "vice_city",
-    "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
-  },
   "Golf Course (E)": {
     "xyz": [
       800.134,
@@ -8922,7 +8909,8 @@
       189.137
     ],
     "source_cameras": [
-      "Metro (SE) (A) (4K)"
+      "Metro (SE) (A) (4K)",
+      "Grassrivers 02 (Watson Bay)"
     ],
     "author": "rlx",
     "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 40th floor W corner"
