@@ -2626,15 +2626,15 @@
   },
   "White Billboard (Hamlet)": {
     "xyz": [
-      -2591.4364,
-      -3751.4718,
-      29.2161
+      -2593.476,
+      -3775.9213,
+      30.2692
     ],
     "source_cameras": [
       "Police Chase (A)",
       "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": null,
+    "error_m": 3.916,
     "zone": "grassrivers"
   },
   "Oval Yellow Sign": {
@@ -8521,9 +8521,9 @@
   },
   "Hotel Breakwater (K)": {
     "xyz": [
-      1962.0838,
-      541.1655,
-      11.2111
+      1949.3024,
+      564.7627,
+      13.6679
     ],
     "source_cameras": [
       "Park",
@@ -9018,6 +9018,47 @@
     "author": "rlx",
     "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 58 NE",
     "error_m": null,
+    "zone": "unknown"
+  },
+  "hotel Victor (SE)": {
+    "xyz": [
+      1964.1553,
+      815.2786,
+      60.7618
+    ],
+    "source_cameras": [
+      "Beach",
+      "Dominion Hotel"
+    ],
+    "error_m": 32.987,
+    "zone": "unknown"
+  },
+  "Hotel Victor (SE)": {
+    "xyz": [
+      1975.3296,
+      736.2734,
+      42.1067
+    ],
+    "source_cameras": [
+      "Park",
+      "Beach",
+      "Dominion Hotel"
+    ],
+    "error_m": 0.102,
+    "zone": "unknown"
+  },
+  "Portofino Tower (NE)": {
+    "xyz": [
+      1753.6794,
+      -181.3662,
+      143.0098
+    ],
+    "source_cameras": [
+      "Sidewalk (Jason) (E)",
+      "Tennis Court (SE)",
+      "Rooftop Party"
+    ],
+    "error_m": 0.247,
     "zone": "unknown"
   }
 }

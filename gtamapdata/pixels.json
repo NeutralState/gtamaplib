@@ -804,10 +804,6 @@
       1097,
       108.5
     ],
-    "Portofino Tower (NE)": [
-      1119,
-      59
-    ],
     "Portofino Tower (NW)": [
       1133,
       59
@@ -815,6 +811,10 @@
     "Margaret Pace Park": [
       1253,
       107
+    ],
+    "Portofino Tower (NE)": [
+      1118.4,
+      59.1
     ]
   },
   "Port": {
@@ -1029,6 +1029,10 @@
     "1500 Ocean Dr": [
       1142,
       409.5
+    ],
+    "Hotel Breakwater (K)": [
+      324.4,
+      435.8
     ]
   },
   "Bar": {
@@ -1668,13 +1672,13 @@
       1398,
       195
     ],
-    "Portofino Tower (NE)": [
-      1556.9,
-      165.0
-    ],
     "Portofino Tower (NW)": [
       1585.6,
       162.4
+    ],
+    "Portofino Tower (NE)": [
+      1561.8,
+      163.2
     ]
   },
   "Pool": {
@@ -3407,8 +3411,8 @@
       671
     ],
     "Portofino Tower (NW)": [
-      1178,
-      564
+      1178.3,
+      568.3
     ],
     "Park@420 Lincoln Rd (SE)": [
       1354,
@@ -3489,6 +3493,10 @@
     "InterContinental Miami (N)": [
       3491,
       597
+    ],
+    "Portofino Tower (NE)": [
+      1124.7,
+      567.1
     ]
   },
   "Vice City Sign": {
@@ -4891,8 +4899,8 @@
       590
     ],
     "Prison Tower (3)": [
-      699,
-      590
+      697.0,
+      587.9
     ],
     "Island U (S)": [
       458,
@@ -7939,36 +7947,11 @@
   },
   "Police Chase (B)": {},
   "Police Chase (C)": {},
-  "Police Chase (E)": {
-    "White Billboard (Hamlet)": [
-      1271,
-      231.5
-    ]
-  },
-  "Police Chase (F)": {
-    "White Billboard (Hamlet)": [
-      1278,
-      223
-    ]
-  },
-  "Police Chase (G)": {
-    "White Billboard (Hamlet)": [
-      1280,
-      225
-    ]
-  },
-  "Police Chase (H)": {
-    "White Billboard (Hamlet)": [
-      1258,
-      210
-    ]
-  },
-  "Police Chase (I)": {
-    "White Billboard (Hamlet)": [
-      1282,
-      236
-    ]
-  },
+  "Police Chase (E)": {},
+  "Police Chase (F)": {},
+  "Police Chase (G)": {},
+  "Police Chase (H)": {},
+  "Police Chase (I)": {},
   "Street (Bikers) (B)": {
     "Four Seasons Hotel Miami (BW)": [
       192,
@@ -7999,6 +7982,20 @@
     "Island F (W)": [
       3621,
       875
+    ]
+  },
+  "Dominion Hotel": {
+    "Portofino Tower (NW)": [
+      239.0,
+      479.9
+    ],
+    "Hotel Breakwater (K)": [
+      130.0,
+      886.3
+    ],
+    "Hotel Breakwater": [
+      137.0,
+      755.3
     ]
   }
 }
