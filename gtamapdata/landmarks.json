@@ -2665,15 +2665,16 @@
   },
   "Sunshine Skyway Bridge (S)": {
     "xyz": [
-      -6686.7358,
-      4315.1191,
-      112.6069
+      -6690.837,
+      4348.569,
+      119.352
     ],
     "source_cameras": [
       "Chase (2) (A)"
     ],
     "error_m": null,
-    "zone": "port_gellhorn"
+    "zone": "port_gellhorn",
+    "notes": "[SUNSHINE-SKYWAY-RIGID-V1] xyz from SunshineSkywayBridge rigid model (was drift 34.37m)"
   },
   "Ambrosia Main St (A)": {
     "xyz": [
@@ -4476,16 +4477,17 @@
   },
   "Sunshine Skyway Bridge (N)": {
     "xyz": [
-      -6757.2704,
-      4566.5862,
-      119.4804
+      -6753.926,
+      4566.237,
+      119.352
     ],
     "source_cameras": [
       "Diner (W) (B)",
       "Ambrosia 04 (Fires)"
     ],
     "error_m": null,
-    "zone": "port_gellhorn"
+    "zone": "port_gellhorn",
+    "notes": "[SUNSHINE-SKYWAY-RIGID-V1] xyz from SunshineSkywayBridge rigid model (was drift 3.37m)"
   },
   "180 Pompano Dr": {
     "xyz": [
