@@ -134,6 +134,16 @@ def compute_projections(cam_name, xyz=None, ypr=None, hfov=None):
     cam_pixels = md.pixels.get(cam_name, {})
     result = []
 
+    # [VIRTUAL-LMS-V1] Include virtual LMs (no marker, e.g. building wireframes)
+    # for known prefixes. They get projected but no marked_pixel/delta.
+    VIRTUAL_PREFIXES = ('Portofino Tower (',)
+    virtual_lms_to_include = []
+    for lm_name in md.landmarks:
+        if lm_name in cam_pixels:
+            continue
+        if any(lm_name.startswith(p) for p in VIRTUAL_PREFIXES):
+            virtual_lms_to_include.append(lm_name)
+
     for lm_name, marked_pixel in cam_pixels.items():
         lm_xyz = md.landmarks.get(lm_name)
         meta = md.landmarks_meta.get(lm_name, {})
@@ -168,6 +178,30 @@ def compute_projections(cam_name, xyz=None, ypr=None, hfov=None):
             'has_xyz': lm_xyz is not None,
             'is_circular': is_circular,
             'error_m': err_m,
+        })
+
+    # [VIRTUAL-LMS-V1] Add virtual LMs (no marker, only projection)
+    for lm_name in virtual_lms_to_include:
+        lm_xyz = md.landmarks.get(lm_name)
+        proj = None
+        if lm_xyz:
+            try:
+                p = cam.get_pixel(lm_xyz)
+                if p is not None:
+                    proj = [round(float(p[0]), 2), round(float(p[1]), 2)]
+            except Exception:
+                pass
+        if proj is None:
+            continue  # behind camera or projection failed
+        result.append({
+            'name': lm_name,
+            'marked_pixel': None,
+            'projected': proj,
+            'delta': None,
+            'has_xyz': True,
+            'is_circular': False,
+            'error_m': 0.0,
+            'is_virtual': True,
         })
 
     all_d = [r['delta'] for r in result if r['delta'] is not None]

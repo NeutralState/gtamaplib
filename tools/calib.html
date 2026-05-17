@@ -2225,6 +2225,240 @@ window.addEventListener('keydown', e => {
   }
 });
 
+// [PORTOFINO-WIREFRAME-V4] Building wireframe overlay
+let showWireframes = true;
+const PORTOFINO_EDGES = [
+  ['Portofino Tower (B-frontL-NW)', 'Portofino Tower (K-frontL-NW)'],
+  ['Portofino Tower (K-frontL-NW)', 'Portofino Tower (L-frontL-NW)'],
+  ['Portofino Tower (L-frontL-NW)', 'Portofino Tower (P-frontL-NW)'],
+  ['Portofino Tower (B-frontR-NW)', 'Portofino Tower (K-frontR-NW)'],
+  ['Portofino Tower (K-frontR-NW)', 'Portofino Tower (L-frontR-NW)'],
+  ['Portofino Tower (L-frontR-NW)', 'Portofino Tower (P-frontR-NW)'],
+  ['Portofino Tower (B-innerL-NW)', 'Portofino Tower (K-innerL-NW)'],
+  ['Portofino Tower (K-innerL-NW)', 'Portofino Tower (L-innerL-NW)'],
+  ['Portofino Tower (L-innerL-NW)', 'Portofino Tower (P-innerL-NW)'],
+  ['Portofino Tower (B-innerR-NW)', 'Portofino Tower (K-innerR-NW)'],
+  ['Portofino Tower (K-innerR-NW)', 'Portofino Tower (L-innerR-NW)'],
+  ['Portofino Tower (L-innerR-NW)', 'Portofino Tower (P-innerR-NW)'],
+  ['Portofino Tower (B-frontL-NE)', 'Portofino Tower (K-frontL-NE)'],
+  ['Portofino Tower (K-frontL-NE)', 'Portofino Tower (L-frontL-NE)'],
+  ['Portofino Tower (L-frontL-NE)', 'Portofino Tower (P-frontL-NE)'],
+  ['Portofino Tower (B-frontR-NE)', 'Portofino Tower (K-frontR-NE)'],
+  ['Portofino Tower (K-frontR-NE)', 'Portofino Tower (L-frontR-NE)'],
+  ['Portofino Tower (L-frontR-NE)', 'Portofino Tower (P-frontR-NE)'],
+  ['Portofino Tower (B-innerL-NE)', 'Portofino Tower (K-innerL-NE)'],
+  ['Portofino Tower (K-innerL-NE)', 'Portofino Tower (L-innerL-NE)'],
+  ['Portofino Tower (L-innerL-NE)', 'Portofino Tower (P-innerL-NE)'],
+  ['Portofino Tower (B-innerR-NE)', 'Portofino Tower (K-innerR-NE)'],
+  ['Portofino Tower (K-innerR-NE)', 'Portofino Tower (L-innerR-NE)'],
+  ['Portofino Tower (L-innerR-NE)', 'Portofino Tower (P-innerR-NE)'],
+  ['Portofino Tower (B-frontL-S)', 'Portofino Tower (K-frontL-S)'],
+  ['Portofino Tower (K-frontL-S)', 'Portofino Tower (L-frontL-S)'],
+  ['Portofino Tower (L-frontL-S)', 'Portofino Tower (P-frontL-S)'],
+  ['Portofino Tower (B-frontR-S)', 'Portofino Tower (K-frontR-S)'],
+  ['Portofino Tower (K-frontR-S)', 'Portofino Tower (L-frontR-S)'],
+  ['Portofino Tower (L-frontR-S)', 'Portofino Tower (P-frontR-S)'],
+  ['Portofino Tower (B-innerL-S)', 'Portofino Tower (K-innerL-S)'],
+  ['Portofino Tower (K-innerL-S)', 'Portofino Tower (L-innerL-S)'],
+  ['Portofino Tower (L-innerL-S)', 'Portofino Tower (P-innerL-S)'],
+  ['Portofino Tower (B-innerR-S)', 'Portofino Tower (K-innerR-S)'],
+  ['Portofino Tower (K-innerR-S)', 'Portofino Tower (L-innerR-S)'],
+  ['Portofino Tower (L-innerR-S)', 'Portofino Tower (P-innerR-S)'],
+  ['Portofino Tower (B-frontL-NW)', 'Portofino Tower (B-innerL-NW)'],
+  ['Portofino Tower (B-innerL-NW)', 'Portofino Tower (B-innerR-NW)'],
+  ['Portofino Tower (B-innerR-NW)', 'Portofino Tower (B-frontR-NW)'],
+  ['Portofino Tower (B-frontR-NW)', 'Portofino Tower (B-frontL-NW)'],
+  ['Portofino Tower (K-frontL-NW)', 'Portofino Tower (K-innerL-NW)'],
+  ['Portofino Tower (K-innerL-NW)', 'Portofino Tower (K-innerR-NW)'],
+  ['Portofino Tower (K-innerR-NW)', 'Portofino Tower (K-frontR-NW)'],
+  ['Portofino Tower (K-frontR-NW)', 'Portofino Tower (K-frontL-NW)'],
+  ['Portofino Tower (L-frontL-NW)', 'Portofino Tower (L-innerL-NW)'],
+  ['Portofino Tower (L-innerL-NW)', 'Portofino Tower (L-innerR-NW)'],
+  ['Portofino Tower (L-innerR-NW)', 'Portofino Tower (L-frontR-NW)'],
+  ['Portofino Tower (L-frontR-NW)', 'Portofino Tower (L-frontL-NW)'],
+  ['Portofino Tower (P-frontL-NW)', 'Portofino Tower (P-innerL-NW)'],
+  ['Portofino Tower (P-innerL-NW)', 'Portofino Tower (P-innerR-NW)'],
+  ['Portofino Tower (P-innerR-NW)', 'Portofino Tower (P-frontR-NW)'],
+  ['Portofino Tower (P-frontR-NW)', 'Portofino Tower (P-frontL-NW)'],
+  ['Portofino Tower (B-frontL-NE)', 'Portofino Tower (B-innerL-NE)'],
+  ['Portofino Tower (B-innerL-NE)', 'Portofino Tower (B-innerR-NE)'],
+  ['Portofino Tower (B-innerR-NE)', 'Portofino Tower (B-frontR-NE)'],
+  ['Portofino Tower (B-frontR-NE)', 'Portofino Tower (B-frontL-NE)'],
+  ['Portofino Tower (K-frontL-NE)', 'Portofino Tower (K-innerL-NE)'],
+  ['Portofino Tower (K-innerL-NE)', 'Portofino Tower (K-innerR-NE)'],
+  ['Portofino Tower (K-innerR-NE)', 'Portofino Tower (K-frontR-NE)'],
+  ['Portofino Tower (K-frontR-NE)', 'Portofino Tower (K-frontL-NE)'],
+  ['Portofino Tower (L-frontL-NE)', 'Portofino Tower (L-innerL-NE)'],
+  ['Portofino Tower (L-innerL-NE)', 'Portofino Tower (L-innerR-NE)'],
+  ['Portofino Tower (L-innerR-NE)', 'Portofino Tower (L-frontR-NE)'],
+  ['Portofino Tower (L-frontR-NE)', 'Portofino Tower (L-frontL-NE)'],
+  ['Portofino Tower (P-frontL-NE)', 'Portofino Tower (P-innerL-NE)'],
+  ['Portofino Tower (P-innerL-NE)', 'Portofino Tower (P-innerR-NE)'],
+  ['Portofino Tower (P-innerR-NE)', 'Portofino Tower (P-frontR-NE)'],
+  ['Portofino Tower (P-frontR-NE)', 'Portofino Tower (P-frontL-NE)'],
+  ['Portofino Tower (B-frontL-S)', 'Portofino Tower (B-innerL-S)'],
+  ['Portofino Tower (B-innerL-S)', 'Portofino Tower (B-innerR-S)'],
+  ['Portofino Tower (B-innerR-S)', 'Portofino Tower (B-frontR-S)'],
+  ['Portofino Tower (B-frontR-S)', 'Portofino Tower (B-frontL-S)'],
+  ['Portofino Tower (K-frontL-S)', 'Portofino Tower (K-innerL-S)'],
+  ['Portofino Tower (K-innerL-S)', 'Portofino Tower (K-innerR-S)'],
+  ['Portofino Tower (K-innerR-S)', 'Portofino Tower (K-frontR-S)'],
+  ['Portofino Tower (K-frontR-S)', 'Portofino Tower (K-frontL-S)'],
+  ['Portofino Tower (L-frontL-S)', 'Portofino Tower (L-innerL-S)'],
+  ['Portofino Tower (L-innerL-S)', 'Portofino Tower (L-innerR-S)'],
+  ['Portofino Tower (L-innerR-S)', 'Portofino Tower (L-frontR-S)'],
+  ['Portofino Tower (L-frontR-S)', 'Portofino Tower (L-frontL-S)'],
+  ['Portofino Tower (P-frontL-S)', 'Portofino Tower (P-innerL-S)'],
+  ['Portofino Tower (P-innerL-S)', 'Portofino Tower (P-innerR-S)'],
+  ['Portofino Tower (P-innerR-S)', 'Portofino Tower (P-frontR-S)'],
+  ['Portofino Tower (P-frontR-S)', 'Portofino Tower (P-frontL-S)'],
+  ['Portofino Tower (PB-pbOL-NW)', 'Portofino Tower (PT-pbOL-NW)'],
+  ['Portofino Tower (PB-pbOR-NW)', 'Portofino Tower (PT-pbOR-NW)'],
+  ['Portofino Tower (PB-pbIL-NW)', 'Portofino Tower (PT-pbIL-NW)'],
+  ['Portofino Tower (PB-pbIR-NW)', 'Portofino Tower (PT-pbIR-NW)'],
+  ['Portofino Tower (PB-pbOL-NW)', 'Portofino Tower (PB-pbOR-NW)'],
+  ['Portofino Tower (PB-pbOR-NW)', 'Portofino Tower (PB-pbIR-NW)'],
+  ['Portofino Tower (PB-pbIR-NW)', 'Portofino Tower (PB-pbIL-NW)'],
+  ['Portofino Tower (PB-pbIL-NW)', 'Portofino Tower (PB-pbOL-NW)'],
+  ['Portofino Tower (PT-pbOL-NW)', 'Portofino Tower (PT-pbOR-NW)'],
+  ['Portofino Tower (PT-pbOR-NW)', 'Portofino Tower (PT-pbIR-NW)'],
+  ['Portofino Tower (PT-pbIR-NW)', 'Portofino Tower (PT-pbIL-NW)'],
+  ['Portofino Tower (PT-pbIL-NW)', 'Portofino Tower (PT-pbOL-NW)'],
+  ['Portofino Tower (PT-pbOL-NW)', 'Portofino Tower (NW)'],
+  ['Portofino Tower (PT-pbOR-NW)', 'Portofino Tower (NW)'],
+  ['Portofino Tower (PB-pbOL-NE)', 'Portofino Tower (PT-pbOL-NE)'],
+  ['Portofino Tower (PB-pbOR-NE)', 'Portofino Tower (PT-pbOR-NE)'],
+  ['Portofino Tower (PB-pbIL-NE)', 'Portofino Tower (PT-pbIL-NE)'],
+  ['Portofino Tower (PB-pbIR-NE)', 'Portofino Tower (PT-pbIR-NE)'],
+  ['Portofino Tower (PB-pbOL-NE)', 'Portofino Tower (PB-pbOR-NE)'],
+  ['Portofino Tower (PB-pbOR-NE)', 'Portofino Tower (PB-pbIR-NE)'],
+  ['Portofino Tower (PB-pbIR-NE)', 'Portofino Tower (PB-pbIL-NE)'],
+  ['Portofino Tower (PB-pbIL-NE)', 'Portofino Tower (PB-pbOL-NE)'],
+  ['Portofino Tower (PT-pbOL-NE)', 'Portofino Tower (PT-pbOR-NE)'],
+  ['Portofino Tower (PT-pbOR-NE)', 'Portofino Tower (PT-pbIR-NE)'],
+  ['Portofino Tower (PT-pbIR-NE)', 'Portofino Tower (PT-pbIL-NE)'],
+  ['Portofino Tower (PT-pbIL-NE)', 'Portofino Tower (PT-pbOL-NE)'],
+  ['Portofino Tower (PT-pbOL-NE)', 'Portofino Tower (NE)'],
+  ['Portofino Tower (PT-pbOR-NE)', 'Portofino Tower (NE)'],
+  ['Portofino Tower (PB-pbOL-S)', 'Portofino Tower (PT-pbOL-S)'],
+  ['Portofino Tower (PB-pbOR-S)', 'Portofino Tower (PT-pbOR-S)'],
+  ['Portofino Tower (PB-pbIL-S)', 'Portofino Tower (PT-pbIL-S)'],
+  ['Portofino Tower (PB-pbIR-S)', 'Portofino Tower (PT-pbIR-S)'],
+  ['Portofino Tower (PB-pbOL-S)', 'Portofino Tower (PB-pbOR-S)'],
+  ['Portofino Tower (PB-pbOR-S)', 'Portofino Tower (PB-pbIR-S)'],
+  ['Portofino Tower (PB-pbIR-S)', 'Portofino Tower (PB-pbIL-S)'],
+  ['Portofino Tower (PB-pbIL-S)', 'Portofino Tower (PB-pbOL-S)'],
+  ['Portofino Tower (PT-pbOL-S)', 'Portofino Tower (PT-pbOR-S)'],
+  ['Portofino Tower (PT-pbOR-S)', 'Portofino Tower (PT-pbIR-S)'],
+  ['Portofino Tower (PT-pbIR-S)', 'Portofino Tower (PT-pbIL-S)'],
+  ['Portofino Tower (PT-pbIL-S)', 'Portofino Tower (PT-pbOL-S)'],
+  ['Portofino Tower (PT-pbOL-S)', 'Portofino Tower (S)'],
+  ['Portofino Tower (PT-pbOR-S)', 'Portofino Tower (S)'],
+  ['Portofino Tower (cyl-B-cyl0)', 'Portofino Tower (cyl-K-cyl0)'],
+  ['Portofino Tower (cyl-K-cyl0)', 'Portofino Tower (cyl-L-cyl0)'],
+  ['Portofino Tower (cyl-L-cyl0)', 'Portofino Tower (cyl-P-cyl0)'],
+  ['Portofino Tower (cyl-P-cyl0)', 'Portofino Tower (cyl-CT-cyl0)'],
+  ['Portofino Tower (cyl-B-cyl1)', 'Portofino Tower (cyl-K-cyl1)'],
+  ['Portofino Tower (cyl-K-cyl1)', 'Portofino Tower (cyl-L-cyl1)'],
+  ['Portofino Tower (cyl-L-cyl1)', 'Portofino Tower (cyl-P-cyl1)'],
+  ['Portofino Tower (cyl-P-cyl1)', 'Portofino Tower (cyl-CT-cyl1)'],
+  ['Portofino Tower (cyl-B-cyl2)', 'Portofino Tower (cyl-K-cyl2)'],
+  ['Portofino Tower (cyl-K-cyl2)', 'Portofino Tower (cyl-L-cyl2)'],
+  ['Portofino Tower (cyl-L-cyl2)', 'Portofino Tower (cyl-P-cyl2)'],
+  ['Portofino Tower (cyl-P-cyl2)', 'Portofino Tower (cyl-CT-cyl2)'],
+  ['Portofino Tower (cyl-B-cyl3)', 'Portofino Tower (cyl-K-cyl3)'],
+  ['Portofino Tower (cyl-K-cyl3)', 'Portofino Tower (cyl-L-cyl3)'],
+  ['Portofino Tower (cyl-L-cyl3)', 'Portofino Tower (cyl-P-cyl3)'],
+  ['Portofino Tower (cyl-P-cyl3)', 'Portofino Tower (cyl-CT-cyl3)'],
+  ['Portofino Tower (cyl-B-cyl4)', 'Portofino Tower (cyl-K-cyl4)'],
+  ['Portofino Tower (cyl-K-cyl4)', 'Portofino Tower (cyl-L-cyl4)'],
+  ['Portofino Tower (cyl-L-cyl4)', 'Portofino Tower (cyl-P-cyl4)'],
+  ['Portofino Tower (cyl-P-cyl4)', 'Portofino Tower (cyl-CT-cyl4)'],
+  ['Portofino Tower (cyl-B-cyl5)', 'Portofino Tower (cyl-K-cyl5)'],
+  ['Portofino Tower (cyl-K-cyl5)', 'Portofino Tower (cyl-L-cyl5)'],
+  ['Portofino Tower (cyl-L-cyl5)', 'Portofino Tower (cyl-P-cyl5)'],
+  ['Portofino Tower (cyl-P-cyl5)', 'Portofino Tower (cyl-CT-cyl5)'],
+  ['Portofino Tower (cyl-B-cyl6)', 'Portofino Tower (cyl-K-cyl6)'],
+  ['Portofino Tower (cyl-K-cyl6)', 'Portofino Tower (cyl-L-cyl6)'],
+  ['Portofino Tower (cyl-L-cyl6)', 'Portofino Tower (cyl-P-cyl6)'],
+  ['Portofino Tower (cyl-P-cyl6)', 'Portofino Tower (cyl-CT-cyl6)'],
+  ['Portofino Tower (cyl-B-cyl7)', 'Portofino Tower (cyl-K-cyl7)'],
+  ['Portofino Tower (cyl-K-cyl7)', 'Portofino Tower (cyl-L-cyl7)'],
+  ['Portofino Tower (cyl-L-cyl7)', 'Portofino Tower (cyl-P-cyl7)'],
+  ['Portofino Tower (cyl-P-cyl7)', 'Portofino Tower (cyl-CT-cyl7)'],
+  ['Portofino Tower (cyl-B-cyl0)', 'Portofino Tower (cyl-B-cyl1)'],
+  ['Portofino Tower (cyl-B-cyl1)', 'Portofino Tower (cyl-B-cyl2)'],
+  ['Portofino Tower (cyl-B-cyl2)', 'Portofino Tower (cyl-B-cyl3)'],
+  ['Portofino Tower (cyl-B-cyl3)', 'Portofino Tower (cyl-B-cyl4)'],
+  ['Portofino Tower (cyl-B-cyl4)', 'Portofino Tower (cyl-B-cyl5)'],
+  ['Portofino Tower (cyl-B-cyl5)', 'Portofino Tower (cyl-B-cyl6)'],
+  ['Portofino Tower (cyl-B-cyl6)', 'Portofino Tower (cyl-B-cyl7)'],
+  ['Portofino Tower (cyl-B-cyl7)', 'Portofino Tower (cyl-B-cyl0)'],
+  ['Portofino Tower (cyl-K-cyl0)', 'Portofino Tower (cyl-K-cyl1)'],
+  ['Portofino Tower (cyl-K-cyl1)', 'Portofino Tower (cyl-K-cyl2)'],
+  ['Portofino Tower (cyl-K-cyl2)', 'Portofino Tower (cyl-K-cyl3)'],
+  ['Portofino Tower (cyl-K-cyl3)', 'Portofino Tower (cyl-K-cyl4)'],
+  ['Portofino Tower (cyl-K-cyl4)', 'Portofino Tower (cyl-K-cyl5)'],
+  ['Portofino Tower (cyl-K-cyl5)', 'Portofino Tower (cyl-K-cyl6)'],
+  ['Portofino Tower (cyl-K-cyl6)', 'Portofino Tower (cyl-K-cyl7)'],
+  ['Portofino Tower (cyl-K-cyl7)', 'Portofino Tower (cyl-K-cyl0)'],
+  ['Portofino Tower (cyl-L-cyl0)', 'Portofino Tower (cyl-L-cyl1)'],
+  ['Portofino Tower (cyl-L-cyl1)', 'Portofino Tower (cyl-L-cyl2)'],
+  ['Portofino Tower (cyl-L-cyl2)', 'Portofino Tower (cyl-L-cyl3)'],
+  ['Portofino Tower (cyl-L-cyl3)', 'Portofino Tower (cyl-L-cyl4)'],
+  ['Portofino Tower (cyl-L-cyl4)', 'Portofino Tower (cyl-L-cyl5)'],
+  ['Portofino Tower (cyl-L-cyl5)', 'Portofino Tower (cyl-L-cyl6)'],
+  ['Portofino Tower (cyl-L-cyl6)', 'Portofino Tower (cyl-L-cyl7)'],
+  ['Portofino Tower (cyl-L-cyl7)', 'Portofino Tower (cyl-L-cyl0)'],
+  ['Portofino Tower (cyl-P-cyl0)', 'Portofino Tower (cyl-P-cyl1)'],
+  ['Portofino Tower (cyl-P-cyl1)', 'Portofino Tower (cyl-P-cyl2)'],
+  ['Portofino Tower (cyl-P-cyl2)', 'Portofino Tower (cyl-P-cyl3)'],
+  ['Portofino Tower (cyl-P-cyl3)', 'Portofino Tower (cyl-P-cyl4)'],
+  ['Portofino Tower (cyl-P-cyl4)', 'Portofino Tower (cyl-P-cyl5)'],
+  ['Portofino Tower (cyl-P-cyl5)', 'Portofino Tower (cyl-P-cyl6)'],
+  ['Portofino Tower (cyl-P-cyl6)', 'Portofino Tower (cyl-P-cyl7)'],
+  ['Portofino Tower (cyl-P-cyl7)', 'Portofino Tower (cyl-P-cyl0)'],
+  ['Portofino Tower (cyl-CT-cyl0)', 'Portofino Tower (cyl-CT-cyl1)'],
+  ['Portofino Tower (cyl-CT-cyl1)', 'Portofino Tower (cyl-CT-cyl2)'],
+  ['Portofino Tower (cyl-CT-cyl2)', 'Portofino Tower (cyl-CT-cyl3)'],
+  ['Portofino Tower (cyl-CT-cyl3)', 'Portofino Tower (cyl-CT-cyl4)'],
+  ['Portofino Tower (cyl-CT-cyl4)', 'Portofino Tower (cyl-CT-cyl5)'],
+  ['Portofino Tower (cyl-CT-cyl5)', 'Portofino Tower (cyl-CT-cyl6)'],
+  ['Portofino Tower (cyl-CT-cyl6)', 'Portofino Tower (cyl-CT-cyl7)'],
+  ['Portofino Tower (cyl-CT-cyl7)', 'Portofino Tower (cyl-CT-cyl0)']
+];
+
+const BUILDING_WIREFRAMES = [
+  { name: 'Portofino Tower', edges: PORTOFINO_EDGES, color: '#ff9d3d' },
+];
+
+function drawBuildingWireframes() {
+  if (!showWireframes) return;
+  if (!projections.length) return;
+
+  const projMap = {};
+  for (const p of projections) {
+    if (p.projected) projMap[p.name] = p.projected;
+  }
+
+  for (const bld of BUILDING_WIREFRAMES) {
+    ctx.strokeStyle = bld.color;
+    ctx.lineWidth = 1;
+    ctx.globalAlpha = 0.65;
+    ctx.beginPath();
+    for (const [a, b] of bld.edges) {
+      const pa = projMap[a], pb = projMap[b];
+      if (!pa || !pb) continue;
+      const [x1, y1] = toCanvas(pa[0], pa[1]);
+      const [x2, y2] = toCanvas(pb[0], pb[1]);
+      ctx.moveTo(x1, y1);
+      ctx.lineTo(x2, y2);
+    }
+    ctx.stroke();
+    ctx.globalAlpha = 1;
+  }
+}
+
 function draw() {
   ctx.clearRect(0, 0, overlay.width, overlay.height);
   drawVerticals();  // VERTICALS-FE-V1
@@ -2238,6 +2472,9 @@ function draw() {
     frameImg.style.cssText = `position:absolute;left:${left}px;top:${top}px;width:${w}px;height:${h}px;object-fit:fill;pointer-events:none`;
   }
   if (!projections.length) return;
+
+  // [PORTOFINO-WIREFRAME-V1] Draw building wireframes before markers
+  drawBuildingWireframes();
 
   projections.forEach(lm => {
     const hi = hoveredLm === lm.name || selectedLm === lm.name;

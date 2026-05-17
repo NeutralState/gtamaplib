@@ -165,22 +165,44 @@ _FS_LM_MAP = {
 }
 _fs_lms_present = {n: np.array(xyz) for n, xyz in _FS_LM_MAP.items() if n in md.landmarks}
 
-# [PORTOFINO-RIGID-V1-EXTENDED] Portofino Tower (rectangular tower, 3 peaks + base + mid)
+# [PORTOFINO-RIGID-V2] Portofino Tower (3-branch star at 120deg, 5 levels)
 _PORTOFINO_LM_MAP = {
-    # Top (z~143, building roof)
-    "Portofino Tower (NW)": (1721.0972, -196.0548, 143.8115),
-    "Portofino Tower (NE)": (1754.8467, -182.0969, 143.3691),
-    "Portofino Tower (S)":  (1734.5771, -223.9029, 140.3028),
-    "Portofino Tower (T)":  (1736.8403, -200.6849, 142.4945),
-    # Mid (z=70, ~floor 21)
-    "Portofino Tower (M-NW)": (1721.0972, -196.0548, 70.0000),
-    "Portofino Tower (M-NE)": (1754.8467, -182.0969, 70.0000),
-    "Portofino Tower (M-S)":  (1734.5771, -223.9029, 70.0000),
-    # Base (z=0, ground)
-    "Portofino Tower (B-NW)": (1721.0972, -196.0548, 0.0000),
-    "Portofino Tower (B-NE)": (1754.8467, -182.0969, 0.0000),
-    "Portofino Tower (B-S)":  (1734.5771, -223.9029, 0.0000),
-    "Portofino Tower (B)":    (1736.8403, -200.6849, 0.0000),
+    # Top peaks (z~142, LEAK-sourced)
+    "Portofino Tower (NW)": (1721.1006, -196.0531, 143.8091),
+    "Portofino Tower (NE)": (1754.8517, -182.0989, 143.3679),
+    "Portofino Tower (S)":  (1734.5777, -223.9029, 140.3034),
+    # Base (z=0)
+    "Portofino Tower (BL-NW)": (1718.4210, -205.1606, 0.0000),
+    "Portofino Tower (BR-NW)": (1723.7802, -186.9456, 0.0000),
+    "Portofino Tower (BL-NE)": (1748.0336, -175.4928, 0.0000),
+    "Portofino Tower (BR-NE)": (1761.6698, -188.7050, 0.0000),
+    "Portofino Tower (BL-S)":  (1744.0263, -224.8249, 0.0000),
+    "Portofino Tower (BR-S)":  (1725.1291, -222.9809, 0.0000),
+    "Portofino Tower (B-C)":   (1736.8433, -200.6850, 0.0000),
+    # Podium top (z=30)
+    "Portofino Tower (PL-NW)": (1718.4210, -205.1606, 30.0000),
+    "Portofino Tower (PR-NW)": (1723.7802, -186.9456, 30.0000),
+    "Portofino Tower (PL-NE)": (1748.0336, -175.4928, 30.0000),
+    "Portofino Tower (PR-NE)": (1761.6698, -188.7050, 30.0000),
+    "Portofino Tower (PL-S)":  (1744.0263, -224.8249, 30.0000),
+    "Portofino Tower (PR-S)":  (1725.1291, -222.9809, 30.0000),
+    "Portofino Tower (P-C)":   (1736.8433, -200.6850, 30.0000),
+    # Mid break (z=90)
+    "Portofino Tower (ML-NW)": (1718.4210, -205.1606, 90.0000),
+    "Portofino Tower (MR-NW)": (1723.7802, -186.9456, 90.0000),
+    "Portofino Tower (ML-NE)": (1748.0336, -175.4928, 90.0000),
+    "Portofino Tower (MR-NE)": (1761.6698, -188.7050, 90.0000),
+    "Portofino Tower (ML-S)":  (1744.0263, -224.8249, 90.0000),
+    "Portofino Tower (MR-S)":  (1725.1291, -222.9809, 90.0000),
+    "Portofino Tower (M-C)":   (1736.8433, -200.6850, 90.0000),
+    # High / branches start (z=110)
+    "Portofino Tower (HL-NW)": (1718.4210, -205.1606, 110.0000),
+    "Portofino Tower (HR-NW)": (1723.7802, -186.9456, 110.0000),
+    "Portofino Tower (HL-NE)": (1748.0336, -175.4928, 110.0000),
+    "Portofino Tower (HR-NE)": (1761.6698, -188.7050, 110.0000),
+    "Portofino Tower (HL-S)":  (1744.0263, -224.8249, 110.0000),
+    "Portofino Tower (HR-S)":  (1725.1291, -222.9809, 110.0000),
+    "Portofino Tower (H-C)":   (1736.8433, -200.6850, 110.0000),
 }
 _portofino_lms_present = {n: np.array(xyz) for n, xyz in _PORTOFINO_LM_MAP.items() if n in md.landmarks}
 
