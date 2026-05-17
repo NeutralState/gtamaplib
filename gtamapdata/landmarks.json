@@ -10180,5 +10180,18 @@
     "source_cameras": [],
     "error_m": 0.0,
     "zone": "vice_city"
+  },
+  "Hotel Victor (NE)": {
+    "xyz": [
+      1974.8244,
+      746.3071,
+      40.0393
+    ],
+    "source_cameras": [
+      "Vice Beach (A)",
+      "Vice Beach (B)"
+    ],
+    "error_m": 4.8498,
+    "zone": "vice_city"
   }
 }
