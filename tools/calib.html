@@ -2513,8 +2513,8 @@ function draw() {
       }
     }
 
-    // Projected cross (independent only)
-    if (lm.projected && !lm.is_circular) {
+    // Projected cross (independent only, skip virtual LMs for wireframes)
+    if (lm.projected && !lm.is_circular && !lm.is_virtual) {
       const [px, py] = toCanvas(lm.projected[0], lm.projected[1]);
       const s = hi ? 8 : 5;
       ctx.beginPath();
