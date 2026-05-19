@@ -228,7 +228,7 @@ def pixel_error(cam, lm_xyz, mp):
         return 1000.0
 
 
-def optimize_camera(cam_name, xyz, ypr, hfov):
+def optimize_camera(cam_name, xyz, ypr, hfov, leak_mode=False):
     """
     Refines a single camera's xyz + ypr + hfov using scipy.least_squares
     with the trust region reflective method and huber loss. Huber loss
@@ -325,10 +325,19 @@ def optimize_camera(cam_name, xyz, ypr, hfov):
     # Absolute z clipping: never below -5m (sea level + tolerance) or
     # above 500m. This prevents under-constrained cams (e.g. 3 obs) from
     # finding solutions like z=-24m (submarine yacht).
-    lb = np.array([xyz[0]-300, xyz[1]-300, max(xyz[2]-50, -5.0),
-                   ypr[0]-90, ypr[1]-60, ypr[2]-5.0, 20.0])
-    ub = np.array([xyz[0]+300, xyz[1]+300, min(xyz[2]+50, 500.0),
-                   ypr[0]+90, ypr[1]+60, ypr[2]+5.0, 130.0])
+    # LEAK-MODE-V1: when leak_mode=True, xyz + hfov are immutable (leak cams
+    # have known positions and FOVs). Only yaw/pitch/roll can adjust.
+    if leak_mode:
+        eps = 1e-4
+        lb = np.array([xyz[0]-eps, xyz[1]-eps, xyz[2]-eps,
+                       ypr[0]-90, ypr[1]-60, ypr[2]-5.0, hfov-eps])
+        ub = np.array([xyz[0]+eps, xyz[1]+eps, xyz[2]+eps,
+                       ypr[0]+90, ypr[1]+60, ypr[2]+5.0, hfov+eps])
+    else:
+        lb = np.array([xyz[0]-300, xyz[1]-300, max(xyz[2]-50, -5.0),
+                       ypr[0]-90, ypr[1]-60, ypr[2]-5.0, 20.0])
+        ub = np.array([xyz[0]+300, xyz[1]+300, min(xyz[2]+50, 500.0),
+                       ypr[0]+90, ypr[1]+60, ypr[2]+5.0, 130.0])
 
     try:
         result = least_squares(
@@ -742,8 +751,11 @@ class Handler(BaseHTTPRequestHandler):
             ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]),
                    float(qs.get('roll', ['0.0'])[0])]
             hfov = float(qs['hfov'][0])
-            print(f"Optimizing {cam_name}...")
-            res, err = optimize_camera(cam_name, xyz, ypr, hfov)
+            # LEAK-MODE-V1: optional flag — xyz and hfov frozen, only yaw/pitch/roll optimize
+            leak_mode = qs.get('leak_mode', ['false'])[0].lower() == 'true'
+            mode_str = " (LEAK MODE — yaw/pitch/roll only)" if leak_mode else ""
+            print(f"Optimizing {cam_name}{mode_str}...")
+            res, err = optimize_camera(cam_name, xyz, ypr, hfov, leak_mode=leak_mode)
             if err:
                 self.send_json({'error': err}, 400)
             else:

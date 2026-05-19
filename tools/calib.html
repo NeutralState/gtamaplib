@@ -1913,8 +1913,8 @@ async function loadProjections() {
   // Handle leak cam
   const isLeak = /^\d{4}-\d{2}-\d{2}/.test(camData.source || '');
   document.getElementById('chip-all').style.opacity = isLeak ? '0.4' : '1';
-  btnOpt.disabled = isLeak;
-  btnOpt.title = isLeak ? 'Leak cam — params are ground truth' : '';
+  btnOpt.disabled = false;
+  btnOpt.title = isLeak ? 'Leak cam — only yaw/pitch/roll will be optimized (xyz + hfov frozen)' : '';
   if (isLeak) {
     lossAll.textContent = 'leak cam';
     document.getElementById('chip-all').style.borderColor = '#4ade80';
@@ -1931,7 +1931,7 @@ async function loadProjections() {
     chipAll.className = 'chip';
     chipAll.style.borderColor = '#4ade80';
     chipAll.style.color = '#4ade80';
-    btnOpt.disabled = true;
+    btnOpt.disabled = false;
   } else {
     chipAll.style.borderColor = '';
     chipAll.style.color = '';
@@ -1996,7 +1996,9 @@ btnOpt.addEventListener('click', async () => {
   btnOpt.classList.add('running');
   btnOpt.disabled = true;
 
-  const url = `/api/optimize?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&roll=${params.roll}&hfov=${params.hfov}`;
+  const isLeakOpt = camData && /^\d{4}-\d{2}-\d{2}/.test(camData.source || '');
+  const leakParam = isLeakOpt ? '&leak_mode=true' : '';
+  const url = `/api/optimize?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&roll=${params.roll}&hfov=${params.hfov}${leakParam}`;
   const data = await fetch(url).then(r => r.json());
 
   optimizing = false;
