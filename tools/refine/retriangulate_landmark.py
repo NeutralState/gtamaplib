@@ -37,7 +37,7 @@ MIN_TRIANGULATION_BASELINE_DEG = 5.0  # warn if all pairs have baseline below th
 
 # Optional manual override: for LMs with known problematic pixels on some cams,
 # hardcode which cams to use. Loaded from tools/generated/manual_triangulation_sources.json
-MANUAL_SOURCES_PATH = os.path.join(GTAMAP_DIR, "tools", "generated", "manual_triangulation_sources.json")
+MANUAL_SOURCES_PATH = os.path.join(GTAMAP_DIR, "tools", "data", "manual_triangulation_sources.json")
 MANUAL_SOURCES = {}
 if os.path.exists(MANUAL_SOURCES_PATH):
     with open(MANUAL_SOURCES_PATH) as _f:
