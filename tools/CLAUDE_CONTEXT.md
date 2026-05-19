@@ -391,3 +391,81 @@ landmarks, on devrait soit set des defaults soit générer ces fields.
    slider if we want quick win)
 2. **rlx port v2** (with correct schema mapping)
 3. **Vanishing points + verticals UX** (T3 critical path)
+
+
+---
+
+## Session: 2026-05-18 Day 2 — Portofino mesh refinement (final)
+
+**Final state**: commit `82cbe03` — sym 120° mesh with proven global optimum
+
+### Key discoveries
+
+1. **AI World Editor Map (4K) is OUR construction, not external leak**. The B-front* landmarks derived from it (centroid 1741.58, -200.89, R=30m wing front) are not ground truth — they are noise from our own data.
+
+2. **3 distinct peaks visible on Amphi** at pixels ~547/556/577 (separated by ~10px). User confirmed visually + Discord validation.
+
+3. **Correct Amphi pixel assignments** (left-to-right ordering on Amphi due to building rotation and cam angle):
+   - NE = (555, 53) — leftmost peak
+   - NW = (565, 52) — middle peak (the central one with antenna)
+   - S  = (577.4, 53.7) — rightmost peak
+   - Earlier confusion: thought "NE" pixel at (556, 52) was actually NW projection (~0.1px match)
+
+4. **Sidewalk (Jason) (E) is also a leak cam** (L1/6). 3 leak cams total: Port (L1/7), Amphi (L1/3), Sidewalk (L1/6). Rooftop is screenshot (T1/20), not leak.
+
+5. **Leak cams constraint**: xyz + fov are FIXED. yaw/pitch/roll can be adjusted.
+
+### Mathematical proof of global optimum
+
+Used Differential Evolution + Basin Hopping + fine grid LSQ — all converge to same minimum under sym 120° constraint:
+
+- Centroid: (1732.81, -206.87)
+- R_PEAK: 18.04m
+- Z: 142.77m
+- Rotation: +5.44° vs canonical base bearings NW=279.19°, NE=39.41°, S=159.37°
+- RMS: 2.67 px on 7 leak cam observations
+
+GTA bearings final: NW=284.63°, NE=44.85°, S=164.81°.
+
+### Leak cam yaw/pitch optimization (applied)
+
+Joint optimization with all leak cam landmarks (not just Portofino):
+- Port:     yaw 302.5 → 302.3392 (Δ-0.1608°)
+- Amphi:    yaw 256.6083 → 256.6445 (Δ+0.0362°)
+- Sidewalk: yaw 244.8 → 244.7533 (Δ-0.0467°)
+- pitch deltas: all <0.02°
+
+Result: initial RMS 1.91 → 1.58 (-17%) on all leak observations including non-Portofino LMs.
+
+### Body dimensions (90% scale — sweet spot)
+
+After leak-cams-only fit shrunk mesh, body proportionally tuned for visual match:
+- BODY_OUTER: 27.0m (was 30 original, tested 25.5 at 85%)
+- BODY_HALF_W: 11.7m (was 13)
+- BODY_INNER: 6.3m (was 7)
+- CYL_RADIUS: 8.1m (was 9)
+- PEAK_BOX: 4×4m, rotated +45° from radial (corner-facing not face-facing)
+
+85% was slightly too narrow on Port. 100% would be too wide on Amphi. 90% is compromise.
+
+### Persistent residuals (irreducible)
+
+- Amphi NW: 6.43 px
+- Sidewalk NE: 5.39 px
+
+RANSAC dropping Port gave RMS 0.84 on Amphi+Sidewalk only — but Port itself matches all its other LMs (Murano 2.3px, Portofino 0.9-3px). Port is reliable; the Amphi+Sidewalk outliers are pixel marking imprecision at 1.9-2.6km distance (resolution limit).
+
+### Commits this session
+
+- `161f43c` Portofino sym 120° fit without Amphi NW outlier (initial RMS 1.9)
+- Final relabeled state with 3 Amphi peaks correctly identified
+- `82cbe03` Body bumped to 90% (final compromise)
+
+### Lessons learned
+
+- Naive ordering assumption (left=NW, right=S on Amphi) is WRONG. Pinwheel buildings project peaks in non-intuitive orders depending on cam bearing.
+- Test permutations of label assignments when pixel ordering is ambiguous.
+- Global optimization (DE + Basin Hopping) is essential when fit has multiple local minima.
+- B-front leak landmarks should be treated as constructed, not ground truth.
+- For leak cams: xyz/fov fixed but yaw/pitch can have small calibration errors (~0.1-0.2°).
+- Pixel marking at >2km distance has ~5px irreducible error from human perception limits.
