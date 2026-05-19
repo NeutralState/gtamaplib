@@ -32,6 +32,18 @@ import gtamapdata as md
 
 LANDMARKS_PATH = os.path.join(GTAMAP_DIR, "gtamapdata", "landmarks.json")
 
+# ── Quality thresholds (inspired by gtamaplib-vc) ─────────────────────────────
+MIN_TRIANGULATION_BASELINE_DEG = 5.0  # warn if all pairs have baseline below this
+
+# Optional manual override: for LMs with known problematic pixels on some cams,
+# hardcode which cams to use. Loaded from tools/generated/manual_triangulation_sources.json
+MANUAL_SOURCES_PATH = os.path.join(GTAMAP_DIR, "tools", "generated", "manual_triangulation_sources.json")
+MANUAL_SOURCES = {}
+if os.path.exists(MANUAL_SOURCES_PATH):
+    with open(MANUAL_SOURCES_PATH) as _f:
+        MANUAL_SOURCES = json.load(_f)
+
+
 parser = argparse.ArgumentParser()
 parser.add_argument('landmark')
 parser.add_argument('--apply', action='store_true')
@@ -57,6 +69,15 @@ for cam_name, pxs in md.pixels.items():
     if not cam_data or not cam_data.get('xyz'):
         continue
     observing.append((cam_name, pxs[LM]))
+
+
+# Apply manual source override if present
+if LM in MANUAL_SOURCES:
+    allowed = set(MANUAL_SOURCES[LM])
+    before = len(observing)
+    observing = [(cn, p) for cn, p in observing if cn in allowed]
+    if len(observing) < before:
+        print(f"\n[MANUAL OVERRIDE] {LM}: restricted to {sorted(allowed)} ({before} → {len(observing)} cams)")
 
 if len(observing) < 2:
     print(f"ERROR: only {len(observing)} usable cameras observe {LM} — need at least 2")
@@ -84,6 +105,34 @@ for cam_name, _ in observing:
     direction = direction / np.linalg.norm(direction)
     origin = np.asarray(cam.xyz, dtype=float)
     rays.append((cam_name, origin, direction))
+
+
+# ── Baseline check: warn if rays are too parallel ────────────────────────────
+# When 2 cams view a LM with rays nearly parallel (< 5° apart), triangulation
+# is numerically fragile (small pixel error → huge position error).
+print(f"\nRay baseline analysis (pairwise angles between cam→LM rays):")
+max_baseline = 0.0
+weak_pairs = []
+for i in range(len(rays)):
+    for j in range(i+1, len(rays)):
+        cn_i, _, d_i = rays[i]
+        cn_j, _, d_j = rays[j]
+        dot = float(np.clip(np.dot(d_i, d_j), -1, 1))
+        angle = np.degrees(np.arccos(abs(dot)))  # use abs for "angle between lines"
+        baseline = min(angle, 180.0 - angle)
+        max_baseline = max(max_baseline, baseline)
+        if baseline < MIN_TRIANGULATION_BASELINE_DEG:
+            weak_pairs.append((cn_i, cn_j, baseline))
+
+if weak_pairs:
+    print(f"  ⚠ {len(weak_pairs)} pair(s) with baseline < {MIN_TRIANGULATION_BASELINE_DEG}°:")
+    for ci, cj, b in weak_pairs[:5]:
+        print(f"    {ci} + {cj}: {b:.2f}°")
+if max_baseline < MIN_TRIANGULATION_BASELINE_DEG:
+    print(f"  ⚠ MAX baseline is only {max_baseline:.2f}° — triangulation will be fragile.")
+    print(f"  Result may be off by hundreds of meters. Consider adding a cam with wider angle.")
+else:
+    print(f"  Max baseline: {max_baseline:.2f}° (OK, > {MIN_TRIANGULATION_BASELINE_DEG}°)")
 
 # ── Solve: minimize sum of squared angular errors ─────────────────────────────
 # For each ray (o, d), the angular error from a candidate point p is:
