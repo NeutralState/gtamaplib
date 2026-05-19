@@ -316,6 +316,22 @@ if _portofino_lms_present:
 if not _rigid_bodies:
     print(f"  [RIGID-BODY-V1] No rigid body LMs in optimizable set; rigid bodies skipped")
 
+
+# ── Load rigid body freeze config ─────────────────────────────────────────────
+# Bodies listed in tools/data/rigid_body_config.json["frozen"] keep their
+# initial pose (identity transform) and aren't optimized. Useful when a body
+# has been manually fit to leak observations and shouldn't drift.
+import os as _os, json as _json
+_RIGID_FREEZE_PATH = _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))),
+                                    "tools", "data", "rigid_body_config.json")
+_FROZEN_BODIES = set()
+if _os.path.exists(_RIGID_FREEZE_PATH):
+    with open(_RIGID_FREEZE_PATH) as _f:
+        _cfg = _json.load(_f)
+        _FROZEN_BODIES = set(_cfg.get("frozen", []))
+        if _FROZEN_BODIES:
+            print(f"  [RIGID-BODY-FREEZE] Frozen bodies (identity transform): {sorted(_FROZEN_BODIES)}")
+
 # Remove rigid LMs from lm_idx and opt_lm_names; computed via rigid body params instead
 _rigid_lm_names = set(_lm_to_rigid_body.keys())
 _free_lm_names = [n for n in opt_lm_names if n not in _rigid_lm_names]
@@ -472,7 +488,11 @@ def pixel_residuals(x):
             body_params = x[rigid_offset:rigid_offset + 6]
             body = _rigid_bodies[body_id]
             local = body['lm_local_coords'][lm_name]
-            world = _transform_rigid_to_world(local, body['centroid'], body_params)
+            # If body is frozen, ignore optimizer's params and use identity (centroid + local)
+            if body_id in _FROZEN_BODIES:
+                world = body['centroid'] + local
+            else:
+                world = _transform_rigid_to_world(local, body['centroid'], body_params)
             lm_xyz = (float(world[0]), float(world[1]), float(world[2]))
         else:
             lm_xyz = _fixed_lm_xyz[lm_name]
