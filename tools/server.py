@@ -416,6 +416,20 @@ class Handler(BaseHTTPRequestHandler):
         elif path == '/cam_health.html':
             self.send_file(os.path.join(TOOL_DIR, 'cam_health.html'), 'text/html')
 
+        # [TILES-V1] isolated test page for new tile-based map renderer.
+        # Not linked from anywhere in the main UI — direct nav only.
+        elif path == '/map_view_v2.html':
+            self.send_file(os.path.join(TOOL_DIR, 'map_view_v2.html'), 'text/html')
+        elif path == '/map_view_v2.js':
+            self.send_file(os.path.join(TOOL_DIR, 'map_view_v2.js'), 'application/javascript')
+
+        # [TILES-V1] isolated test page for new tile-based map renderer.
+        # Not linked from anywhere in the main UI — direct nav only.
+        elif path == '/map_view_v2.html':
+            self.send_file(os.path.join(TOOL_DIR, 'map_view_v2.html'), 'text/html')
+        elif path == '/map_view_v2.js':
+            self.send_file(os.path.join(TOOL_DIR, 'map_view_v2.js'), 'application/javascript')
+
         # ── SVG Map Refactor (Phase 1) ─────────────────────────────
         # Two endpoints powering the new full-screen SVG map view.
         # See tools/CLAUDE_CONTEXT.md > "SVG Map View Refactor" for context.
