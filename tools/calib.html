@@ -156,10 +156,10 @@ body.tiles-on .map-png-wrap{display:none}  /* hide the legacy <img> when tiles o
    per-ray inline strokes due to SVG presentation-attr specificity).
    stroke-width also lowered (8 → 4) and opacity (.5 → .15) so the
    ray bundle reads as faint context, not a wall of color. */
-#map-overlay .ray-line{stroke-width:4;opacity:.15;pointer-events:none;transition:opacity .1s,stroke-width .1s}
-#map-overlay #rays-layer.lm-hover .ray-line{opacity:.08}
+#map-overlay .ray-line{stroke-width:7;opacity:.32;pointer-events:none;transition:opacity .1s,stroke-width .1s}
+#map-overlay #rays-layer.lm-hover .ray-line{opacity:.15}
 #map-overlay #rays-layer.lm-hover .ray-line.lm-hovered{opacity:.85;stroke-width:14}
-#map-overlay #rays-layer.cam-hover .ray-line{opacity:.55}
+#map-overlay #rays-layer.cam-hover .ray-line{opacity:.75}
 
 /* "Show all rays" toggle in the header, next to the view-toggle */
 .rays-toggle{font-family:var(--mono);font-size:11px;font-weight:700;padding:5px 10px;background:var(--surface2);color:var(--mid);border:1px solid var(--border);border-radius:5px;cursor:pointer;display:none}
