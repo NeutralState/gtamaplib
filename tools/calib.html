@@ -1225,7 +1225,7 @@ async function init() {
     const factor = e.deltaY < 0 ? 1.2 : 1 / 1.2;
     const sz = window.mapData.transform.svg_size;
     const minScale = Math.min(rect.width / sz[0], rect.height / sz[1]) * 0.5;
-    const maxScale = 50;
+    const maxScale = 2.0;  // [TILES-V1-CANVAS] cap zoom at exactly z=6 native (s=2 -> zoom=log2(64)=6.0) to avoid sub-pixel stretching drift
     let ns = Math.max(minScale, Math.min(maxScale, s * factor));
     // Adjust translate so the cursor stays over the same map point.
     const ntx = mx - (mx - tx) * (ns / s);
