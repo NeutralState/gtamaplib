@@ -156,6 +156,12 @@ body.view-map .rays-toggle{display:inline-block}
 .rays-toggle.active{background:var(--blue);color:#000;border-color:var(--blue)}
 .rays-toggle:hover{color:var(--text)}
 .rays-toggle.active:hover{color:#000}
+/* [HEATMAP-V1] heat toggle button (same style as rays) */
+.heat-toggle{font-family:var(--mono);font-size:11px;font-weight:700;padding:5px 10px;background:var(--surface2);color:var(--mid);border:1px solid var(--border);border-radius:5px;cursor:pointer;display:none}
+body.view-map .heat-toggle{display:inline-block}
+.heat-toggle.active{background:var(--yellow);color:#000;border-color:var(--yellow)}
+.heat-toggle:hover{color:var(--text)}
+.heat-toggle.active:hover{color:#000}
 
 /* Map tooltip — same look as the existing .tip but distinct id so it
    doesn't fight with the Camera view's hover tooltip. */
@@ -401,6 +407,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <button data-view="map" title="Map view (overview)">Map</button>
   </div>
   <button class="rays-toggle" id="rays-toggle" title="Show all rays from the selected cam to its landmarks">Rays</button>
+  <button class="heat-toggle" id="heat-toggle" title="Show loss landscape for the selected cam (heat map)">Heat</button>
   <span id="cam-meta"></span>
   <div class="chip" id="chip-all"><span style="color:var(--dim)">loss </span><span class="v" id="loss-all">—</span></div>
   <button class="btn btn-reset" id="btn-reset">Reset</button>
@@ -1384,6 +1391,70 @@ async function init() {
   // Rays from the selected cam to all its observed landmarks.
   // Toggle-controlled. Rebuilt on every cam change while toggle is on.
   let raysToggleOn = false;
+  
+  // [HEATMAP-V1] state for loss landscape overlay
+  let heatToggleOn = false;
+  const heatmapCache = {};  // cam_name -> samples array
+  
+  async function fetchHeatmap(camName) {
+    if (heatmapCache[camName]) return heatmapCache[camName];
+    try {
+      const r = await fetch(`/api/render_loss?cam=${encodeURIComponent(camName)}`);
+      const data = await r.json();
+      if (data.error) {
+        console.warn('Heatmap error:', data.error);
+        return null;
+      }
+      heatmapCache[camName] = data;
+      return data;
+    } catch (e) {
+      console.error('Heatmap fetch failed:', e);
+      return null;
+    }
+  }
+  
+  async function renderHeatmap() {
+    const SVG_NS = 'http://www.w3.org/2000/svg';
+    // Clear existing heatmap layer
+    const oldLayer = document.getElementById('heatmap-layer');
+    if (oldLayer) oldLayer.remove();
+    
+    if (!heatToggleOn || !mapSelectedCamName || !window.mapData) return;
+    
+    const data = await fetchHeatmap(mapSelectedCamName);
+    if (!data || !data.samples || !data.samples.length) return;
+    
+    const layer = document.createElementNS(SVG_NS, 'g');
+    layer.setAttribute('id', 'heatmap-layer');
+    layer.setAttribute('opacity', '0.5');
+    layer.style.pointerEvents = 'none';
+    
+    // Each sample is a cell of size `spacing` x `spacing` (in world meters)
+    const spacing = data.spacing || 10;
+    
+    for (const s of data.samples) {
+      const [sx, sy] = window.worldToSvg(s.x, s.y);
+      const [sx2, sy2] = window.worldToSvg(s.x + spacing, s.y + spacing);
+      const w = Math.abs(sx2 - sx);
+      const h = Math.abs(sy2 - sy);
+      
+      const rect = document.createElementNS(SVG_NS, 'rect');
+      rect.setAttribute('x', String(sx - w/2));
+      rect.setAttribute('y', String(sy - h/2));
+      rect.setAttribute('width', String(w));
+      rect.setAttribute('height', String(h));
+      const [r, g, b] = s.color;
+      rect.setAttribute('fill', `rgb(${r},${g},${b})`);
+      layer.appendChild(rect);
+    }
+    
+    // Insert FIRST in mapOverlay so it's behind cams/LMs/rays
+    if (window.mapOverlay.firstChild) {
+      window.mapOverlay.insertBefore(layer, window.mapOverlay.firstChild);
+    } else {
+      window.mapOverlay.appendChild(layer);
+    }
+  }
 
   function renderRaysForSelectedCam() {
     if (!window.mapOverlay) return;
@@ -1445,6 +1516,7 @@ async function init() {
       // Sync selected cam from the global #cam-sel.
       const sel = document.getElementById('cam-sel');
       mapSelectedCamName = sel && sel.value ? sel.value : null;
+      if (heatToggleOn) renderHeatmap();
       renderCamsOnMap();
       renderRaysForSelectedCam();
     }
@@ -1453,6 +1525,7 @@ async function init() {
   // Listen to cam-sel changes to update selection styling on the map.
   document.getElementById('cam-sel').addEventListener('change', () => {
     mapSelectedCamName = document.getElementById('cam-sel').value || null;
+    if (heatToggleOn) renderHeatmap();
     if (window.currentView === 'map') {
       updateMapSelectionStyle();
       renderRaysForSelectedCam();
@@ -1835,6 +1908,15 @@ async function init() {
   });
 
   // "Show all rays" toggle in the header.
+  const heatToggleBtn = document.getElementById('heat-toggle');
+  if (heatToggleBtn) {
+    heatToggleBtn.addEventListener('click', () => {
+      heatToggleOn = !heatToggleOn;
+      heatToggleBtn.classList.toggle('active', heatToggleOn);
+      renderHeatmap();
+    });
+  }
+  
   const raysToggleBtn = document.getElementById('rays-toggle');
   raysToggleBtn.addEventListener('click', () => {
     raysToggleOn = !raysToggleOn;

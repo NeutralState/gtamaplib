@@ -762,6 +762,46 @@ class Handler(BaseHTTPRequestHandler):
                 print(f"  loss={res['loss']} ({res['n_constraints']} constraints)")
                 self.send_json(res)
 
+        elif path == '/api/render_loss':
+            # [RENDER-LOSS-V1] Generate or load cached loss landscape for a cam.
+            # Returns JSON with samples {x, y, loss, color, params}.
+            # Optional ?force=true to regenerate (otherwise use cache).
+            cam_name = unquote(qs.get('cam', [''])[0])
+            if cam_name not in md.cameras:
+                self.send_json({'error': 'invalid cam'}, 400)
+                return
+            force = qs.get('force', ['false'])[0].lower() == 'true'
+            spacing = float(qs.get('spacing', ['10.0'])[0])
+            budget = int(qs.get('budget', ['150'])[0])
+            max_nfev = int(qs.get('max_nfev', ['100'])[0])
+            
+            # Cache path
+            safe_name = cam_name.replace('/', '_').replace(' ', '_').replace('(', '').replace(')', '')
+            cache_dir = os.path.join(os.path.dirname(__file__), 'generated', 'loss_renders')
+            os.makedirs(cache_dir, exist_ok=True)
+            cache_path = os.path.join(cache_dir, f'{safe_name}.json')
+            
+            if not force and os.path.exists(cache_path):
+                with open(cache_path) as f:
+                    data = json.load(f)
+                print(f"Render loss for {cam_name}: served from cache ({data.get('n_samples', 0)} samples)")
+                self.send_json(data)
+                return
+            
+            # Generate
+            print(f"Rendering loss for {cam_name} (spacing={spacing}m, budget={budget})...")
+            try:
+                import render_loss as rl_mod
+                data = rl_mod.render_loss_data(cam_name, spacing, budget, max_nfev, verbose=False)
+                with open(cache_path, 'w') as f:
+                    json.dump(data, f)
+                print(f"  done. {data['n_samples']} samples, loss [{data['loss_min']:.2f}, {data['loss_max']:.2f}]'")
+                self.send_json(data)
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                self.send_json({'error': str(e)}, 500)
+
         elif path == '/api/save':
             cam_name = unquote(qs.get('cam', [''])[0])
             if cam_name not in md.cameras:
