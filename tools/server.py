@@ -8,6 +8,7 @@ Open: http://localhost:8765
 import json
 import math
 import os
+import re
 import sys
 # Threading fix: parallel request handling
 from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer
@@ -17,6 +18,11 @@ GTAMAP_DIR = os.path.expanduser("~/Downloads/gtamaplib-main")
 DATA_DIR = os.path.join(GTAMAP_DIR, "gtamapdata")
 FRAMES_DIR = os.path.join(GTAMAP_DIR, "frames")
 TOOL_DIR = os.path.dirname(os.path.abspath(__file__))
+REPO_ROOT = os.path.dirname(TOOL_DIR)
+# [TILES-V1] gtadb.org tile checkout (sparse, vendored, gitignored).
+# Tiles are 256x256 JPGs at /vendor/gtadb.org/maps/tiles/6/yanis,12/{z}/{z},{y},{x}.jpg
+# 7 zoom levels (0-6). Served via /tiles/{z}/{filename} route.
+TILES_DIR = os.path.join(REPO_ROOT, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,12')
 
 sys.path.insert(0, GTAMAP_DIR)
 import gtamaplib as ml
@@ -433,6 +439,39 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header('Content-Length', len(data))
             # Asset is immutable — 1h cache.
             self.send_header('Cache-Control', 'public, max-age=3600')
+            self.end_headers()
+            self.wfile.write(data)
+
+        elif path.startswith('/tiles/'):
+            # [TILES-V1] Serve tile JPGs from vendor/gtadb.org/maps/tiles/6/yanis,12/
+            # URL pattern: /tiles/{z}/{z},{y},{x}.jpg  (z=0..6)
+            # Strict validation: only digits + commas + .jpg, no path traversal.
+            tile_rel = path[len('/tiles/'):]  # e.g. "3/3,10,0.jpg"
+            # Validate: must match exactly {z}/{z},{y},{x}.jpg with z 0-6
+            m = re.match(r'^([0-6])/([0-6]),(\d+),(\d+)\.jpg$', tile_rel)
+            if not m:
+                self.send_response(404)
+                self.end_headers()
+                self.wfile.write(b'invalid tile path')
+                return
+            z_dir, z_in, y, x = m.groups()
+            if z_dir != z_in:
+                # Defensive: filename z must match directory z
+                self.send_response(404)
+                self.end_headers()
+                return
+            tile_path = os.path.join(TILES_DIR, z_dir, f'{z_in},{y},{x}.jpg')
+            if not os.path.exists(tile_path):
+                self.send_response(404)
+                self.end_headers()
+                return
+            with open(tile_path, 'rb') as f:
+                data = f.read()
+            self.send_response(200)
+            self.send_header('Content-Type', 'image/jpeg')
+            self.send_header('Content-Length', len(data))
+            # Tiles are immutable content — aggressive cache.
+            self.send_header('Cache-Control', 'public, max-age=31536000, immutable')
             self.end_headers()
             self.wfile.write(data)
 
