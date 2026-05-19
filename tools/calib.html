@@ -4074,6 +4074,80 @@ window.addEventListener('load', () => {
     }
   }, 200);
 });
+
+// ── [MULTICAM-STEP1] Dual-pane comparison view ────────────────────────
+// Adds a 2nd cam preview pane alongside the main one. View-only for now:
+// no overlay, no click handlers, no pixel marking.
+(() => {
+  const btnDual = document.getElementById('dual-toggle');
+  const sel2    = document.getElementById('cam-sel-2');
+  const img2    = document.getElementById('frame-img-2');
+  const noImg2  = document.getElementById('no-img-2');
+  if (!btnDual || !sel2 || !img2) {
+    console.warn('[MULTICAM-STEP1] DOM not found');
+    return;
+  }
+  window.currentCam2 = null;
+
+  function populateCam2Dropdown() {
+    const mainSel = document.getElementById('cam-sel');
+    if (!mainSel) return;
+    const prevValue = sel2.value;
+    sel2.innerHTML = '<option value="">— Compare with —</option>';
+    for (const opt of mainSel.options) {
+      if (!opt.value) continue;
+      const clone = document.createElement('option');
+      clone.value = opt.value;
+      clone.textContent = opt.value;
+      sel2.appendChild(clone);
+    }
+    if (prevValue) sel2.value = prevValue;
+  }
+
+  function loadCam2Frame(camName) {
+    window.currentCam2 = camName || null;
+    if (!camName) {
+      img2.removeAttribute('src');
+      noImg2.style.display = 'flex';
+      noImg2.textContent = 'Select a camera';
+      return;
+    }
+    noImg2.style.display = 'flex';
+    noImg2.textContent = 'Loading…';
+    img2.src = `/frame/${encodeURIComponent(camName)}`;
+    img2.onload = () => { noImg2.style.display = 'none'; };
+    img2.onerror = () => { noImg2.textContent = 'No image'; };
+  }
+
+  sel2.addEventListener('change', () => loadCam2Frame(sel2.value));
+
+  btnDual.addEventListener('click', () => {
+    const on = !document.body.classList.contains('dual-cam');
+    document.body.classList.toggle('dual-cam', on);
+    btnDual.classList.toggle('active', on);
+    if (on) {
+      populateCam2Dropdown();
+      if (window.currentCam2) loadCam2Frame(window.currentCam2);
+    }
+    console.log('[MULTICAM-STEP1] dual mode:', on);
+  });
+
+  const mainSel = document.getElementById('cam-sel');
+  if (mainSel) {
+    const obs = new MutationObserver(() => {
+      if (document.body.classList.contains('dual-cam')) populateCam2Dropdown();
+    });
+    obs.observe(mainSel, { childList: true });
+  }
+
+  document.addEventListener('keydown', (e) => {
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA' || e.target.tagName === 'SELECT') return;
+    if (e.key === 'd' || e.key === 'D') btnDual.click();
+  });
+
+  console.log('[MULTICAM-STEP1] dual-pane wired up');
+})();
+// ── end [MULTICAM-STEP1] ──────────────────────────────────────────────
 </script>
 
 <!-- Phase 8.1: triangulation toast (top-center over map view). -->
