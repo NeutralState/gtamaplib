@@ -87,7 +87,7 @@ body.view-map #cam-preview-wrap{display:flex}
 /* Map view container — fills the canvas-wrap slot when active. Toggled via
    body.view-map class (set by setView() in JS). Camera-view-only sections
    in the right sidebar are hidden in Map view. */
-.map-view{flex:1;position:relative;background:#0a0a0c;overflow:hidden;display:none;cursor:grab}
+.map-view{flex:1;position:relative;background:#0a0a0c;overflow:hidden;display:none;cursor:grab;min-height:100vh}
 .map-view.dragging{cursor:grabbing}
 body.view-map .canvas-wrap{display:none}
 body.view-map .map-view{display:block}
@@ -125,6 +125,17 @@ body.view-map .sidebar .statusbar{display:none}
 .map-png-wrap > img{display:block;
   filter:grayscale(1) brightness(1.05) contrast(1.1);
   user-select:none;-webkit-user-drag:none;pointer-events:none}
+
+/* [TILES-V1-CANVAS] tile renderer canvas — sibling of .map-svg-wrap.
+   Sits BEHIND the SVG overlay, fills the .map-view viewport directly.
+   No CSS transform applied — pan/zoom is rendered internally via view state. */
+.map-tile-canvas{position:absolute;left:0;top:0;
+  width:100%;height:100%;
+  pointer-events:none;
+  filter:grayscale(1) brightness(1.05) contrast(1.1);
+  display:none}  /* hidden by default until user enables it via Tiles button */
+body.tiles-on .map-tile-canvas{display:block}
+body.tiles-on .map-png-wrap{display:none}  /* hide the legacy <img> when tiles on */
 .map-overlay-wrap > svg{display:block;pointer-events:none}
 
 /* Overlay interaction (same as Phase 5.3 but no .selected dot styling). */
@@ -408,6 +419,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   </div>
   <button class="rays-toggle" id="rays-toggle" title="Show all rays from the selected cam to its landmarks">Rays</button>
   <button class="heat-toggle" id="heat-toggle" title="Show loss landscape for the selected cam (heat map)">Heat</button>
+
   <span id="cam-meta"></span>
   <div class="chip" id="chip-all"><span style="color:var(--dim)">loss </span><span class="v" id="loss-all">—</span></div>
   <button class="btn btn-reset" id="btn-reset">Reset</button>
@@ -484,6 +496,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   </div>
 
   <div class="map-view" id="map-view">
+    <!-- [TILES-V1-CANVAS] tile renderer behind the SVG overlay -->
+    <canvas class="map-tile-canvas" id="map-tile-canvas"></canvas>
     <div class="map-svg-wrap" id="map-svg-wrap"></div>
     <div class="map-loading" id="map-loading">Loading yanis map…</div>
   </div>
@@ -1017,7 +1031,173 @@ async function init() {
     if (window.mapPngWrap)     window.mapPngWrap.style.transform = t;
     if (window.mapOverlayWrap) window.mapOverlayWrap.style.transform = t;
     updateDotSizes();
+    // [TILES-V1-CANVAS] also re-render the tile canvas if active
+    if (window.tilesRender) window.tilesRender();
   }
+
+  // [TILES-V1-CANVAS] Tile renderer state & functions ─────────────────────
+  //
+  // Renders the rlx gtadb.org tile pyramid into a canvas that sits behind
+  // the SVG overlay. The canvas is viewport-sized; pan/zoom is rendered
+  // internally via a derived view state (centerX, centerY, zoom in world coords).
+  //
+  // Coord conversion:
+  //   - .map-overlay-wrap has CSS transform: translate(tx,ty) scale(s)
+  //     where (tx,ty) is in screen px and s is the SVG-to-screen scale.
+  //   - SVG point (x,y) renders at screen (tx + x*s, ty + y*s).
+  //   - Screen center is (rect.w/2, rect.h/2), so SVG center =
+  //       ((rect.w/2 - tx)/s, (rect.h/2 - ty)/s)
+  //   - SVG → world: see svgToWorld(). With y_sign=-1:
+  //       world_x = svg_x - world_offset[0]
+  //       world_y = -(svg_y - world_offset[1]) = world_offset[1] - svg_y
+  //   - Tile zoom level: 1 SVG unit ≈ 1 meter (no world_scale). So
+  //     meters per screen pixel = 1/s, and rlx formula gives:
+  //       zoom = log2(MAP_W / (1024 * (1/s))) = log2(32 * s)
+  //   - At s=1 (no zoom), zoom = log2(32) = 5.
+  //
+  // Tile coord constants (verbatim from rlx ui/map.js).
+  const TILES_MAP_W = 32768;
+  const TILES_ZERO_X = 16384;
+  const TILES_ZERO_Y = 16384;
+  const TILES_SIZE = 256;
+  const TILES_MIN_Z = 0;
+  const TILES_MAX_Z = 6;
+  const TILES_RANGES = {
+    0: [[0, 0], [2, 2]],
+    1: [[0, 1], [4, 5]],
+    2: [[0, 2], [9, 11]],
+    3: [[0, 4], [19, 23]],
+    4: [[0, 8], [38, 47]],
+    5: [[0, 17], [77, 95]],
+    6: [[0, 34], [155, 190]],
+  };
+  window.tilesCache = new Map();
+  window.tilesPending = new Map();
+  let tilesCanvas = null, tilesCtx = null;
+
+  function tilesUrl(z, x, y)   { return `/tiles/${z}/${z},${y},${x}.jpg`; }
+  function tilesKey(z, x, y)   { return `${z}/${y}/${x}`; }
+  function tilesGet(z, x, y) {
+    const k = tilesKey(z, x, y);
+    if (window.tilesCache.has(k)) return window.tilesCache.get(k);
+    const img = new Image();
+    window.tilesCache.set(k, img);
+    return img;
+  }
+  function tilesLoad(z, x, y) {
+    const img = tilesGet(z, x, y);
+    if (img.src) return img;
+    const k = tilesKey(z, x, y);
+    if (window.tilesPending.has(k)) return img;
+    window.tilesPending.set(k, true);
+    img.addEventListener('load',  () => { window.tilesPending.delete(k); requestAnimationFrame(window.tilesRender); }, { once: true });
+    img.addEventListener('error', () => { window.tilesPending.delete(k); }, { once: true });
+    img.src = tilesUrl(z, x, y);
+    return img;
+  }
+  function tilesDrawParent(ctx, zInt, x, y, tx, ty, drawSize) {
+    for (let pz = zInt - 1; pz >= Math.max(TILES_MIN_Z, zInt - 2); pz--) {
+      const scale = Math.pow(2, zInt - pz);
+      const px = Math.floor(x / scale);
+      const py = Math.floor(y / scale);
+      const [[x0, y0], [x1, y1]] = TILES_RANGES[pz];
+      if (px < x0 || px > x1 || py < y0 || py > y1) continue;
+      const img = tilesGet(pz, px, py);
+      if (!img.complete || img.naturalWidth === 0) { tilesLoad(pz, px, py); continue; }
+      const sSize = TILES_SIZE / scale;
+      const sx = (x - px * scale) * sSize;
+      const sy = (y - py * scale) * sSize;
+      ctx.drawImage(img, sx, sy, sSize, sSize, Math.floor(tx), Math.floor(ty),
+                    Math.ceil(tx + drawSize) - Math.floor(tx),
+                    Math.ceil(ty + drawSize) - Math.floor(ty));
+      return true;
+    }
+    return false;
+  }
+
+  // Render tiles for the current view derived from window.mapTx.
+  window.tilesRender = function () {
+    if (!document.body.classList.contains('tiles-on')) return;
+    if (!tilesCanvas || !window.mapTx || !window.mapTransform) return;
+    const rect = document.getElementById('map-view').getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
+    const cssW = rect.width;
+    const cssH = rect.height;
+    // Match canvas resolution to screen.
+    if (tilesCanvas.width !== Math.floor(cssW * dpr) || tilesCanvas.height !== Math.floor(cssH * dpr)) {
+      tilesCanvas.width = Math.floor(cssW * dpr);
+      tilesCanvas.height = Math.floor(cssH * dpr);
+    }
+    tilesCtx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    // Derive world center + tile zoom from window.mapTx.
+    const { scale: s, tx, ty } = window.mapTx;
+    // SVG point at screen center.
+    const svgCx = (cssW / 2 - tx) / s;
+    const svgCy = (cssH / 2 - ty) / s;
+    // SVG → world via existing inverse transform.
+    const t = window.mapTransform;
+    const centerX = svgCx - t.world_offset[0];                  // world x
+    const centerY = (svgCy - t.world_offset[1]) / t.y_sign;     // world y (y_sign=-1)
+
+    // Tile zoom: 1 SVG unit ≈ 1 m (we confirmed in Phase 2), so m/screen-px = 1/s.
+    // rlx: mppx = MAP_W / (1024 * 2^zoom)  ⇔  zoom = log2(MAP_W / 1024 / mppx) = log2(32 * s)
+    const zoomReal = Math.log2(32 * s);
+    const zoom = Math.min(TILES_MAX_Z, Math.max(TILES_MIN_Z, zoomReal));
+    const zInt = Math.min(TILES_MAX_Z, Math.max(TILES_MIN_Z, Math.ceil(zoom)));
+    const tileWorldPxFactor = (1024 * Math.pow(2, zoom)) / TILES_MAP_W;  // tile-pixels per world meter
+    const cxPix = (centerX + TILES_ZERO_X) * tileWorldPxFactor;
+    const cyPix = (TILES_ZERO_Y - centerY) * tileWorldPxFactor;
+    const offX = cssW / 2 - cxPix;
+    const offY = cssH / 2 - cyPix;
+    const drawSize = TILES_SIZE * Math.pow(2, zoom - zInt);
+
+    tilesCtx.fillStyle = '#0a0a0c';
+    tilesCtx.fillRect(0, 0, cssW, cssH);
+
+    const [[x0, y0], [x1, y1]] = TILES_RANGES[zInt];
+    const minTx = Math.floor(-offX / drawSize);
+    const maxTx = Math.ceil((cssW - offX) / drawSize);
+    const minTy = Math.floor(-offY / drawSize);
+    const maxTy = Math.ceil((cssH - offY) / drawSize);
+
+    for (let yy = minTy; yy <= maxTy; yy++) {
+      for (let xx = minTx; xx <= maxTx; xx++) {
+        const dx = offX + xx * drawSize;
+        const dy = offY + yy * drawSize;
+        if (xx < x0 || xx > x1 || yy < y0 || yy > y1) continue;
+        const img = tilesLoad(zInt, xx, yy);
+        if (img.complete && img.naturalWidth > 0) {
+          tilesCtx.drawImage(img, 0, 0, TILES_SIZE, TILES_SIZE,
+                             Math.floor(dx), Math.floor(dy),
+                             Math.ceil(dx + drawSize) - Math.floor(dx),
+                             Math.ceil(dy + drawSize) - Math.floor(dy));
+        } else {
+          tilesDrawParent(tilesCtx, zInt, xx, yy, dx, dy, drawSize);
+        }
+      }
+    }
+  };
+
+  // Wire up button — run immediately if DOM already ready, otherwise wait for DOMContentLoaded.
+  function tilesInit() {
+    tilesCanvas = document.getElementById('map-tile-canvas');
+    if (tilesCanvas) tilesCtx = tilesCanvas.getContext('2d');
+    const tilesBtn = document.getElementById('tiles-toggle');
+    // [TILES-V1-CANVAS] Tiles are now the default — no toggle button.
+    // Activate immediately and re-render whenever map data is ready.
+    document.body.classList.add('tiles-on');
+    if (window.mapTx) window.tilesRender();
+    window.addEventListener('resize', () => {
+      if (document.body.classList.contains('tiles-on')) window.tilesRender();
+    });
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', tilesInit);
+  } else {
+    tilesInit();
+  }
+  // ── end [TILES-V1-CANVAS] ─────────────────────────────────────────────
 
   function resetMapView() {
     if (!window.mapData) return;
