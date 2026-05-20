@@ -305,6 +305,68 @@ header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(
 
 .canvas-wrap{flex:1;position:relative;background:#000;overflow:hidden}
 #frame-img{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}
+
+/* [MULTICAM-STEP23] LM projection overlays (point + epipolar line).
+   Two SVG layers, one per pane. Each sits ABOVE the frame img but
+   BELOW the existing #overlay canvas (which handles cursors / verticals).
+   Pointer-events: none so they don't block the canvas underneath. */
+.lm-proj-svg{position:absolute;top:0;left:0;width:100%;height:100%;
+  pointer-events:none;display:none}
+body.dual-cam .lm-proj-svg{display:block}
+.lm-proj-svg .lm-proj-point{stroke-width:1.5;fill:rgba(167,139,250,0.27);opacity:.85;
+  transition:opacity .15s,stroke-width .15s;vector-effect:non-scaling-stroke;stroke:#a78bfa}
+.lm-proj-svg .lm-proj-point.hovered{opacity:1;stroke-width:3.5;
+  stroke-dasharray:none}
+.lm-proj-svg .lm-proj-line{stroke-width:3;fill:none;opacity:.65;
+  stroke-dasharray:8 5;transition:opacity .15s,stroke-width .15s;vector-effect:non-scaling-stroke}
+.lm-proj-svg .lm-proj-line.hovered{opacity:.95;stroke-width:2.5}
+.lm-proj-svg .lm-proj-label{font-family:JetBrains Mono,monospace;font-size:11px;
+  fill:#fff;stroke:#000;stroke-width:2;paint-order:stroke;opacity:0;
+  transition:opacity .15s;pointer-events:none;vector-effect:non-scaling-stroke}
+.lm-proj-svg .lm-proj-label.hovered{opacity:1}
+.lm-proj-svg .lm-proj-group{cursor:pointer;pointer-events:auto}
+.lm-proj-svg .lm-proj-group:hover .lm-proj-point,
+.lm-proj-svg .lm-proj-group:hover .lm-proj-line{opacity:1;stroke-width:3}
+.lm-proj-svg .lm-proj-group:hover .lm-proj-label{opacity:1}
+/* "Projections" toggle button — visible only when dual mode is on. */
+#proj-toggle{display:none}
+body.dual-cam #proj-toggle{display:inline-block}
+body.dual-cam.proj-off #proj-toggle{background:var(--surface2);color:var(--mid);border-color:var(--border)}
+body.dual-cam.proj-off .lm-proj-svg{display:none}
+
+/* [MULTICAM-STEP1] Dual-pane layout */
+.cam-pane{position:absolute;top:0;bottom:0;overflow:hidden;background:#000}
+#pane-2{display:none}
+/* [MULTICAM-STEP15] Top/bottom split (was left/right).
+   Pane 1 occupies the top 50%, pane 2 the bottom 50%. */
+/* [MULTICAM-STEP20] Pane 1 occupies top half in dual mode.
+   No more !important — the pan/zoom JS code computes its inline style
+   from getMainPaneRect() now, so its left/top/width/height values are
+   already pane-relative. CSS only needs to set the container bounds. */
+body.dual-cam .canvas-wrap > #frame-img,
+body.dual-cam .canvas-wrap > #overlay,
+body.dual-cam .canvas-wrap > #no-img{
+  top:0;left:0;right:0;bottom:auto;
+  width:100%;height:50%
+}
+body.dual-cam #pane-2{display:block;top:50%;bottom:0;left:0;right:0}
+#pane-2 > #frame-img-2{position:absolute;top:0;left:0;width:100%;height:100%;object-fit:contain;pointer-events:none;user-select:none}
+/* [MULTICAM-STEP15] in-pane dropdown removed — pane 2 cam is picked from
+   the main sidebar via shift-click. */
+#pane-2 > #cam-sel-2-wrap{display:none}
+#pane-2 > #no-img-2{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#666;font-family:JetBrains Mono,monospace;font-size:13px;pointer-events:none}
+/* Horizontal divider (was vertical at left:50%) */
+body.dual-cam .canvas-wrap::after{content:'';position:absolute;left:0;right:0;top:50%;height:1px;background:#333;pointer-events:none;z-index:5}
+
+/* [MULTICAM-STEP15] Sidebar cam item badges showing pane assignment. */
+.cam-dropdown-item .pane-badge{display:inline-block;margin-left:6px;padding:0 5px;
+  font-size:9px;font-weight:700;border-radius:3px;font-family:JetBrains Mono,monospace}
+.cam-dropdown-item .pane-badge.p1{background:var(--green);color:#000}
+.cam-dropdown-item .pane-badge.p2{background:var(--blue);color:#000}
+body:not(.dual-cam) .cam-dropdown-item .pane-badge.p2{display:none}
+#dual-toggle{display:none}
+body:not(.view-map) #dual-toggle{display:inline-block}
+body.dual-cam #dual-toggle{background:var(--blue);color:#000;border-color:var(--blue)}
 #overlay{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
 .no-img{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--dim)}
 
@@ -419,6 +481,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   </div>
   <button class="rays-toggle" id="rays-toggle" title="Show all rays from the selected cam to its landmarks">Rays</button>
   <button class="heat-toggle" id="heat-toggle" title="Show loss landscape for the selected cam (heat map)">Heat</button>
+  <!-- [MULTICAM-STEP1] Dual toggle -->
+  <button class="rays-toggle" id="dual-toggle" title="Compare two cams side-by-side (D)">Dual</button>
+  <!-- [MULTICAM-STEP23] Toggle ghost LM projections in dual mode -->
+  <button class="rays-toggle" id="proj-toggle" title="Show ghost LM projections on the opposite pane">Projections</button>
 
   <span id="cam-meta"></span>
   <div class="chip" id="chip-all"><span style="color:var(--dim)">loss </span><span class="v" id="loss-all">—</span></div>
@@ -469,6 +535,18 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <img id="frame-img" src="" draggable="false">
     <canvas id="overlay"></canvas>
     <div class="no-img" id="no-img">Select a camera to begin</div>
+    <!-- [MULTICAM-STEP23] LM projection overlay for pane 1 -->
+    <svg class="lm-proj-svg" id="proj-svg-1" preserveAspectRatio="none"></svg>
+    <!-- [MULTICAM-STEP1] 2nd pane -->
+    <div class="cam-pane" id="pane-2">
+      <img id="frame-img-2" src="" draggable="false">
+      <!-- [MULTICAM-STEP23] LM projection overlay for pane 2 -->
+      <svg class="lm-proj-svg" id="proj-svg-2" preserveAspectRatio="none"></svg>
+      <div id="no-img-2">Select a camera</div>
+      <div id="cam-sel-2-wrap">
+        <select id="cam-sel-2"><option value="">— Compare with —</option></select>
+      </div>
+    </div>
     <button id="oc-toggle-btn" title="Toggle other cams overlay (O)"
       style="position:absolute;top:8px;right:8px;z-index:10;
              background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
@@ -643,6 +721,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 <script>
 // ── State ──────────────────────────────────────────────────────────────────
 let currentCam = null, camData = null, projections = [], losses = {};
+window.currentCam = null;  // [MULTICAM-STEP21] initial expose
 let params = {x:0,y:0,z:0,yaw:0,pitch:0,roll:0,hfov:60};
 let origParams = null;
 let hoveredLm = null, selectedLm = null;
@@ -773,6 +852,31 @@ const savedEl  = document.getElementById('saved');
 const btnUpdate = document.getElementById('btn-update');
 const btnSuspicious = document.getElementById('btn-suspicious');
 const canvasWrap = document.getElementById('canvas-wrap');
+
+// [MULTICAM-STEP20] Pane-aware rect helper.
+// In single mode: returns the full canvasWrap rect (pane 1 == full).
+// In dual mode: returns only the top half (pane 1 occupies top 50%).
+// All pan/zoom/click handlers should use this instead of
+// canvasWrap.getBoundingClientRect() directly so they keep working
+// correctly when the layout splits.
+function getMainPaneRect() {
+  const r = canvasWrap.getBoundingClientRect();
+  if (document.body.classList.contains('dual-cam')) {
+    return {
+      left: r.left,
+      top: r.top,
+      right: r.right,
+      bottom: r.top + r.height / 2,
+      width: r.width,
+      height: r.height / 2,
+      x: r.x,
+      y: r.y
+    };
+  }
+  return r;
+}
+window.getMainPaneRect = getMainPaneRect;
+
 const optResult  = document.getElementById('opt-result');
 const optLoss    = document.getElementById('opt-loss');
 const optDetail  = document.getElementById('opt-detail');
@@ -2123,6 +2227,7 @@ async function init() {
 // ── Camera select ──────────────────────────────────────────────────────────
 camSel.addEventListener('change', async () => {
   currentCam = camSel.value || null;
+  window.currentCam = currentCam;  // [MULTICAM-STEP21] expose for projection overlay
   // Phase 9.1: sync URL hash on cam change.
   if (typeof window._syncUrlHash === 'function') window._syncUrlHash();
   if (!currentCam) return;
@@ -2145,6 +2250,7 @@ camSel.addEventListener('change', async () => {
   noImg.textContent = 'Loading...';
   frameImg.src = `/frame/${encodeURIComponent(currentCam)}`;
   frameImg.onload  = () => { noImg.style.display = 'none'; resizeOverlay(); };
+  window.resizeOverlay = resizeOverlay;  // [MULTICAM-STEP16] expose for dual-mode resize trigger
   frameImg.onerror = () => { noImg.textContent = 'No image'; };
 
   await loadProjections();
@@ -2384,8 +2490,10 @@ function resizeOverlay() {
   // Phase 3+4: skip if Camera view is hidden — clientWidth/Height would be 0
   // and we'd zero out the overlay, breaking marked-pixel layout on switch back.
   if (window.currentView === 'map') return;
-  overlay.width  = canvasWrap.clientWidth;
-  overlay.height = canvasWrap.clientHeight;
+  // [MULTICAM-STEP20] In dual mode, the overlay covers only pane 1 (top half).
+  const _r = getMainPaneRect();
+  overlay.width  = _r.width;
+  overlay.height = _r.height;
   draw();
 }
 window.addEventListener('resize', resizeOverlay);
@@ -2799,7 +2907,7 @@ function draw() {
 
 // ── Mouse ──────────────────────────────────────────────────────────────────
 canvasWrap.addEventListener('mousemove', e => {
-  const rect = canvasWrap.getBoundingClientRect();
+  const rect = getMainPaneRect();  // [MULTICAM-STEP20]
   const mx = e.clientX - rect.left, my = e.clientY - rect.top;
 
   if (camData?.size) {
@@ -2826,7 +2934,7 @@ canvasWrap.addEventListener('mouseleave', () => { hoveredLm = null; tip.style.di
 // Main canvas zoom
 canvasWrap.addEventListener('wheel', e => {
   e.preventDefault();
-  const rect = canvasWrap.getBoundingClientRect();
+  const rect = getMainPaneRect();  // [MULTICAM-STEP20]
   const mx = e.clientX - rect.left, my = e.clientY - rect.top;
   const {scale, ox, oy} = baseScale();
   const bx = (mx - mainPanX) / mainZoom;
@@ -3275,7 +3383,7 @@ function startAddPixel() {
 // Handle add pixel click on main canvas
 canvasWrap.addEventListener('click', async e => {
   if (!addPxMode) return;
-  const rect = canvasWrap.getBoundingClientRect();
+  const rect = getMainPaneRect();  // [MULTICAM-STEP20]
   const mx = e.clientX - rect.left, my = e.clientY - rect.top;
   if (!camData?.size) return;
   const [iw, ih] = camData.size;
@@ -3851,7 +3959,7 @@ canvasWrap.addEventListener('mousemove', e => {
     }
     return;
   }
-  const rect = canvasWrap.getBoundingClientRect();
+  const rect = getMainPaneRect();  // [MULTICAM-STEP20]
   const mx = e.clientX - rect.left, my = e.clientY - rect.top;
   const hit = _conesHitTest(mx, my);
   if (hit !== hoveredCone) {
@@ -3875,7 +3983,7 @@ canvasWrap.addEventListener('mouseleave', () => {
 
 canvasWrap.addEventListener('click', e => {
   if (!otherCones.length) return;
-  const rect = canvasWrap.getBoundingClientRect();
+  const rect = getMainPaneRect();  // [MULTICAM-STEP20]
   const mx = e.clientX - rect.left, my = e.clientY - rect.top;
   const hit = _conesHitTest(mx, my);
   if (hit !== null) {
@@ -4148,6 +4256,371 @@ window.addEventListener('load', () => {
   console.log('[MULTICAM-STEP1] dual-pane wired up');
 })();
 // ── end [MULTICAM-STEP1] ──────────────────────────────────────────────
+
+// ── [MULTICAM-STEP16] Smart pane assignment (replaces STEP15) ────────
+// Behavior:
+//   - Single mode: click sidebar cam = goes to cam 1 (default behavior).
+//   - Dual mode: click sidebar cam = goes to the OPPOSITE of last-touched.
+//     First click after enabling dual: pane 1 (no change in default flow).
+//     Second click: pane 2. Third: pane 1 again. Etc.
+//   - Visual badges "→1" / "→2" show which cams are loaded in which pane.
+(() => {
+  // Track which pane was last assigned to. Default to 2 so the FIRST click
+  // after enabling dual mode goes to pane 1 (the natural default).
+  window._lastAssignedPane = 2;
+
+  function loadCam2(camName) {
+    const img2 = document.getElementById('frame-img-2');
+    const noImg2 = document.getElementById('no-img-2');
+    if (!img2 || !noImg2) return;
+    window.currentCam2 = camName;
+    noImg2.style.display = 'flex';
+    noImg2.textContent = 'Loading…';
+    img2.src = `/frame/${encodeURIComponent(camName)}`;
+    img2.onload = () => { noImg2.style.display = 'none'; };
+    img2.onerror = () => { noImg2.textContent = 'No image'; };
+  }
+
+  // Capture-phase click handler: intercepts before the existing cam1 handler.
+  document.addEventListener('click', (e) => {
+    // Only act in dual mode.
+    if (!document.body.classList.contains('dual-cam')) return;
+    const item = e.target.closest('.cam-opt');
+    if (!item) return;
+    const camName = item.dataset.name;
+    if (!camName) return;
+
+    const nextPane = window._lastAssignedPane === 1 ? 2 : 1;
+
+    if (nextPane === 2) {
+      // Block the default (which would set cam 1) and assign cam 2 instead.
+      e.preventDefault();
+      e.stopPropagation();
+      e.stopImmediatePropagation();
+      loadCam2(camName);
+      window._lastAssignedPane = 2;
+      setTimeout(updateCamBadges, 50);
+      console.log('[MULTICAM-STEP16] cam2 set to', camName);
+    } else {
+      // Let the default handler run (it sets cam 1).
+      // We just mark last-assigned as 1 so the next click flips to 2.
+      window._lastAssignedPane = 1;
+      setTimeout(updateCamBadges, 100);
+      console.log('[MULTICAM-STEP16] cam1 set to', camName);
+    }
+  }, true);  // capture phase
+
+  // Shift+click as explicit pane 2 override (kept from STEP15 for power users).
+  document.addEventListener('click', (e) => {
+    if (!e.shiftKey) return;
+    if (!document.body.classList.contains('dual-cam')) return;
+    const item = e.target.closest('.cam-opt');
+    if (!item) return;
+    const camName = item.dataset.name;
+    if (!camName) return;
+    e.preventDefault();
+    e.stopPropagation();
+    e.stopImmediatePropagation();
+    loadCam2(camName);
+    window._lastAssignedPane = 2;
+    setTimeout(updateCamBadges, 50);
+  }, true);
+
+  function updateCamBadges() {
+    const cam1 = window.currentCam;
+    const cam2 = window.currentCam2;
+    document.querySelectorAll('.cam-opt').forEach(item => {
+      item.querySelectorAll('.pane-badge').forEach(b => b.remove());
+      const name = item.dataset.name;
+      if (!name) return;
+      if (name === cam1) {
+        const b = document.createElement('span');
+        b.className = 'pane-badge p1';
+        b.textContent = '→1';
+        item.appendChild(b);
+      }
+      if (name === cam2 && document.body.classList.contains('dual-cam')) {
+        const b = document.createElement('span');
+        b.className = 'pane-badge p2';
+        b.textContent = '→2';
+        item.appendChild(b);
+      }
+    });
+  }
+  window.updateCamBadges = updateCamBadges;
+
+  // [MULTICAM-STEP16] On dual toggle: reset last-assigned to 2, force resize
+  // of the overlay canvas so pane 1's overlay re-fits the new half-height.
+  const btnDual = document.getElementById('dual-toggle');
+  if (btnDual) {
+    btnDual.addEventListener('click', () => {
+      window._lastAssignedPane = 2;  // Next click goes to pane 1 by default
+      // [MULTICAM-STEP18-FIX] Clear the inline style that the pan/zoom
+      // code sets on #frame-img. That inline style has fixed px width/height
+      // computed for the single-cam viewport — when we switch to dual mode,
+      // those values no longer match the new container size. Clearing lets
+      // the dual-cam CSS rules (width:100%; height:50%) take over.
+      const fi = document.getElementById('frame-img');
+      if (fi) fi.removeAttribute('style');
+      const ov = document.getElementById('overlay');
+      if (ov) ov.removeAttribute('style');
+      setTimeout(() => {
+        if (typeof window.resizeOverlay === 'function') {
+          try { window.resizeOverlay(); } catch (e) { /* ignore */ }
+        }
+        window.dispatchEvent(new Event('resize'));
+        updateCamBadges();
+      }, 100);
+    });
+  }
+
+  const sel1 = document.getElementById('cam-sel');
+  if (sel1) sel1.addEventListener('change', () => setTimeout(updateCamBadges, 100));
+
+  // Refresh badges whenever the cam list is rebuilt.
+  // [MULTICAM-STEP16-FIX] Debounce + filter to avoid infinite loop:
+  // updateCamBadges() modifies DOM (badges), which would re-trigger the
+  // observer in a tight loop. We (a) watch only direct children (not
+  // subtree, so badge inserts inside .cam-opt don't fire), (b) debounce
+  // 50ms, (c) ignore mutations that only touch .pane-badge nodes.
+  const dd = document.querySelector('.cam-dropdown') || document.body;
+  let badgeTimer = null;
+  const obs = new MutationObserver((mutations) => {
+    // Filter: ignore if every mutation is just adding/removing badge spans.
+    const isOurOwnBadgeChange = mutations.every(m => {
+      const added = [...m.addedNodes].every(n => n.classList?.contains('pane-badge'));
+      const removed = [...m.removedNodes].every(n => n.classList?.contains('pane-badge'));
+      return added && removed;
+    });
+    if (isOurOwnBadgeChange) return;
+    clearTimeout(badgeTimer);
+    badgeTimer = setTimeout(updateCamBadges, 50);
+  });
+  obs.observe(dd, { childList: true });  // No subtree — only direct children
+
+  console.log('[MULTICAM-STEP16] smart pane assignment wired up');
+})();
+// ── end [MULTICAM-STEP16] ─────────────────────────────────────────────
+
+// ── [MULTICAM-STEP23] LM projection overlay rendering ─────────────────
+// For each pane in dual mode, fetch /api/lm_projections for the OTHER
+// pane's cam and draw ghost markers (point for triangulated, line for
+// epipolar). Color matches the source-cam-type palette used elsewhere.
+(() => {
+  const proj1   = document.getElementById('proj-svg-1');
+  const proj2   = document.getElementById('proj-svg-2');
+  const btnProj = document.getElementById('proj-toggle');
+  if (!proj1 || !proj2 || !btnProj) return;
+
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  // Cache fetched projections per cam to avoid hammering the endpoint
+  const cache = new Map();  // cam_name -> {projections, cam_size}
+
+  async function fetchProjections(camName, filterCam) {
+    if (!camName) return null;
+    const cacheKey = camName + '|' + (filterCam || '');
+    if (cache.has(cacheKey)) return cache.get(cacheKey);
+    try {
+      let url = '/api/lm_projections?cam=' + encodeURIComponent(camName);
+      if (filterCam) url += '&filter_cam=' + encodeURIComponent(filterCam);
+      const r = await fetch(url);
+      const d = await r.json();
+      if (d.error) {
+        console.warn('[MULTICAM-STEP23] error for', camName, d.error);
+        return null;
+      }
+      cache.set(cacheKey, d);
+      return d;
+    } catch (e) {
+      console.warn('[MULTICAM-STEP23] fetch failed for', camName, e);
+      return null;
+    }
+  }
+
+  function clearSvg(svg) {
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+  }
+
+  function render(svgEl, data, imgEl) {
+    clearSvg(svgEl);
+    if (!data || !data.projections || !data.projections.length) return;
+    const [iw, ih] = data.cam_size;
+    // Set the SVG viewBox to match the image's native pixel size; the SVG
+    // is laid out at the image's CSS size, so coords inside the viewBox
+    // map 1:1 to image pixels regardless of object-fit:contain scaling.
+    svgEl.setAttribute('viewBox', `0 0 ${iw} ${ih}`);
+    // Match the <img>'s rendered rect so the SVG aligns with the visible image.
+    // Image uses object-fit:contain, so the actual image rect inside its
+    // box has letterboxing. We compute the rendered rect and position the SVG
+    // to match exactly.
+    if (imgEl && imgEl.naturalWidth > 0) {
+      // [MULTICAM-STEP23-FIX3] Just match the SVG to the image's actual
+      // rendered rect on screen. The image is position:absolute inside the
+      // parent — we get its bounding rect and subtract the parent's offset
+      // to position the SVG at the same place using parent-relative coords.
+      const imgR = imgEl.getBoundingClientRect();
+      const parentR = svgEl.parentElement.getBoundingClientRect();
+      const offX = imgR.left - parentR.left;
+      const offY = imgR.top - parentR.top;
+      // For object-fit:contain, the actual image content fits inside imgR
+      // with letterboxing. Compute the letterboxed rect.
+      const ar = iw / ih;
+      const br = imgR.width / imgR.height;
+      let renderW, renderH, innerOffX = 0, innerOffY = 0;
+      if (br > ar) {
+        renderH = imgR.height;
+        renderW = imgR.height * ar;
+        innerOffX = (imgR.width - renderW) / 2;
+      } else {
+        renderW = imgR.width;
+        renderH = imgR.width / ar;
+        innerOffY = (imgR.height - renderH) / 2;
+      }
+      svgEl.style.left = (offX + innerOffX) + 'px';
+      svgEl.style.top = (offY + innerOffY) + 'px';
+      svgEl.style.width = renderW + 'px';
+      svgEl.style.height = renderH + 'px';
+    }
+
+    // Color palette — match the rest of the app's LM color scheme.
+    const COLOR_POINT = '#a78bfa';   // violet for triangulated
+    const COLOR_LINE  = '#4ade80';   // green for epipolar
+
+    for (const p of data.projections) {
+      const g = document.createElementNS(SVG_NS, 'g');
+      g.setAttribute('class', 'lm-proj-group');
+      g.setAttribute('data-lm-name', p.name);
+
+      if (p.type === 'point') {
+        const c = document.createElementNS(SVG_NS, 'circle');
+        c.setAttribute('cx', String(p.pixel[0]));
+        c.setAttribute('cy', String(p.pixel[1]));
+        c.setAttribute('r', '12');  // [MULTICAM-STEP23-FIX8] match existing marker default r=5 on screen
+        c.setAttribute('stroke', COLOR_POINT);
+        c.setAttribute('class', 'lm-proj-point');
+        g.appendChild(c);
+        const t = document.createElementNS(SVG_NS, 'text');
+        t.setAttribute('x', String(p.pixel[0] + 18));
+        t.setAttribute('y', String(p.pixel[1] - 12));
+        t.setAttribute('class', 'lm-proj-label');
+        t.textContent = p.name;
+        g.appendChild(t);
+      } else if (p.type === 'epipolar') {
+        const l = document.createElementNS(SVG_NS, 'line');
+        l.setAttribute('x1', String(p.line[0][0]));
+        l.setAttribute('y1', String(p.line[0][1]));
+        l.setAttribute('x2', String(p.line[1][0]));
+        l.setAttribute('y2', String(p.line[1][1]));
+        l.setAttribute('stroke', COLOR_LINE);
+        l.setAttribute('class', 'lm-proj-line');
+        g.appendChild(l);
+        const mx = (p.line[0][0] + p.line[1][0]) / 2;
+        const my = (p.line[0][1] + p.line[1][1]) / 2;
+        const t = document.createElementNS(SVG_NS, 'text');
+        t.setAttribute('x', String(mx + 8));
+        t.setAttribute('y', String(my));
+        t.setAttribute('class', 'lm-proj-label');
+        t.textContent = p.name + ' (epi)';
+        g.appendChild(t);
+      }
+      svgEl.appendChild(g);
+    }
+  }
+
+  async function refresh() {
+    if (!document.body.classList.contains('dual-cam')) {
+      clearSvg(proj1);
+      clearSvg(proj2);
+      return;
+    }
+    if (document.body.classList.contains('proj-off')) {
+      clearSvg(proj1);
+      clearSvg(proj2);
+      return;
+    }
+    // Each pane shows the OTHER pane's cam projections (so you see where
+    // the other cam's LMs would appear in your view).
+    const cam1 = window.currentCam;
+    const cam2 = window.currentCam2;
+    const img1 = document.getElementById('frame-img');
+    const img2 = document.getElementById('frame-img-2');
+
+    // [MULTICAM-STEP23-FIX7] Pane 1 shows LMs that are marked on cam2 (as ghosts),
+    // and vice versa. So you can verify alignment: "I marked this LM on cam2,
+    // does it land on the same building when I look at cam1?"
+    if (cam1 && cam2) {
+      const d1 = await fetchProjections(cam1, cam2);
+      render(proj1, d1, img1);
+      const d2 = await fetchProjections(cam2, cam1);
+      render(proj2, d2, img2);
+    } else if (cam1) {
+      const d = await fetchProjections(cam1);
+      render(proj1, d, img1);
+      clearSvg(proj2);
+    } else {
+      clearSvg(proj1);
+      clearSvg(proj2);
+    }
+  }
+
+  // Hook into dual toggle + cam selection changes
+  const origDualBtn = document.getElementById('dual-toggle');
+  if (origDualBtn) {
+    origDualBtn.addEventListener('click', () => setTimeout(refresh, 50));
+  }
+  const sel1 = document.getElementById('cam-sel');
+  const sel2 = document.getElementById('cam-sel-2');
+  if (sel1) sel1.addEventListener('change', () => setTimeout(refresh, 200));
+  if (sel2) sel2.addEventListener('change', () => setTimeout(refresh, 200));
+
+  // Also re-render after frame loads (image dimensions become known)
+  const img1 = document.getElementById('frame-img');
+  const img2 = document.getElementById('frame-img-2');
+  if (img1) img1.addEventListener('load', () => setTimeout(refresh, 50));
+  if (img2) img2.addEventListener('load', () => setTimeout(refresh, 50));
+
+  // Re-render on window resize (image rect changes)
+  window.addEventListener('resize', () => setTimeout(refresh, 100));
+
+  // [MULTICAM-STEP23-FIX5] Re-render on pan/zoom — the canvas-wrap fires
+  // wheel for zoom and mousemove during drag-pan. We piggyback off those
+  // to keep projections aligned with the image as it moves/scales.
+  const cw = document.getElementById('canvas-wrap');
+  if (cw) {
+    cw.addEventListener('wheel', () => requestAnimationFrame(refresh), { passive: true });
+    cw.addEventListener('mousemove', () => {
+      if (window._panActive) requestAnimationFrame(refresh);
+    });
+    cw.addEventListener('mousedown', () => { window._panActive = true; });
+    document.addEventListener('mouseup', () => { window._panActive = false; refresh(); });
+  }
+
+  // Projections toggle
+  btnProj.addEventListener('click', () => {
+    const off = document.body.classList.toggle('proj-off');
+    btnProj.classList.toggle('active', !off);
+    if (!off) refresh();
+  });
+  // Default ON
+  btnProj.classList.add('active');
+
+  // Hover sync with the LM sidebar list (highlight ghost when hovering list)
+  document.addEventListener('mouseover', (e) => {
+    const li = e.target.closest('[data-lm-name]');
+    if (!li) return;
+    const name = li.getAttribute('data-lm-name');
+    for (const svg of [proj1, proj2]) {
+      svg.querySelectorAll('.lm-proj-group').forEach(g => {
+        const match = g.getAttribute('data-lm-name') === name;
+        g.querySelectorAll('.lm-proj-point, .lm-proj-line, .lm-proj-label')
+          .forEach(el => el.classList.toggle('hovered', match));
+      });
+    }
+  });
+
+  console.log('[MULTICAM-STEP23] projection overlays wired up');
+})();
+// ── end [MULTICAM-STEP23] ─────────────────────────────────────────────
 </script>
 
 <!-- Phase 8.1: triangulation toast (top-center over map view). -->

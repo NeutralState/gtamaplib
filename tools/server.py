@@ -939,6 +939,125 @@ class Handler(BaseHTTPRequestHandler):
                 traceback.print_exc()
                 self.send_json({'error': str(e)}, 500)
 
+        elif path == '/api/lm_projections':
+            # [MULTICAM-STEP23] Return all LMs that should appear as ghost
+            # markers on this cam's image.
+            # [MULTICAM-STEP23-FIX7] Optional filter_cam param: if provided,
+            # only return LMs that are marked on filter_cam (so cam1 shows
+            # ghosts of LMs marked on cam2, helping verify alignment).
+            cam_name = unquote(qs.get('cam', [''])[0])
+            filter_cam = unquote(qs.get('filter_cam', [''])[0])
+            if cam_name not in md.cameras:
+                self.send_json({'error': 'invalid cam'}, 400)
+                return
+            try:
+                target_cam = ml.get_camera(cam_name)
+            except Exception as e:
+                self.send_json({'error': f'cam load failed: {e}'}, 400)
+                return
+            if target_cam.xyz is None or target_cam.q is None:
+                self.send_json({'error': 'cam not calibrated'}, 400)
+                return
+            target_w, target_h = target_cam.w, target_cam.h
+            target_pixels = md.pixels.get(cam_name, {})  # LMs already marked on this cam
+
+            # [MULTICAM-STEP23-FIX] md.landmarks is {name: (x,y,z)} — no source_cameras.
+            # Read source_cameras from landmarks.json directly.
+            _lm_json_path = os.path.join(os.path.dirname(TOOL_DIR), 'gtamapdata', 'landmarks.json')
+            try:
+                with open(_lm_json_path) as _f:
+                    _lm_meta = json.load(_f)
+            except Exception:
+                _lm_meta = {}
+
+            projections = []
+            VIRTUAL_PREFIXES = ('Portofino Tower (',)
+            # If a filter_cam is given, restrict to LMs marked on it.
+            filter_set = None
+            if filter_cam and filter_cam in md.cameras:
+                filter_set = set(md.pixels.get(filter_cam, {}).keys())
+            for lm_name, lm in md.landmarks.items():
+                # Skip the few synthetic / virtual LMs
+                if any(lm_name.startswith(p) for p in VIRTUAL_PREFIXES):
+                    continue
+                # [MULTICAM-STEP23-FIX7] Filter to LMs marked on the other pane's cam
+                if filter_set is not None and lm_name not in filter_set:
+                    continue
+                # Skip if already marked on the target cam (no ghost needed)
+                if lm_name in target_pixels:
+                    continue
+                # md.landmarks value is (x, y, z) tuple — that IS the xyz.
+                lm_xyz = list(lm) if (isinstance(lm, (tuple, list)) and len(lm) == 3) else None
+                meta = _lm_meta.get(lm_name, {})
+                src_cams = meta.get('source_cameras', []) if isinstance(meta, dict) else []
+
+                if lm_xyz is not None:
+                    # Triangulated -> project as a point
+                    try:
+                        px = target_cam.get_pixel(lm_xyz)
+                    except Exception:
+                        continue
+                    if px is None:
+                        continue
+                    x, y = float(px[0]), float(px[1])
+                    # Skip if out of frame (with small margin for labels)
+                    if x < -50 or x > target_w + 50 or y < -50 or y > target_h + 50:
+                        continue
+                    projections.append({
+                        'name': lm_name,
+                        'type': 'point',
+                        'pixel': [x, y],
+                    })
+                elif len(src_cams) == 1:
+                    # 1 source only -> epipolar line on the target cam
+                    src_cam_name = src_cams[0]
+                    if src_cam_name == cam_name:
+                        continue
+                    if src_cam_name not in md.cameras:
+                        continue
+                    src_pixels = md.pixels.get(src_cam_name, {})
+                    if lm_name not in src_pixels:
+                        continue
+                    try:
+                        src_cam = ml.get_camera(src_cam_name)
+                        src_pix = src_pixels[lm_name]
+                        # Ray from src_cam through this pixel
+                        d = src_cam.get_pixel_direction((float(src_pix[0]), float(src_pix[1])))
+                        # Sample 2 points along the ray at near + far distances
+                        # and project on target_cam.
+                        import numpy as _np
+                        src_xyz = _np.asarray(src_cam.xyz, dtype=float)
+                        d = _np.asarray(d, dtype=float)
+                        near_pt = (src_xyz + 50.0 * d).tolist()
+                        far_pt  = (src_xyz + 5000.0 * d).tolist()
+                        px_near = target_cam.get_pixel(near_pt)
+                        px_far  = target_cam.get_pixel(far_pt)
+                        if px_near is None or px_far is None:
+                            continue
+                        x1, y1 = float(px_near[0]), float(px_near[1])
+                        x2, y2 = float(px_far[0]), float(px_far[1])
+                        # If both endpoints are way outside the frame, skip
+                        outside = (
+                            (max(x1, x2) < -50 or min(x1, x2) > target_w + 50) or
+                            (max(y1, y2) < -50 or min(y1, y2) > target_h + 50)
+                        )
+                        if outside:
+                            continue
+                        projections.append({
+                            'name': lm_name,
+                            'type': 'epipolar',
+                            'line': [[x1, y1], [x2, y2]],
+                            'source_cam': src_cam_name,
+                        })
+                    except Exception:
+                        continue
+
+            self.send_json({
+                'cam': cam_name,
+                'cam_size': [target_w, target_h],
+                'projections': projections,
+            })
+
         elif path == '/api/save':
             cam_name = unquote(qs.get('cam', [''])[0])
             if cam_name not in md.cameras:
