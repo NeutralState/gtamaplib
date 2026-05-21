@@ -540,15 +540,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <img id="frame-img" src="" draggable="false">
     <canvas id="overlay"></canvas>
     <div class="no-img" id="no-img">Select a camera to begin</div>
-    <!-- [MULTICAM-STEP23] LM projection overlay for pane 1 -->
-    <svg class="lm-proj-svg" id="proj-svg-1" preserveAspectRatio="none"></svg>
+<!-- [CANVAS-GHOSTS] proj-svg-1 removed, ghosts now drawn on #overlay -->
     <!-- [MULTICAM-STEP1] 2nd pane -->
     <div class="cam-pane" id="pane-2">
       <img id="frame-img-2" src="" draggable="false">
       <!-- [MULTICAM-STEP30] pane 2 overlay canvas for pan/zoom rendering -->
       <canvas id="overlay-2"></canvas>
-      <!-- [MULTICAM-STEP23] LM projection overlay for pane 2 -->
-      <svg class="lm-proj-svg" id="proj-svg-2" preserveAspectRatio="none"></svg>
+<!-- [CANVAS-GHOSTS] proj-svg-2 removed, ghosts now drawn on #overlay-2 -->
       <div id="no-img-2">Select a camera</div>
       <div id="cam-sel-2-wrap">
         <select id="cam-sel-2"><option value="">— Compare with —</option></select>
@@ -843,6 +841,12 @@ let mainZoom = 1, mainPanX = 0, mainPanY = 0, mainDragging = false, mainDragStar
 let main2Zoom = 1, main2PanX = 0, main2PanY = 0, main2Dragging = false, main2DragStart = null, main2PanStart = null;
 let camData2 = null;  // set when cam 2 frame loads
 window.camData2 = null;
+// [CANVAS-GHOSTS] Per-pane state: real markers + ghost projections + hover
+let projections2 = [];                  // real markers marked on cam2
+let ghostMarkers1 = [], ghostMarkers2 = [];  // ghost projections per pane
+let hoveredLm2 = null, selectedLm2 = null;
+let hoveredGhost1 = null, hoveredGhost2 = null;
+window.projections2 = projections2;
 
 // ── DOM ────────────────────────────────────────────────────────────────────
 const camSel   = document.getElementById('cam-sel');
@@ -2885,24 +2889,97 @@ function drawBuildingWireframes() {
   }
 }
 
-// [MULTICAM-STEP30] Apply current pan/zoom to frame-img-2 by setting inline style.
+// [CANVAS-GHOSTS] draw2() = full mirror of draw() but on pane 2.
+// Renders frame-img-2, real markers (projections2), and ghosts (ghostMarkers2).
+function toCanvas2v(px, py) {
+  // Same as toCanvas2 but exists in this scope. Use the existing toCanvas2 helper.
+  return toCanvas2(px, py);
+}
 function draw2() {
   const img2 = document.getElementById('frame-img-2');
   const overlay2 = document.getElementById('overlay-2');
   if (!img2 || !overlay2) return;
+  const ctx2 = overlay2.getContext('2d');
+  ctx2.clearRect(0, 0, overlay2.width, overlay2.height);
   if (!camData2 || !camData2.size) return;
+
+  // Sync frame image with zoom/pan
   const {scale, ox, oy} = baseScale2();
   const left = main2PanX + ox * main2Zoom;
   const top  = main2PanY + oy * main2Zoom;
   const w    = camData2.size[0] * scale * main2Zoom;
   const h    = camData2.size[1] * scale * main2Zoom;
   img2.style.cssText = `position:absolute;left:${left}px;top:${top}px;width:${w}px;height:${h}px;object-fit:fill;pointer-events:none`;
-  // Trigger projection re-render so ghost markers follow
-  if (typeof window._refreshProjections === 'function') {
-    requestAnimationFrame(window._refreshProjections);
+
+  // Real markers on pane 2 (those marked on currentCam2)
+  for (const lm of projections2) {
+    if (!lm.marked_pixel) continue;
+    const hi = hoveredLm2 === lm.name || selectedLm2 === lm.name;
+    const color = dColor(lm.delta);
+    const visible = lmFilter === 'all'   ? true
+                  : lmFilter === 'indep' ? !lm.is_circular
+                  : (lm.delta != null && lm.delta > 5);
+    ctx2.globalAlpha = visible ? 1 : 0.12;
+    const [mx, my] = toCanvas2(lm.marked_pixel[0], lm.marked_pixel[1]);
+    const r = hi ? 8 : (lm.is_circular ? 3 : 5);
+    ctx2.beginPath(); ctx2.arc(mx, my, r, 0, Math.PI * 2);
+    ctx2.fillStyle = color + '44'; ctx2.fill();
+    ctx2.strokeStyle = color; ctx2.lineWidth = hi ? 2.5 : 1.5; ctx2.stroke();
+    if (hi) {
+      ctx2.font = '11px JetBrains Mono, monospace';
+      ctx2.fillStyle = '#fff';
+      ctx2.fillText(lm.name, mx + 10, my - 8);
+      if (lm.delta != null) {
+        ctx2.fillStyle = color;
+        ctx2.fillText(`d=${lm.delta.toFixed(3)} arcmin`, mx + 10, my + 6);
+      }
+    }
+    ctx2.globalAlpha = 1;
   }
+
+  // Ghost markers on pane 2 (LMs marked on currentCam, projected here)
+  drawGhostsOnCtx(ctx2, ghostMarkers2, toCanvas2, hoveredGhost2);
 }
 window.draw2 = draw2;
+
+// [CANVAS-GHOSTS] Shared helper: draw ghost markers on any ctx with any toCanvas mapper.
+function drawGhostsOnCtx(ctxLocal, ghosts, mapper, hoveredName) {
+  if (!ghosts || !ghosts.length) return;
+  const VIOLET = '#c084fc';
+  for (const g of ghosts) {
+    if (g.type === 'point') {
+      const hi = hoveredName === g.name;
+      const [mx, my] = mapper(g.pixel[0], g.pixel[1]);
+      const r = hi ? 8 : 5;
+      ctxLocal.beginPath(); ctxLocal.arc(mx, my, r, 0, Math.PI * 2);
+      ctxLocal.fillStyle = VIOLET + '44';  // 27% alpha fill — matches existing markers
+      ctxLocal.fill();
+      ctxLocal.strokeStyle = VIOLET; ctxLocal.lineWidth = hi ? 2.5 : 1.5; ctxLocal.stroke();
+      if (hi) {
+        ctxLocal.font = '11px JetBrains Mono, monospace';
+        const labelText = g.name;
+        const labelW = ctxLocal.measureText(labelText).width;
+        // Black background rect (matches the cone-label style — see line ~3991)
+        ctxLocal.fillStyle = '#000';
+        ctxLocal.fillRect(mx + 6, my - 14, labelW + 8, 16);
+        ctxLocal.fillStyle = '#fff';
+        ctxLocal.fillText(labelText, mx + 10, my - 2);
+      }
+    } else if (g.type === 'epipolar') {
+      // Epipolar line in violet, dashed
+      const [x1, y1] = mapper(g.line[0][0], g.line[0][1]);
+      const [x2, y2] = mapper(g.line[1][0], g.line[1][1]);
+      ctxLocal.beginPath();
+      ctxLocal.moveTo(x1, y1); ctxLocal.lineTo(x2, y2);
+      ctxLocal.strokeStyle = VIOLET;
+      ctxLocal.lineWidth = 1.5;
+      ctxLocal.setLineDash([6, 4]);
+      ctxLocal.stroke();
+      ctxLocal.setLineDash([]);
+    }
+  }
+}
+window.drawGhostsOnCtx = drawGhostsOnCtx;
 
 function draw() {
   ctx.clearRect(0, 0, overlay.width, overlay.height);
@@ -2970,6 +3047,8 @@ function draw() {
 
     ctx.globalAlpha = 1;
   });
+  // [CANVAS-GHOSTS] Draw ghost markers (LMs marked on cam2, projected onto cam1)
+  drawGhostsOnCtx(ctx, ghostMarkers1, toCanvas, hoveredGhost1);
 }
 
 // ── Mouse ──────────────────────────────────────────────────────────────────
@@ -2989,6 +3068,15 @@ canvasWrap.addEventListener('mousemove', e => {
     if (Math.sqrt((mx-cx)**2 + (my-cy)**2) < 14) found = lm.name;
   });
   if (found !== hoveredLm) { hoveredLm = found; draw(); }
+  // [CANVAS-GHOSTS] Ghost hover hit-test on pane 1
+  let foundGhost = null;
+  for (const g of ghostMarkers1) {
+    if (g.type !== 'point') continue;
+    const [cx, cy] = toCanvas(g.pixel[0], g.pixel[1]);
+    const dx = mx - cx, dy = my - cy;
+    if (dx*dx + dy*dy < 64) { foundGhost = g.name; break; }
+  }
+  if (foundGhost !== hoveredGhost1) { hoveredGhost1 = foundGhost; draw(); }
 
   if (found) {
     const lm = projections.find(p => p.name === found);
@@ -3076,6 +3164,36 @@ canvasWrap.addEventListener('dblclick', () => { resetMainZoom(); draw(); });
     if (main2Dragging) { main2Dragging = false; pane2.style.cursor = ''; }
   });
   pane2.addEventListener('dblclick', () => { resetMain2Zoom(); draw2(); });
+
+  // [CANVAS-GHOSTS] hover hit-test on pane 2
+  pane2.addEventListener('mousemove', e => {
+    const rect = pane2.getBoundingClientRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    // Test against real projections2 (marked pixels)
+    let found = null;
+    for (const lm of projections2) {
+      if (!lm.marked_pixel) continue;
+      const [cx, cy] = toCanvas2(lm.marked_pixel[0], lm.marked_pixel[1]);
+      const dx = mx - cx, dy = my - cy;
+      if (dx*dx + dy*dy < 64) { found = lm.name; break; }  // 8px radius
+    }
+    if (found !== hoveredLm2) { hoveredLm2 = found; draw2(); }
+    // Test against ghosts
+    let foundGhost = null;
+    for (const g of ghostMarkers2) {
+      if (g.type !== 'point') continue;
+      const [cx, cy] = toCanvas2(g.pixel[0], g.pixel[1]);
+      const dx = mx - cx, dy = my - cy;
+      if (dx*dx + dy*dy < 64) { foundGhost = g.name; break; }
+    }
+    if (foundGhost !== hoveredGhost2) { hoveredGhost2 = foundGhost; draw2(); }
+  });
+  pane2.addEventListener('mouseleave', () => {
+    if (hoveredLm2 !== null || hoveredGhost2 !== null) {
+      hoveredLm2 = null; hoveredGhost2 = null; draw2();
+    }
+  });
+
   console.log('[MULTICAM-STEP30] pane 2 pan/zoom wired up');
 })();
 
@@ -4344,9 +4462,13 @@ window.addEventListener('load', () => {
           if (d && d.camera && d.camera.size) {
             camData2 = d.camera;
             window.camData2 = d.camera;
+            // [CANVAS-GHOSTS] also store the real projections for pane 2 drawing
+            projections2 = d.projections || [];
+            window.projections2 = projections2;
             resetMain2Zoom();
             if (typeof window.resizeOverlay === 'function') window.resizeOverlay();
             if (typeof window.draw2 === 'function') window.draw2();
+            if (typeof window._refreshGhosts === 'function') window._refreshGhosts();
           }
         })
         .catch(e => console.warn('[MULTICAM-STEP30] cam2 data fetch failed', e));
@@ -4413,9 +4535,13 @@ window.addEventListener('load', () => {
           if (d && d.camera && d.camera.size) {
             camData2 = d.camera;
             window.camData2 = d.camera;
+            // [CANVAS-GHOSTS] also store the real projections for pane 2 drawing
+            projections2 = d.projections || [];
+            window.projections2 = projections2;
             resetMain2Zoom();
             if (typeof window.resizeOverlay === 'function') window.resizeOverlay();
             if (typeof window.draw2 === 'function') window.draw2();
+            if (typeof window._refreshGhosts === 'function') window._refreshGhosts();
           }
         })
         .catch(e => console.warn('[MULTICAM-STEP30] cam2 data fetch failed', e));
@@ -4547,19 +4673,11 @@ window.addEventListener('load', () => {
 })();
 // ── end [MULTICAM-STEP16] ─────────────────────────────────────────────
 
-// ── [MULTICAM-STEP23] LM projection overlay rendering ─────────────────
-// For each pane in dual mode, fetch /api/lm_projections for the OTHER
-// pane's cam and draw ghost markers (point for triangulated, line for
-// epipolar). Color matches the source-cam-type palette used elsewhere.
+// ── [CANVAS-GHOSTS] Ghost projection loader (replaces SVG STEP23) ─────
+// Fetches /api/lm_projections for each pane and stores results in
+// ghostMarkers1/ghostMarkers2. Then triggers draw()/draw2() to render.
 (() => {
-  const proj1   = document.getElementById('proj-svg-1');
-  const proj2   = document.getElementById('proj-svg-2');
-  const btnProj = document.getElementById('proj-toggle');
-  if (!proj1 || !proj2 || !btnProj) return;
-
-  const SVG_NS = 'http://www.w3.org/2000/svg';
-  // Cache fetched projections per cam to avoid hammering the endpoint
-  const cache = new Map();  // cam_name -> {projections, cam_size}
+  const cache = new Map();
 
   async function fetchProjections(camName, filterCam) {
     if (!camName) return null;
@@ -4571,221 +4689,58 @@ window.addEventListener('load', () => {
       const r = await fetch(url);
       const d = await r.json();
       if (d.error) {
-        console.warn('[MULTICAM-STEP23] error for', camName, d.error);
+        console.warn('[CANVAS-GHOSTS] error for', camName, d.error);
         return null;
       }
       cache.set(cacheKey, d);
       return d;
     } catch (e) {
-      console.warn('[MULTICAM-STEP23] fetch failed for', camName, e);
+      console.warn('[CANVAS-GHOSTS] fetch failed for', camName, e);
       return null;
     }
   }
 
-  function clearSvg(svg) {
-    while (svg.firstChild) svg.removeChild(svg.firstChild);
-  }
-
-  function render(svgEl, data, imgEl) {
-    clearSvg(svgEl);
-    if (!data || !data.projections || !data.projections.length) return;
-    const [iw, ih] = data.cam_size;
-    // Set the SVG viewBox to match the image's native pixel size; the SVG
-    // is laid out at the image's CSS size, so coords inside the viewBox
-    // map 1:1 to image pixels regardless of object-fit:contain scaling.
-    svgEl.setAttribute('viewBox', `0 0 ${iw} ${ih}`);
-    // Match the <img>'s rendered rect so the SVG aligns with the visible image.
-    // Image uses object-fit:contain, so the actual image rect inside its
-    // box has letterboxing. We compute the rendered rect and position the SVG
-    // to match exactly.
-    if (imgEl && imgEl.naturalWidth > 0) {
-      // [MULTICAM-STEP23-FIX3] Just match the SVG to the image's actual
-      // rendered rect on screen. The image is position:absolute inside the
-      // parent — we get its bounding rect and subtract the parent's offset
-      // to position the SVG at the same place using parent-relative coords.
-      const imgR = imgEl.getBoundingClientRect();
-      const parentR = svgEl.parentElement.getBoundingClientRect();
-      const offX = imgR.left - parentR.left;
-      const offY = imgR.top - parentR.top;
-      // For object-fit:contain, the actual image content fits inside imgR
-      // with letterboxing. Compute the letterboxed rect.
-      const ar = iw / ih;
-      const br = imgR.width / imgR.height;
-      let renderW, renderH, innerOffX = 0, innerOffY = 0;
-      if (br > ar) {
-        renderH = imgR.height;
-        renderW = imgR.height * ar;
-        innerOffX = (imgR.width - renderW) / 2;
-      } else {
-        renderW = imgR.width;
-        renderH = imgR.width / ar;
-        innerOffY = (imgR.height - renderH) / 2;
-      }
-      svgEl.style.left = (offX + innerOffX) + 'px';
-      svgEl.style.top = (offY + innerOffY) + 'px';
-      svgEl.style.width = renderW + 'px';
-      svgEl.style.height = renderH + 'px';
-    }
-
-    // Color palette — match the rest of the app's LM color scheme.
-    const COLOR_POINT = 'var(--violet)';   // violet for triangulated
-    const COLOR_LINE  = '#4ade80';   // green for epipolar
-
-    for (const p of data.projections) {
-      const g = document.createElementNS(SVG_NS, 'g');
-      g.setAttribute('class', 'lm-proj-group');
-      g.setAttribute('data-lm-name', p.name);
-
-      if (p.type === 'point') {
-        const c = document.createElementNS(SVG_NS, 'circle');
-        c.setAttribute('cx', String(p.pixel[0]));
-        c.setAttribute('cy', String(p.pixel[1]));
-        c.setAttribute('r', '7');
-        c.setAttribute('stroke', COLOR_POINT);
-        c.setAttribute('class', 'lm-proj-point');
-        g.appendChild(c);
-        // [STYLE-POLISH] Label with violet background box (matches existing
-        // cone-label style in draw_cones — bold 11px mono, white text on filled rect)
-        const labelText = p.name;
-        const labelX = p.pixel[0] + 12;
-        const labelY = p.pixel[1] - 9;
-        // Approximate text width: ~7px per char at 11px mono (close enough for layout)
-        const approxW = labelText.length * 7;
-        const bg = document.createElementNS(SVG_NS, 'rect');
-        bg.setAttribute('x', String(labelX - 4));
-        bg.setAttribute('y', String(labelY - 12));
-        bg.setAttribute('width', String(approxW + 8));
-        bg.setAttribute('height', '16');
-        bg.setAttribute('class', 'lm-proj-label-bg');
-        g.appendChild(bg);
-        const t = document.createElementNS(SVG_NS, 'text');
-        t.setAttribute('x', String(labelX));
-        t.setAttribute('y', String(labelY));
-        t.setAttribute('class', 'lm-proj-label');
-        t.textContent = labelText;
-        g.appendChild(t);
-      } else if (p.type === 'epipolar') {
-        const l = document.createElementNS(SVG_NS, 'line');
-        l.setAttribute('x1', String(p.line[0][0]));
-        l.setAttribute('y1', String(p.line[0][1]));
-        l.setAttribute('x2', String(p.line[1][0]));
-        l.setAttribute('y2', String(p.line[1][1]));
-        l.setAttribute('stroke', COLOR_LINE);
-        l.setAttribute('class', 'lm-proj-line');
-        g.appendChild(l);
-        const mx = (p.line[0][0] + p.line[1][0]) / 2;
-        const my = (p.line[0][1] + p.line[1][1]) / 2;
-        const t = document.createElementNS(SVG_NS, 'text');
-        t.setAttribute('x', String(mx + 8));
-        t.setAttribute('y', String(my));
-        t.setAttribute('class', 'lm-proj-label');
-        t.textContent = p.name + ' (epi)';
-        g.appendChild(t);
-      }
-      svgEl.appendChild(g);
-    }
-  }
-
   async function refresh() {
-    if (!document.body.classList.contains('dual-cam')) {
-      clearSvg(proj1);
-      clearSvg(proj2);
-      return;
-    }
-    if (document.body.classList.contains('proj-off')) {
-      clearSvg(proj1);
-      clearSvg(proj2);
-      return;
-    }
-    // Each pane shows the OTHER pane's cam projections (so you see where
-    // the other cam's LMs would appear in your view).
     const cam1 = window.currentCam;
     const cam2 = window.currentCam2;
-    const img1 = document.getElementById('frame-img');
-    const img2 = document.getElementById('frame-img-2');
-
-    // [MULTICAM-STEP23-FIX7] Pane 1 shows LMs that are marked on cam2 (as ghosts),
-    // and vice versa. So you can verify alignment: "I marked this LM on cam2,
-    // does it land on the same building when I look at cam1?"
-    if (cam1 && cam2) {
+    if (document.body.classList.contains('dual-cam') && cam1 && cam2 &&
+        !document.body.classList.contains('proj-off')) {
       const d1 = await fetchProjections(cam1, cam2);
-      render(proj1, d1, img1);
+      ghostMarkers1 = (d1 && d1.projections) || [];
       const d2 = await fetchProjections(cam2, cam1);
-      render(proj2, d2, img2);
-    } else if (cam1) {
-      const d = await fetchProjections(cam1);
-      render(proj1, d, img1);
-      clearSvg(proj2);
+      ghostMarkers2 = (d2 && d2.projections) || [];
     } else {
-      clearSvg(proj1);
-      clearSvg(proj2);
+      ghostMarkers1 = [];
+      ghostMarkers2 = [];
     }
+    if (typeof draw === 'function') draw();
+    if (typeof draw2 === 'function') draw2();
   }
+  window._refreshGhosts = refresh;
+  // Backward-compat alias used by draw2 raF call
+  window._refreshProjections = refresh;
 
-  // Hook into dual toggle + cam selection changes
-  const origDualBtn = document.getElementById('dual-toggle');
-  if (origDualBtn) {
-    origDualBtn.addEventListener('click', () => setTimeout(refresh, 50));
-  }
+  // Refresh hooks
+  const btnDual = document.getElementById('dual-toggle');
+  if (btnDual) btnDual.addEventListener('click', () => setTimeout(refresh, 50));
   const sel1 = document.getElementById('cam-sel');
-  const sel2 = document.getElementById('cam-sel-2');
   if (sel1) sel1.addEventListener('change', () => setTimeout(refresh, 200));
+  const sel2 = document.getElementById('cam-sel-2');
   if (sel2) sel2.addEventListener('change', () => setTimeout(refresh, 200));
 
-  // Also re-render after frame loads (image dimensions become known)
-  const img1 = document.getElementById('frame-img');
-  const img2 = document.getElementById('frame-img-2');
-  if (img1) img1.addEventListener('load', () => setTimeout(refresh, 50));
-  if (img2) img2.addEventListener('load', () => setTimeout(refresh, 50));
-
-  // Re-render on window resize (image rect changes)
-  window.addEventListener('resize', () => setTimeout(refresh, 100));
-
-  // [MULTICAM-STEP23-FIX5] Re-render on pan/zoom — the canvas-wrap fires
-  // wheel for zoom and mousemove during drag-pan. We piggyback off those
-  // to keep projections aligned with the image as it moves/scales.
-  const cw = document.getElementById('canvas-wrap');
-  if (cw) {
-    cw.addEventListener('wheel', () => requestAnimationFrame(refresh), { passive: true });
-    cw.addEventListener('mousemove', () => {
-      if (window._panActive) requestAnimationFrame(refresh);
-    });
-    cw.addEventListener('mousedown', () => { window._panActive = true; });
-    document.addEventListener('mouseup', () => { window._panActive = false; refresh(); });
-  }
-
   // Projections toggle
-  btnProj.addEventListener('click', () => {
-    const off = document.body.classList.toggle('proj-off');
-    btnProj.classList.toggle('active', !off);
-    if (!off) refresh();
-  });
-  // Default ON
-  btnProj.classList.add('active');
-
-  // Hover sync with the LM sidebar list (highlight ghost when hovering list)
-  function clearGhostHover() {
-    for (const svg of [proj1, proj2]) {
-      svg.querySelectorAll('.hovered').forEach(el => el.classList.remove('hovered'));
-    }
+  const btnProj = document.getElementById('proj-toggle');
+  if (btnProj) {
+    btnProj.addEventListener('click', () => {
+      const off = document.body.classList.toggle('proj-off');
+      btnProj.classList.toggle('active', !off);
+      refresh();
+    });
+    btnProj.classList.add('active');
   }
-  document.addEventListener('mouseover', (e) => {
-    const li = e.target.closest('[data-lm-name]');
-    if (!li) { clearGhostHover(); return; }
-    const name = li.getAttribute('data-lm-name');
-    for (const svg of [proj1, proj2]) {
-      svg.querySelectorAll('.lm-proj-group').forEach(g => {
-        const match = g.getAttribute('data-lm-name') === name;
-        g.querySelectorAll('.lm-proj-point, .lm-proj-line, .lm-proj-label, .lm-proj-label-bg')
-          .forEach(el => el.classList.toggle('hovered', match));
-      });
-    }
-  });
 
-  window._refreshProjections = refresh;  // [MULTICAM-STEP30] for draw2 sync
-  console.log('[MULTICAM-STEP23] projection overlays wired up');
+  console.log('[CANVAS-GHOSTS] ghost loader wired up');
 })();
-// ── end [MULTICAM-STEP23] ─────────────────────────────────────────────
 </script>
 
 <!-- Phase 8.1: triangulation toast (top-center over map view). -->
