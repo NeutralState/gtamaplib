@@ -472,7 +472,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
      by the time the user picks a cam. The browser fetches it in
      parallel with the rest of the page; same response is reused by
      the Map view <img>, the minimap background-image, etc. -->
-<link rel="preload" as="image" href="/yanis.jpg">
+<!-- [YANIS-CLEANUP-V2] yanis.jpg preload removed -->
 </head>
 <body>
 
@@ -522,7 +522,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div id="minimap-wrap-sb" title="Click to open Map view (M to toggle)">
         <div id="minimap-rotator-sb">
           <!-- Phase 7a.1.2: <img> instead of <div> bg-image (Safari perf) -->
-          <img id="minimap-img-sb" src="/yanis.jpg" alt="">
+          <img id="minimap-img-sb" src="" alt="">
         </div>
         <svg id="minimap-pointer-sb" viewBox="0 0 240 170" preserveAspectRatio="none">
           <path d="M 120,75 L 128,91 L 120,87 L 112,91 Z"
@@ -1013,16 +1013,19 @@ async function init() {
     mapLoading.style.display = 'flex';
     mapLoading.textContent = 'Loading yanis map…';
     try {
-      // Fetch metadata + image in parallel.
-      const [dataRes, imgEl] = await Promise.all([
-        fetch('/api/map_data').then(r => r.json()),
-        new Promise((resolve, reject) => {
-          const img = new Image();
-          img.onload = () => resolve(img);
-          img.onerror = () => reject(new Error('failed to load /yanis.jpg'));
-          img.src = '/yanis.jpg';
-        }),
-      ]);
+      // [YANIS-CLEANUP-V2] Map view uses tile canvas now (not yanis.jpg).
+      // We still need a <img> element here because downstream code attaches
+      // it to the DOM (#map-png-wrap) and uses it as a sizing reference.
+      // Use a 1x1 transparent data URI so no network fetch happens but the
+      // element behaves like a loaded image.
+      const dataRes = await fetch('/api/map_data').then(r => r.json());
+      const imgEl = await new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = () => reject(new Error('image init failed'));
+        // 1x1 transparent PNG data URI
+        img.src = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=';
+      });
       window.mapData = dataRes;
       window.mapTransform = dataRes.transform;
       const sz = dataRes.transform.svg_size;

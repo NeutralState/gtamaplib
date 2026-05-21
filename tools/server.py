@@ -502,43 +502,17 @@ class Handler(BaseHTTPRequestHandler):
 
         # [TILES-V1] isolated test page for new tile-based map renderer.
         # Not linked from anywhere in the main UI — direct nav only.
-        elif path == '/map_view_v2.html':
-            self.send_file(os.path.join(TOOL_DIR, 'map_view_v2.html'), 'text/html')
-        elif path == '/map_view_v2.js':
-            self.send_file(os.path.join(TOOL_DIR, 'map_view_v2.js'), 'application/javascript')
+        # [YANIS-CLEANUP-V2] map_view_v2 routes removed
 
         # [TILES-V1] isolated test page for new tile-based map renderer.
         # Not linked from anywhere in the main UI — direct nav only.
-        elif path == '/map_view_v2.html':
-            self.send_file(os.path.join(TOOL_DIR, 'map_view_v2.html'), 'text/html')
-        elif path == '/map_view_v2.js':
-            self.send_file(os.path.join(TOOL_DIR, 'map_view_v2.js'), 'application/javascript')
+        # [YANIS-CLEANUP-V2] map_view_v2 routes removed
 
         # ── SVG Map Refactor (Phase 1) ─────────────────────────────
         # Two endpoints powering the new full-screen SVG map view.
         # See tools/CLAUDE_CONTEXT.md > "SVG Map View Refactor" for context.
 
-        elif path == '/yanis.jpg':  # [YANIS-V12]
-            # Phase 3+4 PNG: serves the rasterized 4K map (replaces the
-            # original /yanis.svg endpoint — the 85MB vector was too heavy
-            # for the browser to pan/zoom interactively. The PNG is rendered
-            # offline with rsvg-convert from the original SVG and committed
-            # to the repo. World→image transform: see /api/map_data response.
-            png_path = os.path.join(TOOL_DIR, 'assets', 'yanis_v12.jpg')
-            if not os.path.exists(png_path):
-                self.send_response(404)
-                self.end_headers()
-                self.wfile.write(b'yanis_v12.jpg not found in tools/assets/')
-                return
-            with open(png_path, 'rb') as f:
-                data = f.read()
-            self.send_response(200)
-            self.send_header('Content-Type', 'image/jpeg')
-            self.send_header('Content-Length', len(data))
-            # Asset is immutable — 1h cache.
-            self.send_header('Cache-Control', 'public, max-age=3600')
-            self.end_headers()
-            self.wfile.write(data)
+        # [YANIS-CLEANUP-V2] /yanis.jpg endpoint removed
 
         elif path.startswith('/tiles/'):
             # [TILES-V1] Serve tile JPGs from vendor/gtadb.org/maps/tiles/6/yanis,12/
