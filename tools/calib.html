@@ -8,8 +8,7 @@
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=DM+Sans:wght@300;400;500&display=swap');
 :root {
   --bg:#0a0a0c; --surface:#13131a; --surface2:#1c1c26; --border:#252535;
-  --green:#4ade80; --yellow:#f59e0b; --red:#f87171; --blue:#60a5fa;
-  --purple:#a78bfa;
+  --green:#4ade80; --yellow:#f59e0b; --red:#f87171; --blue:#60a5fa; --violet:#c084fc;
   --text:#e2e2f0; --dim:#5a5a7a; --mid:#9090b0;
   --mono:'JetBrains Mono',monospace; --sans:'DM Sans',sans-serif;
 }
@@ -313,17 +312,21 @@ header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(
 .lm-proj-svg{position:absolute;top:0;left:0;width:100%;height:100%;
   pointer-events:none;display:none}
 body.dual-cam .lm-proj-svg{display:block}
-.lm-proj-svg .lm-proj-point{stroke-width:1.5;fill:rgba(167,139,250,0.27);opacity:.85;
-  transition:opacity .15s,stroke-width .15s;vector-effect:non-scaling-stroke;stroke:#a78bfa}
+.lm-proj-svg .lm-proj-point{stroke-width:1.5;fill:none;opacity:.85;
+  transition:opacity .15s,stroke-width .15s;vector-effect:non-scaling-stroke;stroke:var(--violet)}
+.lm-proj-svg .lm-proj-point.hovered{stroke-width:2.5;opacity:1}
 .lm-proj-svg .lm-proj-point.hovered{opacity:1;stroke-width:3.5;
   stroke-dasharray:none}
 .lm-proj-svg .lm-proj-line{stroke-width:3;fill:none;opacity:.65;
   stroke-dasharray:8 5;transition:opacity .15s,stroke-width .15s;vector-effect:non-scaling-stroke}
 .lm-proj-svg .lm-proj-line.hovered{opacity:.95;stroke-width:2.5}
-.lm-proj-svg .lm-proj-label{font-family:JetBrains Mono,monospace;font-size:11px;
-  fill:#fff;stroke:#000;stroke-width:2;paint-order:stroke;opacity:0;
-  transition:opacity .15s;pointer-events:none;vector-effect:non-scaling-stroke}
-.lm-proj-svg .lm-proj-label.hovered{opacity:1}
+.lm-proj-svg .lm-proj-label{font-family:JetBrains Mono,monospace;font-size:11px;font-weight:bold;
+  fill:#fff;opacity:0;pointer-events:none;
+  transition:opacity .15s;vector-effect:non-scaling-stroke}
+.lm-proj-svg .lm-proj-label-bg{fill:#000;opacity:0;pointer-events:none;
+  transition:opacity .15s;vector-effect:non-scaling-stroke}
+.lm-proj-svg .lm-proj-label.hovered,
+.lm-proj-svg .lm-proj-label-bg.hovered{opacity:1}
 .lm-proj-svg .lm-proj-group{cursor:pointer;pointer-events:auto}
 .lm-proj-svg .lm-proj-group:hover .lm-proj-point,
 .lm-proj-svg .lm-proj-group:hover .lm-proj-line{opacity:1;stroke-width:3}
@@ -368,6 +371,8 @@ body:not(.dual-cam) .cam-dropdown-item .pane-badge.p2{display:none}
 body:not(.view-map) #dual-toggle{display:inline-block}
 body.dual-cam #dual-toggle{background:var(--blue);color:#000;border-color:var(--blue)}
 #overlay{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
+/* [MULTICAM-STEP30] pane 2 overlay canvas (same role as #overlay for pane 1) */
+#overlay-2{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
 .no-img{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--dim)}
 
 .sidebar{width:290px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
@@ -540,6 +545,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <!-- [MULTICAM-STEP1] 2nd pane -->
     <div class="cam-pane" id="pane-2">
       <img id="frame-img-2" src="" draggable="false">
+      <!-- [MULTICAM-STEP30] pane 2 overlay canvas for pan/zoom rendering -->
+      <canvas id="overlay-2"></canvas>
       <!-- [MULTICAM-STEP23] LM projection overlay for pane 2 -->
       <svg class="lm-proj-svg" id="proj-svg-2" preserveAspectRatio="none"></svg>
       <div id="no-img-2">Select a camera</div>
@@ -832,6 +839,10 @@ function setLmSort(value) {
 window.setLmSort = setLmSort;
 window._syncUrlHash = _syncUrlHash;
 let mainZoom = 1, mainPanX = 0, mainPanY = 0, mainDragging = false, mainDragStart = null, mainPanStart = null;
+// [MULTICAM-STEP30] pane 2 pan/zoom state
+let main2Zoom = 1, main2PanX = 0, main2PanY = 0, main2Dragging = false, main2DragStart = null, main2PanStart = null;
+let camData2 = null;  // set when cam 2 frame loads
+window.camData2 = null;
 
 // ── DOM ────────────────────────────────────────────────────────────────────
 const camSel   = document.getElementById('cam-sel');
@@ -1375,7 +1386,7 @@ async function init() {
     'LEAK':      '#4ade80',  // green — ground truth
     'Trailer 1': '#60a5fa',  // blue
     'Trailer 2': '#60a5fa',
-    'screenshots': '#a78bfa', // purple
+    'screenshots': 'var(--violet)', // purple
   };
 
   function getCamTypeForMap(c) {
@@ -1604,7 +1615,7 @@ async function init() {
     for (const c of window.mapData.cameras) {
       if (!c.xyz) continue;  // shouldn't happen since /api/map_data filters
       const type = getCamTypeForMap(c);
-      const color = CAM_COLORS[type] || '#a78bfa';
+      const color = CAM_COLORS[type] || 'var(--violet)';
       const [sx, sy] = window.worldToSvg(c.xyz[0], c.xyz[1]);
 
       // Phase 5.1: per-cam frustum length = farthest observed landmark.
@@ -2494,6 +2505,15 @@ function resizeOverlay() {
   const _r = getMainPaneRect();
   overlay.width  = _r.width;
   overlay.height = _r.height;
+  // [MULTICAM-STEP30] Also size overlay-2 to match pane 2.
+  const overlay2 = document.getElementById('overlay-2');
+  const pane2 = document.getElementById('pane-2');
+  if (overlay2 && pane2 && document.body.classList.contains('dual-cam')) {
+    const p2r = pane2.getBoundingClientRect();
+    overlay2.width = p2r.width;
+    overlay2.height = p2r.height;
+    draw2();
+  }
   draw();
 }
 window.addEventListener('resize', resizeOverlay);
@@ -2525,6 +2545,34 @@ function canvasToImg(cx, cy) {
 function resetMainZoom() {
   mainZoom = 1; mainPanX = 0; mainPanY = 0;
 }
+
+// [MULTICAM-STEP30] Pane 2 equivalents of baseScale/toCanvas/canvasToImg/resetMainZoom
+function baseScale2() {
+  const overlay2 = document.getElementById('overlay-2');
+  if (!camData2 || !camData2.size || !overlay2) return {scale:1, ox:0, oy:0};
+  const [iw, ih] = camData2.size;
+  const scale = Math.min(overlay2.width / iw, overlay2.height / ih);
+  const ox = (overlay2.width  - iw * scale) / 2;
+  const oy = (overlay2.height - ih * scale) / 2;
+  return {scale, ox, oy};
+}
+function toCanvas2(px, py) {
+  const {scale, ox, oy} = baseScale2();
+  const bx = ox + px * scale;
+  const by = oy + py * scale;
+  return [main2PanX + bx * main2Zoom, main2PanY + by * main2Zoom];
+}
+function canvasToImg2(cx, cy) {
+  const {scale, ox, oy} = baseScale2();
+  const bx = (cx - main2PanX) / main2Zoom;
+  const by = (cy - main2PanY) / main2Zoom;
+  return [(bx - ox) / scale, (by - oy) / scale];
+}
+function resetMain2Zoom() {
+  main2Zoom = 1; main2PanX = 0; main2PanY = 0;
+}
+window.baseScale2 = baseScale2;
+window.resetMain2Zoom = resetMain2Zoom;
 
 // ── VERTICALS-FE-V1: vanishing-points overlay state ─────────────────
 // Using var to avoid temporal dead zone (draw() is called by
@@ -2837,6 +2885,25 @@ function drawBuildingWireframes() {
   }
 }
 
+// [MULTICAM-STEP30] Apply current pan/zoom to frame-img-2 by setting inline style.
+function draw2() {
+  const img2 = document.getElementById('frame-img-2');
+  const overlay2 = document.getElementById('overlay-2');
+  if (!img2 || !overlay2) return;
+  if (!camData2 || !camData2.size) return;
+  const {scale, ox, oy} = baseScale2();
+  const left = main2PanX + ox * main2Zoom;
+  const top  = main2PanY + oy * main2Zoom;
+  const w    = camData2.size[0] * scale * main2Zoom;
+  const h    = camData2.size[1] * scale * main2Zoom;
+  img2.style.cssText = `position:absolute;left:${left}px;top:${top}px;width:${w}px;height:${h}px;object-fit:fill;pointer-events:none`;
+  // Trigger projection re-render so ghost markers follow
+  if (typeof window._refreshProjections === 'function') {
+    requestAnimationFrame(window._refreshProjections);
+  }
+}
+window.draw2 = draw2;
+
 function draw() {
   ctx.clearRect(0, 0, overlay.width, overlay.height);
   drawVerticals();  // VERTICALS-FE-V1
@@ -2933,6 +3000,8 @@ canvasWrap.addEventListener('mouseleave', () => { hoveredLm = null; tip.style.di
 
 // Main canvas zoom
 canvasWrap.addEventListener('wheel', e => {
+  // [MULTICAM-STEP31] Ignore if event originated in pane-2
+  if (e.target.closest && e.target.closest('#pane-2')) return;
   e.preventDefault();
   const rect = getMainPaneRect();  // [MULTICAM-STEP20]
   const mx = e.clientX - rect.left, my = e.clientY - rect.top;
@@ -2949,6 +3018,8 @@ canvasWrap.addEventListener('wheel', e => {
 // Main canvas pan
 canvasWrap.addEventListener('mousedown', e => {
   if (addPxMode) return;
+  // [MULTICAM-STEP31] Ignore if event originated in pane-2
+  if (e.target.closest && e.target.closest('#pane-2')) return;
   mainDragging = true;
   mainDragStart = [e.clientX, e.clientY];
   mainPanStart = [mainPanX, mainPanY];
@@ -2966,6 +3037,47 @@ window.addEventListener('mouseup', () => {
 
 // Double click to reset zoom
 canvasWrap.addEventListener('dblclick', () => { resetMainZoom(); draw(); });
+
+// [MULTICAM-STEP30] Pane 2 wheel/pan/dblclick handlers (mirror of pane 1)
+(() => {
+  const pane2 = document.getElementById('pane-2');
+  if (!pane2) return;
+
+  pane2.addEventListener('wheel', e => {
+    e.preventDefault();
+    e.stopPropagation();  // [MULTICAM-STEP31] block bubble to canvasWrap
+    const rect = pane2.getBoundingClientRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    const bx = (mx - main2PanX) / main2Zoom;
+    const by = (my - main2PanY) / main2Zoom;
+    const factor = e.deltaY < 0 ? 1.15 : 0.87;
+    main2Zoom = Math.max(0.3, Math.min(32, main2Zoom * factor));
+    main2PanX = mx - bx * main2Zoom;
+    main2PanY = my - by * main2Zoom;
+    draw2();
+  }, {passive: false});
+
+  pane2.addEventListener('mousedown', e => {
+    if (e.shiftKey) return;
+    if (e.target.closest('#cam-sel-2-wrap')) return;
+    e.stopPropagation();  // [MULTICAM-STEP31] block bubble to canvasWrap
+    main2Dragging = true;
+    main2DragStart = [e.clientX, e.clientY];
+    main2PanStart = [main2PanX, main2PanY];
+    pane2.style.cursor = 'grabbing';
+  });
+  window.addEventListener('mousemove', e => {
+    if (!main2Dragging) return;
+    main2PanX = main2PanStart[0] + e.clientX - main2DragStart[0];
+    main2PanY = main2PanStart[1] + e.clientY - main2DragStart[1];
+    draw2();
+  });
+  window.addEventListener('mouseup', () => {
+    if (main2Dragging) { main2Dragging = false; pane2.style.cursor = ''; }
+  });
+  pane2.addEventListener('dblclick', () => { resetMain2Zoom(); draw2(); });
+  console.log('[MULTICAM-STEP30] pane 2 pan/zoom wired up');
+})();
 
 // ── Update Landmarks ──────────────────────────────────────────────────────
 btnUpdate.addEventListener('click', async () => {
@@ -3477,7 +3589,7 @@ function showTriangulationOnMap(lmName, sourceCams, lmXyz, errorM) {
     if (t === 'leak') return '#4ade80';      // green
     if (t === 'trailer1' || t === 'trailer 1') return '#60a5fa';
     if (t === 'trailer2' || t === 'trailer 2') return '#60a5fa';
-    if (t === 'screenshots' || t === 'screenshot') return '#a78bfa'; // purple
+    if (t === 'screenshots' || t === 'screenshot') return 'var(--violet)'; // purple
     return '#fbbf24';
   }
   // Render one ray per source cam.
@@ -4223,7 +4335,22 @@ window.addEventListener('load', () => {
     noImg2.style.display = 'flex';
     noImg2.textContent = 'Loading…';
     img2.src = `/frame/${encodeURIComponent(camName)}`;
-    img2.onload = () => { noImg2.style.display = 'none'; };
+    img2.onload = () => {
+      noImg2.style.display = 'none';
+      // [MULTICAM-STEP30] Fetch camData2 via /api/project + trigger draw2.
+      fetch('/api/project?cam=' + encodeURIComponent(camName))
+        .then(r => r.json())
+        .then(d => {
+          if (d && d.camera && d.camera.size) {
+            camData2 = d.camera;
+            window.camData2 = d.camera;
+            resetMain2Zoom();
+            if (typeof window.resizeOverlay === 'function') window.resizeOverlay();
+            if (typeof window.draw2 === 'function') window.draw2();
+          }
+        })
+        .catch(e => console.warn('[MULTICAM-STEP30] cam2 data fetch failed', e));
+    };
     img2.onerror = () => { noImg2.textContent = 'No image'; };
   }
 
@@ -4277,7 +4404,22 @@ window.addEventListener('load', () => {
     noImg2.style.display = 'flex';
     noImg2.textContent = 'Loading…';
     img2.src = `/frame/${encodeURIComponent(camName)}`;
-    img2.onload = () => { noImg2.style.display = 'none'; };
+    img2.onload = () => {
+      noImg2.style.display = 'none';
+      // [MULTICAM-STEP30] Fetch camData2 via /api/project + trigger draw2.
+      fetch('/api/project?cam=' + encodeURIComponent(camName))
+        .then(r => r.json())
+        .then(d => {
+          if (d && d.camera && d.camera.size) {
+            camData2 = d.camera;
+            window.camData2 = d.camera;
+            resetMain2Zoom();
+            if (typeof window.resizeOverlay === 'function') window.resizeOverlay();
+            if (typeof window.draw2 === 'function') window.draw2();
+          }
+        })
+        .catch(e => console.warn('[MULTICAM-STEP30] cam2 data fetch failed', e));
+    };
     img2.onerror = () => { noImg2.textContent = 'No image'; };
   }
 
@@ -4354,7 +4496,10 @@ window.addEventListener('load', () => {
   const btnDual = document.getElementById('dual-toggle');
   if (btnDual) {
     btnDual.addEventListener('click', () => {
-      window._lastAssignedPane = 2;  // Next click goes to pane 1 by default
+      // [MULTICAM-STEP32] When dual mode turns ON, pane 1 is already loaded
+      // with the current cam, so the next sidebar click should go to pane 2.
+      // We set _lastAssignedPane = 1 so the next toggle flips to 2.
+      window._lastAssignedPane = 1;
       // [MULTICAM-STEP18-FIX] Clear the inline style that the pan/zoom
       // code sets on #frame-img. That inline style has fixed px width/height
       // computed for the single-cam viewport — when we switch to dual mode,
@@ -4483,7 +4628,7 @@ window.addEventListener('load', () => {
     }
 
     // Color palette — match the rest of the app's LM color scheme.
-    const COLOR_POINT = '#a78bfa';   // violet for triangulated
+    const COLOR_POINT = 'var(--violet)';   // violet for triangulated
     const COLOR_LINE  = '#4ade80';   // green for epipolar
 
     for (const p of data.projections) {
@@ -4495,15 +4640,29 @@ window.addEventListener('load', () => {
         const c = document.createElementNS(SVG_NS, 'circle');
         c.setAttribute('cx', String(p.pixel[0]));
         c.setAttribute('cy', String(p.pixel[1]));
-        c.setAttribute('r', '12');  // [MULTICAM-STEP23-FIX8] match existing marker default r=5 on screen
+        c.setAttribute('r', '7');
         c.setAttribute('stroke', COLOR_POINT);
         c.setAttribute('class', 'lm-proj-point');
         g.appendChild(c);
+        // [STYLE-POLISH] Label with violet background box (matches existing
+        // cone-label style in draw_cones — bold 11px mono, white text on filled rect)
+        const labelText = p.name;
+        const labelX = p.pixel[0] + 12;
+        const labelY = p.pixel[1] - 9;
+        // Approximate text width: ~7px per char at 11px mono (close enough for layout)
+        const approxW = labelText.length * 7;
+        const bg = document.createElementNS(SVG_NS, 'rect');
+        bg.setAttribute('x', String(labelX - 4));
+        bg.setAttribute('y', String(labelY - 12));
+        bg.setAttribute('width', String(approxW + 8));
+        bg.setAttribute('height', '16');
+        bg.setAttribute('class', 'lm-proj-label-bg');
+        g.appendChild(bg);
         const t = document.createElementNS(SVG_NS, 'text');
-        t.setAttribute('x', String(p.pixel[0] + 18));
-        t.setAttribute('y', String(p.pixel[1] - 12));
+        t.setAttribute('x', String(labelX));
+        t.setAttribute('y', String(labelY));
         t.setAttribute('class', 'lm-proj-label');
-        t.textContent = p.name;
+        t.textContent = labelText;
         g.appendChild(t);
       } else if (p.type === 'epipolar') {
         const l = document.createElementNS(SVG_NS, 'line');
@@ -4605,19 +4764,25 @@ window.addEventListener('load', () => {
   btnProj.classList.add('active');
 
   // Hover sync with the LM sidebar list (highlight ghost when hovering list)
+  function clearGhostHover() {
+    for (const svg of [proj1, proj2]) {
+      svg.querySelectorAll('.hovered').forEach(el => el.classList.remove('hovered'));
+    }
+  }
   document.addEventListener('mouseover', (e) => {
     const li = e.target.closest('[data-lm-name]');
-    if (!li) return;
+    if (!li) { clearGhostHover(); return; }
     const name = li.getAttribute('data-lm-name');
     for (const svg of [proj1, proj2]) {
       svg.querySelectorAll('.lm-proj-group').forEach(g => {
         const match = g.getAttribute('data-lm-name') === name;
-        g.querySelectorAll('.lm-proj-point, .lm-proj-line, .lm-proj-label')
+        g.querySelectorAll('.lm-proj-point, .lm-proj-line, .lm-proj-label, .lm-proj-label-bg')
           .forEach(el => el.classList.toggle('hovered', match));
       });
     }
   });
 
+  window._refreshProjections = refresh;  // [MULTICAM-STEP30] for draw2 sync
   console.log('[MULTICAM-STEP23] projection overlays wired up');
 })();
 // ── end [MULTICAM-STEP23] ─────────────────────────────────────────────
