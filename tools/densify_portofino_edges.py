@@ -187,6 +187,18 @@ for branch in sorted(pent_branches):
         if a and b:
             edges.append([a, b])
 
+# ─── PYRAMIDAL APEX: Connect 4 corners of peak box PT (top flat) to branch anchor
+# The branch anchor (NW/NE/S) is the apex of the pyramid — already in landmarks.json.
+pbox_corners_pyramidal = ['pbOL', 'pbOR', 'pbIR', 'pbIL']
+for branch in ['NW', 'NE', 'S']:
+    apex_name = f'Portofino Tower ({branch})'
+    if apex_name not in md.landmarks:
+        continue
+    for corner in pbox_corners_pyramidal:
+        pt_corner = pbox_lms.get(('PT', corner, branch))
+        if pt_corner:
+            edges.append([pt_corner, apex_name])
+
 print(f'\nGenerated {len(edges)} edges')
 
 # ─── Write to calib.html ──────────────────────────────────────────────────
