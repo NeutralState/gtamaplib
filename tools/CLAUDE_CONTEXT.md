@@ -469,3 +469,139 @@ RANSAC dropping Port gave RMS 0.84 on Amphi+Sidewalk only — but Port itself ma
 - B-front leak landmarks should be treated as constructed, not ground truth.
 - For leak cams: xyz/fov fixed but yaw/pitch can have small calibration errors (~0.1-0.2°).
 - Pixel marking at >2km distance has ~5px irreducible error from human perception limits.
+
+
+## Session: 2026-05-21 — Building meshes (procedural rendering) + Portofino densify
+
+### Major wins
+
+Procedural building wireframes rendering live in calib UI. Each cam projects
+the building mesh into pixel space via the server `/api/building_meshes_procedural`
+endpoint. Buildings supported:
+
+- **Four Seasons Hotel Miami**: 1003 edges
+- **Sunshine Skyway Bridge**: 242 edges (includes the suspension cables)
+- **HanksWaffles**: 65 edges
+- **Portofino Tower**: 256 edges (densified from 135 to 256, includes pyramidal apex)
+
+### Architecture
+
+Pipeline:
+1. `gtamaplib.py` has Landmark subclasses (`FourSeasons`, `SunshineSkywayBridge`,
+   `HanksWaffles`) with `render_on_camera(cam)` methods that draw via
+   `cam.render_line((xyz1, xyz2), ...)` calls.
+2. `tools/extract_mesh_edges.py` uses a `FakeCam` proxy to hijack render_line
+   calls — collects (xyz1, xyz2) pairs into a list instead of drawing.
+3. Multi-pass extraction (4 viewpoints for FourSeasons) to capture all faces
+   despite hidden-face logic in render_on_camera.
+4. Output: `gtamapdata/building_meshes_procedural.json` with `{building_name:
+   {color, world_edges: [[xyz1, xyz2], ...]}}`.
+5. Server endpoint `/api/building_meshes_procedural?cam=X` projects each edge
+   to pixel space via `cam.get_pixel(xyz)`, skips out-of-frame edges, returns
+   `{meshes: {bld_name: {color, pixel_edges: [[[x,y], [x,y]], ...]}}}`.
+6. Frontend `loadProceduralMeshes()` fetches per-cam projected edges, stored
+   in `BUILDING_PROCEDURAL_PIXEL_EDGES`. `drawBuildingWireframes()` handles
+   both legacy LM-name format (Portofino) and procedural pixel format.
+
+### Portofino: densified hardcoded edges (not a procedural class)
+
+Portofino has 135 LMs in landmarks.json (Alexandre's calibrated mesh from
+`gen_portofino_v4.py`). Tried refactoring as a `PortofinoTower(Landmark)` class
+but failed — the simplistic translation didn't match the real building's
+break/topology and looked worse than the hardcoded version.
+
+Final approach: `tools/densify_portofino_edges.py` auto-generates a complete
+edge array from the 135 existing LMs. Walks the pent/cyl/peak-box structure
+and outputs all vertical + horizontal edges. Pyramidal apex edges connect
+peak box PT corners to branch anchors (NW/NE/S act as turret pyramid apex).
+
+Re-run anytime LMs change:
+    python3 tools/densify_portofino_edges.py
+
+The script discovers structure on-the-fly:
+- Pentagons: levels B(-15) / L(14) / K(83) / M(91) / P(125), 3 branches, 4 corners
+- Cylinder: levels B/L/K/M/P/CT(137), 8 segments
+- Peak box: levels PB(125) / PT(138.77), 3 branches, 4 corners
+
+### Tools inventory (NEW)
+
+`tools/TOOLS_INVENTORY.md` is auto-generated from `tools/generate_inventory.py`.
+Scans repo and produces markdown docs for:
+- 21 CLI scripts (with docstring summaries + usage)
+- 22 server endpoints
+- 30 UI buttons (with tooltips)
+- 13 keyboard shortcuts
+
+Re-run after adding new tools: `python3 tools/generate_inventory.py`
+
+Helped surface forgotten existing scripts (intake_camera, calibration_order,
+compute_confidence_tiers, bundle_adjust, etc.).
+
+### Multicam dual-pane (committed earlier)
+
+Side-by-side cam comparison view (`d` to toggle). Top/bottom split. Each pane
+has independent pan/zoom. Ghost LM projections render on opposite pane
+(`/api/lm_projections?cam=X&filter_cam=Y`). Smart pane assignment on click.
+
+Canvas-ghosts refactor: ghost markers drawn on canvas (not SVG) for consistent
+visual style with main markers.
+
+### Tile migration complete
+
+`yanis.jpg` (13MB) + `map_view_v2.html/js` removed. Map view + sidebar/cam
+minimaps all use rlx tile pyramid via `vendor/gtadb.org/maps/tiles/6/yanis,12/`.
+
+### Failed experiments (reverted)
+
+- **Strategic dashboard** for cam_health.html (ROI scoring). Built it, found
+  the recommendations weren't useful (top picks were Diner E, Gas Station,
+  Mount Kalaga). Reverted.
+- **PortofinoTower class** refactor. Topology I coded didn't match real
+  building. Backups still exist:
+  - `gtamaplib.py.bak_portofino_class`
+  - `tools/extract_mesh_edges.py.bak_portofino`
+
+### Commits this session
+
+```
+d919577 tools: auto-generated inventory of CLI scripts, endpoints, buttons, shortcuts
+96d733e WIP: multicam dual-pane comparison (pre-pan/zoom-pane2-refactor)
+a89bd58 canvas-ghosts refactor
+1097c88 tiles: cleanup yanis.jpg + map_view_v2 test pages (Phase 4)
+[mesh work commits]
+52425bc portofino: pyramidal apex roofs on 3 turrets
+```
+
+16 commits ahead of origin/feature-svg-map — needs `git push` for backup.
+
+### TODO next session
+
+1. `git push origin feature-svg-map` (16 commits not backed up)
+2. Portofino top floor refinements:
+   - Maybe tiered balconies (need real measurements, not invented)
+   - Maybe atrium ring open at CT level
+3. Validate procedural meshes on multiple cams (check Sunshine Skyway from
+   beach cams, HanksWaffles from Sandy Shores cams)
+4. Apply mesh approach to other major buildings (AIWE class exists too?)
+
+### Files / patches added this session
+
+- `tools/TOOLS_INVENTORY.md` (auto-generated, ~1000 lines)
+- `tools/generate_inventory.py`
+- `tools/extract_mesh_edges.py` (FakeCam multi-pass)
+- `tools/densify_portofino_edges.py`
+- `gtamapdata/building_meshes_procedural.json` (1502 edges total)
+- `gtamapdata/building_meshes.json` (handwritten LM-name edges, mostly superseded)
+- Server endpoint `/api/building_meshes_procedural?cam=X`
+- Frontend `[MESH-FRONTEND-V2]` markers in calib.html
+
+### Patches still in repo root (cleanup needed)
+
+```
+patch_canvas_ghosts.py
+patch_mesh_v1.py
+patch_multicam_step15.py through step30.py
+patch_strategic_v1.py  (reverted)
+... (etc)
+```
+Should be deleted or moved to tools/patches_archive/ in next cleanup pass.
