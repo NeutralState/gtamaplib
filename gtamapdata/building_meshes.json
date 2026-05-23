@@ -1,0 +1,42 @@
+{
+  "_comment": "Building wireframe meshes. Edges are LM suffixes (the part after 'BuildingName (...)' stripped). The frontend expands them to full LM names by prepending the building name. Add/remove edges here, then reload the calib UI.",
+
+  "Portofino Tower": {
+    "color": "#ff9d3d",
+    "source": "tools/gen_portofino_v4.py — auto-generated procedural mesh"
+  },
+
+  "Four Seasons Hotel Miami": {
+    "color": "#60a5fa",
+    "edges": [
+      ["NE", "NW"],
+      ["NW", "SW"],
+      ["SW", "SE"],
+      ["SE", "NE"],
+
+      ["40NE", "40NW"],
+      ["40NW", "40W"],
+      ["40W", "40E"],
+      ["40E", "40NE"],
+
+      ["32NE", "40NE"],
+      ["40NE", "56NE"],
+      ["56NE", "NE"],
+
+      ["BE", "BW"],
+      ["E", "BE"],
+      ["BW", "NW"]
+    ]
+  },
+
+  "Sunshine Skyway Bridge": {
+    "color": "#4ade80",
+    "edges": [
+      ["NR", "N"],
+      ["SR", "S"],
+      ["N", "S"],
+      ["NNR", "NR"],
+      ["SSR", "SR"]
+    ]
+  }
+}

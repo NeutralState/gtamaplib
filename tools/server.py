@@ -639,6 +639,88 @@ class Handler(BaseHTTPRequestHandler):
 
         # ── end SVG Map Refactor (Phase 1) ─────────────────────────
 
+        elif path == '/api/building_meshes_procedural':
+            # [MESH-FRONTEND-V2] Project procedural mesh edges to pixel space for a given cam.
+            cam_name = unquote(qs.get('cam', [''])[0])
+            if not cam_name or cam_name not in md.cameras:
+                self.send_json({'error': 'invalid cam'}, 400)
+                return
+            try:
+                cam = ml.get_camera(cam_name)
+            except Exception as e:
+                self.send_json({'error': f'cam load failed: {e}'}, 400)
+                return
+            mesh_path = os.path.join(GTAMAP_DIR, 'gtamapdata', 'building_meshes_procedural.json')
+            if not os.path.exists(mesh_path):
+                self.send_json({'meshes': {}})
+                return
+            try:
+                with open(mesh_path) as _f:
+                    meshes = json.load(_f)
+            except Exception as e:
+                self.send_json({'error': f'failed to load: {e}'}, 500)
+                return
+            result = {}
+            iw, ih = cam.size if cam.size else (3840, 2160)
+            for building_name, mesh_data in meshes.items():
+                world_edges = mesh_data.get('world_edges', [])
+                color = mesh_data.get('color', '#ff9d3d')
+                projected = []
+                for a, b in world_edges:
+                    try:
+                        pa = cam.get_pixel(a)
+                        pb = cam.get_pixel(b)
+                        # Skip if both endpoints out of frame (with margin)
+                        margin = 200
+                        if (pa[0] < -margin and pb[0] < -margin) or \
+                           (pa[0] > iw + margin and pb[0] > iw + margin) or \
+                           (pa[1] < -margin and pb[1] < -margin) or \
+                           (pa[1] > ih + margin and pb[1] > ih + margin):
+                            continue
+                        projected.append([list(pa), list(pb)])
+                    except Exception:
+                        continue
+                if projected:
+                    result[building_name] = {
+                        'color': color,
+                        'pixel_edges': projected,
+                    }
+            self.send_json({'meshes': result})
+
+        elif path == '/api/building_meshes':
+            # [MESH-FRONTEND-V1] Return building wireframe meshes.
+            # Reads gtamapdata/building_meshes.json and expands edges from
+            # LM suffixes to full LM names. Skips edges with missing LMs.
+            import json as _json
+            mesh_path = os.path.join(GTAMAP_DIR, 'gtamapdata', 'building_meshes.json')
+            if not os.path.exists(mesh_path):
+                self.send_json({'meshes': {}})
+                return
+            try:
+                with open(mesh_path) as _f:
+                    meshes = _json.load(_f)
+            except Exception as e:
+                self.send_json({'error': f'failed to load: {e}'}, 500)
+                return
+            result = {}
+            for building_name, mesh_data in meshes.items():
+                if building_name.startswith('_'): continue  # skip _comment
+                edges = mesh_data.get('edges')
+                if not edges: continue  # no edges defined (e.g. Portofino procedural)
+                color = mesh_data.get('color', '#ff9d3d')
+                expanded_edges = []
+                for a, b in edges:
+                    full_a = f'{building_name} ({a})'
+                    full_b = f'{building_name} ({b})'
+                    if full_a in md.landmarks and full_b in md.landmarks:
+                        expanded_edges.append([full_a, full_b])
+                if expanded_edges:
+                    result[building_name] = {
+                        'color': color,
+                        'edges': expanded_edges,
+                    }
+            self.send_json({'meshes': result})
+
         elif path == '/api/cameras':
             result = []
             for name in sorted(md.cameras):
