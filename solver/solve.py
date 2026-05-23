@@ -1,16 +1,14 @@
 """
-Main solver loop.
+Main solver loop with procedural LMs and geometry priors.
 
 Pipeline:
   1. Bootstrap to get initial state (leak cams + anchor LMs)
-  2. Iterate: refine all LMs against current cams, refine all cams against
-     current LMs. Stop when changes drop below tolerance or max iters hit.
+  2. Iterate: refine pixel-anchored LMs against current cams,
+              compute procedural LMs from refined deps,
+              refine leak cams against current LMs.
   3. Calibrate non-leak cams against the converged LM positions.
-  4. Run global bundle adjust: simultaneously refine ALL non-fixed params.
+  4. Global bundle adjust with pixel + prior residuals.
   5. Compute global metrics.
-
-The non-leak cams are added in step 3, not step 2, because they require
-4+ already-solved LMs to be well-posed via PnP.
 """
 
 from __future__ import annotations
@@ -33,6 +31,12 @@ from .io import (
     SolvedLandmark,
     State,
 )
+from .priors import compute_prior_residuals, n_residuals_for_prior
+from .procedural import (
+    ProceduralError,
+    compute_procedural,
+    topological_order,
+)
 from .triangulate import triangulate_landmark
 
 
@@ -40,15 +44,38 @@ class SolveError(Exception):
     pass
 
 
-def _solved_cameras_to_camera_dict(state: State) -> Dict[str, Camera]:
-    """Convert solved cameras to Camera objects for geometry use."""
-    return {
-        name: Camera(
-            xyz=sc.xyz, ypr=sc.ypr,
-            hfov=sc.fov, image_size=(0, 0),  # image_size patched in caller
+def _apply_procedural_lms(
+    landmarks: Dict[str, SolvedLandmark],
+    measurements: Measurements,
+) -> Dict[str, SolvedLandmark]:
+    if not measurements.procedural_lms:
+        return landmarks
+    try:
+        order = topological_order(measurements.procedural_lms)
+    except ProceduralError:
+        return landmarks
+    out = dict(landmarks)
+    for name in order:
+        spec = measurements.procedural_lms[name]
+        deps_xyz: Dict[str, Tuple[float, float, float]] = {}
+        all_present = True
+        for dep_name in spec.depends_on:
+            if dep_name in out:
+                deps_xyz[dep_name] = out[dep_name].xyz
+            else:
+                all_present = False
+                break
+        if not all_present:
+            continue
+        try:
+            xyz = compute_procedural(spec.generator, deps_xyz, spec.params)
+        except ProceduralError:
+            continue
+        out[name] = SolvedLandmark(
+            kind="procedural", xyz=xyz, n_observers=0,
+            computed_from=spec.generator,
         )
-        for name, sc in state.cameras.items()
-    }
+    return out
 
 
 def _refine_landmarks(
@@ -56,12 +83,6 @@ def _refine_landmarks(
     observations: Observations,
     measurements: Measurements,
 ) -> Tuple[Dict[str, SolvedLandmark], float]:
-    """Re-triangulate every currently-known LM against current cams.
-
-    Returns:
-        (updated_landmarks, max_xyz_change_m)
-    """
-    # Build proper Camera dict with image sizes
     cameras: Dict[str, Camera] = {}
     for name, sc in state.cameras.items():
         if name in measurements.leak_cams:
@@ -76,7 +97,11 @@ def _refine_landmarks(
 
     updated: Dict[str, SolvedLandmark] = {}
     max_change = 0.0
+    proc_names = set(measurements.procedural_lms.keys())
     for lm_name, lm in state.landmarks.items():
+        if lm_name in proc_names:
+            updated[lm_name] = lm
+            continue
         z_c = measurements.z_constraints.get(lm_name)
         result = triangulate_landmark(
             lm_name, cameras, observations,
@@ -89,7 +114,6 @@ def _refine_landmarks(
         new_xyz, rms_px = result
         change = float(np.linalg.norm(np.array(new_xyz) - np.array(lm.xyz)))
         max_change = max(max_change, change)
-        # Count observers
         n_obs = sum(
             1 for cam_name in state.cameras
             if lm_name in observations.pixels.get(cam_name, {})
@@ -107,11 +131,6 @@ def _refine_leak_cams(
     observations: Observations,
     measurements: Measurements,
 ) -> Tuple[Dict[str, SolvedCamera], float]:
-    """Refine each leak cam's ypr against current LMs.
-
-    Returns:
-        (updated_cameras, max_ypr_change_deg)
-    """
     updated: Dict[str, SolvedCamera] = dict(state.cameras)
     max_change = 0.0
     for cam_name, sc in state.cameras.items():
@@ -126,16 +145,13 @@ def _refine_leak_cams(
             hint_ypr=hint_ypr,
             hint_weight=0.05 if hint_ypr is not None else 0.0,
         )
-        # Compute angular distance considering yaw wraparound
         yaw_d = abs(((new_ypr[0] - sc.ypr[0] + 180) % 360) - 180)
         change = max(yaw_d, abs(new_ypr[1] - sc.ypr[1]), abs(new_ypr[2] - sc.ypr[2]))
         max_change = max(max_change, change)
-        # Count constraints (LMs visible from this cam)
         n_constraints = sum(
             1 for lm_name in state.landmarks
             if lm_name in observations.pixels.get(cam_name, {})
         )
-        # Per-cam loss in arcmin
         cam = Camera(xyz=leak.xyz, ypr=new_ypr, hfov=leak.fov, image_size=leak.image_size)
         residuals = []
         for lm_name, lm in state.landmarks.items():
@@ -160,14 +176,10 @@ def _add_non_leak_cams(
     observations: Observations,
     measurements: Measurements,
 ) -> Dict[str, SolvedCamera]:
-    """Calibrate non-leak cams against current landmarks.
-
-    Returns updated cameras dict (incl. all leak cams unchanged).
-    """
     updated: Dict[str, SolvedCamera] = dict(state.cameras)
     for cam_name, meta in measurements.non_leak_cam_meta.items():
         if cam_name in updated:
-            continue  # already there from prior iter
+            continue
         if cam_name not in observations.pixels:
             continue
         result = calibrate_non_leak_cam(
@@ -176,13 +188,10 @@ def _add_non_leak_cams(
         if result is None:
             continue
         xyz, ypr, fov, rms_px = result
-        # Count constraints
         n_constraints = sum(
             1 for lm_name in state.landmarks
             if lm_name in observations.pixels.get(cam_name, {})
         )
-        # Convert pixel RMS to angular (rough estimate)
-        # For a 60deg hfov on 1920px image, 1 px ≈ 1.875 arcmin
         loss_arcmin = rms_px * (fov * 60.0 / meta.image_size[0])
         updated[cam_name] = SolvedCamera(
             kind="non_leak", xyz=xyz, ypr=ypr, fov=fov,
@@ -197,25 +206,13 @@ def _global_bundle_adjust(
     measurements: Measurements,
     huber_delta_px: float = 5.0,
 ) -> State:
-    """Run a global bundle adjustment.
-
-    Free parameters:
-      - For each leak cam: ypr (3)
-      - For each non-leak cam: xyz, ypr, fov (7)
-      - For each LM (non-z-constrained): xyz (3)
-      - For each LM (z-constrained): xy (2), z fixed
-
-    Sparse Jacobian: each observation depends only on the cam params and
-    the LM params it involves. We build a sparsity pattern to let
-    scipy compute Jacobians efficiently.
-    """
     cam_names = sorted(state.cameras.keys())
-    lm_names = sorted(state.landmarks.keys())
-
     leak_set = set(measurements.leak_cams.keys())
     z_constraints = measurements.z_constraints
+    proc_names = set(measurements.procedural_lms.keys())
 
-    # Param offsets: leak ypr (3) | non-leak xyzyprfov (7) | LM xyz or xy
+    free_lm_names = sorted(n for n in state.landmarks if n not in proc_names)
+
     cam_offsets: Dict[str, int] = {}
     cam_sizes: Dict[str, int] = {}
     offset = 0
@@ -226,14 +223,13 @@ def _global_bundle_adjust(
         offset += size
     lm_offsets: Dict[str, int] = {}
     lm_sizes: Dict[str, int] = {}
-    for name in lm_names:
+    for name in free_lm_names:
         lm_offsets[name] = offset
         size = 2 if name in z_constraints else 3
         lm_sizes[name] = size
         offset += size
     n_params = offset
 
-    # Pack initial values
     params0 = np.zeros(n_params, dtype=float)
     for name in cam_names:
         sc = state.cameras[name]
@@ -244,7 +240,7 @@ def _global_bundle_adjust(
             params0[off:off+3] = sc.xyz
             params0[off+3:off+6] = sc.ypr
             params0[off+6] = sc.fov
-    for name in lm_names:
+    for name in free_lm_names:
         lm = state.landmarks[name]
         off = lm_offsets[name]
         if lm_sizes[name] == 2:
@@ -252,7 +248,6 @@ def _global_bundle_adjust(
         else:
             params0[off:off+3] = lm.xyz
 
-    # Get image sizes
     cam_image_sizes: Dict[str, Tuple[int, int]] = {}
     for name in cam_names:
         if name in leak_set:
@@ -260,35 +255,30 @@ def _global_bundle_adjust(
         elif name in measurements.non_leak_cam_meta:
             cam_image_sizes[name] = measurements.non_leak_cam_meta[name].image_size
         else:
-            cam_image_sizes[name] = (1920, 1080)  # fallback
+            cam_image_sizes[name] = (1920, 1080)
 
     leak_meas = measurements.leak_cams
 
-    # Build observation list and sparsity pattern
-    obs_list = []  # (cam_name, lm_name, pix, conf)
+    obs_list = []
     for cam_name in cam_names:
         cam_pix = observations.pixels.get(cam_name, {})
-        for lm_name in lm_names:
+        for lm_name in state.landmarks:
             if lm_name in cam_pix:
                 pix_obs = cam_pix[lm_name]
                 obs_list.append((cam_name, lm_name, pix_obs.pixel, pix_obs.confidence))
-
     n_obs = len(obs_list)
-    if n_obs == 0:
-        return state
 
-    # Sparsity: 2 rows per obs, each touches cam params + LM params
-    sparsity = lil_matrix((2 * n_obs, n_params), dtype=int)
-    for k, (cam_name, lm_name, _, _) in enumerate(obs_list):
-        c_off = cam_offsets[cam_name]
-        c_size = cam_sizes[cam_name]
-        l_off = lm_offsets[lm_name]
-        l_size = lm_sizes[lm_name]
-        for row in (2*k, 2*k + 1):
-            for c in range(c_off, c_off + c_size):
-                sparsity[row, c] = 1
-            for c in range(l_off, l_off + l_size):
-                sparsity[row, c] = 1
+    prior_entries = []
+    prior_total_residuals = 0
+    for name, prior in measurements.geometry_priors.items():
+        n_res = n_residuals_for_prior(prior.type, len(prior.lms))
+        if n_res > 0:
+            prior_entries.append((name, prior, n_res, prior_total_residuals))
+            prior_total_residuals += n_res
+
+    total_residuals = 2 * n_obs + prior_total_residuals
+    if total_residuals == 0:
+        return state
 
     def unpack_cam(params, cam_name):
         off = cam_offsets[cam_name]
@@ -302,39 +292,77 @@ def _global_bundle_adjust(
             fov = float(params[off+6])
         return xyz, ypr, fov
 
-    def unpack_lm(params, lm_name):
+    def unpack_lm_xyz(params, lm_name):
         off = lm_offsets[lm_name]
         if lm_sizes[lm_name] == 2:
             return (float(params[off]), float(params[off+1]), z_constraints[lm_name].z)
         return (float(params[off]), float(params[off+1]), float(params[off+2]))
 
+    def get_all_lm_xyz(params):
+        out: Dict[str, Tuple[float, float, float]] = {}
+        for name in free_lm_names:
+            out[name] = unpack_lm_xyz(params, name)
+        if proc_names:
+            try:
+                order = topological_order(measurements.procedural_lms)
+            except ProceduralError:
+                order = []
+            for name in order:
+                spec = measurements.procedural_lms[name]
+                deps_xyz = {d: out[d] for d in spec.depends_on if d in out}
+                if len(deps_xyz) < len(spec.depends_on):
+                    continue
+                try:
+                    out[name] = compute_procedural(spec.generator, deps_xyz, spec.params)
+                except ProceduralError:
+                    continue
+        return out
+
     def residuals(params):
-        out = np.zeros(2 * n_obs)
+        all_xyz = get_all_lm_xyz(params)
+        out = np.zeros(total_residuals)
         for k, (cam_name, lm_name, pix, conf) in enumerate(obs_list):
             xyz, ypr, fov = unpack_cam(params, cam_name)
             if not (5.0 < fov < 175.0):
                 out[2*k] = 1e4
                 out[2*k+1] = 1e4
                 continue
-            lm_xyz = unpack_lm(params, lm_name)
+            if lm_name not in all_xyz:
+                out[2*k] = 1e3 * conf
+                out[2*k+1] = 1e3 * conf
+                continue
             cam = Camera(xyz=xyz, ypr=ypr, hfov=fov, image_size=cam_image_sizes[cam_name])
-            projected = project(lm_xyz, cam)
+            projected = project(all_xyz[lm_name], cam)
             if projected is None:
                 out[2*k] = 1e3 * conf
                 out[2*k+1] = 1e3 * conf
             else:
                 out[2*k] = (projected[0] - pix[0]) * conf
                 out[2*k+1] = (projected[1] - pix[1]) * conf
+        base_offset = 2 * n_obs
+        lm_xyz_np = {n: np.asarray(xyz, dtype=float) for n, xyz in all_xyz.items()}
+        for name, prior, n_res, off in prior_entries:
+            if not all(lm in lm_xyz_np for lm in prior.lms):
+                continue
+            try:
+                r = compute_prior_residuals(
+                    prior.type, lm_xyz_np, prior.lms,
+                    prior.value if prior.value is not None else 0.0,
+                    prior.weight,
+                )
+                for i, v in enumerate(r):
+                    if base_offset + off + i < total_residuals:
+                        out[base_offset + off + i] = v
+            except Exception:
+                continue
         return out
 
     result = least_squares(
         residuals, params0,
         method="trf", loss="huber", f_scale=huber_delta_px,
-        jac_sparsity=sparsity,
-        max_nfev=100,  # bundle is expensive; cap iterations
+        max_nfev=100,
     )
 
-    # Unpack
     new_cameras: Dict[str, SolvedCamera] = {}
     for name in cam_names:
         xyz, ypr, fov = unpack_cam(result.x, name)
@@ -345,12 +373,13 @@ def _global_bundle_adjust(
             n_constraints=old.n_constraints,
         )
     new_landmarks: Dict[str, SolvedLandmark] = {}
-    for name in lm_names:
-        old = state.landmarks[name]
+    all_xyz_final = get_all_lm_xyz(result.x)
+    for name, lm in state.landmarks.items():
+        new_xyz = all_xyz_final.get(name, lm.xyz)
         new_landmarks[name] = SolvedLandmark(
-            kind=old.kind, xyz=unpack_lm(result.x, name),
-            error_m=old.error_m, n_observers=old.n_observers,
-            computed_from=old.computed_from,
+            kind=lm.kind, xyz=new_xyz,
+            error_m=lm.error_m, n_observers=lm.n_observers,
+            computed_from=lm.computed_from,
         )
 
     return State(
@@ -368,7 +397,6 @@ def _compute_global_metrics(
     observations: Observations,
     measurements: Measurements,
 ) -> GlobalMetrics:
-    """Compute residuals across all observations for diagnostics."""
     residuals: List[float] = []
     for cam_name, sc in state.cameras.items():
         if cam_name in measurements.leak_cams:
@@ -385,13 +413,11 @@ def _compute_global_metrics(
                 residuals.append(
                     angular_residual_arcmin(cam, pix_obs.pixel, lm_xyz)
                 )
-
     if not residuals:
         return GlobalMetrics(
             rms_loss_arcmin=0.0, median_loss_arcmin=0.0, p99_loss_arcmin=0.0,
             total_observations=0, outlier_count_above_20_arcmin=0,
         )
-
     arr = np.array(residuals)
     return GlobalMetrics(
         rms_loss_arcmin=float(np.sqrt(np.mean(arr ** 2))),
@@ -405,44 +431,38 @@ def _compute_global_metrics(
 def solve(
     observations: Observations,
     measurements: Measurements,
-    solver_version: str = "0.5.0-solve",
+    solver_version: str = "0.6.0-solve-with-procedural",
     max_iter: int = 20,
     tol_lm_change_m: float = 0.01,
     tol_cam_change_deg: float = 0.001,
     verbose: bool = False,
 ) -> Tuple[State, Dict[str, object]]:
-    """Top-level solve: bootstrap, iterate, calibrate non-leak, bundle, metrics.
-
-    Returns:
-        (state, diagnostics) where diagnostics is a dict with iteration
-        counts, per-iteration changes, and final metrics.
-    """
     log = []
-
-    # Step 1: bootstrap
     state, boot_diag = bootstrap(observations, measurements, solver_version)
+    new_lms = _apply_procedural_lms(state.landmarks, measurements)
+    state = State(
+        solver_version=state.solver_version, solved_at=state.solved_at,
+        input_hash=state.input_hash, cameras=state.cameras,
+        landmarks=new_lms, global_metrics=state.global_metrics,
+    )
     log.append({"phase": "bootstrap", **boot_diag})
     if verbose:
         print(f"Bootstrap: {len(state.cameras)} cams, {len(state.landmarks)} LMs")
 
-    # Step 2: iterate LM + leak cam refinement until convergence
     iter_log = []
     for it in range(max_iter):
-        # Refine LMs
         new_lms, lm_change = _refine_landmarks(state, observations, measurements)
+        new_lms = _apply_procedural_lms(new_lms, measurements)
         state = State(
             solver_version=state.solver_version, solved_at=state.solved_at,
-            input_hash=state.input_hash,
-            cameras=state.cameras, landmarks=new_lms,
-            global_metrics=state.global_metrics,
+            input_hash=state.input_hash, cameras=state.cameras,
+            landmarks=new_lms, global_metrics=state.global_metrics,
         )
-        # Refine leak cams
         new_cams, cam_change = _refine_leak_cams(state, observations, measurements)
         state = State(
             solver_version=state.solver_version, solved_at=state.solved_at,
-            input_hash=state.input_hash,
-            cameras=new_cams, landmarks=state.landmarks,
-            global_metrics=state.global_metrics,
+            input_hash=state.input_hash, cameras=new_cams,
+            landmarks=state.landmarks, global_metrics=state.global_metrics,
         )
         iter_log.append({
             "iter": it, "lm_max_change_m": lm_change,
@@ -454,29 +474,20 @@ def solve(
             break
     log.append({"phase": "main_loop", "iterations": iter_log})
 
-    # Step 3: add non-leak cams (calibrated via PnP against current LMs)
     cams_with_non_leak = _add_non_leak_cams(state, observations, measurements)
     state = State(
         solver_version=state.solver_version, solved_at=state.solved_at,
-        input_hash=state.input_hash,
-        cameras=cams_with_non_leak, landmarks=state.landmarks,
-        global_metrics=state.global_metrics,
+        input_hash=state.input_hash, cameras=cams_with_non_leak,
+        landmarks=state.landmarks, global_metrics=state.global_metrics,
     )
     log.append({
         "phase": "non_leak_calibration",
         "n_non_leak_cams_added": len(cams_with_non_leak) - len(measurements.leak_cams),
     })
-    if verbose:
-        n_nl = len(cams_with_non_leak) - len(measurements.leak_cams)
-        print(f"Non-leak cams added: {n_nl}")
 
-    # Step 4: global bundle adjust
     state = _global_bundle_adjust(state, observations, measurements)
     log.append({"phase": "bundle_adjust", "complete": True})
-    if verbose:
-        print("Global bundle adjust complete")
 
-    # Step 5: metrics
     metrics = _compute_global_metrics(state, observations, measurements)
     state = State(
         solver_version=state.solver_version,
@@ -485,11 +496,6 @@ def solve(
         cameras=state.cameras, landmarks=state.landmarks,
         global_metrics=metrics,
     )
-    if verbose:
-        print(f"Final RMS: {metrics.rms_loss_arcmin:.3f} arcmin, "
-              f"median: {metrics.median_loss_arcmin:.3f}, "
-              f"outliers (>20 arcmin): {metrics.outlier_count_above_20_arcmin}")
-
     diagnostics = {"log": log, "final_metrics": metrics}
     return state, diagnostics
 
