@@ -1236,6 +1236,14 @@ class Handler(BaseHTTPRequestHandler):
                         continue
                     observers.append((ocn, ml.get_camera(ocn)))
 
+                # Skip re-triangulation for already-good LMs: if error_m < 0.5m,
+                # the LM is already well-placed. Re-triangulating from possibly-different
+                # current cam ypr would risk degrading a good placement.
+                _existing_err = md.landmarks_meta.get(lm_name, {}).get('error_m')
+                if _existing_err is not None and _existing_err < 0.5:
+                    skipped.append(f"{lm_name} (already good: error_m={_existing_err:.3f}m)")
+                    continue
+
                 # Co-location check: if all observers are within 50m of each other,
                 # there's no real triangulation baseline — refuse to update.
                 xs = [o[1].x for o in observers]
