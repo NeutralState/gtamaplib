@@ -232,19 +232,42 @@ def _rough_triangulate_lm(
         for name in observers
     }
 
-    # Try all pairs, pick the one with smallest residual distance
+    # Try all pairs, pick the one with the largest angle between the two
+    # rays (best parallax = most stable triangulation).
+    # Among valid candidates, prefer largest angle to avoid near-parallel
+    # rays that would place the LM anywhere along the rays.
+    from .geometry import ray_from_pixel
     best_xyz = None
-    best_dist = float("inf")
+    best_angle = -1.0
     for i in range(len(observers)):
         for j in range(i + 1, len(observers)):
             a, b = observers[i], observers[j]
             try:
-                xyz, dist = triangulate_pair(
+                _, dir_a = ray_from_pixel(observations.pixels[a][lm_name].pixel, cams[a])
+                _, dir_b = ray_from_pixel(observations.pixels[b][lm_name].pixel, cams[b])
+                cos_angle = float(np.dot(dir_a, dir_b))
+                cos_angle = max(-1.0, min(1.0, cos_angle))
+                angle = float(np.arccos(cos_angle))  # radians, in [0, pi]
+                # Effective parallax = min(angle, pi - angle) so we treat
+                # nearly-parallel and nearly-antiparallel the same way.
+                # Actually we want angle close to 90deg, so:
+                effective = abs(angle - np.pi/2)
+                # We want SMALL effective (close to 90deg). So flip:
+                # Score = pi/2 - effective = angle if <pi/2, else pi-angle
+                score = min(angle, np.pi - angle)
+                if score < 0.05:  # less than ~3deg parallax, skip
+                    continue
+                xyz, _ = triangulate_pair(
                     cams[a], observations.pixels[a][lm_name].pixel,
                     cams[b], observations.pixels[b][lm_name].pixel,
                 )
-                if dist < best_dist:
-                    best_dist = dist
+                # Sanity check: the LM should be in front of both cams
+                # (project should not return None)
+                from .geometry import project
+                if project(tuple(xyz), cams[a]) is None: continue
+                if project(tuple(xyz), cams[b]) is None: continue
+                if score > best_angle:
+                    best_angle = score
                     best_xyz = tuple(float(v) for v in xyz)
             except ValueError:
                 continue
@@ -263,6 +286,7 @@ def _joint_refine(
     measurements: Measurements,
     hint_weight: float = 0.1,
     max_iter: int = 200,
+    freeze_cams: bool = False,
 ) -> Tuple[
     Dict[str, Tuple[float, float, float]],
     Dict[str, Tuple[float, float, float]],
@@ -289,12 +313,18 @@ def _joint_refine(
     n_cams = len(cam_names)
     n_lms = len(lm_names)
 
-    # Pack initial parameters: [yaw0, pitch0, roll0, yaw1, ..., x_lm0, y_lm0, z_lm0, ...]
-    params0 = np.zeros(3 * n_cams + 3 * n_lms, dtype=float)
-    for i, name in enumerate(cam_names):
-        params0[3 * i:3 * i + 3] = cam_ypr_init[name]
-    for j, name in enumerate(lm_names):
-        params0[3 * n_cams + 3 * j:3 * n_cams + 3 * j + 3] = lm_xyz_init[name]
+    # Pack initial parameters
+    if freeze_cams:
+        # Only LM xyz are free
+        params0 = np.zeros(3 * n_lms, dtype=float)
+        for j, name in enumerate(lm_names):
+            params0[3 * j:3 * j + 3] = lm_xyz_init[name]
+    else:
+        params0 = np.zeros(3 * n_cams + 3 * n_lms, dtype=float)
+        for i, name in enumerate(cam_names):
+            params0[3 * i:3 * i + 3] = cam_ypr_init[name]
+        for j, name in enumerate(lm_names):
+            params0[3 * n_cams + 3 * j:3 * n_cams + 3 * j + 3] = lm_xyz_init[name]
 
     cam_idx = {name: i for i, name in enumerate(cam_names)}
     lm_idx = {name: j for j, name in enumerate(lm_names)}
@@ -321,10 +351,14 @@ def _joint_refine(
         out = []
         # Project each observation
         for cam_name, lm_name, pix, conf in obs_list:
-            i = cam_idx[cam_name]
             j = lm_idx[lm_name]
-            ypr = tuple(params[3 * i:3 * i + 3])
-            xyz = tuple(params[3 * n_cams + 3 * j:3 * n_cams + 3 * j + 3])
+            if freeze_cams:
+                ypr = cam_ypr_init[cam_name]
+                xyz = tuple(params[3 * j:3 * j + 3])
+            else:
+                i = cam_idx[cam_name]
+                ypr = tuple(params[3 * i:3 * i + 3])
+                xyz = tuple(params[3 * n_cams + 3 * j:3 * n_cams + 3 * j + 3])
             cam = Camera(
                 xyz=leak_cams[cam_name].xyz,
                 ypr=ypr,
@@ -341,8 +375,12 @@ def _joint_refine(
                 out.append((projected[0] - pix[0]) * conf)
                 out.append((projected[1] - pix[1]) * conf)
 
-        # Soft hint pulls
-        for cam_name, hint_ypr, hint_conf in hint_pulls:
+        # Soft hint pulls (skipped if cams are frozen)
+        if freeze_cams:
+            hint_pulls_iter = []
+        else:
+            hint_pulls_iter = hint_pulls
+        for cam_name, hint_ypr, hint_conf in hint_pulls_iter:
             i = cam_idx[cam_name]
             ypr_cur = params[3 * i:3 * i + 3]
             weight = hint_weight * hint_conf
@@ -356,26 +394,33 @@ def _joint_refine(
 
     result = least_squares(
         residuals, params0,
-        method="lm",
+        method="trf",
+        loss="huber",
+        f_scale=10.0,
         max_nfev=max_iter * len(params0),
     )
 
     # Unpack
     cam_ypr_out: Dict[str, Tuple[float, float, float]] = {}
-    for name in cam_names:
-        i = cam_idx[name]
-        ypr = tuple(float(v) for v in result.x[3 * i:3 * i + 3])
-        # Normalize yaw to [0, 360)
-        ypr = (ypr[0] % 360.0, ypr[1], ypr[2])
-        cam_ypr_out[name] = ypr
-
     lm_xyz_out: Dict[str, Tuple[float, float, float]] = {}
-    for name in lm_names:
-        j = lm_idx[name]
-        xyz = tuple(
-            float(v) for v in result.x[3 * n_cams + 3 * j:3 * n_cams + 3 * j + 3]
-        )
-        lm_xyz_out[name] = xyz
+    if freeze_cams:
+        # Cams unchanged
+        for name in cam_names:
+            cam_ypr_out[name] = cam_ypr_init[name]
+        for j, name in enumerate(lm_names):
+            xyz = tuple(float(v) for v in result.x[3 * j:3 * j + 3])
+            lm_xyz_out[name] = xyz
+    else:
+        for name in cam_names:
+            i = cam_idx[name]
+            ypr = tuple(float(v) for v in result.x[3 * i:3 * i + 3])
+            ypr = (ypr[0] % 360.0, ypr[1], ypr[2])
+            cam_ypr_out[name] = ypr
+        for j, name in enumerate(lm_names):
+            xyz = tuple(
+                float(v) for v in result.x[3 * n_cams + 3 * j:3 * n_cams + 3 * j + 3]
+            )
+            lm_xyz_out[name] = xyz
 
     # Diagnostics
     n_obs = len(obs_list)
