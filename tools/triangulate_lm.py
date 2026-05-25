@@ -26,6 +26,7 @@ import argparse
 import json
 import math
 import os
+import re
 import sys
 
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -60,10 +61,18 @@ def load_all():
     return cameras, pixels, landmarks, cam_tiers
 
 
+def is_leak_cam(cam_data):
+    """A cam is 'leak' if its source matches a date pattern YYYY-MM-DD."""
+    if not isinstance(cam_data, dict):
+        return False
+    src = cam_data.get('source', '') or ''
+    return bool(re.match(r'\d{4}-\d{2}-\d{2}', src))
+
+
 def classify_cam(cam_name, cameras, cam_tiers):
     """Return 'leak', 'trusted_non_leak', or 'other'."""
     c = cameras.get(cam_name, {})
-    if c.get('player') is not None:
+    if is_leak_cam(c):
         return 'leak'
     tier = cam_tiers.get(cam_name)
     if tier in ('anchor', 'high'):
