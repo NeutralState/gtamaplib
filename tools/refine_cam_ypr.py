@@ -59,6 +59,20 @@ LEAK_SOURCE_BONUS = 1.5
 sys.path.insert(0, REPO_DIR)
 import gtamaplib as ml
 
+# V2: per-class constraint awareness. Some leak cams (class A) have all DOF
+# locked and must not be refined. Class B adds a soft roll prior. Class Cm
+# allows fov to be refined alongside ypr.
+try:
+    from leak_cam_audit import (
+        get_class as _audit_get_class,
+        is_anchor as _audit_is_anchor,
+        is_triangulation_trusted as _audit_is_xyz_trusted,
+        class_b_roll_prior_sigma,
+    )
+    _HAS_AUDIT = True
+except ImportError:
+    _HAS_AUDIT = False
+
 
 def load_all():
     with open(CAMERAS_JSON) as f:
@@ -77,15 +91,34 @@ def load_all():
     return cameras, pixels, landmarks, lm_tiers
 
 
-def is_leak_cam(cam_data):
-    """A cam is a 'leak' cam if its source string is a date (YYYY-MM-DD).
-    This matches the server.py / UI definition (LEAK_CAMS).
-    Note: this is different from `player is not None` — some leak cams have
-    player=None but their xyz/fov still come from a dated debug overlay."""
+def is_leak_cam(cam_data, cam_name=None):
+    """A cam is treated as a 'leak' cam if it has HUD-derived ground truth
+    for at least its xyz (constraint_class A/B/C/Cm in the audit).
+
+    V2 audit-driven primary; falls back to the legacy date-pattern heuristic
+    for cams whose source matches YYYY-MM-DD but lack an audit entry. The
+    cam_name argument is preferred over inspecting cam_data['source']."""
     if not isinstance(cam_data, dict):
         return False
+    if _HAS_AUDIT and cam_name is not None:
+        # Use cameras dict from cam_data's parent context — caller passes
+        # individual cam_data so we don't have md.cameras here. Fall back
+        # to inspecting cam_data['constraint_class'] directly.
+        cls = cam_data.get('constraint_class')
+        if cls in ('A_full_hud', 'B_pos_fov_player',
+                   'C_pos_fov_only', 'Cm_pos_only'):
+            return True
+        if cls == 'D_no_ground_truth' or cls == 'X_invalid_ground_truth':
+            return False
     src = cam_data.get('source', '') or ''
     return bool(re.match(r'\d{4}-\d{2}-\d{2}', src))
+
+
+def get_constraint_class(cam_data):
+    """Return the V2 constraint_class for a cam_data entry, or None."""
+    if not isinstance(cam_data, dict):
+        return None
+    return cam_data.get('constraint_class')
 
 
 def classify_lm(lm_name, lm_tiers):
@@ -106,7 +139,7 @@ def compute_lm_weight(lm_name, lm_tiers, landmarks, cameras):
         sources = lm.get('source_cameras', [])
         if isinstance(sources, list):
             has_leak_source = any(
-                is_leak_cam(cameras.get(s, {}))
+                is_leak_cam(cameras.get(s, {}), s)
                 for s in sources
             )
             if has_leak_source:
@@ -245,8 +278,14 @@ def compute_residuals(cam_name, ypr, cameras, pixels, landmarks, selected_lms, l
     return rms, max_arcmin, per_lm, per_lm_weight
 
 
-def optimize_ypr(cam_name, initial_ypr, cameras, pixels, landmarks, selected_lms, lm_tiers=None):
+def optimize_ypr(cam_name, initial_ypr, cameras, pixels, landmarks, selected_lms,
+                 lm_tiers=None, roll_prior_sigma_deg=None):
     """Optimize ypr to minimize weighted RMS pixel residuals on selected LMs.
+
+    If roll_prior_sigma_deg is set, add a soft prior `(roll/sigma)^2` to the
+    loss. Used for class B cams where the player ped vertical pose softly
+    constrains roll near 0.
+
     Returns (best_ypr, final_rms, max_arcmin, per_lm, per_lm_weight)."""
     try:
         from scipy.optimize import minimize
@@ -254,14 +293,22 @@ def optimize_ypr(cam_name, initial_ypr, cameras, pixels, landmarks, selected_lms
         return None, None, None, None, None
 
     def loss_fn(ypr):
-        rms, _, _, _ = compute_residuals(cam_name, list(ypr), cameras, pixels, landmarks, selected_lms, lm_tiers)
+        rms, _, _, _ = compute_residuals(cam_name, list(ypr), cameras, pixels,
+                                         landmarks, selected_lms, lm_tiers)
+        if roll_prior_sigma_deg is not None and roll_prior_sigma_deg > 0:
+            roll = ypr[2]
+            rms += (roll / roll_prior_sigma_deg) ** 2
         return rms
 
     result = minimize(loss_fn, initial_ypr, method='Nelder-Mead',
                       options={'xatol': 1e-4, 'fatol': 1e-6,
                                'maxiter': 5000, 'adaptive': True})
     best_ypr = list(result.x)
-    rms, max_arc, per_lm, per_lm_weight = compute_residuals(cam_name, best_ypr, cameras, pixels, landmarks, selected_lms, lm_tiers)
+    rms, max_arc, per_lm, per_lm_weight = compute_residuals(cam_name, best_ypr,
+                                                            cameras, pixels,
+                                                            landmarks,
+                                                            selected_lms,
+                                                            lm_tiers)
     return best_ypr, rms, max_arc, per_lm, per_lm_weight
 
 
@@ -279,10 +326,35 @@ def main():
         print(f"ERROR: Camera '{args.cam_name}' not found.")
         return 1
 
-    if not is_leak_cam(cam_data):
-        print(f"ERROR: '{args.cam_name}' is not a leak cam (source is not a date).")
+    if not is_leak_cam(cam_data, args.cam_name):
+        print(f"ERROR: '{args.cam_name}' is not a leak cam.")
         print(f"This tool is for leak cams only. Non-leak cams need full xyz/ypr/fov calibration.")
         return 1
+
+    # V2 per-class gating
+    cls = get_constraint_class(cam_data)
+    if cls == 'A_full_hud':
+        print(f"ERROR: '{args.cam_name}' is class A_full_hud — ypr is HUD ground-truth, "
+              f"already locked. Nothing to refine.")
+        print(f"  Stored ypr: {cam_data.get('ypr')}")
+        return 1
+    if cls == 'X_invalid_ground_truth':
+        print(f"ERROR: '{args.cam_name}' is class X — excluded.")
+        return 1
+    if cls == 'D_no_ground_truth':
+        print(f"ERROR: '{args.cam_name}' is class D_no_ground_truth — no HUD anchoring.")
+        print(f"Use refine_cam_full.py for full xyz/ypr/fov calibration.")
+        return 1
+    if cls == 'Cm_pos_only':
+        # Cm has xyz locked but fov unknown — refining ypr alone won't give a
+        # well-posed projection. The right tool for Cm is a joint ypr+fov solve.
+        # Refuse here and point the user to refine_cam_full --no-refine-xyz.
+        print(f"ERROR: '{args.cam_name}' is class Cm_pos_only — fov is not "
+              f"ground-truth, must be refined alongside ypr.")
+        print(f"Use refine_cam_full.py --no-refine-xyz for joint ypr+fov solve.")
+        return 1
+    # Classes B and C proceed below. B gets a soft roll prior in the loss
+    # (via the lm_tiers weighting + roll-deviation penalty); C runs unchanged.
 
     cur_ypr = cam_data.get('ypr')
     cur_xyz = cam_data.get('xyz')
@@ -340,9 +412,18 @@ def main():
     print(f"  Max: {init_max:.2f} arcmin")
     print()
 
+    # V2: Class B (P+C+Fov + upright player ped) gets a soft prior keeping
+    # roll near 0 — the player vertical pose anchors it. Class C runs free.
+    roll_prior_sigma = None
+    if cls == 'B_pos_fov_player':
+        roll_prior_sigma = (class_b_roll_prior_sigma()
+                            if _HAS_AUDIT else 2.0)
+        print(f"Class B: applying soft roll prior, sigma = {roll_prior_sigma}°")
+
     # Optimize (weighted)
     new_ypr, final_rms, final_max, final_per_lm, final_per_weight = optimize_ypr(
-        args.cam_name, cur_ypr, cameras, pixels, landmarks, selected, lm_tiers)
+        args.cam_name, cur_ypr, cameras, pixels, landmarks, selected, lm_tiers,
+        roll_prior_sigma_deg=roll_prior_sigma)
     if new_ypr is None:
         print(f"ERROR: optimization failed (scipy not installed?)")
         return 1

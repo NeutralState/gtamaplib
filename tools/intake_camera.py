@@ -65,9 +65,46 @@ ap.add_argument('--xyz-radius', type=float, default=300.0,
                 help='Max xyz movement in meters (default: 300)')
 ap.add_argument('--quiet', action='store_true',
                 help='Suppress per-landmark residual table')
+ap.add_argument('--ignore-class', action='store_true',
+                help='Skip the V2 constraint_class gating. Use with caution: '
+                     'class A cams have ground-truth ypr/fov that should not be refined.')
 args = ap.parse_args()
 
 CAM_NAME = args.cam_name
+
+# V2: auto-derive DOF flags from constraint_class when audit info is available.
+# CLI flags override the auto-derived values.
+try:
+    from leak_cam_audit import get_class as _audit_get_class
+    _HAS_AUDIT = True
+except ImportError:
+    _HAS_AUDIT = False
+
+_cls_for_gate = None
+if _HAS_AUDIT and not args.ignore_class:
+    _cls_for_gate = _audit_get_class(CAM_NAME, cameras=md.cameras)
+    if _cls_for_gate == 'A_full_hud':
+        print(f"ERROR: '{CAM_NAME}' is class A_full_hud — all DOF are HUD "
+              f"ground-truth. There is nothing to intake; this cam is already "
+              f"an anchor. Pass --ignore-class to override (not recommended).")
+        sys.exit(1)
+    if _cls_for_gate == 'X_invalid_ground_truth':
+        print(f"ERROR: '{CAM_NAME}' is class X — excluded from intake.")
+        sys.exit(1)
+    # B/C: xyz + fov ground-truth, only ypr free
+    if _cls_for_gate in ('B_pos_fov_player', 'C_pos_fov_only'):
+        if not args.no_hfov:
+            print(f"  V2 class {_cls_for_gate}: auto-setting --no-hfov "
+                  f"(fov is HUD ground-truth).")
+            args.no_hfov = True
+        # refine_xyz stays user-controlled; default off is correct for B/C.
+    # Cm: only xyz ground-truth, fov + ypr free
+    if _cls_for_gate == 'Cm_pos_only':
+        if args.no_hfov:
+            print(f"  V2 class Cm_pos_only: fov is NOT ground-truth, "
+                  f"--no-hfov ignored.")
+            args.no_hfov = False
+    # D: nothing locked, full solve allowed (caller can pass --refine-xyz)
 
 
 # ── Load tier data ──────────────────────────────────────────────────────────

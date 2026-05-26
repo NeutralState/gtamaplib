@@ -142,7 +142,25 @@ print(f"Loaded tiers: {len(cam_tier)} cams, {len(lm_tier)} LMs")
 
 LEAK_RE = re.compile(r'\d{4}-\d{2}-\d{2}')
 
+# V2: audit-driven leak detection. See bundle_adjust.py for the full rationale.
+try:
+    from leak_cam_audit import (
+        get_class as _audit_get_class,
+        is_triangulation_trusted as _audit_is_xyz_trusted,
+    )
+    _HAS_AUDIT = True
+except ImportError:
+    _HAS_AUDIT = False
+
 def is_leak(cn):
+    """True iff this cam's xyz/ypr/fov should be LOCKED in the BA.
+    Audit-driven: class A/B/C/Cm have xyz HUD-locked. Class D has no
+    ground-truth xyz and is NOT locked. Falls back to legacy date-pattern
+    for cams without an audit entry."""
+    if _HAS_AUDIT:
+        cls = _audit_get_class(cn, cameras=md.cameras)
+        if cls is not None:
+            return _audit_is_xyz_trusted(cn, cameras=md.cameras)
     src = md.cameras.get(cn, {}).get('source', '') or ''
     return bool(LEAK_RE.match(src))
 

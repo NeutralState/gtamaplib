@@ -44,7 +44,31 @@ print("gtamaplib loaded ✓")
 
 LEAK_RE = re.compile(r'\d{4}-\d{2}-\d{2}')
 
+# V2: try to use the audit-driven constraint_class. A cam is treated as
+# locked in the BA if it has any constraint_class (A/B/C/Cm/D in the audit).
+# This matches V1 (date-pattern leak = locked) but is now audit-driven so
+# Ambrosia-style marketing renders (class D, no date in source) are also
+# correctly NOT locked. Cams in audit as class D are an edge case: their
+# xyz is NOT ground-truth, so locking them in the BA is wrong. We pass
+# them through to the optimizable set.
+try:
+    from leak_cam_audit import (
+        get_class as _audit_get_class,
+        is_triangulation_trusted as _audit_is_xyz_trusted,
+    )
+    _HAS_AUDIT = True
+except ImportError:
+    _HAS_AUDIT = False
+
 def is_leak(cn):
+    """True iff this cam's xyz/ypr/fov should be LOCKED in the BA.
+    Audit-driven: class A/B/C/Cm have xyz HUD-locked. Falls back to legacy
+    date-pattern for cams without an audit entry."""
+    if _HAS_AUDIT:
+        cls = _audit_get_class(cn, cameras=md.cameras)
+        if cls is not None:
+            # Class D has no ground-truth xyz — do NOT lock in BA.
+            return _audit_is_xyz_trusted(cn, cameras=md.cameras)
     src = md.cameras.get(cn, {}).get('source', '') or ''
     return bool(LEAK_RE.match(src))
 

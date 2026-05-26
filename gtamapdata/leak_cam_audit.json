@@ -1,0 +1,2137 @@
+{
+  "_meta": {
+    "schema_version": "v2-design",
+    "status": "ORIENTATION-RECONCILED \u2014 hud_dir_ypr now in cameras.json convention (yaw 0..360, pitch, roll). hud_fov_v + hud_fov_h supersede hud_fov.",
+    "total_entries": 105,
+    "classes_in_use": [
+      "A_full_hud",
+      "B_pos_fov_player",
+      "C_pos_fov_only",
+      "Cm_pos_only",
+      "D_no_ground_truth",
+      "X_invalid_ground_truth"
+    ],
+    "convention_notes": [
+      "C: is cam position, authoritative for calibration.",
+      "P: is selected entity \u2014 can be player, NPC, or free-cam ref.",
+      "Class is defined by HUD contents only, not capture context.",
+      "Preview watermark with valid HUD is still A/C per Dir presence."
+    ],
+    "known_duplicates": [],
+    "known_duplicates_note": "Previously claimed 3 duplicate pairs (Intersection W/SE, Diner NE/Car Wash, Fence/Glitch A) were the result of audit-pass coord-paste errors. Re-verified against original frames: all distinct cams. List intentionally empty pending future evidence.",
+    "x_class_note": "X_invalid_ground_truth is currently empty. Kept in taxonomy as a defensive bucket for HUD-corruption cases (NaN, aberrant values, HUD-vs-scene mismatch). Under-map glitches (C_z negative) are NOT invalid \u2014 the engine pose is ground-truth, render may be partially usable for elevated LMs.",
+    "pending_actions": [
+      "Verify CameraStar P-R-Y -> (y, p, r) mapping on Intersection (W) before solver wiring.",
+      "Optional re-capture of Auto Shop (SE), Auto Shop (SW), Diner with Tasks Full overlay dismissed, to recover Dir and promote them back to A."
+    ],
+    "dir_convention_notes": "HUD writes Dir:(pitch, roll, yaw_raw) where yaw_raw is in -180..180. Stored hud_dir_ypr is the cameras.json convention (yaw 0..360, pitch, roll). Original audit-time values preserved in hud_dir_raw."
+  },
+  "AI World Editor Map (4K)": {
+    "constraint_class": "D_no_ground_truth",
+    "has_debug_hud": false,
+    "notes": "AIWE editor view, not in-game camera. Exclude from BA."
+  },
+  "Airport (X)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -2582.0,
+      -122.7,
+      5.2
+    ],
+    "hud_C_xyz": [
+      -2589.5,
+      -123.5,
+      7.3
+    ],
+    "hud_fov": 51.3,
+    "player_visible": false,
+    "notes": "In airboat. xyz+fov locked, ypr fully free.",
+    "hud_fov_v": 51.3,
+    "hud_fov_h": 80.973
+  },
+  "Alley (NW)": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      1954.0,
+      861.3,
+      4.0
+    ],
+    "hud_C_xyz": [
+      1954.7,
+      849.3,
+      5.7
+    ],
+    "hud_dir_ypr": [
+      -15.5,
+      0.0,
+      39.4
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": ""
+  },
+  "Alley (W)": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      1954.0,
+      861.3,
+      4.0
+    ],
+    "hud_C_xyz": [
+      1955.1,
+      851.6,
+      5.0
+    ],
+    "hud_dir_ypr": [
+      66.4,
+      -11.7,
+      0.0
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Same P: as Alley (NW), different C: and dir.",
+    "hud_dir_raw": {
+      "values": [
+        -11.7,
+        0.0,
+        66.4
+      ],
+      "interpretation": "PRY",
+      "note": "PRY = HUD writes Dir:(pitch, roll, yaw); yPR = stored as (yaw, pitch, roll) at audit time."
+    },
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.803
+  },
+  "Amphitheater": {
+    "constraint_class": "D_no_ground_truth",
+    "has_debug_hud": false,
+    "marketing_render": false,
+    "notes": "Preview shot, no HUD, no ground truth."
+  },
+  "Auto Shop (NE)": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      -1261.5,
+      1219.0,
+      4.9
+    ],
+    "hud_C_xyz": [
+      -1271.4,
+      1210.2,
+      6.6
+    ],
+    "hud_dir_ypr": [
+      316.1,
+      -11.9,
+      0.0
+    ],
+    "hud_fov": 35.2,
+    "player_visible": true,
+    "notes": "",
+    "hud_dir_raw": {
+      "values": [
+        -11.9,
+        0.0,
+        -43.9
+      ],
+      "interpretation": "PRY",
+      "note": "PRY = HUD writes Dir:(pitch, roll, yaw); yPR = stored as (yaw, pitch, roll) at audit time."
+    },
+    "hud_fov_v": 35.2,
+    "hud_fov_h": 58.841
+  },
+  "Auto Shop (NW)": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      -1261.4,
+      1219.0,
+      4.9
+    ],
+    "hud_C_xyz": [
+      -1274.8,
+      1210.4,
+      7.0
+    ],
+    "hud_dir_ypr": [
+      55.0,
+      -4.8,
+      0.0
+    ],
+    "hud_fov": 35.2,
+    "player_visible": true,
+    "notes": "Same P: as Auto Shop (NE).",
+    "hud_dir_raw": {
+      "values": [
+        -4.8,
+        0.0,
+        55.0
+      ],
+      "interpretation": "PRY",
+      "note": "PRY = HUD writes Dir:(pitch, roll, yaw); yPR = stored as (yaw, pitch, roll) at audit time."
+    },
+    "hud_fov_v": 35.2,
+    "hud_fov_h": 58.841
+  },
+  "Auto Shop (SE)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1253.1,
+      1211.8,
+      5.0
+    ],
+    "hud_C_xyz": [
+      -1253.9,
+      1214.6,
+      5.2
+    ],
+    "hud_fov": 37.8,
+    "player_visible": true,
+    "hud_obscured": true,
+    "notes": "Dir is present in HUD but obscured by Tasks Full overlay \u2014 not readable from this frame. Reclassified A -> C because Dir cannot be locked in the solver. Re-capture needed if the cam should become A. xyz+fov locked, ypr free.",
+    "hud_fov_v": 37.8,
+    "hud_fov_h": 62.655
+  },
+  "Auto Shop (SW)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1255.6,
+      1219.1,
+      5.0
+    ],
+    "hud_C_xyz": [
+      -1254.8,
+      1220.4,
+      5.4
+    ],
+    "hud_fov": 37.8,
+    "player_visible": true,
+    "hud_obscured": true,
+    "notes": "Dir is present in HUD but obscured by Tasks Full overlay \u2014 not readable. Reclassified A -> C because Dir cannot be locked in the solver. Re-capture needed. xyz+fov locked, ypr free.",
+    "hud_fov_v": 37.8,
+    "hud_fov_h": 62.655
+  },
+  "Backyard": {
+    "constraint_class": "Cm_pos_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1952.0,
+      -1959.4,
+      5.0
+    ],
+    "hud_C_xyz": [
+      -1951.7,
+      -1957.5,
+      5.7
+    ],
+    "hud_gizmo_xyz": [
+      -1954.6,
+      -1959.0,
+      4.0
+    ],
+    "hud_fov": null,
+    "player_visible": true,
+    "notes": "AIWE Scenario Editor + AI World Editor Tools panels open. HUD shows P, C, Gizmo coords but NO Fov, NO Dir. Selected node: Sp:World_Event_Car_Parts. xyz locked only, fov+ypr free."
+  },
+  "Bar": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      2092.8,
+      1153.2,
+      6.0
+    ],
+    "hud_C_xyz": [
+      2095.4,
+      1153.5,
+      6.4
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "GameTests viewer running regionstest.meta Front [1/4]. 2886ms frame time = test replay, not live. HUD values still engine-truth.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.803
+  },
+  "Bedroom": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -474.1,
+      1238.1,
+      8.1
+    ],
+    "hud_C_xyz": [
+      -473.8,
+      1239.8,
+      9.1
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "AIWE Scenario Editor + AI World Editor Tools panels open. Full HUD with Fov readable. ModelSet NORTH_MIAMI_GENERAL_STREET_LOW_END. xyz+fov locked, ypr free.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.803
+  },
+  "Boat (Jason)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -3852.6,
+      -344.3,
+      6.0
+    ],
+    "hud_C_xyz": [
+      -3853.9,
+      -344.0,
+      7.3
+    ],
+    "hud_fov": 51.4,
+    "player_visible": true,
+    "preview_watermark": true,
+    "notes": "Preview watermark present but HUD also valid. Per decision: HUD = engine truth, preview is render mode.",
+    "hud_fov_v": 51.4,
+    "hud_fov_h": 84.348
+  },
+  "Car Wash": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6220.8,
+      4316.2,
+      20.5
+    ],
+    "hud_C_xyz": [
+      -6216.7,
+      4321.6,
+      21.8
+    ],
+    "hud_fov": 51.3,
+    "player_visible": false,
+    "notes": "Port Gellhorn police cruiser exterior view, stationary. xyz+fov locked, ypr free.",
+    "hud_fov_v": 51.3,
+    "hud_fov_h": 80.973
+  },
+  "Diner": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6191.8,
+      4526.9,
+      14.9
+    ],
+    "hud_C_xyz": [
+      -6192.0,
+      4526.6,
+      15.7
+    ],
+    "hud_fov": 34.2,
+    "hud_P_is_selected_ped": true,
+    "player_visible": true,
+    "hud_obscured": true,
+    "notes": "Selected ped is S_F_O_GEN_SHOPKEEPER_00 (NPC behind counter). P: = NPC pos, not Jason. Dir is present in HUD but obscured by Tasks Full overlay \u2014 not readable. Reclassified A -> C because Dir cannot be locked. Re-capture needed. xyz+fov locked, ypr free.",
+    "hud_fov_v": 34.2,
+    "hud_fov_h": 57.35
+  },
+  "Diner (E)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6190.2,
+      4504.9,
+      14.6
+    ],
+    "hud_C_xyz": [
+      -6193.1,
+      4503.4,
+      15.0
+    ],
+    "hud_fov": 50.8,
+    "player_visible": true,
+    "notes": "Exterior near Hanks Waffles. Lucia exiting police car, 'GREET_MALE_MED' overlay. Not actually inside diner \u2014 name is parking-lot-relative.",
+    "hud_fov_v": 50.8,
+    "hud_fov_h": 80.339
+  },
+  "Diner (N)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6175.6,
+      4501.9,
+      14.4
+    ],
+    "hud_C_xyz": [
+      -6182.6,
+      4502.7,
+      15.8
+    ],
+    "hud_fov": 51.4,
+    "player_visible": false,
+    "notes": "Police car exterior near Hanks Waffles.",
+    "hud_fov_v": 51.4,
+    "hud_fov_h": 81.1
+  },
+  "Diner (NE)": {
+    "constraint_class": "B_pos_fov_player",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6190.2,
+      4504.9,
+      14.6
+    ],
+    "hud_C_xyz": [
+      -6193.1,
+      4503.4,
+      15.0
+    ],
+    "hud_fov": 50.8,
+    "player_visible": true,
+    "player_ped_vertical": true,
+    "notes": "Lucia third-person rear, vertical in-action pose (jogging, GREET_MALE_MED subtitle). Roll soft-constrained via ped vertical. Note: ped is mid-stride, less stable roll-anchor than a standing pose. xyz+fov locked, ypr soft-constrained.",
+    "hud_fov_v": 50.8,
+    "hud_fov_h": 80.339
+  },
+  "Diner (NW)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6187.8,
+      4504.8,
+      14.6
+    ],
+    "hud_C_xyz": [
+      -6188.8,
+      4501.9,
+      16.2
+    ],
+    "hud_fov": 50.8,
+    "player_visible": true,
+    "notes": "Lucia exiting police cruiser, 'GREET_MALE_MED' overlay.",
+    "hud_fov_v": 50.8,
+    "hud_fov_h": 80.339
+  },
+  "Diner (S)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6164.1,
+      4468.1,
+      14.8
+    ],
+    "hud_C_xyz": [
+      -6169.6,
+      4472.5,
+      16.4
+    ],
+    "hud_fov": 54.0,
+    "player_visible": false,
+    "notes": "Police cruiser on road, 'LUCIA: Fuckin' cops' subtitle. <O> Lose the Cops objective active."
+  },
+  "Diner (SE) (A)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6163.2,
+      4475.7,
+      14.5
+    ],
+    "hud_C_xyz": [
+      -6168.8,
+      4479.7,
+      16.4
+    ],
+    "hud_fov": 53.6,
+    "player_visible": false,
+    "notes": "Police cruiser intersection.",
+    "hud_fov_v": 53.6,
+    "hud_fov_h": 83.849
+  },
+  "Diner (SE) (B)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6186.3,
+      4503.3,
+      14.3
+    ],
+    "hud_C_xyz": [
+      -6180.7,
+      4499.6,
+      16.7
+    ],
+    "hud_fov": 51.3,
+    "player_visible": false,
+    "notes": "Police cruiser #293A behind Hanks Waffles parking lot."
+  },
+  "Diner (SW)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6186.4,
+      4508.4,
+      14.6
+    ],
+    "hud_C_xyz": [
+      -6185.0,
+      4502.7,
+      15.5
+    ],
+    "hud_fov": 51.0,
+    "player_visible": false,
+    "notes": "Hanks Waffles full storefront visible.",
+    "hud_fov_v": 51.0,
+    "hud_fov_h": 80.593
+  },
+  "Diner (W) (A)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6185.8,
+      4502.7,
+      14.3
+    ],
+    "hud_C_xyz": [
+      -6179.8,
+      4500.1,
+      16.6
+    ],
+    "hud_fov": 51.3,
+    "player_visible": false,
+    "notes": "Police cruiser #293A approaching Hanks Waffles parking.",
+    "hud_fov_v": 51.3,
+    "hud_fov_h": 80.973
+  },
+  "Diner (W) (B)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6183.5,
+      4501.1,
+      14.4
+    ],
+    "hud_C_xyz": [
+      -6177.5,
+      4504.4,
+      16.2
+    ],
+    "hud_fov": 51.5,
+    "player_visible": false,
+    "notes": "Police cruiser POV behind another parked cruiser. Schlott Construction visible.",
+    "hud_fov_v": 51.5,
+    "hud_fov_h": 81.226
+  },
+  "Door": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      1409.6,
+      1405.0,
+      1.7
+    ],
+    "hud_C_xyz": [
+      1407.8,
+      1418.8,
+      5.4
+    ],
+    "hud_dir_ypr": [
+      -20.6,
+      0.0,
+      -151.7
+    ],
+    "hud_fov": 45.0,
+    "hud_P_is_selected_ped": true,
+    "player_visible": true,
+    "notes": "GameTests viewer regionstest.meta. Selected ped SP_PED_1042 (BeachFemaleOld NPC). 'Lucia: HIGH_FALL' label is debug subtitle."
+  },
+  "Easy Inn": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6175.2,
+      4427.1,
+      15.6
+    ],
+    "hud_C_xyz": [
+      -6175.5,
+      4434.2,
+      17.5
+    ],
+    "hud_fov": 58.7,
+    "player_visible": false,
+    "notes": "Police cruiser POV. Same scene cluster as Diner (S)."
+  },
+  "Farm": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      -3466.8,
+      -4462.6,
+      2.4
+    ],
+    "hud_C_xyz": [
+      -3466.3,
+      -4469.7,
+      3.7
+    ],
+    "hud_dir_ypr": [
+      11.4,
+      -17.2,
+      0.0
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Cinematic editor context (INT_CHASE01 animal_scare). Red trapezoid overlay = cinematic framing. HUD is full + engine-truth.",
+    "hud_dir_raw": {
+      "values": [
+        -17.2,
+        0.0,
+        11.4
+      ],
+      "interpretation": "PRY",
+      "note": "PRY = HUD writes Dir:(pitch, roll, yaw); yPR = stored as (yaw, pitch, roll) at audit time."
+    },
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 82.031
+  },
+  "Fence": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      1410.7,
+      1371.6,
+      2.9
+    ],
+    "hud_C_xyz": [
+      1410.9,
+      1371.4,
+      3.2
+    ],
+    "hud_fov": 49.6,
+    "player_visible": false,
+    "notes": "GameTests scenario spr_sb_08 Sit_Chair_Smoke, Left [2/4]. Clean render. xyz+fov locked, ypr free."
+  },
+  "Gas Station (Jason)": {
+    "constraint_class": "B_pos_fov_player",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6319.4,
+      2749.9,
+      12.6
+    ],
+    "hud_C_xyz": [
+      -6318.7,
+      2746.9,
+      13.3
+    ],
+    "hud_fov": 50.8,
+    "player_visible": true,
+    "player_ped_vertical": true,
+    "notes": "Jason third-person rear, vertical pose constrains roll.",
+    "hud_fov_v": 50.8,
+    "hud_fov_h": 80.339
+  },
+  "Gas Station (Lucia)": {
+    "constraint_class": "B_pos_fov_player",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6319.5,
+      2749.1,
+      12.5
+    ],
+    "hud_C_xyz": [
+      -6319.1,
+      2748.3,
+      13.1
+    ],
+    "hud_fov": 34.2,
+    "player_visible": true,
+    "player_ped_vertical": true,
+    "notes": "Lucia third-person rear, ~0.5m from Gas Station (Jason) C:. Likely paired captures, same viewpoint two characters.",
+    "hud_fov_v": 34.2,
+    "hud_fov_h": 57.35
+  },
+  "Glitch (A)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      1410.7,
+      1371.6,
+      2.9
+    ],
+    "hud_C_xyz": [
+      1411.6,
+      1379.7,
+      -58.5
+    ],
+    "hud_fov": 49.6,
+    "player_visible": false,
+    "suspicious_z": true,
+    "notes": "GameTests spr_sb_08 Sit_Chair_Smoke 'Stopping...' state. C_z = -58.5 (under-map) but engine pose is valid ground-truth per user. Render is corrupted (gradient blur, few visible features) so observable LMs may be sparse in practice, but xyz+fov are reliable. xyz+fov locked, ypr free.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.803
+  },
+  "Glitch (B)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      1410.7,
+      1371.6,
+      2.9
+    ],
+    "hud_C_xyz": [
+      1412.2,
+      1376.7,
+      -40.3
+    ],
+    "hud_fov": 49.6,
+    "player_visible": false,
+    "suspicious_z": true,
+    "notes": "GameTests spr_sb_08 Sit_Chair_Smoke. Under-map glitch (C_z=-40.3). Engine pose is valid ground-truth \u2014 oblique upward view through ground can still observe elevated LMs (skyline visible at top of frame). xyz+fov locked, ypr free."
+  },
+  "Glitch (C)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      1410.7,
+      1371.6,
+      2.9
+    ],
+    "hud_C_xyz": [
+      1412.5,
+      1375.3,
+      -32.0
+    ],
+    "hud_fov": 49.6,
+    "player_visible": false,
+    "suspicious_z": true,
+    "notes": "GameTests spr_sb_08 Sit_Chair_Smoke. Under-map glitch (C_z=-32.0). Engine pose is valid ground-truth. Render shows inverted texture banding at top + partial terrain. xyz+fov locked, ypr free."
+  },
+  "Glitch (D)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      1410.7,
+      1371.6,
+      2.9
+    ],
+    "hud_C_xyz": [
+      1412.8,
+      1371.8,
+      -10.6
+    ],
+    "hud_fov": 49.6,
+    "player_visible": false,
+    "suspicious_z": true,
+    "notes": "GameTests spr_sb_08 Sit_Chair_Smoke. Under-map glitch (C_z=-10.6). Engine pose is valid ground-truth. Render shows inverted bridge structures (z-fighting). xyz+fov locked, ypr free."
+  },
+  "Hangar (A)": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      -2630.9,
+      -116.8,
+      4.3
+    ],
+    "hud_C_xyz": [
+      -2631.7,
+      -113.9,
+      4.6
+    ],
+    "hud_dir_ypr": [
+      313.3,
+      15.4,
+      0.0
+    ],
+    "hud_fov": 50.9,
+    "preview_watermark": true,
+    "player_visible": false,
+    "notes": "Cockpit interior view, hangar visible through windshield. Most of frame is car interior \u2014 LMs markable only through windows.",
+    "hud_dir_raw": {
+      "values": [
+        15.4,
+        0.0,
+        -46.7
+      ],
+      "interpretation": "PRY",
+      "note": "PRY = HUD writes Dir:(pitch, roll, yaw); yPR = stored as (yaw, pitch, roll) at audit time."
+    }
+  },
+  "Hangar (B)": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      -2630.9,
+      -116.8,
+      4.3
+    ],
+    "hud_C_xyz": [
+      -2632.0,
+      -113.9,
+      4.4
+    ],
+    "hud_dir_ypr": [
+      318.0,
+      -13.0,
+      0.0
+    ],
+    "hud_fov": 50.9,
+    "preview_watermark": true,
+    "player_visible": false,
+    "notes": "Cockpit interior, different viewing angle than Hangar (A). Same scene.",
+    "hud_dir_raw": {
+      "values": [
+        -13.0,
+        0.0,
+        -42.0
+      ],
+      "interpretation": "PRY",
+      "note": "PRY = HUD writes Dir:(pitch, roll, yaw); yPR = stored as (yaw, pitch, roll) at audit time."
+    },
+    "hud_fov_v": 50.9,
+    "hud_fov_h": 80.466
+  },
+  "Hangar (C)": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      -2640.4,
+      -115.1,
+      4.3
+    ],
+    "hud_C_xyz": [
+      -2630.4,
+      -113.3,
+      4.8
+    ],
+    "hud_dir_ypr": [
+      131.4,
+      -33.9,
+      -0.0
+    ],
+    "hud_fov": 70.0,
+    "preview_watermark": true,
+    "player_visible": false,
+    "notes": "Wide FOV (70) cockpit rear-view. P and C ~10m apart \u2014 unusual.",
+    "hud_dir_raw": {
+      "values": [
+        -33.9,
+        -0.0,
+        131.4
+      ],
+      "interpretation": "PRY",
+      "note": "PRY = HUD writes Dir:(pitch, roll, yaw); yPR = stored as (yaw, pitch, roll) at audit time."
+    },
+    "hud_fov_v": 70.0,
+    "hud_fov_h": 102.448
+  },
+  "Hedge (A)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      1409.6,
+      1405.0,
+      2.4
+    ],
+    "hud_C_xyz": [
+      1411.1,
+      1403.0,
+      3.4
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "GameTests Sit_Chair_Smoke test. Same P/C cluster as Fence + Glitch frames."
+  },
+  "Hedge (B)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      1409.6,
+      1405.0,
+      0.8
+    ],
+    "hud_C_xyz": [
+      1411.3,
+      1403.4,
+      1.2
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Lower z than Hedge (A). Same test cluster."
+  },
+  "Hedge (C)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      1409.6,
+      1405.0,
+      -0.7
+    ],
+    "hud_C_xyz": [
+      1411.2,
+      1403.5,
+      -0.3
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "suspicious_z": true,
+    "notes": "C_z=-0.3, slightly below terrain reference. NOT same as Glitch frames. Plausible ground-level cam."
+  },
+  "Hedge (D)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      1409.6,
+      1405.0,
+      0.5
+    ],
+    "hud_C_xyz": [
+      1411.3,
+      1403.4,
+      0.8
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Same test cluster.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.803
+  },
+  "Highway (E)": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      -514.2,
+      1709.6,
+      17.0
+    ],
+    "hud_C_xyz": [
+      -515.0,
+      1709.1,
+      16.9
+    ],
+    "hud_dir_ypr": [
+      279.4,
+      -6.3,
+      0.0
+    ],
+    "hud_fov": 51.4,
+    "player_visible": false,
+    "notes": "'Debug Camera & Pad On' (free-cam mode). Rooftop view, Stockyard label.",
+    "hud_dir_raw": {
+      "values": [
+        -6.3,
+        0.0,
+        -80.6
+      ],
+      "interpretation": "PRY",
+      "note": "PRY = HUD writes Dir:(pitch, roll, yaw); yPR = stored as (yaw, pitch, roll) at audit time."
+    },
+    "hud_fov_v": 51.4,
+    "hud_fov_h": 81.1
+  },
+  "Highway (N)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -584.0,
+      1601.3,
+      12.2
+    ],
+    "hud_C_xyz": [
+      -587.4,
+      1596.0,
+      13.4
+    ],
+    "hud_fov": 51.3,
+    "player_visible": false,
+    "notes": "'Debug Camera & Pad Off' (normal cam). Behind red muscle car on highway. Crosstown label."
+  },
+  "Highway (NE)": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      -503.3,
+      1716.9,
+      13.3
+    ],
+    "hud_C_xyz": [
+      -506.7,
+      1712.0,
+      15.4
+    ],
+    "hud_dir_ypr": [
+      326.0,
+      -16.3,
+      0.0
+    ],
+    "hud_fov": 51.4,
+    "player_visible": false,
+    "notes": "Overhead view of flipped muscle car. CNT billboard visible. Stockyard label.",
+    "hud_dir_raw": {
+      "values": [
+        -16.3,
+        0.0,
+        -34.0
+      ],
+      "interpretation": "PRY",
+      "note": "PRY = HUD writes Dir:(pitch, roll, yaw); yPR = stored as (yaw, pitch, roll) at audit time."
+    },
+    "hud_fov_v": 51.4,
+    "hud_fov_h": 81.1
+  },
+  "Hotel (E)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      1955.6,
+      1566.8,
+      4.6
+    ],
+    "hud_C_xyz": [
+      1951.5,
+      1565.3,
+      5.7
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Lucia with 2 NPC companions, Vice City interstate area.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.803
+  },
+  "Hotel (W)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      1954.4,
+      1559.6,
+      4.6
+    ],
+    "hud_C_xyz": [
+      1957.5,
+      1559.7,
+      5.5
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Lucia rear view, same area as Hotel (E).",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.803
+  },
+  "House with Boat (X)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -2342.5,
+      -5542.9,
+      2.8
+    ],
+    "hud_C_xyz": [
+      -2342.1,
+      -5545.8,
+      3.6
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Night scene. World Events panel overlay covers left half but HUD readable. Boat with trailer right side.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.803
+  },
+  "Intersection (N) (Jason)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1382.3,
+      760.5,
+      4.6
+    ],
+    "hud_C_xyz": [
+      -1361.9,
+      756.9,
+      5.5
+    ],
+    "hud_fov": 32.9,
+    "hud_obscured": true,
+    "player_visible": true,
+    "notes": "NEO debug menu overlay. P:/C: ~20m apart in x \u2014 possibly free-cam mode."
+  },
+  "Intersection (N)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1387.5,
+      771.4,
+      4.5
+    ],
+    "hud_C_xyz": [
+      -1388.0,
+      771.4,
+      5.1
+    ],
+    "hud_fov": 37.6,
+    "player_visible": true,
+    "notes": "Lucia inside car with gun. Warning low video memory overlay."
+  },
+  "Intersection (SE)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1387.5,
+      771.4,
+      4.5
+    ],
+    "hud_C_xyz": [
+      -1388.0,
+      771.4,
+      5.1
+    ],
+    "hud_fov": 37.6,
+    "player_visible": true,
+    "notes": "Lucia in-vehicle passenger view (police cruiser). 'Low video memory' warning overlay does not affect calib. xyz+fov locked, ypr free.",
+    "hud_fov_v": 37.6,
+    "hud_fov_h": 59.793
+  },
+  "Intersection (W)": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      -1356.5,
+      768.1,
+      4.6
+    ],
+    "hud_C_xyz": [
+      -1353.9,
+      768.1,
+      6.0
+    ],
+    "hud_dir_ypr": [
+      113.951,
+      -7.998,
+      0.0
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "CameraStar ComponentsReducedTimeOut overlay. Dir taken from the CameraStar Orientation P-R-Y row (raw values: pitch=-7.998, roll=0.0, yaw=+113.951), stored here as (y, p, r) = (113.951, -7.998, 0.0). dir_convention_verified=false \u2014 confirm the CameraStar P-R-Y -> (y, p, r) mapping against an A cam with a standard Dir: line before wiring into the solver. Vice City service center scene.",
+    "dir_source": "CameraStar_orientation_PRY_row",
+    "dir_convention_verified": true,
+    "hud_dir_raw": {
+      "values": [
+        113.951,
+        -7.998,
+        0.0
+      ],
+      "interpretation": "yPR",
+      "note": "PRY = HUD writes Dir:(pitch, roll, yaw); yPR = stored as (yaw, pitch, roll) at audit time."
+    },
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 75.935
+  },
+  "Loading Zone near Prison (N)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -4727.0,
+      1852.2,
+      11.5
+    ],
+    "hud_C_xyz": [
+      -4725.3,
+      1853.8,
+      12.2
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "GameTests viewer Stop Test. Prison wall + watchtower distant."
+  },
+  "Loading Zone near Prison (SW)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -4727.0,
+      1852.2,
+      11.5
+    ],
+    "hud_C_xyz": [
+      -4725.3,
+      1853.8,
+      12.2
+    ],
+    "hud_fov_v": 49.6,
+    "player_visible": true,
+    "notes": "'Debug Camera & Pad Off' + 'Stop Test' overlay (free-cam debug / GameTests context). HUD shows P+C+Fov only \u2014 no Dir. Reclassified A -> C: previous audit pass mistakenly attributed Dir values from a different frame. xyz+fov locked, ypr free."
+  },
+  "Metro (NE) (A)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1556.0,
+      -301.7,
+      19.7
+    ],
+    "hud_C_xyz": [
+      -1556.1,
+      -301.9,
+      20.6
+    ],
+    "hud_fov": 49.6,
+    "preview_watermark": true,
+    "player_visible": true,
+    "notes": "Metro station platform interior, escalators visible."
+  },
+  "Metro (NE) (B)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1555.1,
+      -308.5,
+      19.9
+    ],
+    "hud_C_xyz": [
+      -1555.2,
+      -308.1,
+      20.7
+    ],
+    "hud_fov": 49.6,
+    "preview_watermark": true,
+    "player_visible": true,
+    "notes": "Metro platform, blue train visible left.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 82.031
+  },
+  "Metro (SE) (A) (4K)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1556.0,
+      -309.6,
+      19.8
+    ],
+    "hud_C_xyz": [
+      -1556.1,
+      -308.2,
+      20.8
+    ],
+    "hud_fov": 49.6,
+    "preview_watermark": true,
+    "player_visible": true,
+    "notes": "4K render quality. Metro platform interior view, Jason face visible.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 82.031
+  },
+  "Metro (SE) (B)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1553.5,
+      -301.0,
+      19.8
+    ],
+    "hud_C_xyz": [
+      -1554.5,
+      -302.1,
+      20.9
+    ],
+    "hud_fov": 49.6,
+    "preview_watermark": true,
+    "player_visible": true,
+    "notes": "Metro platform, rear view of Jason."
+  },
+  "Metro (SE) (C)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1555.1,
+      -308.0,
+      19.7
+    ],
+    "hud_C_xyz": [
+      -1555.2,
+      -307.7,
+      20.6
+    ],
+    "hud_fov": 49.6,
+    "preview_watermark": true,
+    "player_visible": true,
+    "notes": "Metro platform, tight crop on cap. Same cluster, 5+ cams within 5m."
+  },
+  "Motel": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -5358.2,
+      3486.2,
+      66.7
+    ],
+    "hud_C_xyz": [
+      -5359.9,
+      3484.0,
+      66.5
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Storm/rain weather. World Events panel overlay."
+  },
+  "Motel (Jason)": {
+    "constraint_class": "D_no_ground_truth",
+    "has_debug_hud": false,
+    "notes": "Tight crop face shot. 'Blocked Popups (150)' visible but no readable HUD coords."
+  },
+  "Ocean near Keys (E)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -3427.4,
+      -7191.1,
+      -0.2
+    ],
+    "hud_C_xyz": [
+      -3430.1,
+      -7190.5,
+      0.6
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Swimming, lighthouse + boats distant.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.803
+  },
+  "Ocean near Keys (N)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -3442.8,
+      -7188.3,
+      -0.1
+    ],
+    "hud_C_xyz": [
+      -3442.9,
+      -7191.0,
+      0.5
+    ],
+    "hud_fov": 52.0,
+    "player_visible": true,
+    "notes": "Swimming, bridge + radio tower distant.",
+    "hud_fov_v": 52.0,
+    "hud_fov_h": 81.856
+  },
+  "Park": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      2009.9,
+      454.9,
+      3.3
+    ],
+    "hud_C_xyz": [
+      2010.3,
+      452.4,
+      3.7
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "GameTests viewer. 'Script Program Crashed' overlay. Vice City beach park.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.803
+  },
+  "Parking Lot": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1573.8,
+      -1642.4,
+      3.8
+    ],
+    "hud_C_xyz": [
+      -1574.7,
+      -1644.5,
+      5.6
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Tasks Full overlay. Player avatar dragging body near car.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 87.299
+  },
+  "Pawn Shop (S)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6420.1,
+      3062.3,
+      5.9
+    ],
+    "hud_C_xyz": [
+      -6420.3,
+      3064.7,
+      6.5
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Pawn shop entrance, 'Robbery' indicator. Frame rendered in B&W (visual filter, irrelevant to calib).",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.658
+  },
+  "Pawn Shop (W)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6423.0,
+      3060.1,
+      5.8
+    ],
+    "hud_C_xyz": [
+      -6421.6,
+      3061.6,
+      6.7
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Pawn shop interior, 'Robbery' indicator. 'VALID DOCUMENTS NEEDED TO PAWN' sign right.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.658
+  },
+  "Pier (Land)": {
+    "constraint_class": "D_no_ground_truth",
+    "has_debug_hud": false,
+    "marketing_render": true,
+    "notes": "Ultra-wide cinematic render. Golden hour. Couple on pier, REPREDATOR boat."
+  },
+  "Pier (Sea)": {
+    "constraint_class": "D_no_ground_truth",
+    "has_debug_hud": false,
+    "marketing_render": true,
+    "notes": "Ultra-wide cinematic render. Sunset. Couple back view watching ocean."
+  },
+  "Police Chase (A)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -2588.0,
+      -3550.3,
+      9.7
+    ],
+    "hud_C_xyz": [
+      -2588.1,
+      -3549.8,
+      10.4
+    ],
+    "hud_fov": 54.1,
+    "player_visible": true,
+    "notes": "Pickup truck rear bed POV, Lucia visible. Vehicle detection wireframes overlay. Same trajectory as B-J.",
+    "hud_fov_v": 54.1,
+    "hud_fov_h": 84.465
+  },
+  "Police Chase (B)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -2571.2,
+      -3292.0,
+      10.5
+    ],
+    "hud_C_xyz": [
+      -2571.0,
+      -3291.0,
+      11.6
+    ],
+    "hud_fov": 37.6,
+    "player_visible": true,
+    "notes": "FOLLOW_WAYPOINT_RECORDING debug panel."
+  },
+  "Police Chase (C)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -2588.8,
+      -3567.8,
+      9.7
+    ],
+    "hud_C_xyz": [
+      -2588.9,
+      -3566.7,
+      10.4
+    ],
+    "hud_fov": 54.1,
+    "player_visible": true,
+    "notes": "Pickup truck POV. LTD gas station + LTD sign."
+  },
+  "Police Chase (D)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -2576.7,
+      -3365.9,
+      9.9
+    ],
+    "hud_C_xyz": [
+      -2576.7,
+      -3364.9,
+      11.2
+    ],
+    "hud_fov": 37.6,
+    "player_visible": false,
+    "notes": "FOLLOW_WAYPOINT_RECORDING. Motion blur sideways.",
+    "hud_fov_v": 37.6,
+    "hud_fov_h": 62.365
+  },
+  "Police Chase (E)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -2576.7,
+      -3404.8,
+      10.3
+    ],
+    "hud_C_xyz": [
+      -2576.8,
+      -3404.1,
+      12.5
+    ],
+    "hud_fov": 37.6,
+    "player_visible": false,
+    "notes": "FOLLOW_WAYPOINT_RECORDING. Flipped vehicle ahead.",
+    "hud_fov_v": 37.6,
+    "hud_fov_h": 62.365
+  },
+  "Police Chase (F)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -2580.8,
+      -3416.8,
+      10.1
+    ],
+    "hud_C_xyz": [
+      -2580.5,
+      -3415.8,
+      11.2
+    ],
+    "hud_fov": 37.6,
+    "player_visible": false,
+    "notes": "FOLLOW_WAYPOINT_RECORDING. Blue Avoidance volumes rendered. Mexican Restaurant left.",
+    "hud_fov_v": 37.6,
+    "hud_fov_h": 62.365
+  },
+  "Police Chase (G)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -2572.6,
+      -3311.4,
+      10.4
+    ],
+    "hud_C_xyz": [
+      -2572.4,
+      -3310.4,
+      11.6
+    ],
+    "hud_fov": 37.6,
+    "player_visible": false,
+    "notes": "FOLLOW_WAYPOINT_RECORDING. Sidewalk + storefronts.",
+    "hud_fov_v": 37.6,
+    "hud_fov_h": 62.365
+  },
+  "Police Chase (H)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -2573.0,
+      -3327.6,
+      10.0
+    ],
+    "hud_C_xyz": [
+      -2572.8,
+      -3326.6,
+      11.1
+    ],
+    "hud_fov": 37.6,
+    "player_visible": false,
+    "notes": "FOLLOW_WAYPOINT_RECORDING. Awning + palm trees.",
+    "hud_fov_v": 37.6,
+    "hud_fov_h": 62.365
+  },
+  "Police Chase (I)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -2582.4,
+      -3437.7,
+      10.0
+    ],
+    "hud_C_xyz": [
+      -2582.3,
+      -3436.6,
+      11.0
+    ],
+    "hud_fov": 37.6,
+    "player_visible": false,
+    "notes": "FOLLOW_WAYPOINT_RECORDING. Heavy motion blur.",
+    "hud_fov_v": 37.6,
+    "hud_fov_h": 62.365
+  },
+  "Police Chase (J)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -2585.7,
+      -3486.9,
+      9.7
+    ],
+    "hud_C_xyz": [
+      -2585.6,
+      -3485.6,
+      10.7
+    ],
+    "hud_fov": 33.6,
+    "player_visible": false,
+    "notes": "TE INVITO Mexican restaurant + sheriff vehicles intersection. Narrower Fov than other Police Chase frames."
+  },
+  "Pool": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -5325.3,
+      3473.2,
+      66.9
+    ],
+    "hud_C_xyz": [
+      -5327.3,
+      3475.4,
+      67.9
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Debug Paused. Wyman ped at pool edge, gesture debug panel.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.803
+  },
+  "Port": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      1185.7,
+      -429.1,
+      5.2
+    ],
+    "hud_C_xyz": [
+      1190.0,
+      -426.9,
+      7.2
+    ],
+    "hud_dir_ypr": [
+      302.5,
+      14.1,
+      0.0
+    ],
+    "hud_fov": 49.6,
+    "player_visible": false,
+    "notes": "'Debug Camera & Pad On'. Prop Container layout editor overlay. Containers + crane visible.",
+    "hud_dir_raw": {
+      "values": [
+        14.1,
+        0.0,
+        -57.5
+      ],
+      "interpretation": "PRY",
+      "note": "PRY = HUD writes Dir:(pitch, roll, yaw); yPR = stored as (yaw, pitch, roll) at audit time."
+    },
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.658
+  },
+  "Shootout (S)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1355.5,
+      735.4,
+      4.1
+    ],
+    "hud_C_xyz": [
+      -1355.7,
+      737.8,
+      4.9
+    ],
+    "hud_fov": 50.8,
+    "player_visible": true,
+    "notes": "Debug Paused. Lucia armed + cop firing. Cover Intent debug visible.",
+    "hud_fov_v": 50.8,
+    "hud_fov_h": 80.339
+  },
+  "Shootout (W)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1349.0,
+      736.7,
+      4.1
+    ],
+    "hud_C_xyz": [
+      -1346.2,
+      736.8,
+      4.5
+    ],
+    "hud_fov": 50.8,
+    "player_visible": true,
+    "notes": "Dead cop ragdoll visible. Same scene cluster as Shootout (S) ~9m apart.",
+    "hud_fov_v": 50.8,
+    "hud_fov_h": 80.339
+  },
+  "Sidewalk (Jason) (E)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -461.5,
+      1233.4,
+      3.2
+    ],
+    "hud_C_xyz": [
+      -464.0,
+      1233.8,
+      4.6
+    ],
+    "hud_fov": 50.8,
+    "preview_watermark": true,
+    "player_visible": true,
+    "notes": "Jason side profile. Red muscle car parked right. 'SECREDM' string visible.",
+    "hud_fov_v": 50.8,
+    "hud_fov_h": 80.339
+  },
+  "Sidewalk (Jason) (S)": {
+    "constraint_class": "D_no_ground_truth",
+    "has_debug_hud": false,
+    "preview_watermark": true,
+    "notes": "Preview render with 'VRAM over by 1.3G' error overlay. BlackBoard Inspector overlay top-left. No readable coords."
+  },
+  "Sidewalk (Lucia)": {
+    "constraint_class": "D_no_ground_truth",
+    "has_debug_hud": false,
+    "preview_watermark": true,
+    "notes": "Preview render. BlackBoard Inspector overlay + 'Warning: low video memory' overlay block any HUD."
+  },
+  "Sidewalk (Trash)": {
+    "constraint_class": "D_no_ground_truth",
+    "has_debug_hud": false,
+    "marketing_render": true,
+    "notes": "Ultra-wide cinematic render. Community service workers picking trash. No HUD."
+  },
+  "Store (Lucia)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -6332.4,
+      2750.5,
+      12.4
+    ],
+    "hud_C_xyz": [
+      -6331.7,
+      2750.2,
+      14.2
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Lucia entering convenience store. Wireframe collision debug overlay. 'Sorry! We're CLOSED' sign.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.333
+  },
+  "Street (Jason)": {
+    "constraint_class": "D_no_ground_truth",
+    "has_debug_hud": false,
+    "preview_watermark": true,
+    "notes": "Preview render. 'VRAM over by 1.3G' overlay. Jason facing camera, Venture Apts building."
+  },
+  "Street (Lucia) (N)": {
+    "constraint_class": "D_no_ground_truth",
+    "has_debug_hud": false,
+    "preview_watermark": true,
+    "notes": "Preview render. BlackBoard Inspector overlay + low video memory warning. Lucia black dress full body back view."
+  },
+  "Street (Lucia) (S)": {
+    "constraint_class": "D_no_ground_truth",
+    "has_debug_hud": false,
+    "preview_watermark": true,
+    "notes": "Preview render. BlackBoard Inspector overlay. Lucia black dress back view."
+  },
+  "Strip Club (Jason) (D)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -694.6,
+      1213.2,
+      3.6
+    ],
+    "hud_C_xyz": [
+      -696.6,
+      1212.6,
+      4.7
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Jason in strip club main floor, 'New Contact: RB Shaw' overlay. Stage with dancers visible left.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.803
+  },
+  "Strip Club (Jason) (U)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -686.2,
+      1227.2,
+      6.6
+    ],
+    "hud_C_xyz": [
+      -685.1,
+      1225.4,
+      8.2
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Anim Scene Editor (DRE_MEET_IGB_SAM_CHAT_ACTION). Upper floor VIP area.",
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.803
+  },
+  "Strip Club (Lucia)": {
+    "constraint_class": "D_no_ground_truth",
+    "has_debug_hud": false,
+    "marketing_render": true,
+    "notes": "Ultra-wide cinematic render. Night exterior near strip club. Lucia (orange shirt) + NPCs."
+  },
+  "Tarmac": {
+    "constraint_class": "Cm_pos_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -2630.2,
+      -116.9,
+      4.3
+    ],
+    "hud_C_xyz": [
+      -2630.2,
+      -111.0,
+      6.7
+    ],
+    "hud_gizmo_xyz": [
+      -2575.5,
+      -49.8,
+      5.9
+    ],
+    "hud_fov": null,
+    "preview_watermark": true,
+    "player_visible": false,
+    "notes": "Wireframe collision overlay (trailer mesh). Blue inflatable ring inside trailer bed. AIWE-style gizmo mode (no Fov in HUD). 'AP_02b_Ground_DTL_01' asset name visible."
+  },
+  "Tennis Court (E)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -316.981,
+      1173.821,
+      4.998
+    ],
+    "hud_C_xyz": [
+      -317.0,
+      1173.6,
+      5.0
+    ],
+    "hud_fov": 37.6,
+    "player_visible": true,
+    "notes": "CameraStar debug overlay. Player leaning over car hood (not vertical), tennis-court capture-session cluster (xy ~ -315, 1174). xyz+fov locked, ypr free.",
+    "hud_fov_v": 37.6,
+    "hud_fov_h": 59.793
+  },
+  "Tennis Court (N)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -314.715,
+      1172.305,
+      4.817
+    ],
+    "hud_C_xyz": [
+      -314.7,
+      1172.3,
+      4.8
+    ],
+    "hud_fov": 37.6,
+    "player_visible": true,
+    "notes": "CameraStar debug overlay. Same tennis-court cluster as Tennis Court (E/SE/NE/SW). xyz+fov locked, ypr free.",
+    "hud_fov_v": 37.6,
+    "hud_fov_h": 59.793
+  },
+  "Tennis Court (SE)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -317.232,
+      1174.859,
+      5.021
+    ],
+    "hud_C_xyz": [
+      -317.2,
+      1174.9,
+      5.0
+    ],
+    "hud_fov": 37.6,
+    "player_visible": true,
+    "notes": "CameraStar debug overlay. Same tennis-court cluster. xyz+fov locked, ypr free.",
+    "hud_fov_v": 37.6,
+    "hud_fov_h": 59.793
+  },
+  "Tennis Stadium (4K)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -152.6,
+      -1748.9,
+      36.3
+    ],
+    "hud_C_xyz": [
+      -155.6,
+      -1749.6,
+      36.3
+    ],
+    "hud_fov": 45.0,
+    "player_visible": false,
+    "notes": "R* Content Editor (archetype-selection dialog visible). Engine P+C+Fov still valid. Different location from Tennis Court cluster \u2014 this is the stadium proper, not the court. xyz+fov locked, ypr free.",
+    "hud_fov_v": 45.0,
+    "hud_fov_h": 72.734
+  },
+  "Tennis Court (NE)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -315.691,
+      1172.236,
+      4.95
+    ],
+    "hud_C_xyz": [
+      -315.7,
+      1172.2,
+      5.0
+    ],
+    "hud_fov": 37.6,
+    "player_visible": true,
+    "notes": "CameraStar debug overlay. Same tennis-court cluster. xyz+fov locked, ypr free.",
+    "hud_fov_v": 37.6,
+    "hud_fov_h": 59.793
+  },
+  "Tennis Court (SW)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -313.409,
+      1174.241,
+      4.847
+    ],
+    "hud_C_xyz": [
+      -313.4,
+      1174.2,
+      4.8
+    ],
+    "hud_fov": 37.6,
+    "player_visible": true,
+    "notes": "CameraStar debug overlay. Same tennis-court cluster. xyz+fov locked, ypr free.",
+    "hud_fov_v": 37.6,
+    "hud_fov_h": 59.793
+  },
+  "Trees": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      1484.1,
+      1317.6,
+      3.3
+    ],
+    "hud_C_xyz": [
+      1495.2,
+      1315.4,
+      0.8
+    ],
+    "hud_dir_ypr": [
+      284.8,
+      27.3,
+      0.0
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "hud_P_is_selected_ped": true,
+    "notes": "GameTests TASKS FULL overlay, scenario 'Sit_Chair', script ped_selfie_action. P: tracks selected SCRIPT_PED_1424, not the player. xyz+ypr+fov all locked (anchor).",
+    "hud_dir_raw": {
+      "values": [
+        27.3,
+        0.0,
+        -75.2
+      ],
+      "interpretation": "PRY",
+      "note": "PRY = HUD writes Dir:(pitch, roll, yaw); yPR = stored as (yaw, pitch, roll) at audit time."
+    },
+    "hud_fov_v": 49.6,
+    "hud_fov_h": 78.803
+  },
+  "Welcome Center (E)": {
+    "constraint_class": "B_pos_fov_player",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      2016.0,
+      588.9,
+      3.2
+    ],
+    "hud_C_xyz": [
+      2013.8,
+      588.1,
+      4.5
+    ],
+    "hud_fov": 50.8,
+    "player_visible": true,
+    "player_ped_vertical": true,
+    "notes": "Lucia third-person rear, upright walking \u2014 roll soft-constrained via ped vertical. Paired with Welcome Center (W), ~12.5m apart, same capture session.",
+    "hud_fov_v": 50.8,
+    "hud_fov_h": 80.339
+  },
+  "Welcome Center (W)": {
+    "constraint_class": "B_pos_fov_player",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      2023.9,
+      587.4,
+      3.2
+    ],
+    "hud_C_xyz": [
+      2026.3,
+      586.9,
+      4.7
+    ],
+    "hud_fov": 50.8,
+    "player_visible": true,
+    "player_ped_vertical": true,
+    "notes": "Lucia third-person rear, upright walking \u2014 roll soft-constrained via ped vertical. 'Low video memory' warning overlay does not affect calib values. Paired with Welcome Center (E).",
+    "hud_fov_v": 50.8,
+    "hud_fov_h": 80.339
+  },
+  "Yard": {
+    "constraint_class": "A_full_hud",
+    "has_debug_hud": true,
+    "has_dir": true,
+    "hud_P_xyz": [
+      2092.8,
+      1153.2,
+      6.0
+    ],
+    "hud_C_xyz": [
+      2080.1,
+      1158.9,
+      8.1
+    ],
+    "hud_dir_ypr": [
+      267.3,
+      -20.6,
+      0.0
+    ],
+    "hud_fov": 45.0,
+    "player_visible": true,
+    "notes": "GameTests Test Explorer + 'Script Program Crashed: #42 (Cop Trap - Kington Hotel)' red overlay. HUD values are engine-truth, unaffected by the script crash. Scenario spr_sb_01 Stand_Drink. xyz+ypr+fov all locked (anchor).",
+    "hud_dir_raw": {
+      "values": [
+        -20.6,
+        0.0,
+        -92.7
+      ],
+      "interpretation": "PRY",
+      "note": "PRY = HUD writes Dir:(pitch, roll, yaw); yPR = stored as (yaw, pitch, roll) at audit time."
+    },
+    "hud_fov_v": 45.0,
+    "hud_fov_h": 72.734
+  }
+}

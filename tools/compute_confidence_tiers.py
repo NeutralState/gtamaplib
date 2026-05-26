@@ -68,11 +68,43 @@ OUT_DIR  = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'generated')
 OUT_PATH = os.path.join(OUT_DIR, 'confidence_tiers.json')
 
 
-# ── Source classification (matches existing tools) ──────────────────────────
+# ── Source classification (audit-driven, with fallback) ────────────────────
+
+# V2: load the constraint-class audit if available. The audit defines what
+# the in-game HUD ground-truth tells us about each leak/marketing cam. We
+# import it for `is_leak()` and for an explicit `is_class_a()` check used
+# to short-circuit residual computation on anchor cams.
+try:
+    from leak_cam_audit import (
+        get_class as _audit_get_class,
+        is_anchor as _audit_is_anchor,
+        is_triangulation_trusted as _audit_is_xyz_trusted,
+    )
+    _HAS_AUDIT = True
+except ImportError:
+    _HAS_AUDIT = False
 
 def is_leak(cam_name):
-    s = md.cameras.get(cam_name, {}).get('source', '')
+    """True iff cam_name is a 'leak' cam — i.e. has HUD-derived ground truth
+    for at least its xyz (classes A, B, C, Cm in the audit).
+
+    Audit-driven primary; falls back to the legacy date-pattern heuristic for
+    cams that have a date in `source` but no audit entry yet."""
+    if _HAS_AUDIT:
+        cls = _audit_get_class(cam_name, cameras=md.cameras)
+        if cls is not None:
+            return _audit_is_xyz_trusted(cam_name, cameras=md.cameras)
+    s = md.cameras.get(cam_name, {}).get('source', '') or ''
     return bool(re.match(r'\d{4}-\d{2}-\d{2}', s))
+
+def is_class_a(cam_name):
+    """True iff cam_name is class A_full_hud — anchor for ALL DOF, not just
+    xyz. Used to short-circuit cam tier assignment."""
+    if not _HAS_AUDIT:
+        # Without audit info we can't distinguish A from B/C/Cm — treat any
+        # leak as anchor to preserve V1 behavior.
+        return is_leak(cam_name)
+    return _audit_is_anchor(cam_name, cameras=md.cameras)
 
 def is_trailer(cam_name):
     s = md.cameras.get(cam_name, {}).get('source', '')
@@ -226,8 +258,11 @@ def classify_cameras(lm_tiers):
             }
             continue
 
-        # LEAK cams are anchor by definition, residuals don't matter
-        if is_leak(cam_name):
+        # Class A cams (full HUD ground truth: xyz + ypr + fov) are anchor by
+        # construction — their residuals are irrelevant because all DOF are
+        # locked. B/C/Cm cams have xyz locked but their ypr (and fov for Cm)
+        # was solver-refined, so they get evaluated like any other cam.
+        if is_class_a(cam_name):
             out[cam_name] = {
                 'tier': 'anchor',
                 'n_obs': len(md.pixels.get(cam_name, {})),
@@ -235,7 +270,7 @@ def classify_cameras(lm_tiers):
                 'median_res_ref': None,
                 'max_res_ref': None,
                 'median_res_all': None,
-                'reason': 'LEAK cam (locked ground truth)',
+                'reason': 'class A_full_hud (locked ground truth)',
             }
             continue
 
@@ -362,7 +397,17 @@ def two_pass_classify():
     Stops early if a pass produces no tier changes.
     """
     def source_only_cam_tier(cam_name):
-        if is_leak(cam_name):
+        # Pass-1 bootstrap: a cam is treated as anchor for LM triangulation
+        # iff its xyz is HUD ground-truth. V2: that means class A/B/C/Cm.
+        # Class D (no HUD readable) does NOT count — D cams have no
+        # ground-truth xyz to anchor LMs to.
+        if is_class_a(cam_name):
+            return 'anchor'
+        if _HAS_AUDIT and _audit_is_xyz_trusted(cam_name, cameras=md.cameras):
+            return 'anchor'
+        # Fallback (no audit info, or cam not in audit): use the legacy
+        # date-pattern leak detection.
+        if not _HAS_AUDIT and is_leak(cam_name):
             return 'anchor'
         return 'unknown'
 
