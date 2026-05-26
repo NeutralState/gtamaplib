@@ -363,13 +363,22 @@ def main():
             print(f"Use tools/refine_cam_ypr.py for ypr-only refinement.")
             return 1
         if DOF_XYZ in locked:
-            # Cm: xyz locked, ypr + fov refinable. Force --no-refine-xyz to
-            # honor the HUD-locked xyz, regardless of what the user passed.
-            if args.refine_xyz:
-                print(f"  V2 class {cls}: xyz is HUD-locked, "
-                      f"--refine-xyz ignored.")
-                args.refine_xyz = False
-    # Class D, non-audit cams, or Cm (with refine_xyz now off): full solve
+            # Cm: xyz locked, ypr + fov refinable. Force xyz frozen by setting
+            # fix_xy to current (x, y) and z_bounds to a 0-width interval
+            # around current z. This honors the HUD-locked xyz regardless of
+            # what the user passed.
+            cur_xyz_cm = cam_data.get('xyz')
+            if cur_xyz_cm is not None:
+                if args.fix_xy is None:
+                    args.fix_xy = [cur_xyz_cm[0], cur_xyz_cm[1]]
+                    print(f"  V2 class {cls}: xyz is HUD-locked, "
+                          f"auto-setting --fix-xy {cur_xyz_cm[0]:.3f} {cur_xyz_cm[1]:.3f}")
+                if args.z_bounds is None:
+                    # ±1cm — effectively zero-width but avoids degenerate solver
+                    args.z_bounds = [cur_xyz_cm[2] - 0.01, cur_xyz_cm[2] + 0.01]
+                    print(f"  V2 class {cls}: xyz is HUD-locked, "
+                          f"auto-setting --z-bounds to lock z={cur_xyz_cm[2]:.3f}")
+    # Class D, non-audit cams, or Cm (with xyz now frozen): full solve
     # proceeds with the user's flags.
 
     cur_xyz = cam_data.get('xyz')
