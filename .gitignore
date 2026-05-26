@@ -35,3 +35,4 @@ tools/bundle_adjust_result.json
 # Local vendor clone (rlx upstream) — LFS files pulled manually, do not commit
 vendor/
 vendor/gtadb.org/
+gtamapdata/*.pre-*
