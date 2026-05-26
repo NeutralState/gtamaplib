@@ -61,7 +61,15 @@ gtamaplib-main/
 │   ├── server.py               ← HTTP server localhost:8765 — backend du calib tool
 │   ├── calib.html              ← UI de calibration interactive (~3500 lignes)
 │   ├── cam_health.html         ← dashboard global de santé des cams
-│   ├── bundle_adjust.py        ← solver actuel (TRF two-pass: linear → huber)
+│   ├── bundle_adjust.py            ← legacy global BA (pre-Phase-C)
+│   ├── bundle_adjust_weighted.py   ← Phase C: tier-aware BA (USE THIS)
+│   ├── compute_confidence_tiers.py ← Phase A: tier classifier
+│   ├── intake_camera.py            ← Phase B: validates new cams vs trustworthy set
+│   ├── refine_cam_full.py          ← single-cam 7-param fit (scipy Rotation ZXY)
+│   ├── calibrate_batch.py          ← batch refine + re-triangulate
+│   ├── calibration_plan.py         ← non-tree cam insertion analyzer
+│   ├── build_cam_health.py         ← generates dependency graph dashboard
+│   ├── gen_missing_thumbs.py       ← auto-generates dashboard thumbnails
 │   ├── bundle_adjust_apply.py
 │   ├── outliers_report.py
 │   ├── prerender_minimaps_fast.py  ← bulk pre-render minimap cache (3s pour 147 cams)
@@ -228,6 +236,8 @@ ils gèrent l'écriture atomique (`.tmp` + `os.replace`) et le cache.
 
 #### High priority (T3 critical path)
 
+- ✅ **T3 intake pipeline (Phase A/B/C) shipped 2026-05-25**.
+  See "T3 Intake Pipeline Complete" section below for full workflow.
 - ⏸ **Roll slider integration (Phase 10)** — full pipeline refactor.
   YANIS confirmed needed for Jason at sea + Chase 2. Touche save +
   optimize + bundle_adjust. ~2-3h focused work.
@@ -605,3 +615,182 @@ patch_strategic_v1.py  (reverted)
 ... (etc)
 ```
 Should be deleted or moved to tools/patches_archive/ in next cleanup pass.
+
+---
+
+## Session: 2026-05-25 — T3 Intake Pipeline Complete + Dependency Dashboard
+
+This is **the most important workflow shift in the project's history**. We
+went from rlx's monolithic `triangulate.py` (hardcoded per-cam calibration
+script, 2700+ lines of switch-cases) to a **proper reusable pipeline** that
+auto-discovers structure, validates against trusted ground truth, and runs
+global optimization.
+
+### The lineage: from rlx's `triangulate.py` to our T3 pipeline
+
+**rlx's approach (origin):**
+- Single monolithic `triangulate.py` with flags `-fs`, `-ts`, `-mb`, `-lka`,
+  etc. — each flag is a hardcoded recipe for ONE specific cam/LM.
+- Manually-chosen LM sets, manually-tuned grids, manually-picked anchor cams.
+- Works but doesn't scale: every new cam needs new code, no way to reason
+  about which LMs to trust globally, no automated verification.
+- Output: cam params written manually after inspecting log.
+
+**Our T3 pipeline (this is the new workflow — use it for everything):**
+
+Stage 0 → **Schema (LM and cam tier semantics)**
+Each LM and cam gets a confidence `tier`: anchor → high → medium → low →
+unverified. Derived automatically from observation counts, source diversity,
+and residuals. This is the **truth source** for every downstream decision.
+
+Stage A → **`compute_confidence_tiers.py`**
+- Produces `tools/generated/confidence_tiers.json` (cam_tier + lm_tier per
+  entity, with reasons).
+- Tier rules:
+  - LMs: `>= 3 non-LEAK sources AND median res <= 3'` → high; `1 LEAK source`
+    → high; `all sources LEAK` → anchor; etc.
+  - Cams: `>= 5 anchor+high obs AND median <= 3'` → high; `>= 2 anchor+high
+    obs AND median <= 6' AND max <= 30'` → medium; etc.
+- Re-run after every batch of changes. This file gates Phase B + C.
+
+Stage B → **`intake_camera.py`**
+- Validates a NEW (or suspect) cam against ONLY anchor+high LMs.
+- Solves ypr + (optionally) hfov + xyz against the trustworthy skeleton.
+- Reports verdict: **COMMIT / REVIEW / REJECT** based on tier + post-residual.
+- Does NOT modify cameras.json — the human decides whether to apply.
+- The "wobbly" parts of the current state never pollute new-cam placement.
+
+Stage C → **`bundle_adjust_weighted.py`**  *(built this session — the big new tool)*
+- Global bundle adjustment over ALL non-leak cams + LMs simultaneously.
+- **Per-observation weight** = `min(cam_tier_weight, lm_tier_weight)`
+  - anchor=15, high=7.5, medium=2, low=0.5, unverified=0.1
+  - weakest-link rule (anchor cam × low LM = 0.5, not 7.5)
+- **Movement barriers per tier** (soft hinge penalty outside budget):
+  - anchor cam: xyz ±1m, ypr ±0.2°, fov ±0.2°, stiffness 10
+  - high: ±5m, ±0.5°, stiff 5
+  - medium: ±20m, ±2°, stiff 2
+  - low: ±50m, ±5°, stiff 1
+  - unverified: ±200m, ±15°, stiff 0.5
+- LMs locked tighter in proportion to their tier (anchor LMs barely move).
+- Leak cams fully locked.
+- Skips degenerate obs (LM <50m from cam — Beach LMs etc.) and aberrant LMs
+  (|xyz| > 1e6m).
+- "Behind cam" obs contribute 0, not huge penalty (avoids breaking the
+  optimization when a cam temporarily flips a marker behind it).
+- Sparse Jacobian (~0.4% density — essential for >100 params).
+- 2-pass: linear → huber f_scale=5.
+- Output JSON compatible with existing `bundle_adjust_apply.py`.
+
+**End-to-end loop:**
+```
+add markings → run compute_confidence_tiers
+            → intake_camera "Cam Name"   (verdict?)
+            → refine_cam_full "Cam Name" --apply   (if commit)
+            → bundle_adjust_weighted + bundle_adjust_apply   (global polish)
+            → re-run compute_confidence_tiers
+```
+
+### Supporting tools we built this month (the foundation that makes T3 work)
+
+- **`refine_cam_full.py`** — single-cam fit, 7-param (xyz + ypr + hfov).
+  Critical fix: replaced manual rotation math with `scipy.spatial.transform.Rotation`
+  using gtamaplib's **ZXY euler convention**. The original projection had a
+  bug that made Ambrosia-zone cams unrecalibratable. Added `--use-indep-only`
+  flag for cams whose LMs reference themselves (Ambrosia self-reference).
+  Added `--fix-xy`, `--z-bounds`, `--no-hfov`, `--no-roll`.
+- **`refine_cam_ypr.py`** — ypr-only fit. Same scipy Rotation fix.
+- **`calibrate_batch.py`** — runs `refine_cam_full` over all stale/suspect
+  cams, then re-triangulates affected LMs. Used to calibrate 24 cams in one
+  pass (RMS net improvement across the board).
+- **`calibration_plan.py`** — analyzes cams NOT in the dependency tree
+  (`docs/index.html`) and suggests where to insert them. Treats leak cams as
+  implicit tree root. Outputs "ready" / "needs N more LMs" / "depends on
+  uncalibrated cams" verdicts.
+- **`triangulate_lm.py`** — fixed leak detection (was using stale heuristic;
+  now uses source-date regex `YYYY-MM-DD`).
+- **`gen_missing_thumbs.py`** — auto-generates dashboard thumbnails for any
+  cam with xyz that has a matching PNG in `frames/`. Generated 148 thumbs
+  in one shot.
+- **`build_cam_health.py`** — generates the new dependency graph dashboard
+  (see next section).
+
+### Dependency graph dashboard (replaces old cam_health table)
+
+`tools/cam_health.html` is now an **auto-generated dependency graph** built
+by `build_cam_health.py` from live data:
+
+- **Auto-positioned**: each cam's (x,y) is its world position projected onto
+  the canvas (2000×1600). North is up. PGH cluster lives in the NW, Vice in
+  the east, Keys far south, etc.
+- **Anti-overlap**: pairwise repulsion with spring-back to original position
+  (200 iterations, target 38px min separation).
+- **Auto edges**: built from `landmarks.json source_cameras`. If cam X marks
+  LM L and L was triangulated by cam P, then P → X is an edge. Multiple
+  parents in the same zone get aggregated into an LM cluster node (lm_vc,
+  lm_ambrosia, lm_keys, lm_gv, lm_pgh).
+- **Filter**: only cams with xyz + leak cams that are actually referenced
+  as parents (29 useful leak cams kept, 63 unused dropped).
+- **Tier-colored** nodes: anchor/leak=violet, high=green, medium=blue,
+  low=yellow, unverified=gray, LM cluster=red.
+- **Live tooltip** on hover: current xyz/ypr/fov, tier badge, source string,
+  parents/children, AND the cam's thumbnail (200×130px).
+- **Filters by tier** and **by zone** (top bar).
+- Endpoint `/cam_health.html` (server.py serves the static file).
+- Endpoint `/thumbs/<name>.jpg` (added this session, serves from `docs/thumbs/`).
+
+### Calibration session results (this week)
+
+- 29 non-leak cams calibrated in single-cam mode (24 batch + 4 Ambrosia + 1
+  Mt Kalaga via rlx baseline).
+- Ambrosia zone recovered: had been broken for months due to projection bug.
+- Phase C BA: RMS 92.50' → 4.47' → 2.67' (95.41% improvement). Tier diff:
+  cams +2 high, -1 low; LMs +3 anchor, +3 high, -3 low.
+- Container Crane (1) outlier auto-corrected by BA (37m movement) — couldn't
+  fix it manually.
+
+### Tier state after this session
+
+```
+Cameras:                  Landmarks:
+anchor=92 (leak cams)     anchor=164
+high=24                   high=106
+medium=7                  medium=227
+low=2                     low=7
+unverified=46             unverified=337
+```
+
+### Files added/changed
+
+- `tools/bundle_adjust_weighted.py` (new — Phase C)
+- `tools/refine_cam_full.py` (rewrite — scipy Rotation projection fix)
+- `tools/refine_cam_ypr.py` (same fix)
+- `tools/calibrate_batch.py` (new — batch refine + re-triangulate)
+- `tools/calibration_plan.py` (new — non-tree cam insertion analysis)
+- `tools/triangulate_lm.py` (leak detection fix)
+- `tools/build_cam_health.py` (new — dashboard generator)
+- `tools/gen_missing_thumbs.py` (new — thumbnail generator)
+- `tools/cam_health.html` (rebuilt — dependency graph instead of table)
+- `tools/server.py` (added `/api/dependency_graph` and `/thumbs/*` routes)
+- `gtamapdata/cameras.json` (29 cams calibrated + BA polish on 46 cams)
+- `gtamapdata/landmarks.json` (605 LMs re-triangulated + BA polish on 517 LMs)
+- `gtamapdata/pixels.json` (markings cleanup)
+
+### Reference: how a fresh calibration session should now go
+
+1. Add new markings in calib UI (or via pixels.json edits).
+2. `python3 tools/compute_confidence_tiers.py` — refresh tiers.
+3. For each cam you want to calibrate:
+   - `python3 tools/intake_camera.py "Cam Name"` — see verdict.
+   - If COMMIT: `python3 tools/refine_cam_full.py "Cam Name" --apply`
+   - If REVIEW: investigate, add more anchor markings, or accept rlx baseline.
+4. Re-triangulate affected LMs (`triangulate_lm.py` per LM or via
+   `calibrate_batch.py --retriangulate`).
+5. `python3 tools/bundle_adjust_weighted.py` then `bundle_adjust_apply.py`
+   — global polish.
+6. `python3 tools/compute_confidence_tiers.py` — refresh tiers, check
+   promotions.
+7. `python3 tools/build_cam_health.py` — regenerate dashboard.
+8. Commit.
+
+**Don't** revert to rlx's per-flag pattern in `triangulate.py`. The pipeline
+above is the new way.

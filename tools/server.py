@@ -497,6 +497,19 @@ class Handler(BaseHTTPRequestHandler):
         if path in ('/', '/index.html', '/calib.html'):
             self.send_file(os.path.join(TOOL_DIR, 'calib.html'), 'text/html')
 
+        elif path.startswith('/thumbs/'):
+            # Serve thumbnails from docs/thumbs/
+            from urllib.parse import unquote
+            fname = unquote(path[len('/thumbs/'):])
+            # Basic sanitization
+            if '/' in fname or '\\' in fname or '..' in fname:
+                self.send_response(400); self.end_headers(); return
+            thumb_path = os.path.join(GTAMAP_DIR, 'docs', 'thumbs', fname)
+            if os.path.exists(thumb_path):
+                self.send_file(thumb_path, 'image/jpeg')
+            else:
+                self.send_response(404); self.end_headers()
+
         elif path == '/cam_health.html':
             self.send_file(os.path.join(TOOL_DIR, 'cam_health.html'), 'text/html')
 
@@ -785,6 +798,243 @@ class Handler(BaseHTTPRequestHandler):
                 'has_xyz': has_xyz,
                 'z_constraint': meta.get('z_constraint'),
             })
+
+        elif path == '/api/dependency_graph':
+            # Auto-generated camera dependency graph.
+            # Returns nodes (cams + LM clusters) and edges (parent → child).
+            import re as _re_local
+            import statistics as _stats_local
+            import json as _json_local
+
+            # Load tiers
+            tiers_path = os.path.join(TOOL_DIR, 'generated', 'confidence_tiers.json')
+            tiers = {'cameras': {}, 'landmarks': {}}
+            if os.path.exists(tiers_path):
+                with open(tiers_path) as f:
+                    tiers = _json_local.load(f)
+
+            # Zone inference from xyz
+            def infer_zone(xyz):
+                if not xyz: return 'unknown'
+                x, y, z = xyz
+                # Heuristic from map layout
+                if y > 3000: return 'ambrosia'  # north
+                if y < -3000: return 'keys'  # south
+                if y < -1500 and x < -3000: return 'grassrivers'
+                if y < 0 and x > -1000: return 'keys'  # south
+                if x > 500 and y > -1000: return 'port_gellhorn'
+                return 'vice'  # center default
+
+            # Manual zone override for known cams
+            ZONE_OVERRIDE = {
+                'Leonida Keys 01 (Airplane) (X)': 'keys',
+                'Leonida Keys Postcard (X)': 'keys',
+                'Leonida Keys 05 (Boats)': 'keys',
+                'Key Lento': 'keys',
+                'Keys': 'keys',
+                'Grassrivers 02 (Watson Bay)': 'grassrivers',
+                'Prison': 'grassrivers',
+                'Ambrosia 01 (Bikers)': 'ambrosia',
+                'Ambrosia 02 (Panorama)': 'ambrosia',
+                'Ambrosia 04 (Fires)': 'ambrosia',
+                'Ambrosia Postcard (X)': 'ambrosia',
+                'Chase (2) (A)': 'ambrosia',
+                'Chase (2) (B)': 'ambrosia',
+                'Port Gellhorn Postcard (X)': 'port_gellhorn',
+                'Port Gellhorn 04 (Delights) (X)': 'port_gellhorn',
+                'Mount Kalaga National Park 02 (Helicopter) (X)': 'port_gellhorn',
+                'Mount Kalaga National Park 04 (Mountain Pass) (X)': 'port_gellhorn',
+            }
+
+            # Detect leak/source type
+            def get_source_type(name):
+                src = md.cameras.get(name, {}).get('source', '') or ''
+                if _re_local.match(r'\d{4}-\d{2}-\d{2}', src):
+                    return 'leak'
+                if src.startswith('Trailer'):
+                    return 'trailer'
+                if src.startswith('screenshot') or 'screenshot' in src.lower():
+                    return 'screenshots'
+                return 'other'
+
+            # Build cam metadata
+            cam_data = {}
+            for name in md.cameras:
+                cam = md.cameras[name]
+                xyz = cam.get('xyz')
+                ypr = cam.get('ypr')
+                fov = cam.get('fov') or [None, None]
+                src_type = get_source_type(name)
+                tier_info = tiers['cameras'].get(name, {})
+                tier = tier_info.get('tier', 'unknown')
+                zone = ZONE_OVERRIDE.get(name, infer_zone(xyz))
+
+                # Compute RMS from current calibration
+                rms = None
+                n_obs = 0
+                if xyz and name in md.pixels:
+                    try:
+                        projs, losses = compute_projections(name)
+                        if losses['independent'] is not None:
+                            rms = round(losses['independent'], 2)
+                        elif losses['total'] is not None:
+                            rms = round(losses['total'], 2)
+                        n_obs = len([p for p in projs if p['delta'] is not None])
+                    except Exception:
+                        pass
+
+                cam_data[name] = {
+                    'name': name,
+                    'xyz': xyz,
+                    'ypr': ypr,
+                    'fov': fov,
+                    'source_type': src_type,
+                    'source_str': cam.get('source', ''),
+                    'tier': tier,
+                    'zone': zone,
+                    'rms': rms,
+                    'n_obs': n_obs,
+                }
+
+            # Build edges: for each cam, find parents (cams that triangulated its LMs)
+            # An edge (parent_cam, child_cam) means parent_cam is in source_cameras
+            # of at least one LM that child_cam observes.
+            edges_set = set()
+            for child_name in md.cameras:
+                if child_name not in md.pixels: continue
+                if not md.cameras[child_name].get('xyz'): continue
+                child_is_leak = (cam_data[child_name]['source_type'] == 'leak')
+                if child_is_leak: continue  # leak cams have no parents
+
+                # Aggregate parents from LMs this cam marks
+                parents = set()
+                for lm_name in md.pixels[child_name]:
+                    lm_meta = md.landmarks_meta.get(lm_name, {})
+                    sources = lm_meta.get('source_cameras') or []
+                    for s in sources:
+                        if s == child_name: continue  # skip self
+                        if s in md.cameras: parents.add(s)
+
+                for p in parents:
+                    edges_set.add((p, child_name))
+
+            # Aggregate edges by zone clusters (LM clusters)
+            # If cam X depends on >=2 cams from same zone, replace with cluster edge
+            ZONE_TO_CLUSTER = {
+                'vice': 'lm_vc',
+                'ambrosia': 'lm_ambrosia',
+                'keys': 'lm_keys',
+                'grassrivers': 'lm_gv',
+                'port_gellhorn': 'lm_pgh',
+                'unknown': 'lm_misc',
+            }
+            CLUSTER_LABELS = {
+                'lm_vc': 'Vice City\nlandmarks',
+                'lm_ambrosia': 'Ambrosia\nlandmarks',
+                'lm_keys': 'Keys & Islands\nlandmarks',
+                'lm_gv': 'Grassrivers\nlandmarks',
+                'lm_pgh': 'Port Gellhorn\nlandmarks',
+                'lm_misc': 'Other\nlandmarks',
+            }
+            CLUSTER_ZONES = {
+                'lm_vc': 'vice',
+                'lm_ambrosia': 'ambrosia',
+                'lm_keys': 'keys',
+                'lm_gv': 'grassrivers',
+                'lm_pgh': 'port_gellhorn',
+                'lm_misc': 'unknown',
+            }
+
+            # Group parents per (child, zone)
+            child_zone_parents = {}  # (child, zone) -> set of parents
+            for (parent, child) in edges_set:
+                zone = cam_data[parent]['zone']
+                key = (child, zone)
+                if key not in child_zone_parents:
+                    child_zone_parents[key] = set()
+                child_zone_parents[key].add(parent)
+
+            # Final edges
+            final_edges = []
+            cluster_used = set()
+            for (child, zone), parents in child_zone_parents.items():
+                cluster_id = ZONE_TO_CLUSTER.get(zone, 'lm_misc')
+                if len(parents) >= 2:
+                    # Use cluster edge
+                    cluster_used.add(cluster_id)
+                    final_edges.append({'from': cluster_id, 'to': child, 'type': 'calib'})
+                    # Each parent contributes to cluster
+                    for p in parents:
+                        # avoid duplicates
+                        final_edges.append({'from': p, 'to': cluster_id, 'type': 'lm'})
+                else:
+                    # Single parent — direct edge
+                    for p in parents:
+                        final_edges.append({'from': p, 'to': child, 'type': 'calib'})
+
+            # Deduplicate edges
+            seen = set()
+            dedup_edges = []
+            for e in final_edges:
+                key = (e['from'], e['to'], e['type'])
+                if key in seen: continue
+                seen.add(key)
+                dedup_edges.append(e)
+
+            # Build nodes list
+            nodes = []
+            # Cam nodes
+            for name, c in cam_data.items():
+                # Skip cams with no xyz AND no observations (they're not in tree)
+                if not c['xyz'] and c['n_obs'] == 0:
+                    continue
+                # Skip leak cams that nobody depends on (would be visual noise)
+                # Actually, include all that are referenced by other cams or have own xyz
+                node_type = c['source_type']
+                if node_type == 'leak':
+                    node_type = 'leak'
+                elif c['tier'] == 'anchor':
+                    node_type = 'anchor'
+                elif c['tier'] == 'high':
+                    node_type = 'high'
+                elif c['tier'] == 'medium':
+                    node_type = 'medium'
+                elif c['tier'] == 'low':
+                    node_type = 'low'
+                else:
+                    node_type = 'unverified'
+                nodes.append({
+                    'id': name,
+                    'label': name,
+                    'type': node_type,
+                    'zone': c['zone'],
+                    'xyz': c['xyz'],
+                    'ypr': c['ypr'],
+                    'fov': c['fov'],
+                    'source_type': c['source_type'],
+                    'source_str': c['source_str'],
+                    'tier': c['tier'],
+                    'rms': c['rms'],
+                    'n_obs': c['n_obs'],
+                })
+
+            # Cluster nodes
+            for cluster_id in cluster_used:
+                nodes.append({
+                    'id': cluster_id,
+                    'label': CLUSTER_LABELS[cluster_id],
+                    'type': 'lm_cluster',
+                    'zone': CLUSTER_ZONES[cluster_id],
+                })
+
+            response = {
+                'nodes': nodes,
+                'edges': dedup_edges,
+                'n_cams': sum(1 for n in nodes if n['type'] != 'lm_cluster'),
+                'n_clusters': len(cluster_used),
+                'n_edges': len(dedup_edges),
+            }
+            self.send_json(response)
 
         elif path == '/api/cam_health':
             # Per-cam health metrics. Reuses compute_projections to get
