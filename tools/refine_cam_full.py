@@ -74,6 +74,15 @@ LEAK_SOURCE_BONUS = 1.5
 sys.path.insert(0, REPO_DIR)
 import gtamaplib as ml
 
+# V2: per-class constraint awareness via the audit helper.
+from leak_cam_audit import (
+    get_class,
+    is_excluded,
+    is_triangulation_trusted,
+    get_locked_dof,
+    DOF_XYZ, DOF_YPR, DOF_FOV,
+)
+
 
 def load_all():
     with open(CAMERAS_JSON) as f:
@@ -92,15 +101,6 @@ def load_all():
     return cameras, pixels, landmarks, lm_tiers
 
 
-def is_leak_cam(cam_data):
-    """A cam is 'leak' if its source matches a date pattern YYYY-MM-DD.
-    Matches the server.py / UI definition."""
-    if not isinstance(cam_data, dict):
-        return False
-    src = cam_data.get('source', '') or ''
-    return bool(re.match(r'\d{4}-\d{2}-\d{2}', src))
-
-
 def classify_lm(lm_name, lm_tiers):
     return lm_tiers.get(lm_name, 'unknown')
 
@@ -114,11 +114,11 @@ def compute_lm_weight(lm_name, lm_tiers, landmarks, cameras):
     if isinstance(lm, dict):
         sources = lm.get('source_cameras', [])
         if isinstance(sources, list):
-            has_leak_source = any(
-                is_leak_cam(cameras.get(s, {}))
+            has_locked_xyz_source = any(
+                is_triangulation_trusted(s, cameras=cameras)
                 for s in sources
             )
-            if has_leak_source:
+            if has_locked_xyz_source:
                 weight *= LEAK_SOURCE_BONUS
 
     return weight
@@ -335,10 +335,42 @@ def main():
         print(f"ERROR: Camera '{args.cam_name}' not found.")
         return 1
 
-    if is_leak_cam(cam_data):
-        print(f"ERROR: '{args.cam_name}' is a leak cam (source is a date).")
-        print(f"Use tools/refine_cam_ypr.py instead — leak cams have ground-truth xyz/fov.")
+    # V2 gating: refine_cam_full does a joint xyz/ypr/fov solve. The right
+    # cams for this tool are ones where xyz is NOT HUD-locked (so the solver
+    # has freedom on position) — i.e. class D, non-audit ordinary cams, or
+    # class Cm when the user passes --no-refine-xyz to freeze xyz.
+    #
+    # Decision rule:
+    #   - Excluded (X): refuse
+    #   - Anchor (A, _legacy_date): refuse (nothing to refine)
+    #   - xyz is locked (B, C, Cm): only allow if user passes --no-refine-xyz
+    #     to acknowledge the constraint
+    #   - xyz is free (D, non-audit): allow with default flags
+    if is_excluded(args.cam_name, cameras=cameras):
+        print(f"ERROR: '{args.cam_name}' is class X_invalid_ground_truth — excluded.")
         return 1
+    cls = get_class(args.cam_name, cameras=cameras)
+    if cls is not None:
+        locked = get_locked_dof(args.cam_name, cameras=cameras)
+        if DOF_XYZ in locked and DOF_YPR in locked and DOF_FOV in locked:
+            print(f"ERROR: '{args.cam_name}' is class {cls} — all DOF are HUD "
+                  f"ground-truth, nothing to refine.")
+            return 1
+        if DOF_XYZ in locked and DOF_FOV in locked:
+            # B or C — only ypr is free, use refine_cam_ypr.py
+            print(f"ERROR: '{args.cam_name}' is class {cls} — xyz and fov are "
+                  f"HUD-locked, only ypr is refinable.")
+            print(f"Use tools/refine_cam_ypr.py for ypr-only refinement.")
+            return 1
+        if DOF_XYZ in locked:
+            # Cm: xyz locked, ypr + fov refinable. Force --no-refine-xyz to
+            # honor the HUD-locked xyz, regardless of what the user passed.
+            if args.refine_xyz:
+                print(f"  V2 class {cls}: xyz is HUD-locked, "
+                      f"--refine-xyz ignored.")
+                args.refine_xyz = False
+    # Class D, non-audit cams, or Cm (with refine_xyz now off): full solve
+    # proceeds with the user's flags.
 
     cur_xyz = cam_data.get('xyz')
     cur_ypr = cam_data.get('ypr')

@@ -59,19 +59,17 @@ LEAK_SOURCE_BONUS = 1.5
 sys.path.insert(0, REPO_DIR)
 import gtamaplib as ml
 
-# V2: per-class constraint awareness. Some leak cams (class A) have all DOF
-# locked and must not be refined. Class B adds a soft roll prior. Class Cm
-# allows fov to be refined alongside ypr.
-try:
-    from leak_cam_audit import (
-        get_class as _audit_get_class,
-        is_anchor as _audit_is_anchor,
-        is_triangulation_trusted as _audit_is_xyz_trusted,
-        class_b_roll_prior_sigma,
-    )
-    _HAS_AUDIT = True
-except ImportError:
-    _HAS_AUDIT = False
+# V2: per-class constraint awareness via the audit helper. All class-related
+# decisions flow through this module — no local date-pattern fallback.
+from leak_cam_audit import (
+    get_class,
+    is_anchor,
+    is_excluded,
+    is_triangulation_trusted,
+    get_locked_dof,
+    class_b_roll_prior_sigma,
+    DOF_XYZ, DOF_YPR, DOF_FOV,
+)
 
 
 def load_all():
@@ -91,36 +89,6 @@ def load_all():
     return cameras, pixels, landmarks, lm_tiers
 
 
-def is_leak_cam(cam_data, cam_name=None):
-    """A cam is treated as a 'leak' cam if it has HUD-derived ground truth
-    for at least its xyz (constraint_class A/B/C/Cm in the audit).
-
-    V2 audit-driven primary; falls back to the legacy date-pattern heuristic
-    for cams whose source matches YYYY-MM-DD but lack an audit entry. The
-    cam_name argument is preferred over inspecting cam_data['source']."""
-    if not isinstance(cam_data, dict):
-        return False
-    if _HAS_AUDIT and cam_name is not None:
-        # Use cameras dict from cam_data's parent context — caller passes
-        # individual cam_data so we don't have md.cameras here. Fall back
-        # to inspecting cam_data['constraint_class'] directly.
-        cls = cam_data.get('constraint_class')
-        if cls in ('A_full_hud', 'B_pos_fov_player',
-                   'C_pos_fov_only', 'Cm_pos_only'):
-            return True
-        if cls == 'D_no_ground_truth' or cls == 'X_invalid_ground_truth':
-            return False
-    src = cam_data.get('source', '') or ''
-    return bool(re.match(r'\d{4}-\d{2}-\d{2}', src))
-
-
-def get_constraint_class(cam_data):
-    """Return the V2 constraint_class for a cam_data entry, or None."""
-    if not isinstance(cam_data, dict):
-        return None
-    return cam_data.get('constraint_class')
-
-
 def classify_lm(lm_name, lm_tiers):
     """Return tier or 'unknown'."""
     return lm_tiers.get(lm_name, 'unknown')
@@ -129,7 +97,8 @@ def classify_lm(lm_name, lm_tiers):
 def compute_lm_weight(lm_name, lm_tiers, landmarks, cameras):
     """Compute weight for this LM in the optimization.
 
-    weight = tier_weight × leak_bonus (if any source is a leak cam)
+    weight = tier_weight × xyz_locked_source_bonus
+    (where "xyz_locked_source_bonus" applies if any source cam has HUD-locked xyz)
     """
     tier = lm_tiers.get(lm_name, 'unknown')
     weight = TIER_WEIGHTS.get(tier, 0.1)
@@ -138,11 +107,11 @@ def compute_lm_weight(lm_name, lm_tiers, landmarks, cameras):
     if isinstance(lm, dict):
         sources = lm.get('source_cameras', [])
         if isinstance(sources, list):
-            has_leak_source = any(
-                is_leak_cam(cameras.get(s, {}), s)
+            has_locked_xyz_source = any(
+                is_triangulation_trusted(s, cameras=cameras)
                 for s in sources
             )
-            if has_leak_source:
+            if has_locked_xyz_source:
                 weight *= LEAK_SOURCE_BONUS
 
     return weight
@@ -326,35 +295,37 @@ def main():
         print(f"ERROR: Camera '{args.cam_name}' not found.")
         return 1
 
-    if not is_leak_cam(cam_data, args.cam_name):
-        print(f"ERROR: '{args.cam_name}' is not a leak cam.")
-        print(f"This tool is for leak cams only. Non-leak cams need full xyz/ypr/fov calibration.")
+    # V2 gating: this tool refines ypr only, assuming xyz and fov are frozen
+    # (HUD ground-truth). That's exactly the constraint set of classes B and
+    # C in the audit. Any other class is rejected with a clear redirect.
+    if is_excluded(args.cam_name, cameras=cameras):
+        print(f"ERROR: '{args.cam_name}' is class X_invalid_ground_truth — excluded.")
         return 1
-
-    # V2 per-class gating
-    cls = get_constraint_class(cam_data)
-    if cls == 'A_full_hud':
-        print(f"ERROR: '{args.cam_name}' is class A_full_hud — ypr is HUD ground-truth, "
+    cls = get_class(args.cam_name, cameras=cameras)
+    if cls is None:
+        print(f"ERROR: '{args.cam_name}' is not a leak/audit cam.")
+        print(f"This tool refines ypr while xyz and fov stay frozen. Non-leak "
+              f"cams need full xyz/ypr/fov calibration via refine_cam_full.py.")
+        return 1
+    locked = get_locked_dof(args.cam_name, cameras=cameras)
+    needs_locked = {DOF_XYZ, DOF_FOV}
+    if DOF_YPR in locked:
+        print(f"ERROR: '{args.cam_name}' is class {cls} — ypr is HUD ground-truth, "
               f"already locked. Nothing to refine.")
         print(f"  Stored ypr: {cam_data.get('ypr')}")
         return 1
-    if cls == 'X_invalid_ground_truth':
-        print(f"ERROR: '{args.cam_name}' is class X — excluded.")
+    if not needs_locked.issubset(locked):
+        # xyz or fov is not locked — this tool is the wrong choice
+        missing = sorted(needs_locked - locked)
+        print(f"ERROR: '{args.cam_name}' is class {cls} — {missing} is not "
+              f"HUD-locked. This tool refines ypr only while xyz and fov stay "
+              f"frozen, which does not match this class.")
+        if cls == 'Cm_pos_only':
+            print(f"Use refine_cam_full.py --no-refine-xyz for a joint ypr+fov solve.")
+        elif cls == 'D_no_ground_truth':
+            print(f"Use refine_cam_full.py for full xyz/ypr/fov calibration.")
         return 1
-    if cls == 'D_no_ground_truth':
-        print(f"ERROR: '{args.cam_name}' is class D_no_ground_truth — no HUD anchoring.")
-        print(f"Use refine_cam_full.py for full xyz/ypr/fov calibration.")
-        return 1
-    if cls == 'Cm_pos_only':
-        # Cm has xyz locked but fov unknown — refining ypr alone won't give a
-        # well-posed projection. The right tool for Cm is a joint ypr+fov solve.
-        # Refuse here and point the user to refine_cam_full --no-refine-xyz.
-        print(f"ERROR: '{args.cam_name}' is class Cm_pos_only — fov is not "
-              f"ground-truth, must be refined alongside ypr.")
-        print(f"Use refine_cam_full.py --no-refine-xyz for joint ypr+fov solve.")
-        return 1
-    # Classes B and C proceed below. B gets a soft roll prior in the loss
-    # (via the lm_tiers weighting + roll-deviation penalty); C runs unchanged.
+    # cls is B_pos_fov_player or C_pos_fov_only. B adds a soft roll prior.
 
     cur_ypr = cam_data.get('ypr')
     cur_xyz = cam_data.get('xyz')
@@ -416,8 +387,7 @@ def main():
     # roll near 0 — the player vertical pose anchors it. Class C runs free.
     roll_prior_sigma = None
     if cls == 'B_pos_fov_player':
-        roll_prior_sigma = (class_b_roll_prior_sigma()
-                            if _HAS_AUDIT else 2.0)
+        roll_prior_sigma = class_b_roll_prior_sigma()
         print(f"Class B: applying soft roll prior, sigma = {roll_prior_sigma}°")
 
     # Optimize (weighted)

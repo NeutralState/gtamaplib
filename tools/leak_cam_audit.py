@@ -28,9 +28,18 @@ Per-class DOF locking
     +-----------------------+----------------------------------------+
     | X_invalid_ground_truth| EXCLUDED (no operations allowed)       |
     +-----------------------+----------------------------------------+
+    | _legacy_date          | locked: xyz, ypr, fov                  |
+    | (synthetic)           | refinable: (none)                      |
+    +-----------------------+----------------------------------------+
 
-Cams with no audit entry are treated as ordinary non-leak calibration cams
-(everything refinable). This matches today's behavior for non-leak cams.
+The `_legacy_date` synthetic class is assigned to cams whose `source` field
+matches `\\d{4}-\\d{2}-\\d{2}` but which have no entry in leak_cam_audit.json.
+These are treated like class A for backward compatibility (V1 was "date in
+source = locked"). The list of such cams is exposed via `legacy_cam_names()`
+so they can be audited and reclassified explicitly over time.
+
+Cams with no audit entry AND no date in source are treated as ordinary
+non-leak calibration cams (everything refinable).
 
 The audit file is the canonical reference for `constraint_class`. The same
 value is also written into `cameras.json` by `migrate_constraint_classes.py`
@@ -42,6 +51,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 from typing import Optional
 
 # DOF labels used everywhere
@@ -50,7 +60,7 @@ DOF_YPR = "ypr"
 DOF_FOV = "fov"
 ALL_DOF = frozenset({DOF_XYZ, DOF_YPR, DOF_FOV})
 
-# Per-class locked DOF (the rest is refinable)
+# Per-class locked DOF (the rest is refinable). None = excluded.
 LOCKED_DOF_BY_CLASS = {
     "A_full_hud":            frozenset({DOF_XYZ, DOF_YPR, DOF_FOV}),
     "B_pos_fov_player":      frozenset({DOF_XYZ, DOF_FOV}),
@@ -58,6 +68,11 @@ LOCKED_DOF_BY_CLASS = {
     "Cm_pos_only":           frozenset({DOF_XYZ}),
     "D_no_ground_truth":     frozenset(),
     "X_invalid_ground_truth": None,  # excluded
+    # Synthetic class for cams whose source matches YYYY-MM-DD but lack an
+    # audit entry. Treated like A_full_hud (fully locked) for V1 back-compat.
+    # If a cam in this state needs different handling, add an explicit audit
+    # entry for it.
+    "_legacy_date":          frozenset({DOF_XYZ, DOF_YPR, DOF_FOV}),
 }
 
 # Soft-prior config for class B. Used as `loss += (roll / SIGMA) ** 2`
@@ -73,9 +88,29 @@ _TRIANGULATION_TRUSTED_CLASSES = frozenset({
     "B_pos_fov_player",
     "C_pos_fov_only",
     "Cm_pos_only",
+    "_legacy_date",
+})
+
+# A class is "fully anchor" if all DOF are locked (xyz + ypr + fov).
+_FULL_ANCHOR_CLASSES = frozenset({
+    "A_full_hud",
+    "_legacy_date",
+})
+
+# Classes from the audit (excludes the synthetic _legacy_date)
+AUDIT_CLASSES = frozenset({
+    "A_full_hud",
+    "B_pos_fov_player",
+    "C_pos_fov_only",
+    "Cm_pos_only",
+    "D_no_ground_truth",
+    "X_invalid_ground_truth",
 })
 
 VALID_CLASSES = frozenset(LOCKED_DOF_BY_CLASS.keys())
+
+# Regex for legacy date-source detection
+_LEGACY_DATE_RE = re.compile(r'\d{4}-\d{2}-\d{2}')
 
 
 # ----------------------------------------------------------------------
@@ -117,30 +152,65 @@ def reload_audit() -> None:
 # ----------------------------------------------------------------------
 
 def get_class(cam_name: str, cameras: Optional[dict] = None) -> Optional[str]:
-    """Return the constraint_class for `cam_name`, or None if not in the audit.
+    """Return the constraint_class for `cam_name`, or None.
 
-    If `cameras` (the cameras.json dict) is supplied and contains a
-    `constraint_class` field on this cam, that value wins. This lets tools
-    pass the loaded cameras.json once and avoid the audit lookup.
+    Resolution order:
+      1. `cameras[cam_name]['constraint_class']` if present and valid
+      2. `leak_cam_audit.json` entry for cam_name
+      3. Synthetic `_legacy_date` if the source matches YYYY-MM-DD (V1 fallback)
+      4. None — cam is ordinary (everything refinable)
 
-    Returns None for cams with no audit entry (= ordinary non-leak cam).
+    The `_legacy_date` synthetic class is treated like A_full_hud and is
+    listed in `legacy_cam_names()` for later auditing.
     """
+    # Primary: cameras.json constraint_class
+    cam_data = None
     if cameras is not None:
         cam_data = cameras.get(cam_name)
         if isinstance(cam_data, dict):
             cls = cam_data.get("constraint_class")
-            if cls in VALID_CLASSES:
+            if cls in AUDIT_CLASSES:
                 return cls
-            if cls is not None:
-                # cameras.json has a value but it's invalid — fall through to
-                # audit lookup to be safe, but flag.
-                pass
+    # Secondary: audit JSON
     audit = _load_audit()
     entry = audit.get(cam_name)
-    if not isinstance(entry, dict):
-        return None
-    cls = entry.get("constraint_class")
-    return cls if cls in VALID_CLASSES else None
+    if isinstance(entry, dict):
+        cls = entry.get("constraint_class")
+        if cls in AUDIT_CLASSES:
+            return cls
+    # Tertiary: legacy date-pattern fallback (cams in source like "2024-08-23"
+    # but with no audit entry yet). V1 treated these as "leak = fully locked".
+    src = None
+    if isinstance(cam_data, dict):
+        src = cam_data.get("source")
+    if src is None and cameras is not None:
+        # Caller didn't pass cameras for this cam — try to load it ourselves
+        # via the audit's cameras snapshot if present. (Avoid infinite recursion.)
+        pass
+    if isinstance(src, str) and _LEGACY_DATE_RE.match(src):
+        return "_legacy_date"
+    return None
+
+
+def legacy_cam_names(cameras: dict) -> list:
+    """Return the list of cam names that resolved to `_legacy_date` via the
+    fallback (date in source but no audit entry). Useful for logging /
+    flagging cams that should be added to leak_cam_audit.json.
+
+    Requires the loaded cameras.json (cannot be inferred from the audit alone)."""
+    out = []
+    audit = _load_audit()
+    for name, cam in cameras.items():
+        if not isinstance(cam, dict):
+            continue
+        if cam.get("constraint_class") in AUDIT_CLASSES:
+            continue
+        if name in audit:
+            continue
+        src = cam.get("source") or ""
+        if _LEGACY_DATE_RE.match(src):
+            out.append(name)
+    return out
 
 
 def get_locked_dof(cam_name: str, cameras: Optional[dict] = None) -> frozenset:
@@ -178,8 +248,9 @@ def is_excluded(cam_name: str, cameras: Optional[dict] = None) -> bool:
 
 
 def is_anchor(cam_name: str, cameras: Optional[dict] = None) -> bool:
-    """True iff this cam is class A — full ground truth, anchor tier."""
-    return get_class(cam_name, cameras=cameras) == "A_full_hud"
+    """True iff this cam has all DOF locked (= anchor tier in confidence
+    tiers). Currently classes A_full_hud and synthetic _legacy_date."""
+    return get_class(cam_name, cameras=cameras) in _FULL_ANCHOR_CLASSES
 
 
 def is_audit_cam(cam_name: str, cameras: Optional[dict] = None) -> bool:

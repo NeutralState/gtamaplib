@@ -138,47 +138,40 @@ lm_tier  = {n: (d.get('tier') if isinstance(d, dict) else d) for n, d in tiers['
 print(f"Loaded tiers: {len(cam_tier)} cams, {len(lm_tier)} LMs")
 
 
-# ── Identify leak cameras ───────────────────────────────────────────────────
+# ── Identify cams with HUD-locked xyz (excluded from optimization) ──────────
+#
+# V2 audit-driven. See bundle_adjust.py for the full rationale.
 
-LEAK_RE = re.compile(r'\d{4}-\d{2}-\d{2}')
+from leak_cam_audit import (
+    is_triangulation_trusted,
+    is_excluded,
+    legacy_cam_names,
+)
 
-# V2: audit-driven leak detection. See bundle_adjust.py for the full rationale.
-try:
-    from leak_cam_audit import (
-        get_class as _audit_get_class,
-        is_triangulation_trusted as _audit_is_xyz_trusted,
-    )
-    _HAS_AUDIT = True
-except ImportError:
-    _HAS_AUDIT = False
+LOCKED_XYZ_CAMS = {n for n in md.cameras if is_triangulation_trusted(n, cameras=md.cameras)}
+EXCLUDED_CAMS   = {n for n in md.cameras if is_excluded(n, cameras=md.cameras)}
 
-def is_leak(cn):
-    """True iff this cam's xyz/ypr/fov should be LOCKED in the BA.
-    Audit-driven: class A/B/C/Cm have xyz HUD-locked. Class D has no
-    ground-truth xyz and is NOT locked. Falls back to legacy date-pattern
-    for cams without an audit entry."""
-    if _HAS_AUDIT:
-        cls = _audit_get_class(cn, cameras=md.cameras)
-        if cls is not None:
-            return _audit_is_xyz_trusted(cn, cameras=md.cameras)
-    src = md.cameras.get(cn, {}).get('source', '') or ''
-    return bool(LEAK_RE.match(src))
-
-LEAK_CAMS = {n for n in md.cameras if is_leak(n)}
-print(f"Detected {len(LEAK_CAMS)} LEAK cams (locked)")
+_legacy = legacy_cam_names(md.cameras)
+print(f"Detected {len(LOCKED_XYZ_CAMS)} cams with HUD-locked xyz (excluded from BA)")
+if _legacy:
+    print(f"  (Includes {len(_legacy)} legacy date-source cam(s) without audit entry)")
+if EXCLUDED_CAMS:
+    print(f"  Excluded (class X): {sorted(EXCLUDED_CAMS)}")
 
 
 # ── Build candidate sets ────────────────────────────────────────────────────
 
 candidate_cams = {
     n for n in md.pixels
-    if n not in LEAK_CAMS and md.cameras.get(n, {}).get('xyz')
+    if n not in LOCKED_XYZ_CAMS
+    and n not in EXCLUDED_CAMS
+    and md.cameras.get(n, {}).get('xyz')
 }
 
 candidate_lms = {
     n for n, data in md.landmarks_meta.items()
     if md.landmarks.get(n) is not None
-    and not all(s in LEAK_CAMS for s in (data.get('source_cameras') or []))
+    and not all(s in LOCKED_XYZ_CAMS for s in (data.get('source_cameras') or []))
     and data.get('source_cameras')
     # Reject LMs with aberrant xyz (e.g. failed triangulations at e15+ meters)
     and max(abs(x) for x in md.landmarks[n]) < 1e6
@@ -196,14 +189,15 @@ used_lms = set()
 for cam_name, lm_pixels in md.pixels.items():
     if cam_name not in md.cameras: continue
     if md.cameras[cam_name].get('xyz') is None: continue
-    cam_is_leak = cam_name in LEAK_CAMS
+    if cam_name in EXCLUDED_CAMS: continue
+    cam_xyz_is_locked = cam_name in LOCKED_XYZ_CAMS
     cam_t = cam_tier.get(cam_name, 'unknown')
     cam_w = TIER_WEIGHTS.get(cam_t, 1.0)
     cam_xyz_arr = np.array(md.cameras[cam_name]['xyz'])
     for lm_name, pixel in lm_pixels.items():
         if lm_name not in candidate_lms and lm_name not in md.landmarks: continue
         if md.landmarks.get(lm_name) is None: continue
-        if cam_is_leak and lm_name not in candidate_lms: continue
+        if cam_xyz_is_locked and lm_name not in candidate_lms: continue
         # Skip degenerate near-cam observations (constraint is too sensitive)
         lm_xyz_arr = np.array(md.landmarks[lm_name])
         dist = np.linalg.norm(lm_xyz_arr - cam_xyz_arr)
@@ -220,7 +214,7 @@ for cam_name, lm_pixels in md.pixels.items():
             'cam_tier': cam_t,
             'lm_tier': lm_t,
         })
-        if not cam_is_leak:
+        if not cam_xyz_is_locked:
             used_cams.add(cam_name)
         used_lms.add(lm_name)
 

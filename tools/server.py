@@ -30,15 +30,38 @@ import gtamapdata as md
 
 print("gtamaplib loaded ✓")
 
-# Leak-anchored landmarks: triangulated from 2+ leak cams — positions are ground truth
-import re as _re
-LEAK_CAMS = {n for n, d in md.cameras.items() if d.get('source') and _re.match(r'\d{4}-\d{2}-\d{2}', d['source'])}
-LEAK_ANCHORED_LMS = {
+# V2: audit-driven sets replace V1's date-regex LEAK_CAMS.
+# - LOCKED_XYZ_CAMS: cams whose xyz is HUD-locked (classes A/B/C/Cm and
+#   legacy date-source cams without an audit entry). Their triangulating
+#   rays are treated as ground truth.
+# - XYZ_ANCHORED_LMS: landmarks triangulated from 2+ HUD-locked-xyz cams.
+#   Their positions are considered ground truth.
+import os as _os, sys as _sys
+_sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__)))
+from leak_cam_audit import (
+    get_class as _audit_get_class,
+    is_triangulation_trusted as _audit_xyz_trusted,
+    legacy_cam_names as _audit_legacy_names,
+)
+
+LOCKED_XYZ_CAMS = {n for n in md.cameras if _audit_xyz_trusted(n, cameras=md.cameras)}
+XYZ_ANCHORED_LMS = {
     lm for lm, meta in md.landmarks_meta.items()
     if md.landmarks.get(lm) is not None
-    and len([c for c in meta.get('source_cameras', []) if c in LEAK_CAMS]) >= 2
+    and len([c for c in meta.get('source_cameras', []) if c in LOCKED_XYZ_CAMS]) >= 2
 }
-print(f"Leak cams: {len(LEAK_CAMS)} · Leak-anchored landmarks: {len(LEAK_ANCHORED_LMS)}")
+
+# Back-compat aliases — many downstream callsites still use the V1 names.
+# These will be removed once all callers have migrated.
+LEAK_CAMS = LOCKED_XYZ_CAMS
+LEAK_ANCHORED_LMS = XYZ_ANCHORED_LMS
+
+_legacy_cams = _audit_legacy_names(md.cameras)
+print(f"Cams with HUD-locked xyz: {len(LOCKED_XYZ_CAMS)} · "
+      f"xyz-anchored landmarks: {len(XYZ_ANCHORED_LMS)}")
+if _legacy_cams:
+    print(f"  (Includes {len(_legacy_cams)} legacy date-source cam(s) without "
+          f"audit entry: {', '.join(_legacy_cams)})")
 
 
 # ── Phase 7a.4: pre-render minimaps at startup ──────────────────────────────
@@ -175,9 +198,14 @@ def _render_minimap_for_cam(cam_name):
 # ── Item 4 : "Other cams" overlay (canvas-based, no image rendering) ─────────
 
 def _classify_cam(cam_name):
-    """Returns 'leak' | 'trailer' | 'screenshot'."""
+    """Returns 'leak' | 'trailer' | 'screenshot'.
+
+    V2: 'leak' bucket now means "any cam whose xyz is HUD-locked" (classes
+    A/B/C/Cm + legacy date-source). The bucket name is retained for
+    back-compat with the dashboard CSS; the underlying check is audit-driven."""
+    if _audit_xyz_trusted(cam_name, cameras=md.cameras):
+        return 'leak'
     src = md.cameras.get(cam_name, {}).get('source', '') or ''
-    if _re.match(r'\d{4}-\d{2}-\d{2}', src): return 'leak'
     if src.startswith('Trailer'): return 'trailer'
     return 'screenshot'
 
@@ -755,7 +783,11 @@ class Handler(BaseHTTPRequestHandler):
                     'fov': list(data['fov']) if data.get('fov') else None,
                     'size': list(data['size']) if data.get('size') else None,
                     'source': data.get('source'),
-                    'is_leak': bool(__import__('re').match(r'\d{4}-\d{2}-\d{2}', data.get('source') or '')),
+                    # V2: is_leak now means "xyz is HUD-locked". The
+                    # constraint_class field exposes the granular V2 class
+                    # for richer client-side handling.
+                    'is_leak': name in LOCKED_XYZ_CAMS,
+                    'constraint_class': _audit_get_class(name, cameras=md.cameras),
                 })
             self.send_json(result)
 
@@ -802,7 +834,6 @@ class Handler(BaseHTTPRequestHandler):
         elif path == '/api/dependency_graph':
             # Auto-generated camera dependency graph.
             # Returns nodes (cams + LM clusters) and edges (parent → child).
-            import re as _re_local
             import statistics as _stats_local
             import json as _json_local
 
@@ -846,11 +877,12 @@ class Handler(BaseHTTPRequestHandler):
                 'Mount Kalaga National Park 04 (Mountain Pass) (X)': 'port_gellhorn',
             }
 
-            # Detect leak/source type
+            # V2: source_type bucket. 'leak' means "xyz is HUD-locked"
+            # (audit-driven, includes legacy date-source cams).
             def get_source_type(name):
-                src = md.cameras.get(name, {}).get('source', '') or ''
-                if _re_local.match(r'\d{4}-\d{2}-\d{2}', src):
+                if _audit_xyz_trusted(name, cameras=md.cameras):
                     return 'leak'
+                src = md.cameras.get(name, {}).get('source', '') or ''
                 if src.startswith('Trailer'):
                     return 'trailer'
                 if src.startswith('screenshot') or 'screenshot' in src.lower():
@@ -903,8 +935,9 @@ class Handler(BaseHTTPRequestHandler):
             for child_name in md.cameras:
                 if child_name not in md.pixels: continue
                 if not md.cameras[child_name].get('xyz'): continue
-                child_is_leak = (cam_data[child_name]['source_type'] == 'leak')
-                if child_is_leak: continue  # leak cams have no parents
+                # Cams with HUD-locked xyz are not children in the dependency
+                # graph — their pose came from the HUD, not from any parent.
+                if child_name in LOCKED_XYZ_CAMS: continue
 
                 # Aggregate parents from LMs this cam marks
                 parents = set()
@@ -1040,7 +1073,6 @@ class Handler(BaseHTTPRequestHandler):
             # Per-cam health metrics. Reuses compute_projections to get
             # angular residuals from the current calibration state.
             import statistics
-            import re as _re_local
             result = []
             for name in sorted(md.cameras):
                 if not md.cameras[name].get('xyz'):
@@ -1059,8 +1091,8 @@ class Handler(BaseHTTPRequestHandler):
 
                 cam_data = md.cameras[name]
                 source = cam_data.get('source') or ''
-                is_leak = bool(_re_local.match(r'\d{4}-\d{2}-\d{2}', source))
-                if is_leak:
+                # V2: 'LEAK' bucket means xyz is HUD-locked (audit-driven).
+                if name in LOCKED_XYZ_CAMS:
                     source_type = 'LEAK'
                 elif source.startswith('Trailer 1'):
                     source_type = 'Trailer 1'
@@ -1587,8 +1619,12 @@ class Handler(BaseHTTPRequestHandler):
                 if len(errors) < 3: continue
                 avg = sum(e['err'] for e in errors) / len(errors)
                 for e in errors:
-                    if lm_name in LEAK_ANCHORED_LMS:
-                        threshold = 3 if e['cam'] not in LEAK_CAMS else 999
+                    # V2: relaxed threshold for cams whose xyz is HUD-locked
+                    # observing an xyz-anchored landmark (both endpoints
+                    # are ground truth, so the cam alignment is more
+                    # trustworthy than its projection-residual would suggest).
+                    if lm_name in XYZ_ANCHORED_LMS:
+                        threshold = 3 if e['cam'] not in LOCKED_XYZ_CAMS else 999
                     else:
                         threshold = max(avg * 3, 10)
                     if e['err'] > threshold:
@@ -1600,12 +1636,14 @@ class Handler(BaseHTTPRequestHandler):
                             'n_cams': len(errors),
                         })
 
-            # Tag leak-anchored outliers
+            # Tag xyz-anchored outliers (kept as `leak_anchored` for JSON
+            # back-compat with the UI; semantics is "LM triangulated from
+            # 2+ HUD-locked cams").
             for o in outliers:
-                o['leak_anchored'] = o['lm_name'] in LEAK_ANCHORED_LMS
+                o['leak_anchored'] = o['lm_name'] in XYZ_ANCHORED_LMS
 
             outliers.sort(key=lambda x: x['err'], reverse=True)
-            # Separate leak-anchored (ground truth) from regular
+            # Separate xyz-anchored (ground truth) from regular
             leak_outliers = [o for o in outliers if o['leak_anchored']]
             self.send_json({
                 'outliers': outliers[:50],

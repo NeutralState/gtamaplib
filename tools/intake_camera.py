@@ -72,39 +72,47 @@ args = ap.parse_args()
 
 CAM_NAME = args.cam_name
 
-# V2: auto-derive DOF flags from constraint_class when audit info is available.
-# CLI flags override the auto-derived values.
-try:
-    from leak_cam_audit import get_class as _audit_get_class
-    _HAS_AUDIT = True
-except ImportError:
-    _HAS_AUDIT = False
+# V2: auto-derive DOF flags from constraint_class. CLI flags override
+# the auto-derived values. Pass --ignore-class to bypass this entirely.
+from leak_cam_audit import (
+    get_class,
+    get_locked_dof,
+    is_anchor,
+    is_excluded,
+    DOF_XYZ, DOF_FOV,
+)
 
-_cls_for_gate = None
-if _HAS_AUDIT and not args.ignore_class:
-    _cls_for_gate = _audit_get_class(CAM_NAME, cameras=md.cameras)
-    if _cls_for_gate == 'A_full_hud':
-        print(f"ERROR: '{CAM_NAME}' is class A_full_hud — all DOF are HUD "
-              f"ground-truth. There is nothing to intake; this cam is already "
-              f"an anchor. Pass --ignore-class to override (not recommended).")
+if not args.ignore_class:
+    if is_excluded(CAM_NAME, cameras=md.cameras):
+        print(f"ERROR: '{CAM_NAME}' is class X_invalid_ground_truth — "
+              f"excluded from intake.")
         sys.exit(1)
-    if _cls_for_gate == 'X_invalid_ground_truth':
-        print(f"ERROR: '{CAM_NAME}' is class X — excluded from intake.")
+    if is_anchor(CAM_NAME, cameras=md.cameras):
+        print(f"ERROR: '{CAM_NAME}' is anchor (all DOF HUD-locked). There is "
+              f"nothing to intake; this cam is already an anchor. Pass "
+              f"--ignore-class to override (not recommended).")
         sys.exit(1)
-    # B/C: xyz + fov ground-truth, only ypr free
-    if _cls_for_gate in ('B_pos_fov_player', 'C_pos_fov_only'):
-        if not args.no_hfov:
-            print(f"  V2 class {_cls_for_gate}: auto-setting --no-hfov "
+    # Derive DOF flags from the locked set
+    _cls = get_class(CAM_NAME, cameras=md.cameras)
+    if _cls is not None:
+        _locked = get_locked_dof(CAM_NAME, cameras=md.cameras)
+        # fov is HUD-locked → force --no-hfov on
+        if DOF_FOV in _locked and not args.no_hfov:
+            print(f"  V2 class {_cls}: auto-setting --no-hfov "
                   f"(fov is HUD ground-truth).")
             args.no_hfov = True
-        # refine_xyz stays user-controlled; default off is correct for B/C.
-    # Cm: only xyz ground-truth, fov + ypr free
-    if _cls_for_gate == 'Cm_pos_only':
-        if args.no_hfov:
-            print(f"  V2 class Cm_pos_only: fov is NOT ground-truth, "
+        # fov is NOT locked but user requested --no-hfov → clear it
+        if DOF_FOV not in _locked and args.no_hfov:
+            print(f"  V2 class {_cls}: fov is NOT HUD-locked, "
                   f"--no-hfov ignored.")
             args.no_hfov = False
-    # D: nothing locked, full solve allowed (caller can pass --refine-xyz)
+        # xyz is HUD-locked → force --refine-xyz off
+        if DOF_XYZ in _locked and args.refine_xyz:
+            print(f"  V2 class {_cls}: xyz is HUD-locked, "
+                  f"--refine-xyz ignored.")
+            args.refine_xyz = False
+    # For cams with no audit entry (and no _legacy_date fallback): nothing
+    # is auto-set, all flags stay user-controlled.
 
 
 # ── Load tier data ──────────────────────────────────────────────────────────

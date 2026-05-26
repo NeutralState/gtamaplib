@@ -36,49 +36,43 @@ import gtamapdata as md
 
 print("gtamaplib loaded ✓")
 
-# ── Identify leak cameras (auto-detect via source field) ──────────────────────
+# ── Identify cams with HUD-locked xyz (excluded from optimization) ──────────
 #
-# LEAK   : source matches YYYY-MM-DD (extracted from game engine — locked)
-# TRAILER: source starts with "Trailer" (community-calibrated — optimizable)
-# other  : community-calibrated — optimizable
+# V2 audit-driven. A cam's xyz/ypr/fov are LOCKED in the BA iff its
+# constraint_class is in {A, B, C, Cm} (or the synthetic _legacy_date for
+# cams without an audit entry but with a date-pattern source). Class D and
+# X cams are handled separately:
+#   - D: no ground truth → fully optimizable (do NOT lock)
+#   - X: invalid → excluded entirely from the BA
+#
+# TRAILER: source starts with "Trailer" — community-calibrated, optimizable.
 
-LEAK_RE = re.compile(r'\d{4}-\d{2}-\d{2}')
-
-# V2: try to use the audit-driven constraint_class. A cam is treated as
-# locked in the BA if it has any constraint_class (A/B/C/Cm/D in the audit).
-# This matches V1 (date-pattern leak = locked) but is now audit-driven so
-# Ambrosia-style marketing renders (class D, no date in source) are also
-# correctly NOT locked. Cams in audit as class D are an edge case: their
-# xyz is NOT ground-truth, so locking them in the BA is wrong. We pass
-# them through to the optimizable set.
-try:
-    from leak_cam_audit import (
-        get_class as _audit_get_class,
-        is_triangulation_trusted as _audit_is_xyz_trusted,
-    )
-    _HAS_AUDIT = True
-except ImportError:
-    _HAS_AUDIT = False
-
-def is_leak(cn):
-    """True iff this cam's xyz/ypr/fov should be LOCKED in the BA.
-    Audit-driven: class A/B/C/Cm have xyz HUD-locked. Falls back to legacy
-    date-pattern for cams without an audit entry."""
-    if _HAS_AUDIT:
-        cls = _audit_get_class(cn, cameras=md.cameras)
-        if cls is not None:
-            # Class D has no ground-truth xyz — do NOT lock in BA.
-            return _audit_is_xyz_trusted(cn, cameras=md.cameras)
-    src = md.cameras.get(cn, {}).get('source', '') or ''
-    return bool(LEAK_RE.match(src))
+from leak_cam_audit import (
+    is_triangulation_trusted,
+    is_excluded,
+    legacy_cam_names,
+)
 
 def is_trailer(cn):
     src = md.cameras.get(cn, {}).get('source', '') or ''
     return src.startswith('Trailer')
 
-LEAK_CAMS = {n for n in md.cameras if is_leak(n)}
-print(f"Detected {len(LEAK_CAMS)} LEAK cams (locked), "
+# Cams whose xyz is HUD-locked. They are excluded from the BA parameter
+# vector — their pose is taken as ground truth. (For B/C/Cm cams whose ypr
+# is solver-derived, the BA still treats them as fixed; ypr refinement is
+# handled by refine_cam_ypr.py, not the BA. A finer-grained partial-BA
+# could be introduced later.)
+LOCKED_XYZ_CAMS = {n for n in md.cameras if is_triangulation_trusted(n, cameras=md.cameras)}
+EXCLUDED_CAMS   = {n for n in md.cameras if is_excluded(n, cameras=md.cameras)}
+
+_legacy = legacy_cam_names(md.cameras)
+print(f"Detected {len(LOCKED_XYZ_CAMS)} cams with HUD-locked xyz (excluded from BA), "
       f"{sum(1 for n in md.cameras if is_trailer(n))} TRAILER cams (optimizable)")
+if _legacy:
+    print(f"  (Includes {len(_legacy)} legacy date-source cam(s) without audit entry: "
+          f"{', '.join(_legacy)})")
+if EXCLUDED_CAMS:
+    print(f"  Excluded (class X): {sorted(EXCLUDED_CAMS)}")
 
 # ── Build candidate sets ──────────────────────────────────────────────────────
 # These are the cameras and landmarks we *would* optimize if they have
@@ -86,13 +80,15 @@ print(f"Detected {len(LEAK_CAMS)} LEAK cams (locked), "
 
 candidate_cams = {
     n for n in md.pixels
-    if n not in LEAK_CAMS and md.cameras.get(n, {}).get('xyz')
+    if n not in LOCKED_XYZ_CAMS
+    and n not in EXCLUDED_CAMS
+    and md.cameras.get(n, {}).get('xyz')
 }
 
 candidate_lms = {
     n for n, data in md.landmarks_meta.items()
     if md.landmarks.get(n) is not None
-    and not all(s in LEAK_CAMS for s in data.get('source_cameras', []))
+    and not all(s in LOCKED_XYZ_CAMS for s in data.get('source_cameras', []))
     and data.get('source_cameras')
 }
 
@@ -106,9 +102,9 @@ n_skipped_constant = 0
 n_skipped_no_lm    = 0
 
 for cam_name, cam_pixels in md.pixels.items():
-    cam_is_candidate = cam_name in candidate_cams
-    cam_is_leak      = cam_name in LEAK_CAMS
-    if not cam_is_candidate and not cam_is_leak:
+    cam_is_candidate    = cam_name in candidate_cams
+    cam_xyz_is_locked   = cam_name in LOCKED_XYZ_CAMS
+    if not cam_is_candidate and not cam_xyz_is_locked:
         continue
 
     for lm_name, pixel in cam_pixels.items():
@@ -403,10 +399,11 @@ print(f"Residuals : {n_residuals}")
 # ── Cache camera objects + leak/fixed params ──────────────────────────────────
 
 _cam_cache = {n: ml.get_camera(n)
-              for n in (set(md.pixels.keys()) & (used_cams | LEAK_CAMS))}
+              for n in (set(md.pixels.keys()) & (used_cams | LOCKED_XYZ_CAMS))}
 
-_leak_params = {}
-for cam_name in LEAK_CAMS:
+# Cached fixed pose parameters for HUD-locked cams (replaces V1's `_leak_params`)
+_locked_params = {}
+for cam_name in LOCKED_XYZ_CAMS:
     if cam_name not in md.cameras:
         continue
     d = md.cameras[cam_name]
@@ -417,7 +414,7 @@ for cam_name in LEAK_CAMS:
     hfov = fov[0]
     if hfov is None:
         hfov = ml.get_hfov(fov[1], size) if fov[1] is not None else 60.0
-    _leak_params[cam_name] = (tuple(xyz), tuple(ypr), float(hfov))
+    _locked_params[cam_name] = (tuple(xyz), tuple(ypr), float(hfov))
 
 _fixed_lm_xyz = {n: tuple(md.landmarks[n])
                  for n in md.landmarks
@@ -494,7 +491,7 @@ def pixel_residuals(x):
             ypr = (float(cp[3]), float(cp[4]), float(cp[5]))
             hfov = float(cp[6])
         else:
-            xyz, ypr, hfov = _leak_params[cam_name]
+            xyz, ypr, hfov = _locked_params[cam_name]
 
         if lm_name in lm_idx:
             lp = lm_params[lm_idx[lm_name]]

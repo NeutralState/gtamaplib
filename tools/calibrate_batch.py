@@ -125,30 +125,68 @@ def resolve_cam_names(keys_in_order):
     return resolved
 
 
-def is_leak_cam(cam_name):
-    """A cam is 'leak' if its source matches YYYY-MM-DD date pattern."""
-    cameras = json.loads(CAMERAS_JSON.read_text())
-    src = cameras.get(cam_name, {}).get('source', '') or ''
-    return bool(re.match(r'\d{4}-\d{2}-\d{2}', src))
+# V2: dispatch refine tool via the audit helper. cameras.json is reloaded
+# from disk on each call to track --apply writes; the helper's API supports
+# passing the dict directly to avoid the audit JSON lookup.
+sys.path.insert(0, str(THIS_DIR))
+from leak_cam_audit import (
+    get_locked_dof,
+    is_anchor,
+    is_excluded,
+    DOF_XYZ, DOF_FOV,
+)
+
+
+def _load_cameras():
+    return json.loads(CAMERAS_JSON.read_text())
+
+
+def _refine_tool_for(cam_name):
+    """Pick the right refine tool for this cam based on its constraint_class.
+    Returns (tool_path, reason_str) or (None, skip_reason).
+
+    Routing rules (mirrors the per-tool gates in refine_cam_ypr.py and
+    refine_cam_full.py):
+      - excluded (X)            → skip
+      - all DOF locked (A/legacy) → skip (already anchor)
+      - xyz+fov locked, ypr free (B/C) → refine_cam_ypr
+      - xyz locked, ypr+fov free (Cm)  → refine_cam_full --no-refine-xyz
+      - all DOF free (D / no audit)    → refine_cam_full
+    """
+    cameras = _load_cameras()
+    if is_excluded(cam_name, cameras=cameras):
+        return (None, 'class X_invalid_ground_truth — excluded')
+    if is_anchor(cam_name, cameras=cameras):
+        return (None, 'all DOF locked (anchor) — nothing to refine')
+    locked = get_locked_dof(cam_name, cameras=cameras)
+    if DOF_XYZ in locked and DOF_FOV in locked:
+        return (REFINE_YPR, 'xyz+fov locked, ypr free → ypr-only refinement')
+    if DOF_XYZ in locked:
+        return (REFINE_FULL, 'xyz locked, ypr+fov free → joint ypr+fov refinement')
+    return (REFINE_FULL, 'all DOF free → full xyz/ypr/fov solve')
 
 
 def run_refine_dry_run(cam_name):
-    """Run refine_cam_full (or refine_cam_ypr if leak) in dry-run mode.
+    """Run the appropriate refine tool in dry-run mode based on constraint_class.
     Returns (stdout, success_bool)."""
-    if is_leak_cam(cam_name):
-        cmd = ['python3', str(REFINE_YPR), cam_name]
-    else:
-        cmd = ['python3', str(REFINE_FULL), cam_name]
+    tool, reason = _refine_tool_for(cam_name)
+    if tool is None:
+        return f'SKIPPED: {reason}\n', False
+    cmd = ['python3', str(tool), cam_name]
+    # Class Cm needs --no-refine-xyz to honor the HUD-locked xyz. refine_cam_full
+    # already enforces this internally (logging an "ignored" warning if the
+    # user passed --refine-xyz). We rely on that here rather than duplicating
+    # the per-class flag logic.
     result = subprocess.run(cmd, capture_output=True, text=True, cwd=REPO_DIR)
     return result.stdout, result.returncode == 0
 
 
 def run_refine_apply(cam_name):
-    """Run refine in --apply mode."""
-    if is_leak_cam(cam_name):
-        cmd = ['python3', str(REFINE_YPR), cam_name, '--apply']
-    else:
-        cmd = ['python3', str(REFINE_FULL), cam_name, '--apply']
+    """Run the appropriate refine tool in --apply mode."""
+    tool, reason = _refine_tool_for(cam_name)
+    if tool is None:
+        return f'SKIPPED: {reason}\n', False
+    cmd = ['python3', str(tool), cam_name, '--apply']
     result = subprocess.run(cmd, capture_output=True, text=True, cwd=REPO_DIR)
     return result.stdout, result.returncode == 0
 

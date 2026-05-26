@@ -139,8 +139,11 @@ def world_to_canvas(xyz):
     return round(cx, 1), round(cy, 1)
 
 
-def is_leak_source(src):
-    return bool(re.match(r'\d{4}-\d{2}-\d{2}', src or ''))
+sys.path.insert(0, str(TOOLS))
+from leak_cam_audit import (
+    get_class,
+    is_triangulation_trusted,
+)
 
 
 def apply_anti_overlap(nodes, iterations=200):
@@ -204,7 +207,10 @@ def main():
     for child, pix in pixels.items():
         if child not in cams: continue
         if not cams[child].get('xyz'): continue
-        if is_leak_source(cams[child].get('source')): continue
+        # Skip cams whose xyz is HUD-locked — they have no "parents" in the
+        # calibration dependency graph (their pose comes from the HUD, not
+        # from other cams).
+        if is_triangulation_trusted(child, cameras=cams): continue
         parents = set()
         for lm_name in pix:
             lm = lms.get(lm_name)
@@ -216,16 +222,19 @@ def main():
 
     include = set()
     for name, cam in cams.items():
-        if cam.get('xyz') and not is_leak_source(cam.get('source')):
+        if cam.get('xyz') and not is_triangulation_trusted(name, cameras=cams):
             include.add(name)
-    # Only include leak cams that are referenced as parents (= they actually contribute)
-    referenced_leaks = set()
+    # Only include HUD-locked cams that are referenced as parents (= they
+    # actually contribute to at least one community cam's calibration).
+    referenced_locked = set()
     for child, parents in parents_of.items():
         for p in parents:
-            if is_leak_source(cams[p].get('source')):
-                referenced_leaks.add(p)
-    include |= referenced_leaks
-    print(f"Filtered: kept {len(referenced_leaks)} useful leak cams (dropped {sum(1 for n,c in cams.items() if is_leak_source(c.get('source'))) - len(referenced_leaks)} unused)")
+            if is_triangulation_trusted(p, cameras=cams):
+                referenced_locked.add(p)
+    include |= referenced_locked
+    total_locked = sum(1 for n in cams if is_triangulation_trusted(n, cameras=cams))
+    print(f"Filtered: kept {len(referenced_locked)} useful HUD-locked cams "
+          f"(dropped {total_locked - len(referenced_locked)} unused)")
 
     edges = []
     clusters_used = set()
@@ -262,12 +271,17 @@ def main():
         ypr = cam.get('ypr')
         fov = cam.get('fov') or [None, None]
         source = cam.get('source', '') or ''
-        is_leak = is_leak_source(source)
+        cls = get_class(name, cameras=cams)
+        is_locked_xyz = is_triangulation_trusted(name, cameras=cams)
         tier_info = tiers['cameras'].get(name, {})
         tier = tier_info.get('tier', 'unknown')
         zone = ZONE_OVERRIDE.get(name) or infer_zone(xyz)
 
-        if is_leak:
+        # Node type for the dashboard. 'leak' is retained as the visual
+        # bucket for HUD-locked cams (preserves the existing dashboard CSS).
+        # Future: the dashboard could split this into per-class buckets
+        # (anchor_full / anchor_pos_fov / anchor_pos) for finer color-coding.
+        if is_locked_xyz:
             ntype = 'leak'
         elif tier == 'anchor':
             ntype = 'anchor'
@@ -297,6 +311,7 @@ def main():
             'id': name,
             'label': name,
             'type': ntype,
+            'constraint_class': cls,  # V2: expose raw class for richer dashboard UI
             'zone': zone,
             'x': x,
             'y': y,
