@@ -1,7 +1,7 @@
 {
   "_meta": {
     "schema_version": "v2-design",
-    "status": "ORIENTATION-RECONCILED — hud_dir_ypr now in cameras.json convention (yaw 0..360, pitch, roll). hud_fov_v + hud_fov_h supersede hud_fov.",
+    "status": "ORIENTATION-RECONCILED \u2014 hud_dir_ypr now in cameras.json convention (yaw 0..360, pitch, roll). hud_fov_v + hud_fov_h supersede hud_fov.",
     "total_entries": 105,
     "classes_in_use": [
       "A_full_hud",
@@ -13,13 +13,13 @@
     ],
     "convention_notes": [
       "C: is cam position, authoritative for calibration.",
-      "P: is selected entity — can be player, NPC, or free-cam ref.",
+      "P: is selected entity \u2014 can be player, NPC, or free-cam ref.",
       "Class is defined by HUD contents only, not capture context.",
       "Preview watermark with valid HUD is still A/C per Dir presence."
     ],
     "known_duplicates": [],
     "known_duplicates_note": "Previously claimed 3 duplicate pairs (Intersection W/SE, Diner NE/Car Wash, Fence/Glitch A) were the result of audit-pass coord-paste errors. Re-verified against original frames: all distinct cams. List intentionally empty pending future evidence.",
-    "x_class_note": "X_invalid_ground_truth is currently empty. Kept in taxonomy as a defensive bucket for HUD-corruption cases (NaN, aberrant values, HUD-vs-scene mismatch). Under-map glitches (C_z negative) are NOT invalid — the engine pose is ground-truth, render may be partially usable for elevated LMs.",
+    "x_class_note": "X_invalid_ground_truth is currently empty. Kept in taxonomy as a defensive bucket for HUD-corruption cases (NaN, aberrant values, HUD-vs-scene mismatch). Under-map glitches (C_z negative) are NOT invalid \u2014 the engine pose is ground-truth, render may be partially usable for elevated LMs.",
     "pending_actions": [
       "Verify CameraStar P-R-Y -> (y, p, r) mapping on Intersection (W) before solver wiring.",
       "Optional re-capture of Auto Shop (SE), Auto Shop (SW), Diner with Tasks Full overlay dismissed, to recover Dir and promote them back to A."
@@ -199,7 +199,7 @@
     "hud_fov": 37.8,
     "player_visible": true,
     "hud_obscured": true,
-    "notes": "Dir is present in HUD but obscured by Tasks Full overlay — not readable from this frame. Reclassified A -> C because Dir cannot be locked in the solver. Re-capture needed if the cam should become A. xyz+fov locked, ypr free.",
+    "notes": "Dir is present in HUD but obscured by Tasks Full overlay \u2014 not readable from this frame. Reclassified A -> C because Dir cannot be locked in the solver. Re-capture needed if the cam should become A. xyz+fov locked, ypr free.",
     "hud_fov_v": 37.8,
     "hud_fov_h": 62.655
   },
@@ -220,7 +220,7 @@
     "hud_fov": 37.8,
     "player_visible": true,
     "hud_obscured": true,
-    "notes": "Dir is present in HUD but obscured by Tasks Full overlay — not readable. Reclassified A -> C because Dir cannot be locked in the solver. Re-capture needed. xyz+fov locked, ypr free.",
+    "notes": "Dir is present in HUD but obscured by Tasks Full overlay \u2014 not readable. Reclassified A -> C because Dir cannot be locked in the solver. Re-capture needed. xyz+fov locked, ypr free.",
     "hud_fov_v": 37.8,
     "hud_fov_h": 62.655
   },
@@ -346,7 +346,7 @@
     "hud_P_is_selected_ped": true,
     "player_visible": true,
     "hud_obscured": true,
-    "notes": "Selected ped is S_F_O_GEN_SHOPKEEPER_00 (NPC behind counter). P: = NPC pos, not Jason. Dir is present in HUD but obscured by Tasks Full overlay — not readable. Reclassified A -> C because Dir cannot be locked. Re-capture needed. xyz+fov locked, ypr free.",
+    "notes": "Selected ped is S_F_O_GEN_SHOPKEEPER_00 (NPC behind counter). P: = NPC pos, not Jason. Dir is present in HUD but obscured by Tasks Full overlay \u2014 not readable. Reclassified A -> C because Dir cannot be locked. Re-capture needed. xyz+fov locked, ypr free.",
     "hud_fov_v": 34.2,
     "hud_fov_h": 57.35
   },
@@ -366,7 +366,7 @@
     ],
     "hud_fov": 50.8,
     "player_visible": true,
-    "notes": "Exterior near Hanks Waffles. Lucia exiting police car, 'GREET_MALE_MED' overlay. Not actually inside diner — name is parking-lot-relative.",
+    "notes": "Exterior near Hanks Waffles. Lucia exiting police car, 'GREET_MALE_MED' overlay. Not actually inside diner \u2014 name is parking-lot-relative.",
     "hud_fov_v": 50.8,
     "hud_fov_h": 80.339
   },
@@ -721,7 +721,7 @@
     "hud_fov": 49.6,
     "player_visible": false,
     "suspicious_z": true,
-    "notes": "GameTests spr_sb_08 Sit_Chair_Smoke. Under-map glitch (C_z=-40.3). Engine pose is valid ground-truth — oblique upward view through ground can still observe elevated LMs (skyline visible at top of frame). xyz+fov locked, ypr free."
+    "notes": "GameTests spr_sb_08 Sit_Chair_Smoke. Under-map glitch (C_z=-40.3). Engine pose is valid ground-truth \u2014 oblique upward view through ground can still observe elevated LMs (skyline visible at top of frame). xyz+fov locked, ypr free."
   },
   "Glitch (C)": {
     "constraint_class": "C_pos_fov_only",
@@ -783,7 +783,7 @@
     "hud_fov": 50.9,
     "preview_watermark": true,
     "player_visible": false,
-    "notes": "Cockpit interior view, hangar visible through windshield. Most of frame is car interior — LMs markable only through windows.",
+    "notes": "Cockpit interior view, hangar visible through windshield. Most of frame is car interior \u2014 LMs markable only through windows.",
     "hud_dir_raw": {
       "values": [
         15.4,
@@ -851,7 +851,7 @@
     "hud_fov": 70.0,
     "preview_watermark": true,
     "player_visible": false,
-    "notes": "Wide FOV (70) cockpit rear-view. P and C ~10m apart — unusual.",
+    "notes": "Wide FOV (70) cockpit rear-view. P and C ~10m apart \u2014 unusual.",
     "hud_dir_raw": {
       "values": [
         -33.9,
@@ -1102,7 +1102,7 @@
     "hud_fov": 32.9,
     "hud_obscured": true,
     "player_visible": true,
-    "notes": "NEO debug menu overlay. P:/C: ~20m apart in x — possibly free-cam mode."
+    "notes": "NEO debug menu overlay. P:/C: ~20m apart in x \u2014 possibly free-cam mode."
   },
   "Intersection (N)": {
     "constraint_class": "C_pos_fov_only",
@@ -1163,7 +1163,7 @@
     ],
     "hud_fov": 49.6,
     "player_visible": true,
-    "notes": "CameraStar ComponentsReducedTimeOut overlay. Dir taken from the CameraStar Orientation P-R-Y row (raw values: pitch=-7.998, roll=0.0, yaw=+113.951), stored here as (y, p, r) = (113.951, -7.998, 0.0). dir_convention_verified=false — confirm the CameraStar P-R-Y -> (y, p, r) mapping against an A cam with a standard Dir: line before wiring into the solver. Vice City service center scene.",
+    "notes": "CameraStar ComponentsReducedTimeOut overlay. Dir taken from the CameraStar Orientation P-R-Y row (raw values: pitch=-7.998, roll=0.0, yaw=+113.951), stored here as (y, p, r) = (113.951, -7.998, 0.0). dir_convention_verified=false \u2014 confirm the CameraStar P-R-Y -> (y, p, r) mapping against an A cam with a standard Dir: line before wiring into the solver. Vice City service center scene.",
     "dir_source": "CameraStar_orientation_PRY_row",
     "dir_convention_verified": true,
     "hud_dir_raw": {
@@ -1212,7 +1212,7 @@
     ],
     "hud_fov_v": 49.6,
     "player_visible": true,
-    "notes": "'Debug Camera & Pad Off' + 'Stop Test' overlay (free-cam debug / GameTests context). HUD shows P+C+Fov only — no Dir. Reclassified A -> C: previous audit pass mistakenly attributed Dir values from a different frame. xyz+fov locked, ypr free."
+    "notes": "'Debug Camera & Pad Off' + 'Stop Test' overlay (free-cam debug / GameTests context). HUD shows P+C+Fov only \u2014 no Dir. Reclassified A -> C: previous audit pass mistakenly attributed Dir values from a different frame. xyz+fov locked, ypr free."
   },
   "Metro (NE) (A)": {
     "constraint_class": "C_pos_fov_only",
@@ -1297,21 +1297,7 @@
   "Metro (SE) (C)": {
     "constraint_class": "C_pos_fov_only",
     "has_debug_hud": true,
-    "has_dir": false,
-    "hud_P_xyz": [
-      -1555.1,
-      -308.0,
-      19.7
-    ],
-    "hud_C_xyz": [
-      -1555.2,
-      -307.7,
-      20.6
-    ],
-    "hud_fov": 49.6,
-    "preview_watermark": true,
-    "player_visible": true,
-    "notes": "Metro platform, tight crop on cap. Same cluster, 5+ cams within 5m."
+    "notes": "Ported from rlx upstream (commit 2870375, updated pose ypr 180/-9.5). HUD provides P, C, Fov (vfov 49.6, hfov None). ypr to refine."
   },
   "Motel": {
     "constraint_class": "C_pos_fov_only",
@@ -1979,7 +1965,7 @@
     ],
     "hud_fov": 45.0,
     "player_visible": false,
-    "notes": "R* Content Editor (archetype-selection dialog visible). Engine P+C+Fov still valid. Different location from Tennis Court cluster — this is the stadium proper, not the court. xyz+fov locked, ypr free.",
+    "notes": "R* Content Editor (archetype-selection dialog visible). Engine P+C+Fov still valid. Different location from Tennis Court cluster \u2014 this is the stadium proper, not the court. xyz+fov locked, ypr free.",
     "hud_fov_v": 45.0,
     "hud_fov_h": 72.734
   },
@@ -2075,7 +2061,7 @@
     "hud_fov": 50.8,
     "player_visible": true,
     "player_ped_vertical": true,
-    "notes": "Lucia third-person rear, upright walking — roll soft-constrained via ped vertical. Paired with Welcome Center (W), ~12.5m apart, same capture session.",
+    "notes": "Lucia third-person rear, upright walking \u2014 roll soft-constrained via ped vertical. Paired with Welcome Center (W), ~12.5m apart, same capture session.",
     "hud_fov_v": 50.8,
     "hud_fov_h": 80.339
   },
@@ -2096,7 +2082,7 @@
     "hud_fov": 50.8,
     "player_visible": true,
     "player_ped_vertical": true,
-    "notes": "Lucia third-person rear, upright walking — roll soft-constrained via ped vertical. 'Low video memory' warning overlay does not affect calib values. Paired with Welcome Center (E).",
+    "notes": "Lucia third-person rear, upright walking \u2014 roll soft-constrained via ped vertical. 'Low video memory' warning overlay does not affect calib values. Paired with Welcome Center (E).",
     "hud_fov_v": 50.8,
     "hud_fov_h": 80.339
   },
