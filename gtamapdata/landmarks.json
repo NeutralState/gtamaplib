@@ -11361,5 +11361,19 @@
     "source_cameras": [],
     "error_m": null,
     "zone": "unknown"
+  },
+  "Infinity at Brickell (SW)": {
+    "xyz": [
+      -1219.2,
+      -1395.6,
+      168.8
+    ],
+    "source_cameras": [
+      "Highway (Peacock Bay) (A)",
+      "Metro (SE) (C)"
+    ],
+    "error_m": 4.7,
+    "zone": "unknown",
+    "notes": "Manual triangulation: Peacock Bay A + Metro SE C, parallax 140deg, ray gap 4.7m, 34m from generic Infinity (SW corner of tower). Metro SE C used despite unverified tier (pose validated reproj ~10px)."
   }
 }
