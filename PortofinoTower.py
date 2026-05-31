@@ -13,11 +13,12 @@ class PortofinoTower:
     color = '#a78bfa'  # violet, distinct from other meshes
 
     # Heights (m) — z_top matches real peaks (~142)
-    Z_PEAK_TOP  = 142.0
+    Z_PEAK_TOP  = 144.0
+    Z_PEAK_WALL = 142.0   # top of peak-box walls; pyramid roof 139->142
     Z_CYL_TOP   = 137.0
     Z_PENT_TOP  = 125.0
-    Z_BREAK_TOP = 85.0
-    Z_BASE_TOP  = 75.0
+    Z_BREAK_TOP = 95.0
+    Z_BASE_TOP  = 85.0
     Z_GROUND    = 0.0
 
     # Scale (m) — calibrated to satellite reference (1px ~= 0.074m)
@@ -38,19 +39,19 @@ class PortofinoTower:
         self.branch_peaks = {'NW': self.nw, 'NE': self.ne, 'S': self.s}
 
         self.PENT_LEVELS = [
-            ('B', self.Z_GROUND,    1.7),
+            ('B', self.Z_GROUND,    1.6),
             ('K', self.Z_BASE_TOP,  1.6),
-            ('L', self.Z_BREAK_TOP, 1.0),
-            ('P', self.Z_PENT_TOP,  1.0),
+            ('L', self.Z_BREAK_TOP, 1.5),
+            ('P', self.Z_PENT_TOP,  1.6),
         ]
         self.CYL_LEVELS = [
-            ('B',  self.Z_GROUND,    1.7),
-            ('K',  self.Z_BASE_TOP,  1.6),
+            ('B',  self.Z_GROUND,    1.0),
+            ('K',  self.Z_BASE_TOP,  1.0),
             ('L',  self.Z_BREAK_TOP, 1.0),
             ('P',  self.Z_PENT_TOP,  1.0),
             ('CT', self.Z_CYL_TOP,   1.0),
         ]
-        self.PEAK_BOX_LEVELS = [('PB', self.Z_PENT_TOP), ('PT', self.Z_PEAK_TOP)]
+        self.PEAK_BOX_LEVELS = [('PB', self.Z_PENT_TOP), ('PT', self.Z_PEAK_WALL)]
 
         self.pent = {}
         self.cyl  = {}
@@ -163,4 +164,10 @@ class PortofinoTower:
                     p1 = self.pbox[(code, br_name, a)]
                     p2 = self.pbox[(code, br_name, b)]
                     cam.render_line((p1, p2), color, bold)
+            # pyramid roof: 4 wall-top corners (PT, z=139) -> tip (LM, z=142)
+            tip = self.branch_peaks[br_name]
+            tip_pt = (float(tip[0]), float(tip[1]), self.Z_PEAK_TOP)
+            for corner in pbox_corners:
+                base = self.pbox[('PT', br_name, corner)]
+                cam.render_line((base, tip_pt), color, bold)
         return self
