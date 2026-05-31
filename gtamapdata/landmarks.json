@@ -11375,5 +11375,170 @@
     "error_m": 4.7,
     "zone": "unknown",
     "notes": "Manual triangulation: Peacock Bay A + Metro SE C, parallax 140deg, ray gap 4.7m, 34m from generic Infinity (SW corner of tower). Metro SE C used despite unverified tier (pose validated reproj ~10px)."
+  },
+  "WDNA FM (N0)": {
+    "xyz": [
+      -2522.483,
+      -2298.963,
+      5.0
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "WDNA FM (SE0)": {
+    "xyz": [
+      -2520.733,
+      -2303.673,
+      5.0
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "WDNA FM (SW0)": {
+    "xyz": [
+      -2525.701,
+      -2302.661,
+      5.0
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "WDNA FM (N1)": {
+    "xyz": [
+      -2522.483,
+      -2298.963,
+      215.456
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "WDNA FM (SE1)": {
+    "xyz": [
+      -2520.733,
+      -2303.673,
+      215.456
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "WDNA FM (SW1)": {
+    "xyz": [
+      -2525.701,
+      -2302.661,
+      215.456
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "WDNA FM (N2)": {
+    "xyz": [
+      -2522.483,
+      -2298.963,
+      373.768
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "WDNA FM (SE2)": {
+    "xyz": [
+      -2520.733,
+      -2303.673,
+      373.768
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "WDNA FM (SW2)": {
+    "xyz": [
+      -2525.701,
+      -2302.661,
+      373.768
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "WDNA FM (N3)": {
+    "xyz": [
+      -2522.483,
+      -2298.963,
+      390.127
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "WDNA FM (SE3)": {
+    "xyz": [
+      -2520.733,
+      -2303.673,
+      390.127
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "WDNA FM (SW3)": {
+    "xyz": [
+      -2525.701,
+      -2302.661,
+      390.127
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "WDNA FM (N4)": {
+    "xyz": [
+      -2522.483,
+      -2298.963,
+      396.302
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "WDNA FM (SE4)": {
+    "xyz": [
+      -2520.733,
+      -2303.673,
+      396.302
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "WDNA FM (SW4)": {
+    "xyz": [
+      -2525.701,
+      -2302.661,
+      396.302
+    ],
+    "source_cameras": [
+      "Prison"
+    ],
+    "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
   }
 }

@@ -34,6 +34,8 @@ sys.path.insert(0, REPO)
 import gtamaplib as ml
 import gtamapdata as md
 from OneThousandVenetian import OneThousandVenetian
+from WDNAFM import WDNAFM
+from PortofinoTower import PortofinoTower
 
 
 class FakeCam:
@@ -131,6 +133,32 @@ except Exception as e:
     traceback.print_exc()
     otv_edges = []
 
+print('Extracting WDNAFM edges...')
+try:
+    instance = WDNAFM(md, ml)
+    fake = FakeCam()
+    instance.render_on_camera(fake)
+    wdna_edges = fake.edges
+    print(f'  -> {len(wdna_edges)} edges')
+except Exception as e:
+    print(f'  FAILED: {e}')
+    import traceback
+    traceback.print_exc()
+    wdna_edges = []
+
+print('Extracting PortofinoTower edges...')
+try:
+    instance = PortofinoTower(md, ml)
+    fake = FakeCam()
+    instance.render_on_camera(fake)
+    porto_edges = fake.edges
+    print(f'  -> {len(porto_edges)} edges')
+except Exception as e:
+    print(f'  FAILED: {e}')
+    import traceback
+    traceback.print_exc()
+    porto_edges = []
+
 result = {}
 if fs_edges:
     result['Four Seasons Hotel Miami'] = {
@@ -151,6 +179,16 @@ if otv_edges:
     result['1000 Venetian Way'] = {
         'color': '#f472b6',
         'world_edges': otv_edges,
+    }
+if wdna_edges:
+    result['WDNA FM'] = {
+        'color': '#f87171',
+        'world_edges': wdna_edges,
+    }
+if porto_edges:
+    result['Portofino Tower'] = {
+        'color': '#a78bfa',
+        'world_edges': porto_edges,
     }
 
 out_path = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
