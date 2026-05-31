@@ -23,7 +23,10 @@ class PortofinoTower:
 
     # Scale (m) — calibrated to satellite reference (1px ~= 0.074m)
     R_CYLINDER_BASE = 18.0    # cylinder radius (485px box -> ~36m diam -> R~18)
-    SIDE_FRONT_BASE = 9.7     # outer (yellow) square side: 131px*0.074
+    SIDE_FRONT_BASE = 9.7     # (legacy) outer side
+    SIDE_FRONT = 6.0          # tip-to-shoulder radial depth (front faces)
+    SIDE_SIDE  = 9.7          # shoulder full width
+    SIDE_INNER = 9.0          # base width against the cylinder
     PEAK_BOX_SIDE   = 8.6     # inner (green) square side: 116px*0.074
 
     def __init__(self, md, ml=None):
@@ -59,27 +62,36 @@ class PortofinoTower:
         self._build_geometry()
 
     def _pentagon(self, peak_xyz, z, scale=1.0):
-        peak_xy = peak_xyz[:2]
-        radial = peak_xy - self.centroid_xy
-        radial_len = np.linalg.norm(radial)
-        radial_unit = radial / radial_len
+        # Wing extends OUTWARD from the cylinder edge (the LM sits at the
+        # inner base of the wing, on the cylinder rim). Seen from above:
+        #   innerL/innerR : base, at the LM radius (cylinder rim)
+        #   sideL/sideR   : shoulders, further out, widest
+        #   peak          : outer tip (furthest from centre)
+        lm_xy = peak_xyz[:2]
+        radial = lm_xy - self.centroid_xy
+        lm_dist = np.linalg.norm(radial)          # ~18m (cylinder rim)
+        radial_unit = radial / lm_dist
         perp = np.array([-radial_unit[1], radial_unit[0]])
-        radial_outward = (scale - 1.0) * radial_len * 0.3
-        side_front = self.SIDE_FRONT_BASE * scale
-        inner_radius = self.R_CYLINDER_BASE * scale
-        inner_half = side_front * 0.75
-        peak_pos_xy = self.centroid_xy + radial_unit * (radial_len + radial_outward)
-        front_half = side_front / 2
-        front_L = peak_pos_xy + perp * front_half
-        front_R = peak_pos_xy - perp * front_half
-        inner_pos = self.centroid_xy + radial_unit * inner_radius
-        inner_L = inner_pos + perp * inner_half
-        inner_R = inner_pos - perp * inner_half
+
+        WING_DEPTH = 9.0 * scale                 # how far the wing sticks out
+        SHOULDER_OUT = 4.5 * scale                # shoulder distance from base
+        inner_half = (self.SIDE_INNER / 2) * scale
+        side_half  = (self.SIDE_SIDE  / 2) * scale
+
+        base_pos = lm_xy                                          # at LM (cyl rim)
+        side_pos = lm_xy + radial_unit * SHOULDER_OUT
+        peak_pos = lm_xy + radial_unit * WING_DEPTH
+
+        innerL = base_pos + perp * inner_half
+        innerR = base_pos - perp * inner_half
+        sideL  = side_pos + perp * side_half
+        sideR  = side_pos - perp * side_half
         return {
-            'frontL': (front_L[0], front_L[1], z),
-            'frontR': (front_R[0], front_R[1], z),
-            'innerL': (inner_L[0], inner_L[1], z),
-            'innerR': (inner_R[0], inner_R[1], z),
+            'innerL': (innerL[0], innerL[1], z),
+            'innerR': (innerR[0], innerR[1], z),
+            'sideL':  (sideL[0],  sideL[1],  z),
+            'sideR':  (sideR[0],  sideR[1],  z),
+            'peak':   (peak_pos[0], peak_pos[1], z),
         }
 
     def _peak_box(self, peak_xyz, z):
@@ -138,7 +150,7 @@ class PortofinoTower:
                 cam.render_line((c1, c2), color, thin)
 
         pent_codes = [code for code, _, _ in self.PENT_LEVELS]
-        pent_corners = ['frontL', 'frontR', 'innerR', 'innerL']
+        pent_corners = ['innerL', 'sideL', 'peak', 'sideR', 'innerR']
         for br_name in ('NW', 'NE', 'S'):
             for corner in pent_corners:
                 for j in range(len(pent_codes) - 1):
@@ -146,8 +158,8 @@ class PortofinoTower:
                     p2 = self.pent[(pent_codes[j + 1], br_name, corner)]
                     cam.render_line((p1, p2), color, bold if corner.startswith('front') else thin)
             for code in pent_codes:
-                for k in range(4):
-                    a = pent_corners[k]; b = pent_corners[(k + 1) % 4]
+                for k in range(5):
+                    a = pent_corners[k]; b = pent_corners[(k + 1) % 5]
                     p1 = self.pent[(code, br_name, a)]
                     p2 = self.pent[(code, br_name, b)]
                     cam.render_line((p1, p2), color, thin)
