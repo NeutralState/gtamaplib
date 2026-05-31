@@ -172,7 +172,7 @@ def run_refine_dry_run(cam_name):
     tool, reason = _refine_tool_for(cam_name)
     if tool is None:
         return f'SKIPPED: {reason}\n', False
-    cmd = ['python3', str(tool), cam_name]
+    cmd = [sys.executable, str(tool), cam_name]
     # Class Cm needs --no-refine-xyz to honor the HUD-locked xyz. refine_cam_full
     # already enforces this internally (logging an "ignored" warning if the
     # user passed --refine-xyz). We rely on that here rather than duplicating
@@ -186,7 +186,7 @@ def run_refine_apply(cam_name):
     tool, reason = _refine_tool_for(cam_name)
     if tool is None:
         return f'SKIPPED: {reason}\n', False
-    cmd = ['python3', str(tool), cam_name, '--apply']
+    cmd = [sys.executable, str(tool), cam_name, '--apply']
     result = subprocess.run(cmd, capture_output=True, text=True, cwd=REPO_DIR)
     return result.stdout, result.returncode == 0
 
@@ -313,7 +313,7 @@ def retriangulate_lms_for_cam(cam_name, verbose=True):
             n_skip += 1
             continue
         
-        cmd = ['python3', str(TRIANGULATE_LM), lm_name, '--apply']
+        cmd = [sys.executable, str(TRIANGULATE_LM), lm_name, '--apply']
         result = subprocess.run(cmd, capture_output=True, text=True, cwd=REPO_DIR)
         if result.returncode == 0:
             n_done += 1
@@ -342,7 +342,7 @@ def snapshot_tiers():
 
 def rerun_tiers():
     """Re-run compute_confidence_tiers.py silently."""
-    cmd = ['python3', str(COMPUTE_TIERS)]
+    cmd = [sys.executable, str(COMPUTE_TIERS)]
     subprocess.run(cmd, capture_output=True, text=True, cwd=REPO_DIR)
 
 

@@ -527,6 +527,7 @@ class Handler(BaseHTTPRequestHandler):
 
         elif path.startswith('/thumbs/'):
             # Serve thumbnails from docs/thumbs/
+            from urllib.parse import unquote
             fname = unquote(path[len('/thumbs/'):])
             # Basic sanitization
             if '/' in fname or '\\' in fname or '..' in fname:

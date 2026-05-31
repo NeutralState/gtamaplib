@@ -70,11 +70,22 @@ def is_leak_cam(cam_data):
 
 
 def classify_cam(cam_name, cameras, cam_tiers):
-    """Return 'leak', 'trusted_non_leak', or 'other'."""
+    """Return 'leak', 'trusted_non_leak', 'other', or 'excluded'.
+
+    Selection is driven purely by calibration confidence (tier).
+    constraint_class is kept in the data for provenance but does NOT affect
+    source selection: nearly all non-leak cams are trailer/screenshot
+    captures we calibrate ourselves, so what matters is how well a cam was
+    calibrated (its tier), not its origin class. Only 'low' tier cams are
+    excluded as triangulation sources; cams with no tier fall through to
+    'other' (usable only as a last resort, never as an anchor).
+    """
     c = cameras.get(cam_name, {})
+    tier = cam_tiers.get(cam_name)
+    if tier == 'low':
+        return 'excluded'
     if is_leak_cam(c):
         return 'leak'
-    tier = cam_tiers.get(cam_name)
     if tier in ('anchor', 'high'):
         return 'trusted_non_leak'
     return 'other'
