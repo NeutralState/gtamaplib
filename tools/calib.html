@@ -1494,6 +1494,7 @@ async function init() {
     window.mapCamFrustumDist = camDist;
   }
 
+  const FRUSTUM_EXTEND = 2.5;  // [FRUSTUM-EXTEND] stretch cam cones beyond farthest LM
   function frustumDistanceForCam(cam) {
     if (!window.mapCamFrustumDist) return FRUSTUM_DIST_DEFAULT;
     return window.mapCamFrustumDist.get(cam.name) || FRUSTUM_DIST_DEFAULT;
@@ -1657,7 +1658,7 @@ async function init() {
       // Phase 5.1: per-cam frustum length = farthest observed landmark.
       const yaw = (c.ypr && c.ypr.length >= 1) ? c.ypr[0] : 0;
       const hfov = c.hfov || 60;
-      const dist = frustumDistanceForCam(c);
+      const dist = frustumDistanceForCam(c) * FRUSTUM_EXTEND;  // [FRUSTUM-EXTEND]
       const fcWorld = frustumCornersWorld(c.xyz, yaw, hfov, dist);
       const fcSvg = fcWorld.map(([wx, wy]) => window.worldToSvg(wx, wy));
 

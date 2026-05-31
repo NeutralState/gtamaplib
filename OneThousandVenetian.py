@@ -48,8 +48,8 @@ class OneThousandVenetian:
     Z_PE2 = 39.0
     Z_W4 = 44.0
     Z_PE3 = 51.0
-    Z_ROOF = 59.5     # main roof of the building (where T-NW/T-SW sit)
-    Z_PHTOP = 65.0    # top of the penthouse box (where SE/SW sit)
+    Z_ROOF = 62.75     # main roof of the building (where T-NW/T-SW sit)
+    Z_PHTOP = 68.2    # top of the penthouse box (where SE/SW sit)
 
     def __init__(self, md, ml):
         self.md = md
