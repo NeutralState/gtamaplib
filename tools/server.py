@@ -1676,6 +1676,29 @@ class Handler(BaseHTTPRequestHandler):
             print(f"Set pixel {lm_name} in {cam_name}: ({px_x}, {px_y})")
             self.send_json({'ok': True})
 
+        elif path == '/api/set_class':
+            cam_name = unquote(qs.get('cam', [''])[0])
+            new_class = unquote(qs.get('class', [''])[0])
+            from leak_cam_audit import VALID_CLASSES
+            if cam_name not in md.cameras:
+                self.send_json({'error': 'invalid cam'}, 400); return
+            if new_class not in VALID_CLASSES:
+                self.send_json({'error': 'invalid class', 'valid': sorted(VALID_CLASSES)}, 400); return
+            audit_path = os.path.join(DATA_DIR, 'leak_cam_audit.json')
+            with open(audit_path) as f:
+                audit = json.load(f)
+            entry = audit.get(cam_name, {})
+            entry['constraint_class'] = new_class
+            entry.setdefault('has_debug_hud', True)
+            audit[cam_name] = entry
+            tmp = audit_path + '.tmp'
+            with open(tmp, 'w') as f:
+                json.dump(audit, f, indent=2)
+            os.replace(tmp, audit_path)
+            print(f"Set class {cam_name}: {new_class}")
+            self.send_json({'ok': True, 'cam': cam_name, 'class': new_class,
+                            'note': 'Re-run compute_confidence_tiers.py to apply.'})
+
         elif path == '/api/heatmap_data':
             # Return all landmarks with xyz, error, zone for heatmap
             result = []

@@ -492,6 +492,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   <button class="rays-toggle" id="proj-toggle" title="Show ghost LM projections on the opposite pane">Projections</button>
 
   <span id="cam-meta"></span>
+  <span id="class-label" style="display:none;font-family:var(--mono);font-size:10px;font-weight:600;padding:3px 8px;border-radius:9px;border:1px solid var(--border);margin-left:4px"></span>
   <div class="chip" id="chip-all"><span style="color:var(--dim)">loss </span><span class="v" id="loss-all">—</span></div>
   <button class="btn btn-reset" id="btn-reset">Reset</button>
   <button class="btn btn-save" id="btn-save" disabled>Save</button>
@@ -726,6 +727,34 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 <script>
 // ── State ──────────────────────────────────────────────────────────────────
 let currentCam = null, camData = null, projections = [], losses = {};
+
+// ── [CLASS-LABEL] read-only badge: leak class or cam type ──
+const _CLASS_SHORT = {
+  'A_full_hud':'A · full HUD','B_pos_fov_player':'B · pos+fov+ped',
+  'C_pos_fov_only':'C · pos+fov','Cm_pos_only':'Cm · pos only','D_no_ground_truth':'D · no GT'
+};
+function updateClassLabel() {
+  const el = document.getElementById('class-label');
+  if (!el) return;
+  if (!currentCam) { el.style.display='none'; return; }
+  const cam = (allCams || []).find(c => c.name === currentCam);
+  if (!cam) { el.style.display='none'; return; }
+  el.style.display = '';
+  const cls = cam.constraint_class;
+  if (cam.is_leak && cls && _CLASS_SHORT[cls]) {
+    el.textContent = _CLASS_SHORT[cls];
+    el.style.color = '#f59e0b'; el.style.borderColor = '#f59e0b';
+  } else {
+    const src = cam.source || '';
+    let t = 'Screenshot';
+    if (src.startsWith('Trailer 1')) t = 'Trailer 1';
+    else if (src.startsWith('Trailer')) t = 'Trailer 2';
+    el.textContent = t;
+    if (t === 'Trailer 1') { el.style.color='var(--blue)'; el.style.borderColor='var(--blue)'; }
+    else if (t === 'Trailer 2') { el.style.color='var(--green)'; el.style.borderColor='var(--green)'; }
+    else { el.style.color='var(--violet)'; el.style.borderColor='var(--violet)'; }
+  }
+}
 window.currentCam = null;  // [MULTICAM-STEP21] initial expose
 let params = {x:0,y:0,z:0,yaw:0,pitch:0,roll:0,hfov:60};
 let origParams = null;
@@ -2246,6 +2275,7 @@ async function init() {
 camSel.addEventListener('change', async () => {
   currentCam = camSel.value || null;
   window.currentCam = currentCam;  // [MULTICAM-STEP21] expose for projection overlay
+  updateClassLabel();  // [CLASS-LABEL]
   // [MESH-FRONTEND-V2] Reload procedural building edges for the new cam
   if (typeof loadProceduralMeshes === 'function') loadProceduralMeshes();
   // Phase 9.1: sync URL hash on cam change.
@@ -2304,8 +2334,7 @@ async function loadProjections() {
   btnOpt.disabled = false;
   btnOpt.title = isLeak ? 'Leak cam — only yaw/pitch/roll will be optimized (xyz + hfov frozen)' : '';
   if (isLeak) {
-    lossAll.textContent = 'leak cam';
-    document.getElementById('chip-all').style.borderColor = '#4ade80';
+    document.getElementById('chip-all').style.borderColor = '#f59e0b';
   }
   }
 
@@ -2315,10 +2344,9 @@ async function loadProjections() {
   // Leak cam detection — update after losses
   const isLeakCam = /^\d{4}-\d{2}-\d{2}/.test(camData.source || '');
   if (isLeakCam) {
-    lossAll.textContent = 'leak cam';
     chipAll.className = 'chip';
-    chipAll.style.borderColor = '#4ade80';
-    chipAll.style.color = '#4ade80';
+    chipAll.style.borderColor = '#f59e0b';
+    chipAll.style.opacity = '1';
     btnOpt.disabled = false;
   } else {
     chipAll.style.borderColor = '';
