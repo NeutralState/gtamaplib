@@ -27,6 +27,7 @@ class PortofinoTower:
     SIDE_FRONT = 6.0          # tip-to-shoulder radial depth (front faces)
     SIDE_SIDE  = 9.7          # shoulder full width
     SIDE_INNER = 9.0          # base width against the cylinder
+    WING_ROT = -45.0            # no wing rotation
     PEAK_BOX_SIDE   = 8.6     # inner (green) square side: 116px*0.074
 
     def __init__(self, md, ml=None):
@@ -61,7 +62,7 @@ class PortofinoTower:
         self.pbox = {}
         self._build_geometry()
 
-    def _pentagon(self, peak_xyz, z, scale=1.0):
+    def _pentagon(self, peak_xyz, z, scale=1.0, br_name=None):
         # Wing extends OUTWARD from the cylinder edge (the LM sits at the
         # inner base of the wing, on the cylinder rim). Seen from above:
         #   innerL/innerR : base, at the LM radius (cylinder rim)
@@ -71,6 +72,11 @@ class PortofinoTower:
         radial = lm_xy - self.centroid_xy
         lm_dist = np.linalg.norm(radial)          # ~18m (cylinder rim)
         radial_unit = radial / lm_dist
+        _wr = self.WING_ROT + (180.0 if br_name == 'NE' else 0.0)
+        _th = math.radians(_wr)
+        _c, _sn = math.cos(_th), math.sin(_th)
+        radial_unit = np.array([radial_unit[0]*_c - radial_unit[1]*_sn,
+                                radial_unit[0]*_sn + radial_unit[1]*_c])
         perp = np.array([-radial_unit[1], radial_unit[0]])
 
         WING_DEPTH = 9.0 * scale                 # how far the wing sticks out
@@ -98,6 +104,11 @@ class PortofinoTower:
         peak_xy = peak_xyz[:2]
         radial = peak_xy - self.centroid_xy
         radial_unit = radial / np.linalg.norm(radial)
+        # rotate box orientation 10 deg CCW
+        _th = math.radians(45.0)
+        _c, _sn = math.cos(_th), math.sin(_th)
+        radial_unit = np.array([radial_unit[0]*_c - radial_unit[1]*_sn,
+                                radial_unit[0]*_sn + radial_unit[1]*_c])
         perp = np.array([-radial_unit[1], radial_unit[0]])
         half = self.PEAK_BOX_SIDE / 2
         outer = peak_xy + radial_unit * half
@@ -122,7 +133,7 @@ class PortofinoTower:
     def _build_geometry(self):
         for code, z, scale in self.PENT_LEVELS:
             for br_name, peak in self.branch_peaks.items():
-                for c_name, xyz in self._pentagon(peak, z, scale).items():
+                for c_name, xyz in self._pentagon(peak, z, scale, br_name).items():
                     self.pent[(code, br_name, c_name)] = xyz
         for code, z, scale in self.CYL_LEVELS:
             for c_name, xyz in self._cylinder(z, scale).items():
