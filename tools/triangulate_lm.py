@@ -82,10 +82,19 @@ def classify_cam(cam_name, cameras, cam_tiers):
     """
     c = cameras.get(cam_name, {})
     tier = cam_tiers.get(cam_name)
+    # Leak cams have HUD-locked position (and usually fov) = ground truth.
+    # Only D (no ground truth) and X (invalid) are excluded; A/B/C/Cm all
+    # have at least a locked position, so their rays originate from a known
+    # point and are valid triangulation sources regardless of tier.
+    if is_leak_cam(c):
+        cls = (c.get('constraint_class') or '')
+        if cls.startswith('D') or cls.startswith('X'):
+            return 'excluded'
+        if cls.startswith('A'):
+            return 'leak_a'
+        return 'leak_pos'
     if tier == 'low':
         return 'excluded'
-    if is_leak_cam(c):
-        return 'leak'
     if tier in ('anchor', 'high'):
         return 'trusted_non_leak'
     return 'other'
@@ -96,22 +105,30 @@ def select_sources(observers_classified):
 
     observers_classified: dict {cam_name: classification}
     """
-    leak = [n for n, c in observers_classified.items() if c == 'leak']
+    leak_a = [n for n, c in observers_classified.items() if c == 'leak_a']
+    leak_pos = [n for n, c in observers_classified.items() if c == 'leak_pos']
     trusted = [n for n, c in observers_classified.items() if c == 'trusted_non_leak']
     other = [n for n, c in observers_classified.items() if c == 'other']
 
-    if len(leak) >= 2:
-        return leak, f"2+ leak cams ({len(leak)})"
-    if len(leak) >= 1 and len(trusted) >= 1:
-        return leak + trusted, f"leak + trusted ({len(leak)}+{len(trusted)})"
-    if len(trusted) >= 2:
-        return trusted, f"2+ trusted non-leak ({len(trusted)})"
-    if len(leak) >= 1:
-        # Only 1 leak, no trusted. Fallback to leak + other.
-        return leak + other, f"leak + other fallback ({len(leak)}+{len(other)})"
-    # No leak. Use whatever we have.
-    if len(other) + len(trusted) >= 2:
-        return trusted + other, f"untrusted only ({len(trusted)}+{len(other)})"
+    # Priority tiers, best first: A (full HUD) > trusted non-leak > C/B/Cm
+    # (pos-locked, dir uncertain) > other. We INCLUDE all sources from every
+    # tier that has any reliable cam, rather than stopping at 2 — this gives
+    # the triangulation enough viewpoint diversity (parallax) and avoids the
+    # degenerate case of two near-collinear cams (e.g. Port + Port (B) at
+    # 0.03 deg) being picked alone and blowing the solution up to 1e15.
+    pool = []
+    reason_parts = []
+    for label, group in [('leak_A', leak_a), ('trusted', trusted),
+                         ('leak_pos', leak_pos)]:
+        if group:
+            pool += group
+            reason_parts.append(f"{label}({len(group)})")
+    # Only fall back to 'other' if the reliable pool is still too small.
+    if len(pool) < 2 and other:
+        pool += other
+        reason_parts.append(f"other({len(other)})")
+    if len(pool) >= 2:
+        return pool, " + ".join(reason_parts)
     return [], "insufficient observers"
 
 
@@ -141,6 +158,16 @@ def triangulate(selected_cams, lm_name, pixels, cameras, init_xyz):
 
     if len(rays) < 2:
         return None, f"not enough rays ({len(rays)})"
+
+    # Parallax guard: reject degenerate near-collinear configurations
+    # (e.g. Port + Port (B) at 0.03 deg) that send the LSQ solution to ~1e15.
+    import itertools, math as _m
+    max_par = 0.0
+    for (_, _, d1), (_, _, d2) in itertools.combinations(rays, 2):
+        cosang = float(np.clip(np.dot(d1, d2), -1.0, 1.0))
+        max_par = max(max_par, _m.degrees(_m.acos(cosang)))
+    if max_par < 3.0:
+        return None, f"insufficient parallax (max {max_par:.2f} deg between all ray pairs)"
 
     def loss(p):
         p = np.asarray(p)
@@ -172,6 +199,135 @@ def triangulate(selected_cams, lm_name, pixels, cameras, init_xyz):
         max_res = max(max_res, ang_arcmin)
 
     return p_new.tolist(), max_res
+
+
+def _build_rays(cams, lm_name, pixels):
+    """Build (name, origin, unit_dir) for each cam that can see lm_name."""
+    import numpy as np
+    rays = []
+    for cn in cams:
+        if lm_name not in pixels.get(cn, {}):
+            continue
+        try:
+            cam = ml.get_camera(cn)
+            d = np.asarray(cam.get_landmark_direction(lm_name), dtype=float)
+            d = d / np.linalg.norm(d)
+            rays.append((cn, np.asarray(cam.xyz, dtype=float), d))
+        except Exception:
+            continue
+    return rays
+
+
+def _residuals_arcmin(point, rays):
+    """Per-cam reprojection residual in arcmin for a candidate point."""
+    import numpy as np, math
+    out = {}
+    p = np.asarray(point, dtype=float)
+    for cn, o, d in rays:
+        v = p - o
+        dist = np.linalg.norm(v)
+        if dist < 1e-3:
+            out[cn] = 0.0; continue
+        perp = v - np.dot(v, d) * d
+        out[cn] = math.degrees(np.linalg.norm(perp) / dist) * 60.0
+    return out
+
+
+def robust_triangulate(candidate_cams, lm_name, pixels, cameras, init_xyz,
+                       min_parallax=15.0, outlier_mult=2.0, outlier_floor=5.0,
+                       verbose=True, observers_classified_global=None):
+    """Choose a consensus subset of sources automatically.
+
+    1. Drop cams that have NO pairing >= min_parallax with any other cam
+       (a source with only collinear partners is useless / dangerous).
+    2. Triangulate with survivors, compute per-cam reprojection residual.
+    3. Reject the worst cam if its residual > outlier_mult * median AND
+       > outlier_floor; retriangulate; repeat until stable or < 3 cams.
+    Returns (xyz, max_res, kept, dropped_log).
+    """
+    import numpy as np, math, itertools
+
+    rays = _build_rays(candidate_cams, lm_name, pixels)
+    observers_classified_global = observers_classified_global or {}
+    dropped = []
+    if len(rays) < 2:
+        return None, f"not enough rays ({len(rays)})", [], dropped
+
+    # --- Step 1: parallax filter ---
+    names = [r[0] for r in rays]
+    best_par = {n: 0.0 for n in names}
+    pair_par = {}
+    for (n1, _, d1), (n2, _, d2) in itertools.combinations(rays, 2):
+        ang = math.degrees(math.acos(float(np.clip(np.dot(d1, d2), -1.0, 1.0))))
+        pair_par[(n1, n2)] = ang
+        best_par[n1] = max(best_par[n1], ang)
+        best_par[n2] = max(best_par[n2], ang)
+    survivors = [r for r in rays if best_par[r[0]] >= min_parallax]
+    for r in rays:
+        if best_par[r[0]] < min_parallax:
+            dropped.append((r[0], f"low parallax (best {best_par[r[0]]:.1f}deg < {min_parallax})"))
+    if verbose:
+        print("  Pairwise parallax (best per cam):")
+        for n in names:
+            mark = "" if best_par[n] >= min_parallax else "  DROP (collinear)"
+            print(f"    {best_par[n]:6.1f}deg  {n}{mark}")
+    if len(survivors) < 2:
+        return None, f"only {len(survivors)} cam(s) survive parallax filter",                [r[0] for r in survivors], dropped
+
+    # --- Step 1b: collinear-pair dedup ---
+    # Two cams seeing the LM from nearly the same direction (mutual parallax
+    # < dedup_thresh) add no independent info and form a degenerate pair
+    # (e.g. Port + Port (B) at 0.03 deg). Keep only the better one, ranked
+    # leak_a > trusted_non_leak > leak_pos > other.
+    dedup_thresh = 5.0
+    rank = {'leak_a': 0, 'trusted_non_leak': 1, 'leak_pos': 2, 'other': 3}
+    def _worse(n1, n2):
+        r1 = rank.get(observers_classified_global.get(n1, 'other'), 9)
+        r2 = rank.get(observers_classified_global.get(n2, 'other'), 9)
+        return n2 if r1 <= r2 else n1
+    removed = set()
+    snames = [r[0] for r in survivors]
+    for i in range(len(snames)):
+        for j in range(i + 1, len(snames)):
+            n1, n2 = snames[i], snames[j]
+            if n1 in removed or n2 in removed:
+                continue
+            par = pair_par.get((n1, n2), pair_par.get((n2, n1)))
+            if par is not None and par < dedup_thresh:
+                w = _worse(n1, n2)
+                keep = n1 if w == n2 else n2
+                removed.add(w)
+                dropped.append((w, f"collinear with {keep} ({par:.2f}deg) - redundant viewpoint"))
+                if verbose:
+                    print(f"  dedup: drop {w} (collinear {par:.2f}deg with {keep})")
+    survivors = [r for r in survivors if r[0] not in removed]
+    if len(survivors) < 2:
+        return None, f"only {len(survivors)} cam(s) after dedup", [r[0] for r in survivors], dropped
+
+    # --- Step 2+3: triangulate, reject outliers iteratively ---
+    cur = list(survivors)
+    while True:
+        names_cur = [r[0] for r in cur]
+        xyz, max_res = triangulate(names_cur, lm_name, pixels, cameras, init_xyz)
+        if xyz is None:
+            return None, max_res, names_cur, dropped
+        res = _residuals_arcmin(xyz, cur)
+        vals = sorted(res.values())
+        median = vals[len(vals) // 2]
+        worst_cam = max(res, key=res.get)
+        worst_res = res[worst_cam]
+        if len(cur) > 3 and worst_res > outlier_mult * median and worst_res > outlier_floor:
+            dropped.append((worst_cam, f"outlier residual {worst_res:.1f}' (>{outlier_mult}x median {median:.1f}')"))
+            if verbose:
+                print(f"  reject outlier: {worst_cam} ({worst_res:.1f}', median {median:.1f}')")
+            cur = [r for r in cur if r[0] != worst_cam]
+            continue
+        # stable
+        if verbose:
+            print("  Final source residuals:")
+            for cn in sorted(res, key=res.get):
+                print(f"    {res[cn]:6.2f}'  {cn}")
+        return xyz, max_res, names_cur, dropped
 
 
 def main():
@@ -224,19 +380,30 @@ def main():
         print(f"  [{cls:18}] {cam_name}")
     print()
 
-    # Apply priority
-    selected, reason = select_sources(observers_classified)
-    print(f"Selected sources ({len(selected)}): {selected}")
-    print(f"Selection reason: {reason}")
+    # Build candidate pool by class priority (excludes D/X and low-tier).
+    candidate, reason = select_sources(observers_classified)
+    print(f"Candidate pool ({len(candidate)}): {candidate}")
+    print(f"Pool reason: {reason}")
     print()
 
-    if len(selected) < 2:
-        print(f"LM not updated, reason: only {len(selected)} cam(s) selected (need >= 2 for triangulation)")
+    if len(candidate) < 2:
+        print(f"LM not updated, reason: only {len(candidate)} cam(s) in pool (need >= 2)")
         return 1
 
     # Triangulate
     init = cur_xyz if cur_xyz else [0.0, 0.0, 0.0]
-    new_xyz, max_res = triangulate(selected, args.lm_name, pixels, cameras, init)
+    # Robust consensus: parallax filter + iterative outlier rejection.
+    print("Robust source selection:")
+    new_xyz, max_res, kept, dropped = robust_triangulate(
+        candidate, args.lm_name, pixels, cameras, init,
+        observers_classified_global=observers_classified)
+    print()
+    if dropped:
+        print("Dropped sources:")
+        for cn, why in dropped:
+            print(f"  - {cn}: {why}")
+    print(f"Kept sources ({len(kept) if kept else 0}): {kept}")
+    print()
 
     if new_xyz is None:
         print(f"LM not updated, reason: {max_res}")
@@ -262,7 +429,7 @@ def main():
     # Apply
     lm['xyz'] = new_xyz
     lm['error_m'] = round(float(max_res), 3)
-    lm['source_cameras'] = selected
+    lm['source_cameras'] = kept
     landmarks[args.lm_name] = lm
 
     with open(LANDMARKS_JSON, 'w') as f:

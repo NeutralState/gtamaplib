@@ -12,9 +12,10 @@
 ## Quick state
 
 - **Repo** : `~/Downloads/gtamaplib-main` · GitHub : `NeutralState/gtamaplib`
-- **Branch active** : `feature-svg-map`
-- **Bundle adjust RMS** : 2.26' (clean state, post-revert of Mount Kalaga experiment)
-- **Last session** : 2026-05-09 — Phases 5-8.2 + Phase 9.1 shipped, minimap pre-render script, rlx port investigation (parked)
+- **Branch active** : `feature-solver`
+- **Triangulation tool** : `tools/triangulate_lm.py` (ROBUST version — parallax filter + collinear dedup + outlier rejection; see 2026-05-31 session). Backup of pre-robust: `tools/triangulate_lm.py.bak_pre_robust`.
+- **Mesh classes** (repo root, read LMs, NEVER touch vendored lib) : `PortofinoTower.py`, `WDNAFM.py`, `OneThousandVenetian.py`. Regenerate meshes with `python3 tools/extract_mesh_edges.py` (writes `building_meshes_procedural.json`; per-building key = `world_edges`).
+- **Last session** : 2026-05-31 — robust triangulator, Portofino anchors re-triangulated via Sidewalk E (leak C now sources), Portofino mesh rebuilt from scratch (trifoliate), WDNA FM mesh ported. See bottom log.
 
 ---
 
@@ -794,3 +795,241 @@ unverified=46             unverified=337
 
 **Don't** revert to rlx's per-flag pattern in `triangulate.py`. The pipeline
 above is the new way.
+
+
+---
+
+## Session: 2026-05-31 — Robust triangulator + Portofino anchors re-triangulated + mesh rebuilt
+
+**The headline shift this session: leak cams now SOURCE landmarks by constraint
+class, and `triangulate_lm.py` chooses its own sources robustly (parallax +
+collinear dedup + outlier rejection) instead of trusting a blind priority list.**
+
+### The problem we were solving
+
+The 3 Portofino tower peaks (the mesh anchors) sat at bad positions — NW was
+at 13.9' error — because they had been triangulated from poor sources:
+- **Amphitheater** = class `D_no_ground_truth` (preview shot, no HUD) — pure
+  poison, no truth at all.
+- **Port + Port (B)** = both class A but ~0.03-0.09° apart (same vantage) —
+  the recurring **collinear trap**: near-parallel rays send the LSQ solution
+  to ~1e15 ("under terre" / infinity).
+- **Sidewalk (Jason) (E)** = leak class C, was being EXCLUDED as a source
+  because its tier had dropped to `low` (high residuals on its far LMs), even
+  though its pose is HUD-locked ground truth.
+
+Alexandre's framing (correct): a leak cam with HUD-locked pose is a SOURCE OF
+TRUTH. It should SOURCE the LMs it sees (the LMs adapt to it), not be excluded
+because of residuals it didn't cause.
+
+### `triangulate_lm.py` — the robust rewrite (THIS IS THE TOOL TO USE)
+
+**`classify_cam`** now classifies by constraint class, not tier alone:
+- leak `A_full_hud` → `leak_a` (best — full HUD, dir verified)
+- leak `B/C/Cm` (pos+fov HUD-locked, dir uncertain) → `leak_pos` (good source:
+  ray origin is exact, only the 3 dir params are soft)
+- leak `D`/`X` (no ground truth / invalid) → `excluded` (Amphitheater)
+- non-leak: `trusted_non_leak` (anchor/high) / `other` / `excluded` (low tier)
+
+**`select_sources`** builds a candidate pool by priority **leak_A > trusted >
+leak_pos > other** (A before C, per Alexandre). Includes ALL reliable tiers
+(doesn't stop at 2) so parallax/dedup downstream has material to work with.
+
+**`robust_triangulate`** (new core function) — does what we used to do by hand:
+1. **Parallax filter**: drop any cam whose best pairing with another cam is
+   < **15°** (a cam collinear with everyone is useless/dangerous).
+2. **Collinear dedup**: if two cams see the LM < **5°** apart (Port+PortB at
+   0.09°, Leonida01+LeonidaPostcard at 0.6°), keep the better one
+   (rank leak_a > trusted_non_leak > leak_pos > other), drop the redundant.
+3. **Iterative outlier rejection**: triangulate, compute per-cam reprojection
+   residual; if the worst > **2× median AND > 5'**, drop it and re-triangulate.
+   Repeats while > 3 cams remain. (Auto-caught Sidewalk E's Venetian markings
+   at 12.3' and dropped them.)
+4. Logs everything: per-cam parallax, dedup drops, outlier drops, kept set.
+
+Also a hard parallax guard inside `triangulate` (rejects < 3° → no more 1e15).
+`source_cameras` is now written as the **kept** set (post-filter), not the raw pool.
+
+Thresholds (Alexandre approved): parallax min **15°**, dedup **< 5°**, outlier
+**> 2× median AND > 5'**, min **3** cams to allow a rejection (conservative).
+
+### Sidewalk (Jason) (E) — leak C turned into a reliable source
+
+- Class `C_pos_fov_only`, HUD-locked: xyz `[-464.0, 1233.8, 4.6]`, fov h=80.339
+  / v=50.8, `has_dir: False`. Source date `2021-09-10 16-37-50`.
+- We did NOT recalibrate its pose (refine_cam_ypr barely moved it: the pose is
+  fine, the high residuals were from bad markings + circular LMs).
+- **Removed its `1000 Venetian Way (SW)` and `(NW)` markings** from pixels.json
+  — they were at y≈18 (top edge of the 1920×1080 frame), on buildings 2.4km+
+  away → ~15' irreducible error, and Venetian already has good sources
+  elsewhere (Tennis Court SE, Venetian Islands, Vice City Postcard). Backup:
+  `pixels.json.bak_pre_remove_venetian_sidewalkE`.
+- After cleanup, its 6 remaining LMs reproject at 0.6–5.5' — a genuinely good
+  leak C source. It now sources Portofino NE/NW, Star Island, Floridian, etc.
+
+### Portofino anchors — re-triangulated, then S locked geometrically
+
+Applied with the robust tool:
+- **NE** → `[1758.377, -189.128, 145.380]`, residual 0.57'.
+  Sources: Rooftop Party + Sidewalk (Jason) E (parallax 61.7°).
+- **NW** → `[1723.019, -195.567, 145.699]`, residual 5.76'.
+  Sources kept: Port + Rooftop Party + Leonida Keys 01 + Sidewalk (Jason) E.
+  (Robust tool auto-dropped Port (B) [collinear 0.09° with Port] and Leonida
+  Postcard [collinear 0.60° with Leonida 01].)
+- **S** → could NOT be triangulated: its only observers (Port, Port B,
+  Grassrivers Watson Bay) are all within ~12.9° of each other — below the 15°
+  parallax floor, so the tool refused. **Locked geometrically** as the
+  equilateral third point from NW+NE: `[1746.274, -222.969, 145.539]`,
+  `error_m: 0`, `source_cameras: ['(geometric: equilateral from NW+NE)']`.
+  Justified: we know the tower is a perfect trifoliate (3 wings at 120°).
+
+**New triangle**: equilateral, side **35.94m** (was 31.2m before — the tower
+"grew" ~15% as the anchors moved out to truer positions), centroid
+(1739.6, -203.0), **LM radius 20.75m** (was 18), LM z ≈ 145.5 (was 142).
+Backup before S edit: `landmarks.json.bak_pre_S_equilateral`.
+
+### PortofinoTower.py — mesh rescaled to the new anchors
+
+The mesh is parametric (reads the 3 LMs, computes centroid/radius/azimuths)
+but several constants were hardcoded to the OLD scale and had to be recaled:
+- `R_CYLINDER_BASE`: 18.0 → **20.75** (= new LM radius, cylinder touches LMs).
+- Heights raised to sit on the new LMs (LM z ≈ 145.5, real spec 484ft/147.5m):
+  `Z_PEAK_WALL` 142 → **143.5** (peak-box wall top = LM−2m), `Z_CYL_TOP`
+  137 → **140.5**, `Z_PENT_TOP` 125 → **128.5**. `Z_GROUND`=0, break z85-95
+  left as-is.
+- **Pyramid tip = the LM exactly**: `tip_pt` now uses `tip[2]` (the LM's real z)
+  instead of a hardcoded `Z_PEAK_TOP`. So each turret peak lands precisely on
+  its anchor, with a 2m pyramid above the box wall.
+
+Mesh structure (built from scratch earlier this session, before the rescale):
+cylinder (octagon) + 3 radial pentagonal wings (house-shape: wide inner base
+at the cylinder rim → shoulders → outer tip) + peak boxes rotated +45° + a 180°
+flip on the NE wing + shallow pyramidal roofs. Wings stop at Z_PENT_TOP; above
+that only the cylinder + peak boxes. Regenerate: `python3 tools/extract_mesh_edges.py`.
+
+NOTE: a residual offset on **Rooftop Party** only (mesh fits well on the leak
+cams, slightly off on Rooftop) is a Rooftop CALIBRATION issue (it's a trusted
+non-leak T1 cam, its ypr can drift), NOT a mesh problem. Don't bend the mesh
+to fit one non-leak cam.
+
+### How the Portofino mesh is built (PortofinoTower.py) — detailed
+
+`PortofinoTower(md, ml)` is a standalone class at repo root. It READS the 3
+anchor LMs from `md.landmarks` and computes everything else parametrically.
+It never touches the vendored lib. `render_on_camera(cam)` emits the mesh as
+`cam.render_line((xyz1, xyz2), color, bold)` calls; `extract_mesh_edges.py`
+captures those via a FakeCam into `world_edges`.
+
+**Anchors & coordinate frame**
+- 3 LMs = the 3 turret tips: `Portofino Tower (NW)/(NE)/(S)`, stored as
+  `self.nw/ne/s`. They form a perfect equilateral triangle (side 35.94m,
+  z≈145.5). Azimuths from centroid: NE=45°, NW=165°, S=-75° (120° apart).
+- `self.centroid_xy` = mean of the 3 LM xy. `self.branch_peaks =
+  {'NW':nw, 'NE':ne, 'S':s}`.
+- Per branch, the geometry is built on a local frame: `radial_unit` = unit
+  vector centroid→LM, `perp` = 90° rotation of it. So "outward" = +radial,
+  "sideways" = ±perp.
+
+**Vertical levels** (z, bottom→top), shared codes B/K/L/P (+CT for cylinder):
+- B  = Z_GROUND   = 0
+- K  = Z_BASE_TOP = 85
+- L  = Z_BREAK_TOP= 95     ← the break (a 3-floor ~10m pinch)
+- P  = Z_PENT_TOP = 128.5  ← wings STOP here (~floor 38)
+- CT = Z_CYL_TOP  = 140.5  ← cylinder alone above the wings
+- peak boxes: PB=Z_PENT_TOP(128.5) → PT=Z_PEAK_WALL(143.5)
+- pyramid tip = the LM's real z (~145.5), Z_PEAK_TOP(147.5) is the legacy
+  ceiling constant (the tip now uses tip[2], i.e. the LM, not this).
+
+**Body = octagonal cylinder + 3 radial pentagonal wings**
+
+Cylinder (`_cylinder`, CYL_LEVELS): an 8-sided ring of radius
+`R_CYLINDER_BASE × scale`. R_CYLINDER_BASE = 20.75 (= LM radius, so the
+cylinder rim reaches the LMs). CYL_LEVELS scale = 1.0 at EVERY level → the
+cylinder is a straight tube R=20.75 from ground to CT. In the body it is
+hidden inside the wings; above z=128.5 it stands alone and thin under the
+peak boxes. (Keeping it 1.0 everywhere avoids a tapering cone artifact.)
+
+Wings (`_pentagon`, PENT_LEVELS): 3 wings, one per branch, each a 5-sided
+"house" shape seen from above, extending OUTWARD from the cylinder:
+- `innerL/innerR`: wide base at the LM (cylinder rim), half-width SIDE_INNER/2 = 4.5
+- `sideL/sideR`: shoulders, set back along radial by SHOULDER_OUT=4.5,
+  half-width SIDE_SIDE/2 = 4.85
+- `peak`: the outer tip, at lm_xy + radial_unit × WING_DEPTH (9m out)
+- Wing orientation rotated by `WING_ROT = -45°`, with the NE wing getting an
+  EXTRA +180° (`_wr = WING_ROT + (180 if br=='NE' else 0)`) — this is what
+  finally aligned all 3 wings+boxes to the leak-cam views.
+
+**Per-level width (scale) — constant body with a light break**
+PENT_LEVELS scales: B=1.6, K=1.6, L=1.5, P=1.6. So the wings are full-width
+(1.6) top to bottom EXCEPT a light pinch to 1.5 at the break level (z85→95,
+~3 floors). No gradual taper — same width all the way, just the one notch.
+(scale acts as a multiplier on the wing half-widths and radial offsets.)
+
+**Peak boxes** (`_peak_box`, PEAK_BOX_LEVELS): a square turret on each wing
+tip, side PEAK_BOX_SIDE=8.6, walls from PB(128.5) to PT(143.5). The box axis
+is `radial_unit` rotated +45° (corner-facing, not face-facing). Like the
+wings, the NE box inherits the +180° flip so box+wing stay rigidly aligned.
+
+**Pyramidal roofs**: for each branch, the 4 PT wall-top corners (z=143.5)
+connect up to a single tip = the LM itself (`tip_pt = (tip[0], tip[1],
+tip[2])`, i.e. exact LM z ≈145.5). So each turret ends in a ~2m pyramid whose
+apex sits precisely on the anchor LM.
+
+**Real-world calibration**: Portofino Tower South Beach = 484ft/147.5m, 44
+floors, completed 1997 (Sieger Suarez). The new anchor z≈145.5 + 2m pyramid ≈
+147.5m matches the real height. The break sits high (~floors 28-31).
+
+**Render flow & iterating**
+`render_on_camera` walks PENT_LEVELS → `_pentagon` (5 corners/level, connects
+the pentagon outline + verticals between levels), CYL_LEVELS → `_cylinder`
+(octagon + verticals), PEAK_BOX_LEVELS → `_peak_box` (square + verticals) +
+the 4 pyramid edges per branch. ~192+ edges total.
+To iterate: edit a constant in PortofinoTower.py → `python3
+tools/extract_mesh_edges.py` → hard-refresh the viewer (Cmd+Shift+R). The
+mesh auto-follows the LMs (centroid/radius/azimuth recomputed); only the
+hardcoded constants (R_CYLINDER_BASE, the Z_* heights, wing/box sizes) need
+manual rescaling if the anchors move a lot — as we did this session when the
+triangle grew 31.2m→35.94m.
+
+### WDNA FM radio tower — mesh ported from rlx
+
+Ported rlx's `class WDNAFM` lattice (21 edges: 3 verticals N/SE/SW × 5 levels
+z=5→396 converging to tip ~402). Created `WDNAFM.py` (color #f87171, reads LMs),
+added 15 structure points to landmarks.json, integrated into extract_mesh_edges.py.
+
+### Doctrine reinforced this session
+
+- **Leak cam = source of truth.** It sources the LMs; the LMs/other cams adapt.
+  Source by class: A > C/B/Cm; exclude only D/X. A leak C is still better than
+  any non-leak frame (position + fov are HUD-exact).
+- **Port + Port (B) are always collinear (~0.03-0.09°)** — never let them be
+  the only two sources. The dedup handles this automatically now.
+- **Amphitheater is class D** (no ground truth) — never a source. It was the
+  original "poison" pulling the Portofino anchors.
+- **Parallax + delta are the judges, not RMS.** A 0.5' residual with 0.1°
+  parallax is a trap. The robust tool encodes this.
+- When a leak cam has high residuals on FAR LMs at the frame edge, suspect the
+  MARKINGS (edge of frame, distant), not the cam pose.
+
+### Files changed this session
+
+- `tools/triangulate_lm.py` (robust rewrite — classify by class, priority pool,
+  robust_triangulate). Backup: `tools/triangulate_lm.py.bak_pre_robust`.
+- `PortofinoTower.py` (built from scratch + rescaled to new anchors).
+- `WDNAFM.py` (new), `OneThousandVenetian.py` (Z fix from a prior segment).
+- `tools/extract_mesh_edges.py` (imports the 3 mesh classes; `world_edges` key).
+- `gtamapdata/landmarks.json` (Portofino NE/NW retriangulated, S locked
+  equilateral, +WDNA points). Backups: `.bak_pre_S_equilateral` etc.
+- `gtamapdata/pixels.json` (removed Sidewalk E's Venetian markings).
+  Backup: `.bak_pre_remove_venetian_sidewalkE`.
+
+### TODO next session
+
+1. The robust triangulator now lets MANY previously-excluded leak C cams source
+   LMs. Consider a sweep: re-triangulate LMs that gained good (parallax-checked)
+   sources, then re-run `compute_confidence_tiers.py`.
+2. Rooftop Party ypr may want a `refine_cam_ypr` pass (it's the one cam the
+   Portofino mesh is off on).
+3. Optional: make the outlier rule allow dropping down to 2 cams when the
+   outlier is egregious (currently needs >3 to reject) — Alexandre was leaning
+   "conservative, leave as-is".

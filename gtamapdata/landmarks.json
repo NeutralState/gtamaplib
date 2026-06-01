@@ -1764,15 +1764,17 @@
   },
   "Portofino Tower (NW)": {
     "xyz": [
-      1715.355,
-      -202.314,
-      142.0
+      1723.0186644813966,
+      -195.56717108425323,
+      145.6990038321377
     ],
     "source_cameras": [
-      "Sidewalk (Jason) (E)",
-      "Port"
+      "Port",
+      "Rooftop Party",
+      "Leonida Keys 01 (Airplane) (X)",
+      "Sidewalk (Jason) (E)"
     ],
-    "error_m": 13.949,
+    "error_m": 5.762,
     "zone": "vice_city"
   },
   "Pylon (3)": {
@@ -8853,14 +8855,14 @@
   },
   "Portofino Tower (S)": {
     "xyz": [
-      1737.537,
-      -224.28,
-      142.0
+      1746.274,
+      -222.969,
+      145.539
     ],
     "source_cameras": [
-      "Port"
+      "(geometric: equilateral from NW+NE)"
     ],
-    "error_m": 3.782,
+    "error_m": 0.0,
     "zone": "vice_city"
   },
   "536 Richard Jackson Blvd (BSW)": {
@@ -9096,15 +9098,15 @@
   },
   "Star Island Water Tower": {
     "xyz": [
-      757.1055019107256,
-      479.7944233152151,
-      30.76459878416756
+      756.9351035107827,
+      479.74961731903494,
+      29.045339884813668
     ],
     "source_cameras": [
-      "Sidewalk (Jason) (E)",
-      "Vice Beach (B)"
+      "Vice Beach (B)",
+      "Sidewalk (Jason) (E)"
     ],
-    "error_m": 4.041,
+    "error_m": 5.375,
     "zone": "vice_city"
   },
   "Tall Billboard": {
@@ -9571,14 +9573,15 @@
   },
   "Portofino Tower (NE)": {
     "xyz": [
-      1745.533,
-      -194.08,
-      142.0
+      1758.3770934931047,
+      -189.12838039817245,
+      145.37984413273887
     ],
     "source_cameras": [
+      "Rooftop Party",
       "Sidewalk (Jason) (E)"
     ],
-    "error_m": 2.571,
+    "error_m": 0.573,
     "zone": "unknown"
   },
   "Hotel Victor (NE)": {

@@ -13,16 +13,16 @@ class PortofinoTower:
     color = '#a78bfa'  # violet, distinct from other meshes
 
     # Heights (m) — z_top matches real peaks (~142)
-    Z_PEAK_TOP  = 144.0
-    Z_PEAK_WALL = 142.0   # top of peak-box walls; pyramid roof 139->142
-    Z_CYL_TOP   = 137.0
-    Z_PENT_TOP  = 125.0
+    Z_PEAK_TOP  = 147.5
+    Z_PEAK_WALL = 143.5   # top of peak-box walls (LM z - 2m); pyramid roof goes up to LM
+    Z_CYL_TOP   = 140.5
+    Z_PENT_TOP  = 128.5
     Z_BREAK_TOP = 95.0
     Z_BASE_TOP  = 85.0
     Z_GROUND    = 0.0
 
     # Scale (m) — calibrated to satellite reference (1px ~= 0.074m)
-    R_CYLINDER_BASE = 18.0    # cylinder radius (485px box -> ~36m diam -> R~18)
+    R_CYLINDER_BASE = 20.75   # cylinder radius = LM dist from centroid (retriangulated)
     SIDE_FRONT_BASE = 9.7     # (legacy) outer side
     SIDE_FRONT = 6.0          # tip-to-shoulder radial depth (front faces)
     SIDE_SIDE  = 9.7          # shoulder full width
@@ -189,7 +189,7 @@ class PortofinoTower:
                     cam.render_line((p1, p2), color, bold)
             # pyramid roof: 4 wall-top corners (PT, z=139) -> tip (LM, z=142)
             tip = self.branch_peaks[br_name]
-            tip_pt = (float(tip[0]), float(tip[1]), self.Z_PEAK_TOP)
+            tip_pt = (float(tip[0]), float(tip[1]), float(tip[2]))  # tip = LM exact
             for corner in pbox_corners:
                 base = self.pbox[('PT', br_name, corner)]
                 cam.render_line((base, tip_pt), color, bold)
