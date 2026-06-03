@@ -1097,7 +1097,8 @@ PURS:
        WDNA source Prison/Leonida = ancre INDEPENDANTE d'Ambrosia.
    Cluster a donc 2 pieds externes (04->Skyway, 02->WDNA): pas auto-referentiel
    en realite, juste pas encore exploite dans les sources.
-   RECALIBRATION (= session dediee avec ROLL): marquer WDNA comme contrainte
+   RECALIBRATION DU CLUSTER sur ancres externes (= session dediee; rouvre le
+   roll, donc a coupler avec la dette roll): marquer WDNA comme contrainte
    verticale plein-cadre sur 02 (sommet flou -> plusieurs points le long du mat),
    refine_cam_full (7 params dont roll libre, deja supporte) sur 02 puis 04,
    Postcard si contrainte par LM partages, PUIS retrianguler les 35 LM Ambrosia.
