@@ -1074,6 +1074,47 @@ si ça gêne — pas fait pour éviter d'inventer des valeurs HUD sur des cams g
 
 ---
 
+### Session 2026-06-03 — Chantier B (cycles de dependances) DONE
+
+**Livrable**: tools/audit/circular_deps.py (READ-ONLY) + tools/generated/dep_graph.json
+(regenerable, non versionne). Graphe cam->cam B-strict COMPLET (reutilise
+build_indices/is_leak de audit_leak_influence_tree, applique a TOUTES les cams)
++ Tarjan SCC. Classe PUR (aucune leak) vs SAIN (leak dans la boucle).
+Graphe: 77 noeuds, 464 aretes, 8 D/X exclues.
+
+**5 SCC taille>=2: 2 SAINS, 3 PURS.**
+SAINS (RAS): 42 cams (coeur Vice City/Keys), 16 cams (Diner/Waffles, Hedge B OK).
+
+PURS:
+1. AMBROSIA (04 Fires / 02 Panorama / Postcard X) — etait GRAVE, MAINTENANT
+   ANCRABLE. 35 LM orphelins dont faux-high Sebring Water Tower A/B et
+   1500 Sonora Ave (Tank) (confiance interne au cluster, trompeuse).
+   ANCRES TROUVEES cette session:
+     - Ambrosia 04 -> Sunshine Skyway Bridge (N): residu pose 0.6' (anchor,
+       source Diner/leaks). Deja marque.
+     - Ambrosia 02 -> mat WDNA: VERIFIE par repro pile WDNA (z=5->404), tombe a
+       10 arcmin / 12px des clics sur le mat reel (4 points) -> c'est WDNA.
+       WDNA source Prison/Leonida = ancre INDEPENDANTE d'Ambrosia.
+   Cluster a donc 2 pieds externes (04->Skyway, 02->WDNA): pas auto-referentiel
+   en realite, juste pas encore exploite dans les sources.
+   RECALIBRATION (= session dediee avec ROLL): marquer WDNA comme contrainte
+   verticale plein-cadre sur 02 (sommet flou -> plusieurs points le long du mat),
+   refine_cam_full (7 params dont roll libre, deja supporte) sur 02 puis 04,
+   Postcard si contrainte par LM partages, PUIS retrianguler les 35 LM Ambrosia.
+   REGLE ANTI-BOUCLE: WDNA reste source Prison/Leonida, JAMAIS Ambrosia.
+   A fusionner avec la dette ROLL (Jason at sea, Chase 2).
+   Wheelabrator/MIA (sweep A): bougeront quasi pas au recalage (02 deja a 10').
+2. PORT GELLHORN (Postcard X / 04 Delights X / Postcard) — MOYEN. 45 LM
+   orphelins (Bay, faible enjeu). 'Port Gellhorn Postcard' a source=''.
+3. CHASE2 (Chase 2 A/B / U-Turn NW) — BENIN. Ancre par voisinage. 2 LM orphelins:
+   Radio Tower #1 (Port Gellhorn), Sunshine Skyway Bridge (S) (NO_BASELINE 2585'
+   du sweep A, a benner).
+
+FakeCam WDNA: envisagee puis ECARTEE (reprojeter depuis xyz Ambrosia actuels
+gelerait le cluster sans info externe). L'ancrage reel = WDNA observe sur 02.
+
+---
+
 ## Roadmap niveau supérieur (planifiée 2026-06-XX)
 
 Objectif global : faire passer gtamaplib de "débogage expert au coup par coup"
