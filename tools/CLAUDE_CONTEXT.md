@@ -1037,6 +1037,43 @@ added 15 structure points to landmarks.json, integrated into extract_mesh_edges.
 
 ---
 
+### Session 2026-06-XX — Chantier A (sweep retriangulation) DONE
+
+**A1.** Construit `tools/audit/retriangulation_candidates.py` (READ-ONLY). Scanne
+les 857 LM, rejoue observers → classify_cam → select_sources → robust_triangulate,
+classe par gain (parallaxe≥15° ET delta≥2m ET ≥2 sources post-dedup). Réutilise
+les fonctions de triangulate_lm (zéro reduplication sauf l'acos pairwise).
+Sortie taggée CAND/NEAR/NOBASE/SKIP. Résultat: 34 CAND / 236 QUASI / 586 SKIP.
+
+**A2.** 31 LM retriangulés via robust triangulator (29 batch + Mount Mountain
++ Mount Waffles). Gains majeurs: Wheelabrator S Broward (+31m), MIA North
+Terminal (+29m), Mount Mountain (+16m via Hedge B). La plupart des gains
+viennent des leak C nouvellement autorisées comme sources.
+
+**Hedge (B)/(C) (X)** : confirmées leak C légitimes (glitch sous-map, mais xyz
+console exact → origine de rayon valide). Le "(X)" du nom = label positionnel,
+PAS la classe doctrine X. Formalisées `cc=C_pos_fov_only` dans cameras.json.
+NE PAS ajouter d'exclusion par nom dans classify_cam (bannirait des leak C valides).
+
+**Quarantaine (5 LM, non appliqués)** : résidu élevé ou base trop étroite.
+- Park Grove Condominium (N): laissé à error_m=1.882. Retriangulation tirée à
+  11.66' par Grassrivers 02; l'outlier rejection ne le drop pas (règle >3 cams).
+- Trésor Tower (9.98'), W South Beach (BNW) (8.35'), Di Lido Island (N) (6.99'),
+  Three Tequesta Point (6.01'): benchés. À revoir après refine_cam_ypr de
+  Rooftop Party (source de W South Beach BNW notamment).
+
+**A3.** compute_confidence_tiers.py regénéré (174 cam changes, convergé pass 3:
+anchor 17c/91lm, high 36/110, medium 16/237, low 9/12, unverified 96/407).
+Aucune régénération mesh: aucun des 31 LM recalés n'est une ancre de
+PortofinoTower/WDNAFM/OneThousandVenetian; find_mary_brickell() est live (no cache).
+
+**Dette connue** : compute_confidence_tiers warne sur Hedge B/C "no audit entry"
+(il lit leak_cam_audit.json, pas le cc de cameras.json). Cosmétique, fallback =
+fully-locked legacy (bénin pour xyz valide). Ajouter entrée audit pour silencer
+si ça gêne — pas fait pour éviter d'inventer des valeurs HUD sur des cams glitch.
+
+---
+
 ## Roadmap niveau supérieur (planifiée 2026-06-XX)
 
 Objectif global : faire passer gtamaplib de "débogage expert au coup par coup"
