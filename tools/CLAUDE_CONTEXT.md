@@ -1033,3 +1033,136 @@ added 15 structure points to landmarks.json, integrated into extract_mesh_edges.
 3. Optional: make the outlier rule allow dropping down to 2 cams when the
    outlier is egregious (currently needs >3 to reject) — Alexandre was leaning
    "conservative, leave as-is".
+
+
+---
+
+## Roadmap niveau supérieur (planifiée 2026-06-XX)
+
+Objectif global : faire passer gtamaplib de "débogage expert au coup par coup"
+à "pipeline rigoureux qui raisonne sur tout le réseau". Trois chantiers
+INDÉPENDANTS. Ordre conseillé A → B → C (gain immédiat → explication
+structurelle → fondation statistique). Chacun est autonome ; on peut en faire
+un par session.
+
+Rappels transverses pour TOUS les chantiers :
+- Claude n'a PAS accès au disque : il écrit des commandes/scripts one-shot,
+  Alexandre les lance et colle l'output.
+- Scripts idempotents, dry-run par défaut, `--apply` pour écrire, backups
+  `.bak_<reason>`. Scripts d'audit READ-ONLY dans `tools/audit/`.
+- Le juge de toute triangulation = PARALLAXE + DELTA, jamais le RMS seul.
+- Le robust triangulator (`tools/triangulate_lm.py`, session 2026-05-31) est
+  la référence : classify par classe (A>C, exclude D/X), parallax filter 15°,
+  collinear dedup <5°, outlier rejection >2x median & >5'.
+
+---
+
+### CHANTIER A — Sweep de retriangulation (quick win, ~1 session)
+
+**Pourquoi** : avant la session 2026-05-31, les leak C étaient exclues comme
+sources (tier low). Le robust triangulator les autorise maintenant (pos+fov
+HUD-locked = ray origin exacte). Donc beaucoup de LM ont gagné des sources
+fiables et peuvent être retriangulés — mais on ne sait pas lesquels en
+profiteraient vraiment. Il faut un audit systématique, pas du cas par cas.
+
+**Étape A1 — `tools/audit/retriangulation_candidates.py` (READ-ONLY)**
+Pour chaque LM dans landmarks.json :
+- lister ses observers (cams avec un pixel dans pixels.json), classer chacun
+  via la même logique que `classify_cam` (leak_a / leak_pos / trusted / other
+  / excluded — réutiliser/importer la fonction, ne pas la redupliquer).
+- calculer la MEILLEURE parallaxe atteignable entre paires de sources non
+  exclues (réutiliser le calcul d'angle entre rayons).
+- estimer la position qu'une retriangulation robuste donnerait (peut appeler
+  la logique de robust_triangulate en dry-run / import), et le delta vs xyz
+  actuel.
+- flag "gain potentiel" = (best_parallax >= 15°) ET (delta > seuil, ex. 2m)
+  ET (sources kept >= 2 après dedup).
+- sortie triée par delta décroissant : `LM | nb sources | best_parallax |
+  delta | kept sources | flag`.
+Aucune écriture. C'est la carte de ce qui vaut la peine.
+
+**Étape A2 — application en lot contrôlée**
+- dry-run `triangulate_lm.py "<LM>"` sur les candidats flaggés, vérifier que
+  le log (parallaxe/dedup/outlier) est sain cas par cas.
+- `--apply` sur ceux qui sont propres. Skip les delta ~0 (déjà bons) et les
+  résidus douteux.
+- Attention pièges connus : LM au bord de frame (markings imprécis, ex.
+  Venetian depuis Sidewalk E), LM dont toutes les sources sont dans un même
+  cluster (parallaxe faible même si nombreuses), LM ancres de mesh (vérifier
+  l'impact sur le mesh après).
+
+**Étape A3 — clôture**
+- `compute_confidence_tiers.py` → voir les promotions de tier.
+- éventuellement `bundle_adjust_weighted.py` + apply pour le polish global.
+- regénérer les meshes touchés (`extract_mesh_edges.py`) si des ancres ont bougé.
+- commit.
+
+Livrable : un audit réutilisable + N LM recalés proprement + tiers à jour.
+
+---
+
+### CHANTIER B — Détection de cycles dans le graphe de dépendances (~1-2 sessions)
+
+**Pourquoi** : le problème circulaire vu sur Portofino (Amphitheater source
+des LM qui re-valident Amphitheater ; Sidewalk E sourçait Portofino NE dont
+elle dépendait) est STRUCTUREL. Aujourd'hui on le découvre à la main quand un
+LM a l'air faux. On veut le détecter sur tout le réseau.
+
+**Étape B1 — `tools/audit/build_dep_graph.py` (READ-ONLY)**
+Construire le graphe dirigé : pour chaque LM, ses `source_cameras` → arêtes
+cam→LM. Pour chaque cam non-leak, les LM qui l'ont calibrée (via intake /
+historique) → arêtes LM→cam. Les leak cams sont des racines (ground truth, pas
+de parent). Sortir le graphe (dict adjacence + dump JSON dans tools/generated/).
+
+**Étape B2 — `tools/audit/circular_deps.py` (READ-ONLY)**
+- détecter les composantes fortement connexes (Tarjan/Kosaraju) — les cycles
+  où des positions se valident mutuellement sans ancrage externe (leak).
+- pour chaque cycle : lister les entités, le maillon le plus faible (classe /
+  tier le plus bas), et dire "ce cycle a besoin d'un point d'ancrage externe
+  (leak A ou anchor LM indépendant)".
+- distinguer cycles "sains" (au moins une racine leak fiable dans/proche) des
+  cycles "auto-référentiels purs" (aucune ground truth → suspect).
+
+**Étape B3 — visualisation / action**
+- marquer les zones auto-référentielles dans le viewer ou cam_health dashboard
+  (couleur d'alerte).
+- pour chaque cycle pur, proposer la cam/LM à ancrer en priorité.
+
+Livrable : `circular_deps.py` + carte des zones auto-référentielles de la map +
+liste priorisée d'ancrages manquants.
+
+---
+
+### CHANTIER C — Incertitude quantifiée par LM (ambitieux, ~2 sessions)
+
+**Pourquoi** : tout le projet juge la qualité par RMS + parallaxe à la main, et
+les poids du bundle adjust sont des tiers discrets (anchor=15, high=7.5, ...).
+Une vraie covariance par LM dirait objectivement lesquels des 56 LM ancres sont
+fiables et lesquels sont fragiles.
+
+**Étape C1 — covariance par LM**
+- pour chaque LM triangulé, propager l'incertitude : bruit pixel (~quelques px,
+  pire au bord/loin) + incertitude pose des cams sources → ellipsoïde de
+  covariance 3D (Jacobien de la triangulation, ou Monte-Carlo si plus simple).
+- sortir, par LM, les axes/volume de l'ellipsoïde (un "rayon d'incertitude").
+
+**Étape C2 — exposer dans le viewer**
+- couleur/taille du dot LM ∝ incertitude (vert = serré, rouge = flou).
+- endpoint server + frontend.
+
+**Étape C3 — intégrer au bundle adjust**
+- remplacer/compléter les poids de tier par l'inverse de la covariance
+  (information matrix) dans `bundle_adjust_weighted.py`. Le BA devient
+  statistiquement fondé (Gauss-Markov), plus de tiers arbitraires.
+
+Livrable : incertitude réelle par LM, visible + utilisée par le BA.
+
+---
+
+### Reprises rapides en attente (TODO court)
+- **Rooftop Party** : `refine_cam_ypr` — seule cam où le mesh Portofino dévie
+  (c'est SA calibration qui drifte, pas le mesh ; ne pas toucher le mesh).
+- **`git push origin feature-solver`** — vérifier que les commits sont backés.
+- Optionnel : assouplir l'outlier rule du robust triangulator pour autoriser
+  la descente à 2 cams quand l'outlier est flagrant (actuellement >3 requis ;
+  Alexandre penchait "conservative, leave as-is").
