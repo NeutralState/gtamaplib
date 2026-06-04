@@ -1116,6 +1116,55 @@ gelerait le cluster sans info externe). L'ancrage reel = WDNA observe sur 02.
 
 ---
 
+### Session 2026-06-03 — Chantier C1 (incertitude par LM) DONE
+
+**Livrable**: tools/audit/lm_uncertainty.py (READ-ONLY) + tools/generated/lm_uncertainty.json
+(regenerable, non versionne, ~3min pour 382 LM a N=200).
+
+Monte-Carlo par LM. Moteur: rayons reconstruits a la main (cam.xyz +
+get_pixel_direction(pixel)) pour injecter bruit pixel ET pose independamment sans
+toucher l'etat global ml. robust_triangulate fige le jeu 'kept' une fois, puis N
+tirages perturbes -> covariance empirique -> rayon scalaire = sqrt(trace(cov)).
+
+Modele de bruit:
+  - sigma_px = 3px (constant, v1; hook pour variable plus tard).
+  - sigma_pose par TIER cam (anchor 0.5m/0.05deg ... unverified 15m/1deg).
+  - LEAK cams: sigma quasi nul (0m / 0.02deg) — pose HUD = verite, le tier d'une
+    leak reflete ses markings pas sa pose. (Correction cle: sans ca, les LM
+    ancres sur leaks etaient injustement penalises.)
+  - tirages divergents (>10km du init, LSQ explose a parallaxe ~0) rejetes.
+
+DECOMPOSITION cle: r_pose (bruit pixel+pose) vs r_pix (pixel seul), ratio=r_pose/r_pix.
+  - ratio ~1 -> fragilite PHYSIQUE (point lointain, pixel x distance). Irreparable.
+    Ex: Mount Mountain (16m, 2 leaks a 109deg mais dist 7000). Rien a faire.
+  - ratio >2 -> fragilite REPARABLE (poses sources fragiles). Ex: Sebring (ratio 3.6).
+    Action: reancrer les cams sources.
+
+RESULTAT — l'insight central: RMS != incertitude. Des LM a residu ~0' ont
+±100m+ d'incertitude (Wildfire Scooters: res 0', r_pose 150m). Le RMS mesure si
+les rayons se croisent; le MC mesure si la position tient quand les poses bougent.
+
+CONVERGENCE avec Chantier B: les 3 cycles purs ressortent spontanement en tete du
+classement d'incertitude, sans lien code entre les deux outils:
+  - Ambrosia -> billboards (Large Billboard, Diversity Motif), ratio 17-24.
+  - Port Gellhorn -> Juice Fruit Sign x4 (ratio 60-65), Radio Tower #1 (97).
+  - Chase2 -> Wildfire Scooters (ratio 330-660).
+  Deux methodes independantes (graphe Tarjan vs propagation MC) pointent les memes
+  zones = forte validation croisee.
+
+Validation sweep A: Wheelabrator (124m, ratio 3.5) et MIA North (81m, ratio 3.3)
+confirmes sous-contraints et REPARABLES -> coherent avec la prudence de la session B.
+
+Facteur dominant de fragilite: nsrc=2. Quasi tout le top a 2 sources (incertitude
+portee par la seule parallaxe). Regle de priorisation collecte: tout LM 2-sources
+non-leak a ratio>2 = candidat a une 3e source / reancrage.
+
+C2 (exposer dans le viewer) et C3 (remplacer les poids tier discrets du
+bundle_adjust par la covariance) = sessions futures. sigma_pose sont des hypotheses
+a calibrer (le CLASSEMENT relatif est robuste; les metres absolus dependent des sigma).
+
+---
+
 ## Roadmap niveau supérieur (planifiée 2026-06-XX)
 
 Objectif global : faire passer gtamaplib de "débogage expert au coup par coup"
