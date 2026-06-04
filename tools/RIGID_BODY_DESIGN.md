@@ -1,6 +1,6 @@
 # Rigid Body Solver Integration — Design Doc (Niveau 2)
 
-**Status**: Design phase, pre-implementation.
+**Status**: IMPLEMENTE (2026-06). Meshs FourSeasons, Portofino, WDNA, Sunshine Skyway en place. Ce doc reste comme reference de design.
 **Author**: Alexandre + Claude, 2026-05-15 afternoon
 **Context**: After Niveau 1 (xyz override from FourSeasons model) dropped RMS
 from 2.97 to 1.94 arcmin (-35%), we want to make the solver

@@ -9,6 +9,43 @@ system. For the architecture overview see `CLAUDE_CONTEXT.md` and
 
 ---
 
+## Outils d'audit READ-ONLY (tools/audit/) — sante du reseau
+
+Ces outils ne modifient RIEN. A lancer periodiquement (surtout apres un gros
+batch de retriangulation/recalibration) pour verifier la sante globale, pas
+juste un LM a la fois.
+
+### `retriangulation_candidates.py` (Chantier A)
+Scanne tous les LM, rejoue la selection de sources + triangulation, classe par
+GAIN potentiel (parallaxe >=15deg, delta >=2m, >=2 sources post-dedup).
+→ Quand: pour savoir QUELS LM beneficieraient d'une retriangulation avant de se
+  lancer. Sortie taggee CAND / NEAR / NOBASE / SKIP.
+
+### `circular_deps.py` (Chantier B)
+Construit le graphe de dependance cam->cam (B-strict) + Tarjan SCC. Detecte les
+CYCLES: groupes de cams qui se valident mutuellement sans ancrage leak (PUR =
+suspect auto-referentiel, SAIN = ancre par une leak dans la boucle).
+→ Quand: apres avoir ajoute/recalibre des cams, pour s'assurer qu'on n'a pas
+  cree de zone auto-referentielle. `--dump-graph` pour le graphe complet.
+→ Connu (2026-06): 3 cycles purs = Ambrosia, Port Gellhorn, Chase2.
+
+### `lm_uncertainty.py` (Chantier C1)
+Incertitude 3D par LM via Monte-Carlo (perturbe pixels + poses, retriangule N
+fois, covariance du nuage). Sortie: r_pose (incertitude totale), r_pix (bruit
+pixel seul), ratio = r_pose/r_pix.
+→ Lecture: ratio ~1 = fragilite PHYSIQUE (point lointain, irreparable);
+  ratio >2 = fragilite REPARABLE (poses sources fragiles -> reancrer).
+→ Insight cle: le RMS ne mesure PAS l'incertitude. Un LM peut avoir un residu
+  parfait et etre incertain de 100m+. Cet outil voit ce que le RMS cache.
+→ Quand: pour prioriser quels LM/cams ont besoin d'une 3e source ou d'un reancrage.
+  ~3min pour 382 LM a N=200.
+
+### `audit_leak_influence_tree.py`
+Arbre d'influence descendante depuis chaque leak cam (quelle leak influence le
+plus de LM/cams en aval). → Quand: pour prioriser quelle leak calibrer en premier.
+
+---
+
 ## TL;DR — the loop
 
 ```
