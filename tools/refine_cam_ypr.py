@@ -68,11 +68,10 @@ from leak_cam_audit import (
     is_triangulation_trusted,
     get_locked_dof,
     class_b_roll_prior_sigma,
+    ROLL_PRIOR_WEIGHT,
     DOF_XYZ, DOF_YPR, DOF_FOV,
 )
 
-
-ROLL_PRIOR_WEIGHT = 50.0  # arcmin-scale weight for the soft roll prior (calibrated)
 
 def load_all():
     with open(CAMERAS_JSON) as f:

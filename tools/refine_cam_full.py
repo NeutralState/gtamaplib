@@ -77,6 +77,8 @@ import gtamaplib as ml
 # V2: per-class constraint awareness via the audit helper.
 from leak_cam_audit import (
     get_class,
+    class_b_roll_prior_sigma,
+    ROLL_PRIOR_WEIGHT,
     is_excluded,
     is_triangulation_trusted,
     get_locked_dof,
@@ -248,7 +250,7 @@ def compute_residuals(cam_name, params, cameras, pixels, landmarks, selected_lms
 
 
 def optimize_full(cam_name, initial_params, cameras, pixels, landmarks, selected_lms, lm_tiers,
-                  fix_xy=None, z_bounds=None):
+                  fix_xy=None, z_bounds=None, roll_prior_sigma_deg=None):
     """Optimize 7 params to minimize weighted RMS pixel residuals.
     
     fix_xy: tuple (x, y) — if provided, x and y are frozen at these values
@@ -286,6 +288,10 @@ def optimize_full(cam_name, initial_params, cameras, pixels, landmarks, selected
                 penalty += (z_bounds[0] - z) ** 2 * 1000
             elif z > z_bounds[1]:
                 penalty += (z - z_bounds[1]) ** 2 * 1000
+        # Soft roll prior (same scale as refine_cam_ypr): keep roll near 0
+        # unless a strong physical signal justifies it.
+        if roll_prior_sigma_deg is not None and roll_prior_sigma_deg > 0:
+            penalty += ROLL_PRIOR_WEIGHT * (params[5] / roll_prior_sigma_deg) ** 2
         rms, _, _, _ = compute_residuals(cam_name, params, cameras, pixels, landmarks, selected_lms, lm_tiers)
         return rms + penalty
 
@@ -475,7 +481,10 @@ def main():
     # Optimize
     new_params, final_rms, final_max, final_per_lm, final_per_weight = optimize_full(
         args.cam_name, init_params, cameras, pixels, landmarks, selected, lm_tiers,
-        fix_xy=fix_xy, z_bounds=z_bounds)
+        fix_xy=fix_xy, z_bounds=z_bounds,
+        roll_prior_sigma_deg=(class_b_roll_prior_sigma() * 1.5
+                              if cls == 'D_no_ground_truth'
+                              else class_b_roll_prior_sigma()))
     if new_params is None:
         print(f"ERROR: optimization failed (scipy not installed?)")
         return 1

@@ -75,11 +75,15 @@ LOCKED_DOF_BY_CLASS = {
     "_legacy_date":          frozenset({DOF_XYZ, DOF_YPR, DOF_FOV}),
 }
 
-# Soft-prior config for class B. Used as `loss += (roll / SIGMA) ** 2`
-# inside the optimization, so SIGMA is in degrees.
-# Roll of 10 deg costs (10/SIGMA)**2 = 25 at SIGMA=2, i.e. roughly comparable
-# to a 5 arcmin RMS contribution per LM. Tunable.
+# Soft roll prior config. Used as `loss += ROLL_PRIOR_WEIGHT * (roll/SIGMA)**2`.
+# SIGMA in degrees. WEIGHT puts the prior on the arcmin scale of the RMS loss:
+# without it the bare (roll/sigma)**2 term (~1e-3) is ~3500x too small to bite.
+# Calibrated W=50 on Diner (N): curbs free micro-roll (~0.07deg pure noise),
+# while a real multi-deg roll (deep residual minimum off zero) still overrides.
+# Applies to classes B (ped anchors roll), C (xyz/fov ground-truth) and, wider,
+# D (nothing locked). Class A roll is HUD truth and stays frozen.
 CLASS_B_ROLL_PRIOR_SIGMA_DEG = 2.0
+ROLL_PRIOR_WEIGHT = 50.0
 
 # A class is "anchor-equivalent for triangulation" if its xyz is locked.
 # Used by compute_confidence_tiers to know which cams contribute trusted rays.
