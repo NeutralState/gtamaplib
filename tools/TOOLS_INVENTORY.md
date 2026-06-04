@@ -33,7 +33,7 @@ python3 tools/outliers_report.py
 
 ## CLI Scripts (tools/*.py)
 
-Total: 21 scripts
+Total: 37 scripts
 
 ### `batch_optimize.py`
 Batch-optimize multiple cams via the running server API.
@@ -47,11 +47,27 @@ python3 tools/batch_optimize.py --tier unverified           # dry-run all unveri
     python3 tools/batch_optimize.py --apply --polish            # batch optimize + bundle_adjust
 ```
 
+### `build_cam_health.py`
+Generate tools/cam_health.html from live data.
+
 ### `bundle_adjust.py`
 Two-pass bundle adjustment.
 
 ### `bundle_adjust_apply.py`
 Apply bundle adjustment results to cameras.json and landmarks.json
+
+### `bundle_adjust_weighted.py`
+Phase C of the T3 intake pipeline.
+
+### `calibrate_batch.py`
+Interactive batch calibration following the topological
+
+**Usage:**
+```
+python3 tools/calibrate_batch.py
+    python3 tools/calibrate_batch.py --start-from "Vice Beach (B)"
+    python3 tools/calibrate_batch.py --auto   # accept all without prompting (DANGEROUS)
+```
 
 ### `calibrate_cam.py`
 Narrative calibration assistant for a single camera.
@@ -82,8 +98,43 @@ python3 tools/calibration_order.py --tier unverified
     python3 tools/calibration_order.py --tier unverified,low
 ```
 
+### `calibration_plan.py`
+Analyze cams not currently in the dependency tree
+
+**Usage:**
+```
+python3 tools/calibration_plan.py                       # analyze all
+    python3 tools/calibration_plan.py --cam "Amphitheater"  # single cam
+    python3 tools/calibration_plan.py --zone vice_city      # filter by zone
+    python3 tools/calibration_plan.py --include-leak        # also include leak cams
+```
+
 ### `compute_confidence_tiers.py`
 Classify every cam and landmark into a confidence tier.
+
+### `compute_venetian_xyz.py`
+Calcule les xyz des LMs 1000 Venetian Way qui sont
+
+**Usage:**
+```
+python3 tools/compute_venetian_xyz.py            # dry-run, print propositions
+    python3 tools/compute_venetian_xyz.py --apply    # write to landmarks.json
+```
+
+### `densify_portofino_edges.py`
+densify_portofino_edges.py
+
+### `discover_mesh_candidates.py`
+Find LM prefixes that could become procedural
+
+### `extract_mesh_edges.py`
+Extract wireframe edges from gtamaplib's procedural Landmark classes
+
+### `fix_audit_orientations.py`
+Reconcile leak_cam_audit.json with cameras.json
+
+### `gen_missing_thumbs.py`
+Generate thumbnails for any calibrated cam that has
 
 ### `gen_portofino_lms.py`
 Generate Portofino Tower LMs derived from 3 anchor LMs (NW, NE, S).
@@ -123,6 +174,12 @@ python3 tools/intake_camera.py "Some Cam Name"                  # ypr + hfov
        update the tier JSON, then bundle_adjust as usual.
 ```
 
+### `leak_cam_audit.py`
+Single source of truth for constraint-class semantics.
+
+### `migrate_constraint_classes.py`
+Migration step from V1 (no class info in
+
 ### `outliers_report.py`
 Generate an HTML review report from bundle_adjust_result.json
 
@@ -154,6 +211,9 @@ python3 tools/port_rlx_one_cam.py "Yacht (2)"             # dry run
     python3 tools/port_rlx_one_cam.py "Yacht (2)" --apply     # writes changes
 ```
 
+### `portofino_v5.py`
+Portofino V5 refactor - adds:
+
 ### `prerender_minimaps_fast.py`
 bulk pre-render all missing minimaps.
 
@@ -162,23 +222,54 @@ bulk pre-render all missing minimaps.
 python3 tools/prerender_minimaps_fast.py
 ```
 
+### `refine_cam_full.py`
+Refine xyz+ypr+fov of a single non-leak camera using
+
+**Usage:**
+```
+python3 tools/refine_cam_full.py "Vice Beach (B)"
+    python3 tools/refine_cam_full.py "Vice Beach (B)" --apply
+    python3 tools/refine_cam_full.py "Vice Beach (B)" --force-apply
+```
+
+### `refine_cam_ypr.py`
+Refine the ypr of a single leak camera using
+
+**Usage:**
+```
+python3 tools/refine_cam_ypr.py "Tennis Court (SE)"           # dry-run
+    python3 tools/refine_cam_ypr.py "Tennis Court (SE)" --apply   # write
+```
+
 ### `regen_index_camdata.py`
 Regenerate the `const camData = {...}` block in
 
 ### `render_loss.py`
 [RENDER-LOSS-V1] Render a local XY loss landscape for one camera.
 
+### `triangulate_lm.py`
+Triangulate a single landmark using priority-based source selection.
+
+**Usage:**
+```
+python3 tools/triangulate_lm.py "1000 Venetian Way (SW)"           # dry-run
+    python3 tools/triangulate_lm.py "1000 Venetian Way (SW)" --apply   # write
+```
+
 ---
 
 ## Server Endpoints (tools/server.py)
 
-Total: 22 endpoints
+Total: 26 endpoints
 
 | Endpoint | Note |
 |---|---|
 | `/api/map_data` | Single dump used by the SVG map view at load time. After this, |
+| `/api/building_meshes_procedural` |  |
+| `/api/building_meshes` | Reads gtamapdata/building_meshes.json and expands edges from |
 | `/api/cameras` |  |
 | `/api/lm_info` | Returns source cameras + all observers for a landmark. |
+| `/api/dependency_graph` | Auto-generated camera dependency graph. |
 | `/api/cam_health` | Per-cam health metrics. Reuses compute_projections to get |
 | `/api/project` |  |
 | `/api/verticals` | return their pixel coords. Frontend overlays these as yellow |
@@ -189,6 +280,7 @@ Total: 22 endpoints
 | `/api/update_landmarks` | Safety: refuse if cam loss is too high. A high-loss cam in a bad |
 | `/api/suspicious` | Find outlier pixels by consensus across cams |
 | `/api/set_pixel` | Update pixels.json |
+| `/api/set_class` |  |
 | `/api/heatmap_data` | Return all landmarks with xyz, error, zone for heatmap |
 | `/api/all_landmarks` | Return all landmark names that have xyz |
 | `/api/add_pixel` | Create new landmark entry if needed |
