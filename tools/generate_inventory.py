@@ -88,6 +88,22 @@ for f in sorted(os.listdir(TOOLS)):
         'docstring': doc,
     })
 
+# Scan tools/audit/*.py (READ-ONLY diagnostic tools)
+print('Scanning tools/audit/*.py...')
+audit_scripts = []
+AUDIT = os.path.join(TOOLS, 'audit')
+if os.path.isdir(AUDIT):
+    for f in sorted(os.listdir(AUDIT)):
+        if not f.endswith('.py'): continue
+        path = os.path.join(AUDIT, f)
+        doc = extract_docstring(path)
+        audit_scripts.append({
+            'name': f,
+            'summary': summary_line(doc),
+            'usage': extract_usage(doc),
+            'docstring': doc,
+        })
+
 # ── Scan tools/server.py for endpoints ─────────────────────────────
 print('Scanning server.py endpoints...')
 endpoints = []
@@ -251,6 +267,17 @@ for s in cli_scripts:
 md.append('---\n\n')
 
 # ── Server endpoints ───────────────────────────────────────────────
+md.append('## Audit Tools (tools/audit/*.py) — READ-ONLY\n\n')
+md.append('Diagnostic tools that NEVER modify data. Run periodically to check network health.\n\n')
+md.append(f'Total: {len(audit_scripts)} audit scripts\n\n')
+for sc in audit_scripts:
+    md.append(f"### `audit/{sc['name']}`\n")
+    if sc['summary']:
+        md.append(f"{sc['summary']}\n")
+    if sc.get('usage'):
+        md.append('\n**Usage:**\n```\n' + sc['usage'] + '\n```\n')
+    md.append('\n')
+
 md.append('## Server Endpoints (tools/server.py)\n\n')
 md.append(f'Total: {len(endpoints)} endpoints\n\n')
 md.append('| Endpoint | Note |\n|---|---|\n')

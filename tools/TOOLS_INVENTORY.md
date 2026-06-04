@@ -258,6 +258,108 @@ python3 tools/triangulate_lm.py "1000 Venetian Way (SW)"           # dry-run
 
 ---
 
+## Audit Tools (tools/audit/*.py) — READ-ONLY
+
+Diagnostic tools that NEVER modify data. Run periodically to check network health.
+
+Total: 18 audit scripts
+
+### `audit/audit_all_leak_opportunities.py`
+For each non-LEAK cam with zero all_leak LMs
+
+### `audit/audit_fixed_landmarks_quality.py`
+For each FIXED landmark, evaluate the
+
+**Usage:**
+```
+python3 tools/audit_fixed_landmarks_quality.py
+```
+
+### `audit/audit_leak_consistency.py`
+Audit observations between LEAK cameras and
+
+### `audit/audit_leak_influence_tree.py`
+Compute the transitive influence of each LEAK
+
+### `audit/audit_leak_marker_quality.py`
+Audit reprojection errors for all markings
+
+### `audit/audit_leak_priority_ranking.py`
+Cross-reference LEAK cam influence with
+
+### `audit/check_camera_consistency.py`
+For each camera, count how often it produces
+
+### `audit/check_landmark_consistency.py`
+Detect landmarks where different cameras seem
+
+### `audit/circular_deps.py`
+READ-ONLY (Chantier B, etapes B1+B2).
+
+**Usage:**
+```
+python3 tools/audit/circular_deps.py
+    python3 tools/audit/circular_deps.py --dump-graph
+    python3 tools/audit/circular_deps.py --min-scc 2
+```
+
+### `audit/compare_rlx_vs_current.py`
+Compare camera positions between rlx (Initial commit)
+
+**Usage:**
+```
+python3 compare_rlx_vs_current.py /tmp/cameras_rlx.json gtamapdata/cameras.json
+```
+
+### `audit/diagnose_camera.py`
+Show every observation made by a given camera, ranked by
+
+**Usage:**
+```
+python3 tools/diagnose_camera.py "Ambrosia 04 (Fires)"
+    python3 tools/diagnose_camera.py "Diner (W) (B)"
+```
+
+### `audit/find_outlier_pixels.py`
+List pixels with angular err > threshold that have
+
+### `audit/find_z_candidates.py`
+Scan landmarks.json pour proposer des candidats à
+
+### `audit/investigate_landmark.py`
+For a given landmark, show where each camera's
+
+**Usage:**
+```
+python3 tools/investigate_landmark.py "Easy Hill"
+    python3 tools/investigate_landmark.py "Easy Inn Sign"
+```
+
+### `audit/list_extra_observers.py`
+Trouve les landmarks qui ont des observers (cams
+
+### `audit/lm_uncertainty.py`
+READ-ONLY (Chantier C1).
+
+**Usage:**
+```
+python3 tools/audit/lm_uncertainty.py --n 200 --top 60 --dump
+  python3 tools/audit/lm_uncertainty.py --only "Sebring"
+  python3 tools/audit/lm_uncertainty.py --no-pose   (bruit pixel seul)
+```
+
+### `audit/retriangulation_candidates.py`
+READ-ONLY audit (Chantier A, etape A1).
+
+### `audit/trace_ray_on_map.py`
+Draw a ray on the map from a camera through a marked
+
+**Usage:**
+```
+python3 tools/trace_ray_on_map.py "Airport (X)" "Bank of America Financial Center"
+    python3 tools/trace_ray_on_map.py "Diner (SE) (A)" "Easy Inn Sign" --map yanis
+```
+
 ## Server Endpoints (tools/server.py)
 
 Total: 26 endpoints
