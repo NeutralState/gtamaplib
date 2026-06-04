@@ -1788,7 +1788,7 @@
     "error_m": 0.17,
     "zone": "port_gellhorn"
   },
-  "Red Bird Caf\u00e9 (NW)": {
+  "Red Bird Café (NW)": {
     "xyz": [
       -6470.1,
       3166.712,
@@ -2802,13 +2802,17 @@
     "zone": "port_gellhorn"
   },
   "Sunshine Skyway Bridge (S)": {
-    "xyz": null,
+    "xyz": [
+      -6690.837,
+      4348.569,
+      119.352
+    ],
     "source_cameras": [
       "Chase (2) (A)"
     ],
     "error_m": null,
     "zone": "port_gellhorn",
-    "notes": "[SUNSHINE-SKYWAY-RIGID-V1] xyz from SunshineSkywayBridge rigid model (was drift 34.37m)"
+    "notes": "[SUNSHINE-SKYWAY-RIGID-V2] xyz=st south-pylon-top z=119.352 from SunshineSkywayBridge rigid model; identical to rlx 73bbf43. Far LM (~2.5km from 04), residual at resolution limit."
   },
   "Ambrosia Main St (A)": {
     "xyz": [
@@ -7484,7 +7488,7 @@
     "error_m": null,
     "zone": "port_gellhorn"
   },
-  "Tr\u00e9sor Tower": {
+  "Trésor Tower": {
     "xyz": [
       1851.7842840721546,
       1942.3850250280702,
@@ -9423,7 +9427,7 @@
       "Metro (SE) (A) (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 40th floor NW corner",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 40th floor NW corner",
     "error_m": null,
     "zone": "unknown"
   },
@@ -9438,7 +9442,7 @@
       "Grassrivers 02 (Watson Bay)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 40th floor W corner",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 40th floor W corner",
     "error_m": 2.71,
     "zone": "unknown"
   },
@@ -9452,7 +9456,7 @@
       "Tennis Stadium (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 40th floor E corner",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 40th floor E corner",
     "error_m": null,
     "zone": "unknown"
   },
@@ -9466,7 +9470,7 @@
       "Tennis Stadium (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 32nd floor NE corner",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 32nd floor NE corner",
     "error_m": null,
     "zone": "unknown"
   },
@@ -9480,7 +9484,7 @@
       "Tennis Stadium (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 56th floor NE (rooftop)",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 56th floor NE (rooftop)",
     "error_m": null,
     "zone": "unknown"
   },
@@ -9494,7 +9498,7 @@
       "Tennis Stadium (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 28 SE",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — handlebar 28 SE",
     "error_m": null,
     "zone": "unknown"
   },
@@ -9508,7 +9512,7 @@
       "Tennis Stadium (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 8 SE",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — handlebar 8 SE",
     "error_m": null,
     "zone": "unknown"
   },
@@ -9522,7 +9526,7 @@
       "Tennis Stadium (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 58 SE",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — handlebar 58 SE",
     "error_m": null,
     "zone": "unknown"
   },
@@ -9536,7 +9540,7 @@
       "Tennis Stadium (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 58 NE",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — handlebar 58 NE",
     "error_m": null,
     "zone": "unknown"
   },
