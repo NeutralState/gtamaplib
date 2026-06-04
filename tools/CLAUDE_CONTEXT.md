@@ -1,4 +1,38 @@
 <!-- INDEX_DE_RETOUR_v1 -->
+
+## Session 2026-06-04 (PM) — Politique roll + Dominion + Portofino NE
+
+**Doctrine roll (NOUVEAU, calibre):** le prior roll `(roll/sigma)**2` etait inoperant
+partout (echelle ~3500x trop petite, cosmetique meme pour classe B). Corrige via
+`ROLL_PRIOR_WEIGHT=50` (central dans leak_cam_audit.py, a cote de CLASS_B_ROLL_PRIOR_SIGMA_DEG).
+Calibre sur Diner (N) + valide par test de convergence (un vrai roll multi-deg passe,
+le bruit ~0.07deg est ecrase). Applique sur les 3 outils:
+- refine_cam_ypr: classes B/C (sigma 2), D (sigma 3)
+- refine_cam_full: D/Cm/libre (sigma 3 si D, 2 sinon), dans le `penalty`
+- bundle_adjust_weighted: composante roll du ypr-hinge remplacee par prior vers 0
+  (seules les cams D/non-leak y passent; A/B/C/Cm ont xyz->roll fige)
+
+**Dominion Hotel recalibre** (classe None): roll parasite -2.77deg ecrasait Portofino
+NE a 45'. refine_cam_full --apply: roll->-0.05, RMS 9.56->3.06', Portofino NE 45->7.4'.
+Marking Portofino NW ajoute (0.91'). xyz a bouge de 8m (acceptable, pas d'anchor).
+
+**Portofino NE oriente** (mesh): peak box + pentagone NE etaient mal orientes vs NW/S.
+PortofinoTower.py: `PEAK_BOX_NE_OFFSET=-22.5`, `PENTAGON_NE_OFFSET=-5` (le +180 d'origine
+du pentagone enleve). Anchors NW/NE/S inchanges. Regle visuellement via wireframe.
+Les LM PB-/PT-NE dans landmarks.json sont du vieux bruit (AI World Editor), pas ground truth.
+
+**Repo cleanup (AM):** 63 .bak archives, solver/ retire (code mort), inventory regenere
+(scanne tools/audit/), patches ranges, doublons retires, index de retour ajoute.
+
+**TODO laisses en route:**
+- Portofino NE chez Dominion encore a 7.4' (incoherence NE/NW): re-verifier le marking NE
+  ou le xyz du mesh apres l'orientation corrigee
+- Marking stale `Waffles Ridge (C)` a 9.6' sur Diner (N) — fix independant du roll
+- Dominion Hotel: assigner une classe (actuellement None), n'a aucun LM anchor
+- Toujours en file: recalibration cluster Ambrosia (WDNA+Skyway, rouvre le roll — le
+  prior est pret), C2/C3, calibrer sigma_pose de lm_uncertainty
+
+
 # gtamaplib — Point d'entree (lis ca en premier)
 
 **Branche de travail: `feature-solver`** (c'est LA branche principale, pas une
