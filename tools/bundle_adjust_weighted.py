@@ -146,6 +146,9 @@ from leak_cam_audit import (
     is_triangulation_trusted,
     is_excluded,
     legacy_cam_names,
+    get_class,
+    class_b_roll_prior_sigma,
+    ROLL_PRIOR_WEIGHT,
 )
 
 LOCKED_XYZ_CAMS = {n for n in md.cameras if is_triangulation_trusted(n, cameras=md.cameras)}
@@ -219,6 +222,7 @@ for cam_name, lm_pixels in md.pixels.items():
         used_lms.add(lm_name)
 
 # Only optimize cams/lms that have observations AND are candidates
+_cam_cls = {n: get_class(n, cameras=md.cameras) for n in (used_cams & candidate_cams)}
 opt_cams = sorted(used_cams & candidate_cams)
 opt_lms = sorted(used_lms & candidate_lms)
 
@@ -363,12 +367,19 @@ def compute_residuals(p):
             for d in (xyz - init_xyz):
                 excess = max(0.0, abs(d) - xyz_budget)
                 res.append(excess * stiff)
-            # ypr hinge (per axis, deg)
-            for d in (ypr - init_ypr):
-                # angular wrap
-                dd = ((d + 180) % 360) - 180
-                excess = max(0.0, abs(dd) - ypr_budget)
-                res.append(excess * stiff)
+            # yaw/pitch hinge (toward init); roll uses a soft prior toward 0
+            # instead (game cams have ~0 roll; a hinge-to-init would freeze any
+            # inherited noise). Same residual count (3) -> sparsity unchanged.
+            # Residual sqrt(W)*roll/sigma -> W*(roll/sigma)^2 in the LS loss,
+            # same scale as refine_cam_ypr & refine_cam_full.
+            _rsig = class_b_roll_prior_sigma() * (1.5 if _cam_cls.get(n) == 'D_no_ground_truth' else 1.0)
+            for _axis, d in enumerate(ypr - init_ypr):
+                if _axis == 2:
+                    res.append(math.sqrt(ROLL_PRIOR_WEIGHT) * ypr[2] / _rsig)
+                else:
+                    dd = ((d + 180) % 360) - 180
+                    excess = max(0.0, abs(dd) - ypr_budget)
+                    res.append(excess * stiff)
             # hfov hinge
             excess = max(0.0, abs(hfov - init_hfov) - fov_budget)
             res.append(excess * stiff)
