@@ -1,3 +1,44 @@
+<!-- INDEX_DE_RETOUR_v1 -->
+# gtamaplib — Point d'entree (lis ca en premier)
+
+**Branche de travail: `feature-solver`** (c'est LA branche principale, pas une
+experimentale — l'ancien solver/ from-scratch a ete abandonne et retire).
+
+**Regle d'or:** l'UI (calib.html, port 8765) sert UNIQUEMENT a marquer des
+pixels. Tout le solving = terminal. Ne jamais cliquer Optimize/Update LMs dans l'UI.
+
+**Workflow (Claude ecrit les commandes, Alexandre les lance):** scripts Python
+one-shot, dry-run par defaut + `--apply`, backups `.bak_<raison>`, heredoc
+`<<'PY'` sans `#` inline (zsh bracketed-paste). Outils d'audit READ-ONLY dans
+`tools/audit/`. La lib vendored `gtamaplib.py`/`vendor/` ne se touche jamais.
+
+**Quand je reviens et je sais plus quoi faire — ou je lis:**
+| Besoin | Fichier |
+|---|---|
+| Etat courant + journal des sessions | ce fichier (sections datees ci-dessous) |
+| Liste de tous les outils/scripts | `tools/TOOLS_INVENTORY.md` |
+| Classes de cams (A/B/C/Cm/D/X) | `tools/V2_CONSTRAINT_CLASSES.md` |
+| Procedure apres nouveaux markings | `tools/RECALIBRATION_WORKFLOW.md` |
+| Design des meshs (Portofino/WDNA...) | `tools/RIGID_BODY_DESIGN.md` |
+
+**Outils d'audit (READ-ONLY, tous dans tools/audit/):**
+- `retriangulation_candidates.py` — classe les LM par gain de retriangulation (Chantier A)
+- `circular_deps.py` — detecte les cycles de dependance cam->cam, Tarjan (Chantier B)
+- `lm_uncertainty.py` — incertitude 3D par LM via Monte-Carlo, r_pose/r_pix/ratio (Chantier C1)
+- `audit_leak_influence_tree.py` — arbre d'influence descendante depuis les leaks
+
+**Doctrine cle:** leak cam = source de verite (xyz/fov HUD-locked); le juge d'une
+triangulation = PARALLAXE + DELTA, jamais le RMS seul; le roll (ypr[2]) est
+hardcode a 0 dans tout le pipeline (dette connue, refactor a venir).
+
+**TODO prioritaires (voir details dans les sections ci-dessous):**
+- Recalibration cluster Ambrosia sur ancres externes (WDNA/Skyway), rouvre le roll
+- Chantier C2 (viewer) / C3 (covariance dans bundle_adjust)
+- Calibrer les sigma_pose de lm_uncertainty
+- Petits restes: 4 LM quarantaine sweep A, Port Gellhorn Postcard sans source, Sunshine Skyway (S) a benner
+
+---
+
 # CLAUDE_CONTEXT.md
 
 > **À lire en début de chaque session avec Claude.** Colle ce fichier (ou ses
