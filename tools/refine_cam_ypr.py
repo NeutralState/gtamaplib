@@ -72,6 +72,8 @@ from leak_cam_audit import (
 )
 
 
+ROLL_PRIOR_WEIGHT = 50.0  # arcmin-scale weight for the soft roll prior (calibrated)
+
 def load_all():
     with open(CAMERAS_JSON) as f:
         cameras = json.load(f)
@@ -266,7 +268,12 @@ def optimize_ypr(cam_name, initial_ypr, cameras, pixels, landmarks, selected_lms
                                          landmarks, selected_lms, lm_tiers)
         if roll_prior_sigma_deg is not None and roll_prior_sigma_deg > 0:
             roll = ypr[2]
-            rms += (roll / roll_prior_sigma_deg) ** 2
+            # Scale to arcmin: rms is a weighted arcmin RMS (~order 1-10), so a
+            # bare (roll/sigma)^2 term (~1e-3) never bites. ROLL_PRIOR_WEIGHT puts
+            # the prior on the arcmin scale. Calibrated W=50 on Diner (N): curbs
+            # free micro-roll (~0.07deg of pure noise) while a real multi-deg roll
+            # (deep residual minimum off zero) still overrides it.
+            rms += ROLL_PRIOR_WEIGHT * (roll / roll_prior_sigma_deg) ** 2
         return rms
 
     result = minimize(loss_fn, initial_ypr, method='Nelder-Mead',
@@ -383,12 +390,19 @@ def main():
     print(f"  Max: {init_max:.2f} arcmin")
     print()
 
-    # V2: Class B (P+C+Fov + upright player ped) gets a soft prior keeping
-    # roll near 0 — the player vertical pose anchors it. Class C runs free.
+    # V2: soft roll prior keeping roll near 0. A game camera's roll is almost
+    # always ~0; only a strong physical signal (a vertical landmark) should move
+    # it. Without a prior the solver invents micro-roll (~0.05deg) to absorb
+    # stale markings. Applied to B (ped anchors roll), C (xyz/fov ground-truth),
+    # and D (nothing locked -> wider sigma). Class A roll is HUD truth, frozen.
+    base_sigma = class_b_roll_prior_sigma()
     roll_prior_sigma = None
-    if cls == 'B_pos_fov_player':
-        roll_prior_sigma = class_b_roll_prior_sigma()
-        print(f"Class B: applying soft roll prior, sigma = {roll_prior_sigma}°")
+    if cls in ('B_pos_fov_player', 'C_pos_fov_only'):
+        roll_prior_sigma = base_sigma
+        print(f"Class {cls[0]}: soft roll prior, sigma = {roll_prior_sigma}°")
+    elif cls == 'D_no_ground_truth':
+        roll_prior_sigma = base_sigma * 1.5
+        print(f"Class D: soft roll prior (wider), sigma = {roll_prior_sigma}°")
 
     # Optimize (weighted)
     new_ypr, final_rms, final_max, final_per_lm, final_per_weight = optimize_ypr(
