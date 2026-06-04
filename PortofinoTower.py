@@ -28,8 +28,8 @@ class PortofinoTower:
     SIDE_SIDE  = 9.7          # shoulder full width
     SIDE_INNER = 9.0          # base width against the cylinder
     WING_ROT = -45.0
-    PEAK_BOX_NE_OFFSET = 0.0   # NE peak box rotation offset (deg), tune via UI wireframe
-    PENTAGON_NE_OFFSET = 180.0 # NE pentagon rotation offset (deg); 180 = current behaviour
+    PEAK_BOX_NE_OFFSET = -22.5   # NE peak box rotation offset (deg), tune via UI wireframe
+    PENTAGON_NE_OFFSET = -5.0 # NE pentagon rotation offset (deg); 180 = current behaviour
     PEAK_BOX_SIDE   = 8.6     # inner (green) square side: 116px*0.074
 
     def __init__(self, md, ml=None):
