@@ -27,7 +27,9 @@ class PortofinoTower:
     SIDE_FRONT = 6.0          # tip-to-shoulder radial depth (front faces)
     SIDE_SIDE  = 9.7          # shoulder full width
     SIDE_INNER = 9.0          # base width against the cylinder
-    WING_ROT = -45.0            # no wing rotation
+    WING_ROT = -45.0
+    PEAK_BOX_NE_OFFSET = 0.0   # NE peak box rotation offset (deg), tune via UI wireframe
+    PENTAGON_NE_OFFSET = 180.0 # NE pentagon rotation offset (deg); 180 = current behaviour
     PEAK_BOX_SIDE   = 8.6     # inner (green) square side: 116px*0.074
 
     def __init__(self, md, ml=None):
@@ -72,7 +74,7 @@ class PortofinoTower:
         radial = lm_xy - self.centroid_xy
         lm_dist = np.linalg.norm(radial)          # ~18m (cylinder rim)
         radial_unit = radial / lm_dist
-        _wr = self.WING_ROT + (180.0 if br_name == 'NE' else 0.0)
+        _wr = self.WING_ROT + (self.PENTAGON_NE_OFFSET if br_name == 'NE' else 0.0)
         _th = math.radians(_wr)
         _c, _sn = math.cos(_th), math.sin(_th)
         radial_unit = np.array([radial_unit[0]*_c - radial_unit[1]*_sn,
@@ -100,12 +102,15 @@ class PortofinoTower:
             'peak':   (peak_pos[0], peak_pos[1], z),
         }
 
-    def _peak_box(self, peak_xyz, z):
+    def _peak_box(self, peak_xyz, z, br_name=None):
         peak_xy = peak_xyz[:2]
         radial = peak_xy - self.centroid_xy
         radial_unit = radial / np.linalg.norm(radial)
-        # rotate box orientation 10 deg CCW
-        _th = math.radians(45.0)
+        # Box corner-facing: radial rotated 45deg. NE branch needs an extra
+        # offset (like _pentagon's +180) because its peak box was visibly
+        # mis-oriented vs NW/S. PEAK_BOX_NE_OFFSET tunes it (see UI wireframe).
+        _pb_rot = 45.0 + (self.PEAK_BOX_NE_OFFSET if br_name == 'NE' else 0.0)
+        _th = math.radians(_pb_rot)
         _c, _sn = math.cos(_th), math.sin(_th)
         radial_unit = np.array([radial_unit[0]*_c - radial_unit[1]*_sn,
                                 radial_unit[0]*_sn + radial_unit[1]*_c])
@@ -140,7 +145,7 @@ class PortofinoTower:
                 self.cyl[(code, c_name)] = xyz
         for code, z in self.PEAK_BOX_LEVELS:
             for br_name, peak in self.branch_peaks.items():
-                for c_name, xyz in self._peak_box(peak, z).items():
+                for c_name, xyz in self._peak_box(peak, z, br_name).items():
                     self.pbox[(code, br_name, c_name)] = xyz
 
     def render_on_camera(self, cam):
