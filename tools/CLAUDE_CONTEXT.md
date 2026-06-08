@@ -1369,3 +1369,103 @@ Livrable : incertitude réelle par LM, visible + utilisée par le BA.
 - Optionnel : assouplir l'outlier rule du robust triangulator pour autoriser
   la descente à 2 cams quand l'outlier est flagrant (actuellement >3 requis ;
   Alexandre penchait "conservative, leave as-is").
+
+
+## [SESSION-20260607-CHASE-CLUSTER] 2026-06-07 — Chase cluster, AI World Map doctrine, angular-precision limit
+
+### Chase (2) (A) — RESOLVED (was loss 20.7 "Suspicious" -> RMS 2.4px)
+Root cause was NOT pose: A's position/orientation were fine all along (moved 0.2m on recal).
+The 20.7 loss came from two FAR landmarks (Sunshine Skyway Bridge N at 1311m, S at 1084m)
+that A physically sees but cannot point precisely. A is a chase-frame cam from a floating
+cluster: its angular precision is ~0.8deg. That 0.8deg is invisible on close LMs (<600m, all
+at <5px) but explodes to 50-68px on the SSB at >1km. rlx had already excluded SSB(N) from A
+for this reason.
+Fix: removed SSB(N) marking from A; kept SSB(S) marking on A as observation but re-sourced its
+position to Chase (2) (B) and excluded both from A's pose fit. A then recals to RMS 2.4px on
+Juice Fruit x4 / Pylon(3) / Radio Tower #1 / Wildfire NW+S / Oval Yellow.
+
+### DOCTRINE: angular precision vs landmark distance
+A camera's finite angular precision sets a max usable landmark distance. Floating-cluster cams
+(~0.8deg) are reliable only on near/mid LMs; very distant LMs (>~1km) will show large pixel
+residuals that are NOT pose errors and NOT bad markings — they exceed what the cam can resolve.
+Mark them as observations if visible, but EXCLUDE them from the pose fit. Forcing them corrupts
+the pose (tug-of-war: distant LM wins -> near LMs break, or vice versa). No single pinhole pose
+satisfies both. This is the "Mercator" problem: model can fit center OR edge, not both.
+
+### DOCTRINE: AI World Editor Map (4K) pollutes 3D positions
+Top-down (Google-Maps style), class D. Good x/y, z=10 default. BUT its top-down click is
+imprecise (flat blurry aerial), so when it is a SOURCE for a landmark that also has good ground
+views, it PULLS the position and creates residuals. Example today: Wildfire Scooters (S) was
+perfect on AIW+B (0px) but 186px on A because AIW pulled it 5.3m off. Fix = retriangulate from
+ground views, or use a 3-view equal-weight optimum. Wildfire (S) repositioned to 3-view optimum
+[-6457.9, 3328.6, 9.0]: A 3.8px / B 7.6px / AIW 6.9px (was A 186px). Of 70 AIW-sourced LMs, 52
+are AIW-only and all at z=10 (ground points, fine); only ~2 high LMs were correctable.
+
+### Cluster bundle-adjustment solver — VALIDATED
+Built and validated a solver that optimizes Chase(2) A+B poses + shared-LM positions together,
+hard anchors (SSB N, Pylon 3) weighted 8x, prior roll, method trf. KEY LESSON: LMs with an
+EXTERNAL source (non-cluster cam) must stay FIXED, not free — e.g. Radio Tower #1 is anchored by
+U-Turn (NW) and is perfect there; letting it float made the solver drag it 69m to chase A. Only
+truly-orphan LMs (no external source) are free. B solved cleanly (RMS 4.5px); A could not be
+forced to satisfy SSB -> confirmed the angular-precision limit above. Solver is reusable; good
+candidate for a tools/cluster_solve.py.
+
+### Other this session
+- Amphitheater: repositioned to rlx pose [-350,-100,8] (map proof beat the distant-LM "validation").
+- Port Gellhorn Smokestack: z 49.9 -> 53.68 (ground cams Lucia+Jason, 0deg parallax so best-effort,
+  RMS 5.8px). rlx has 49.861 (same top-down bias); we diverge on geometric grounds.
+- NEXT (step 2): extract Chase scene frames from Trailer 2 (~2s) -> COLMAP SfM -> dense
+  reconstruction to anchor the floating Port Gellhorn / west region. Manual per-frame marking of
+  60 frames is NOT worth it; COLMAP (auto feature matching) is the right tool.
+
+### Session 2026-06-08 — Beach/Metro/Ambrosia fixes + retriangulation sweep
+
+RAPPEL CRITIQUE POUR PROCHAINES SESSIONS: commencer par lire ce fichier ET
+lancer `circular_deps.py` + `lm_uncertainty.py` AVANT de toucher une cam.
+Beaucoup de temps perdu cette session a re-decouvrir a la main des choses deja
+faites/documentees (cycles Ambrosia, RMS!=incertitude, ancres WDNA/Skyway).
+
+DATA ECRITE:
+- Metro (SE) (C): reclassee None->C_pos_fov_only, pose HUD [-1555.7,-308.5,20.8]
+  fov [None,49.6] (lue sur screenshot debug). RMS reste 23' = 3 LM mal positionnes
+  (Ritz Coconut Grove S, Infinity Brickell, Park Grove N), pas la pose. NB: le
+  "(C)" du nom != classe; Metro (SE) (B) est la vraie leak C voisine.
+- Beach: z corrige -1.9 (sous l'eau!) -> 1.0. Cam de PROJECTION-SOL (coastline
+  Beach A-F = intersection rayon-sol z=0, pas triangulation). z/pitch critiques
+  pour ces cams. rlx pose [2219,-407,1.692] donne 27px sur NOS batiments ->
+  referentiels divergents dans cette zone, garde la notre (4.5px).
+- Ambrosia 02 (Panorama): refine_cam_full applique, RMS ~8px -> 5.24'. Reste
+  US Sugar Mill R a 11.7'. PAS d'ancre WDNA marquee (manuel, pas fait).
+- Retriangulations (parallaxe ~146-167deg, robust_triangulate): MIA North
+  Terminal Tower (1.6'), Wheelabrator South Broward (2.7'), FAA Miami ATCT (3.2')
+  [les 3 via Ambrosia02 x Leonida Keys 01 - baseline externe], Di Lido Island N
+  (6'), Three Tequesta Point (6').
+- SKIP volontaire: W South Beach BNW (marking Rooftop Party 8' suspect, gain 2m),
+  Tresor Tower (marking Beach 9' suspect, gain 3m). Markings mous, gain marginal.
+
+DOCTRINE confirmee (rien de neuf, deja dans logs C1/B mais re-prouve):
+- Ambrosia = cycle PUR (circular_deps): 02/04/Postcard se calent entre eux. Les
+  Silos/Smokestacks vus seulement par 02xPostcard a 2.5deg parallaxe = NON
+  triangulables, plancher ~7px. Irreparables sans ancre. NE PAS s'acharner.
+- "Sourced by cam X" ne garantit PAS 0px: si 2e source faible-parallaxe OU si la
+  position est un compromis de rayons gauches. RMS != verite (cf C1).
+- Les 2 pieds externes d'Ambrosia existent (04->Skyway N deja marque,
+  02->WDNA pas encore marque). Vraie repair = marquer WDNA mat sur 02 (projette
+  ligne verticale x~565, z=5..404 deja positionnes via Prison), refine_full 02,
+  retrianguler. REGLE ANTI-BOUCLE: WDNA reste source Prison/Leonida JAMAIS Ambrosia.
+
+NOUVEAUX SCRIPTS (cette session, possiblement redondants avec l'existant):
+- tools/observability_report.py: carte stale/floating/under-anchored par zone.
+  RESULTAT: 73/90 soft cams voient <2 ancres dures. vice_city=42% hard (roc),
+  ambrosia=0% (floating), port_gellhorn=15%, leonida_keys=17%.
+- tools/global_solve.py: bundle adjustment global SHADOW par zone, Huber loss,
+  prior position (0.5) anti-teleportation. vice_city shadow: 15 IMPROVED 0 WORSE
+  (Vice City Sign 200->0, Basketball 27->2, Yacht 14->1, Vice City 08, etc.).
+  PAS ENCORE APPLIQUE EN ECRITURE. Note: recoupe audit_leak_influence_tree +
+  retriangulation_candidates existants - a rationaliser.
+
+PENDING (prochaine session):
+- APPLIQUER global_solve sur vice_city en ecriture (poses cams IMPROVED seulement,
+  blacklist Beach/Amphitheater/Vice Beach A, pas les landmarks). C'EST LE LIVRABLE.
+- Marquer WDNA sur Ambrosia 02 -> recalibrer cluster sur ancres externes.
+- Rationaliser observability_report/global_solve vs outils audit/ existants.

@@ -1735,7 +1735,7 @@
     "xyz": [
       -6351.527,
       3419.566,
-      49.861
+      53.68
     ],
     "source_cameras": [
       "Gas Station (Lucia)",
@@ -1744,7 +1744,8 @@
     ],
     "error_m": 2.545,
     "zone": "port_gellhorn",
-    "author": "rlx"
+    "author": "rlx",
+    "notes": "| z refined 49.9->53.7 from ground cams Lucia+Jason (xy from AI World Map top-down, z corrected; cams at 0deg parallax so z best-effort, RMS 5.8px)."
   },
   "Port of Tampa Container Crane (3)": {
     "xyz": [
@@ -1788,7 +1789,7 @@
     "error_m": 0.17,
     "zone": "port_gellhorn"
   },
-  "Red Bird Café (NW)": {
+  "Red Bird Caf\u00e9 (NW)": {
     "xyz": [
       -6470.1,
       3166.712,
@@ -2175,18 +2176,19 @@
   },
   "Wildfire Scooters (S)": {
     "xyz": [
-      -6458.852656485456,
-      3323.354742842763,
-      8.668091185261577
+      -6457.9,
+      3328.6,
+      9.0
     ],
     "source_cameras": [
       "AI World Editor Map (4K)",
       "Chase (2) (A)",
       "Chase (2) (B)"
     ],
-    "error_m": 1.322,
+    "error_m": 0.5,
     "zone": "port_gellhorn",
-    "author": "rlx"
+    "author": "rlx",
+    "notes": "| repositioned to 3-view optimum (Chase A+B+AI World Map equal weight): A 186px->3.8px, B 7.6px, AIW 6.9px. Old pos satisfied AIW+B perfectly but missed A by 186px (over-trusted AI World Map top-down xy)."
   },
   "Wildfire Scooters (SE)": {
     "xyz": [
@@ -2288,16 +2290,16 @@
   },
   "FAA Miami ATCT (MIA)": {
     "xyz": [
-      -2381.558967964305,
-      -778.4461081913873,
-      91.13515682775966
+      -2380.1091858000627,
+      -777.6715393333014,
+      93.2519367340478
     ],
     "source_cameras": [
       "Vice Beach (B)",
       "Leonida Keys 01 (Airplane) (X)",
       "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 4.825,
+    "error_m": 3.202,
     "zone": "vice_city"
   },
   "Homestead Water Tower": {
@@ -2808,11 +2810,11 @@
       119.352
     ],
     "source_cameras": [
-      "Chase (2) (A)"
+      "Chase (2) (B)"
     ],
     "error_m": null,
     "zone": "port_gellhorn",
-    "notes": "[SUNSHINE-SKYWAY-RIGID-V2] xyz=st south-pylon-top z=119.352 from SunshineSkywayBridge rigid model; identical to rlx 73bbf43. Far LM (~2.5km from 04), residual at resolution limit."
+    "notes": "[SUNSHINE-SKYWAY-RIGID-V2] xyz=st south-pylon-top z=119.352 from SunshineSkywayBridge rigid model; identical to rlx 73bbf43. Far LM (~2.5km from 04), residual at resolution limit. | source A->B: A is a chase frame, SSB at 1km exceeds A angular precision (~0.8deg). Marking kept on A as observation but excluded from A pose fit."
   },
   "Ambrosia Main St (A)": {
     "xyz": [
@@ -2930,15 +2932,15 @@
   },
   "MIA North Terminal Tower": {
     "xyz": [
-      -2393.9173729868735,
-      -585.5510676535656,
-      52.66637696735819
+      -2391.9970369858656,
+      -579.3772666837378,
+      56.55496978696573
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 3.491,
+    "error_m": 1.647,
     "zone": "vice_city"
   },
   "Water Tower near Prison": {
@@ -2956,15 +2958,15 @@
   },
   "Wheelabrator South Broward": {
     "xyz": [
-      -2406.0477274204986,
-      2335.5103348545595,
-      90.08024488219098
+      -2405.680122736156,
+      2337.1993876054903,
+      92.14171926317434
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 3.38,
+    "error_m": 2.682,
     "zone": "ambrosia"
   },
   "Wheelabrator South Broward (W)": {
@@ -5833,15 +5835,15 @@
   },
   "Di Lido Island (N)": {
     "xyz": [
-      470.36183338288805,
-      1502.536303804048,
-      0.0
+      470.6351995228056,
+      1502.714113711681,
+      5.104228522173279
     ],
     "source_cameras": [
       "Venetian Islands",
       "Vice City 03 (Basketball)"
     ],
-    "error_m": 5.907,
+    "error_m": 6.987,
     "zone": "vice_city",
     "z_constraint": {
       "type": "fixed",
@@ -7447,9 +7449,9 @@
   },
   "Three Tequesta Point": {
     "xyz": [
-      -3.6529345862829588,
-      -948.3029927009051,
-      207.89705996589845
+      -6.186213387621015,
+      -948.7455871304642,
+      207.78358453412793
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -7457,7 +7459,7 @@
       "Leonida Keys 01 (Airplane) (X)",
       "Vice City Postcard"
     ],
-    "error_m": 4.7,
+    "error_m": 6.006,
     "zone": "vice_city"
   },
   "Train Signal (S) (E)": {
@@ -7488,7 +7490,7 @@
     "error_m": null,
     "zone": "port_gellhorn"
   },
-  "Trésor Tower": {
+  "Tr\u00e9sor Tower": {
     "xyz": [
       1851.7842840721546,
       1942.3850250280702,
@@ -9427,7 +9429,7 @@
       "Metro (SE) (A) (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 40th floor NW corner",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 40th floor NW corner",
     "error_m": null,
     "zone": "unknown"
   },
@@ -9442,7 +9444,7 @@
       "Grassrivers 02 (Watson Bay)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 40th floor W corner",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 40th floor W corner",
     "error_m": 2.71,
     "zone": "unknown"
   },
@@ -9456,7 +9458,7 @@
       "Tennis Stadium (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 40th floor E corner",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 40th floor E corner",
     "error_m": null,
     "zone": "unknown"
   },
@@ -9470,7 +9472,7 @@
       "Tennis Stadium (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 32nd floor NE corner",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 32nd floor NE corner",
     "error_m": null,
     "zone": "unknown"
   },
@@ -9484,7 +9486,7 @@
       "Tennis Stadium (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 56th floor NE (rooftop)",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 56th floor NE (rooftop)",
     "error_m": null,
     "zone": "unknown"
   },
@@ -9498,7 +9500,7 @@
       "Tennis Stadium (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — handlebar 28 SE",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 28 SE",
     "error_m": null,
     "zone": "unknown"
   },
@@ -9512,7 +9514,7 @@
       "Tennis Stadium (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — handlebar 8 SE",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 8 SE",
     "error_m": null,
     "zone": "unknown"
   },
@@ -9526,7 +9528,7 @@
       "Tennis Stadium (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — handlebar 58 SE",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 58 SE",
     "error_m": null,
     "zone": "unknown"
   },
@@ -9540,7 +9542,7 @@
       "Tennis Stadium (4K)"
     ],
     "author": "rlx",
-    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — handlebar 58 NE",
+    "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 58 NE",
     "error_m": null,
     "zone": "unknown"
   },
@@ -11543,5 +11545,23 @@
       "Prison"
     ],
     "notes": "Ported from rlx upstream (WDNA tower structure, triangulated via Prison)."
+  },
+  "Red Billboard (Kelly County)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown"
+  },
+  "Prison Tower (Kelly County)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown"
+  },
+  "The Floridian (SW)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown"
   }
 }
