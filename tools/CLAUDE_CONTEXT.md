@@ -1469,3 +1469,26 @@ PENDING (prochaine session):
   blacklist Beach/Amphitheater/Vice Beach A, pas les landmarks). C'EST LE LIVRABLE.
 - Marquer WDNA sur Ambrosia 02 -> recalibrer cluster sur ancres externes.
 - Rationaliser observability_report/global_solve vs outils audit/ existants.
+
+### REFLEXE D'OUVERTURE DE SESSION (ajoute 2026-06-08)
+
+AVANT de toucher une cam, lancer ces 3 outils existants (ne PAS en recoder):
+  1. python3 tools/audit/circular_deps.py
+     -> cycles PURS (auto-ref, besoin ancre externe) vs SAINS. Ne pas recaler les PURS.
+  2. python3 tools/audit/audit_leak_influence_tree.py
+     -> ancrage TRANSITIF (multi-hop) au reseau dur. Une cam reliee (downstream
+        d'une leak) est calibrable; une cam a ZERO downstream est isolee.
+  3. python3 tools/audit/lm_uncertainty.py (ou lire tools/generated/lm_uncertainty.json)
+     -> incertitude par LM. ratio>2 = reparable (reancrer sources); ratio~1 = physique, irreparable.
+
+REGLE D'OR (apprise a la dure 2026-06-08): bouger une cam INVALIDE ses LM enfants,
+toujours. Une cam ne se recale que sur des ancres EXTERNES (pas ses propres LM
+engendres), et l'ancrage est TRANSITIF (via chaine de LM partages), pas seulement
+direct. Un detecteur "1-hop hard anchors" (calibratability.py, supprime) est FAUX:
+il declarait 0 calibrable alors que 51 cams le sont par propagation.
+
+NON-REPARABLES connues (ne pas s'acharner):
+  - Amphitheater: dans cycle Chase2/Portofino/Cranes, 2 ancres dures externes
+    contradictoires avec fov reel (14px plancher). Reste sur pose rlx.
+  - Ambrosia Silos/Smokestacks: parallaxe 02xPostcard ~2.5deg, non triangulables.
+    Besoin ancre WDNA marquee sur 02 (mat vertical, projette x~565).
