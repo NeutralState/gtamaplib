@@ -54,6 +54,46 @@
 
 <!-- INDEX_DE_RETOUR_v1 -->
 
+## Session 2026-06-10 (PM) — BA v2: z-pin + leak rays dominent (A/B valide au garde)
+
+**Patch livre: `tools/patch_ba_zpin_leakweight.py`** (idempotent, sentinels,
+backup .bak_zpin_leakweight) — 2 fixes a `bundle_adjust_weighted.py`:
+- **P1 z-pin:** les 131 LM a z_constraint fixed sont pinnes DANS l'optimiseur
+  (get_lm_xyz override le z). Avant: BA optimisait z libre, update_landmark
+  snappait a l'ecriture -> la geometrie optimisee n'etait jamais celle ecrite.
+- **P2 leak rays dominent:** obs des cams HUD-locked -> obs_w = anchor (15.0)
+  au lieu de min(cam_w, lm_w). La pose leak = ground truth; le min() laissait
+  une cam medium contester un rayon leak sur un LM partage (racine du massacre
+  Pool/Motel du matin). Huber pass 2 protege contre un marking leak stale.
+
+**A/B (depuis l'etat post-guarded du matin, tout passe au garde, disk-verified):**
+- CTRL (BA non patche, 2e passe): 46 deltas acceptes -> 5 improved / 0 worse.
+- V2 (BA patche): 73 acceptes -> **19 improved / 1 worse (+0.13' max)**.
+  Mediane 2.247'->1.985', moyenne 7.897'->7.359'. Max residual interne du BA
+  63px->31.6px. Gains: U-Turn (NW) 111->91', Basketball 23.8->13.2',
+  Port (B) 10.1->5.3', Police Chase (A) 2.6->0.3', Hotel (W) 3.5->1.2'.
+  Zero leak bougee, zero violation z ecrite.
+
+**DECOUVERTE — 6 violations z_constraint PREEXISTANTES sur disque** (un vieil
+outil a ecrit les JSON en bypassant update_landmark): Island J (E/W), G (E/W),
+V (S) a z=-2.0..-2.6 (sous l'eau!) et Di Lido Island (N) a z=+5.1, tous
+contraints a 0.0. Le BA patche a propose le snap honnete; le garde l'a REJETE
+car z=0 empire les observatrices (Key Lento +2.1', Venetian Islands +1.8').
+Le z=-2.5 systematique sur 5 iles de Key Lento = probable biais de referentiel
+zone Keys (cf divergence rlx 2026-05-31) OU constraints a retirer. DECISION
+MARKING A PRENDRE, pas algorithmique: soit recaler la zone, soit retirer ces
+6 z_constraints. En attendant, invariant "JSON xyz matche la constraint" est
+viole pour ces 6.
+
+**Doctrine:** un rejet du garde est un SIGNAL, pas juste une protection — si
+le fix geometriquement vrai (z=0) empire le RMS, c'est le reste de la zone
+qui est biaise.
+
+**TODO:**
+- Trancher les 6 violations z (recale zone Keys vs retrait des constraints)
+- Toujours en file: WDNA sur Ambrosia 02 (manuel), weighting C2/C3
+
+
 ## Session 2026-06-10 — Rerun global d'optimisation + GUARDED APPLY (nouveau process: Claude roule le repo dans son sandbox)
 
 **NOUVEAU PROCESS valide:** Claude (Fable 5) clone `NeutralState/gtamaplib` dans son
