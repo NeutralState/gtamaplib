@@ -1,3 +1,46 @@
+<!-- DEMARRAGE_NOUVEAU_CHAT_v1 -->
+# ===================================================================
+# DEMARRAGE NOUVEAU CHAT — LIS CE BLOC EN PREMIER
+# ===================================================================
+#
+# 1. CE FICHIER (CLAUDE_CONTEXT.md) = point d'entree. Lis-le en entier.
+#    Puis les 2 docs lies:
+#      - tools/TOOLS_INVENTORY.md      (tous les outils, auto-genere)
+#      - tools/RECALIBRATION_WORKFLOW.md (procedure + cycles + ancrage)
+#
+# 2. REFLEXE AVANT DE TOUCHER UNE CAM (lancer ces audits READ-ONLY):
+#      python3 tools/audit/circular_deps.py            (cycles PURS vs sains)
+#      python3 tools/audit/audit_leak_influence_tree.py (ancrage transitif)
+#      python3 tools/audit/lm_uncertainty.py           (incertitude par LM)
+#
+# 3. ORDRE DE CALIBRATION (definitif):
+#      python3 tools/compute_confidence_tiers.py  (regen tiers)
+#      python3 tools/calibration_order.py --tier <...>  (ordre glouton ancre)
+#      -> calibrer les READY, investiguer/laisser les BROKEN.
+#    NOTE: dep_graph.json n'est PAS un DAG (graphe cyclique) -> PAS d'ordre
+#    topologique. Il sert UNIQUEMENT a circular_deps pour les cycles.
+#    calibration_plan.py SUPPRIME. calibrate_batch.py = ordre HTML perime, NE PAS utiliser.
+#
+# 4. REGLE D'OR: bouger une cam INVALIDE ses LM enfants. Une cam ne se recale
+#    que sur des ancres EXTERNES (pas ses propres LM), et l'ancrage est
+#    TRANSITIF. Pas assez d'ancres non-contradictoires (>=3 pour 7 params)
+#    -> sous-determinee, NE PAS toucher.
+#
+# 5. NON-REPARABLES connues (ne pas s'acharner):
+#      - Amphitheater (2 ancres dures contradictoires, plancher 14px)
+#      - Ambrosia Silos/Smokestacks (parallaxe ~2.5deg; besoin ancre WDNA)
+#
+# 6. WORKFLOW VIBE-CODING: Claude ecrit les commandes (one-shot, heredoc),
+#    Alexandre les lance et colle l'output. Patches idempotents, backups
+#    .bak_<reason>, dry-run par defaut, --apply pour ecrire. Output terminal
+#    en anglais. Ne jamais toucher gtamaplib.py / ml (lib vendored).
+#
+# 7. STATUT (2026-06-08): branche feature-solver. Solve global ABANDONNE
+#    (bancal: optimisait poses+LM en memoire mais n'ecrivait que les poses
+#    -> poses fantomes; reverte). Vice City Sign recale honnetement 2-LM.
+#    Beach/Metro C/Ambrosia 02 + retriangulations = sains (commit 530ac7d).
+# ===================================================================
+
 <!-- INDEX_DE_RETOUR_v1 -->
 
 ## Session 2026-06-04 (PM) — Politique roll + Dominion + Portofino NE
