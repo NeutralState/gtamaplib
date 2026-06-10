@@ -32,6 +32,21 @@ class PortofinoTower:
     PENTAGON_NE_OFFSET = -5.0 # NE pentagon rotation offset (deg); 180 = current behaviour
     PEAK_BOX_SIDE   = 8.6     # inner (green) square side: 116px*0.074
 
+    # ── Per-floor rings (2026-06-10) ─────────────────────────────────────
+    # Horizontal cross-section rings at every floor: alignment with the
+    # window bands in leak frames lets us tune ONE knob (FLOOR_PITCH) via
+    # the UI wireframe, same workflow as PEAK_BOX_NE_OFFSET. Real Portofino
+    # Tower is 44 storeys / ~145 m -> ~3.0 m pitch as starting value.
+    RENDER_FLOORS = True      # one-flag revert if UI perf suffers
+    FLOOR_PITCH   = 3.0       # metres between floor slabs — TUNE THIS
+    # (start_z, end_z, with_wings): break zone 85-95 skipped (mechanical/
+    # transition, no window bands); crown 128.5-140.5 is cylinder-only.
+    FLOOR_SEGMENTS = [
+        (Z_GROUND,    Z_BASE_TOP, True),
+        (Z_BREAK_TOP, Z_PENT_TOP, True),
+        (Z_PENT_TOP,  Z_CYL_TOP,  False),
+    ]
+
     def __init__(self, md, ml=None):
         self.md = md
         self.ml = ml
@@ -58,6 +73,31 @@ class PortofinoTower:
             ('CT', self.Z_CYL_TOP,   1.0),
         ]
         self.PEAK_BOX_LEVELS = [('PB', self.Z_PENT_TOP), ('PT', self.Z_PEAK_WALL)]
+
+        # Floor levels: ('Fxx', z, pent_scale, with_wings). Wing scale is
+        # interpolated between the bounding named PENT_LEVELS so floor rings
+        # stay flush with the existing silhouette (B/K=1.6, L=1.5, P=1.6).
+        self.FLOOR_LEVELS = []
+        if self.RENDER_FLOORS:
+            named = [(z, s) for _, z, s in self.PENT_LEVELS]  # sorted by build order
+
+            def pent_scale_at(z):
+                for (z0, s0), (z1, s1) in zip(named, named[1:]):
+                    if z0 <= z <= z1:
+                        t = 0.0 if z1 == z0 else (z - z0) / (z1 - z0)
+                        return s0 + t * (s1 - s0)
+                return named[-1][1]
+
+            idx = 0
+            for z_start, z_end, with_wings in self.FLOOR_SEGMENTS:
+                n = int((z_end - z_start) / self.FLOOR_PITCH)
+                for k in range(1, n + 1):
+                    z = z_start + k * self.FLOOR_PITCH
+                    if z >= z_end - 0.25:   # named level already draws this ring
+                        continue
+                    self.FLOOR_LEVELS.append(
+                        (f'F{idx:02d}', z, pent_scale_at(z), with_wings))
+                    idx += 1
 
         self.pent = {}
         self.cyl  = {}
@@ -147,6 +187,14 @@ class PortofinoTower:
             for br_name, peak in self.branch_peaks.items():
                 for c_name, xyz in self._peak_box(peak, z, br_name).items():
                     self.pbox[(code, br_name, c_name)] = xyz
+        # floor rings reuse the exact same cross-sections (cyl scale 1.0)
+        for code, z, pscale, with_wings in self.FLOOR_LEVELS:
+            for c_name, xyz in self._cylinder(z, 1.0).items():
+                self.cyl[(code, c_name)] = xyz
+            if with_wings:
+                for br_name, peak in self.branch_peaks.items():
+                    for c_name, xyz in self._pentagon(peak, z, pscale, br_name).items():
+                        self.pent[(code, br_name, c_name)] = xyz
 
     def render_on_camera(self, cam):
         color = self.color
@@ -181,6 +229,21 @@ class PortofinoTower:
                     cam.render_line((p1, p2), color, thin)
 
         pbox_corners = ['pbOL', 'pbOR', 'pbIR', 'pbIL']
+        # ── floor rings (thin horizontal cross-sections, no new verticals) ──
+        floor_w = 0.35
+        pent_corners_ring = ['innerL', 'sideL', 'peak', 'sideR', 'innerR']
+        for code, _z, _ps, with_wings in self.FLOOR_LEVELS:
+            for i in range(8):
+                c1 = self.cyl[(code, f'cyl{i}')]
+                c2 = self.cyl[(code, f'cyl{(i + 1) % 8}')]
+                cam.render_line((c1, c2), color, floor_w)
+            if with_wings:
+                for br_name in ('NW', 'NE', 'S'):
+                    for k in range(5):
+                        a = pent_corners_ring[k]; b = pent_corners_ring[(k + 1) % 5]
+                        p1 = self.pent[(code, br_name, a)]
+                        p2 = self.pent[(code, br_name, b)]
+                        cam.render_line((p1, p2), color, floor_w)
         for br_name in ('NW', 'NE', 'S'):
             for corner in pbox_corners:
                 p1 = self.pbox[('PB', br_name, corner)]
