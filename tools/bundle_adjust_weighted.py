@@ -208,7 +208,13 @@ for cam_name, lm_pixels in md.pixels.items():
             continue
         lm_t = lm_tier.get(lm_name, 'unknown')
         lm_w = TIER_WEIGHTS.get(lm_t, 1.0)
-        obs_w = min(cam_w, lm_w)
+        if cam_xyz_is_locked:
+            # leak ray dominates: HUD-locked pose is ground truth, so the obs
+            # weight must not be capped by the LM's tier (min() let medium
+            # cams contest leak rays on shared LMs -> Pool/Motel massacre).
+            obs_w = TIER_WEIGHTS['anchor']
+        else:
+            obs_w = min(cam_w, lm_w)
         observations.append({
             'cam': cam_name,
             'lm': lm_name,
@@ -297,10 +303,22 @@ def get_cam_params(p, name):
         hfov = CAM_HFOV_INIT.get(name)
     return xyz, ypr, hfov
 
+# LMs with a fixed z_constraint are pinned in the OPTIMIZER (not just at
+# write time): md.update_landmark snaps z on write, so optimizing a free z
+# means converging on geometry that will never reach the disk (2026-06-10).
+LM_FIXED_Z = {
+    n: float(m["z_constraint"]["value"])
+    for n, m in md.landmarks_meta.items()
+    if (m or {}).get("z_constraint") and m["z_constraint"].get("type") == "fixed"
+}
+
 def get_lm_xyz(p, name):
     if name in lm_idx:
         i = n_cam_params + lm_idx[name] * LM_PARAMS
-        return p[i:i+3]
+        xyz = p[i:i+3]
+        if name in LM_FIXED_Z:
+            xyz = np.array([xyz[0], xyz[1], LM_FIXED_Z[name]])
+        return xyz
     return np.array(md.landmarks[name])
 
 
