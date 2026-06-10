@@ -99,198 +99,1223 @@ const C = {
 
 // Camera calibration metadata
 const camData = {
-  'lka': {
-    label: 'LK Airplane (X)',
-    lms: ['Four Seasons Hotel Miami (BE)', 'Four Seasons Hotel Miami (BW)', 'Portofino Tower (NW)', 'House with Boat (X)', 'Two Tequesta Point', 'Three Tequesta Point', 'Prison Tower (1)', 'Asia Brickell Key'],
-    rays: ['Tennis Stadium → Park Grove Condominium (S)', 'Tennis Stadium → Homestead Water Tower', 'Ocean near Keys (N) → Seven Mile Bridge (3T/6T)', 'Ocean near Keys (N) → Blue Billboard (Key Lento)', 'Ocean near Keys (N) → 99353/102180 Overseas Hwy', 'House with Boat (X) → House D (SW)'],
-    author: 'neutral_state', loss: 5.562,
-    params: 'xyz=(-4374.7, -7585.7, 78.996) · ypr=(318.625, -9.400, 0.000) · hfov=62.550'
+  'ai_world_editor_map': {
+    label: 'AI World Editor Map (4K)',
+    lms: ['AIWE', 'Waldo Station (SE)', '1703 E 5th St (Warehouse) (NW)', '1703 E 5th St (Shack) (SE)', '1703 E 5th St (Shack) (SW)', 'Transformer Station (SW)', 'Lucky Plucker (NE)', 'Pier (L945) (SW)', '1703 E 5th St (Warehouse) (SW)', 'Lucky Plucker (SE)', '? (L944) (SE)', 'Pier (L946) (NE)', 'Port Gellhorn Smokestack', '6232 E Hwy 98 (NE)', 'Leslie Porter Wayside Park', '? (L664) (SE)', '6232 E Hwy 98 (SE)', 'Large White Billboard', '? (L954) (SE)', 'Wildfire Scooters (NW)', '? (L663) (SE)', 'Wildfire Scooters (SE)', 'Wildfire Scooters (W)', '3401 E Hwy 98 (SW)', 'Wildfire Scooters (S)', '? (L952) (NE)', '2533 E Hwy 98 (N)', '2533 E Hwy 98 (W)', '? (L953) (NE)', '6246 E Hwy 98 (NE)', 'Twice The Ice (N)', 'Twice The Ice (W)', 'Goodwill Career Training Center (SW)', 'Red Bird Café (NW)', 'Rodeo\'s (SE)', 'King Slayer Charters (NE)', 'King Slayer Charters (SE)', 'Parker Community Center (SW)', 'Pier 98 (NE)', '3210 E Hwy 98 (NE)', 'Parker Public Library (SW)', 'Dan\'s Pawn (NE)', '? (L958) (SW)', 'Coyote\'s (SE)', '6218 E Hwy 98 (E)', 'Coyote\'s (SW)', 'Dan\'s Pawn (SE)', 'Parker City Hall (SW)', '? (L957) (NE)', 'Parker Police Station (SW)', 'Seclusion Bay', '? (L956) (N)', '? (L669) (SE)', '? (L668) (SW)', '? (L667) (SW)', 'Welcome to Port Gellhorn Sign', '? (L666) (SE)', '? (L665) (SE)', 'Mr. Bingo (SW)', 'Mr. Bingo (SE)', '4937 E Hwy 98 (Gas Station) (NE)', '4937 E Hwy 98 (Gas Station) (SE)', '4937 E Hwy 98 (Store) (NE)', '4937 E Hwy 98 (Store) (SE)', 'Centerplate', 'Wine Country Motor Sports', 'Guardhouse', 'Sebring International Raceway (T17)', 'Sebring International Raceway (T7)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6529.8, 3383.6, 8012.737) · ypr=(0.432, -92.819, 0.507) · hfov=20.000'
   },
-  'lkp': {
-    label: 'LK Postcard (X)',
-    lms: ['Island A (W)', 'Island J (E)', 'Portofino Tower (NW)', 'Icon at South Beach'],
-    rays: ['LK Airplane → Pin D01R/D01L/D02R/D02L', 'LK Airplane → House D (SW)', 'LK Airplane → Tree on Island J', 'LK Airplane → 102180 Overseas Hwy', 'LK Airplane → Turkey Point (3)'],
-    author: 'neutral_state', loss: 5.616,
-    params: 'xyz=(-3826.5, -6799.0, 154.302) · ypr=(299.747, -12.250, 0.000) · hfov=47.450'
+  'airport': {
+    label: 'Airport (X)',
+    lms: ['Pole near Signature Hangar 2', 'Signature Hangar 2 (NW)', 'Signature Hangar 2 (W)', 'Latitude on the River (S) (NW)', 'Latitude on the River (S) (SW)', 'Nine at Mary Brickell Village (A)', 'Nine at Mary Brickell Village (B)', 'Nine at Mary Brickell Village (C)', 'Nine at Mary Brickell Village (D)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2589.5, -123.5, 7.300) · ypr=(276.700, -17.180, 0.000)'
   },
-  'kl': {
-    label: 'Key Lento',
-    lms: ['Blue Billboard (Key Lento)', '99353 Overseas Hwy', 'Tree on Island J', '102180 Overseas Hwy'],
-    rays: ['LK Postcard → Marina Club at Blackwater Sound (S)', 'LK Postcard → Billboard #2 (Key Lento)', 'LK Postcard → House D (E)', 'LK Postcard → 200 Pompano Dr'],
-    author: 'neutral_state', loss: 3.038,
-    params: 'xyz=(-1786.5, -5241.5, 30.168) · ypr=(134.211, -7.950, 0.000) · hfov=62.250'
-  },
-  'gw': {
-    label: 'Grassrivers 02 (Watson Bay)',
-    lms: ['Homestead Water Tower', 'Park Grove Condominium (S)', 'Prison Tower (2)', 'Prison Tower (3)', 'Prison Tower (4)', 'Prison Tower (5)', 'Prison Tower (6)'],
-    rays: ['LK Airplane → Turkey Point Nuclear (N)', 'LK Airplane → Turkey Point Nuclear (3)'],
-    author: 'neutral_state', loss: 0.838,
-    params: 'xyz=(-5251.5, -3359.0, 25.772) · ypr=(282.228, -5.900, 0.000) · hfov=49.100'
-  },
-  'prison': {
-    label: 'Prison',
-    lms: ['Opera Tower', 'The Grand (E)', 'Turkey Point Nuclear (S)', 'Turkey Point Nuclear (N)', 'Prison Tower (1-6)'],
-    rays: ['Grassrivers 02 → Prison Tower (1)', 'Grassrivers 02 → Prison Tower (3)', 'Grassrivers 02 → Prison Tower (5)'],
-    author: 'neutral_state', loss: 2.758,
-    params: 'xyz=(-3355.5, -2757.5, 33.294) · ypr=(281.580, -2.550, 0.000) · hfov=80.550'
-  },
-  'vb_a': {
-    label: 'Vice Beach (A)',
-    lms: ['Four Seasons Hotel Miami (BE/BW/NW/SE)'],
-    rays: ['Alley (W) → Flamingo South Beach (TE/TNE/TSE)', 'Sidewalk (Jason) E → The Floridian', 'Park → Hotel Breakwater, Jenny Hostel, 1500 Ocean Dr', 'Tennis Court SE → Old City Hall, 1000 Venetian Way'],
-    author: 'rlx', loss: 17.249
-  },
-  'vb_b': {
-    label: 'Vice Beach (B)',
-    lms: ['Four Seasons Hotel Miami (BE/BW/NW/SE)', 'Wells Fargo Center'],
-    rays: ['Prison → Southeast Financial Center, Wells Fargo Center, Opera Tower', 'LK Airplane → Asia Brickell, FAA Miami ATCT', 'Tennis Court SE → The Waverly South Beach (NW)', 'Sidewalk Jason → Flamingo South Beach (SRSW)', 'Alley W → Flamingo South Beach (TE/TNE/TSE)', 'Park → Jenny Hostel, 1500 Ocean Dr', 'Tennis Court SE → Old City Hall, 1000 Venetian Way'],
-    author: 'rlx', loss: null
-  },
-  'rooftop': {
-    label: 'Rooftop Party',
-    lms: ['Asia Brickell Key', 'Flamingo South Beach (TE/TSE)', 'Four Seasons Hotel Miami (BE/BW)', 'Loews Miami Beach', '1500 Ocean Dr', 'Old City Hall', 'Portofino Tower (NW)'],
-    rays: ['Vice Beach B → Capri South Beach (SE)', 'Sidewalk Jason E → Continuum on South Beach (S)', 'Vice Beach B → Cruise Terminal G (B)', 'Venetian Islands → Flagler Memorial Monument'],
-    author: 'rlx', loss: 6.761
-  },
-  'vi': {
-    label: 'Venetian Islands',
-    lms: ['Flamingo South Beach (TNE)', 'Loews Miami Beach', '1500 Ocean Dr', '1000 Venetian Way (SW)', 'Rooftop Party'],
-    rays: ['Highway NE → Akoya Condominium, Jade Ocean', 'Vice Beach A → Flamingo South Beach (SDS)', 'Sidewalk Jason E → Flamingo South Beach (SRSW/TSW)', 'Vice Beach B → St. Moritz Hotel (SW)'],
-    author: 'rlx', loss: 22.543
-  },
-  'beach': {
-    label: 'Beach',
-    lms: ['Akoya Condominium', 'Hotel Breakwater', 'Jenny Hostel (NE)', 'Loews Miami Beach', '1500 Ocean Dr', 'Royal Palm South Beach (N/S)'],
-    rays: ['Vice Beach A → 12th St Lifeguard Tower', 'Venetian Islands → Bank of America, Green Diamond, Jade Ocean (SW)', 'Park → Hotel Victor (SW)', 'Vice Beach B → The Tides South Beach', 'Venetian Islands → Trésor Tower'],
-    author: 'rlx', loss: 75.831
-  },
-  'skyline': {
-    label: 'Skyline',
-    lms: ['Four Seasons Hotel Miami (BE/NW)', '1000 Venetian Way (SE)'],
-    rays: ['Vice Beach B → Asia Brickell Key, Flagler on the River, The Grand (E), Loft Downtown II, Marina Blue (NE), Opera Tower, Southeast Financial Center, Ten Museum Park (SE), Wells Fargo Center (N)', 'Venetian Islands → 1000 Venetian Way (2/3/4)'],
-    author: 'rlx', loss: 2.017
-  },
-  'basketball': {
-    label: 'VC 03 (Basketball)',
-    lms: ['Capri South Beach (SE)', 'Flamingo South Beach (NENE)', 'The Grand (E)', 'Loft Downtown II', 'Marina Blue (NE)', 'Opera Tower', 'Southeast Financial Center', 'Wells Fargo Center (N)'],
-    rays: ['Skyline → 50 Biscayne Blvd (SE), Citigroup Center (NW/SE), One Miami Condo East/West', 'Rooftop Party → Flamingo South Beach (NWNE), 1111 Lincoln Rd (NW/SE)', 'Venetian Islands → The Gates Hotel (NW), New World Center, Sunset Harbour South Condo', 'Vice Beach B → Marriott Miami Biscayne Bay (NE), Quantum on the Bay (N/S)'],
-    author: 'rlx', loss: 2.793
-  },
-  'vcp': {
-    label: 'Vice City Postcard',
-    lms: ['Asia Brickell Key', 'Citigroup Center (NW)', 'Four Seasons Hotel Miami (BW/NW)', 'The Grand (E)', 'Marriott Miami Biscayne Bay (NE)', 'One Miami Condo East/West (NE)', 'Opera Tower', 'Quantum on the Bay (N/S)', 'Southeast Financial Center', '1000 Venetian Way (SE)', 'Wells Fargo Center (N)'],
-    rays: ['VC 03 → 1800 Club, 22 Biscayne Bay (SE), Citigroup (NE), The Crimson (CC), Uptown Lofts (NE/SE), Vizcayne North (NE/SE)', 'Skyline → Carbonell Brickell, Kaseya Center (SE), Miami Tower, Skyviews Miami', 'Ambrosia 02 → Flat Water Tower', 'Intersection W → Reworld Miami-Dade (SE)', 'Vice Beach B → Three/Two Tequesta Point, Unknown Building near VCIA'],
-    author: 'rlx', loss: 29.431
-  },
-  'motorboats': {
-    label: 'Motorboats (A/B)',
-    lms: ['Four Seasons Hotel Miami (BE/SE)', 'Park Grove Condominium (S)', 'Container Crane (1/3)'],
-    rays: ['Vice Beach B → Asia Brickell Key (CC1/CC2)', 'VC 03 → Marina Blue (NE), Vizcayne North (NE)'],
-    author: 'rlx', loss: 0.071
-  },
-  'ferris': {
-    label: 'VC 08 (Ferris Wheel)',
-    lms: ['Container Crane (1/2/3)', 'CC (1/2/3) (BB2)', 'Kaseya Center (SE)', 'Skyviews Miami Observation Wheel'],
-    rays: ['Skyline → Cruise Ship (FT)', 'Vice City Postcard → Cruise Ship (RT)', 'LK Postcard → WTP (E/W)'],
-    author: 'rlx', loss: 57.279
-  },
-  'amb02': {
-    label: 'Ambrosia 02 (Panorama)',
-    lms: ['FAA Miami ATCT (MIA)'],
-    rays: ['LK Airplane → MIA North Terminal Tower, Wheelabrator South Broward', 'Loading Zone near Prison SW → Water Tower near Prison', 'WDNA FM Fake Cam → WDNA FM (B)'],
-    author: 'rlx', loss: 0.037
-  },
-  'amb04': {
-    label: 'Ambrosia 04 (Fires)',
-    lms: ['Sunshine Skyway Bridge (N/S)'],
-    rays: ['Ambrosia 02 → Sebring Water Tower (B/T), 1500 Sonora Ave (Tank), US Sugar Mill (Factory), USSM Smokestack (4-11)', 'Ambrosia 02 → Wheelabrator South Broward (W)'],
-    author: 'rlx', loss: 23.512
-  },
-  'pgp': {
-    label: 'Port Gellhorn Postcard (X)',
-    lms: ['Port of Tampa Container Crane (1/2/3)', 'PTCC (3) (BB2)'],
-    rays: ['Chase 2A → Juice Fruit Sign (B/E/W)', 'Chase 2A → New Foundation Church', 'Port Gellhorn 04 → Train Signal (S) (E/W)', 'Port Gellhorn 04 → Water Tower (West PGH) (C)'],
-    author: 'rlx', loss: null
-  },
-  'pg04': {
-    label: 'PGH 04 (Delights) (X)',
-    lms: ['Juice Fruit Sign (B)'],
-    rays: ['PGH Postcard → Train Signal (S) (E/W)', 'PGH Postcard → Water Tower (West PGH) (C)'],
-    author: 'rlx', loss: 0.035
-  },
-  'peacock_a': {
-    label: 'Highway\n(Peacock Bay) (A)',
-    lms: ['Park Grove Condominium (N)', 'Park Grove Condominium (C)'],
-    rays: ['Metro SE B → Infinity at Brickell', 'Grassrivers 02 → One Broadway (W)', 'VC 03 → Stephen P. Clark Government Center (E)'],
-    author: 'rlx', loss: null
-  },
-  'peacock_b': {
-    label: 'Highway\n(Peacock Bay) (B)',
-    lms: ['Park Grove Condominium (C)'],
-    rays: ['Four Seasons Fake Cam → Four Seasons Hotel Miami (T)', 'Metro SE B → Infinity at Brickell', 'Grassrivers 02 → One Broadway (W)', 'VC 03 → Stephen P. Clark Government Center (E)'],
-    author: 'neutral_state', loss: 139.06
-  },
-
-  'keys': {
-    label: 'Keys',
-    lms: ['Seven Mile Bridge (20B)', 'Seven Mile Bridge (5B)', 'Island V (S)', 'Blimp Bay'],
-    rays: ['Ocean near Keys E → Sombrero Key Light (B)', 'LK Airplane → Unnamed Building #1 (Blimp Key)'],
-    author: 'rlx', loss: 16.931
-  },
-  'convertible': {
-    label: 'Convertible',
-    lms: ['Kaseya Center (SE)'],
-    rays: ['VC 08 → Highway Sign (S), KC01-KC11', 'Vice Beach B → Ten Museum Park (SE)'],
-    author: 'rlx', loss: 27.99
-  },
-  'raul': {
-    label: 'Raul Bautista 03 (Motorboat)',
-    lms: ['Four Seasons Hotel Miami (16E/16NE/24E/24NE)'],
-    rays: ['VC 03 → One Miami Condo East/West (SE)'],
-    author: 'rlx', loss: 33.959
-  },
-  'chase2a': {
-    label: 'Chase (2) (A)',
-    lms: ['Pylon (3)'],
-    rays: ['Gas Station Lucia → Oval Yellow Sign', 'Diner W A → Sunshine Skyway Bridge (N)', 'AIWE → Wildfire Scooters (NW/S)'],
-    author: 'rlx', loss: null
-  },
-  'chase2b': {
-    label: 'Chase (2) (B)',
-    lms: ['Sunshine Skyway Bridge (N/S)'],
-    rays: ['AIWE → Wildfire Scooters (NW/S/SE/W)'],
-    author: 'rlx', loss: 8.196
-  },
-  'mkp04': {
-    label: 'Mount Kalaga NP 04 (Mountain Pass) (X)',
-    lms: ['Water Tower near Prison'],
-    rays: ['Gas Station Lucia → Billboard (Delights)', 'Diner SE A → Quarry'],
-    author: 'rlx', loss: 0.270
+  'alley': {
+    label: 'Alley (W)',
+    lms: ['Flamingo South Beach (TSE)', 'Flamingo South Beach (TE)', 'Flamingo South Beach (TNE)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(1955.1, 851.6, 5.000) · ypr=(66.400, -11.700, 0.000) · hfov=78.803'
   },
   'amb01': {
     label: 'Ambrosia 01 (Bikers)',
-    lms: ['Billboard with Irregular Shape', 'Billboard with Oval Motif #1'],
-    rays: ['Ambrosia 02 → Large Billboard (Ambrosia)'],
-    author: 'rlx', loss: null
+    lms: ['Billboard with Oval Motif #1', 'Large Billboard (Ambrosia)', 'Billboard with Diversity Motif (W)', 'Billboard with Irregular Shape', 'Billboard with Diversity Motif (E)'],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(-2743.9, 3731.5, 6.821) · ypr=(11.500, 0.261, -0.551) · hfov=37.977'
+  },
+  'amb02': {
+    label: 'Ambrosia 02 (Panorama)',
+    lms: ['Wheelabrator South Broward', 'FAA Miami ATCT (MIA)', 'MIA North Terminal Tower', 'Wheelabrator South Broward (3B)', 'Industrial Building (Ambrosia)', 'USSM Smokestack (1)', 'USSM Smokestack (2)', '1500 Sonora Ave (Silo) (L)', '1500 Sonora Ave (Silo)', '1500 Sonora Ave (Silo) (N)', '1500 Sonora Ave (Silo) (R)', 'Billboard with Diversity Motif (E)', 'Billboard with Diversity Motif (W)', 'White Silos (W)', 'USSM Smokestack (4)', 'USSM Smokestack (5)', 'USSM Smokestack (6)', 'US Sugar Mill (Factory)', 'US Sugar Mill (Factory) (R)', 'USSM Smokestack (7)', '1500 Sonora Ave (Tank) (L)', '1500 Sonora Ave (Tank)', 'USSM Smokestack (10)', 'USSM Smokestack (11)', 'USSM Smokestack (8)', 'Light Pollution (A)', 'USSM Smokestack (9)', 'Light Pollution (B)', 'Large Billboard (Ambrosia)', 'Light Pollution (C)', 'Billboard with Irregular Shape', 'Sebring Water Tower (B)', 'Sebring Water Tower', 'Billboard with Oval Motif #1', 'Water Tower near Prison'],
+    rays: ['Leonida Keys 01 (Airplane) (X) → Wheelabrator South Broward (W)'],
+    author: 'neutral_state', loss: 2.167,
+    params: 'xyz=(-2462.9, 5133.2, 82.179) · ypr=(160.241, -4.170, -0.071) · hfov=52.999'
+  },
+  'amb04': {
+    label: 'Ambrosia 04 (Fires)',
+    lms: ['Wheelabrator South Broward (3B)', 'Radio Tower (Ambrosia)', 'Radio Tower (Ambrosia) (B)', 'USSM Smokestack (3)', 'Sebring Water Tower', 'Sebring Water Tower (B)', 'US Sugar Mill (Factory) (R)', 'US Sugar Mill (Factory)', 'USSM Smokestack (7)', 'USSM Smokestack (5)', 'USSM Smokestack (6)', 'USSM Smokestack (4)', 'USSM Smokestack (8)', 'USSM Smokestack (9)', '1500 Sonora Ave (Tank) (L)', '1500 Sonora Ave (Tank)', '1500 Sonora Ave (Tank) (R)'],
+    rays: ['Leonida Keys 01 (Airplane) (X) → Wheelabrator South Broward (W)', 'Chase (2) (B) → Sunshine Skyway Bridge (S)', 'Diner (W) (A) → Sunshine Skyway Bridge (N)', 'Diner (W) (B) → Sunshine Skyway Bridge (N)', 'Diner (SW) → Sunshine Skyway Bridge (N)'],
+    author: 'neutral_state', loss: 2.411,
+    params: 'xyz=(-1408.7, 3351.1, 51.987) · ypr=(103.224, -2.319, 0.165) · hfov=54.828'
   },
   'amb_post_x': {
     label: 'Ambrosia Postcard (X)',
-    lms: ['Sebring Water Tower (B/T)', '1500 Sonora Ave (Tank)', 'US Sugar Mill (Factory/R)', 'USSM Smokestack (4-9)'],
-    rays: ['Ambrosia 02 → 1500 Sonora Ave (Silo/N), USSM Smokestack (1/2/10/11)', 'Ambrosia 04 → USSM Smokestack (3)'],
-    author: 'rlx', loss: null
+    lms: ['Industrial Building (Ambrosia)', 'USSM Smokestack (1)', 'Billboard (South Ambrosia)', 'USSM Smokestack (2)', '1500 Sonora Ave (Silo) (L)', '1500 Sonora Ave (Silo)', '1500 Sonora Ave (Silo) (N)', '1500 Sonora Ave (Silo) (R)', 'USSM Smokestack (3)', 'White Silos (W)', 'US Sugar Mill (Factory)', 'US Sugar Mill (Factory) (R)', 'USSM Smokestack (4)', 'USSM Smokestack (5)', 'USSM Smokestack (6)', 'USSM Smokestack (7)', '1500 Sonora Ave (Tank) (L)', 'USSM Smokestack (8)', '1500 Sonora Ave (Tank)', 'USSM Smokestack (9)', '1500 Sonora Ave (Tank) (R)', 'USSM Smokestack (10)', 'Sebring Water Tower (B)', 'Sebring Water Tower', 'USSM Smokestack (11)'],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(-2702.9, 3972.2, 52.665) · ypr=(151.183, -1.274, 0.830) · hfov=52.501'
   },
-  'jd05': {
-    label: 'Jason Duval 05\n(Machine Gun)',
+  'amphitheater': {
+    label: 'Amphitheater',
+    lms: ['Container Crane (9)', 'Container Crane (3)'],
+    rays: ['(geometric: equilateral from NW+NE) → Portofino Tower (S)', 'Rooftop Party → Continuum on South Beach (S)', 'Leonida Keys 01 (Airplane) (X) → Continuum on South Beach (S)', 'Port → Portofino Tower (NW)', 'Rooftop Party → Portofino Tower (NW)', 'Leonida Keys 01 (Airplane) (X) → Portofino Tower (NW)', 'Sidewalk (Jason) (E) → Portofino Tower (NW)'],
+    author: 'leak', loss: null,
+    params: 'xyz=(-350.0, -100.0, 8.000) · ypr=(254.000, -12.500, 0.000) · hfov=65.000'
+  },
+  'auto_shop': {
+    label: 'Auto Shop (NE)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1271.4, 1210.2, 6.600) · ypr=(316.100, -11.900, 0.000) · hfov=58.841'
+  },
+  'auto_shop_2': {
+    label: 'Auto Shop (NW)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1274.8, 1210.4, 7.000) · ypr=(55.000, -4.800, 0.000) · hfov=58.841'
+  },
+  'auto_shop_3': {
+    label: 'Auto Shop (SE)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1253.9, 1214.6, 5.200) · ypr=(190.000, 4.000, 0.000)'
+  },
+  'auto_shop_4': {
+    label: 'Auto Shop (SW)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1254.8, 1220.4, 5.400) · ypr=(134.000, 1.000, 0.000)'
+  },
+  'backyard': {
+    label: 'Backyard',
+    lms: ['Box in Backyard'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1951.7, -1957.5, 5.701) · ypr=(120.195, -27.488, 0.000) · hfov=60.089'
+  },
+  'bar': {
+    label: 'Bar',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(2095.4, 1153.5, 6.400) · ypr=(87.802, 0.000, 0.000)'
+  },
+  'beach': {
+    label: 'Beach',
+    lms: ['Jenny Hostel (NE)', 'Bank of America Financial Center (SW)', 'Bank of America Financial Center', 'Hotel Breakwater', 'The Ritz-Carlton Bal Harbour', 'Akoya Condominium', 'Hotel Victor (SW)', 'Jade Ocean Condos (SW)', 'The Tides South Beach', 'Green Diamond', 'Trésor Tower', 'Royal Palm South Beach (S)', '1500 Ocean Dr (S) (SE)', 'Royal Palm South Beach (N) (S)', 'Beach (B)', '1500 Ocean Dr', 'Beach (D)', 'Beach (E)', 'Beach (C)', '12th St Lifeguard Tower', 'Beach (F)', 'Beach (A)'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(2204.4, -397.1, 1.000) · ypr=(14.030, -0.560, 0.166) · hfov=34.650'
+  },
+  'beach_gym': {
+    label: 'Beach Gym',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(2000.0, 400.0, 4.000) · ypr=(100.000, 3.000, 0.000) · hfov=60.000'
+  },
+  'bedroom': {
+    label: 'Bedroom',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-473.8, 1239.8, 9.100) · ypr=(160.106, -11.648, 0.000)'
+  },
+  'boat': {
+    label: 'Boat',
+    lms: [],
+    rays: ['Prison → Opera Tower', 'Vice Beach (A) → Opera Tower', 'Skyline → Opera Tower', 'Vice City 03 (Basketball) → Opera Tower', 'Vice City Postcard → Opera Tower'],
+    author: 'trailer', loss: null,
+    params: 'xyz=(1095.5, 796.8, -4.914) · ypr=(92.230, 0.898, 0.026) · hfov=29.805'
+  },
+  'boat_2': {
+    label: 'Boat (Jason)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-3853.9, -344.0, 7.300) · ypr=(240.000, -27.000, 0.000)'
+  },
+  'brickell': {
+    label: 'Brickell',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-850.0, -850.0, 5.000) · ypr=(300.000, 55.000, 0.000) · hfov=60.000'
+  },
+  'car_wash': {
+    label: 'Car Wash',
+    lms: ['Pylon (3)', 'Springfield Community Church (CW)', 'Tall Double Billboard', 'Springfield Community Church', 'Car Wash Sign (BE)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6216.7, 4321.6, 21.800) · ypr=(146.304, 0.295, -0.074)'
+  },
+  'chase': {
+    label: 'Chase (1)',
+    lms: ['Black Billboard (BE)'],
+    rays: ['Car Wash → Pylon (3)', 'Gas Station (Lucia) → Pylon (3)'],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-6294.0, 3950.3, 11.131) · ypr=(110.870, 6.096, 0.004) · hfov=70.263'
+  },
+  'chase2a': {
+    label: 'Chase (2) (A)',
+    lms: ['Juice Fruit Sign (W)', 'Juice Fruit Sign', 'Juice Fruit Sign (B)', 'Juice Fruit Sign (E)', 'Radio Tower #1 (Port Gellhorn)', 'Wildfire Scooters (NW)', 'Wildfire Scooters (S)', 'Oval Yellow Sign'],
+    rays: ['Chase (2) (B) → Sunshine Skyway Bridge (S)', 'Car Wash → Pylon (3)', 'Gas Station (Lucia) → Pylon (3)'],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-6476.4, 3292.3, 6.500) · ypr=(351.030, 2.040, 1.238) · hfov=51.696'
+  },
+  'chase2b': {
+    label: 'Chase (2) (B)',
+    lms: ['Sunshine Skyway Bridge (S)', 'Radio Tower #1 (Port Gellhorn)', 'Wildfire Scooters (NW)', 'Wildfire Scooters (W)', 'Wildfire Scooters (S)', 'Wildfire Scooters (SE)'],
+    rays: ['Diner (W) (A) → Sunshine Skyway Bridge (N)', 'Diner (W) (B) → Sunshine Skyway Bridge (N)', 'Diner (SW) → Sunshine Skyway Bridge (N)'],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-6473.5, 3247.6, 5.981) · ypr=(354.349, 0.856, 0.913) · hfov=49.518'
+  },
+  'convertible': {
+    label: 'Convertible',
+    lms: [],
+    rays: ['Skyline → Kaseya Center (SE)', 'Vice City Postcard → Kaseya Center (SE)', 'Vice Beach (B) → Ten Museum Park (SE)', 'Skyline → Ten Museum Park (SE)', 'Motorboats (B) → Vizcayne North Condominium (NE)', 'Jason Duval 05 (Machine Gun) → Vizcayne North Condominium (NE)', 'Vice City 03 (Basketball) → Vizcayne North Condominium (NE)', 'Vice City Postcard → Vizcayne North Condominium (NE)'],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-21.3, 569.0, 13.726) · ypr=(103.409, 1.293, 1.124) · hfov=57.807'
+  },
+  'dancing': {
+    label: 'Dancing',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-695.0, 1260.0, 5.000) · ypr=(230.000, 20.000, 0.000) · hfov=60.000'
+  },
+  'diner': {
+    label: 'Diner',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6192.0, 4526.0, 15.700) · ypr=(330.000, -6.000, 0.000)'
+  },
+  'diner_2': {
+    label: 'Diner (E)',
+    lms: ['Waffles Billboard (BW)', 'Waffles Billboard', 'Billboard (Hank\'s Waffles) (BE)', 'White Pole', 'Waffles Arrow', 'Domed Hills Sign (TW)'],
+    rays: ['Diner (N) → Mount Mountain', 'Hedge (B) (X) → Mount Mountain'],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6182.6, 4502.7, 15.800) · ypr=(264.166, -0.178, 0.000) · hfov=81.100'
+  },
+  'diner_3': {
+    label: 'Diner (N)',
+    lms: ['Waffles Sign (TR)', 'Waffles Ridge (C)', '536 Richard Jackson Blvd (RSE)', '536 Richard Jackson Blvd (RNE)', 'Mount Waffles (TW)', 'Train Tunnel (N)', 'Beige Billboard (BE)', 'Mount Mountain', 'Waffles Billboard (BW)'],
+    rays: ['Diner (NE) → Mount Waffles', 'Gas Station (Lucia) → Mount Waffles', 'Hedge (B) (X) → Mount Waffles'],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6188.8, 4501.9, 16.200) · ypr=(326.117, -17.747, 0.000) · hfov=80.339'
+  },
+  'diner_4': {
+    label: 'Diner (NE)',
+    lms: ['536 Richard Jackson Blvd (RSE)', 'Mount Waffles (TW)', 'Mount Waffles', 'Beige Billboard (BE)', 'Train Tunnel (N)', 'Train Tunnel (B)', 'Waffles Billboard (BW)', 'Waffles Billboard', 'Waffles Arrow', 'White Pole', 'Domed Hills Sign (TW)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6193.1, 4503.4, 16.000) · ypr=(285.796, -13.472, 0.089) · hfov=80.339'
+  },
+  'diner_5': {
+    label: 'Diner (NW)',
+    lms: ['536 Richard Jackson Blvd (RSW)', '536 Richard Jackson Blvd (BSW)', 'Waffles Sign (TR)', '536 Richard Jackson Blvd (RSE)', '536 Richard Jackson Blvd (RNE)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6185.0, 4502.7, 15.500) · ypr=(17.850, 1.748, -0.016) · hfov=80.593'
+  },
+  'diner_6': {
+    label: 'Diner (S)',
+    lms: ['Easy Inn Sign', '252 N Tyndall Pkwy (NE)', '252 N Tyndall Pkwy (NW)', '18635 SW 105th Ave (CE)', '18635 SW 105th Ave (CW)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6179.2, 4507.1, 16.000) · ypr=(161.000, -3.000, 0.000)'
+  },
+  'diner_7': {
+    label: 'Diner (SE) (A)',
+    lms: ['Domed Hills Sign (TW)', 'Traffic Sign', 'Quarry'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6168.8, 4479.7, 16.400) · ypr=(224.730, -6.418, 0.000)'
+  },
+  'diner_8': {
+    label: 'Diner (SE) (B)',
+    lms: ['Traffic Sign'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6169.6, 4472.5, 16.800) · ypr=(218.111, -5.435, 0.000)'
+  },
+  'diner_9': {
+    label: 'Diner (SW)',
+    lms: ['18635 SW 105th Ave (CE)', '18635 SW 105th Ave (CW)', 'Bay (AAA)', 'Bay (BBB)', 'Sunshine Skyway Bridge (N)', 'Water Tower (North Port Gellhorn)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6177.5, 4504.4, 16.200) · ypr=(116.004, -4.908, -0.112) · hfov=81.226'
+  },
+  'diner_10': {
+    label: 'Diner (W) (A)',
+    lms: ['Bay (AA)', 'Port of Tampa Container Crane (3)', 'Port of Tampa Container Crane (2)', 'Bay (BB)', 'Sunshine Skyway Bridge (N)', 'Bay (CC)', 'Sunshine Skyway Bridge (NR)', 'Water Tower (North Port Gellhorn)', 'Bay (GG)', 'Bay (DD)', 'Bay (EE)', 'Sunshine Skyway Bridge (NNR)', 'Bay (FF)', '536 Richard Jackson Blvd (RSW)', 'Waffles Sign (TR)', '536 Richard Jackson Blvd (RSE)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6180.7, 4499.6, 16.700) · ypr=(53.000, -9.200, 0.000)'
+  },
+  'diner_11': {
+    label: 'Diner (W) (B)',
+    lms: ['Port of Tampa Container Crane (1)', 'Sunshine Skyway Bridge (N)', 'Sunshine Skyway Bridge (NR)', 'Water Tower (North Port Gellhorn)', '536 Richard Jackson Blvd (RSW)', '536 Richard Jackson Blvd (BSW)', 'Waffles Sign (TR)', '536 Richard Jackson Blvd (RSE)', 'Bay (AAAA)', 'Bay (BBBB)', 'Bay (CCCC)', 'Bay (DDDD)', 'Bay (EEEE)', 'Bay (FFFF)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6179.6, 4500.1, 16.600) · ypr=(64.079, -8.222, 0.038) · hfov=80.973'
+  },
+  'dominion_hotel': {
+    label: 'Dominion Hotel',
+    lms: ['Hotel Breakwater (K)'],
+    rays: ['Park → Hotel Breakwater', 'Vice Beach (A) → Hotel Breakwater', 'Beach → Hotel Breakwater', 'Rooftop Party → Portofino Tower (NE)', 'Sidewalk (Jason) (E) → Portofino Tower (NE)', 'Vice Beach (A) → Hotel Victor (NE)', 'Vice Beach (B) → Hotel Victor (NE)', 'Port → Portofino Tower (NW)', 'Rooftop Party → Portofino Tower (NW)', 'Leonida Keys 01 (Airplane) (X) → Portofino Tower (NW)', 'Sidewalk (Jason) (E) → Portofino Tower (NW)'],
+    author: 'trailer', loss: null,
+    params: 'xyz=(2046.4, 932.2, 3.506) · ypr=(141.496, 2.096, -0.017) · hfov=50.499'
+  },
+  'donuts': {
+    label: 'Donuts',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-710.0, 1250.0, 40.000) · ypr=(315.000, -40.000, 0.000) · hfov=45.000'
+  },
+  'easy_inn': {
+    label: 'Easy Inn',
+    lms: ['Easy Inn Sign', 'Springfield Community Church', 'Car Wash Sign (BE)', '252 N Tyndall Pkwy (NE)', '252 N Tyndall Pkwy (NW)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6175.0, 4434.4, 17.204) · ypr=(172.112, -2.923, -0.050) · hfov=90.493'
+  },
+  'empty_lot_near_metro_station': {
+    label: 'Empty Lot near Metro Station',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-673.2, 938.2, 5.000) · ypr=(0.000, 0.000, 0.000) · hfov=50.000'
+  },
+  'explosion': {
+    label: 'Explosion',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-1030.0, 100.0, 20.000) · ypr=(0.000, -4.600, 0.000) · hfov=40.000'
+  },
+  'farm': {
+    label: 'Farm',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-3466.3, -4469.7, 3.700) · ypr=(11.400, -17.200, 0.000) · hfov=82.031'
+  },
+  'gas_station': {
+    label: 'Gas Station (Alligator)',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-5300.0, 3580.0, 69.000) · ypr=(270.000, -17.500, 0.000) · hfov=60.000'
+  },
+  'gas_station_2': {
+    label: 'Gas Station (Chase) (S)',
+    lms: [],
+    rays: ['Vice Beach (A) → The Grand', 'Vice Beach (B) → The Grand', 'Vice City Postcard → The Grand', 'Vice Beach (A) → Quantum on the Bay Condominium (S) (NE)', 'Vice Beach (B) → Quantum on the Bay Condominium (S) (NE)', 'Vice City 03 (Basketball) → Quantum on the Bay Condominium (S) (NE)', 'Vice City Postcard → Quantum on the Bay Condominium (S) (NE)', 'Prison → Opera Tower', 'Vice Beach (A) → Opera Tower', 'Skyline → Opera Tower', 'Vice City 03 (Basketball) → Opera Tower', 'Vice City Postcard → Opera Tower'],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-794.7, 3125.3, -35.877) · ypr=(200.423, 6.326, -0.617) · hfov=53.939'
+  },
+  'gas_station_3': {
+    label: 'Gas Station (Chase) (SE)',
+    lms: ['112 NE 41st St'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-998.4, 3001.0, 3.778) · ypr=(218.041, 4.897, 0.001) · hfov=60.159'
+  },
+  'gas_station_4': {
+    label: 'Gas Station (Jason)',
+    lms: ['4937 E Hwy 98 (Gas Station) (SE)', 'Pylon (1)', 'Pylon (2)', '4937 E Hwy 98 (Gas Station) (NE)', 'Port Gellhorn Smokestack', 'Billboard (Hank\'s Waffles)', 'Billboard (Delights)', 'Parker City Hall (SW)', 'Welcome to Port Gellhorn Sign'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6318.7, 2746.9, 13.387) · ypr=(0.115, -5.268, -0.013) · hfov=80.339'
+  },
+  'gas_station_5': {
+    label: 'Gas Station (Lucia)',
+    lms: ['Pylon (1)', 'Pylon (2)', 'Pylon (3)', '4937 E Hwy 98 (Gas Station) (NE)', 'Port Gellhorn Smokestack', 'Large White Billboard', 'Oval Yellow Sign', 'Springfield Community Church (CW)', 'Tall Double Billboard', 'Coyote\'s (SE)', '1703 E 5th St (Warehouse) (NW)', '1703 E 5th St (Warehouse) (SW)', 'Billboard (Hank\'s Waffles)', 'Billboard (Hank\'s Waffles) (BE)', 'Uncle Jack\'s Valley', 'Waffles Ridge (C)', 'Parker Community Center (SW)', 'Billboard (Delights)', 'Parker City Hall (SW)', 'Welcome to Port Gellhorn Sign', 'Parker Police Station (SW)', 'Mount Waffles'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6319.1, 2748.3, 13.100) · ypr=(359.814, -0.232, 0.000) · hfov=57.350'
+  },
+  'glitch': {
+    label: 'Glitch (A)',
+    lms: ['112 NE 41st St (SW)', '112 NE 41st St', 'Park (W)', 'Park (E)', 'Golf Course (W)', 'Lake (W)', 'Lake (E)', 'Golf Course (E)', 'East Coast (A)', 'East Coast (B)', 'East Coast (C)', 'East Coast (D)', 'East Coast (E)', 'East Coast (F)', 'East Coast (G)', 'East Coast (H)', 'East Coast (I)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(1411.6, 1379.7, -58.500) · ypr=(28.300, -14.622, 0.000)'
+  },
+  'gw': {
+    label: 'Grassrivers 02 (Watson Bay)',
+    lms: ['Miami Tower', 'Wells Fargo Center (N)', 'Latitude on the River (S) (NW)', 'Latitude on the River (S) (SW)', 'Nine at Mary Brickell Village (A)', 'Nine at Mary Brickell Village (B)', 'Nine at Mary Brickell Village (E)', 'One Broadway (W)', 'Park Grove Condominium (N)', 'Park Grove Condominium (C)', 'Park Grove Condominium (S)', 'Prison Tower (1)', 'Prison Tower (6)', 'Prison Tower (2)', 'Tall Billboard', 'Prison Tower (3)', 'Prison Tower (5)', 'Prison Tower (4)', 'Homestead Water Tower', 'Turkey Point Nuclear Power Station (CNE)', 'Turkey Point Nuclear Power Station (CNW)', 'Turkey Point Nuclear Power Station (N)', 'Red Billboard (Hamlet)', 'Turkey Point Nuclear Power Station (S)', 'Turkey Point Nuclear Power Station (1)', 'Turkey Point Nuclear Power Station (2)', 'Turkey Point Nuclear Power Station (3)', 'Turkey Point Nuclear Power Station (CSE)', 'Turkey Point Nuclear Power Station (CSW)', 'WDNA FM (Mid)', 'Four Seasons Hotel Miami (40W)'],
+    rays: ['(geometric: equilateral from NW+NE) → Portofino Tower (S)'],
+    author: 'neutral_state', loss: 5.670,
+    params: 'xyz=(-5282.9, -3370.1, 24.780) · ypr=(282.217, -5.935, 0.079) · hfov=49.355'
+  },
+  'grassrivers_postcard': {
+    label: 'Grassrivers Postcard (X)',
+    lms: [],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(-3500.2, -3999.8, 50.529) · ypr=(134.998, -14.539, 0.000) · hfov=45.024'
+  },
+  'grassrivers_sign': {
+    label: 'Grassrivers Sign',
+    lms: ['Ball near Grassrivers Sign'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1133.1, 390.2, 4.700) · ypr=(67.899, -28.738, 0.000) · hfov=59.958'
+  },
+  'hangar': {
+    label: 'Hangar (A)',
+    lms: ['Pole near Signature Hangar 2', 'Signature Hangar 2 (NW)', 'Signature Hangar 2 (W)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2631.7, -113.9, 4.600) · ypr=(313.300, 15.400, 0.000) · hfov=80.714'
+  },
+  'hangar_2': {
+    label: 'Hangar (B)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2632.0, -113.9, 4.400) · ypr=(318.000, -13.000, 0.000) · hfov=80.466'
+  },
+  'hangar_3': {
+    label: 'Hangar (C)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2630.4, -113.3, 4.800) · ypr=(131.400, -33.900, -0.000) · hfov=102.448'
+  },
+  'hedge': {
+    label: 'Hedge (B) (X)',
+    lms: ['Mount Waffles', 'Mount Mountain'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(1411.3, 1403.4, 1.200) · ypr=(28.300, 0.000, 0.000)'
+  },
+  'hedge_2': {
+    label: 'Hedge (C) (X)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(1411.3, 1403.4, 0.800) · ypr=(28.300, 0.000, 0.000)'
+  },
+  'hedge_3': {
+    label: 'Hedge (D)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(1411.2, 1403.5, -0.300) · ypr=(28.300, 0.000, 0.000)'
+  },
+  'highway': {
+    label: 'Highway (E)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-515.0, 1709.1, 16.900) · ypr=(279.400, -6.300, 0.000) · hfov=81.100'
+  },
+  'highway_2': {
+    label: 'Highway (N)',
+    lms: ['112 NE 41st St'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-584.9, 1591.9, 13.908) · ypr=(324.352, -5.947, 0.000) · hfov=81.529'
+  },
+  'highway_3': {
+    label: 'Highway (NE)',
+    lms: ['City View Parking Garage (S)', '112 NE 41st St (NW)', 'City View Parking Garage (SE)', '112 NE 41st St', '112 NE 41st St (SW)', '112 NE 41st St (SE)', 'The Ritz-Carlton Bal Harbour', 'Akoya Condominium', 'Sherry Frontenac Oceanfront Hotel (N)', 'Sherry Frontenac Oceanfront Hotel (S)', 'Jade Ocean Condos'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-506.7, 1712.0, 15.400) · ypr=(326.000, -16.300, 0.000) · hfov=81.100'
+  },
+  'highway_4': {
+    label: 'Highway (Peacock Bay) (A)',
+    lms: ['Stephen P. Clark Government Center (E)', 'Infinity at Brickell', 'One Broadway (W)', 'Park Grove Condominium (N)', 'Park Grove Condominium (C)', 'Infinity at Brickell (SW)'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-1482.6, -2348.3, 14.138) · ypr=(339.238, 3.574, -0.969) · hfov=48.987'
+  },
+  'highway_5': {
+    label: 'Highway (Peacock Bay) (B)',
+    lms: ['Stephen P. Clark Government Center (E)', 'Infinity at Brickell', 'Nine at Mary Brickell Village (E)', 'One Broadway (W)', 'Park Grove Condominium (N)', 'Park Grove Condominium (C)'],
+    rays: ['Highway (Peacock Bay) (A) → Infinity at Brickell (SW)', 'Metro (SE) (C) → Infinity at Brickell (SW)'],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-1473.8, -2310.5, 13.939) · ypr=(346.387, 13.033, -0.819) · hfov=49.539'
+  },
+  'hotel': {
+    label: 'Hotel (E)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(1951.5, 1565.3, 5.700) · ypr=(284.767, -7.500, 0.000)'
+  },
+  'hotel_2': {
+    label: 'Hotel (W)',
+    lms: ['Brown Hotel Sign'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(1957.5, 1559.7, 5.500) · ypr=(84.000, -8.250, 0.000)'
+  },
+  'house_with_boat': {
+    label: 'House with Boat (X)',
+    lms: ['House D (SW)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2342.1, -5545.8, 3.600) · ypr=(0.000, -5.000, 0.000)'
+  },
+  'interchange': {
+    label: 'Interchange',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-970.0, 800.0, 15.000) · ypr=(171.000, 0.000, 0.000) · hfov=60.000'
+  },
+  'intersection': {
+    label: 'Intersection (Bikers)',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-670.0, 860.0, 25.000) · ypr=(60.000, -30.000, 0.000) · hfov=60.000'
+  },
+  'intersection_2': {
+    label: 'Intersection (N)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1360.0, 770.0, 5.000) · ypr=(0.000, -6.000, 0.000) · hfov=60.000'
+  },
+  'intersection_3': {
+    label: 'Intersection (SE)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1388.0, 771.4, 5.100) · ypr=(225.000, -3.000, 0.000)'
+  },
+  'intersection_4': {
+    label: 'Intersection (W)',
+    lms: ['Reworld Miami-Dade (SE)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1353.9, 768.1, 6.000) · ypr=(113.951, -7.998, 0.000) · hfov=75.935'
+  },
+  'jason_duval_02': {
+    label: 'Jason Duval 02 (Car)',
+    lms: [],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(900.0, 500.0, 5.000) · ypr=(298.000, 9.500, 0.000) · hfov=60.000'
+  },
+  'jason_duval_03': {
+    label: 'Jason Duval 03 (Boat)',
+    lms: [],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(-2885.0, -6700.0, 2.500) · ypr=(329.000, -3.000, -0.500) · hfov=50.000'
+  },
+  'jason_duval_05': {
+    label: 'Jason Duval 05 (Machine Gun)',
     lms: ['Vizcayne North Condominium (NE)', 'Icon at South Beach', 'The Floridian', 'Marina Blue (NE)', 'One Miami Condominium East (NE)'],
     rays: [],
-    author: 'neutral_state', loss: 18.82
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(-1431.3, 1002.7, 50.577) · ypr=(236.877, -3.809, 0.157) · hfov=42.197'
   },
-  'lka_boats': {
-    label: 'LK 05 (Boats)',
-    lms: ['Blue Billboard (Key Lento)', 'Pin B01L/C01R/B02R/B02L'],
-    rays: ['LK Postcard → House with Pier (E)'],
-    author: 'neutral_state', loss: 32.964,
-    params: 'xyz=(-3173.5, -6351.0, 3.557) · ypr=(162.116, -17.050, 0.000) · hfov=74.400'
+  'jet_ski': {
+    label: 'Jet Ski',
+    lms: ['Pelican Harbor Radio Tower', 'The Ritz-Carlton Bal Harbour', 'Akoya Condominium', 'Sherry Frontenac Oceanfront Hotel (N)', 'Sherry Frontenac Oceanfront Hotel (S)', 'Jade Ocean Condos', 'Jade Ocean Condos (SW)', 'East Venetian Causeway Bridge', 'Sunset Harbour South Condo', 'Green Diamond', 'Blue Diamond', 'Trésor Tower', '1111 Lincoln Rd (NW)', '1111 Lincoln Rd (SE)'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(868.3, 841.1, -2.530) · ypr=(336.396, 1.310, -0.459) · hfov=60.728'
+  },
+  'kl': {
+    label: 'Key Lento',
+    lms: ['Island G (E)', 'Island G (W)', '200 Pompano Dr', '180 Pompano Dr', 'Island J (E)', 'Island J (W)', 'Tree on Island J', 'Island K (E)', 'Island K (W)', 'Unknown Residential Building', 'Billboard #2 (Key Lento)', '99353 Overseas Hwy', 'Blue Billboard (Key Lento)', '102180 Overseas Hwy', 'Marina Club at Blackwater Sound (S)', 'Marina Club at Blackwater Sound (N)', '500 Pompano Dr', 'House C (E)', 'House D (E)', 'Island V (S)', 'Naval Air Station Key West (Control Tower)', 'Naval Air Station Key West (Radar Tower)'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-1681.9, -5148.4, 25.882) · ypr=(133.973, -7.853, 0.107) · hfov=62.438'
+  },
+  'keys': {
+    label: 'Keys',
+    lms: ['Island W (N)', 'New Bahia Honda Bridge (39B)', 'New Bahia Honda Bridge (38B)', 'New Bahia Honda Bridge (37B)', 'New Bahia Honda Bridge (36B)', 'New Bahia Honda Bridge (35B)', 'New Bahia Honda Bridge (34B)', 'New Bahia Honda Bridge (33B)', 'Unnamed Building #1 (Blimp Key)', 'New Bahia Honda Bridge (32B)', 'New Bahia Honda Bridge (31B)', 'New Bahia Honda Bridge (30B)', 'Seven Mile Bridge (E)', 'New Bahia Honda Bridge (29B)', 'New Bahia Honda Bridge (28B)', 'New Bahia Honda Bridge (27B)', 'Seven Mile Bridge (5B)', 'Old Bahia Honda Bridge (21B)', 'New Bahia Honda Bridge (23B)', 'New Bahia Honda Bridge (22B)', 'New Bahia Honda Bridge (21B)', 'New Bahia Honda Bridge (20B)', 'New Bahia Honda Bridge (19B)', 'New Bahia Honda Bridge (18B)', 'New Bahia Honda Bridge (17B)', 'Seven Mile Bridge (20B)', 'New Bahia Honda Bridge (16B)', 'New Bahia Honda Bridge (15B)', 'New Bahia Honda Bridge (14B)', 'New Bahia Honda Bridge (13B)', 'New Bahia Honda Bridge (12B)', 'Sombrero Key Light (B)', 'New Bahia Honda Bridge (11B)', 'New Bahia Honda Bridge (10B)', 'Seven Mile Bridge (W)', 'New Bahia Honda Bridge (9B)', 'New Bahia Honda Bridge (8B)', 'New Bahia Honda Bridge (7B)', 'New Bahia Honda Bridge (6B)', 'New Bahia Honda Bridge (5B)', 'New Bahia Honda Bridge (4B)', 'New Bahia Honda Bridge (3B)', 'New Bahia Honda Bridge (2B)', 'New Bahia Honda Bridge (1B)', 'Blimp Bay', 'Old Bahia Honda Bridge (1B)', 'Vake Island (E)', 'Vake Island (W)'],
+    rays: ['Key Lento → Island V (S)', 'Leonida Keys 01 (Airplane) (X) → Island V (S)'],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-6468.3, -7078.1, 224.238) · ypr=(276.216, -18.363, 0.227) · hfov=51.193'
+  },
+  'leonida_keys_01': {
+    label: 'Leonida Keys 01 (Airplane) (X)',
+    lms: ['Wheelabrator South Broward (W)', 'Unnamed Building #1 (Blimp Key)', 'Wheelabrator South Broward', 'Island S (E)', 'MIA North Terminal Tower', 'FAA Miami ATCT (MIA)', 'Homestead Water Tower', 'Prison Tower (6)', 'Prison Tower (1)', 'Prison Tower (5)', 'Prison Tower (2)', 'Magic City Casino (?)', 'Prison Tower (4)', 'Prison Tower (3)', 'Island U (S)', 'WDNA FM', 'Island N (W)', 'Island V (S)', 'Red Billboard (Hamlet)', 'White Billboard (Hamlet)', 'Four Seasons Hotel Miami (BW)', 'Park Grove Condominium (N)', 'Park Grove Condominium (C)', 'Park Grove Condominium (S)', 'Four Seasons Hotel Miami (BE)', 'Office in the Grove', 'Island N (E)', 'Carbonell Brickell', 'Asia Brickell Key', 'Three Tequesta Point', 'Turkey Point Nuclear Power Station (CNW)', 'Turkey Point Nuclear Power Station (CNE)', 'Two Tequesta Point', 'Turkey Point Nuclear Power Station (CSW)', 'Turkey Point Nuclear Power Station (N)', 'Turkey Point Nuclear Power Station (CSE)', 'Turkey Point Nuclear Power Station (S)', 'Turkey Point Nuclear Power Station (1)', 'Turkey Point Nuclear Power Station (2)', 'Turkey Point Nuclear Power Station (3)', 'Seven Mile Bridge (W)', 'Bridge Island (W)', 'Portofino Tower (NW)', 'Keys Bridge (C)', 'Continuum on South Beach (S)', 'Seven Mile Bridge (21B)', 'Island A (W)', 'Seven Mile Bridge (20B)', 'Seven Mile Bridge (19B)', 'Key Lento (A)', 'Seven Mile Bridge (18B)', 'House D (SW)', 'Seven Mile Bridge (17B)', 'House with Boat (X)', 'Seven Mile Bridge (16B)', 'Seven Mile Bridge (15B)', 'Seven Mile Bridge (14B)', 'Seven Mile Bridge (13B)', 'Seven Mile Bridge (12B)', 'Seven Mile Bridge (11B)', 'Seven Mile Bridge (10B)', 'Seven Mile Bridge (9B)', 'Seven Mile Bridge (8B)', '102180 Overseas Hwy', 'Seven Mile Bridge (7B)', 'Seven Mile Bridge (6T)', 'Seven Mile Bridge (6B)', 'Seven Mile Bridge (5B)', 'Seven Mile Bridge (4B)', 'Seven Mile Bridge (3T)', 'Seven Mile Bridge (3B)', 'Blue Billboard (Key Lento)', 'Seven Mile Bridge (2B)', 'Seven Mile Bridge (1B)', 'Seven Mile Bridge (E)', '99353 Overseas Hwy', 'Key Lento (J)', 'Blimp Bay', 'Island J (E)', 'Tree on Island J', 'Pin A02R', 'Pin A03L', 'Pin A03R', 'Pin A04L', 'Pin A04R', 'Pin A05L', 'Pin A05R', 'Pin A06L', 'Pin A06R', 'Pin A07L', 'Pin A07R', 'Pin A08L', 'Pin A08R', 'Pin B01L', 'Pin B01R', 'Pin B02L', 'Pin B02R', 'Pin B03L', 'Pin B03R', 'Pin B04L', 'Pin B04R', 'Pin C01R', 'Pin C01R (B)', 'Pin C02L', 'Pin C02R', 'Pin C03L', 'Pin C03R', 'Pin C04L', 'Pin C04R', 'Pin D01L', 'Pin D01R', 'Pin D02L', 'Pin D02R'],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(-4404.6, -7599.4, 81.611) · ypr=(318.506, -9.404, -0.003) · hfov=62.453'
+  },
+  'leonida_keys_02': {
+    label: 'Leonida Keys 02 (Sidewalk)',
+    lms: [],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(-2933.0, -6433.0, 2.000) · ypr=(105.000, 1.000, 0.000) · hfov=45.000'
+  },
+  'leonida_keys_05': {
+    label: 'Leonida Keys 05 (Boats)',
+    lms: ['House with Pier (E)', 'Blue Billboard (Key Lento)', 'Pin B01L', 'Pin C01R', 'Pin B02R', 'Pin B02L'],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(-3134.0, -6296.3, 3.765) · ypr=(159.648, -14.548, 0.745) · hfov=66.041'
+  },
+  'leonida_keys_postcard': {
+    label: 'Leonida Keys Postcard (X)',
+    lms: ['Lake Surprise Viaduct (15B)', 'Turkey Point Nuclear Power Station (1)', 'Turkey Point Nuclear Power Station (2)', 'Turkey Point Nuclear Power Station (3)', 'Icon at South Beach', 'Lake Surprise Viaduct (14B)', 'Murano Grande', 'Lake Surprise Viaduct (13B)', 'Lake Surprise Viaduct (12B)', 'Lake Surprise Viaduct (11B)', 'Lake Surprise Viaduct (10B)', 'Bridge Island (W)', 'Lake Surprise Viaduct (9B)', 'Lake Surprise Viaduct (8B)', 'Keys Bridge (1B)', 'Island X (S)', 'Lake Surprise Viaduct (7B)', 'Keys Bridge (2B)', 'Keys Bridge (3B)', 'Keys Bridge (4B)', 'Keys Bridge (5B)', 'Keys Bridge (6B)', 'Keys Bridge (7B)', 'Lake Surprise Viaduct (6B)', 'Island Z (S)', 'Lake Surprise Viaduct (5B)', 'Island Y (S)', 'Lake Surprise Viaduct (4B)', 'Lake Surprise Viaduct (3B)', 'Lake Surprise Viaduct (2B)', 'Key Lento (E)', 'Island A (W)', 'House D (SW)', 'House D (E)', 'House C (E)', 'Key Lento (A)', 'House with Boat (X)', '500 Pompano Dr', 'Marina Club at Blackwater Sound (N)', 'Unknown Residential Building', '200 Pompano Dr', '180 Pompano Dr', 'Marina Club at Blackwater Sound (S)', '102180 Overseas Hwy', 'Key Lento (W)', 'Island F (E)', 'Island F (W)', 'House with Pier (E)', 'Key Lento (V)', 'Billboard #2 (Key Lento)', 'Island G (E)', 'Island G (W)', 'Key Lento (U)', 'Island J (E)', 'Tree on Island J', 'Island J (W)', 'Key Lento (J)', 'Pin A02R', 'Pin A03L', 'Pin A03R', 'Pin A04L', 'Pin A04R', 'Pin A05L', 'Pin A05R', 'Pin A06L', 'Pin A06R', 'Pin A07L', 'Pin A07R', 'Pin A08L', 'Pin A08R', 'Pin B01L', 'Pin B01R', 'Pin B02L', 'Pin B02R', 'Pin B03L', 'Pin B03R', 'Pin B04L', 'Pin B04R', 'Pin C01R', 'Pin C01R (B)', 'Pin C02L', 'Pin C02R', 'Pin C03L', 'Pin C03R', 'Pin C04L', 'Pin C04R', 'Pin D01L', 'Pin D01R', 'Pin D02L', 'Pin D02R'],
+    rays: ['Port → Portofino Tower (NW)', 'Rooftop Party → Portofino Tower (NW)', 'Leonida Keys 01 (Airplane) (X) → Portofino Tower (NW)', 'Sidewalk (Jason) (E) → Portofino Tower (NW)', 'Rooftop Party → Continuum on South Beach (S)', 'Leonida Keys 01 (Airplane) (X) → Continuum on South Beach (S)', 'Prison → Keys Bridge (C)', 'Leonida Keys 01 (Airplane) (X) → Keys Bridge (C)'],
+    author: 'neutral_state', loss: 6.412,
+    params: 'xyz=(-3807.1, -6764.6, 157.006) · ypr=(299.619, -12.284, -0.118) · hfov=47.622'
+  },
+  'little_haiti': {
+    label: 'Little Haiti',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-1242.0, 1242.0, 5.000) · ypr=(209.600, 0.000, 2.000) · hfov=60.000'
+  },
+  'loading_zone_near_prison': {
+    label: 'Loading Zone near Prison (N)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-4727.6, 1856.5, 11.900) · ypr=(21.000, -8.400, 0.000)'
+  },
+  'loading_zone_near_prison_2': {
+    label: 'Loading Zone near Prison (SW)',
+    lms: ['Water Tower near Prison'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-4725.3, 1853.8, 12.200) · ypr=(122.973, -5.000, 0.000)'
+  },
+  'lucia_caminos_02': {
+    label: 'Lucia Caminos 02 (Pool)',
+    lms: [],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(10.0, 1208.0, 15.000) · ypr=(120.000, -5.000, 0.000) · hfov=45.000'
+  },
+  'metro': {
+    label: 'Metro (NE) (B)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1554.5, -302.1, 20.900) · ypr=(305.704, -15.194, 0.000)'
+  },
+  'metro_2': {
+    label: 'Metro (SE) (A) (4K)',
+    lms: ['Four Seasons Hotel Miami (40NE)', 'Four Seasons Hotel Miami (40NW)', 'Four Seasons Hotel Miami (40W)', 'Nine at Mary Brickell Village (A)', 'Nine at Mary Brickell Village (B)', 'Nine at Mary Brickell Village (C)', 'Nine at Mary Brickell Village (D)', 'The Ritz-Carlton Coconut Grove (S)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1555.2, -307.7, 20.600) · ypr=(183.749, -9.924, 0.000)'
+  },
+  'metro_3': {
+    label: 'Metro (SE) (B)',
+    lms: ['Infinity at Brickell'],
+    rays: ['Grassrivers 02 (Watson Bay) → Nine at Mary Brickell Village (A)', 'Metro (SE) (A) (4K) → Nine at Mary Brickell Village (A)', 'Airport (X) → Nine at Mary Brickell Village (A)'],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1555.6, -335.8, 34.108) · ypr=(185.266, -10.179, 0.000) · hfov=81.116'
+  },
+  'metro_4': {
+    label: 'Metro (SE) (C)',
+    lms: ['Infinity at Brickell (SW)'],
+    rays: ['Highway (Peacock Bay) (A) → Park Grove Condominium (N)', 'Highway (Peacock Bay) (B) → Park Grove Condominium (N)', 'Leonida Keys 01 (Airplane) (X) → Park Grove Condominium (N)', 'Grassrivers 02 (Watson Bay) → Park Grove Condominium (N)', 'Metro (SE) (A) (4K) → The Ritz-Carlton Coconut Grove (S)', 'Tennis Stadium (4K) → The Ritz-Carlton Coconut Grove (S)', 'Metro (SE) (B) → Infinity at Brickell', 'Highway (Peacock Bay) (A) → Infinity at Brickell', 'Highway (Peacock Bay) (B) → Infinity at Brickell'],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1555.7, -308.5, 20.800) · ypr=(179.912, -9.406, -0.087)'
+  },
+  'motel': {
+    label: 'Motel',
+    lms: ['Economy Inn (RE)', 'Starlet Motel Sign (BS)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-5360.3, 3483.6, 67.800) · ypr=(313.691, 10.461, 0.000) · hfov=86.515'
+  },
+  'motorboats': {
+    label: 'Motorboats (A)',
+    lms: ['Park Grove Condominium (S)', 'Four Seasons Hotel Miami (SE)', 'Four Seasons Hotel Miami (BE)', 'Two Tequesta Point', 'Three Tequesta Point', 'Container Crane (1)', 'Asia Brickell Key (CC1)', 'Asia Brickell Key (CC2)', 'Stack (T)', 'Stack (B)', 'Container Crane (3)', 'CC (3) (BB2)', 'C (TSW)', 'C (BSW)', 'C (TSE)', 'C (BSE)', 'C (TNE)', 'C (BNE)'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(1517.9, -787.8, 3.065) · ypr=(93.003, 1.944, -0.060) · hfov=62.514'
+  },
+  'motorboats_2': {
+    label: 'Motorboats (B)',
+    lms: ['Park Grove Condominium (S)', 'Four Seasons Hotel Miami (SE)', 'Four Seasons Hotel Miami (BE)', 'Container Crane (1)', 'Asia Brickell Key (CC1)', 'Asia Brickell Key (CC2)', 'Container Crane (2)', 'Stack (T)', 'Stack (B)', 'Container Crane (3)', 'Cruise Terminal D', 'Vizcayne North Condominium (NE)', 'Marina Blue (NE)'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(1533.2, -781.1, 4.567) · ypr=(88.869, -0.392, -0.001) · hfov=62.466'
+  },
+  'mount_kalaga_national_park_02': {
+    label: 'Mount Kalaga National Park 02 (Helicopter) (X)',
+    lms: [],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(-1750.0, 6250.0, 200.000) · ypr=(118.750, 6.800, 0.000) · hfov=60.000'
+  },
+  'mount_kalaga_national_park_04': {
+    label: 'Mount Kalaga National Park 04 (Mountain Pass) (X)',
+    lms: ['Quarry'],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(-4750.0, 6000.0, 120.007) · ypr=(158.056, -13.303, -0.352) · hfov=59.854'
+  },
+  'ocean_drive': {
+    label: 'Ocean Drive (NW)',
+    lms: [],
+    rays: ['Vice Beach (A) → The Tides South Beach', 'Vice Beach (B) → The Tides South Beach', 'Beach → The Tides South Beach'],
+    author: 'trailer', loss: null,
+    params: 'xyz=(1973.7, 521.2, 7.608) · ypr=(22.540, -4.398, -0.034) · hfov=57.235'
+  },
+  'ocean_near_keys': {
+    label: 'Ocean near Keys (E)',
+    lms: ['Sombrero Key Light (B)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-3430.1, -7190.5, 0.600) · ypr=(257.800, -6.831, 0.000)'
+  },
+  'ocean_near_keys_2': {
+    label: 'Ocean near Keys (N)',
+    lms: ['Seven Mile Bridge (6T)', 'Seven Mile Bridge (3T)', 'Blue Billboard (Key Lento)', '99353 Overseas Hwy', 'Four Seasons Hotel Miami (BW)', '102180 Overseas Hwy'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-3442.9, -7191.0, 0.501) · ypr=(358.564, -2.172, -1.338) · hfov=81.924'
+  },
+  'park': {
+    label: 'Park',
+    lms: ['Jenny Hostel (NE)', 'Hotel Breakwater', 'Hotel Victor (SW)', '1500 Ocean Dr (S) (SW)', '1500 Ocean Dr (S) (SE)', 'Art Deco Welcome Center (S)', '1500 Ocean Dr', 'Hotel Breakwater (K)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(2010.3, 452.4, 3.700) · ypr=(0.000, 0.023, -0.050)'
+  },
+  'park_2': {
+    label: 'Park (Mobile Phone)',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-170.0, 370.0, 5.000) · ypr=(225.000, 0.000, 0.000) · hfov=60.000'
+  },
+  'parking_lot': {
+    label: 'Parking Lot',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1574.7, -1644.5, 5.600) · ypr=(316.500, -33.500, 0.000)'
+  },
+  'pawn_shop': {
+    label: 'Pawn Shop (S)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6420.3, 3064.7, 6.500) · ypr=(173.193, -4.990, 0.000)'
+  },
+  'pawn_shop_2': {
+    label: 'Pawn Shop (W)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6421.6, 3061.6, 6.700) · ypr=(125.104, -8.885, 0.000)'
+  },
+  'pickup_truck': {
+    label: 'Pickup Truck (Night) (A)',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-1250.0, -2550.0, 2.500) · ypr=(15.000, 5.000, 0.000) · hfov=45.000'
+  },
+  'pier': {
+    label: 'Pier (Sea)',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-2545.0, -5705.0, 2.500) · ypr=(45.000, -0.500, 0.000) · hfov=60.000'
+  },
+  'police_chase': {
+    label: 'Police Chase (A)',
+    lms: ['White Billboard (Hamlet)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2588.9, -3566.7, 10.300) · ypr=(201.396, -2.565, -1.500)'
+  },
+  'police_chase_2': {
+    label: 'Police Chase (B)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2588.1, -3549.8, 10.400) · ypr=(187.368, -14.000, 0.000)'
+  },
+  'police_chase_3': {
+    label: 'Police Chase (C)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2585.6, -3485.9, 10.700) · ypr=(197.405, -7.000, 0.000)'
+  },
+  'police_chase_4': {
+    label: 'Police Chase (D)',
+    lms: ['Red Billboard (Hamlet)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2582.3, -3436.6, 10.400) · ypr=(201.105, -7.000, 0.000)'
+  },
+  'police_chase_5': {
+    label: 'Police Chase (E)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2580.5, -3415.8, 11.200) · ypr=(188.940, -8.000, 0.000)'
+  },
+  'police_chase_6': {
+    label: 'Police Chase (F)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2576.4, -3364.9, 11.000) · ypr=(188.940, -9.000, 0.000)'
+  },
+  'police_chase_7': {
+    label: 'Police Chase (G)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2572.8, -3326.6, 11.100) · ypr=(188.940, -9.000, 0.000)'
+  },
+  'police_chase_8': {
+    label: 'Police Chase (H)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2572.4, -3310.4, 11.600) · ypr=(188.940, -9.000, 1.500)'
+  },
+  'police_chase_9': {
+    label: 'Police Chase (I)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2571.0, -3291.0, 11.600) · ypr=(188.940, -8.500, 0.000)'
+  },
+  'police_chase_10': {
+    label: 'Police Chase (J)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2568.7, -3272.6, 11.300) · ypr=(190.275, -8.500, 0.000)'
+  },
+  'pool': {
+    label: 'Pool',
+    lms: ['Red-Yellow Umbrella (2)', 'Red-Yellow Umbrella (1)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-5327.7, 3476.6, 67.900) · ypr=(208.500, -8.000, 0.000)'
+  },
+  'port': {
+    label: 'Port',
+    lms: ['Murano Grande', 'Portofino Tower (NW)'],
+    rays: ['(geometric: equilateral from NW+NE) → Portofino Tower (S)'],
+    author: 'leak', loss: null,
+    params: 'xyz=(1190.0, -426.9, 7.200) · ypr=(302.500, 14.100, 0.000) · hfov=78.658'
+  },
+  'port_2': {
+    label: 'Port (B)',
+    lms: [],
+    rays: ['Port → Portofino Tower (NW)', 'Rooftop Party → Portofino Tower (NW)', 'Leonida Keys 01 (Airplane) (X) → Portofino Tower (NW)', 'Sidewalk (Jason) (E) → Portofino Tower (NW)', '(geometric: equilateral from NW+NE) → Portofino Tower (S)'],
+    author: 'leak', loss: null,
+    params: 'xyz=(1191.5, -426.2, 7.300) · ypr=(296.300, -8.000, 0.000) · hfov=78.658'
+  },
+  'port_gellhorn_01': {
+    label: 'Port Gellhorn 01 (Starlet Motel)',
+    lms: ['Red-Yellow Umbrella (2)', 'Starlet Motel Sign (BS)', 'Red-Yellow Umbrella (1)', 'Economy Inn (RE)'],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(-5334.5, 3575.1, 68.168) · ypr=(177.038, 4.882, 3.080) · hfov=50.045'
+  },
+  'port_gellhorn_04': {
+    label: 'Port Gellhorn 04 (Delights) (X)',
+    lms: ['Water Tower (West Port Gellhorn) (C)', 'Train Signal (S) (W)', 'Train Signal (S) (E)'],
+    rays: ['Chase (2) (A) → Juice Fruit Sign (B)', 'Port Gellhorn Postcard (X) → Juice Fruit Sign (B)'],
+    author: 'neutral_state', loss: 0.003,
+    params: 'xyz=(-6316.5, 3692.7, 7.903) · ypr=(73.445, -22.471, 1.409) · hfov=82.423'
+  },
+  'port_gellhorn_05': {
+    label: 'Port Gellhorn 05 (Fire)',
+    lms: [],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(-6800.0, 3950.0, 5.000) · ypr=(315.000, -0.500, 0.000) · hfov=50.000'
+  },
+  'pgp': {
+    label: 'Port Gellhorn Postcard (X)',
+    lms: ['PGH Island B (W)', 'PGH Barrier Island (E)', 'PGH Island B (E)', 'PGH Island A (E)', 'PGH Island A (S)', 'PGH Island A (W)', 'Bay (A)', 'Bay (B)', 'Bay (C)', 'Bay (D)', 'Water Tower (West Port Gellhorn)', 'Water Tower (West Port Gellhorn) (C)', 'Bay (E)', 'Bay (G)', 'Bay (F)', 'Bay (H)', 'PGH Canal (A)', 'Port of Tampa Container Crane (1)', 'PGH Canal (B)', 'Bay (I)', 'Port of Tampa Container Crane (2)', 'PTCC (2) (BB2)', 'Bay (J)', 'Bay (K)', 'Port of Tampa Container Crane (3)', 'PTCC (3) (BB2)', 'Bay (L)', 'Bay (M)', 'PGH Canal (C)', 'PGH Canal (D)', 'Train Signal (S) (W)', 'Train Signal (S) (E)', 'Bay (N)', 'Bay (O)', 'Ship (A)', 'Ship (B)', 'Juice Fruit Sign (W)', 'Ship (C)', 'Juice Fruit Sign (B)', 'Juice Fruit Sign', 'Bay (P)', 'Bay (Q)', 'Juice Fruit Sign (E)', 'Bay (R)', 'Bay (S)', 'Bay (T)', 'Bay (U)', 'Bay (V)', 'Bay (W)', 'Bay (X)', 'Bay (Y)', 'Bay (Z)'],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(-6551.0, 3600.5, 32.516) · ypr=(51.810, -3.204, 0.995) · hfov=70.959'
+  },
+  'prison': {
+    label: 'Prison',
+    lms: ['Opera Tower', 'The Grand (E)', 'Magic City Casino (?)', 'Double Pole (1N)', 'Double Pole (1S)', 'Miami Tower', 'Wells Fargo Center (N)', 'Southeast Financial Center', 'Southeast Financial Center (D)', 'Four Seasons Hotel Miami (NW)', 'Four Seasons Hotel Miami (BW)', 'Four Seasons Hotel Miami (BE)', 'Four Seasons Hotel Miami (SE)', 'WDNA FM', 'Double Pole (2N)', 'Double Pole (2S)', 'Park Grove Condominium (S)', 'Double Pole (3N)', 'Double Pole (3S)', 'Prison Tower (1)', 'Prison Tower (2)', 'Lamp Post (NW)', 'Lamp Post (NE)', 'Lamp Post (SW)', 'Lamp Post (SE)', 'Prison Tower (3)', 'Prison Tower (6)', 'Keys Bridge (C)', 'Prison Tower (4)', 'Tall Billboard', 'Prison Tower (5)', 'Turkey Point Nuclear Power Station (N)', 'Turkey Point Nuclear Power Station (S)', 'Turkey Point Nuclear Power Station (1)', 'Turkey Point Nuclear Power Station (2)', 'Turkey Point Nuclear Power Station (3)'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-3359.5, -2761.1, 33.344) · ypr=(281.398, -2.632, 0.069) · hfov=81.379'
+  },
+  'prison_tower': {
+    label: 'Prison Tower',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-2638.0, -2915.0, 5.000) · ypr=(4.000, 16.000, 0.000) · hfov=45.000'
+  },
+  'raul': {
+    label: 'Raul Bautista 03 (Motorboat)',
+    lms: ['Bayshore Place Condominium (TE)'],
+    rays: ['Skyline → One Miami Condominium West (SE)', 'Vice City 03 (Basketball) → One Miami Condominium West (SE)', 'Skyline → One Miami Condominium East (SE)', 'Vice City 03 (Basketball) → One Miami Condominium East (SE)', 'Rooftop Party → Carbonell Brickell', 'Skyline → Carbonell Brickell', 'Leonida Keys 01 (Airplane) (X) → Carbonell Brickell', 'Vice City Postcard → Carbonell Brickell'],
+    author: 'neutral_state', loss: 0.164,
+    params: 'xyz=(-799.2, -1992.2, 3.080) · ypr=(352.649, 0.148, 0.396) · hfov=39.155'
+  },
+  'red_limousine': {
+    label: 'Red Limousine',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(1700.0, 400.0, 5.000) · ypr=(315.000, 8.000, 0.000) · hfov=45.000'
+  },
+  'rooftop': {
+    label: 'Rooftop Party',
+    lms: ['1500 Ocean Dr', 'Royal Palm South Beach (N) (N)', 'Royal Palm South Beach (S)', 'Fisher Island (A)', 'Loews Miami Beach', 'W South Beach (BNW)', 'Continuum on South Beach (S)', 'Palazzo del Sol', 'Portofino Tower (NW)', 'Old City Hall', 'The Waverly South Beach (SE)', 'Flamingo South Beach (TSE)', 'Flamingo South Beach (TE)', '1111 Lincoln Rd (SE)', 'Cruise Terminal G (B)', 'Asia Brickell Key', 'Capri South Beach (SE)', 'Flamingo South Beach (NWNE)', 'Carbonell Brickell', 'Four Seasons Hotel Miami (BE)', 'Four Seasons Hotel Miami (BW)', 'InterContinental Miami (N)', 'Portofino Tower (NE)'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(1921.3, 1951.7, 105.101) · ypr=(162.606, -7.558, 0.077) · hfov=59.097'
+  },
+  'shootout': {
+    label: 'Shootout (S)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1355.7, 737.8, 4.900) · ypr=(169.000, -7.500, 0.000)'
+  },
+  'shootout_2': {
+    label: 'Shootout (W)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1346.2, 736.8, 4.500) · ypr=(78.000, 2.500, 0.000)'
+  },
+  'sidewalk': {
+    label: 'Sidewalk (Jason) (E)',
+    lms: ['W South Beach (SE)', 'The Floridian', 'Star Island Water Tower', 'Portofino Tower (NW)', 'Margaret Pace Park', 'Portofino Tower (NE)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-464.0, 1233.8, 4.600) · ypr=(244.753, -19.854, 0.000)'
+  },
+  'sidewalk_2': {
+    label: 'Sidewalk (Jason) (S)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-465.0, 1232.1, 3.500) · ypr=(180.000, 0.000, 0.000)'
+  },
+  'sidewalk_3': {
+    label: 'Sidewalk (Lucia)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(1931.7, 270.4, 5.800) · ypr=(359.000, -32.000, 0.000)'
+  },
+  'skyline': {
+    label: 'Skyline',
+    lms: ['Cruise Ship (FT)', 'Asia Brickell Key (CC1)', 'Asia Brickell Key', 'Asia Brickell Key (CC2)', 'Carbonell Brickell', 'One Miami Condominium East (SE)', 'One Miami Condominium East (NE)', 'One Miami Condominium West (SE)', 'One Miami Condominium West (NE)', 'Skyviews Miami Observation Wheel', 'Citigroup Center (SE)', 'Citigroup Center (NW)', 'Southeast Financial Center', '50 Biscayne Blvd (SE)', 'Wells Fargo Center (N)', 'Miami Tower', 'Unknown Sphere', 'Loft Downtown II', 'Vizcayne North Condominium (SE)', 'Kaseya Center (SE)', 'Flagler on the River', 'Kaseya Center (NW)', 'Marina Blue (NE)', 'Ten Museum Park (SE)', '1000 Venetian Way (SE)', '1000 Venetian Way (4)', '1000 Venetian Way (3)', '1000 Venetian Way (2)', 'Opera Tower', 'The Grand (E)'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(731.3, 1334.4, 16.344) · ypr=(135.388, -2.501, 0.040) · hfov=60.043'
+  },
+  'store': {
+    label: 'Store (Lucia)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-6331.1, 2750.2, 14.200) · ypr=(86.623, -42.601, 0.000)'
+  },
+  'street': {
+    label: 'Street (Bikers) (B)',
+    lms: [],
+    rays: ['Ocean near Keys (N) → Four Seasons Hotel Miami (BW)', 'Prison → Four Seasons Hotel Miami (BW)', 'Vice Beach (A) → Four Seasons Hotel Miami (BW)', 'Vice Beach (B) → Four Seasons Hotel Miami (BW)', 'Rooftop Party → Four Seasons Hotel Miami (BW)', 'Leonida Keys 01 (Airplane) (X) → Four Seasons Hotel Miami (BW)', 'Vice City Postcard → Four Seasons Hotel Miami (BW)'],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-865.0, 1600.0, 4.998) · ypr=(152.715, -0.085, -0.066) · hfov=60.094'
+  },
+  'street_2': {
+    label: 'Street (Jason)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1375.0, 600.0, 5.000) · ypr=(350.000, 9.000, 0.000) · hfov=60.000'
+  },
+  'street_3': {
+    label: 'Street (Lucia) (N)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1340.0, 850.0, 5.000) · ypr=(0.000, 2.500, 0.000) · hfov=60.000'
+  },
+  'street_4': {
+    label: 'Street (Lucia) (S)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-1340.0, 800.0, 5.000) · ypr=(350.000, 5.000, 0.000) · hfov=60.000'
+  },
+  'strip_club': {
+    label: 'Strip Club (Jason) (D)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-696.6, 1212.6, 4.700) · ypr=(288.000, -15.000, 0.000)'
+  },
+  'strip_club_2': {
+    label: 'Strip Club (Jason) (U)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-685.1, 1225.4, 8.200) · ypr=(21.000, -24.000, 0.000)'
+  },
+  'strip_club_3': {
+    label: 'Strip Club (Lucia)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-700.0, 1190.0, 5.000) · ypr=(225.000, -5.000, 0.000) · hfov=60.000'
+  },
+  'tarmac': {
+    label: 'Tarmac',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-2630.2, -111.0, 6.700) · ypr=(90.000, -50.000, 0.000) · hfov=60.000'
+  },
+  'television': {
+    label: 'Television',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-2357.1, -5712.2, 6.540) · ypr=(27.154, -4.878, 0.000) · hfov=58.284'
+  },
+  'tennis_court': {
+    label: 'Tennis Court (E)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-317.0, 1173.0, 4.989) · ypr=(315.186, -8.964, -0.003)'
+  },
+  'tennis_court_2': {
+    label: 'Tennis Court (N)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-314.7, 1172.3, 4.817) · ypr=(28.731, -3.951, -0.013)'
+  },
+  'tennis_court_3': {
+    label: 'Tennis Court (NE)',
+    lms: ['112 NE 41st St (NW)', '112 NE 41st St (SE)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-315.7, 1172.2, 4.958) · ypr=(0.366, -8.063, -0.011)'
+  },
+  'tennis_court_4': {
+    label: 'Tennis Court (SE)',
+    lms: ['Old City Hall', 'West Venetian Causeway Bridge', '1000 Venetian Way (SW)', '1000 Venetian Way (NW)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-317.2, 1174.9, 5.021) · ypr=(258.595, -9.932, -0.105)'
+  },
+  'tennis_court_5': {
+    label: 'Tennis Court (SW)',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-313.4, 1174.2, 4.847) · ypr=(100.299, -4.820, -0.005)'
+  },
+  'tennis_stadium': {
+    label: 'Tennis Stadium (4K)',
+    lms: ['Homestead Water Tower', 'Prison Tower (4)', 'Prison Tower (3)', 'Prison Tower (5)', 'Prison Tower (2)', 'Prison Tower (6)', 'Office in the Grove', 'Park Grove Condominium (S)', 'Four Seasons Hotel Miami (SW)', 'Four Seasons Hotel Miami (SE)', 'Four Seasons Hotel Miami (HB28SE)', 'Four Seasons Hotel Miami (HB8SE)', 'Four Seasons Hotel Miami (HB58SE)', 'Four Seasons Hotel Miami (HB58NE)', 'Four Seasons Hotel Miami (40E)', 'Four Seasons Hotel Miami (NE)', 'Four Seasons Hotel Miami (56NE)', 'Four Seasons Hotel Miami (40NE)', 'Four Seasons Hotel Miami (32NE)', 'Nine at Mary Brickell Village (E)', 'Bayshore Place Condominium (TE)', 'The Ritz-Carlton Coconut Grove (S)', 'Park Grove Condominium (C)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(-155.6, -1748.6, 36.300) · ypr=(84.966, -0.092, 0.077)'
+  },
+  'trees': {
+    label: 'Trees',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(1495.2, 1315.4, 0.800) · ypr=(284.800, 27.300, 0.000) · hfov=78.803'
+  },
+  'truck': {
+    label: 'Truck (2)',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-250.0, -420.0, 10.000) · ypr=(90.000, 0.000, 0.000) · hfov=60.000'
+  },
+  'u_turn': {
+    label: 'U-Turn (NE)',
+    lms: ['Tall Double Billboard'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-6289.7, 3531.7, 9.954) · ypr=(341.175, -1.358, 0.047) · hfov=45.585'
+  },
+  'u_turn_2': {
+    label: 'U-Turn (NW)',
+    lms: ['6232 E Hwy 98 (SE)', '6232 E Hwy 98 (NE)', 'Radio Tower #1 (Port Gellhorn)', 'Lucky Plucker (SW)'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-6295.2, 3360.2, 10.601) · ypr=(66.422, -3.090, -1.912) · hfov=54.433'
+  },
+  'uncle_jack_s': {
+    label: 'Uncle Jack\'s',
+    lms: ['Uncle Jack\'s Valley'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-6370.0, 3875.0, 14.707) · ypr=(260.051, 1.416, -0.006) · hfov=60.022'
+  },
+  'vi': {
+    label: 'Venetian Islands',
+    lms: ['Akoya Condominium', 'Jade Ocean Condos', 'Jade Ocean Condos (SW)', 'Di Lido Island (N)', 'Pelican Harbor Marina (E)', 'Pelican Harbor Marina (D)', 'Pelican Harbor Radio Tower', 'Green Diamond', 'Pelican Harbor Marina (C)', 'Pelican Harbor Marina (B)', 'Blue Diamond', 'Sunset Harbour South Condo', 'Trésor Tower', 'Sunset Harbour South Condo (RN)', 'Pelican Harbor Marina (A)', 'Sunset Harbour South Condo (RS)', 'East Venetian Causeway Bridge', 'The Gates Hotel South Beach (NW)', 'W South Beach (SE)', 'New World Center', '1000 Venetian Way (2)', '1111 Lincoln Rd (NW)', 'Bank of America Financial Center (NW)', 'Bank of America Financial Center', 'Rivo Alto Island (S)', 'Bank of America Financial Center (SW)', '1000 Venetian Way (3)', '1000 Venetian Way (4)', '1000 Venetian Way (SW)', 'Loews Miami Beach', 'St. Moritz Hotel (SW)', 'Flamingo South Beach (NWNW)', 'Royal Palm South Beach (N) (N)', 'Royal Palm South Beach (N) (S)', 'Biscayne Island (S)', '1500 Ocean Dr (S) (NW)', '1500 Ocean Dr', '1500 Ocean Dr (S) (SW)', 'Flagler Memorial Island (N)', 'Flamingo South Beach (TNE)', 'Di Lido Island (S)', 'Flamingo South Beach (TSW)', 'Pier (Flamingo)', 'Flamingo South Beach (SDS)', 'Flamingo South Beach (SRSW)', '1000 Venetian Way (W2)', '1000 Venetian Way (W3)', '1000 Venetian Way (W4)', '1000 Venetian Way (NW)', '1000 Venetian Way (B-SW)', '1000 Venetian Way (W1)', '1000 Venetian Way (T-SW)', '1000 Venetian Way (T-NW)', '1000 Venetian Way (W-Box-NW)', '1000 Venetian Way (B-NW)', '1000 Venetian Way (Center-NE)', '1000 Venetian Way (NE)'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-44.9, 1093.8, 71.133) · ypr=(286.357, -12.956, -0.009) · hfov=62.721'
+  },
+  'vb_a': {
+    label: 'Vice Beach (A)',
+    lms: ['Beach (G)', 'Hotel Breakwater', 'Murano Grande', 'Icon at South Beach', 'Jenny Hostel (NE)', 'Cavalier Hotel', 'Leslie Hotel', 'Container Crane (9)', 'Construction Crane (Vice Beach)', 'Hotel Victor (NW)', 'Miami Beach Parking Garage (SE)', 'Asia Brickell Key', 'Four Seasons Hotel Miami (SE)', 'Four Seasons Hotel Miami (BE)', 'Four Seasons Hotel Miami (BW)', 'Winter Haven', 'Old City Hall', 'Four Seasons Hotel Miami (NW)', 'McAlpin Ocean Plaza', 'The Floridian', 'The Tides South Beach', '12th St Lifeguard Tower', 'Cardozo South Beach', 'Southeast Financial Center', '1500 Ocean Dr', 'The Waverly South Beach (SE)', 'The Waverly South Beach (NW)', 'Flamingo South Beach (SRSW)', 'Flamingo South Beach (SDS)', 'Flamingo South Beach (TSE)', 'Flamingo South Beach (TE)', 'Flamingo South Beach (TNE)', 'Marriott Miami Biscayne Bay (NE)', 'Opera Tower', 'Courtyard by Marriott (NE)', 'The Grand', 'Quantum on the Bay Condominium (S) (NE)', 'Quantum on the Bay Condominium (N) (NE)', '1000 Venetian Way (SW)', '1000 Venetian Way (SE)', 'Capri South Beach (SE)', 'Beach (H)', 'Loews Miami Beach', 'Hotel Victor (NE)'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(2354.3, 1108.0, 50.045) · ypr=(112.667, -12.749, 0.034) · hfov=62.634'
+  },
+  'vb_b': {
+    label: 'Vice Beach (B)',
+    lms: ['Murano Grande', 'Jenny Hostel (NE)', 'Cavalier Hotel', 'Leslie Hotel', 'Icon at South Beach', 'Port (A)', 'CC (9) (BE)', 'Container Crane (9)', 'CC (9) (BW)', 'Construction Crane (Vice Beach)', 'Hotel Victor (NW)', 'Port (B)', 'Two Tequesta Point', 'Miami Beach Parking Garage (SE)', 'Three Tequesta Point', 'Winter Haven', 'McAlpin Ocean Plaza', 'Old City Hall', 'Asia Brickell Key (CC2)', 'Four Seasons Hotel Miami (SE)', 'Four Seasons Hotel Miami (BE)', 'Four Seasons Hotel Miami (BW)', 'Four Seasons Hotel Miami (NW)', 'Cruise Terminal G (B)', 'The Tides South Beach', 'The Floridian', 'Cardozo South Beach', 'Southeast Financial Center', '1500 Ocean Dr', 'Wells Fargo Center (N)', 'The Waverly South Beach (SE)', '1500 Ocean Dr (S) (SE)', 'The Waverly South Beach (NW)', 'Flagler on the River', 'FAA Miami ATCT (MIA)', 'Star Island Water Tower', '1500 Ocean Dr (S) (NW)', 'Marina Blue (NE)', 'Ten Museum Park (SE)', 'Royal Palm South Beach (S)', 'Flamingo South Beach (TSE)', 'Flamingo South Beach (TE)', 'Flamingo South Beach (TNE)', 'Royal Palm South Beach (N) (S)', 'Marriott Miami Biscayne Bay (NE)', 'Royal Palm South Beach (N) (N)', 'The Grand', 'The Grand (E)', 'Flamingo South Beach (NERNE)', 'Courtyard by Marriott (NE)', 'Flamingo South Beach (NENE)', '1000 Venetian Way (SW)', 'Quantum on the Bay Condominium (S) (NE)', '1000 Venetian Way (SE)', 'Quantum on the Bay Condominium (N) (NE)', 'Venetian Isle Condominium', 'Capri South Beach (SE)', 'The Crimson (CC)', 'St. Moritz Hotel (SW)', '22 Biscayne Bay (SE)', 'Hotel Victor (NE)'],
+    rays: ['Vice Beach (A) → Asia Brickell Key', 'Rooftop Party → Asia Brickell Key', 'Skyline → Asia Brickell Key', 'Leonida Keys 01 (Airplane) (X) → Asia Brickell Key', 'Vice City Postcard → Asia Brickell Key', 'Vice Beach (A) → Flamingo South Beach (SRSW)', 'Venetian Islands → Flamingo South Beach (SRSW)', 'Prison → Opera Tower', 'Vice Beach (A) → Opera Tower', 'Skyline → Opera Tower', 'Vice City 03 (Basketball) → Opera Tower', 'Vice City Postcard → Opera Tower'],
+    author: 'trailer', loss: null,
+    params: 'xyz=(2253.4, 1068.5, 70.485) · ypr=(112.664, -5.860, 0.025) · hfov=62.714'
+  },
+  'vice_city_01': {
+    label: 'Vice City 01 (Vice City Sign)',
+    lms: [],
+    rays: ['Prison → Four Seasons Hotel Miami (NW)', 'Vice Beach (A) → Four Seasons Hotel Miami (NW)', 'Vice Beach (B) → Four Seasons Hotel Miami (NW)', 'Vice City Postcard → Four Seasons Hotel Miami (NW)', 'Ocean near Keys (N) → Four Seasons Hotel Miami (BW)', 'Prison → Four Seasons Hotel Miami (BW)', 'Vice Beach (A) → Four Seasons Hotel Miami (BW)', 'Vice Beach (B) → Four Seasons Hotel Miami (BW)', 'Rooftop Party → Four Seasons Hotel Miami (BW)', 'Leonida Keys 01 (Airplane) (X) → Four Seasons Hotel Miami (BW)', 'Vice City Postcard → Four Seasons Hotel Miami (BW)', 'Tennis Stadium (4K) → Four Seasons Hotel Miami (SW)', 'Penthouse (SW) → Four Seasons Hotel Miami (SW)', 'Highway (Peacock Bay) (A) → Infinity at Brickell (SW)', 'Metro (SE) (C) → Infinity at Brickell (SW)', 'Prison → WDNA FM', 'Leonida Keys 01 (Airplane) (X) → WDNA FM'],
+    author: 'neutral_state', loss: 2.760,
+    params: 'xyz=(-3685.7, -481.9, 5.000) · ypr=(217.417, 22.118, 0.033) · hfov=76.818'
+  },
+  'vice_city_02': {
+    label: 'Vice City 02 (Hotel)',
+    lms: [],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(2015.0, 1585.0, 25.000) · ypr=(250.000, -15.000, 0.000) · hfov=45.000'
+  },
+  'vice_city_03': {
+    label: 'Vice City 03 (Basketball)',
+    lms: ['Bank of America Financial Center (NW)', 'One Miami Condominium East (SE)', 'One Miami Condominium East (NE)', 'Flamingo South Beach (NERNE)', 'One Miami Condominium West (SE)', 'One Miami Condominium West (NE)', 'Flamingo South Beach (NENE)', 'Citigroup Center (SE)', 'Citigroup Center (NE)', 'Citigroup Center (NW)', 'Southeast Financial Center (D)', 'Southeast Financial Center', 'Brown Hotel Sign', 'Flamingo South Beach (NWNE)', 'Flamingo South Beach (NWNW)', 'Capri South Beach (SE)', '50 Biscayne Blvd (SE)', 'Wells Fargo Center (N)', '1111 Lincoln Rd (SE)', 'New World Center', 'W South Beach (BNW)', 'Loft Downtown II', 'Vizcayne North Condominium (SE)', 'Vizcayne North Condominium (NE)', '1111 Lincoln Rd (NW)', 'Stephen P. Clark Government Center (E)', 'Marina Blue (NE)', 'The Gates Hotel South Beach (NW)', 'Marriott Miami Biscayne Bay (E)', 'Marriott Miami Biscayne Bay (NE)', 'Opera Tower', 'The Grand (E)', '1800 Club', 'Venetian Isle Condominium', 'Quantum on the Bay Condominium (S) (NE)', 'Quantum on the Bay Condominium (N) (NE)', 'Rivo Alto Island (N)', '419 NE 4th Ave (W)', 'The Crimson (CC)', 'Uptown Lofts (SE)', 'Uptown Lofts (NE)', 'Uptown Lofts', '22 Biscayne Bay (SE)', 'Di Lido Island (N)', 'Marina (Stockyard) (NE)', 'New Wave Condominiums', 'Sunset Harbour South Condo (RS)', 'Canal (Hotel Valetta)', 'Sunset Harbour South Condo', 'Sunset Harbour South Condo (RN)'],
+    rays: ['Rooftop Party → InterContinental Miami (N)', 'Vice City Postcard → InterContinental Miami (N)'],
+    author: 'neutral_state', loss: 7.194,
+    params: 'xyz=(1969.0, 1652.6, 41.116) · ypr=(110.000, -8.019, -0.009) · hfov=55.093'
+  },
+  'vice_city_05': {
+    label: 'Vice City 05 (Vice Beach)',
+    lms: [],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(2175.0, 750.0, 0.000) · ypr=(45.000, 7.500, 0.000) · hfov=60.000'
+  },
+  'vice_city_06': {
+    label: 'Vice City 06 (Ocean Drive)',
+    lms: [],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(1990.0, 640.0, 3.000) · ypr=(45.000, 5.000, 0.000) · hfov=60.000'
+  },
+  'vice_city_08': {
+    label: 'Vice City 08 (Ferris Wheel)',
+    lms: ['Port (C)', 'Port (D)', 'CC (3) (BB2)', 'Port (E)', 'Port (F)', 'Container Crane (2)', 'CC (2) (BB2)', 'Cruise Terminal D', 'CC (1) (BB2)', 'Port (G)', 'Cruise Ship (RT)', 'Cruise Ship (FT)', 'Port (H)', 'Port (I)', 'Kaseya Center (S)', 'Kaseya Center (NW)', 'Central District Wastewater Treatment Plant (Tank)', 'Port (J)', 'Port (K)', 'Port (L)', 'Palazzo del Sol'],
+    rays: ['Amphitheater → Container Crane (3)', 'Motorboats (A) → Container Crane (3)', 'Motorboats (B) → Container Crane (3)', 'Motorboats (A) → Container Crane (1)', 'Motorboats (B) → Container Crane (1)', 'Skyline → Skyviews Miami Observation Wheel', 'Vice City Postcard → Skyviews Miami Observation Wheel', 'Skyline → Kaseya Center (SE)', 'Vice City Postcard → Kaseya Center (SE)'],
+    author: 'neutral_state', loss: 13.799,
+    params: 'xyz=(-571.3, 930.6, 89.754) · ypr=(213.749, -9.797, 0.081) · hfov=39.636'
+  },
+  'vice_city_09': {
+    label: 'Vice City 09 (La Perle)',
+    lms: [],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(-1250.0, 1150.0, 7.000) · ypr=(300.000, 2.000, 0.000) · hfov=50.000'
+  },
+  'vcp': {
+    label: 'Vice City Postcard',
+    lms: ['Central District Wastewater Treatment Plant (Tank)', 'Cruise Ship (RT)', '1000 Venetian Way (SE)', '1000 Venetian Way (SW)', 'Two Tequesta Point', 'Three Tequesta Point', 'Asia Brickell Key (CC1)', 'Asia Brickell Key', 'Skyviews Miami Observation Wheel', 'Carbonell Brickell', 'One Miami Condominium East (NE)', 'InterContinental Miami (N)', 'One Miami Condominium West (NE)', 'Citigroup Center (NE)', 'Citigroup Center (NW)', 'Southeast Financial Center', 'Unknown Sphere', '50 Biscayne Blvd (SE)', 'Four Seasons Hotel Miami (BW)', 'Four Seasons Hotel Miami (NW)', 'Kaseya Center (SE)', 'Kaseya Center (S)', 'Wells Fargo Center (N)', 'Loft Downtown II', 'Miami Tower', 'Vizcayne North Condominium (SE)', 'Vizcayne North Condominium (NE)', 'West Venetian Causeway Bridge', 'Marriott Miami Biscayne Bay (E)', 'Marriott Miami Biscayne Bay (NE)', 'The Grand (E)', 'The Grand', 'Picnic Island B (S)', 'Opera Tower', 'Margaret Pace Park', '1800 Club', 'Picnic Island A (N)', 'Quantum on the Bay Condominium (S) (NE)', 'Quantum on the Bay Condominium (N) (NE)', 'Picnic Island C (S)', '419 NE 4th Ave (W)', 'Marina (Stockyard) (SE)', 'Uptown Lofts (SE)', 'Uptown Lofts (NE)', 'The Crimson (CC)', 'Marina (Stockyard) (SW)', 'Uptown Lofts', 'Marina (Stockyard) (NE)', '22 Biscayne Bay (SE)', 'New Wave Condominiums', 'Venetian Isle Condominium', '1000 Venetian Way (W-Box-NW)', '1000 Venetian Way (NW)', '1000 Venetian Way (T-NW)', '1000 Venetian Way (Center-NW)', '1000 Venetian Way (Center-SW)', '1000 Venetian Way (Center-NE)', '1000 Venetian Way (NE)', '1000 Venetian Way (T-NE)', '1000 Venetian Way (T-SE)'],
+    rays: [],
+    author: 'neutral_state', loss: null,
+    params: 'xyz=(360.7, 1850.6, 38.210) · ypr=(152.101, 2.943, 0.096) · hfov=68.864'
+  },
+  'vice_city_sign': {
+    label: 'Vice City Sign',
+    lms: [],
+    rays: ['Vice Beach (B) → FAA Miami ATCT (MIA)', 'Leonida Keys 01 (Airplane) (X) → FAA Miami ATCT (MIA)', 'Ambrosia 02 (Panorama) → FAA Miami ATCT (MIA)', 'Highway (Peacock Bay) (A) → Infinity at Brickell (SW)', 'Metro (SE) (C) → Infinity at Brickell (SW)', 'Highway (Peacock Bay) (A) → One Broadway (W)', 'Highway (Peacock Bay) (B) → One Broadway (W)', 'Grassrivers 02 (Watson Bay) → One Broadway (W)', 'Airport (X) → Latitude on the River (S) (SW)', 'Grassrivers 02 (Watson Bay) → Latitude on the River (S) (SW)'],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-3715.2, -503.2, 14.433) · ypr=(251.206, 5.542, 0.091) · hfov=30.000'
+  },
+  'waning_sands': {
+    label: 'Waning Sands (A) (X)',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-1000.0, 4000.0, 32.000) · ypr=(270.000, -4.300, -1.800) · hfov=58.000'
+  },
+  'waning_sands_2': {
+    label: 'Waning Sands (B)',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-985.0, 4003.0, 32.000) · ypr=(330.000, 0.000, 0.000) · hfov=58.000'
+  },
+  'waning_sands_3': {
+    label: 'Waning Sands (C)',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-970.0, 4006.0, 32.000) · ypr=(345.000, 6.000, 1.000) · hfov=58.000'
+  },
+  'welcome_center': {
+    label: 'Welcome Center (E)',
+    lms: ['Art Deco Welcome Center (S)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(2013.8, 588.1, 4.500) · ypr=(282.000, -22.034, 0.000)'
+  },
+  'welcome_center_2': {
+    label: 'Welcome Center (W)',
+    lms: ['Art Deco Welcome Center (S)'],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(2026.3, 586.9, 4.700) · ypr=(71.823, -26.284, 0.000)'
+  },
+  'wynwood': {
+    label: 'Wynwood',
+    lms: ['City View Parking Garage (S)', 'City View Parking Garage (SE)'],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(-424.9, 1699.6, 5.662) · ypr=(318.969, 3.187, -0.550) · hfov=60.230'
+  },
+  'yacht': {
+    label: 'Yacht (1)',
+    lms: [],
+    rays: [],
+    author: 'trailer', loss: null,
+    params: 'xyz=(400.0, 1700.0, 5.000) · ypr=(334.000, 0.000, 0.000) · hfov=50.000'
+  },
+  'yacht_2': {
+    label: 'Yacht (2)',
+    lms: [],
+    rays: ['Port → Portofino Tower (NW)', 'Rooftop Party → Portofino Tower (NW)', 'Leonida Keys 01 (Airplane) (X) → Portofino Tower (NW)', 'Sidewalk (Jason) (E) → Portofino Tower (NW)', 'Vice Beach (A) → 1000 Venetian Way (SE)', 'Vice Beach (B) → 1000 Venetian Way (SE)', 'Skyline → 1000 Venetian Way (SE)', 'Vice City Postcard → 1000 Venetian Way (SE)', 'Skyline → One Miami Condominium East (SE)', 'Vice City 03 (Basketball) → One Miami Condominium East (SE)'],
+    author: 'trailer', loss: null,
+    params: 'xyz=(378.8, 1730.8, 10.879) · ypr=(188.585, -0.246, -0.546) · hfov=53.052'
+  },
+  'yard': {
+    label: 'Yard',
+    lms: [],
+    rays: [],
+    author: 'leak', loss: null,
+    params: 'xyz=(2080.1, 1158.9, 8.100) · ypr=(267.300, -20.600, 0.000) · hfov=72.734'
   },
 };
 
