@@ -44,13 +44,80 @@
 #    .bak_<reason>, dry-run par defaut, --apply pour ecrire. Output terminal
 #    en anglais. Ne jamais toucher gtamaplib.py / ml (lib vendored).
 #
-# 7. STATUT (2026-06-08): branche feature-solver. Solve global ABANDONNE
-#    (bancal: optimisait poses+LM en memoire mais n'ecrivait que les poses
-#    -> poses fantomes; reverte). Vice City Sign recale honnetement 2-LM.
-#    Beach/Metro C/Ambrosia 02 + retriangulations = sains (commit 530ac7d).
+# 7. STATUT (2026-06-10): branche feature-solver. Rerun global recolte via
+#    GUARDED APPLY (tools/refine/guarded_apply.py, commit a06e647): 24 cams
+#    improved, mediane 2.476->2.247', zero leak touchee. Apply integral d'un
+#    BA global = JAMAIS (min(cam_w,lm_w) laisse contester les rayons leak;
+#    update_landmark snap le z a l'ecriture -> simuler avec snap_z).
+#    rms_snapshot.py = check anti-poses-fantomes en fin de chaque chantier.
 # ===================================================================
 
 <!-- INDEX_DE_RETOUR_v1 -->
+
+## Session 2026-06-10 — Rerun global d'optimisation + GUARDED APPLY (nouveau process: Claude roule le repo dans son sandbox)
+
+**NOUVEAU PROCESS valide:** Claude (Fable 5) clone `NeutralState/gtamaplib` dans son
+propre sandbox, installe requirements.txt, et roule les outils lui-meme sur les
+vraies donnees. Le loop "Claude ecrit / Alexandre colle l'output" devient
+"Claude developpe+teste, livre un patch deja valide". Prerequis: push avant la
+session. Limites: pas de push depuis le sandbox, UI calib.html = encore manuel.
+
+**EXPERIENCE: rerun complet bundle_adjust_weighted (Phase C), HEAD 4622d99.**
+- In-memory: 16.26px -> 3.24px (-80%). MAIS disk-verified a poids egaux:
+  30 improved / 29 WORSE, mediane flat, moyenne PIRE. Catastrophes: Pool 0'->416',
+  Motel 0'->132', Police Chase (D) (LEAK) 1.6'->133' — sans que ces cams bougent.
+- MECANISME (doctrine): le weighting `min(cam_w, lm_w)` permet a une cam
+  medium de contester le rayon d'une LEAK sur un LM partage (ex: Red Billboard
+  (Hamlet) tire de 4.28m par Leonida Keys 01 (X)). Le BA compromet la verite
+  pour baisser sa loss ponderee. Un apply integral de BA global = JAMAIS.
+
+**FIX livre: `tools/refine/guarded_apply.py`** — apply selectif disk-verified.
+Hill-climbing multi-pass sur les deltas individuels (LM, cam, bundle cam+LMs
+enfants). Acceptation: aucune cam affectee ne regresse > --tol (0.25') en
+CUMULATIF vs la baseline de session, ET le net s'ameliore. Blacklist cams par
+defaut: Amphitheater (pose rlx), Beach (projection-sol, z critique invisible au
+RMS pixel), Vice City Sign (2-LM sous-determinee).
+
+**2e BUG poses-fantomes trouve (meme famille que global_solve):**
+`md.update_landmark` snap xyz[2] au z_constraint A L'ECRITURE (212 entrees
+sea-level). Toute simulation qui valide une geometrie z-libre valide autre
+chose que ce qui sera ecrit (Island G/K via Key Lento: valide +0.1', ecrit
++1.44'). REGLE: tout outil qui simule des moves de LM doit appliquer snap_z
+AVANT d'evaluer. guarded_apply le fait (fn snap_z). NOTE TODO:
+bundle_adjust_weighted optimise le z des LM contraints librement -> devrait
+les pinner (gain de convergence probable).
+
+**RESULTAT FINAL (applique dans le sandbox, disk-verified):**
+142 deltas acceptes / 540 rejetes -> 10 cams + 153 LMs ecrits.
+24 cams improved, 2 worse (max +0.14', sous tol). Mediane 2.476'->2.247',
+moyenne 9.80'->7.90'. Zero leak touchee. Top: Ambrosia Postcard (X) 180->108',
+Intersection (W) 38.6'->0.0', U-Turn (NW) 142->111', Yacht (2) 12->2.9',
+Chase (2) (A) 17.5->13.4', Convertible 4.9->0.9', Boat 3.2->0.0'.
+
+**Nouvel outil audit: `tools/audit/rms_snapshot.py --tag <t>`** — RMS arcmin
+par cam + rollup zone, lu FRAIS du disque (formule identique aux tiers).
+Snapshot avant/apres = le check anti-poses-fantomes. A rouler en fin de
+chaque chantier qui ecrit.
+
+**PROCEDURE RERUN (reproductible, ~10 min):**
+  1. python3 tools/compute_confidence_tiers.py
+  2. python3 tools/audit/rms_snapshot.py --tag baseline
+  3. python3 tools/bundle_adjust_weighted.py
+  4. python3 tools/refine/guarded_apply.py            # dry-run, lire le bilan
+  5. python3 tools/refine/guarded_apply.py --apply    # backups .bak_guarded
+  6. python3 tools/audit/rms_snapshot.py --tag final  # diff vs baseline
+
+**Note circular_deps (a verifier):** Ambrosia 02/04/Postcard apparaissent
+maintenant dans le SCC SAIN 45-cams (plus en cycle PUR) — probablement l'effet
+du marking 04->Skyway N. Les cycles PURS restants: Chase2/U-Turn (NW) et
+le trio Port Gellhorn Postcard.
+
+**TODO laisses en route:**
+- Marquer WDNA sur Ambrosia 02 (toujours pending, manuel)
+- Pinner le z des LM contraints dans bundle_adjust_weighted
+- Reflechir au weighting: obs d'une leak devrait dominer min(cam_w, lm_w)
+  sur les LM partages (c'est la racine du massacre Pool/Motel)
+
 
 ## Session 2026-06-04 (PM) — Politique roll + Dominion + Portofino NE
 
