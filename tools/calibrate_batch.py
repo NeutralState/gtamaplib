@@ -86,42 +86,28 @@ KEY_TO_CAM_NAME = {
 }
 
 
-def parse_order_from_html():
-    """Extract the ordered list of cam keys from docs/index.html."""
-    html = DEPS_HTML.read_text()
-    pattern = re.compile(
-        r"'([^']+)':\s*\{[^}]*?label:\s*'([^']+)'[^}]*?author:\s*'([^']+)'",
-        re.DOTALL
+def get_order_from_calibration_order(tiers='unverified,low'):
+    """Get calibration order by running calibration_order.py (the live, anchored
+    greedy ordering). Replaces the old docs/index.html scrape (stale 6-may).
+    Returns list of (name, label, author) tuples to match downstream consumers."""
+    script = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'calibration_order.py')
+    result = subprocess.run(
+        [sys.executable, script, '--tier', tiers],
+        capture_output=True, text=True
     )
-    keys_in_order = []
-    for m in pattern.finditer(html):
-        key, label, author = m.groups()
-        keys_in_order.append((key, label, author))
-    return keys_in_order
-
-
-def resolve_cam_names(keys_in_order):
-    """Resolve docs/index.html keys to cameras.json keys.
-
-    Some keys (e.g. 'motorboats') map to multiple cams. We expand them.
-    """
     cameras = json.loads(CAMERAS_JSON.read_text())
     resolved = []
-    for key, label, author in keys_in_order:
-        if key == 'motorboats':
-            # Expand to A and B
-            for sub in ['Motorboats (A)', 'Motorboats (B)']:
-                if sub in cameras:
-                    resolved.append((sub, label + f' [{sub.split()[-1]}]', author))
-        else:
-            name = KEY_TO_CAM_NAME.get(key)
-            if name is None:
-                print(f"  WARN: No mapping for key '{key}', skipping")
-                continue
-            if name not in cameras:
-                print(f"  WARN: Cam '{name}' not in cameras.json, skipping")
-                continue
-            resolved.append((name, label, author))
+    for line in result.stdout.splitlines():
+        s = line.strip()
+        if not s or '[' not in s or ']' not in s:
+            continue
+        m = re.match(r'^\d+\.\s+(\S+)\s+\[\s*\w+\s*\]\s+(.+?)$', s)
+        if not m:
+            continue
+        status, name = m.group(1), m.group(2).strip()
+        if name in cameras:
+            label = 'READY' if status == 'OK' else status
+            resolved.append((name, label, 'calibration_order'))
     return resolved
 
 
@@ -376,9 +362,8 @@ def main():
     args = parser.parse_args()
 
     # Parse order
-    keys_in_order = parse_order_from_html()
-    cams_in_order = resolve_cam_names(keys_in_order)
-    print(f"Loaded {len(cams_in_order)} cams from docs/index.html order")
+    cams_in_order = get_order_from_calibration_order()
+    print(f"Loaded {len(cams_in_order)} cams from calibration_order.py (live anchored order)")
     print()
 
     # Skip until --start-from
