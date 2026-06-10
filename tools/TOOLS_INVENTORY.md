@@ -33,7 +33,7 @@ python3 tools/outliers_report.py
 
 ## CLI Scripts (tools/*.py)
 
-Total: 37 scripts
+Total: 39 scripts
 
 ### `batch_optimize.py`
 Batch-optimize multiple cams via the running server API.
@@ -98,17 +98,6 @@ python3 tools/calibration_order.py --tier unverified
     python3 tools/calibration_order.py --tier unverified,low
 ```
 
-### `calibration_plan.py`
-Analyze cams not currently in the dependency tree
-
-**Usage:**
-```
-python3 tools/calibration_plan.py                       # analyze all
-    python3 tools/calibration_plan.py --cam "Amphitheater"  # single cam
-    python3 tools/calibration_plan.py --zone vice_city      # filter by zone
-    python3 tools/calibration_plan.py --include-leak        # also include leak cams
-```
-
 ### `compute_confidence_tiers.py`
 Classify every cam and landmark into a confidence tier.
 
@@ -154,6 +143,10 @@ Portofino V4: corrected z levels and architecture.
 ### `generate_inventory.py`
 Generate TOOLS_INVENTORY.md — a comprehensive map of everything available
 
+### `global_solve.py`
+Global bundle adjustment, SHADOW mode. Scoped to one zone.
+
+### `global_solve_apply.py`
 ### `intake_camera.py`
 Validate a new (or existing) camera against the
 
@@ -180,6 +173,7 @@ Single source of truth for constraint-class semantics.
 ### `migrate_constraint_classes.py`
 Migration step from V1 (no class info in
 
+### `observability_report.py`
 ### `outliers_report.py`
 Generate an HTML review report from bundle_adjust_result.json
 

@@ -7,13 +7,23 @@ import gtamaplib as ml
 
 LEAK = {'A_full_hud','B_pos_fov_player','C_pos_fov_only','Cm_pos_only'}
 HARD_LM_ERR = 0.5
-ZONE = 'vice_city'
 HUBER = 5.0
 POS_PRIOR = 0.5
 ANG_PRIOR = 2.0
-BLACKLIST = {'Beach','Amphitheater','Vice Beach (A)'}
 IMPROVE_MIN = 1.0
+
+ZONE = None
+for a in sys.argv[1:]:
+    if a != '--apply':
+        ZONE = a
+if ZONE is None:
+    print("usage: global_solve_apply.py <zone> [--apply]"); sys.exit(1)
 APPLY = '--apply' in sys.argv
+
+BLACKLIST_BY_ZONE = {
+    'vice_city': {'Beach','Amphitheater','Vice Beach (A)'},
+}
+BLACKLIST = BLACKLIST_BY_ZONE.get(ZONE, set())
 
 def main():
     cams, pix, lms, tiers = R.load_all()
@@ -79,16 +89,15 @@ def main():
             out += list(POS_PRIOR*(np.array(xyz)-x0xyz)); out.append(ANG_PRIOR*(ypr[2]-x0ypr[2]))
         return out
 
-    print("solving vice_city (%d soft cams, %d free LMs, %d obs)..." % (nC, nL, len(obs)))
+    print("=== global_solve_apply zone=%s (%d soft cams, %d free LMs, %d obs) ===" % (ZONE, nC, nL, len(obs)))
+    if nC == 0:
+        print("  no soft cams in zone, nothing to do"); return
     res = least_squares(resid, x0, method='trf', loss='huber', f_scale=HUBER, max_nfev=300)
     poses, lmpos = unpack(res.x)
 
     def rms(cn, use_solve):
         cd = cams[cn]
-        if use_solve:
-            obj = cam_for(cn, poses)
-        else:
-            obj = ml.Camera(cd.get('id'), cn, cd.get('player'), cd['xyz'], cd['ypr'], cd['fov'], cd['size'], cd.get('source'))
+        obj = cam_for(cn, poses) if use_solve else ml.Camera(cd.get('id'), cn, cd.get('player'), cd['xyz'], cd['ypr'], cd['fov'], cd['size'], cd.get('source'))
         es = []
         for lm in pix.get(cn, {}):
             if lm not in zone_lms: continue
@@ -101,7 +110,7 @@ def main():
         return np.sqrt(np.mean(np.square(es))) if es else 0
 
     to_write = []
-    print("\n  %-32s %7s %7s %7s" % ('cam','before','after','moved'))
+    print("  %-32s %7s %7s %7s" % ('cam','before','after','moved'))
     for cn in soft_cams:
         b = rms(cn, False); a = rms(cn, True)
         moved = float(np.linalg.norm(poses[cn][0] - cam0[cn][0]))
@@ -113,16 +122,17 @@ def main():
 
     print("\n  Will write %d cam poses: %s" % (len(to_write), to_write))
     if not APPLY:
-        print("\n  DRY-RUN. Re-run with --apply to write.")
-        return
+        print("  DRY-RUN. Re-run with --apply."); return
+    if not to_write:
+        print("  nothing to write."); return
     P = 'gtamapdata/cameras.json'
     data = json.load(open(P))
-    shutil.copy(P, P+'.bak_globalsolve_vc')
+    shutil.copy(P, P+'.bak_globalsolve_'+ZONE)
     for cn in to_write:
         data[cn]['xyz'] = [float(v) for v in poses[cn][0]]
         data[cn]['ypr'] = [float(v) for v in poses[cn][1]]
     json.dump(data, open(P,'w'), indent=2, ensure_ascii=False)
-    print("\n  APPLIED %d poses. backup .bak_globalsolve_vc" % len(to_write))
+    print("  APPLIED %d poses. backup .bak_globalsolve_%s" % (len(to_write), ZONE))
 
 if __name__ == '__main__':
     main()

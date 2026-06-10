@@ -1492,3 +1492,67 @@ NON-REPARABLES connues (ne pas s'acharner):
     contradictoires avec fov reel (14px plancher). Reste sur pose rlx.
   - Ambrosia Silos/Smokestacks: parallaxe 02xPostcard ~2.5deg, non triangulables.
     Besoin ancre WDNA marquee sur 02 (mat vertical, projette x~565).
+
+### CHANTIER PRIORITAIRE (diagnostique 2026-06-08) — Rebrancher l'ordre de calib sur le vrai graphe
+
+PROBLEME DE FOND identifie: l'ordre de calibration ne respecte PAS le dependency
+tree a jour. Trois sources d'ordre DECONNECTEES:
+  - dep_graph.json (genere par circular_deps.py, 3 juin): LE vrai graphe.
+    Structure {meta, adjacency}. adjacency[A]=[B,C] => "A depend de B,C"
+    (B,C doivent etre calibrees AVANT A). 77 noeuds, B-strict, D/X exclus. A JOUR.
+    -> Lu par PERSONNE pour planifier l'ordre.
+  - calibration_plan.py: scrape docs/index.html par REGEX. Or index.html date du
+    6 MAI (1 mois plus vieux que dep_graph). Ordre PERIME. CASSE.
+  - calibration_order.py: score par tiers (anchor+high), ignore le graphe.
+
+FIX (prochaine session, faire proprement, PAS en fin de session):
+  1. Remplacer parse_tree_order() de calibration_plan.py: lire dep_graph.json au
+     lieu de scraper index.html.
+  2. Calculer l'ordre TOPOLOGIQUE depuis adjacency (leaks/ancres d'abord, puis
+     cams dont toutes les deps sont satisfaites, niveau par niveau).
+  3. Cycles purs (Ambrosia/Port Gellhorn/Chase2, deja detectes par circular_deps
+     via Tarjan) = marquer "non-ordonnable sans ancre externe", ne pas inserer.
+  4. Idealement aussi rebrancher calibration_order.py, ou le deprecier au profit
+     de calibration_plan.py.
+  RESULTAT VISE: un seul ordre de verite, derive du graphe regenere par
+  circular_deps.py -> "l'ordre de calibration respecte en tout temps".
+  Workflow d'ouverture: circular_deps.py (regen graphe) -> calibration_plan.py
+  (ordre a jour) -> calibrer dans cet ordre.
+
+REGLE D'OR (rappel): bouger une cam invalide ses LM enfants. Calibrer parent
+AVANT enfant. C'est exactement ce que l'ordre topologique garantit.
+
+### RECTIFICATION (2026-06-08, meme jour) — l'ordre de calib EST deja resolu
+
+Le bloc "CHANTIER PRIORITAIRE rebrancher sur dep_graph" ci-dessus est ERRONE.
+Diagnostic corrige apres verification:
+
+- dep_graph.json n'est PAS un DAG. Les cams voisines se referencent
+  mutuellement (Diner NE <-> Diner N <-> ...). Aucune racine, tout est cycle.
+  => IMPOSSIBLE d'en tirer un ordre topologique. Ce graphe sert UNIQUEMENT a
+  circular_deps.py pour detecter les cycles PURS (Ambrosia/PortGellhorn/Chase2).
+
+- L'ORDRE DE CALIBRATION correct = calibration_order.py. Algo glouton ancre:
+  score chaque cam par #LM anchor+high, prend la mieux ancree, "promeut" ses
+  LM self-source comme fiables, repete. C'est l'algo JUSTE pour un graphe
+  cyclique avec ancres (leaks). Lit confidence_tiers.json (a jour). Marque
+  chaque cam READY (loss<seuil) ou BROKEN avec le loss reel. Validation
+  croisee OK: il classe Amphitheater BROKEN 111', Chase2A READY 2.92' —
+  exactement nos conclusions manuelles.
+
+- calibration_plan.py = SUPPRIME. Etait casse (scrapait docs/index.html par
+  regex, fichier du 6 mai donc 1 mois perime) ET doublon de calibration_order
+  ET conceptuellement faux (pretendait un tri d'arbre sur un graphe cyclique).
+
+WORKFLOW D'ORDRE (le bon, definitif):
+  1. compute_confidence_tiers.py   (regenere les tiers depuis l'etat actuel)
+  2. calibration_order.py --tier <...>   (ordre glouton ancre, a jour)
+  3. calibrer les cams READY ; investiguer/laisser les BROKEN.
+  (calibrate_session.py --from-order branche deja sur calibration_order.)
+
+ATTENTION calibrate_batch.py: lui AUSSI lit docs/index.html (6 mai, perime) pour
+son ordre (parse_tree_order ligne 90, "Loaded N cams from docs/index.html order").
+Et il ECRIT (applique ypr/xyz/fov + retriangule). Donc son ordre est perime d'un
+mois. NE PAS l'utiliser tel quel. Preferer calibrate_session.py --from-order
+(branche sur calibration_order, a jour). TODO futur: rebrancher calibrate_batch
+sur calibration_order, ou le supprimer s'il fait doublon avec calibrate_session.
