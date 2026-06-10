@@ -8,6 +8,15 @@
 #      - tools/TOOLS_INVENTORY.md      (tous les outils, auto-genere)
 #      - tools/RECALIBRATION_WORKFLOW.md (procedure + cycles + ancrage)
 #
+# 1bis. REFERENCES GITHUB / LIENS
+#    - Repo (origin):   https://github.com/NeutralState/gtamaplib  (branche: feature-solver)
+#    - Upstream (rlx):  https://github.com/rolux/gtamaplib  (collaborateur Discord: rlx, martipk)
+#    - Viz deployee:    https://neutralstate.github.io/gtamaplib/  (dependency graph, GitHub Pages, source = docs/)
+#    - Local:           ~/Downloads/gtamaplib-main
+#    - Workflow git:    git add ... && git commit -m "..." && git push origin feature-solver
+#                       (apres chaque chantier, pour sauvegarder sur GitHub)
+#    - Sync upstream:   git fetch upstream  (rlx maintient son repo en parallele, ~190 commits divergence)
+#
 # 2. REFLEXE AVANT DE TOUCHER UNE CAM (lancer ces audits READ-ONLY):
 #      python3 tools/audit/circular_deps.py            (cycles PURS vs sains)
 #      python3 tools/audit/audit_leak_influence_tree.py (ancrage transitif)
