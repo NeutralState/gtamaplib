@@ -59,6 +59,19 @@ class PortofinoTower:
         self.centroid_xy = (self.nw[:2] + self.ne[:2] + self.s[:2]) / 3
         self.branch_peaks = {'NW': self.nw, 'NE': self.ne, 'S': self.s}
 
+        # Pyramid tip z per branch. NW/NE LMs are real triangulated peak tips
+        # (~145.5). The S LM is GEOMETRIC (equilateral from NW+NE) and its z
+        # (~143.1) sits at wall-top height — consistent with the Port LEAK ray
+        # through the 'Portofino Tower (S)' marking (raising the LM costs
+        # Port +6.8'). So: do NOT move the LM; give the MESH a synthetic S tip
+        # at the mean of the two real peaks so the pyramid renders like the
+        # others (verified pointy in leak frames).
+        self.tip_z = {
+            'NW': float(self.nw[2]),
+            'NE': float(self.ne[2]),
+            'S':  (float(self.nw[2]) + float(self.ne[2])) / 2,
+        }
+
         self.PENT_LEVELS = [
             ('B', self.Z_GROUND,    1.6),
             ('K', self.Z_BASE_TOP,  1.6),
@@ -255,9 +268,10 @@ class PortofinoTower:
                     p1 = self.pbox[(code, br_name, a)]
                     p2 = self.pbox[(code, br_name, b)]
                     cam.render_line((p1, p2), color, bold)
-            # pyramid roof: 4 wall-top corners (PT, z=139) -> tip (LM, z=142)
+            # pyramid roof: 4 wall-top corners (PT) -> per-branch tip
+            # (tip_z: S uses synthetic height, see __init__)
             tip = self.branch_peaks[br_name]
-            tip_pt = (float(tip[0]), float(tip[1]), float(tip[2]))  # tip = LM exact
+            tip_pt = (float(tip[0]), float(tip[1]), self.tip_z[br_name])
             for corner in pbox_corners:
                 base = self.pbox[('PT', br_name, corner)]
                 cam.render_line((base, tip_pt), color, bold)
