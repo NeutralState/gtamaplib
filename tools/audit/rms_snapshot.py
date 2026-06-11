@@ -11,8 +11,9 @@ import argparse, json, math, os, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, ROOT)
 
-import gtamaplib as ml
 import gtamapdata as md
+sys.path.insert(0, os.path.join(ROOT, "tools"))
+from common import cam_rms
 
 
 def main():
@@ -29,26 +30,11 @@ def main():
     for cam_name, lm_pixels in pixels.items():
         if cam_name not in cameras:
             continue
-        cam = ml.get_camera(cam_name)
-        if cam is None:
-            continue
-        residuals = []
-        for lm_name, pixel in lm_pixels.items():
-            lm_xyz = landmarks.get(lm_name)
-            if lm_xyz is None or pixel is None:
-                continue
-            try:
-                proj = cam.get_pixel(lm_xyz)
-                if proj is None:
-                    continue
-                dx = (proj[0] - pixel[0]) * cam.hfov / cam.w * 60
-                dy = (proj[1] - pixel[1]) * cam.vfov / cam.h * 60
-                residuals.append(math.hypot(dx, dy))
-            except Exception:
-                continue
-        if residuals:
-            rms = math.sqrt(sum(r * r for r in residuals) / len(residuals))
-            out[cam_name] = {"rms_arcmin": round(rms, 3), "n_obs": len(residuals)}
+        rms = cam_rms(cam_name)
+        if rms is not None:
+            n_obs = sum(1 for l, p in lm_pixels.items()
+                        if p is not None and landmarks.get(l) is not None)
+            out[cam_name] = {"rms_arcmin": round(rms, 3), "n_obs": n_obs}
 
     # global + zone rollup (zone inferred from landmarks seen, majority vote)
     lm_zone = {n: (landmarks_meta.get(n) or {}).get("zone") for n in landmarks}

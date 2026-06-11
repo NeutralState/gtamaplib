@@ -29,8 +29,9 @@ sys.path.insert(0, os.path.dirname(ROOT)) if os.path.basename(ROOT) == "tools" e
 PROJ = os.path.dirname(ROOT) if os.path.basename(ROOT) == "tools" else ROOT
 sys.path.insert(0, PROJ)
 
-import gtamaplib as ml
 import gtamapdata as md
+sys.path.insert(0, os.path.join(PROJ, "tools"))
+from common import cam_rms as _common_cam_rms
 
 CAM_BLACKLIST_DEFAULT = ["Amphitheater", "Beach", "Vice City Sign"]
 
@@ -54,32 +55,8 @@ def build_state():
     return cams, lms
 
 
-def cam_rms(cam_name, cams, lms, _cache={}):
-    """RMS arcmin for cam_name under in-memory state. Same formula as tiers."""
-    obs = md.pixels.get(cam_name)
-    if not obs or cam_name not in cams:
-        return None
-    cam = ml.get_camera(cam_name)
-    st = cams[cam_name]
-    cam.set_xyz(tuple(st["xyz"]))
-    cam.set_ypr(tuple(st["ypr"]))
-    cam.set_fov(tuple(st["fov"]))
-    acc, n = 0.0, 0
-    for lm_name, pixel in obs.items():
-        xyz = lms.get(lm_name)
-        if xyz is None or pixel is None:
-            continue
-        try:
-            proj = cam.get_pixel(xyz)
-            if proj is None:
-                continue
-            dx = (proj[0] - pixel[0]) * cam.hfov / cam.w * 60
-            dy = (proj[1] - pixel[1]) * cam.vfov / cam.h * 60
-            acc += dx * dx + dy * dy
-            n += 1
-        except Exception:
-            continue
-    return math.sqrt(acc / n) if n else None
+def cam_rms(cam_name, cams, lms):
+    return _common_cam_rms(cam_name, cam_state=cams.get(cam_name), lms=lms)
 
 
 def main():

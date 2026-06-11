@@ -12,26 +12,15 @@ import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, ROOT)
-import gtamaplib as ml
 import gtamapdata as md
+sys.path.insert(0, os.path.join(ROOT, "tools"))
+from common import get_cam, pixel_observers, ray_ls_point
 
 
-def ray_ls_point(rays):
-    """Least-squares point minimizing distance to all rays (origin, dir)."""
-    A = np.zeros((3, 3)); b = np.zeros(3)
-    for o, d in rays:
-        d = np.asarray(d, float); d = d / np.linalg.norm(d)
-        P = np.eye(3) - np.outer(d, d)
-        A += P; b += P @ np.asarray(o, float)
-    return np.linalg.solve(A, b)
 
 
 def main():
-    observers = {}
-    for c, obs in md.pixels.items():
-        for l, px in obs.items():
-            if px is not None:
-                observers.setdefault(l, []).append(c)
+    observers = pixel_observers(require_existing_cam=False)
 
     rows = []
     for lm_name, meta in md.landmarks_meta.items():
@@ -43,16 +32,14 @@ def main():
         for cn in obs_cams:
             if cn not in md.cameras:
                 continue
-            cam = ml.get_camera(cn)
-            st = md.cameras[cn]
-            cam.set_xyz(tuple(st["xyz"])); cam.set_ypr(tuple(st["ypr"])); cam.set_fov(tuple(st["fov"]))
+            cam = get_cam(cn)
             try:
                 d = cam.get_pixel_direction(md.pixels[cn][lm_name])
             except Exception:
                 continue
             if d is None:
                 continue
-            rays.append((st["xyz"], d))
+            rays.append((md.cameras[cn]["xyz"], d))
         if len(rays) < 2:
             continue
         try:

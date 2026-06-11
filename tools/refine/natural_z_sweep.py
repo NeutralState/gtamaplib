@@ -18,38 +18,17 @@ import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, ROOT)
-import gtamaplib as ml
 import gtamapdata as md
+sys.path.insert(0, os.path.join(ROOT, "tools"))
+from common import cam_rms as _common_cam_rms, get_cam, pixel_observers, ray_ls_point
 
 NATURAL = re.compile(
     r'\b(Island|Key|Bay|Beach|Coast|Shore|Shoreline|Lagoon|Inlet|Cove|'
     r'Mangrove|Surf|Ocean|Reef|Sandbar|Boat|Buoy)\b', re.I)
 
 
-def ray_ls_point(rays):
-    A = np.zeros((3, 3)); b = np.zeros(3)
-    for o, d in rays:
-        d = np.asarray(d, float); d /= np.linalg.norm(d)
-        P = np.eye(3) - np.outer(d, d)
-        A += P; b += P @ np.asarray(o, float)
-    return np.linalg.solve(A, b)
-
-
 def cam_rms(cn, override):
-    cam = ml.get_camera(cn); st = md.cameras[cn]
-    cam.set_xyz(tuple(st["xyz"])); cam.set_ypr(tuple(st["ypr"])); cam.set_fov(tuple(st["fov"]))
-    acc = n = 0
-    for ln, px in md.pixels[cn].items():
-        x = override.get(ln, md.landmarks.get(ln))
-        if x is None or px is None:
-            continue
-        p = cam.get_pixel(x)
-        if p is None:
-            continue
-        dx = (p[0] - px[0]) * cam.hfov / cam.w * 60
-        dy = (p[1] - px[1]) * cam.vfov / cam.h * 60
-        acc += dx * dx + dy * dy; n += 1
-    return math.sqrt(acc / n) if n else None
+    return _common_cam_rms(cn, lm_override=override)
 
 
 def main():
@@ -59,11 +38,7 @@ def main():
     ap.add_argument("--apply", action="store_true")
     args = ap.parse_args()
 
-    observers = {}
-    for c, obs in md.pixels.items():
-        for l, px in obs.items():
-            if px is not None and c in md.cameras:
-                observers.setdefault(l, []).append(c)
+    observers = pixel_observers()
 
     accepted, rejected, kept = {}, [], []
     for lm_name in sorted(md.landmarks_meta):
@@ -73,14 +48,13 @@ def main():
             continue
         rays = []
         for cn in observers.get(lm_name, []):
-            cam = ml.get_camera(cn); st = md.cameras[cn]
-            cam.set_xyz(tuple(st["xyz"])); cam.set_ypr(tuple(st["ypr"])); cam.set_fov(tuple(st["fov"]))
+            cam = get_cam(cn)
             try:
                 d = cam.get_pixel_direction(md.pixels[cn][lm_name])
             except Exception:
                 continue
             if d is not None:
-                rays.append((st["xyz"], d))
+                rays.append((md.cameras[cn]["xyz"], d))
         if len(rays) < 2:
             kept.append(lm_name)
             continue

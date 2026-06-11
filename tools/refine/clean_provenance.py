@@ -28,6 +28,8 @@ import argparse, json, os, shutil, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 sys.path.insert(0, ROOT)
 import gtamapdata as md
+sys.path.insert(0, os.path.join(ROOT, "tools"))
+from common import save_json
 
 DEAD_PIXEL_CAMS = ["Port Gellhorn Postcard"]
 ORPHANS = {"Port Gellhorn Postcard", "Gizmo", "Penthouse (SE)", "Penthouse (NE)", "Penthouse (SW)"}
@@ -69,8 +71,7 @@ def main():
         md.update_landmark(n, list(cur) if cur is not None else None, source_cameras=new)
     for c in dead:
         del px[c]
-    with open(px_path, "w") as f:
-        json.dump(px, f, indent=1, sort_keys=True)
+    save_json(px_path, px)  # convention projet: indent=2, ordre preserve
     print(f"APPLIED: {len(to_fix)} LMs + {len(dead)} purge(s) (backups .bak_provenance)")
 
 
