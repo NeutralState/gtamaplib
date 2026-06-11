@@ -54,6 +54,59 @@
 
 <!-- INDEX_DE_RETOUR_v1 -->
 
+## Session 2026-06-10 (soir) — Doctrine waterline: tranchee, appliquee, outillee
+
+**Question du PM** (6 violations z_constraint): recaler la zone Keys ou retirer
+les constraints? **Reponse mesuree: retirer — le datum etait faux, pas la zone.**
+
+**Analyse (`tools/audit/keys_z_bias_analysis.py`):** re-triangulation LS libre
+des LM contraints z=0. Keys: mediane -1.30m, spread -2.9..+0.35 — pas de biais
+rigide de zone, pas de maree par frame (spread intra-cam > inter-cams). Preuve
+decisive: la LEAK Ocean near Keys (E) (pose HUD ground truth) place sa ligne
+d'eau a -0.60m.
+
+**DOCTRINE: la ligne d'eau VISIBLE dans les frames n'est PAS le datum z=0 du
+moteur** (pente de plage, maree, parallaxe faible). z_constraint fixed 0.0 =
+UNIQUEMENT structures construites plates (quais, seawalls, piscines). Jamais
+rivages/iles naturels ni objets flottants (Boat, Buoy).
+
+**Fix data (`tools/refine/free_waterline_z.py`, policy keep/ls, commit cb3a1f2):**
+11 LM liberes. 5 re-triangules LS (snappes a 0), 6 gardent leur xyz disque
+(re-LS coutait Key Lento +0.47' / Venetian +0.35', rejete par la barre 0.25).
+Resultat: **Ocean near Keys (E) LEAK 4.70' -> 0.03'**, aucune regression,
+violations disque 6 -> 0, mediane globale 1.985' -> 1.965'.
+
+**Outillage doctrine (`tools/patch_doctrine_waterline_tools.py`):**
+- **`tools/audit/invariants.py`** — garde-fou AVANT chaque commit touchant
+  gtamapdata/ (exit 1 si violation): (1) z_constraints coherentes sur disque,
+  (2) leaks immobiles vs reference gelee `tools/audit/leak_poses_ref.json`
+  (--freeze pour regenerer apres un intake qui AJOUTE des leaks; une leak qui
+  BOUGE n'est jamais legitime), (3) schema. Dette legacy en WARN (--strict pour
+  FAIL). Teste par sabotage: leak +1m -> FAIL, z_constraint +0.5m -> FAIL.
+- **`find_z_candidates.py` patche:** patterns naturels exclus d'office (meme
+  --include-all-near-zero), candidats reduits aux structures construites,
+  regle zone-wide COASTAL_ZONES supprimee (c'est elle qui avait cree les
+  constraints d'iles). Verification: l'ancien outil aurait re-propose ce soir
+  meme les LM qu'on venait de liberer; le nouveau les exclut.
+
+**DETTE IDENTIFIEE (a prioriser, pas touchee):**
+- **85/120 z_constraints restantes ont un nom naturel** (port_gellhorn 41,
+  leonida_keys 18, vice_city 17, leonard_county 9). 19 ont >=2 sources
+  (liberables et mesurables via free_waterline_z, etendre TARGETS); 66 ont
+  1 source (constraint PORTEUSE — ne pas retirer sans remplacement).
+- **32 provenances orphelines** dans source_cameras ('Port Gellhorn Postcard'
+  -> renommee (X): 26 LMs; Gizmo/Penthouse supprimees: 6) + une entree pixels
+  morte 'Port Gellhorn Postcard'. La protection FIXED ne s'applique plus a ces
+  sources. TODO: outil de remap de provenance.
+
+**Convention nouvelle:** `python3 tools/audit/invariants.py` avant chaque
+commit qui touche gtamapdata/. `rms_snapshot --tag` avant/apres chaque
+chantier qui ecrit.
+
+**TODO file d'attente:** WDNA Ambrosia 02 (manuel), bootstrap T3 vanishing
+points, sweep des 19 constraints naturelles multi-sources, remap provenance.
+
+
 ## Session 2026-06-10 (PM) — BA v2: z-pin + leak rays dominent (A/B valide au garde)
 
 **Patch livre: `tools/patch_ba_zpin_leakweight.py`** (idempotent, sentinels,

@@ -33,17 +33,31 @@ OUTPUT_PATH = '/tmp/z_candidates.json'
 # shipping lane pins triangulés depuis les cams Keys (LEAK) et ont z=2-4m,
 # pas z=0. Si on ajoute des "marina pins" plus tard, utilise un nom plus
 # explicite (ex: "Marina Pin").
+# DOCTRINE WATERLINE (2026-06-10, tools/audit/keys_z_bias_analysis.py):
+# la ligne d'eau VISIBLE dans les frames n'est PAS le datum z=0 du moteur
+# (mediane Keys -1.30m, leak Ocean near Keys (E) a -0.60m). z=0 s'applique
+# UNIQUEMENT aux structures construites plates. Les features naturelles et
+# les objets flottants (Boat, Buoy: marees!) sont EXCLUS d'office.
 COASTAL_PATTERNS = re.compile(
     r'\b('
-    r'Marina|Pier|Beach|Coast|Boat|Dock|Buoy|'
-    r'Jetty|Boardwalk|Wharf|Quay|Lagoon|Inlet|Cove|'
-    r'Harbor|Harbour|Mangrove|Shoreline|Surf'
+    r'Marina|Pier|Dock|Jetty|Boardwalk|Wharf|Quay|'
+    r'Harbor|Harbour|Seawall|Pool'
     r')\b',
     re.IGNORECASE
 )
 
-# Zones connues côtières (heuristique conservatrice)
-COASTAL_ZONES = {'leonida_keys'}  # Vice City a aussi des coastal mais beaucoup de buildings
+# Exclusion doctrine: jamais candidats, meme avec --include-all-near-zero
+NATURAL_WATERLINE_PATTERNS = re.compile(
+    r'\b('
+    r'Island|Key|Bay|Beach|Coast|Shore|Shoreline|Lagoon|Inlet|Cove|'
+    r'Mangrove|Surf|Ocean|Reef|Sandbar|Boat|Buoy'
+    r')\b',
+    re.IGNORECASE
+)
+
+# Plus de regle zone-wide: c'est elle qui a cree les constraints d'iles
+# retirees le 2026-06-10 (tout LM |z|<1 des Keys devenait candidat).
+COASTAL_ZONES = set()
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--z-threshold', type=float, default=1.0,
@@ -73,6 +87,7 @@ def is_in_coastal_zone(meta):
 
 candidates = []
 already_constrained = []
+excluded_doctrine = []
 near_zero_skipped = []
 
 for lm_name, xyz in md.landmarks.items():
@@ -86,6 +101,12 @@ for lm_name, xyz in md.landmarks.items():
 
     if is_already_constrained(meta):
         already_constrained.append((lm_name, z, meta['z_constraint']))
+        continue
+
+    # Exclusion doctrine: rivages/iles/objets flottants ne sont JAMAIS
+    # candidats z=0, meme avec --include-all-near-zero.
+    if NATURAL_WATERLINE_PATTERNS.search(lm_name):
+        excluded_doctrine.append((lm_name, z))
         continue
 
     name_match = matches_coastal_name(lm_name)
@@ -112,6 +133,14 @@ for lm_name, xyz in md.landmarks.items():
 print(f"Scan landmarks.json (|z| < {args.z_threshold}m, "
       f"{'ALL near-zero' if args.include_all_near_zero else 'coastal name/zone match'})")
 print()
+if excluded_doctrine:
+    print(f"{len(excluded_doctrine)} exclus par doctrine waterline (rivages/flottants, jamais z=0):")
+    for n_, z_ in excluded_doctrine[:10]:
+        print(f"    {z_:+6.2f}m  {n_}")
+    if len(excluded_doctrine) > 10:
+        print(f"    ... +{len(excluded_doctrine)-10}")
+    print()
+
 print(f"Total landmarks scanned : {sum(1 for v in md.landmarks.values() if v is not None)}")
 print(f"  Already z-constrained : {len(already_constrained)}")
 print(f"  Candidats proposés    : {len(candidates)}")
