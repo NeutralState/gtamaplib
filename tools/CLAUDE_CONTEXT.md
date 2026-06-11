@@ -54,6 +54,39 @@
 
 <!-- INDEX_DE_RETOUR_v1 -->
 
+## Session 2026-06-10 (nuit) — Provenance nettoyee + module commun des outils
+
+**Provenance (commit 213e4b9):** les "19 constraints naturelles multi-sources"
+comptaient des sources MORTES. En rayons reels, les 85 constraints naturelles
+restantes sont TOUTES porteuses (1 rayon) — conservees, le T3 apportera les
+seconds rayons. 'Port Gellhorn Postcard' (morte) n'est PAS un rename de (X)
+(67 LMs communs, pixels differents = frames distincts); ses 78 markings sans
+camera = PURGES (archive git). 32 source_cameras orphelines -> marqueurs
+"(legacy: NAME)". RMS inchange, invariants 33 WARN -> 0.
+`tools/refine/natural_z_sweep.py` livre: A RE-ROULER apres chaque intake T3.
+
+**Module commun (`tools/common.py`, commits f445bc4+9abbd4c):** cam_rms
+(formule canonique, supporte etat simule cam_state/lms), get_cam (gotcha #5
+encapsule), ray_ls_point, pixel_observers, save_json (indent=2 SANS sort_keys,
+ecriture ATOMIQUE). Les 6 outils du jour refactores. Parite validee.
+**REGLE: tout nouvel outil importe common.py — plus jamais de formule ou de
+json.dump local.** (Lecon: un dump indent=1/sort_keys = 8000 lignes de churn.)
+
+**Inventaire (`docs/TOOLS_INVENTORY_2026-06-10.md`):** 70 outils dates avec
+references croisees. 13 candidats archivage (gen_portofino pre-v4, 7 outils
+du 7 mai, compute_venetian_xyz, discover_mesh_candidates) — DECISION
+ALEXANDRE. Note: calibrate_batch touche le 2026-06-10, la mention "perime"
+est peut-etre a retirer.
+
+**Lecon process (4 ratés aujourd'hui):** le bloc de session passe maintenant
+INLINE dans la commande de commit, plus jamais par un fichier a DL.
+
+**Etat fin 2026-06-10:** mediane 2.476' -> 1.965' (-21%), zero leak touchee,
+invariants verts, doctrine waterline appliquee data+outils+code partage,
+7 mesh. **File: WDNA Ambrosia 02 (manuel), bootstrap T3 vanishing points
+(session dediee), natural_z_sweep apres T3, trancher les 13 archivages.**
+
+
 ## Session 2026-06-10 (soir) — Doctrine waterline: tranchee, appliquee, outillee
 
 **Question du PM** (6 violations z_constraint): recaler la zone Keys ou retirer
