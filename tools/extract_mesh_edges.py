@@ -36,6 +36,7 @@ import gtamapdata as md
 from OneThousandVenetian import OneThousandVenetian
 from WDNAFM import WDNAFM
 from PortofinoTower import PortofinoTower
+from HomesteadWaterTower import HomesteadWaterTower
 
 
 class FakeCam:
@@ -155,6 +156,17 @@ try:
     print(f'  -> {len(porto_edges)} edges')
 except Exception as e:
     print(f'  FAILED: {e}')
+
+print('Extracting HomesteadWaterTower edges...')
+try:
+    instance = HomesteadWaterTower(md, ml)
+    fake = FakeCam()
+    instance.render_on_camera(fake)
+    hwt_edges = fake.edges
+    print(f'  -> {len(hwt_edges)} edges')
+except Exception as e:
+    hwt_edges = []
+    print(f'  FAILED: {e}')
     import traceback
     traceback.print_exc()
     porto_edges = []
@@ -189,6 +201,12 @@ if porto_edges:
     result['Portofino Tower'] = {
         'color': '#a78bfa',
         'world_edges': porto_edges,
+    }
+
+if hwt_edges:
+    result['Homestead Water Tower'] = {
+        'color': HomesteadWaterTower.color,
+        'world_edges': hwt_edges,
     }
 
 out_path = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
