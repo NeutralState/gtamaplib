@@ -2258,20 +2258,16 @@
   },
   "Blimp Bay": {
     "xyz": [
-      -4011.3935102619125,
-      -7352.087178115111,
-      0.0
+      -4011.404034097724,
+      -7352.085296388045,
+      0.34860515399003367
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Keys"
     ],
     "error_m": 0.243,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
+    "zone": "leonida_keys"
   },
   "Blue Billboard (Key Lento)": {
     "xyz": [
@@ -2318,20 +2314,16 @@
   },
   "Island A (W)": {
     "xyz": [
-      -2544.9522223058584,
-      -5587.943850868515,
-      0.0
+      -2543.324718322513,
+      -5586.3635562783,
+      -0.14213562738842384
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
     "error_m": 0.273,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
+    "zone": "leonida_keys"
   },
   "Island J (E)": {
     "xyz": [
@@ -2345,11 +2337,7 @@
       "Leonida Keys Postcard (X)"
     ],
     "error_m": 1.701,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
+    "zone": "leonida_keys"
   },
   "Island N (E)": {
     "xyz": [
@@ -2426,45 +2414,33 @@
       "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": 0.771,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
+    "zone": "leonida_keys"
   },
   "Key Lento (A)": {
     "xyz": [
-      -2589.009131516872,
-      -5718.502747153347,
-      0.0
+      -2587.876282421695,
+      -5717.54237046793,
+      -0.9603065484907984
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
     "error_m": 0.135,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
+    "zone": "leonida_keys"
   },
   "Key Lento (J)": {
     "xyz": [
-      -2979.6974677682065,
-      -6677.792054173916,
-      0.0
+      -2979.616320147216,
+      -6677.749286966142,
+      -1.2962565670270016
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
     "error_m": 0.79,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
+    "zone": "leonida_keys"
   },
   "Park Grove Condominium (S)": {
     "xyz": [
@@ -3039,11 +3015,7 @@
       "Leonida Keys Postcard (X)"
     ],
     "error_m": 3.267,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
+    "zone": "leonida_keys"
   },
   "Island G (W)": {
     "xyz": [
@@ -3056,11 +3028,7 @@
       "Leonida Keys Postcard (X)"
     ],
     "error_m": 3.87,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
+    "zone": "leonida_keys"
   },
   "Island J (W)": {
     "xyz": [
@@ -3073,11 +3041,7 @@
       "Leonida Keys Postcard (X)"
     ],
     "error_m": 0.907,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
+    "zone": "leonida_keys"
   },
   "Island X (S)": {
     "xyz": [
@@ -5844,11 +5808,7 @@
       "Vice City 03 (Basketball)"
     ],
     "error_m": 6.987,
-    "zone": "vice_city",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
+    "zone": "vice_city"
   },
   "Di Lido Island (S)": {
     "xyz": [
@@ -9072,20 +9032,16 @@
   },
   "Sombrero Key Light (B)": {
     "xyz": [
-      -3029.180916014442,
-      -7215.868334690616,
-      0.0
+      -3019.98438430567,
+      -7216.450125134589,
+      -0.5972830266560778
     ],
     "source_cameras": [
       "Ocean near Keys (E)",
       "Keys"
     ],
     "error_m": 0.047,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
+    "zone": "leonida_keys"
   },
   "Stack (B)": {
     "xyz": [
