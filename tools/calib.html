@@ -500,6 +500,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   <div class="view-toggle" id="view-toggle">
     <button data-view="camera" class="active" title="Camera view (calibration)">Camera</button>
     <button data-view="map" title="Map view (overview)">Map</button>
+    <button data-view="view3d" title="3D view (network in space)">3D</button>
   </div>
   <button class="rays-toggle" id="rays-toggle" title="Show all rays from the selected cam to its landmarks">Rays</button>
   <button class="heat-toggle" id="heat-toggle" title="Show loss landscape for the selected cam (heat map)">Heat</button>
@@ -1129,10 +1130,17 @@ async function init() {
   const _mapViewSibling = mapView.nextSibling;  // anchor for re-insert
 
   function setView(name) {
-    if (name !== 'camera' && name !== 'map') return;
+    if (name !== 'camera' && name !== 'map' && name !== 'view3d') return;
     if (window.currentView === name) return;
     window.currentView = name;
     document.body.classList.toggle('view-map', name === 'map');
+    // [VIEW3D-TAB] iframe lazy: la scene WebGL ne coute rien tant que
+    // l'onglet n'a pas ete ouvert une premiere fois.
+    document.body.classList.toggle('view-view3d', name === 'view3d');
+    if (name === 'view3d') {
+      const fr = document.getElementById('view3d-frame');
+      if (fr && !fr.src) fr.src = '/view3d.html';
+    }
     viewToggle.querySelectorAll('button[data-view]').forEach(b => {
       b.classList.toggle('active', b.dataset.view === name);
     });
@@ -4997,5 +5005,16 @@ window.addEventListener('load', () => {
 
   </div>
 </div>
+<!-- [VIEW3D-TAB] onglet 3D: iframe lazy vers /view3d.html. Iframe plutot
+     qu'integration inline: zero risque pour ce fichier de 4900 lignes, la
+     scene WebGL garde son etat en changeant d'onglet, et la page reste
+     accessible standalone. -->
+<style>
+  .view3d-wrap { display:none; position:fixed; left:0; right:0; top:44px;
+                 bottom:0; z-index:5; background:#0a0a0c; }
+  body.view-view3d .view3d-wrap { display:block; }
+  .view3d-wrap iframe { width:100%; height:100%; border:0; display:block; }
+</style>
+<div class="view3d-wrap" id="view3d-wrap"><iframe id="view3d-frame"></iframe></div>
 </body>
 </html>

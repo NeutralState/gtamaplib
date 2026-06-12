@@ -540,6 +540,20 @@ class Handler(BaseHTTPRequestHandler):
         elif path == '/cam_health.html':
             self.send_file(os.path.join(TOOL_DIR, 'cam_health.html'), 'text/html')
 
+        # [VIEW3D-V1] scene three.js plein ecran (page isolee, lien depuis topbar)
+        elif path == '/view3d.html':
+            self.send_file(os.path.join(TOOL_DIR, 'view3d.html'), 'text/html')
+
+        elif path.startswith('/threejs/'):
+            fname = unquote(path[len('/threejs/'):])
+            if '/' in fname or '\\' in fname or '..' in fname:
+                self.send_response(400); self.end_headers(); return
+            fpath = os.path.join(TOOL_DIR, 'threejs', fname)  # tools/threejs: committable ('vendor/' du .gitignore matche a tous les niveaux)
+            if os.path.exists(fpath):
+                self.send_file(fpath, 'application/javascript')
+            else:
+                self.send_response(404); self.end_headers()
+
         # [TILES-V1] isolated test page for new tile-based map renderer.
         # Not linked from anywhere in the main UI — direct nav only.
         # [YANIS-CLEANUP-V2] map_view_v2 routes removed
@@ -586,6 +600,52 @@ class Handler(BaseHTTPRequestHandler):
             self.send_header('Cache-Control', 'public, max-age=31536000, immutable')
             self.end_headers()
             self.wfile.write(data)
+
+        # [VIEW3D-V1] scene 3D: cams avec coins de frustum calcules par LA LIB
+        # (get_pixel_direction aux 4 coins image — zero risque de convention
+        # ypr cote JS), LMs, meshes proceduraux, bornes.
+        elif path == '/api/scene3d':
+            try:
+                import json as _json
+                from common import get_cam as _get_cam, cam_rms as _cam_rms
+                from leak_cam_audit import is_triangulation_trusted as _itt
+                with open(os.path.join(REPO_ROOT, 'tools', 'generated', 'confidence_tiers.json')) as _f:
+                    _ct = _json.load(_f).get('cameras', {})
+                cams3d = []
+                for name, cd in md.cameras.items():
+                    if not cd.get('xyz'):
+                        continue
+                    entry = {
+                        'name': name, 'xyz': cd['xyz'],
+                        'tier': (_ct.get(name) or {}).get('tier'),
+                        'rms_arcmin': (lambda r: round(r, 2) if r is not None else None)(_cam_rms(name)),
+                        'hud_locked': bool(_itt(name, cameras=md.cameras)),
+                        'n_pixels': len([p for p in md.pixels.get(name, {}).values() if p is not None]),
+                        'corners': None,
+                    }
+                    try:
+                        cam = _get_cam(name)
+                        w, h = cd['size']
+                        dirs = []
+                        for px in ((0, 0), (w - 1, 0), (w - 1, h - 1), (0, h - 1)):
+                            d = cam.get_pixel_direction(px)
+                            dirs.append([float(v) for v in d] if d is not None else None)
+                        if all(d is not None for d in dirs):
+                            entry['corners'] = dirs
+                    except Exception:
+                        pass
+                    cams3d.append(entry)
+                lms3d = [{'name': n, 'xyz': [float(v) for v in x], 'zone': (md.landmarks_meta.get(n) or {}).get('zone')}
+                         for n, x in md.landmarks.items() if x is not None]
+                meshes = {}
+                _mp = os.path.join(REPO_ROOT, 'gtamapdata', 'building_meshes_procedural.json')
+                if os.path.exists(_mp):
+                    with open(_mp) as _f:
+                        meshes = _json.load(_f)
+                self.send_json({'cameras': cams3d, 'landmarks': lms3d, 'meshes': meshes})
+            except Exception as e:
+                import traceback; traceback.print_exc()
+                self.send_json({'error': str(e)})
 
         elif path == '/api/map_data':
             # Single dump used by the SVG map view at load time. After this,

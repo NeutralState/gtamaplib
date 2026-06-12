@@ -1,0 +1,253 @@
+<!doctype html>
+<!-- [VIEW3D-V1] Vue 3D du reseau de calibration.
+     Frustums des cams (couleur = tier de confiance), landmarks, meshes
+     proceduraux, plan d'ocean a z=0 (le datum que les iles des Keys ont
+     viole pendant des mois sans que personne le voie — cette vue existe
+     pour que ca n'arrive plus jamais).
+     Donnees: /api/scene3d (coins de frustum calcules par gtamaplib serveur-
+     side, zero replication de convention ypr en JS). three.js vendorise. -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>gtamaplib — 3D</title>
+<style>
+  html, body { margin:0; height:100%; background:#0a0a0c; overflow:hidden;
+               font:12px ui-monospace, monospace; color:#b9b9c2; }
+  #c { position:fixed; inset:0; }
+  .panel { position:fixed; z-index:10; background:rgba(10,10,13,.78);
+           backdrop-filter:blur(6px); border:1px solid #26262c;
+           border-radius:10px; padding:10px 14px; }
+  #hud { top:12px; left:12px; }
+  #hud label { display:block; cursor:pointer; line-height:1.9; user-select:none; }
+  #hud input { vertical-align:-2px; margin-right:7px; accent-color:#4ade80; }
+  #hud .ttl { color:#e6e6ec; font-weight:600; margin-bottom:4px; }
+  #hud a { color:#7dd3fc; text-decoration:none; }
+  #info { top:12px; right:12px; display:none; max-width:280px; }
+  #info b { color:#e6e6ec; }
+  #info .rms-bad { color:#f87171; }
+  #legend { bottom:12px; left:12px; line-height:1.8; }
+  .sw { display:inline-block; width:9px; height:9px; border-radius:50%;
+        margin-right:6px; vertical-align:-1px; }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="panel" id="hud">
+  <div class="ttl">gtamaplib 3D &nbsp;·&nbsp; <a href="/">← calib</a></div>
+  <label><input type="checkbox" id="ly-cams" checked>cameras (frustums)</label>
+  <label><input type="checkbox" id="ly-lms" checked>landmarks</label>
+  <label><input type="checkbox" id="ly-meshes" checked>meshes</label>
+  <label><input type="checkbox" id="ly-ocean" checked>ocean z=0</label>
+  <label><input type="checkbox" id="ly-ground" checked>map</label>
+  <label><input type="checkbox" id="ly-grid">grid</label>
+</div>
+<div class="panel" id="info"></div>
+<div class="panel" id="legend">
+  <span><span class="sw" style="background:#a78bfa"></span>anchor</span>
+  <span style="margin-left:10px"><span class="sw" style="background:#4ade80"></span>high</span>
+  <span style="margin-left:10px"><span class="sw" style="background:#fbbf24"></span>medium</span>
+  <span style="margin-left:10px"><span class="sw" style="background:#fb923c"></span>low</span>
+  <span style="margin-left:10px"><span class="sw" style="background:#6b7280"></span>unverified</span>
+</div>
+<script type="importmap">
+{ "imports": { "three": "/threejs/three.module.min.js" } }
+</script>
+<script type="module">
+import * as THREE from 'three';
+
+// [VIEW3D-TAB] en iframe (onglet 3D de calib), le lien "← calib" est
+// redondant et ouvrirait l'app dans l'app — on le masque.
+if (window.self !== window.top) {
+  const a = document.querySelector('#hud a');
+  if (a) a.parentElement.innerHTML = 'gtamaplib 3D';
+}
+import { MapControls } from '/threejs/MapControls.js';
+
+const TIER_COLORS = { anchor: 0xa78bfa, high: 0x4ade80, medium: 0xfbbf24,
+                      low: 0xfb923c, unverified: 0x6b7280 };
+const FRUSTUM_LEN = 260;   // metres
+const canvas = document.getElementById('c');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0a0a0c);
+let fog = null; // configure apres le calcul du span
+
+// Monde z-up (convention gtamaplib)
+const camera = new THREE.PerspectiveCamera(55, 1, 1, 50000);
+camera.up.set(0, 0, 1);
+// [VIEW3D-V2] MapControls: drag = pan (feel d'app de carte), clic droit =
+// orbite, zoom vers le curseur, double-clic = recentrer la cible au sol.
+const controls = new MapControls(camera, canvas);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.zoomToCursor = true;
+controls.screenSpacePanning = false;
+controls.zoomSpeed = 1.7;
+controls.panSpeed = 1.3;
+controls.rotateSpeed = 0.6;
+controls.maxPolarAngle = Math.PI * 0.495;   // jamais sous le sol
+
+function resize() {
+  renderer.setSize(innerWidth, innerHeight, false);
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+}
+addEventListener('resize', resize); resize();
+
+const layers = { cams: new THREE.Group(), lms: new THREE.Group(),
+                 meshes: new THREE.Group(), ocean: new THREE.Group(),
+                 ground: new THREE.Group(), grid: new THREE.Group() };
+Object.values(layers).forEach(g => scene.add(g));
+for (const k of ['cams', 'lms', 'meshes', 'ocean', 'ground', 'grid']) {
+  document.getElementById('ly-' + k).addEventListener('change', e => {
+    layers[k].visible = e.target.checked;
+  });
+}
+layers.grid.visible = false;
+
+const data = await (await fetch('/api/scene3d')).json();
+
+// ── frustums: un LineSegments par tier (perf: 174 cams en 5 draws) ──
+const byTier = {};
+for (const c of data.cameras) {
+  const t = c.tier || 'unverified';
+  (byTier[t] = byTier[t] || []).push(c);
+}
+const camPickPositions = [];   // pour le raycast hover
+const camPickRefs = [];
+for (const [tier, cams] of Object.entries(byTier)) {
+  const verts = [];
+  for (const c of cams) {
+    const [x, y, z] = c.xyz;
+    camPickPositions.push(x, y, z);
+    camPickRefs.push(c);
+    if (!c.corners) continue;
+    const tips = c.corners.map(d => [x + d[0] * FRUSTUM_LEN,
+                                     y + d[1] * FRUSTUM_LEN,
+                                     z + d[2] * FRUSTUM_LEN]);
+    for (const tip of tips) verts.push(x, y, z, ...tip);          // 4 aretes apex→coin
+    for (let i = 0; i < 4; i++)                                    // rectangle du fond
+      verts.push(...tips[i], ...tips[(i + 1) % 4]);
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+  const m = new THREE.LineBasicMaterial({ color: TIER_COLORS[tier],
+    transparent: true, opacity: tier === 'unverified' ? 0.22 : 0.65 });
+  layers.cams.add(new THREE.LineSegments(g, m));
+}
+// points invisibles aux apex pour le hover
+const pickGeo = new THREE.BufferGeometry();
+pickGeo.setAttribute('position', new THREE.Float32BufferAttribute(camPickPositions, 3));
+const pickPts = new THREE.Points(pickGeo,
+  new THREE.PointsMaterial({ size: 26, transparent: true, opacity: 0 }));
+layers.cams.add(pickPts);
+
+// ── landmarks: Points blancs discrets ──
+const lmVerts = [];
+for (const l of data.landmarks) lmVerts.push(...l.xyz);
+const lmGeo = new THREE.BufferGeometry();
+lmGeo.setAttribute('position', new THREE.Float32BufferAttribute(lmVerts, 3));
+layers.lms.add(new THREE.Points(lmGeo, new THREE.PointsMaterial({
+  color: 0xd8d8e0, size: 7, transparent: true, opacity: 0.8, sizeAttenuation: true })));
+
+// ── meshes proceduraux: wireframe cyan ──
+const meshVerts = [];
+for (const edges of Object.values(data.meshes || {})) {
+  const list = edges.world_edges || edges;
+  for (const e of list) meshVerts.push(...e[0], ...e[1]);
+}
+if (meshVerts.length) {
+  const mg = new THREE.BufferGeometry();
+  mg.setAttribute('position', new THREE.Float32BufferAttribute(meshVerts, 3));
+  layers.meshes.add(new THREE.LineSegments(mg,
+    new THREE.LineBasicMaterial({ color: 0x67e8f9, transparent: true, opacity: 0.8 })));
+}
+
+// ── ocean z=0 + grille ──
+// cadrage sur les LANDMARKS seulement: des cams aeriennes (ex. AI World
+// Editor Map a z=8012m) explosent la bbox et noient la scene dans le fog.
+const bb = new THREE.Box3();
+for (const l of data.landmarks) bb.expandByPoint(new THREE.Vector3(...l.xyz));
+const ctr = bb.getCenter(new THREE.Vector3());
+const span = bb.getSize(new THREE.Vector3()).length();
+// ── [VIEW3D-V2] sol: tuiles satellite drapees sur un plan ──
+// Transform identique a server.world_to_tile_px: monde 32768m, origine
+// (16384,16384), y flippe. Z=3 → 4 m/px, tuile = 1024m, ~400 tuiles.
+const TZ = 3, TSIZE = 256, TMETERS = 32768 / (32);           // 1024m par tuile a z=3
+const TR = { 3: [[0, 4], [19, 23]] }[TZ];
+const [[tx0, ty0], [tx1, ty1]] = TR;
+const gw = (tx1 - tx0 + 1), gh = (ty1 - ty0 + 1);
+const gcan = document.createElement('canvas');
+gcan.width = gw * TSIZE; gcan.height = gh * TSIZE;
+const gctx = gcan.getContext('2d');
+gctx.fillStyle = '#101218'; gctx.fillRect(0, 0, gcan.width, gcan.height);
+const gtex = new THREE.CanvasTexture(gcan);
+gtex.colorSpace = THREE.SRGBColorSpace;
+gtex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+const groundW = gw * TMETERS, groundH = gh * TMETERS;
+const groundCx = (tx0 * TMETERS - 16384) + groundW / 2;
+const groundCy = (16384 - ty0 * TMETERS) - groundH / 2;
+const ground = new THREE.Mesh(
+  new THREE.PlaneGeometry(groundW, groundH),
+  new THREE.MeshBasicMaterial({ map: gtex, color: 0xb8bcc6 }));  // legerement assombri: les frustums restent les heros
+ground.position.set(groundCx, groundCy, -0.8);
+layers.ground.add(ground);
+for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) {
+  const img = new Image();
+  img.onload = () => {
+    gctx.drawImage(img, (tx - tx0) * TSIZE, (ty - ty0) * TSIZE);
+    gtex.needsUpdate = true;
+  };
+  img.src = `/tiles/${TZ}/${TZ},${ty},${tx}.jpg`;
+}
+
+const ocean = new THREE.Mesh(
+  new THREE.PlaneGeometry(span * 1.6, span * 1.6),
+  new THREE.MeshBasicMaterial({ color: 0x1d4ed8, transparent: true,
+    opacity: 0.10, side: THREE.DoubleSide, depthWrite: false }));
+ocean.position.set(ctr.x, ctr.y, 0);   // plan XY a z=0 (deja l'orientation par defaut apres rotation)
+layers.ocean.add(ocean);
+const grid = new THREE.GridHelper(span * 1.6, 60, 0x26262c, 0x1a1a1f);
+grid.rotation.x = Math.PI / 2;          // GridHelper est XZ par defaut → XY
+grid.position.set(ctr.x, ctr.y, 0);
+layers.grid.add(grid);
+
+camera.position.set(ctr.x + span * 0.30, ctr.y - span * 0.40, span * 0.28);
+controls.target.copy(ctr);
+scene.fog = new THREE.Fog(0x0a0a0c, span * 1.2, span * 3.5);
+
+// ── hover ──
+const ray = new THREE.Raycaster();
+ray.params.Points.threshold = 30;
+const info = document.getElementById('info');
+addEventListener('pointermove', ev => {
+  const ndc = new THREE.Vector2(ev.clientX / innerWidth * 2 - 1,
+                                -(ev.clientY / innerHeight) * 2 + 1);
+  ray.setFromCamera(ndc, camera);
+  const hits = ray.intersectObject(pickPts);
+  if (hits.length) {
+    const c = camPickRefs[hits[0].index];
+    const rms = c.rms_arcmin;
+    info.style.display = 'block';
+    info.innerHTML = `<b>${c.name}</b><br>` +
+      `tier ${c.tier || 'unverified'} · ${c.n_pixels} markings` +
+      (c.hud_locked ? ' · HUD-locked' : '') +
+      (rms != null ? `<br>RMS <span class="${rms > 10 ? 'rms-bad' : ''}">${rms}&#8242;</span>` : '');
+  } else {
+    info.style.display = 'none';
+  }
+});
+
+addEventListener('dblclick', ev => {
+  const ndc = new THREE.Vector2(ev.clientX / innerWidth * 2 - 1,
+                                -(ev.clientY / innerHeight) * 2 + 1);
+  ray.setFromCamera(ndc, camera);
+  const hit = ray.intersectObject(ground);
+  if (hit.length) { controls.target.copy(hit[0].point); }
+});
+
+renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
+</script>
+</body>
+</html>
