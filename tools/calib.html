@@ -86,13 +86,22 @@ body.view-map #cam-preview-wrap{display:flex}
 /* Map view container — fills the canvas-wrap slot when active. Toggled via
    body.view-map class (set by setView() in JS). Camera-view-only sections
    in the right sidebar are hidden in Map view. */
-.map-legend{position:absolute;left:14px;bottom:14px;z-index:30;background:rgba(13,13,16,.92);border:1px solid #2a2a30;border-radius:10px;padding:10px 14px;font:11px/1.7 ui-monospace,monospace;color:#c9c9cf;pointer-events:none}
-.map-legend .sw{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:-1px}
-.map-legend .ring{border:2px solid #fff;background:transparent}
-.map-legend .halo{border:2px solid #ef4444;background:transparent}
-.map-health{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:30;display:flex;gap:8px;align-items:center;background:rgba(13,13,16,.92);border:1px solid #2a2a30;border-radius:10px;padding:6px 14px;font:11px ui-monospace,monospace;color:#c9c9cf;pointer-events:none}
-.map-health b{color:#4ade80;font-weight:600}
-.map-health .chip{padding:1px 8px;border-radius:999px;background:#1c1c22;border:1px solid #2a2a30}
+/* bottom:44px compense la topbar: .map-view fait min-height:100vh mais
+   demarre sous la topbar de 44px, donc son bas depasse le viewport de 44px
+   (c'est pour ca que la legende v1 etait coupee). */
+.map-legend{position:absolute;left:0;right:0;bottom:44px;z-index:30;display:flex;gap:22px;justify-content:center;align-items:center;background:rgba(10,10,13,.82);backdrop-filter:blur(6px);border-top:1px solid #26262c;padding:7px 18px;font:11px ui-monospace,monospace;color:#b9b9c2;pointer-events:none;letter-spacing:.02em}
+.map-legend .grp{display:flex;gap:13px;align-items:center}
+.map-legend .grp+.grp{border-left:1px solid #2c2c33;padding-left:22px}
+.map-legend .sw{display:inline-block;width:9px;height:9px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.map-legend .ring{border:2px solid #fff;background:transparent;width:7px;height:7px}
+.map-legend .halo{border:2px solid #ef4444;background:transparent;width:7px;height:7px}
+.map-legend .dim{opacity:.55}
+.map-health{position:absolute;left:50%;top:12px;transform:translateX(-50%);z-index:30;display:flex;gap:10px;align-items:center;background:rgba(10,10,13,.85);backdrop-filter:blur(6px);border:1px solid #2c2c33;border-radius:12px;padding:7px 16px;font:11.5px ui-monospace,monospace;color:#b9b9c2;pointer-events:none;letter-spacing:.02em}
+.map-health .lbl{opacity:.6;margin-right:2px}
+.map-health b{color:#4ade80;font-weight:600;font-size:13px;margin-right:6px}
+.map-health .chip{padding:2px 10px;border-radius:999px;background:rgba(34,34,40,.8);border:1px solid #2c2c33}
+.map-health .chip-bad{color:#f87171;border-color:#7f1d1d;background:rgba(127,29,29,.18)}
+.map-health .chip-good{color:#4ade80;border-color:#14532d;background:rgba(20,83,45,.15)}
 .map-view{flex:1;position:relative;background:#0a0a0c;overflow:hidden;display:none;cursor:grab;min-height:100vh}
 .map-view.dragging{cursor:grabbing}
 body.view-map .canvas-wrap{display:none}
@@ -589,14 +598,15 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   <div class="map-view" id="map-view">
   <div class="map-health" id="map-health">chargement…</div>
   <div class="map-legend" id="map-legend">
-    <div><span class="sw" style="background:#a78bfa"></span>anchor
-         <span class="sw" style="background:#4ade80;margin-left:10px"></span>high
-         <span class="sw" style="background:#fbbf24;margin-left:10px"></span>medium
-         <span class="sw" style="background:#fb923c;margin-left:10px"></span>low
-         <span class="sw" style="background:#6b7280;margin-left:10px"></span>unverified</div>
-    <div><span class="sw ring"></span>HUD-locked (ground truth)
-         <span class="sw halo" style="margin-left:10px"></span>RMS &gt; 10'
-         <span style="margin-left:10px;opacity:.7">taille = n markings</span></div>
+    <div class="grp"><span class="dim">confidence</span>
+      <span><span class="sw" style="background:#a78bfa"></span>anchor</span>
+      <span><span class="sw" style="background:#4ade80"></span>high</span>
+      <span><span class="sw" style="background:#fbbf24"></span>medium</span>
+      <span><span class="sw" style="background:#fb923c"></span>low</span>
+      <span><span class="sw" style="background:#6b7280"></span>unverified</span></div>
+    <div class="grp"><span><span class="sw ring"></span>HUD-locked</span>
+      <span><span class="sw halo"></span>outlier &gt;10&#8242;</span></div>
+    <div class="grp"><span class="dim">dot size &#8733; markings</span></div>
   </div>
     <!-- [TILES-V1-CANVAS] tile renderer behind the SVG overlay -->
     <canvas class="map-tile-canvas" id="map-tile-canvas"></canvas>
@@ -1790,10 +1800,12 @@ async function init() {
       const locked = window.mapData.cameras.filter(c => c.hud_locked).length;
       const el = document.getElementById('map-health');
       if (el) el.innerHTML =
-        `mediane <b>${globalMed != null ? globalMed.toFixed(2) + "'" : '—'}</b>` +
-        `<span class="chip">${withRms.length} cams mesurees</span>` +
-        `<span class="chip">${locked} HUD-locked</span>` +
-        `<span class="chip" style="color:${bad ? '#ef4444' : '#4ade80'}">${bad} > 10'</span>`;
+        `<span class="lbl">median RMS</span><b>${globalMed != null ? globalMed.toFixed(2) + '\u2032' : '—'}</b>` +
+        `<span class="chip">${withRms.length} calibrated</span>` +
+        `<span class="chip">${locked} ground-truth</span>` +
+        (bad
+          ? `<span class="chip chip-bad">${bad} outlier${bad > 1 ? 's' : ''} &gt;10\u2032</span>`
+          : `<span class="chip chip-good">no outliers</span>`);
     } catch (e) { /* bandeau non bloquant */ }
 
     // Apply current selection styling (in case we re-render after a select).
