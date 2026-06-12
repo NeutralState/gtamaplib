@@ -94,6 +94,15 @@ def main():
             print(f"NOTE: {len(new_leaks)} nouvelles cams HUD-locked pas dans la ref "
                   f"(normal apres intake; --freeze pour les geler): {sorted(new_leaks)[:5]}...")
 
+    # ── 2b. doublons case-insensitive (LMs et cams) ─────────────────────
+    import collections as _coll
+    for label, keys in (("landmarks", md.landmarks), ("cameras", md.cameras)):
+        low = _coll.Counter(k.lower() for k in keys)
+        for k, v in low.items():
+            if v > 1:
+                originals = [o for o in keys if o.lower() == k]
+                fails.append(f"DOUBLON {label}: {originals} ne different que par la casse")
+
     # ── 3. schema ────────────────────────────────────────────────────────
     for n, c in md.cameras.items():
         for k, ln in (("xyz", 3), ("ypr", 3), ("fov", 2), ("size", 2)):
