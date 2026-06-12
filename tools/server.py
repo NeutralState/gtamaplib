@@ -605,6 +605,26 @@ class Handler(BaseHTTPRequestHandler):
             # Cameras: only those with xyz (otherwise they can't be placed
             # on the map). For each we mirror what /api/cameras returns,
             # plus the per-cam color used by /api/other_cams_overlay.
+            # [MAP-DESIGN-V1] enrichissement qualite: tier (confidence_tiers
+            # genere), rms live (common.cam_rms, formule canonique), statut
+            # HUD-locked (leak_cam_audit). La map encode enfin la qualite.
+            try:
+                import json as _json
+                with open(os.path.join(REPO_ROOT, 'tools', 'generated', 'confidence_tiers.json')) as _f:
+                    _tiers_data = _json.load(_f)
+                _cams_t = _tiers_data.get('cameras', {})
+                _cam_tier = {n: (v.get('tier') if isinstance(v, dict) else v) for n, v in _cams_t.items()}
+            except Exception:
+                _cam_tier = {}
+            try:
+                from common import cam_rms as _cam_rms
+            except Exception:
+                _cam_rms = lambda n: None
+            try:
+                from leak_cam_audit import is_triangulation_trusted as _itt
+            except Exception:
+                _itt = lambda n, cameras=None: False
+
             cams_out = []
             for name, cam_data in md.cameras.items():
                 if not cam_data.get('xyz'):
@@ -634,6 +654,9 @@ class Handler(BaseHTTPRequestHandler):
                     'color': color,
                     'n_pixels': len(cam_pixels),
                     'n_independent': n_indep,
+                    'tier': _cam_tier.get(name),                       # [MAP-DESIGN-V1]
+                    'rms_arcmin': (lambda _r: round(_r, 2) if _r is not None else None)(_cam_rms(name)),
+                    'hud_locked': bool(_itt(name, cameras=md.cameras)),
                 })
 
             # Landmarks: include ALL of them — even those without xyz, since

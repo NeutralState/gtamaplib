@@ -86,6 +86,13 @@ body.view-map #cam-preview-wrap{display:flex}
 /* Map view container — fills the canvas-wrap slot when active. Toggled via
    body.view-map class (set by setView() in JS). Camera-view-only sections
    in the right sidebar are hidden in Map view. */
+.map-legend{position:absolute;left:14px;bottom:14px;z-index:30;background:rgba(13,13,16,.92);border:1px solid #2a2a30;border-radius:10px;padding:10px 14px;font:11px/1.7 ui-monospace,monospace;color:#c9c9cf;pointer-events:none}
+.map-legend .sw{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px;vertical-align:-1px}
+.map-legend .ring{border:2px solid #fff;background:transparent}
+.map-legend .halo{border:2px solid #ef4444;background:transparent}
+.map-health{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:30;display:flex;gap:8px;align-items:center;background:rgba(13,13,16,.92);border:1px solid #2a2a30;border-radius:10px;padding:6px 14px;font:11px ui-monospace,monospace;color:#c9c9cf;pointer-events:none}
+.map-health b{color:#4ade80;font-weight:600}
+.map-health .chip{padding:1px 8px;border-radius:999px;background:#1c1c22;border:1px solid #2a2a30}
 .map-view{flex:1;position:relative;background:#0a0a0c;overflow:hidden;display:none;cursor:grab;min-height:100vh}
 .map-view.dragging{cursor:grabbing}
 body.view-map .canvas-wrap{display:none}
@@ -580,6 +587,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   </div>
 
   <div class="map-view" id="map-view">
+  <div class="map-health" id="map-health">chargement…</div>
+  <div class="map-legend" id="map-legend">
+    <div><span class="sw" style="background:#a78bfa"></span>anchor
+         <span class="sw" style="background:#4ade80;margin-left:10px"></span>high
+         <span class="sw" style="background:#fbbf24;margin-left:10px"></span>medium
+         <span class="sw" style="background:#fb923c;margin-left:10px"></span>low
+         <span class="sw" style="background:#6b7280;margin-left:10px"></span>unverified</div>
+    <div><span class="sw ring"></span>HUD-locked (ground truth)
+         <span class="sw halo" style="margin-left:10px"></span>RMS &gt; 10'
+         <span style="margin-left:10px;opacity:.7">taille = n markings</span></div>
+  </div>
     <!-- [TILES-V1-CANVAS] tile renderer behind the SVG overlay -->
     <canvas class="map-tile-canvas" id="map-tile-canvas"></canvas>
     <div class="map-svg-wrap" id="map-svg-wrap"></div>
@@ -1354,9 +1372,29 @@ async function init() {
     if (!window.mapData) return;
     const sz = window.mapData.transform.svg_size;
     const rect = mapView.getBoundingClientRect();
-    const scale = Math.min(rect.width / sz[0], rect.height / sz[1]);
-    const tx = (rect.width  - sz[0] * scale) / 2;
-    const ty = (rect.height - sz[1] * scale) / 2;
+    // [MAP-DESIGN-V1] auto-fit sur la bounding box des cams (+12% padding)
+    // au lieu du monde entier: les cams occupent ~2 clusters dans un viewBox
+    // de 20000 — la vue monde rendait tout sub-3px et illisible.
+    let scale, tx, ty;
+    const pts = (window.mapData.cameras || [])
+      .filter(c => c.xyz)
+      .map(c => window.worldToSvg(c.xyz[0], c.xyz[1]));
+    if (pts.length >= 2) {
+      const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+      const pad = 0.12;
+      const x0 = Math.min(...xs), x1 = Math.max(...xs);
+      const y0 = Math.min(...ys), y1 = Math.max(...ys);
+      const bw = (x1 - x0) * (1 + 2 * pad) || sz[0];
+      const bh = (y1 - y0) * (1 + 2 * pad) || sz[1];
+      scale = Math.min(rect.width / bw, rect.height / bh);
+      const cx = (x0 + x1) / 2, cy = (y0 + y1) / 2;
+      tx = rect.width / 2 - cx * scale;
+      ty = rect.height / 2 - cy * scale;
+    } else {
+      scale = Math.min(rect.width / sz[0], rect.height / sz[1]);
+      tx = (rect.width  - sz[0] * scale) / 2;
+      ty = (rect.height - sz[1] * scale) / 2;
+    }
     window.mapTx = { scale, tx, ty };
     // [CAM-DOT-ADAPTIVE]: baseline scale = fit-to-screen scale; dot sizes
     // are kept constant at this scale.
@@ -1418,6 +1456,24 @@ async function init() {
   // Camera type → color. We pull from the same color palette as the rest
   // of the app for consistency (greens for LEAK ground-truth, blue for
   // Trailers, purple for other community sources).
+  // [MAP-DESIGN-V1] encodages qualite: fill=tier, anneau blanc=HUD-locked,
+  // taille=n_pixels, halo rouge=RMS>10'. Palette alignee sur la semantique
+  // des tiers (anchor=violet confiance maximale ... unverified=gris).
+  const TIER_COLORS = {
+    anchor:     '#a78bfa',
+    high:       '#4ade80',
+    medium:     '#fbbf24',
+    low:        '#fb923c',
+    unverified: '#6b7280',
+  };
+  const RMS_BAD_THRESHOLD = 10.0;  // arcmin
+  function markerFill(c) {
+    return TIER_COLORS[c.tier] || TIER_COLORS.unverified;
+  }
+  function markerRadius(c) {
+    const n = c.n_pixels || 0;
+    return n >= 30 ? 82 : n >= 10 ? 66 : n >= 1 ? 52 : 38;
+  }
   const CAM_COLORS = {
     'LEAK':      '#4ade80',  // green — ground truth
     'Trailer 1': '#60a5fa',  // blue
@@ -1652,7 +1708,9 @@ async function init() {
     for (const c of window.mapData.cameras) {
       if (!c.xyz) continue;  // shouldn't happen since /api/map_data filters
       const type = getCamTypeForMap(c);
-      const color = CAM_COLORS[type] || 'var(--violet)';
+      // [MAP-DESIGN-V1] fill = tier (qualite), pas type; le frustum garde
+      // la couleur tier aussi pour la coherence.
+      const color = markerFill(c);
       const [sx, sy] = window.worldToSvg(c.xyz[0], c.xyz[1]);
 
       // Phase 5.1: per-cam frustum length = farthest observed landmark.
@@ -1692,13 +1750,27 @@ async function init() {
       const marker = document.createElementNS(SVG_NS, 'g');
       marker.setAttribute('class', 'cam-marker');
       marker.dataset.camName = c.name;
+      // [MAP-DESIGN-V1] halo rouge si RMS au-dessus du seuil — la cam a
+      // probleme se voit de loin, avant meme de hover.
+      if (c.rms_arcmin != null && c.rms_arcmin > RMS_BAD_THRESHOLD) {
+        const halo = document.createElementNS(SVG_NS, 'circle');
+        halo.setAttribute('cx', String(sx));
+        halo.setAttribute('cy', String(sy));
+        halo.setAttribute('r', String(markerRadius(c) + 44));
+        halo.setAttribute('fill', 'none');
+        halo.setAttribute('stroke', '#ef4444');
+        halo.setAttribute('stroke-width', '18');
+        halo.setAttribute('opacity', '0.55');
+        marker.appendChild(halo);
+      }
       const circle = document.createElementNS(SVG_NS, 'circle');
       circle.setAttribute('cx', String(sx));
       circle.setAttribute('cy', String(sy));
-      circle.setAttribute('r', String(MARKER_RADIUS));
+      circle.setAttribute('r', String(markerRadius(c)));   // [MAP-DESIGN-V1] taille = n_pixels
       circle.setAttribute('fill', color);
-      circle.setAttribute('stroke', '#000');
-      circle.setAttribute('stroke-width', String(MARKER_STROKE));
+      // [MAP-DESIGN-V1] anneau blanc = HUD-locked (ground truth)
+      circle.setAttribute('stroke', c.hud_locked ? '#ffffff' : '#000');
+      circle.setAttribute('stroke-width', String(c.hud_locked ? MARKER_STROKE * 1.6 : MARKER_STROKE));
       marker.appendChild(circle);
       camGroup.appendChild(marker);
 
@@ -1708,6 +1780,21 @@ async function init() {
     // Phase 6.1: render landmark dots. Done after cams so any future
     // shared state (e.g. dim-on-cam-hover) flows in the right direction.
     renderLandmarksOnMap();
+
+    // [MAP-DESIGN-V1] bandeau sante: medianes RMS depuis le payload.
+    try {
+      const withRms = window.mapData.cameras.filter(c => c.rms_arcmin != null);
+      const med = a => { const v = a.slice().sort((x,y)=>x-y); return v.length ? v[Math.floor(v.length/2)] : null; };
+      const globalMed = med(withRms.map(c => c.rms_arcmin));
+      const bad = withRms.filter(c => c.rms_arcmin > RMS_BAD_THRESHOLD).length;
+      const locked = window.mapData.cameras.filter(c => c.hud_locked).length;
+      const el = document.getElementById('map-health');
+      if (el) el.innerHTML =
+        `mediane <b>${globalMed != null ? globalMed.toFixed(2) + "'" : '—'}</b>` +
+        `<span class="chip">${withRms.length} cams mesurees</span>` +
+        `<span class="chip">${locked} HUD-locked</span>` +
+        `<span class="chip" style="color:${bad ? '#ef4444' : '#4ade80'}">${bad} > 10'</span>`;
+    } catch (e) { /* bandeau non bloquant */ }
 
     // Apply current selection styling (in case we re-render after a select).
     updateMapSelectionStyle();
