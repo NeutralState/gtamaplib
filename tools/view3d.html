@@ -11,35 +11,45 @@
 <meta charset="utf-8">
 <title>gtamaplib — 3D</title>
 <style>
-  html, body { margin:0; height:100%; background:#0a0a0c; overflow:hidden;
-               font:12px ui-monospace, monospace; color:#b9b9c2; }
+  :root { --bg:#0a0a0c; --surface:#13131a; --surface2:#1c1c26; --border:#252535;
+          --green:#4ade80; --red:#f87171; --text:#e2e2f0; --dim:#5a5a7a;
+          --mid:#9090b0; --mono:'JetBrains Mono',monospace; }
+  html, body { margin:0; height:100%; background:var(--bg); overflow:hidden;
+               font:11px var(--mono); color:var(--mid); }
   #c { position:fixed; inset:0; }
-  .panel { position:fixed; z-index:10; background:rgba(10,10,13,.78);
-           backdrop-filter:blur(6px); border:1px solid #26262c;
-           border-radius:10px; padding:10px 14px; }
-  #hud { top:12px; left:12px; }
-  #hud label { display:block; cursor:pointer; line-height:1.9; user-select:none; }
-  #hud input { vertical-align:-2px; margin-right:7px; accent-color:#4ade80; }
-  #hud .ttl { color:#e6e6ec; font-weight:600; margin-bottom:4px; }
-  #hud a { color:#7dd3fc; text-decoration:none; }
-  #info { top:12px; right:12px; display:none; max-width:280px; }
-  #info b { color:#e6e6ec; }
-  #info .rms-bad { color:#f87171; }
-  #legend { bottom:12px; left:12px; line-height:1.8; }
-  .sw { display:inline-block; width:9px; height:9px; border-radius:50%;
+  .panel { position:fixed; z-index:10; background:rgba(19,19,26,.88);
+           backdrop-filter:blur(8px); border:1px solid var(--border);
+           border-radius:10px; padding:10px 12px; }
+  #hud { top:12px; left:12px; display:flex; align-items:center; gap:12px; }
+  #hud .sect { color:var(--dim); font-size:9.5px; letter-spacing:.12em;
+               text-transform:uppercase; margin:0; }
+  #hud .chips { display:flex; flex-wrap:nowrap; gap:6px; }
+  .lchip { font:11px var(--mono); padding:3px 10px; border-radius:12px;
+           background:var(--surface2); border:1px solid var(--border);
+           color:var(--dim); cursor:pointer; user-select:none;
+           transition:color .12s, border-color .12s; }
+  .lchip:hover { color:var(--mid); }
+  .lchip.on { color:var(--green); border-color:rgba(74,222,128,.45); }
+  #info { top:12px; right:12px; display:none; max-width:280px; color:var(--mid); }
+  #info b { color:var(--text); }
+  #info .rms-bad { color:var(--red); }
+  #legend { bottom:12px; left:12px; display:flex; gap:13px; padding:7px 14px; }
+  .sw { display:inline-block; width:8px; height:8px; border-radius:50%;
         margin-right:6px; vertical-align:-1px; }
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
 <div class="panel" id="hud">
-  <div class="ttl">gtamaplib 3D &nbsp;·&nbsp; <a href="/">← calib</a></div>
-  <label><input type="checkbox" id="ly-cams" checked>cameras (frustums)</label>
-  <label><input type="checkbox" id="ly-lms" checked>landmarks</label>
-  <label><input type="checkbox" id="ly-meshes" checked>meshes</label>
-  <label><input type="checkbox" id="ly-ocean" checked>ocean z=0</label>
-  <label><input type="checkbox" id="ly-ground" checked>map</label>
-  <label><input type="checkbox" id="ly-grid">grid</label>
+  <div class="sect">Layers</div>
+  <div class="chips">
+    <span class="lchip on" id="ly-cams">cams</span>
+    <span class="lchip on" id="ly-lms">landmarks</span>
+    <span class="lchip on" id="ly-meshes">meshes</span>
+    <span class="lchip on" id="ly-ocean">ocean</span>
+    <span class="lchip on" id="ly-ground">map</span>
+    <span class="lchip" id="ly-grid">grid</span>
+  </div>
 </div>
 <div class="panel" id="info"></div>
 <div class="panel" id="legend">
@@ -57,10 +67,7 @@ import * as THREE from 'three';
 
 // [VIEW3D-TAB] en iframe (onglet 3D de calib), le lien "← calib" est
 // redondant et ouvrirait l'app dans l'app — on le masque.
-if (window.self !== window.top) {
-  const a = document.querySelector('#hud a');
-  if (a) a.parentElement.innerHTML = 'gtamaplib 3D';
-}
+// (HUD v2: plus de lien calib — rien a masquer en iframe)
 import { MapControls } from '/threejs/MapControls.js';
 
 const TIER_COLORS = { anchor: 0xa78bfa, high: 0x4ade80, medium: 0xfbbf24,
@@ -83,9 +90,9 @@ controls.enableDamping = true;
 controls.dampingFactor = 0.08;
 controls.zoomToCursor = true;
 controls.screenSpacePanning = false;
-controls.zoomSpeed = 1.7;
-controls.panSpeed = 1.3;
-controls.rotateSpeed = 0.6;
+controls.zoomSpeed = 3.0;
+controls.panSpeed = 3.0;
+controls.rotateSpeed = 1.0;
 controls.maxPolarAngle = Math.PI * 0.495;   // jamais sous le sol
 
 function resize() {
@@ -100,8 +107,10 @@ const layers = { cams: new THREE.Group(), lms: new THREE.Group(),
                  ground: new THREE.Group(), grid: new THREE.Group() };
 Object.values(layers).forEach(g => scene.add(g));
 for (const k of ['cams', 'lms', 'meshes', 'ocean', 'ground', 'grid']) {
-  document.getElementById('ly-' + k).addEventListener('change', e => {
-    layers[k].visible = e.target.checked;
+  const chip = document.getElementById('ly-' + k);
+  chip.addEventListener('click', () => {
+    const on = chip.classList.toggle('on');
+    layers[k].visible = on;
   });
 }
 layers.grid.visible = false;
@@ -148,8 +157,20 @@ const lmVerts = [];
 for (const l of data.landmarks) lmVerts.push(...l.xyz);
 const lmGeo = new THREE.BufferGeometry();
 lmGeo.setAttribute('position', new THREE.Float32BufferAttribute(lmVerts, 3));
+// gl_points = carres par defaut; une texture radiale les rend circulaires
+const dotCan = document.createElement('canvas');
+dotCan.width = dotCan.height = 64;
+const dctx = dotCan.getContext('2d');
+const grad = dctx.createRadialGradient(32, 32, 0, 32, 32, 30);
+grad.addColorStop(0, 'rgba(232,232,242,1)');
+grad.addColorStop(0.55, 'rgba(232,232,242,.9)');
+grad.addColorStop(1, 'rgba(232,232,242,0)');
+dctx.fillStyle = grad;
+dctx.beginPath(); dctx.arc(32, 32, 30, 0, Math.PI * 2); dctx.fill();
+const dotTex = new THREE.CanvasTexture(dotCan);
 layers.lms.add(new THREE.Points(lmGeo, new THREE.PointsMaterial({
-  color: 0xd8d8e0, size: 7, transparent: true, opacity: 0.8, sizeAttenuation: true })));
+  map: dotTex, size: 9, transparent: true, opacity: 0.85,
+  alphaTest: 0.05, depthWrite: false, sizeAttenuation: true })));
 
 // ── meshes proceduraux: wireframe cyan ──
 const meshVerts = [];

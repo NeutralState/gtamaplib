@@ -54,6 +54,50 @@
 
 <!-- INDEX_DE_RETOUR_v1 -->
 
+## Session 2026-06-12 — Journee UI: la sandbox a des yeux
+
+**CAPACITE NOUVELLE (change tout le travail UI):** chromium headless via
+playwright DANS le sandbox Claude (pre-installe /opt/pw-browsers, lancement
+args no-sandbox). Loop valide: serveur en nohup + Playwright + screenshots —
+Claude developpe, VOIT, itere et valide avant livraison. Limites: tuiles
+gtadb.org bloquees dans la conversation courante (allowlist reseau =
+par-conversation; "All domains" actif aux NOUVELLES conversations), frames
+absentes du repo. Alignement du sol 3D valide avec tuiles SYNTHETIQUES
+etiquetees.
+
+**Map design (commits 618c731, db47129, 68c7889):** /api/map_data enrichi
+(tier/rms_arcmin via common.cam_rms/hud_locked), encodages qualite
+(fill=tier, anneau blanc=HUD-locked, taille=n_pixels, halo rouge >10'),
+auto-fit bbox cams, bandeau sante discret en anglais, legende barre du bas.
+Bug racine corrige: .map-view min-height:100vh sous topbar 44px coupait tout
+element bottom-anchored.
+
+**Doublon LM + outillage:** 'hotel Victor (SE)' (err 33m, orphelin) supprime
+via NOUVEAU tools/refine/remove_landmark.py (chemin canonique de suppression,
+gardes: markings vivants/refs sources/meshes). invariants.py: check FAIL
+doublons case-insensitive (LMs et cams).
+
+**view3d (onglet 3D):** scene three.js du reseau complet — 174 frustums
+(coins calcules SERVEUR-SIDE par gtamaplib via get_pixel_direction, zero
+replication ypr en JS), 849 LMs (dots circulaires texture radiale), 7 meshes,
+ocean z=0 (la vue qui aurait montre le bug des iles Keys au jour 1), sol =
+tuiles drapees (transform world_to_tile_px identique au serveur). MapControls
+(zoomToCursor, dblclick retarget, vitesses 3.0/3.0/1.0), HUD chips charte de
+l'app en barre horizontale. Integration: onglet dans calib via iframe LAZY
+(/view3d.html reste standalone). three.js 0.160 vendorise tools/threejs/
+(vendor/ du gitignore matche a TOUS les niveaux — piege evite).
+
+**Lecons process:** (1) scripts de patch GENERES depuis le fichier valide du
+sandbox, jamais retapes (un bloc retape de memoire = assert fail chez
+Alexandre). (2) `&` de nohup backgrounde aussi le cd qui precede.
+
+**File UI restante:** #4 wireframes intelligents, #6 mode diff rms_snapshots
+sur la map, 3D v2 (clic cam -> ouvrir calib, LMs colores par z_constraint,
+rayons au hover). Toujours en file projet: WDNA Ambrosia 02 (manuel),
+bootstrap T3 vanishing points (LE debloqueur, session dediee),
+natural_z_sweep apres T3, trancher les 13 archivages d'outils.
+
+
 ## Session 2026-06-10 (nuit) — Provenance nettoyee + module commun des outils
 
 **Provenance (commit 213e4b9):** les "19 constraints naturelles multi-sources"
