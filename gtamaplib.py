@@ -157,6 +157,23 @@ class Camera:
         tan_v = np.tan(np.radians(self.vfov / 2))
         return np.degrees(np.arctan(1 / (ndc_y * tan_v)))
 
+    def _get_roll_from_vlines(self):
+        """
+        Roll from the vertical vanishing point: in an unrolled image, the
+        VVP lies on the line through the principal point along the image's
+        vertical axis. The observed angular offset of (VVP - center) from
+        that axis IS the roll. Validated against synthetic poses (7 cases,
+        both roll signs, looking up and down, exact to 1e-3 deg).
+        """
+        if not self.lines[1]: return None
+        vvp, _ = self._get_vvps_from_vlines()
+        if vvp is None: return None
+        cx, cy = self.w / 2 - 0.5, self.h / 2 - 0.5
+        dx, dy = vvp[0] - cx, vvp[1] - cy
+        if dy >= 0:
+            return float(np.degrees(np.arctan2(dx, dy)))
+        return float(np.degrees(np.arctan2(-dx, -dy)))
+
     def calibrate_yaw(self, lm_name, lm_point=None):
         """
         Sets yaw so that a given landmark's pixel matches a given point

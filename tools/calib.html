@@ -392,7 +392,14 @@ body.dual-cam #dual-toggle{background:var(--blue);color:#000;border-color:var(--
 #overlay-2{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none}
 .no-img{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:var(--mono);font-size:12px;color:var(--dim)}
 
-.sidebar{width:290px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.sidebar{width:290px;flex-shrink:0;background:var(--surface);border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden;transition:width .18s ease-out}
+/* [MAP-RSB-COLLAPSE] en vue Map, la sidebar droite est repliable pour
+   donner toute la place a la map */
+body.view-map.rsb-collapsed .sidebar{width:0;border-left:none}
+#rsb-toggle{display:none;position:fixed;right:290px;top:50%;transform:translateY(-50%);z-index:40;width:18px;height:54px;align-items:center;justify-content:center;background:var(--surface2);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;color:var(--dim);cursor:pointer;font:12px var(--mono);transition:right .18s ease-out,color .12s;user-select:none}
+#rsb-toggle:hover{color:var(--text)}
+body.view-map #rsb-toggle{display:flex}
+body.rsb-collapsed #rsb-toggle{right:0}
 .sb-sec{padding:11px 13px;border-bottom:1px solid var(--border)}
 .sb-title{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:9px}
 .sl-row{display:flex;align-items:center;gap:6px;margin-bottom:5px}
@@ -577,6 +584,53 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
              border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;
              font-family:JetBrains Mono,monospace">⊕ cams</button>
     <!-- ── VERTICALS-FE-V1 ── -->
+    <!-- [T3-LINES-V1] mode tracage de lignes (bootstrap VP) -->
+    <button id="trace-btn" title="Trace lines for VP calibration (T3 bootstrap)"
+      style="position:absolute;top:8px;right:248px;z-index:10;
+             background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
+             border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;
+             font-family:JetBrains Mono,monospace">&#9998; lines</button>
+    <div id="trace-pop" style="display:none;position:absolute;top:38px;right:168px;
+         z-index:30;background:rgba(19,19,26,.95);border:1px solid var(--border);
+         border-radius:8px;padding:10px 12px;min-width:230px;
+         font-family:var(--mono);font-size:11px;color:var(--mid)">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
+        <span style="color:var(--dim);font-size:9px;letter-spacing:.12em;
+              text-transform:uppercase">Trace lines &#183; click 2 points</span>
+        <span id="trace-clear" style="color:var(--red);font-size:10px;cursor:pointer;
+              opacity:.75">clear all</span>
+      </div>
+      <div style="display:flex;gap:6px;margin-bottom:8px">
+        <span class="trace-fam" data-fam="v" style="padding:2px 10px;border-radius:10px;
+              border:1px solid #facc15;color:#facc15;cursor:pointer">vertical</span>
+        <span class="trace-fam" data-fam="h" style="padding:2px 10px;border-radius:10px;
+              border:1px solid var(--border);color:var(--dim);cursor:pointer">horizontal</span>
+      </div>
+      <div id="trace-list" style="max-height:130px;overflow:auto;margin-bottom:8px"></div>
+      <button id="trace-solve" style="width:100%;background:var(--surface2);color:var(--green);
+              border:1px solid var(--border);border-radius:6px;padding:4px;cursor:pointer;
+              font-family:var(--mono);font-size:11px">solve roll + pitch</button>
+      <div id="trace-result" style="margin-top:7px;display:none"></div>
+    </div>
+    <!-- [MESH-CTRL-V1] controle par mesh + opacite -->
+    <button id="mesh-ctrl-btn" title="Per-mesh wireframe controls"
+      style="position:absolute;top:8px;right:168px;z-index:10;
+             background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
+             border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;
+             font-family:JetBrains Mono,monospace">&#8853; mesh</button>
+    <div id="mesh-ctrl-pop" style="display:none;position:absolute;top:38px;right:88px;
+         z-index:30;background:rgba(19,19,26,.95);border:1px solid var(--border);
+         border-radius:8px;padding:10px 12px;min-width:210px;
+         font-family:var(--mono);font-size:11px;color:var(--mid)">
+      <div style="color:var(--dim);font-size:9px;letter-spacing:.12em;
+           text-transform:uppercase;margin-bottom:7px">Wireframes</div>
+      <div id="mesh-ctrl-list"></div>
+      <div style="margin-top:9px;display:flex;align-items:center;gap:8px">
+        <span style="color:var(--dim)">alpha</span>
+        <input id="mesh-alpha" type="range" min="10" max="100" value="65"
+               style="flex:1;accent-color:var(--green)">
+      </div>
+    </div>
     <button id="verts-toggle-btn" title="Toggle vertical-lines overlay (V)"
       style="position:absolute;top:8px;right:88px;z-index:10;
              background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
@@ -615,6 +669,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
     <div class="map-svg-wrap" id="map-svg-wrap"></div>
     <div class="map-loading" id="map-loading">Loading yanis map…</div>
   </div>
+  <div id="rsb-toggle" title="Collapse panel">&#9656;</div>
   <div class="sidebar">
     <!-- Phase 7a.2: Generate Map button removed (replaced by Map view) -->
     <div class="sb-sec">
@@ -1160,7 +1215,30 @@ async function init() {
       if (typeof resizeOverlay === 'function') resizeOverlay();
     }
   }
+  // [MAP-RSB-COLLAPSE] repli de la sidebar droite en vue Map
+  const rsbToggle = document.getElementById('rsb-toggle');
+  if (rsbToggle) rsbToggle.addEventListener('click', () => {
+    const collapsed = document.body.classList.toggle('rsb-collapsed');
+    rsbToggle.innerHTML = collapsed ? '&#9666;' : '&#9656;';
+    rsbToggle.title = collapsed ? 'Expand panel' : 'Collapse panel';
+    setTimeout(() => window.dispatchEvent(new Event('resize')), 200);
+  });
+
   window.setView = setView;
+
+  // [VIEW3D-OPEN] l'onglet 3D (iframe) demande d'ouvrir une cam: meme
+  // chemin que le clic sur un marker de la map 2D.
+  window.addEventListener('message', ev => {
+    if (!ev.data || ev.data.type !== 'gtamaplib-open-cam' || !ev.data.name) return;
+    setView('camera');
+    const sel = document.getElementById('cam-sel');
+    if (sel && sel.value !== ev.data.name) {
+      sel.value = ev.data.name;
+      sel.dispatchEvent(new Event('change'));
+      const camSearch = document.getElementById('cam-search');
+      if (camSearch) camSearch.value = ev.data.name;
+    }
+  });
   // Phase 9.1: sync URL hash whenever view changes.
   const _origSetView = setView;
   window.setView = function(name) {
@@ -2793,6 +2871,9 @@ window.addEventListener('keydown', e => {
 
 // [PORTOFINO-WIREFRAME-V4] Building wireframe overlay
 let showWireframes = true;
+// [MESH-CTRL-V1] controle par mesh + opacite globale des wireframes
+let hiddenMeshes = new Set();
+let wireAlpha = 0.65;
 const PORTOFINO_EDGES = [
   ['Portofino Tower (B-frontL-NE)', 'Portofino Tower (L-frontL-NE)'],
   ['Portofino Tower (L-frontL-NE)', 'Portofino Tower (K-frontL-NE)'],
@@ -3099,6 +3180,43 @@ async function loadProceduralMeshes() {
 }
 window.loadProceduralMeshes = loadProceduralMeshes;
 
+// [MESH-CTRL-V1] popover de controle par mesh
+(function meshCtrl() {
+  const btn = document.getElementById('mesh-ctrl-btn');
+  const pop = document.getElementById('mesh-ctrl-pop');
+  const list = document.getElementById('mesh-ctrl-list');
+  const alpha = document.getElementById('mesh-alpha');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    pop.style.display = pop.style.display === 'none' ? 'block' : 'none';
+    if (pop.style.display === 'block') rebuild();
+  });
+  alpha.addEventListener('input', () => { wireAlpha = alpha.value / 100; draw(); });
+  function rebuild() {
+    const names = [
+      ...BUILDING_WIREFRAMES.filter(b => b.edges && b.edges.length).map(b => b.name),
+      ...Object.keys(BUILDING_PROCEDURAL_PIXEL_EDGES),
+    ];
+    list.innerHTML = names.length ? '' : '<span style="color:var(--dim)">no mesh on this cam</span>';
+    for (const n of names) {
+      const row = document.createElement('label');
+      row.style.cssText = 'display:flex;align-items:center;gap:7px;margin-bottom:4px;cursor:pointer';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = !hiddenMeshes.has(n);
+      cb.style.accentColor = 'var(--green)';
+      cb.addEventListener('change', () => {
+        cb.checked ? hiddenMeshes.delete(n) : hiddenMeshes.add(n);
+        draw();
+      });
+      row.appendChild(cb);
+      row.appendChild(document.createTextNode(n));
+      list.appendChild(row);
+    }
+  }
+  window.rebuildMeshCtrl = rebuild;
+})();
+
 function drawBuildingWireframes() {
   if (!showWireframes) return;
   if (!projections.length) return;
@@ -3111,9 +3229,10 @@ function drawBuildingWireframes() {
   // Legacy LM-name edges (Portofino-style — uses projections array)
   for (const bld of BUILDING_WIREFRAMES) {
     if (!bld.edges) continue;
+    if (hiddenMeshes.has(bld.name)) continue;   // [MESH-CTRL-V1]
     ctx.strokeStyle = bld.color;
     ctx.lineWidth = 1;
-    ctx.globalAlpha = 0.65;
+    ctx.globalAlpha = wireAlpha;
     ctx.beginPath();
     for (const [a, b] of bld.edges) {
       const pa = projMap[a], pb = projMap[b];
@@ -3128,9 +3247,10 @@ function drawBuildingWireframes() {
   }
   // [MESH-FRONTEND-V2] Procedural edges pre-projected by the server.
   for (const [bldName, meshInfo] of Object.entries(BUILDING_PROCEDURAL_PIXEL_EDGES)) {
+    if (hiddenMeshes.has(bldName)) continue;    // [MESH-CTRL-V1]
     ctx.strokeStyle = meshInfo.color || '#ff9d3d';
     ctx.lineWidth = 1;
-    ctx.globalAlpha = 0.65;
+    ctx.globalAlpha = wireAlpha;
     ctx.beginPath();
     for (const [a, b] of meshInfo.pixel_edges) {
       const [x1, y1] = toCanvas(a[0], a[1]);
@@ -3238,6 +3358,7 @@ window.drawGhostsOnCtx = drawGhostsOnCtx;
 function draw() {
   ctx.clearRect(0, 0, overlay.width, overlay.height);
   drawVerticals();  // VERTICALS-FE-V1
+  drawTracedLines();  // [T3-LINES-V1]
   // Sync frame image with zoom/pan
   if (camData?.size) {
     const {scale, ox, oy} = baseScale();
@@ -3359,6 +3480,7 @@ canvasWrap.addEventListener('wheel', e => {
 
 // Main canvas pan
 canvasWrap.addEventListener('mousedown', e => {
+  if (traceMode) { handleTraceClick(e); return; }   // [T3-LINES-V1]
   if (addPxMode) return;
   // [MULTICAM-STEP31] Ignore if event originated in pane-2
   if (e.target.closest && e.target.closest('#pane-2')) return;
@@ -3779,6 +3901,140 @@ window.addEventListener('resize', () => { if (pxeEditor.classList.contains('acti
 // ── Add Pixel ─────────────────────────────────────────────────────────────
 let addPxSelectedLm = null;
 let addPxMode = false;
+
+// ── [T3-LINES-V1] mode tracage pour le bootstrap vanishing points ──────
+var traceMode = false, traceFam = 'v', tracePending = null;
+var camLines = [[], []];          // [hlines, vlines] de la cam courante
+var linesLoadedFor = null;
+
+function drawTracedLines() {
+  // garde TDZ: draw() roule au chargement avant l'assignation des var
+  // (meme piege que VERTICALS-FE-V1-TDZ-FIX)
+  if (!Array.isArray(camLines)) return;
+  if (!camLines[0].length && !camLines[1].length && !tracePending) return;
+  ctx.save();
+  ctx.lineWidth = 1.5;
+  for (const [fi, color] of [[0, '#22d3ee'], [1, '#facc15']]) {
+    ctx.strokeStyle = color;
+    for (const [a, b] of camLines[fi]) {
+      const [x1, y1] = toCanvas(a[0], a[1]);
+      const [x2, y2] = toCanvas(b[0], b[1]);
+      ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+      for (const [px, py] of [[x1, y1], [x2, y2]]) {
+        ctx.beginPath(); ctx.arc(px, py, 3, 0, Math.PI * 2); ctx.stroke();
+      }
+    }
+  }
+  if (tracePending) {
+    const [x, y] = toCanvas(tracePending[0], tracePending[1]);
+    ctx.strokeStyle = traceFam === 'v' ? '#facc15' : '#22d3ee';
+    ctx.beginPath(); ctx.arc(x, y, 4, 0, Math.PI * 2); ctx.stroke();
+  }
+  ctx.restore();
+}
+
+function handleTraceClick(e) {
+  const rect = getMainPaneRect();
+  const [ix, iy] = canvasToImg(e.clientX - rect.left, e.clientY - rect.top);
+  const pt = [Math.round(ix * 10) / 10, Math.round(iy * 10) / 10];
+  if (!tracePending) { tracePending = pt; draw(); return; }
+  const fi = traceFam === 'h' ? 0 : 1;
+  camLines[fi].push([tracePending, pt]);
+  tracePending = null;
+  persistLines();
+  rebuildTraceList();
+  draw();
+}
+
+async function persistLines() {
+  await fetch(`/api/save_lines?cam=${encodeURIComponent(currentCam)}` +
+    `&hlines=${encodeURIComponent(JSON.stringify(camLines[0]))}` +
+    `&vlines=${encodeURIComponent(JSON.stringify(camLines[1]))}`);
+}
+
+async function loadLinesForCam() {
+  if (linesLoadedFor === currentCam) return;
+  try {
+    const d = await fetch(`/api/get_lines?cam=${encodeURIComponent(currentCam)}`).then(r => r.json());
+    camLines = d.lines || [[], []];
+  } catch (e) { camLines = [[], []]; }
+  linesLoadedFor = currentCam;
+}
+
+function rebuildTraceList() {
+  const list = document.getElementById('trace-list');
+  list.innerHTML = '';
+  for (const [fi, label, color] of [[1, 'V', '#facc15'], [0, 'H', '#22d3ee']]) {
+    camLines[fi].forEach((seg, i) => {
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;justify-content:space-between;margin-bottom:3px';
+      row.innerHTML = `<span style="color:${color}">${label}${i + 1}</span>` +
+        `<span style="color:var(--dim)">(${seg[0][0]},${seg[0][1]})&#8594;(${seg[1][0]},${seg[1][1]})</span>`;
+      const del = document.createElement('span');
+      del.textContent = '\u2715';
+      del.style.cssText = 'cursor:pointer;color:var(--dim);margin-left:7px';
+      del.addEventListener('click', () => {
+        camLines[fi].splice(i, 1);
+        persistLines(); rebuildTraceList(); draw();
+      });
+      row.appendChild(del);
+      list.appendChild(row);
+    });
+  }
+  if (!list.children.length)
+    list.innerHTML = '<span style="color:var(--dim)">no lines yet</span>';
+}
+
+(function initTraceUI() {
+  const btn = document.getElementById('trace-btn');
+  const pop = document.getElementById('trace-pop');
+  if (!btn) return;
+  btn.addEventListener('click', async () => {
+    traceMode = !traceMode;
+    btn.style.background = traceMode ? 'rgba(250,204,21,0.8)' : 'rgba(0,0,0,0.6)';
+    btn.style.color = traceMode ? '#000' : '#fff';
+    pop.style.display = traceMode ? 'block' : 'none';
+    if (traceMode) { await loadLinesForCam(); rebuildTraceList(); draw(); }
+    else { tracePending = null; draw(); }
+  });
+  document.querySelectorAll('.trace-fam').forEach(ch => {
+    ch.addEventListener('click', () => {
+      traceFam = ch.dataset.fam;
+      document.querySelectorAll('.trace-fam').forEach(c => {
+        const on = c.dataset.fam === traceFam;
+        const col = c.dataset.fam === 'v' ? '#facc15' : '#22d3ee';
+        c.style.borderColor = on ? col : 'var(--border)';
+        c.style.color = on ? col : 'var(--dim)';
+      });
+    });
+  });
+  document.getElementById('trace-clear').addEventListener('click', () => {
+    if (!camLines[0].length && !camLines[1].length) return;
+    camLines = [[], []];
+    tracePending = null;
+    persistLines();
+    rebuildTraceList();
+    document.getElementById('trace-result').style.display = 'none';
+    draw();
+  });
+  document.getElementById('trace-solve').addEventListener('click', async () => {
+    const res = document.getElementById('trace-result');
+    res.style.display = 'block';
+    const d = await fetch(`/api/solve_lines?cam=${encodeURIComponent(currentCam)}`).then(r => r.json());
+    if (!d.ok) { res.innerHTML = `<span style="color:var(--red)">${d.error}</span>`; return; }
+    res.innerHTML = `roll <b style="color:var(--green)">${d.roll}&deg;</b> &#183; ` +
+      `pitch <b style="color:var(--green)">${d.pitch}&deg;</b> (${d.n_vlines} vlines) ` +
+      `<span id="trace-apply" style="color:#facc15;cursor:pointer;text-decoration:underline">apply</span>`;
+    document.getElementById('trace-apply').addEventListener('click', () => {
+      params.roll = d.roll;
+      if (d.pitch != null) params.pitch = d.pitch;
+      syncSliders();
+      dirty = true; btnSave.disabled = false;
+      scheduleLoad();
+      draw();
+    });
+  });
+})();
 let addPxIsNew = false;
 
 async function openAddPixel() {
@@ -3887,6 +4143,10 @@ canvasWrap.addEventListener('click', async e => {
 });
 
 document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && traceMode) {        // [T3-LINES-V1]
+    document.getElementById('trace-btn')?.click();
+    return;
+  }
   if (e.key === 'Escape' && addPxMode) {
     addPxMode = false;
     document.getElementById('no-img').style.display = 'none';
@@ -5013,6 +5273,10 @@ window.addEventListener('load', () => {
   .view3d-wrap { display:none; position:fixed; left:0; right:0; top:44px;
                  bottom:0; z-index:5; background:#0a0a0c; }
   body.view-view3d .view3d-wrap { display:block; }
+  /* [VIEW3D-TAB] les overlays de la vue Camera (verts/cams) ne doivent pas
+     flotter par-dessus l'onglet 3D */
+  body.view-view3d #verts-toggle-btn,
+  body.view-view3d #oc-toggle-btn { display:none !important; }
   .view3d-wrap iframe { width:100%; height:100%; border:0; display:block; }
 </style>
 <div class="view3d-wrap" id="view3d-wrap"><iframe id="view3d-frame"></iframe></div>

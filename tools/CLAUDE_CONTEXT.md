@@ -54,6 +54,40 @@
 
 <!-- INDEX_DE_RETOUR_v1 -->
 
+## Session 2026-06-12 (suite) — T3 bootstrap vanishing points — fondations + UI
+
+**LE debloqueur (rlx/martipk) est fonctionnel.** Pipeline complet: tracer des
+verticales sur un frame T3 -> roll+pitch calibres sans landmarks.
+
+**Maths validees:** roll = atan2(dx,dy) du VVP vs centre image (normalise si
+dy<0). 7 poses synthetiques (les 2 signes de roll, regard haut/bas, yaw
+35/90/210, roll 0 et -0.3) exactes a 1e-3 deg, + roundtrip reel sur Beach
+(roll 0.166 / pitch -0.560 recuperes pile).
+
+**Fondations:** gtamapdata: lines.json + update_lines() (ecriture atomique,
+format {cam: [hlines, vlines]}, le placeholder 'lines = {}' jamais migre par
+l'upstream est maintenant vivant). gtamaplib: _get_roll_from_vlines()
+(famille des _get_*_from_*lines existants). get_camera cablait deja
+lines=md.lines.get(name) — il attendait les donnees.
+
+**Serveur:** /api/save_lines, /api/get_lines, /api/solve_lines (probe roll=0
+-> _get_roll_from_vlines -> probe avec roll resolu -> _get_pitch_from_vlines).
+
+**UI (vue Camera):** bouton '&#9998; lines' + popover: familles V (jaune) /
+H (cyan), clic-clic = segment, liste avec suppression unitaire + clear all,
+persistance auto a chaque trace, solve roll+pitch avec apply (params +
+syncSliders + dirty). ESC sort du mode. Garde TDZ sur drawTracedLines (meme
+piege que VERTICALS-FE-V1: draw() roule avant l'assignation des var).
+
+**Workflow cam T3:** Camera -> lines -> tracer 2-3 verticales ELOIGNEES dans
+le frame -> solve -> apply -> verifier avec le bouton verts -> Save.
+Candidat premier essai: Ambrosia Postcard (X) (~108 px d'erreur).
+
+**Limite connue:** verticales paralleles dans l'image = VVP indefini (erreur
+propre cote serveur). hlines tracables et persistees mais pas encore
+consommees par solve_lines (pitch/fov par hlines = chantier futur).
+
+
 ## Session 2026-06-12 — Journee UI: la sandbox a des yeux
 
 **CAPACITE NOUVELLE (change tout le travail UI):** chromium headless via

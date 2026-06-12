@@ -203,5 +203,40 @@ def update_camera(cam_name, xyz=None, ypr=None, fov=None):
         json.dump(cam_data, f, indent=2)
     os.replace(tmp, cam_path)
 
-# Lines not yet migrated to JSON
+# ── Lines (T3 bootstrap: vanishing-point calibration) ───────────────────────
+# Format lines.json: { cam_name: [hlines, vlines] } ou chaque ligne est
+# [[x1,y1],[x2,y2]] en pixels image. Consomme par Camera(lines=...) pour
+# _get_vp_from_hlines / _get_vvps_from_vlines / _get_pitch_from_vlines /
+# _get_roll_from_vlines.
+
+def _tuplify_lines(raw):
+    return [
+        [tuple(tuple(p) for p in seg) for seg in fam]
+        for fam in raw
+    ]
+
+_lines_path = os.path.join(DATA_DIR, "lines.json")
 lines = {}
+if os.path.exists(_lines_path):
+    lines = {name: _tuplify_lines(v) for name, v in _load("lines.json").items()}
+
+
+def update_lines(cam_name, hlines=None, vlines=None):
+    """Met a jour les lignes tracees d'une cam et persiste lines.json.
+    hlines/vlines: listes de segments [[x1,y1],[x2,y2]]; None = inchange;
+    [] = efface la famille. Ecriture atomique (pattern update_camera)."""
+    if cam_name not in cameras:
+        raise KeyError(f"unknown camera: {cam_name}")
+    cur = lines.get(cam_name, [[], []])
+    new_h = cur[0] if hlines is None else _tuplify_lines([hlines])[0]
+    new_v = cur[1] if vlines is None else _tuplify_lines([vlines])[0]
+    if not new_h and not new_v:
+        lines.pop(cam_name, None)
+    else:
+        lines[cam_name] = [new_h, new_v]
+    data = {n: [[ [list(p) for p in seg] for seg in fam ] for fam in v]
+            for n, v in lines.items()}
+    tmp = _lines_path + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(data, f, indent=2, sort_keys=True)
+    os.replace(tmp, _lines_path)

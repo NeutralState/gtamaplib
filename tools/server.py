@@ -635,7 +635,9 @@ class Handler(BaseHTTPRequestHandler):
                     except Exception:
                         pass
                     cams3d.append(entry)
-                lms3d = [{'name': n, 'xyz': [float(v) for v in x], 'zone': (md.landmarks_meta.get(n) or {}).get('zone')}
+                lms3d = [{'name': n, 'xyz': [float(v) for v in x],
+                          'zone': (md.landmarks_meta.get(n) or {}).get('zone'),
+                          'zc': bool((md.landmarks_meta.get(n) or {}).get('z_constraint'))}
                          for n, x in md.landmarks.items() if x is not None]
                 meshes = {}
                 _mp = os.path.join(REPO_ROOT, 'gtamapdata', 'building_meshes_procedural.json')
@@ -1477,6 +1479,58 @@ class Handler(BaseHTTPRequestHandler):
                 'cam_size': [target_w, target_h],
                 'projections': projections,
             })
+
+        # [T3-LINES-V1] persistance des lignes tracees (bootstrap VP)
+        elif path == '/api/save_lines':
+            try:
+                import json as _json
+                cam_name = unquote(qs.get('cam', [''])[0])
+                if cam_name not in md.cameras:
+                    self.send_json({'error': 'invalid cam'}, 400); return
+                hlines = _json.loads(unquote(qs.get('hlines', ['null'])[0]))
+                vlines = _json.loads(unquote(qs.get('vlines', ['null'])[0]))
+                md.update_lines(cam_name, hlines=hlines, vlines=vlines)
+                ml.get_camera.cache_clear()
+                self.send_json({'ok': True, 'lines': md.lines.get(cam_name, [[], []])})
+            except Exception as e:
+                self.send_json({'error': str(e)}, 500)
+
+        elif path == '/api/get_lines':
+            cam_name = unquote(qs.get('cam', [''])[0])
+            self.send_json({'lines': md.lines.get(cam_name, [[], []])})
+
+        # [T3-LINES-V1] solve roll+pitch depuis les vlines (pipeline valide:
+        # roll par _get_roll_from_vlines sur probe roll=0, puis pitch par
+        # _get_pitch_from_vlines avec le roll resolu)
+        elif path == '/api/solve_lines':
+            try:
+                cam_name = unquote(qs.get('cam', [''])[0])
+                cur = md.lines.get(cam_name)
+                if not cur or len(cur[1]) < 2:
+                    self.send_json({'error': 'need at least 2 vlines'}, 400); return
+                cd = md.cameras[cam_name]
+                base_ypr = cd.get('ypr') or (0.0, 0.0, 0.0)
+                hfov = (cd.get('fov') or (60.0, None))[0]
+                probe = ml.Camera(id=99998, name='__PROBE_R', player=None,
+                                  xyz=cd.get('xyz') or (0, 0, 0),
+                                  ypr=(base_ypr[0], 0.0, 0.0), fov=(hfov, None),
+                                  size=cd['size'], source='probe',
+                                  lines=[[], list(cur[1])])
+                roll = probe._get_roll_from_vlines()
+                if roll is None:
+                    self.send_json({'error': 'VVP indefini (verticales paralleles?)'}, 400); return
+                probe2 = ml.Camera(id=99997, name='__PROBE_P', player=None,
+                                   xyz=cd.get('xyz') or (0, 0, 0),
+                                   ypr=(base_ypr[0], 0.0, roll), fov=(hfov, None),
+                                   size=cd['size'], source='probe',
+                                   lines=[[], list(cur[1])])
+                pitch = probe2._get_pitch_from_vlines()
+                self.send_json({'ok': True, 'roll': round(float(roll), 4),
+                                'pitch': round(float(pitch), 4) if pitch is not None else None,
+                                'n_vlines': len(cur[1])})
+            except Exception as e:
+                import traceback; traceback.print_exc()
+                self.send_json({'error': str(e)}, 500)
 
         elif path == '/api/save':
             cam_name = unquote(qs.get('cam', [''])[0])
