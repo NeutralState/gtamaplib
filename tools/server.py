@@ -621,6 +621,9 @@ class Handler(BaseHTTPRequestHandler):
                         'rms_arcmin': (lambda r: round(r, 2) if r is not None else None)(_cam_rms(name)),
                         'hud_locked': bool(_itt(name, cameras=md.cameras)),
                         'n_pixels': len([p for p in md.pixels.get(name, {}).values() if p is not None]),
+                        # [VIEW3D-RAYS] LMs observes (marking vivant + xyz connu)
+                        'obs': [l for l, px in md.pixels.get(name, {}).items()
+                                if px is not None and md.landmarks.get(l) is not None],
                         'corners': None,
                     }
                     try:
@@ -847,6 +850,13 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json({'meshes': result})
 
         elif path == '/api/cameras':
+            # [TIER-DOTS-V1] tiers pour la liste (lecture seule, pas de calc RMS)
+            try:
+                import json as _json
+                with open(os.path.join(REPO_ROOT, 'tools', 'generated', 'confidence_tiers.json')) as _f:
+                    _tiers = _json.load(_f).get('cameras', {})
+            except Exception:
+                _tiers = {}
             result = []
             for name in sorted(md.cameras):
                 data = md.cameras[name]
@@ -859,6 +869,7 @@ class Handler(BaseHTTPRequestHandler):
                 )
                 result.append({
                     'name': name,
+                    'tier': (_tiers.get(name) or {}).get('tier'),
                     'has_image': has_image,
                     'n_pixels': len(cam_pixels),
                     'n_independent': n_indep,
@@ -1511,6 +1522,9 @@ class Handler(BaseHTTPRequestHandler):
                 cd = md.cameras[cam_name]
                 base_ypr = cd.get('ypr') or (0.0, 0.0, 0.0)
                 hfov = (cd.get('fov') or (60.0, None))[0]
+                # ordre valide (4 poses synthetiques exactes): roll (pure
+                # image), puis FOV si hlines (VPs orthogonaux — corrige le
+                # pitch des cams au FOV douteux), puis pitch avec les deux.
                 probe = ml.Camera(id=99998, name='__PROBE_R', player=None,
                                   xyz=cd.get('xyz') or (0, 0, 0),
                                   ypr=(base_ypr[0], 0.0, 0.0), fov=(hfov, None),
@@ -1519,15 +1533,27 @@ class Handler(BaseHTTPRequestHandler):
                 roll = probe._get_roll_from_vlines()
                 if roll is None:
                     self.send_json({'error': 'VVP indefini (verticales paralleles?)'}, 400); return
+                solved_fov = None
+                if len(cur[0]) >= 2:
+                    probe_f = ml.Camera(id=99996, name='__PROBE_F', player=None,
+                                        xyz=cd.get('xyz') or (0, 0, 0),
+                                        ypr=(base_ypr[0], 0.0, roll), fov=(hfov, None),
+                                        size=cd['size'], source='probe',
+                                        lines=[list(cur[0]), list(cur[1])])
+                    out = probe_f._get_fov_from_lines()
+                    if out:
+                        solved_fov = float(out[0])
+                pitch_fov = solved_fov if solved_fov else hfov
                 probe2 = ml.Camera(id=99997, name='__PROBE_P', player=None,
                                    xyz=cd.get('xyz') or (0, 0, 0),
-                                   ypr=(base_ypr[0], 0.0, roll), fov=(hfov, None),
+                                   ypr=(base_ypr[0], 0.0, roll), fov=(pitch_fov, None),
                                    size=cd['size'], source='probe',
                                    lines=[[], list(cur[1])])
                 pitch = probe2._get_pitch_from_vlines()
                 self.send_json({'ok': True, 'roll': round(float(roll), 4),
                                 'pitch': round(float(pitch), 4) if pitch is not None else None,
-                                'n_vlines': len(cur[1])})
+                                'hfov': round(solved_fov, 4) if solved_fov else None,
+                                'n_vlines': len(cur[1]), 'n_hlines': len(cur[0])})
             except Exception as e:
                 import traceback; traceback.print_exc()
                 self.send_json({'error': str(e)}, 500)

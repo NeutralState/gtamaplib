@@ -70,8 +70,11 @@ class Camera:
         """
         # need at least two line families
         if not self.lines[0] or not self.lines[1]: return None
-        hvp, hvps = self._get_vp_from_hlines(self.lines[0])
-        vvp = self._get_vp_from_vlines(self.lines[1])
+        # [T3-LINES-V1] fix refs upstream cassees: _get_vp_from_hlines /
+        # _get_vp_from_vlines n'ont jamais existe; les vraies methodes sont
+        # _get_hvps_from_hlines / _get_vvps_from_vlines.
+        hvp, hvps = self._get_hvps_from_hlines()
+        vvp, _ = self._get_vvps_from_vlines()
         if hvp is None or vvp is None:
             return None
         x1, y1 = hvp

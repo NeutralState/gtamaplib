@@ -172,7 +172,9 @@ body.tiles-on .map-png-wrap{display:none}  /* hide the legacy <img> when tiles o
    per-ray inline strokes due to SVG presentation-attr specificity).
    stroke-width also lowered (8 → 4) and opacity (.5 → .15) so the
    ray bundle reads as faint context, not a wall of color. */
-#map-overlay .ray-line{stroke-width:7;opacity:.32;pointer-events:none;transition:opacity .1s,stroke-width .1s}
+/* [RAYS-V2] width/opacity par-rayon via attributs (hierarchie par severite);
+   les classes de hover ci-dessous overrident les attributs (cascade SVG) */
+#map-overlay .ray-line{pointer-events:none;transition:opacity .1s,stroke-width .1s;stroke-linecap:round}
 #map-overlay #rays-layer.lm-hover .ray-line{opacity:.15}
 #map-overlay #rays-layer.lm-hover .ray-line.lm-hovered{opacity:.85;stroke-width:14}
 #map-overlay #rays-layer.cam-hover .ray-line{opacity:.75}
@@ -603,7 +605,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div style="display:flex;gap:6px;margin-bottom:8px">
         <span class="trace-fam" data-fam="v" style="padding:2px 10px;border-radius:10px;
               border:1px solid #facc15;color:#facc15;cursor:pointer">vertical</span>
-        <span class="trace-fam" data-fam="h" style="padding:2px 10px;border-radius:10px;
+        <span class="trace-fam" data-fam="h" title="Receding lines (toward the horizon), not frontoparallel ones"
+              style="padding:2px 10px;border-radius:10px;
               border:1px solid var(--border);color:var(--dim);cursor:pointer">horizontal</span>
       </div>
       <div id="trace-list" style="max-height:130px;overflow:auto;margin-bottom:8px"></div>
@@ -2006,14 +2009,14 @@ async function init() {
       // Phase 6.3: tag with data-lm-name so the hover boost CSS can
       // target this specific ray when its landmark is hovered.
       line.dataset.lmName = lm.name;
-      // Phase 6.2/6.3: per-ray color matches the dot's delta color.
-      // ALWAYS set stroke inline — Phase 5's CSS rule no longer sets
-      // stroke (Phase 6.3 hunk 1), so inline always wins. Fallback
-      // grey for null deltas (delta hasn't loaded, or projection
-      // failed, or cam can't see this landmark).
+      // [RAYS-V5] hairlines colores par delta, uniformes et delicats —
+      // memes couleurs que les dots, aucune hierarchie de largeur/opacite.
+      // Deux reglages et c'est tout:
+      const RAY_W = 2, RAY_OP = 0.60;
       const delta = window.mapDeltasByLm ? window.mapDeltasByLm.get(lm.name) : undefined;
-      const color = (delta != null) ? window.deltaColor(delta) : NULL_DELTA_COLOR;
-      line.setAttribute('stroke', color);
+      line.setAttribute('stroke', (delta != null) ? window.deltaColor(delta) : NULL_DELTA_COLOR);
+      line.setAttribute('stroke-width', String(RAY_W));
+      line.setAttribute('opacity', String(RAY_OP));
       raysLayer.appendChild(line);
     }
   }
@@ -3480,7 +3483,16 @@ canvasWrap.addEventListener('wheel', e => {
 
 // Main canvas pan
 canvasWrap.addEventListener('mousedown', e => {
-  if (traceMode) { handleTraceClick(e); return; }   // [T3-LINES-V1]
+  if (traceMode) {                                   // [T3-LINES-V1]
+    // blacklist des elements d'UI: les clics sur le popover, les chips de
+    // famille ou les boutons overlay bubblent jusqu'ici et creaient des
+    // points fantomes sous la boite. Tout le reste (canvas, placeholder
+    // no-img) trace normalement.
+    if (e.target && e.target.closest && e.target.closest(
+        '#trace-pop, #trace-btn, #mesh-ctrl-pop, #mesh-ctrl-btn, ' +
+        '#verts-toggle-btn, #oc-toggle-btn, #pane-2')) return;
+    handleTraceClick(e); return;
+  }
   if (addPxMode) return;
   // [MULTICAM-STEP31] Ignore if event originated in pane-2
   if (e.target.closest && e.target.closest('#pane-2')) return;
@@ -4023,11 +4035,14 @@ function rebuildTraceList() {
     const d = await fetch(`/api/solve_lines?cam=${encodeURIComponent(currentCam)}`).then(r => r.json());
     if (!d.ok) { res.innerHTML = `<span style="color:var(--red)">${d.error}</span>`; return; }
     res.innerHTML = `roll <b style="color:var(--green)">${d.roll}&deg;</b> &#183; ` +
-      `pitch <b style="color:var(--green)">${d.pitch}&deg;</b> (${d.n_vlines} vlines) ` +
+      `pitch <b style="color:var(--green)">${d.pitch}&deg;</b>` +
+      (d.hfov != null ? ` &#183; fov <b style="color:var(--green)">${d.hfov}&deg;</b>` : '') +
+      ` (${d.n_vlines}V${d.n_hlines ? '+' + d.n_hlines + 'H' : ''}) ` +
       `<span id="trace-apply" style="color:#facc15;cursor:pointer;text-decoration:underline">apply</span>`;
     document.getElementById('trace-apply').addEventListener('click', () => {
       params.roll = d.roll;
       if (d.pitch != null) params.pitch = d.pitch;
+      if (d.hfov != null) params.hfov = d.hfov;
       syncSliders();
       dirty = true; btnSave.disabled = false;
       scheduleLoad();
@@ -5276,7 +5291,11 @@ window.addEventListener('load', () => {
   /* [VIEW3D-TAB] les overlays de la vue Camera (verts/cams) ne doivent pas
      flotter par-dessus l'onglet 3D */
   body.view-view3d #verts-toggle-btn,
-  body.view-view3d #oc-toggle-btn { display:none !important; }
+  body.view-view3d #oc-toggle-btn,
+  body.view-view3d #trace-btn,
+  body.view-view3d #trace-pop,
+  body.view-view3d #mesh-ctrl-btn,
+  body.view-view3d #mesh-ctrl-pop { display:none !important; }
   .view3d-wrap iframe { width:100%; height:100%; border:0; display:block; }
 </style>
 <div class="view3d-wrap" id="view3d-wrap"><iframe id="view3d-frame"></iframe></div>

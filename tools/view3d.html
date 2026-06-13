@@ -46,9 +46,6 @@
     <span class="lchip on" id="ly-cams">cams</span>
     <span class="lchip on" id="ly-lms">landmarks</span>
     <span class="lchip on" id="ly-meshes">meshes</span>
-    <span class="lchip on" id="ly-ocean">ocean</span>
-    <span class="lchip on" id="ly-ground">map</span>
-    <span class="lchip" id="ly-grid">grid</span>
   </div>
 </div>
 <div class="panel" id="info"></div>
@@ -58,6 +55,7 @@
   <span style="margin-left:10px"><span class="sw" style="background:#fbbf24"></span>medium</span>
   <span style="margin-left:10px"><span class="sw" style="background:#fb923c"></span>low</span>
   <span style="margin-left:10px"><span class="sw" style="background:#6b7280"></span>unverified</span>
+  <span style="margin-left:14px"><span class="sw" style="background:#60a5fa"></span>z-constrained LM</span>
 </div>
 <script type="importmap">
 { "imports": { "three": "/threejs/three.module.min.js" } }
@@ -102,18 +100,18 @@ function resize() {
 }
 addEventListener('resize', resize); resize();
 
+// [VIEW3D-SIMPLIFY] map toujours visible (pas un filtre); ocean et grid
+// retires — inutiles avec les tuiles satellite (l'eau est dans la map).
 const layers = { cams: new THREE.Group(), lms: new THREE.Group(),
-                 meshes: new THREE.Group(), ocean: new THREE.Group(),
-                 ground: new THREE.Group(), grid: new THREE.Group() };
+                 meshes: new THREE.Group(), ground: new THREE.Group() };
 Object.values(layers).forEach(g => scene.add(g));
-for (const k of ['cams', 'lms', 'meshes', 'ocean', 'ground', 'grid']) {
+for (const k of ['cams', 'lms', 'meshes']) {
   const chip = document.getElementById('ly-' + k);
   chip.addEventListener('click', () => {
     const on = chip.classList.toggle('on');
     layers[k].visible = on;
   });
 }
-layers.grid.visible = false;
 
 const data = await (await fetch('/api/scene3d')).json();
 
@@ -153,10 +151,14 @@ const pickPts = new THREE.Points(pickGeo,
 layers.cams.add(pickPts);
 
 // ── landmarks: Points blancs discrets ──
-const lmVerts = [];
-for (const l of data.landmarks) lmVerts.push(...l.xyz);
+// [VIEW3D-ZC] deux groupes: LMs libres (blanc) et contraints en z (bleu)
+// — la doctrine waterline rendue visible dans l'espace.
+const lmVerts = [], lmVertsZc = [];
+for (const l of data.landmarks) (l.zc ? lmVertsZc : lmVerts).push(...l.xyz);
 const lmGeo = new THREE.BufferGeometry();
 lmGeo.setAttribute('position', new THREE.Float32BufferAttribute(lmVerts, 3));
+const lmGeoZc = new THREE.BufferGeometry();
+lmGeoZc.setAttribute('position', new THREE.Float32BufferAttribute(lmVertsZc, 3));
 // gl_points = carres par defaut; une texture radiale les rend circulaires
 const dotCan = document.createElement('canvas');
 dotCan.width = dotCan.height = 64;
@@ -170,6 +172,9 @@ dctx.beginPath(); dctx.arc(32, 32, 30, 0, Math.PI * 2); dctx.fill();
 const dotTex = new THREE.CanvasTexture(dotCan);
 layers.lms.add(new THREE.Points(lmGeo, new THREE.PointsMaterial({
   map: dotTex, size: 9, transparent: true, opacity: 0.85,
+  alphaTest: 0.05, depthWrite: false, sizeAttenuation: true })));
+layers.lms.add(new THREE.Points(lmGeoZc, new THREE.PointsMaterial({
+  map: dotTex, size: 10, color: 0x60a5fa, transparent: true, opacity: 0.95,
   alphaTest: 0.05, depthWrite: false, sizeAttenuation: true })));
 
 // ── meshes proceduraux: wireframe cyan ──
@@ -223,25 +228,61 @@ for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) {
   img.src = `/tiles/${TZ}/${TZ},${ty},${tx}.jpg`;
 }
 
-const ocean = new THREE.Mesh(
-  new THREE.PlaneGeometry(span * 1.6, span * 1.6),
-  new THREE.MeshBasicMaterial({ color: 0x1d4ed8, transparent: true,
-    opacity: 0.10, side: THREE.DoubleSide, depthWrite: false }));
-ocean.position.set(ctr.x, ctr.y, 0);   // plan XY a z=0 (deja l'orientation par defaut apres rotation)
-layers.ocean.add(ocean);
-const grid = new THREE.GridHelper(span * 1.6, 60, 0x26262c, 0x1a1a1f);
-grid.rotation.x = Math.PI / 2;          // GridHelper est XZ par defaut → XY
-grid.position.set(ctr.x, ctr.y, 0);
-layers.grid.add(grid);
 
 camera.position.set(ctr.x + span * 0.30, ctr.y - span * 0.40, span * 0.28);
 controls.target.copy(ctr);
 scene.fog = new THREE.Fog(0x0a0a0c, span * 1.2, span * 3.5);
 
+// ── [VIEW3D-RAYS] rayons d'observation au hover d'une cam ──
+const lmByName = new Map(data.landmarks.map(l => [l.name, l.xyz]));
+let hoverRays = null;
+function showHoverRays(cam) {
+  clearHoverRays();
+  if (!cam.obs || !cam.obs.length) return;
+  const verts = [];
+  for (const n of cam.obs) {
+    const p = lmByName.get(n);
+    if (p) verts.push(...cam.xyz, ...p);
+  }
+  if (!verts.length) return;
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+  hoverRays = new THREE.LineSegments(g, new THREE.LineBasicMaterial({
+    color: 0xfacc15, transparent: true, opacity: 0.4 }));
+  scene.add(hoverRays);
+}
+function clearHoverRays() {
+  if (hoverRays) {
+    scene.remove(hoverRays);
+    hoverRays.geometry.dispose();
+    hoverRays.material.dispose();
+    hoverRays = null;
+  }
+}
+
 // ── hover ──
 const ray = new THREE.Raycaster();
 ray.params.Points.threshold = 30;
 const info = document.getElementById('info');
+// [VIEW3D-OPEN] clic (pas drag) sur une cam -> ouvre la cam dans l'onglet
+// Camera du parent (iframe). On distingue clic et drag par le deplacement.
+let downAt = null;
+addEventListener('pointerdown', ev => { downAt = [ev.clientX, ev.clientY]; });
+addEventListener('pointerup', ev => {
+  if (!downAt) return;
+  const moved = Math.hypot(ev.clientX - downAt[0], ev.clientY - downAt[1]);
+  downAt = null;
+  if (moved > 5 || window.self === window.top) return;
+  const ndc = new THREE.Vector2(ev.clientX / innerWidth * 2 - 1,
+                                -(ev.clientY / innerHeight) * 2 + 1);
+  ray.setFromCamera(ndc, camera);
+  const hits = ray.intersectObject(pickPts);
+  if (hits.length) {
+    window.parent.postMessage(
+      { type: 'gtamaplib-open-cam', name: camPickRefs[hits[0].index].name }, '*');
+  }
+});
+
 addEventListener('pointermove', ev => {
   const ndc = new THREE.Vector2(ev.clientX / innerWidth * 2 - 1,
                                 -(ev.clientY / innerHeight) * 2 + 1);
@@ -249,6 +290,7 @@ addEventListener('pointermove', ev => {
   const hits = ray.intersectObject(pickPts);
   if (hits.length) {
     const c = camPickRefs[hits[0].index];
+    showHoverRays(c);                              // [VIEW3D-RAYS]
     const rms = c.rms_arcmin;
     info.style.display = 'block';
     info.innerHTML = `<b>${c.name}</b><br>` +
@@ -257,6 +299,7 @@ addEventListener('pointermove', ev => {
       (rms != null ? `<br>RMS <span class="${rms > 10 ? 'rms-bad' : ''}">${rms}&#8242;</span>` : '');
   } else {
     info.style.display = 'none';
+    clearHoverRays();                              // [VIEW3D-RAYS]
   }
 });
 
@@ -267,6 +310,18 @@ addEventListener('dblclick', ev => {
   const hit = ray.intersectObject(ground);
   if (hit.length) { controls.target.copy(hit[0].point); }
 });
+
+// helper de test/debug: etat des rayons de hover
+window.__hoverRaysCount = () => hoverRays ? hoverRays.geometry.attributes.position.count / 2 : 0;
+
+// helper de test/debug: position ecran d'une cam par nom
+window.__camScreen = name => {
+  const i = camPickRefs.findIndex(c => c.name === name);
+  if (i < 0) return null;
+  const v = new THREE.Vector3(camPickPositions[i*3], camPickPositions[i*3+1], camPickPositions[i*3+2]);
+  v.project(camera);
+  return { x: (v.x + 1) / 2 * innerWidth, y: (1 - v.y) / 2 * innerHeight, behind: v.z > 1 };
+};
 
 renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
 </script>

@@ -54,6 +54,35 @@
 
 <!-- INDEX_DE_RETOUR_v1 -->
 
+## Session 2026-06-12 (fin) — Soiree polish + fermeture de la file UI
+
+**T3 bootstrap phase 3 — FOV:** _get_fov_from_lines avait des refs upstream
+CASSEES (_get_vp_from_* n'ont jamais existe) — reparees vers les vraies
+methodes. solve_lines ordonne roll -> fov (si 2+ hlines) -> pitch (corrige le
+pitch des cams au FOV douteux). 4 poses synthetiques exactes. UI: fov dans le
+resultat + apply; hint: les hlines utiles sont FUYANTES (frontoparallele =
+VP a l'infini). Fixes tracage: clear all, clics UI ignores (points fantomes
+par bubbling), overlays masques en vue 3D (2e fois ce pattern — si un 3e
+bouton overlay arrive, faire une classe .cam-overlay-btn).
+
+**Visuels:** tier dots dans la liste de cams (tier ajoute a /api/cameras,
+lecture seule de confidence_tiers.json — NOTE: Ambrosia Postcard (X) y est
+'high' malgre ~108px de dette, verifier la fraicheur du fichier). Boutons
+overlay unifies a la charte (.cov-btn). Rays map v5 apres 4 iterations:
+hairlines colores par delta, UNIFORMES (RAY_W=2, RAY_OP=0.60 — reglages
+nommes dans le code). Lecon design: la severite aux endpoints, la geometrie
+aux lignes; hierarchie par-rayon = spaghetti ou mur de la honte.
+
+**3D:** rayons d'observation au hover d'un frustum (obs par cam dans
+/api/scene3d, LineSegments jaune 0.4, dispose au unhover, hook test
+window.__hoverRaysCount).
+
+**File UI: VIDE.** Restent (non-UI): WDNA Ambrosia 02 (marquage manuel
+Alexandre), premiere vraie cam T3 au pipeline lines (candidat: Ambrosia
+Postcard (X)), natural_z_sweep apres intakes T3, 13 archivages d'outils
+(docs/TOOLS_INVENTORY_2026-06-10.md).
+
+
 ## Session 2026-06-12 (suite) — T3 bootstrap vanishing points — fondations + UI
 
 **LE debloqueur (rlx/martipk) est fonctionnel.** Pipeline complet: tracer des
