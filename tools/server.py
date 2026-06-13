@@ -1550,9 +1550,42 @@ class Handler(BaseHTTPRequestHandler):
                                    size=cd['size'], source='probe',
                                    lines=[[], list(cur[1])])
                 pitch = probe2._get_pitch_from_vlines()
+                # [T3-YAW-CHAIN] orientation complete: si la cam a un xyz et
+                # >=1 marking vivant sur un LM a xyz connu, chaque marking
+                # implique un yaw (calibrate_yaw sur probe). Moyenne
+                # circulaire = yaw; spread = indicateur de sante gratuit
+                # (si roll/pitch/fov sont bons, tous les markings pointent
+                # le meme yaw). Valide: synthese exacte, spread 0.0000.
+                yaw = None; yaw_spread = None; n_yaw = 0
+                if cd.get('xyz') and pitch is not None:
+                    import math as _math
+                    cam_px = md.pixels.get(cam_name, {})
+                    usable = [(l, px) for l, px in cam_px.items()
+                              if px is not None and md.landmarks.get(l) is not None]
+                    yaws = []
+                    for l, px in usable:
+                        try:
+                            yp = ml.Camera(id=99995, name='__PROBE_Y', player=None,
+                                           xyz=cd['xyz'],
+                                           ypr=(0.0, float(pitch), float(roll)),
+                                           fov=(pitch_fov, None), size=cd['size'],
+                                           source='probe', pixels={l: tuple(px)})
+                            yp.calibrate_yaw(l, lm_point=md.landmarks[l])
+                            yaws.append(float(yp.yaw))
+                        except Exception:
+                            continue
+                    if yaws:
+                        rad = [_math.radians(y) for y in yaws]
+                        yaw = _math.degrees(_math.atan2(
+                            sum(map(_math.sin, rad)), sum(map(_math.cos, rad)))) % 360
+                        yaw_spread = max(abs((y - yaw + 180) % 360 - 180) for y in yaws)
+                        n_yaw = len(yaws)
                 self.send_json({'ok': True, 'roll': round(float(roll), 4),
                                 'pitch': round(float(pitch), 4) if pitch is not None else None,
                                 'hfov': round(solved_fov, 4) if solved_fov else None,
+                                'yaw': round(yaw, 4) if yaw is not None else None,
+                                'yaw_spread': round(yaw_spread, 3) if yaw_spread is not None else None,
+                                'n_yaw_lms': n_yaw,
                                 'n_vlines': len(cur[1]), 'n_hlines': len(cur[0])})
             except Exception as e:
                 import traceback; traceback.print_exc()

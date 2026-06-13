@@ -4037,12 +4037,15 @@ function rebuildTraceList() {
     res.innerHTML = `roll <b style="color:var(--green)">${d.roll}&deg;</b> &#183; ` +
       `pitch <b style="color:var(--green)">${d.pitch}&deg;</b>` +
       (d.hfov != null ? ` &#183; fov <b style="color:var(--green)">${d.hfov}&deg;</b>` : '') +
+      (d.yaw != null ? `<br>yaw <b style="color:var(--green)">${d.yaw}&deg;</b> ` +
+        `<span style="color:var(--dim)">(${d.n_yaw_lms} LMs, spread ${d.yaw_spread}&deg;)</span>` : '') +
       ` (${d.n_vlines}V${d.n_hlines ? '+' + d.n_hlines + 'H' : ''}) ` +
       `<span id="trace-apply" style="color:#facc15;cursor:pointer;text-decoration:underline">apply</span>`;
     document.getElementById('trace-apply').addEventListener('click', () => {
       params.roll = d.roll;
       if (d.pitch != null) params.pitch = d.pitch;
       if (d.hfov != null) params.hfov = d.hfov;
+      if (d.yaw != null) params.yaw = d.yaw;
       syncSliders();
       dirty = true; btnSave.disabled = false;
       scheduleLoad();
