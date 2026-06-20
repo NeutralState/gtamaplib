@@ -2286,16 +2286,15 @@
   },
   "FAA Miami ATCT (MIA)": {
     "xyz": [
-      -2380.1091858000627,
-      -777.6715393333014,
-      93.2519367340478
+      -2372.265830276955,
+      -773.4798140774429,
+      94.47340053692022
     ],
     "source_cameras": [
-      "Vice Beach (B)",
       "Leonida Keys 01 (Airplane) (X)",
-      "Ambrosia 02 (Panorama)"
+      "Vice Beach (B)"
     ],
-    "error_m": 3.202,
+    "error_m": 0.368,
     "zone": "vice_city"
   },
   "Homestead Water Tower": {
@@ -2908,15 +2907,16 @@
   },
   "MIA North Terminal Tower": {
     "xyz": [
-      -2391.9970369858656,
-      -579.3772666837378,
-      56.55496978696573
+      -2386.890428500441,
+      -523.3525188207121,
+      56.95333593503138
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
-      "Ambrosia 02 (Panorama)"
+      "Ambrosia 02 (Panorama)",
+      "Port Vice City (B)"
     ],
-    "error_m": 1.647,
+    "error_m": 5.151,
     "zone": "vice_city"
   },
   "Water Tower near Prison": {
