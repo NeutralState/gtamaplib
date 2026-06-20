@@ -4441,5 +4441,53 @@
       2160
     ],
     "source": "Trailer 1 [1199]"
+  },
+  "Port Vice City (A)": {
+    "id": "S3/1",
+    "player": null,
+    "xyz": [
+      1443.0,
+      -137.0,
+      79.91
+    ],
+    "ypr": [
+      103.675,
+      -2.2,
+      0.0
+    ],
+    "fov": [
+      74.3,
+      46.166
+    ],
+    "size": [
+      3840,
+      2160
+    ],
+    "source": "Port Vice City [1]",
+    "constraint_class": "X"
+  },
+  "Port Vice City (B)": {
+    "id": "S3/2",
+    "player": null,
+    "xyz": [
+      1605.0,
+      -122.0,
+      78.179
+    ],
+    "ypr": [
+      103.156,
+      -3.0,
+      0.0
+    ],
+    "fov": [
+      75.2,
+      46.843
+    ],
+    "size": [
+      3840,
+      2160
+    ],
+    "source": "Port Vice City [140]",
+    "constraint_class": "X"
   }
 }
