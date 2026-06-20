@@ -9215,16 +9215,16 @@
   },
   "Stephen P. Clark Government Center (E)": {
     "xyz": [
-      -925.588680571743,
-      21.63523093909964,
-      158.26328391742854
+      -922.0870066080281,
+      23.836275457154507,
+      158.1468105838451
     ],
     "source_cameras": [
       "Highway (Peacock Bay) (A)",
-      "Highway (Peacock Bay) (B)",
+      "Leonida Keys 01 (Airplane) (X)",
       "Vice City 03 (Basketball)"
     ],
-    "error_m": 0.562,
+    "error_m": 17.004,
     "zone": "vice_city"
   },
   "Infinity at Brickell": {
@@ -11502,6 +11502,18 @@
     "zone": "unknown"
   },
   "The Floridian (SW)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown"
+  },
+  "Grove at Grand Bay (S)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown"
+  },
+  "Grove at Grand Bay (N)": {
     "xyz": null,
     "source_cameras": [],
     "error_m": null,
