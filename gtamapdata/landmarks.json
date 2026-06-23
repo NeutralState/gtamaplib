@@ -1133,20 +1133,19 @@
   },
   "Four Seasons Hotel Miami (BE)": {
     "xyz": [
-      -816.0303259458424,
-      -1307.1552231579522,
-      262.50268873511175
+      -816.2491600918743,
+      -1306.1227958014601,
+      262.4372310352953
     ],
     "source_cameras": [
-      "Prison",
-      "Vice Beach (A)",
-      "Vice Beach (B)",
+      "Leonida Keys 01 (Airplane) (X)",
       "Motorboats (A)",
-      "Motorboats (B)",
+      "Prison",
       "Rooftop Party",
-      "Leonida Keys 01 (Airplane) (X)"
+      "Vice Beach (A)",
+      "Port Vice City (B)"
     ],
-    "error_m": 3.285,
+    "error_m": 2.958,
     "zone": "vice_city",
     "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
   },
@@ -1197,17 +1196,17 @@
   },
   "Four Seasons Hotel Miami (NW)": {
     "xyz": [
-      -841.3488998475365,
-      -1253.8116122930055,
-      257.1488704231146
+      -840.9755778185067,
+      -1251.988616270712,
+      257.072533689933
     ],
     "source_cameras": [
       "Prison",
       "Vice Beach (A)",
-      "Vice Beach (B)",
-      "Vice City Postcard"
+      "Vice City Postcard",
+      "Port Vice City (B)"
     ],
-    "error_m": 2.018,
+    "error_m": 1.962,
     "zone": "vice_city",
     "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
   },
@@ -2443,19 +2442,18 @@
   },
   "Park Grove Condominium (S)": {
     "xyz": [
-      -1324.4761317867699,
-      -2138.43108031154,
-      97.31159834532109
+      -1324.1083831367164,
+      -2138.202363471951,
+      97.3386613169633
     ],
     "source_cameras": [
-      "Tennis Stadium (4K)",
-      "Prison",
-      "Motorboats (A)",
-      "Motorboats (B)",
+      "Grassrivers 02 (Watson Bay)",
       "Leonida Keys 01 (Airplane) (X)",
-      "Grassrivers 02 (Watson Bay)"
+      "Motorboats (A)",
+      "Port Vice City (B)",
+      "Tennis Stadium (4K)"
     ],
-    "error_m": 3.966,
+    "error_m": 1.08,
     "zone": "grassrivers"
   },
   "Red Billboard (Hamlet)": {
@@ -3971,15 +3969,15 @@
   },
   "Container Crane (1)": {
     "xyz": [
-      935.0535821138095,
-      -822.9505762992894,
-      76.00037322738898
+      934.0893457476624,
+      -823.8115859504076,
+      75.9960789495903
     ],
     "source_cameras": [
       "Motorboats (A)",
-      "Motorboats (B)"
+      "Port Vice City (B)"
     ],
-    "error_m": 2.29,
+    "error_m": 1.908,
     "zone": "vice_city"
   },
   "Container Crane (3)": {
@@ -5111,18 +5109,19 @@
   },
   "Asia Brickell Key": {
     "xyz": [
-      -121.34888928967291,
-      -884.6229688549855,
-      184.04118148056673
+      -122.44551558646111,
+      -886.4671302734163,
+      184.19985844316028
     ],
     "source_cameras": [
-      "Vice Beach (A)",
+      "Leonida Keys 01 (Airplane) (X)",
       "Rooftop Party",
       "Skyline",
-      "Leonida Keys 01 (Airplane) (X)",
-      "Vice City Postcard"
+      "Vice Beach (A)",
+      "Vice City Postcard",
+      "Port Vice City (B)"
     ],
-    "error_m": 2.818,
+    "error_m": 2.159,
     "zone": "vice_city"
   },
   "Bank of America Financial Center": {
@@ -6307,18 +6306,19 @@
   },
   "Marina Blue (NE)": {
     "xyz": [
-      -456.39584699596315,
-      420.6774245191034,
-      175.05956597410201
+      -456.4367195191511,
+      420.45924745358434,
+      175.1030420403539
     ],
     "source_cameras": [
-      "Vice Beach (B)",
+      "Jason Duval 05 (Machine Gun)",
       "Motorboats (B)",
       "Skyline",
-      "Jason Duval 05 (Machine Gun)",
-      "Vice City 03 (Basketball)"
+      "Vice Beach (B)",
+      "Vice City 03 (Basketball)",
+      "Port Vice City (B)"
     ],
-    "error_m": 3.091,
+    "error_m": 2.216,
     "zone": "vice_city"
   },
   "Marriott Miami Biscayne Bay (E)": {
@@ -6666,18 +6666,18 @@
   },
   "Park Grove Condominium (C)": {
     "xyz": [
-      -1324.242358549612,
-      -2061.4433748632687,
-      97.3767581143604
+      -1324.0684744870628,
+      -2061.3433316404576,
+      97.33597632944299
     ],
     "source_cameras": [
-      "Tennis Stadium (4K)",
+      "Grassrivers 02 (Watson Bay)",
       "Highway (Peacock Bay) (A)",
-      "Highway (Peacock Bay) (B)",
       "Leonida Keys 01 (Airplane) (X)",
-      "Grassrivers 02 (Watson Bay)"
+      "Port Vice City (B)",
+      "Tennis Stadium (4K)"
     ],
-    "error_m": 1.797,
+    "error_m": 2.437,
     "zone": "vice_city"
   },
   "Park Grove Condominium (N)": {
@@ -7281,15 +7281,16 @@
   },
   "Skyviews Miami Observation Wheel": {
     "xyz": [
-      30.494494677681534,
-      127.95291264083959,
-      71.25389701008756
+      32.06544967121721,
+      129.89762660892012,
+      71.6018044830731
     ],
     "source_cameras": [
       "Skyline",
-      "Vice City Postcard"
+      "Vice City Postcard",
+      "Port Vice City (B)"
     ],
-    "error_m": 1.634,
+    "error_m": 1.623,
     "zone": "vice_city"
   },
   "Southeast Financial Center": {
@@ -7466,61 +7467,62 @@
   },
   "Turkey Point Nuclear Power Station (1)": {
     "xyz": [
-      -1492.982008202552,
-      -3702.0158095293777,
-      79.83217019092925
+      -1493.035742332837,
+      -3702.1114771799157,
+      80.05139176755546
     ],
     "source_cameras": [
-      "Prison",
-      "Leonida Keys 01 (Airplane) (X)",
       "Grassrivers 02 (Watson Bay)",
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Prison",
+      "Port Vice City (B)"
     ],
-    "error_m": 1.451,
+    "error_m": 0.687,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (2)": {
     "xyz": [
-      -1492.4567794168183,
-      -3742.009789844666,
-      79.74314784728678
+      -1492.013573249405,
+      -3742.287264889191,
+      79.86915739695341
     ],
     "source_cameras": [
-      "Prison",
-      "Leonida Keys 01 (Airplane) (X)",
       "Grassrivers 02 (Watson Bay)",
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Prison",
+      "Port Vice City (B)"
     ],
-    "error_m": 1.28,
+    "error_m": 0.48,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (3)": {
     "xyz": [
-      -1492.799363758168,
-      -3784.050504998046,
-      79.68439978178614
+      -1492.7770144254846,
+      -3784.224417591131,
+      79.64741380082663
     ],
     "source_cameras": [
-      "Prison",
-      "Leonida Keys 01 (Airplane) (X)",
       "Grassrivers 02 (Watson Bay)",
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Prison",
+      "Port Vice City (B)"
     ],
-    "error_m": 1.366,
+    "error_m": 1.018,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (N)": {
     "xyz": [
-      -1568.2345752450099,
-      -3480.939318708245,
-      55.711387020783846
+      -1570.1020505542224,
+      -3480.1254148940516,
+      55.79799230248413
     ],
     "source_cameras": [
-      "Prison",
+      "Grassrivers 02 (Watson Bay)",
       "Leonida Keys 01 (Airplane) (X)",
-      "Grassrivers 02 (Watson Bay)"
+      "Prison",
+      "Port Vice City (B)"
     ],
-    "error_m": 1.118,
+    "error_m": 2.222,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (S)": {
@@ -7622,16 +7624,17 @@
   },
   "Vizcayne North Condominium (SE)": {
     "xyz": [
-      -537.615263007666,
-      108.32860586856567,
-      176.2215715917375
+      -539.1782208697484,
+      107.48396954569402,
+      176.52794562322504
     ],
     "source_cameras": [
       "Skyline",
       "Vice City 03 (Basketball)",
-      "Vice City Postcard"
+      "Vice City Postcard",
+      "Port Vice City (B)"
     ],
-    "error_m": 2.237,
+    "error_m": 2.314,
     "zone": "vice_city"
   },
   "W South Beach (BNW)": {
