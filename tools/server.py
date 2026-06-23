@@ -1372,6 +1372,254 @@ class Handler(BaseHTTPRequestHandler):
                 traceback.print_exc()
                 self.send_json({'error': str(e)}, 500)
 
+        elif path == '/api/export_validation':
+            cam_name = unquote(qs.get('cam', [''])[0])
+            if cam_name not in md.cameras:
+                self.send_json({'error': 'invalid cam'}, 400); return
+            try:
+                cam = ml.get_camera(cam_name)
+            except Exception as e:
+                self.send_json({'error': f'cam load failed: {e}'}, 400); return
+            if cam.xyz is None or cam.q is None:
+                self.send_json({'error': 'cam not calibrated'}, 400); return
+            from PIL import Image, ImageDraw, ImageFont
+            import io as _io, math as _math
+            frame_path = os.path.join(os.path.dirname(TOOL_DIR), 'frames', cam_name + '.png')
+            if not os.path.exists(frame_path):
+                self.send_json({'error': 'frame not found'}, 404); return
+            base = Image.open(frame_path).convert('RGBA')
+            W, H = base.size
+            ov = Image.new('RGBA',(W,H),(0,0,0,0)); draw = ImageDraw.Draw(ov)
+            INK=(12,12,16)
+            TIER_COL={'anchor':(74,222,128),'high':(96,165,250),'medium':(245,158,11),
+                      'low':(248,113,113),'unverified':(160,160,180)}
+            def dcol(d):
+                if d is None: return (130,130,160)
+                if d < 1: return (74,222,128)
+                if d < 3: return (163,230,53)
+                if d < 8: return (245,158,11)
+                return (248,113,113)
+            def tcolor(bg):
+                lum=0.299*bg[0]+0.587*bg[1]+0.114*bg[2]
+                return (10,10,12) if lum>140 else (255,255,255)
+            def F(sz):
+                for fp in ('/System/Library/Fonts/Menlo.ttc','/System/Library/Fonts/Monaco.ttf',
+                           '/System/Library/Fonts/SFNSMono.ttf','/System/Library/Fonts/Supplemental/Andale Mono.ttf'):
+                    try: return ImageFont.truetype(fp, sz)
+                    except Exception: pass
+                return ImageFont.load_default()
+            flab=F(max(12,int(W/200))); fbar=F(max(16,int(W/120)))
+            cam_tier='unverified'
+            try:
+                with open(os.path.join(TOOL_DIR,'generated','confidence_tiers.json')) as _tf:
+                    _tj=json.load(_tf)
+                _v=_tj.get('cameras', {}).get(cam_name)
+                if isinstance(_v,dict): cam_tier=_v.get('tier','unverified')
+                elif isinstance(_v,str): cam_tier=_v
+            except Exception: pass
+            hfov_deg=cam.fov[0]
+            marked=md.pixels.get(cam_name,{})
+            pts=[]; deltas=[]
+            for lm_name, marker_px in marked.items():
+                lm_xyz=md.landmarks.get(lm_name)
+                if lm_xyz is None: continue
+                proj=cam.get_pixel(list(lm_xyz))
+                if proj is None: continue
+                px,py=float(proj[0]),float(proj[1])
+                mx,my=float(marker_px[0]),float(marker_px[1])
+                d=(_math.hypot(px-mx,py-my)/W)*hfov_deg*60.0
+                deltas.append(d)
+                if -100<mx<W+100 and -100<my<H+100:
+                    pts.append([lm_name,mx,my,d])
+            pts.sort(key=lambda p:p[1])
+            STEM=int(H*0.045); last=-999; tlvl=0; gap=int(W*0.018)
+            for nm,px,py,d in pts:
+                if px-last<gap: tlvl=(tlvl+1)%3
+                else: tlvl=0
+                last=px
+                col=dcol(d); stem=STEM+tlvl*int(H*0.04); ty=py-stem
+                draw.line([(px,py),(px,ty)],fill=col+(180,),width=1)
+                draw.ellipse([px-3,py-3,px+3,py+3],fill=col+(255,))
+                bb=flab.getbbox(nm); tw=bb[2]-bb[0]; th=bb[3]-bb[1]; padx=6; pady=3
+                card=Image.new('RGBA',(tw+padx*2,th+pady*2),(0,0,0,0))
+                cd=ImageDraw.Draw(card)
+                cd.rounded_rectangle([0,0,tw+padx*2-1,th+pady*2-1],radius=3,fill=col+(255,))
+                cd.text((padx,pady-bb[1]),nm,fill=tcolor(col)+(255,),font=flab)
+                cv=card.rotate(90,expand=True)
+                ov.paste(cv,(int(px)-cv.width//2,int(ty)-cv.height-2),cv)
+            deltas.sort(); med=deltas[len(deltas)//2] if deltas else 0.0
+            yp=cam.ypr if (hasattr(cam,'ypr') and cam.ypr is not None) else [0,0,0]
+            tcol=TIER_COL.get(cam_tier,(160,160,180))
+            WHITE=(214,214,228)
+            segs=[("XYZ (%.0f, %.0f, %.1f)   "%(cam.xyz[0],cam.xyz[1],cam.xyz[2]), WHITE),
+                  ("YPR (%.1f, %.1f, %.1f)   "%(yp[0],yp[1],yp[2]), WHITE),
+                  ("FOV (%.1f, %.1f)    "%(cam.fov[0],cam.fov[1]), WHITE),
+                  (cam_tier.upper()+" confidence    ", tcol),
+                  ("RMS %.1f'    "%med, WHITE),
+                  (cam_name, tcol)]
+            total_w=sum(fbar.getbbox(t)[2] for t,_ in segs)
+            sidepad=int(W*0.012)
+            box_w=total_w+sidepad*2
+            barh=max(int(H*0.032),30); by=H-barh-int(H*0.012)
+            draw.rounded_rectangle([sidepad,by,sidepad+box_w,by+barh],radius=6,
+                                   fill=INK+(236,),outline=tcol+(255,),width=1)
+            x=sidepad*2; ty=by+(barh-fbar.getbbox("X")[3])//2 - 1
+            for txt,col in segs:
+                draw.text((x,ty),txt,fill=col+(255,),font=fbar)
+                x+=fbar.getbbox(txt)[2]
+            out=Image.alpha_composite(base,ov).convert('RGB')
+            buf=_io.BytesIO(); out.save(buf,'PNG'); data=buf.getvalue()
+            self.send_response(200)
+            self.send_header('Content-Type','image/png')
+            self.send_header('Content-Disposition','attachment; filename="'+cam_name+' validation.png"')
+            self.send_header('Content-Length',str(len(data)))
+            self.end_headers(); self.wfile.write(data)
+
+        elif path == '/api/export_map_validation':
+            cam_name = unquote(qs.get('cam', [''])[0])
+            if cam_name not in md.cameras:
+                self.send_json({'error': 'invalid cam'}, 400); return
+            try:
+                cam = ml.get_camera(cam_name)
+            except Exception as e:
+                self.send_json({'error': f'cam load failed: {e}'}, 400); return
+            if cam.xyz is None or cam.q is None:
+                self.send_json({'error': 'cam not calibrated'}, 400); return
+            from PIL import Image, ImageDraw, ImageFont
+            import io as _io, math as _math
+            Image.MAX_IMAGE_PIXELS = None
+            cx, cy = float(cam.xyz[0]), float(cam.xyz[1])
+            INK=(12,12,16); INK_BG=(18,20,28)
+            TIER_COL={'anchor':(74,222,128),'high':(96,165,250),'medium':(245,158,11),
+                      'low':(248,113,113),'unverified':(160,160,180)}
+            def dcol(d):
+                if d is None: return (130,130,160)
+                if d < 1: return (74,222,128)
+                if d < 3: return (163,230,53)
+                if d < 8: return (245,158,11)
+                return (248,113,113)
+            def tcolor(bg):
+                lum=0.299*bg[0]+0.587*bg[1]+0.114*bg[2]
+                return (10,10,12) if lum>140 else (255,255,255)
+            def F(sz):
+                for fp in ('/System/Library/Fonts/Menlo.ttc','/System/Library/Fonts/Monaco.ttf',
+                           '/System/Library/Fonts/SFNSMono.ttf','/System/Library/Fonts/Supplemental/Andale Mono.ttf'):
+                    try: return ImageFont.truetype(fp, sz)
+                    except Exception: pass
+                return ImageFont.load_default()
+            cam_tier='unverified'
+            try:
+                with open(os.path.join(TOOL_DIR,'generated','confidence_tiers.json')) as _tf:
+                    _tj=json.load(_tf)
+                _v=_tj.get('cameras', {}).get(cam_name)
+                if isinstance(_v,dict): cam_tier=_v.get('tier','unverified')
+                elif isinstance(_v,str): cam_tier=_v
+            except Exception: pass
+            tcol=TIER_COL.get(cam_tier,(160,160,180))
+            hfov_deg=cam.fov[0]
+            size=md.cameras[cam_name].get('size') or [1920,1080]
+            marked=md.pixels.get(cam_name,{})
+            lms=[]; maxd=300.0
+            for lm_name, marker_px in marked.items():
+                lm_xyz=md.landmarks.get(lm_name)
+                if lm_xyz is None: continue
+                lx,ly=float(lm_xyz[0]),float(lm_xyz[1])
+                maxd=max(maxd,_math.hypot(lx-cx,ly-cy))
+                proj=cam.get_pixel(list(lm_xyz))
+                if proj is None: d=None
+                else:
+                    px,py=float(proj[0]),float(proj[1])
+                    mxp,myp=float(marker_px[0]),float(marker_px[1])
+                    d=(_math.hypot(px-mxp,py-myp)/size[0])*hfov_deg*60.0
+                lms.append([lm_name,lx,ly,d])
+            R=maxd*1.15
+            try:
+                mp=ml.get_map('yanis'); mp.open(add_padding=False)
+                MAP_PX=mp.size[0] if hasattr(mp,'size') else 20000
+            except Exception as e:
+                self.send_json({'error':f'map open failed: {e}'},500); return
+            p_test = mp.get_map_xy((0.0,0.0)); Xoff=p_test[0]; Yoff=p_test[1]
+            WX_MIN=0-Xoff; WX_MAX=MAP_PX-Xoff; WY_MAX=Yoff-0; WY_MIN=Yoff-MAP_PX
+            half=R; ctrx,ctry=cx,cy
+            if ctrx-half<WX_MIN: ctrx=WX_MIN+half
+            if ctrx+half>WX_MAX: ctrx=WX_MAX-half
+            if ctry-half<WY_MIN: ctry=WY_MIN+half
+            if ctry+half>WY_MAX: ctry=WY_MAX-half
+            x0w,y0w,x1w,y1w=ctrx-half,ctry-half,ctrx+half,ctry+half
+            try:
+                px0,py_a=mp.get_map_xy((x0w,y0w)); px1,py_b=mp.get_map_xy((x1w,y1w))
+                px0,px1=sorted((px0,px1)); py0,py1=sorted((py_a,py_b))
+                vx0,vy0=max(0,int(px0)),max(0,int(py0))
+                vx1,vy1=min(MAP_PX,int(px1)),min(MAP_PX,int(py1))
+                req_w=int(px1-px0); req_h=int(py1-py0)
+                canvas=Image.new('RGB',(req_w,req_h),INK_BG)
+                if vx1>vx0 and vy1>vy0:
+                    piece=mp.image.crop((vx0,vy0,vx1,vy1))
+                    canvas.paste(piece,(vx0-int(px0),vy0-int(py0)))
+            except Exception as e:
+                self.send_json({'error':f'map crop failed: {e}'},500); return
+            OUT=1500
+            crop=canvas.resize((OUT,OUT),Image.BILINEAR).convert('RGBA')
+            dark=Image.new('RGBA',(OUT,OUT),(8,10,16,80))
+            base=Image.alpha_composite(crop,dark)
+            ov=Image.new('RGBA',(OUT,OUT),(0,0,0,0)); draw=ImageDraw.Draw(ov)
+            CROP_M=2*R
+            def w2c(x,y): return ((x-x0w)/CROP_M*OUT,(y1w-y)/CROP_M*OUT)
+            flab=F(max(7,int(OUT/200))); fbar=F(max(13,int(OUT/110)))
+            camx,camy=w2c(cx,cy)
+            try:
+                vdir=cam.get_pixel_direction((size[0]/2.0,size[1]/2.0))
+                aim=_math.atan2(float(vdir[1]),float(vdir[0]))
+            except Exception:
+                aim=_math.radians(90.0)
+            halffov=_math.radians(hfov_deg/2.0); clen=CROP_M*1.5
+            def cone_pt(a): return w2c(cx+_math.cos(a)*clen, cy+_math.sin(a)*clen)
+            draw.polygon([(camx,camy),cone_pt(aim-halffov),cone_pt(aim+halffov)],fill=tcol+(22,),outline=tcol+(70,))
+            placed=[]
+            def overlaps(b):
+                for p in placed:
+                    if not (b[2]<p[0] or b[0]>p[2] or b[3]<p[1] or b[1]>p[3]): return True
+                return False
+            lms_sorted=sorted(lms, key=lambda r:w2c(r[1],r[2])[1])
+            for lm_name,lx,ly,d in lms_sorted:
+                col=dcol(d); mx,my=w2c(lx,ly)
+                draw.line([(camx,camy),(mx,my)],fill=col+(120,),width=1)
+                draw.ellipse([mx-2,my-2,mx+2,my+2],fill=col+(220,),outline=(255,255,255,180),width=1)
+                vx,vy=mx-camx,my-camy; vn=_math.hypot(vx,vy) or 1; ux,uy=vx/vn,vy/vn
+                bb=flab.getbbox(lm_name); tw=bb[2]-bb[0]; th=bb[3]-bb[1]
+                lxp,lyp=mx+ux*6,my+uy*6
+                bx=lxp-tw-4 if ux<0 else lxp; by=lyp-th/2-2
+                bx=max(2,min(bx,OUT-tw-6)); by=max(2,min(by,OUT-th-6))
+                tries=0
+                while overlaps((bx-2,by-1,bx+tw+3,by+th+3)) and tries<24:
+                    by+=th+3; tries+=1
+                    if by>OUT-th-6: by=2+tries*4
+                placed.append((bx-2,by-1,bx+tw+3,by+th+3))
+                draw.rounded_rectangle([bx-2,by-1,bx+tw+3,by+th+3],radius=2,fill=col+(175,))
+                draw.text((bx,by),lm_name,fill=tcolor(col)+(255,),font=flab)
+            draw.ellipse([camx-5,camy-5,camx+5,camy+5],fill=tcol+(255,),outline=(255,255,255,255),width=2)
+            yp=cam.ypr if (hasattr(cam,'ypr') and cam.ypr is not None) else [0,0,0]
+            dvals=sorted(x[3] for x in lms if x[3] is not None)
+            med=dvals[len(dvals)//2] if dvals else 0.0
+            WHITE=(214,214,228)
+            segs=[("XYZ (%.0f, %.0f, %.1f)   "%(cam.xyz[0],cam.xyz[1],cam.xyz[2]),WHITE),
+                  ("YPR (%.1f, %.1f, %.1f)   "%(yp[0],yp[1],yp[2]),WHITE),
+                  (cam_tier.upper()+" confidence   ",tcol),
+                  ("RMS %.1f'   "%med,WHITE),(cam_name,tcol)]
+            tot=sum(fbar.getbbox(t)[2] for t,_ in segs); sp=int(OUT*0.016)
+            bw=tot+sp*2; bh=max(int(OUT*0.022),22); by=OUT-bh-int(OUT*0.016)
+            draw.rounded_rectangle([sp,by,sp+bw,by+bh],radius=5,fill=INK+(236,),outline=tcol+(255,),width=1)
+            x=sp*2; ty=by+(bh-fbar.getbbox("X")[3])//2-1
+            for t,c in segs:
+                draw.text((x,ty),t,fill=c+(255,),font=fbar); x+=fbar.getbbox(t)[2]
+            out=Image.alpha_composite(base,ov).convert('RGB')
+            buf=_io.BytesIO(); out.save(buf,'PNG'); data=buf.getvalue()
+            self.send_response(200)
+            self.send_header('Content-Type','image/png')
+            self.send_header('Content-Disposition','attachment; filename="'+cam_name+' map.png"')
+            self.send_header('Content-Length',str(len(data)))
+            self.end_headers(); self.wfile.write(data)
+
         elif path == '/api/lm_projections':
             # [MULTICAM-STEP23] Return all LMs that should appear as ghost
             # markers on this cam's image.

@@ -524,6 +524,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   <button class="btn btn-reset" id="btn-reset">Reset</button>
   <button class="btn btn-save" id="btn-save" disabled>Save</button>
   <button class="btn" id="btn-update" disabled style="background:#7c3aed;color:#fff">Update LMs</button>
+  <button class="btn" id="btn-export" style="background:#0e7490;color:#fff">⬇ Export</button>
   <button class="btn" id="btn-suspicious" style="background:#1c1c26;color:#f59e0b;border:1px solid #f59e0b">⚠ Suspicious</button>
   <span class="saved" id="saved">✓ Saved</span>
 </header>
@@ -587,34 +588,6 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
              font-family:JetBrains Mono,monospace">⊕ cams</button>
     <!-- ── VERTICALS-FE-V1 ── -->
     <!-- [T3-LINES-V1] mode tracage de lignes (bootstrap VP) -->
-    <button id="trace-btn" title="Trace lines for VP calibration (T3 bootstrap)"
-      style="position:absolute;top:8px;right:248px;z-index:10;
-             background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
-             border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;
-             font-family:JetBrains Mono,monospace">&#9998; lines</button>
-    <div id="trace-pop" style="display:none;position:absolute;top:38px;right:168px;
-         z-index:30;background:rgba(19,19,26,.95);border:1px solid var(--border);
-         border-radius:8px;padding:10px 12px;min-width:230px;
-         font-family:var(--mono);font-size:11px;color:var(--mid)">
-      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
-        <span style="color:var(--dim);font-size:9px;letter-spacing:.12em;
-              text-transform:uppercase">Trace lines &#183; click 2 points</span>
-        <span id="trace-clear" style="color:var(--red);font-size:10px;cursor:pointer;
-              opacity:.75">clear all</span>
-      </div>
-      <div style="display:flex;gap:6px;margin-bottom:8px">
-        <span class="trace-fam" data-fam="v" style="padding:2px 10px;border-radius:10px;
-              border:1px solid #facc15;color:#facc15;cursor:pointer">vertical</span>
-        <span class="trace-fam" data-fam="h" title="Receding lines (toward the horizon), not frontoparallel ones"
-              style="padding:2px 10px;border-radius:10px;
-              border:1px solid var(--border);color:var(--dim);cursor:pointer">horizontal</span>
-      </div>
-      <div id="trace-list" style="max-height:130px;overflow:auto;margin-bottom:8px"></div>
-      <button id="trace-solve" style="width:100%;background:var(--surface2);color:var(--green);
-              border:1px solid var(--border);border-radius:6px;padding:4px;cursor:pointer;
-              font-family:var(--mono);font-size:11px">solve roll + pitch</button>
-      <div id="trace-result" style="margin-top:7px;display:none"></div>
-    </div>
     <!-- [MESH-CTRL-V1] controle par mesh + opacite -->
     <button id="mesh-ctrl-btn" title="Per-mesh wireframe controls"
       style="position:absolute;top:8px;right:168px;z-index:10;
@@ -639,6 +612,13 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
              background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
              border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;
              font-family:JetBrains Mono,monospace">⊕ verts</button>
+    <div id="fan-push-hint" style="display:none;position:absolute;top:42px;right:88px;z-index:30;
+         background:rgba(19,19,26,.95);border:1px solid #333;border-radius:8px;
+         padding:8px 11px;font:11px JetBrains Mono,monospace;color:#bbb;max-width:230px;line-height:1.5">
+      Drag on the image to rotate the yellow fan onto the building's verticals.
+      <span style="color:#888">&#8596; roll &#183; &#8597; pitch</span>
+      <div id="fan-push-readout" style="margin-top:6px;color:#4ade80"></div>
+    </div>
     <!-- Phase 7a.1: floating minimap removed — relocated to the
          left sidebar's preview slot (#sb-preview-slot). -->
     <div id="oc-cursor-preview" style="position:fixed;display:none;z-index:100;
@@ -983,6 +963,15 @@ const btnSave  = document.getElementById('btn-save');
 const savedEl  = document.getElementById('saved');
 const btnUpdate = document.getElementById('btn-update');
 const btnSuspicious = document.getElementById('btn-suspicious');
+const btnExport = document.getElementById('btn-export');
+btnExport.addEventListener('click', () => {
+  if (!currentCam) { return; }
+  const c = encodeURIComponent(currentCam);
+  // telecharge le frame puis la map (2 fichiers)
+  const dl = (url) => { const a=document.createElement('a'); a.href=url; a.download=''; document.body.appendChild(a); a.click(); a.remove(); };
+  dl('/api/export_validation?cam=' + c);
+  setTimeout(() => dl('/api/export_map_validation?cam=' + c), 900);
+});
 const canvasWrap = document.getElementById('canvas-wrap');
 
 // [MULTICAM-STEP20] Pane-aware rect helper.
@@ -2809,6 +2798,59 @@ var vertsOn    = false;
 var vertsLines = null;       // last fetched [[ [x1,y1],[x2,y2] ], ...]
 var vertsReq   = 0;          // request counter to ignore stale responses
 
+// ── [FAN-PUSH-V1] pousser l'eventail de verticales pour matcher l'image ──
+// L'eventail jaune est entierement determine par la pose. Le dragger = tourner
+// la camera: dx ecran -> roll, dy ecran -> pitch. La pose change, l'eventail
+// se redessine (fetchVerticals), boucle fermee. Rien a stocker: on manipule
+// directement params.roll / params.pitch.
+var fanPushOn = false, fanDrag = null;
+var FAN_ROLL_SENS = 0.06;    // deg de roll par pixel ecran horizontal
+var FAN_PITCH_SENS = 0.05;   // deg de pitch par pixel ecran vertical
+
+function fanReadout() {
+  var el = document.getElementById('fan-push-readout');
+  if (el) el.textContent = 'roll ' + params.roll.toFixed(2) + '\u00b0 \u00b7 pitch ' + params.pitch.toFixed(2) + '\u00b0';
+}
+
+async function fanApplyDrag(dx, dy) {
+  params.roll = Math.max(-45, Math.min(45, fanDrag.roll0 + dx * FAN_ROLL_SENS));
+  params.pitch = Math.max(-89, Math.min(89, fanDrag.pitch0 - dy * FAN_PITCH_SENS));
+  syncSliders();
+  dirty = true; btnSave.disabled = false;
+  fanReadout();
+  await fetchVerticals();
+  draw();
+  scheduleLoad();
+}
+
+window.addEventListener('DOMContentLoaded', function () {
+  var fb = document.getElementById('fan-push-btn');
+  var hint = document.getElementById('fan-push-hint');
+  if (!fb) return;
+  fb.addEventListener('click', async function () {
+    fanPushOn = !fanPushOn;
+    fb.style.background = fanPushOn ? 'rgba(250,204,21,0.85)' : 'rgba(0,0,0,0.6)';
+    fb.style.color = fanPushOn ? '#000' : '#fff';
+    hint.style.display = fanPushOn ? 'block' : 'none';
+    if (fanPushOn) {
+      vertsOn = true;
+      var vb = document.getElementById('verts-toggle-btn');
+      if (vb) { vb.style.background = 'rgba(250,204,21,0.85)'; vb.style.color = '#000'; }
+      await fetchVerticals();
+      fanReadout();
+    }
+    draw();
+  });
+});
+
+window.addEventListener('mousemove', function (e) {
+  if (!fanPushOn || !fanDrag) return;
+  fanApplyDrag(e.clientX - fanDrag.x0, e.clientY - fanDrag.y0);
+});
+window.addEventListener('mouseup', function () {
+  if (fanDrag) { fanDrag = null; canvasWrap.style.cursor = ''; }
+});
+
 async function fetchVerticals() {
   if (!currentCam || !camData) { vertsLines = null; return; }
   const my = ++vertsReq;
@@ -2852,12 +2894,18 @@ window.addEventListener('DOMContentLoaded', () => {
   if (!btn) return;
   btn.addEventListener('click', async () => {
     vertsOn = !vertsOn;
+    fanPushOn = vertsOn;                         // [VERTS-MERGE] verts = pousser l'eventail
     btn.style.background = vertsOn ? 'rgba(255,200,0,0.7)' : 'rgba(0,0,0,0.6)';
     btn.style.color = vertsOn ? '#000' : '#fff';
+    const hint = document.getElementById('fan-push-hint');
     if (vertsOn) {
       await fetchVerticals();
+      fanReadout();
+      if (hint) hint.style.display = 'block';
     } else {
       vertsLines = null;
+      fanDrag = null;
+      if (hint) hint.style.display = 'none';
     }
     draw();
   });
@@ -3483,6 +3531,14 @@ canvasWrap.addEventListener('wheel', e => {
 
 // Main canvas pan
 canvasWrap.addEventListener('mousedown', e => {
+  if (fanPushOn) {                                   // [FAN-PUSH-V1/VERTS-MERGE]
+    if (e.target && e.target.closest && e.target.closest(
+        '#fan-push-hint, #fan-push-btn, #trace-pop, #mesh-ctrl-pop, #pane-2')) return;
+    fanDrag = { x0: e.clientX, y0: e.clientY, roll0: params.roll, pitch0: params.pitch };
+    canvasWrap.style.cursor = 'grabbing';
+    e.preventDefault(); e.stopPropagation();
+    return;
+  }
   if (traceMode) {                                   // [T3-LINES-V1]
     // blacklist des elements d'UI: les clics sur le popover, les chips de
     // famille ou les boutons overlay bubblent jusqu'ici et creaient des
@@ -5293,9 +5349,10 @@ window.addEventListener('load', () => {
   body.view-view3d .view3d-wrap { display:block; }
   /* [VIEW3D-TAB] les overlays de la vue Camera (verts/cams) ne doivent pas
      flotter par-dessus l'onglet 3D */
+  body.view-view3d #fan-push-btn,
+  body.view-view3d #fan-push-hint,
   body.view-view3d #verts-toggle-btn,
   body.view-view3d #oc-toggle-btn,
-  body.view-view3d #trace-btn,
   body.view-view3d #trace-pop,
   body.view-view3d #mesh-ctrl-btn,
   body.view-view3d #mesh-ctrl-pop { display:none !important; }
