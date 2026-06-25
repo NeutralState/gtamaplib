@@ -20,9 +20,9 @@ FRAMES_DIR = os.path.join(GTAMAP_DIR, "frames")
 TOOL_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(TOOL_DIR)
 # [TILES-V1] gtadb.org tile checkout (sparse, vendored, gitignored).
-# Tiles are 256x256 JPGs at /vendor/gtadb.org/maps/tiles/6/yanis,12/{z}/{z},{y},{x}.jpg
+# Tiles are 256x256 JPGs at /vendor/gtadb.org/maps/tiles/6/yanis,13/{z}/{z},{y},{x}.jpg
 # 7 zoom levels (0-6). Served via /tiles/{z}/{filename} route.
-TILES_DIR = os.path.join(REPO_ROOT, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,12')
+TILES_DIR = os.path.join(REPO_ROOT, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,13')
 
 sys.path.insert(0, GTAMAP_DIR)
 import gtamaplib as ml
@@ -87,7 +87,7 @@ def _minimap_cache_path(cam_name):
 
 def _render_minimap_for_cam(cam_name):
     # [MINIMAP-TILES-V1] Render a minimap PNG by compositing rlx tiles
-    # (vendor/gtadb.org/maps/tiles/6/yanis,12/). Replaces the previous
+    # (vendor/gtadb.org/maps/tiles/6/yanis,13/). Replaces the previous
     # yanis.jpg-based crop. Same signature, same output path — client
     # code is unaffected.
     #
@@ -569,7 +569,7 @@ class Handler(BaseHTTPRequestHandler):
         # [YANIS-CLEANUP-V2] /yanis.jpg endpoint removed
 
         elif path.startswith('/tiles/'):
-            # [TILES-V1] Serve tile JPGs from vendor/gtadb.org/maps/tiles/6/yanis,12/
+            # [TILES-V1] Serve tile JPGs from vendor/gtadb.org/maps/tiles/6/yanis,13/
             # URL pattern: /tiles/{z}/{z},{y},{x}.jpg  (z=0..6)
             # Strict validation: only digits + commas + .jpg, no path traversal.
             tile_rel = path[len('/tiles/'):]  # e.g. "3/3,10,0.jpg"
@@ -1437,8 +1437,7 @@ class Handler(BaseHTTPRequestHandler):
                 if px-last<gap: tlvl=(tlvl+1)%3
                 else: tlvl=0
                 last=px
-                col=dcol(d); stem=STEM+tlvl*int(H*0.04); ty=py-stem
-                draw.line([(px,py),(px,ty)],fill=col+(180,),width=1)
+                col=dcol(d); stem=STEM+tlvl*int(H*0.04)
                 draw.ellipse([px-3,py-3,px+3,py+3],fill=col+(255,))
                 bb=flab.getbbox(nm); tw=bb[2]-bb[0]; th=bb[3]-bb[1]; padx=6; pady=3
                 card=Image.new('RGBA',(tw+padx*2,th+pady*2),(0,0,0,0))
@@ -1446,7 +1445,13 @@ class Handler(BaseHTTPRequestHandler):
                 cd.rounded_rectangle([0,0,tw+padx*2-1,th+pady*2-1],radius=3,fill=col+(255,))
                 cd.text((padx,pady-bb[1]),nm,fill=tcolor(col)+(255,),font=flab)
                 cv=card.rotate(90,expand=True)
-                ov.paste(cv,(int(px)-cv.width//2,int(ty)-cv.height-2),cv)
+                ty=py-stem
+                paste_y=int(ty)-cv.height-2
+                if paste_y < 4:
+                    ty=py+stem
+                    paste_y=int(ty)+2
+                draw.line([(px,py),(px,ty)],fill=col+(180,),width=1)
+                ov.paste(cv,(int(px)-cv.width//2,paste_y),cv)
             deltas.sort(); med=deltas[len(deltas)//2] if deltas else 0.0
             yp=cam.ypr if (hasattr(cam,'ypr') and cam.ypr is not None) else [0,0,0]
             tcol=TIER_COL.get(cam_tier,(160,160,180))

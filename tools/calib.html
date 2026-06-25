@@ -1333,7 +1333,7 @@ async function init() {
   window.tilesPending = new Map();
   let tilesCanvas = null, tilesCtx = null;
 
-  function tilesUrl(z, x, y)   { return `/tiles/${z}/${z},${y},${x}.jpg`; }
+  function tilesUrl(z, x, y)   { return `/tiles/${z}/${z},${y},${x}.jpg?v=13`; }
   function tilesKey(z, x, y)   { return `${z}/${y}/${x}`; }
   function tilesGet(z, x, y) {
     const k = tilesKey(z, x, y);
