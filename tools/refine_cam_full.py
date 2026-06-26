@@ -250,7 +250,7 @@ def compute_residuals(cam_name, params, cameras, pixels, landmarks, selected_lms
 
 
 def optimize_full(cam_name, initial_params, cameras, pixels, landmarks, selected_lms, lm_tiers,
-                  fix_xy=None, z_bounds=None, roll_prior_sigma_deg=None):
+                  fix_xy=None, z_bounds=None, roll_prior_sigma_deg=None, n_starts=1):  # [MULTISTART-NOROLLPRIOR-V1]
     """Optimize 7 params to minimize weighted RMS pixel residuals.
     
     fix_xy: tuple (x, y) — if provided, x and y are frozen at these values
@@ -295,9 +295,28 @@ def optimize_full(cam_name, initial_params, cameras, pixels, landmarks, selected
         rms, _, _, _ = compute_residuals(cam_name, params, cameras, pixels, landmarks, selected_lms, lm_tiers)
         return rms + penalty
 
-    result = minimize(loss_fn, initial_params, method='Nelder-Mead',
+    # [MULTISTART-NOROLLPRIOR-V1]  multistart: base init + (n_starts-1) bounded random restarts
+    import random as _random
+    _starts = [list(initial_params)]
+    for _ in range(max(0, n_starts - 1)):
+        _p = list(initial_params)
+        _p[0] += _random.uniform(-10, 10)
+        _p[1] += _random.uniform(-10, 10)
+        _p[3] += _random.uniform(-8, 8)
+        _p[4] += _random.uniform(-4, 4)
+        _p[5] += _random.uniform(-4, 4)
+        _p[6] += _random.uniform(-4, 4)
+        _starts.append(_p)
+    _best = None
+    for _init in _starts:
+        if fix_xy is not None:
+            _init[0] = fix_xy[0]; _init[1] = fix_xy[1]
+        _r = minimize(loss_fn, _init, method='Nelder-Mead',
                       options={'xatol': 1e-4, 'fatol': 1e-6,
                                'maxiter': 20000, 'adaptive': True})
+        if _best is None or _r.fun < _best.fun:
+            _best = _r
+    result = _best
     best_params = list(result.x)
     # Re-apply xy constraint (Nelder-Mead might have drifted them despite the loss fn)
     if fix_xy is not None:
@@ -327,6 +346,10 @@ def main():
                         help="Write the update even if RMS > 10 arcmin (use with caution).")
     parser.add_argument('--fix-xy', nargs=2, type=float, metavar=('X', 'Y'), default=None,
                         help="Freeze the cam's x,y position. e.g. --fix-xy 2021.75 921.75")
+    parser.add_argument('--no-roll-prior', action='store_true',  # [MULTISTART-NOROLLPRIOR-V1]
+                        help="Disable the soft roll prior (tilted cams: boats, vehicles, handheld).")
+    parser.add_argument('--multistart', type=int, default=4, metavar='N',  # [MULTISTART-NOROLLPRIOR-V1]
+                        help="Optimizer restarts (default 4; use 1 for legacy single-start).")
     parser.add_argument('--z-bounds', nargs=2, type=float, metavar=('MIN', 'MAX'), default=None,
                         help="Constrain z within [MIN, MAX]. e.g. --z-bounds 1 6")
     parser.add_argument('--use-indep-only', action='store_true',
@@ -479,12 +502,14 @@ def main():
         print()
 
     # Optimize
+    _roll_sigma = (None if args.no_roll_prior else  # [MULTISTART-NOROLLPRIOR-V1]
+                   (class_b_roll_prior_sigma() * 1.5
+                    if cls == 'D_no_ground_truth'
+                    else class_b_roll_prior_sigma()))
     new_params, final_rms, final_max, final_per_lm, final_per_weight = optimize_full(
         args.cam_name, init_params, cameras, pixels, landmarks, selected, lm_tiers,
         fix_xy=fix_xy, z_bounds=z_bounds,
-        roll_prior_sigma_deg=(class_b_roll_prior_sigma() * 1.5
-                              if cls == 'D_no_ground_truth'
-                              else class_b_roll_prior_sigma()))
+        roll_prior_sigma_deg=_roll_sigma, n_starts=args.multistart)
     if new_params is None:
         print(f"ERROR: optimization failed (scipy not installed?)")
         return 1
