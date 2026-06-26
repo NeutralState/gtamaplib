@@ -12952,15 +12952,29 @@
   },
   "Marina Blue (SE)": {
     "xyz": [
-      -484.0689813118653,
-      369.12075206581846,
-      177.98442714323465
+      -484.2467763938628,
+      369.89674315077923,
+      177.03185070564285
     ],
     "source_cameras": [
       "Jason Duval 05 (Machine Gun)",
-      "Skyline"
+      "Skyline",
+      "Port Vice City (B)"
     ],
-    "error_m": 6.277,
+    "error_m": 8.469,
+    "zone": "unknown"
+  },
+  "Vizcayne North Condominium (NW)": {
+    "xyz": [
+      -551.474308905386,
+      149.97152886135692,
+      176.63027614663807
+    ],
+    "source_cameras": [
+      "Skyline",
+      "Vice City Postcard"
+    ],
+    "error_m": 0.204,
     "zone": "unknown"
   }
 }
