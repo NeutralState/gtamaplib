@@ -36,6 +36,20 @@ GEN_DIR = os.path.join(THIS_DIR, 'generated')
 
 CAMERAS_JSON = os.path.join(DATA_DIR, 'cameras.json')
 PIXELS_JSON = os.path.join(DATA_DIR, 'pixels.json')
+EXCLUDED_JSON = os.path.join(DATA_DIR, 'excluded_markings.json')
+
+# [EXCLUDED-MARKINGS-V1]
+def _load_excluded_markings():
+    data = {}
+    try:
+        with open(EXCLUDED_JSON) as f:
+            raw = json.load(f)
+        for cam, lms in raw.items():
+            if not cam.startswith("_") and isinstance(lms, list):
+                data[cam] = set(lms)
+    except FileNotFoundError:
+        pass
+    return data
 LANDMARKS_JSON = os.path.join(DATA_DIR, 'landmarks.json')
 TIERS_JSON = os.path.join(GEN_DIR, 'confidence_tiers.json')
 
@@ -359,9 +373,13 @@ def main():
     print()
 
     # Find all cams with markings for this LM
+    excluded = _load_excluded_markings()  # [EXCLUDED-MARKINGS-V1]
     observers = []
     for cam_name, lm_map in pixels.items():
         if args.lm_name in lm_map:
+            if args.lm_name in excluded.get(cam_name, ()):  # [EXCLUDED-MARKINGS-V1]
+                print(f"  [excluded] {cam_name} (skipped per excluded_markings.json)")
+                continue
             observers.append(cam_name)
 
     if not observers:

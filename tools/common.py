@@ -21,6 +21,31 @@ if _ROOT not in sys.path:
 import gtamaplib as ml
 import gtamapdata as md
 
+
+# [EXCLUDED-MARKINGS-V1]
+_EXCLUDED_MARKINGS = None
+def _load_excluded_markings():
+    """Charge gtamapdata/excluded_markings.json une fois (cache).
+    {cam: [lm,...]} ignores par cam_rms/triangulation, gardes dans pixels.json (UI)."""
+    global _EXCLUDED_MARKINGS
+    if _EXCLUDED_MARKINGS is None:
+        path = os.path.join(_ROOT, "gtamapdata", "excluded_markings.json")
+        data = {}
+        try:
+            with open(path) as f:
+                raw = json.load(f)
+            for cam, lms in raw.items():
+                if not cam.startswith("_") and isinstance(lms, list):
+                    data[cam] = set(lms)
+        except FileNotFoundError:
+            pass
+        _EXCLUDED_MARKINGS = data
+    return _EXCLUDED_MARKINGS
+
+def is_excluded_marking(cam_name, lm_name):
+    """True si (cam_name, lm_name) est exclu du solveur."""
+    return lm_name in _load_excluded_markings().get(cam_name, ())
+
 try:
     import numpy as np
 except ImportError:  # ray_ls_point devient indisponible, le reste marche
@@ -56,6 +81,8 @@ def cam_rms(cam_name, lm_override=None, cam_state=None, lms=None):
     acc = n = 0
     for ln, px in obs.items():
         if px is None:
+            continue
+        if is_excluded_marking(cam_name, ln):  # [EXCLUDED-MARKINGS-V1]
             continue
         x = (lm_override or {}).get(ln, base.get(ln))
         if x is None:
