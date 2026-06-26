@@ -6116,15 +6116,16 @@
   },
   "Kaseya Center (SE)": {
     "xyz": [
-      -219.5935233152762,
-      427.03770564355494,
-      44.92438825858786
+      -221.07023160410887,
+      426.58721199696765,
+      45.19745603703422
     ],
     "source_cameras": [
       "Skyline",
-      "Vice City Postcard"
+      "Vice City Postcard",
+      "Port Vice City (B)"
     ],
-    "error_m": 1.633,
+    "error_m": 3.728,
     "zone": "vice_city"
   },
   "Keys Bridge (C)": {
@@ -6230,16 +6231,17 @@
   },
   "Loft Downtown II": {
     "xyz": [
-      -533.2808497818257,
-      62.14323842861736,
-      123.27944474358931
+      -535.3644560706318,
+      58.298734456037096,
+      123.61386054836731
     ],
     "source_cameras": [
       "Skyline",
+      "Vice Beach (B)",
       "Vice City 03 (Basketball)",
       "Vice City Postcard"
     ],
-    "error_m": 2.534,
+    "error_m": 3.596,
     "zone": "vice_city"
   },
   "Margaret Pace Park": {
@@ -6351,17 +6353,18 @@
   },
   "Miami Tower": {
     "xyz": [
-      -782.9675232481438,
-      -420.29591329122934,
-      160.78530622515552
+      -778.1575211183914,
+      -414.7879210218117,
+      160.76997760019123
     ],
     "source_cameras": [
+      "Grassrivers 02 (Watson Bay)",
       "Prison",
       "Skyline",
-      "Grassrivers 02 (Watson Bay)",
-      "Vice City Postcard"
+      "Vice City Postcard",
+      "Port Vice City (B)"
     ],
-    "error_m": 1.548,
+    "error_m": 2.308,
     "zone": "vice_city"
   },
   "New Foundation Church": {
@@ -7609,17 +7612,19 @@
   },
   "Vizcayne North Condominium (NE)": {
     "xyz": [
-      -542.3069211776915,
-      158.4355172483164,
-      177.80225580595237
+      -540.8000046092295,
+      157.3484930496064,
+      177.45551267639777
     ],
     "source_cameras": [
-      "Motorboats (B)",
       "Jason Duval 05 (Machine Gun)",
+      "Motorboats (B)",
+      "Vice Beach (B)",
       "Vice City 03 (Basketball)",
-      "Vice City Postcard"
+      "Vice City Postcard",
+      "Port Vice City (B)"
     ],
-    "error_m": 1.918,
+    "error_m": 3.735,
     "zone": "vice_city"
   },
   "Vizcayne North Condominium (SE)": {
@@ -9218,16 +9223,17 @@
   },
   "Stephen P. Clark Government Center (E)": {
     "xyz": [
-      -922.1776378886118,
-      22.893873325527487,
-      157.692666803647
+      -846.6904222408352,
+      70.8529225189499,
+      155.3717688974049
     ],
     "source_cameras": [
-      "Highway (Peacock Bay) (A)",
       "Leonida Keys 01 (Airplane) (X)",
-      "Vice City 03 (Basketball)"
+      "Motorboats (B)",
+      "Vice City 03 (Basketball)",
+      "Port Vice City (B)"
     ],
-    "error_m": 17.004,
+    "error_m": 4.358,
     "zone": "vice_city"
   },
   "Infinity at Brickell": {
