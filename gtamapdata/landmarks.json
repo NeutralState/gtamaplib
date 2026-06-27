@@ -4957,15 +4957,16 @@
   },
   "1000 Venetian Way (4)": {
     "xyz": [
-      295.4002333289585,
-      1131.3559217274699,
-      54.21881785926287
+      293.08345435479447,
+      1130.8581400184964,
+      54.12807066846648
     ],
     "source_cameras": [
+      "Skyline",
       "Venetian Islands",
-      "Skyline"
+      "Vice City Postcard"
     ],
-    "error_m": 1.117,
+    "error_m": 7.718,
     "zone": "vice_city"
   },
   "1000 Venetian Way (SE)": {
@@ -6424,16 +6425,16 @@
   },
   "Nine at Mary Brickell Village (E)": {
     "xyz": [
-      -1063.143515498337,
-      -1037.2872470639127,
-      118.83798073400465
+      -1060.9165035984947,
+      -1041.7954278030295,
+      117.06316191798282
     ],
     "source_cameras": [
-      "Tennis Stadium (4K)",
-      "Highway (Peacock Bay) (B)",
-      "Grassrivers 02 (Watson Bay)"
+      "Grassrivers 02 (Watson Bay)",
+      "Airport (X)",
+      "Tennis Stadium (4K)"
     ],
-    "error_m": 0.883,
+    "error_m": 12.061,
     "zone": "vice_city"
   },
   "One Miami Condominium East (NE)": {
@@ -7456,16 +7457,16 @@
   },
   "Tr\u00e9sor Tower": {
     "xyz": [
-      1856.1964534798287,
-      1942.404914519006,
-      122.87687606730414
+      1856.7395445434627,
+      1942.9998343268464,
+      120.70286626509855
     ],
     "source_cameras": [
       "Beach",
-      "Venetian Islands",
-      "Jet Ski"
+      "Jet Ski",
+      "Venetian Islands"
     ],
-    "error_m": 8.678,
+    "error_m": 10.233,
     "zone": "vice_city"
   },
   "Turkey Point Nuclear Power Station (1)": {
@@ -8628,15 +8629,16 @@
   },
   "1000 Venetian Way (3)": {
     "xyz": [
-      292.7797976044385,
-      1142.7689804642484,
-      41.84589770935848
+      290.69406319214977,
+      1142.287724307756,
+      41.81663156880629
     ],
     "source_cameras": [
+      "Skyline",
       "Venetian Islands",
-      "Skyline"
+      "Vice City Postcard"
     ],
-    "error_m": 1.024,
+    "error_m": 6.455,
     "zone": "vice_city"
   },
   "Nine at Mary Brickell Village (C)": {
@@ -8827,14 +8829,16 @@
   },
   "Portofino Tower (S)": {
     "xyz": [
-      1724.4407583766754,
-      -229.12069419043613,
-      140.70837120830916
+      1724.8620563048776,
+      -229.58256582096985,
+      140.47039858018462
     ],
     "source_cameras": [
-      "(geometric: equilateral from NW+NE)"
+      "Port",
+      "Grassrivers 02 (Watson Bay)",
+      "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.0,
+    "error_m": 8.149,
     "zone": "vice_city"
   },
   "536 Richard Jackson Blvd (BSW)": {
