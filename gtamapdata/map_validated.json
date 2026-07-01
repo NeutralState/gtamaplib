@@ -1,0 +1,23 @@
+{
+  "_comment": "Verdicts de preuve map (yanis V13) par LM. validated = xyz confirme sur la map -> FROZEN dans les solveurs. rejected = xyz contredit par la map -> exclu du bundle, a retrianguler. Genere/importe par tools/map_validate.py.",
+  "1500 Sonora Ave (Silo) (N)": {
+    "status": "rejected",
+    "date": "2026-07-01"
+  },
+  "Continuum on South Beach (S)": {
+    "status": "rejected",
+    "date": "2026-07-01"
+  },
+  "Cruise Terminal D": {
+    "status": "validated",
+    "date": "2026-07-01"
+  },
+  "Palazzo del Sol": {
+    "status": "rejected",
+    "date": "2026-07-01"
+  },
+  "The Waverly South Beach (NW)": {
+    "status": "rejected",
+    "date": "2026-07-01"
+  }
+}

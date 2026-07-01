@@ -174,6 +174,7 @@ if EXCLUDED_CAMS:
 JUNK_CAMS = set()
 WEAK_LMS = set()
 FROZEN_LMS = set()
+MAP_PRIOR_LMS = set()
 if args.cleanup:
     _cmeta = tiers['cameras']
     _lmeta = tiers['landmarks']
@@ -191,9 +192,24 @@ if args.cleanup:
     WEAK_LMS = {n for n, d in _lmeta.items()
                 if d.get('tier') in ('low', 'unverified')
                 and _good_obs.get(n, 0) <= 1}
+    _mv_path = os.path.normpath(os.path.join(os.path.dirname(TIERS_PATH), '..', '..', 'gtamapdata', 'map_validated.json'))
+    _map_ok, _map_bad = set(), set()
+    if os.path.exists(_mv_path):
+        with open(_mv_path) as _f:
+            for _n, _v in json.load(_f).items():
+                if _n.startswith('_'): continue
+                if _v.get('status') == 'validated': _map_ok.add(_n)
+                elif _v.get('status') == 'rejected': _map_bad.add(_n)
     _frozen_pre = {n for n, d in _lmeta.items()
                    if md.landmarks.get(n) is not None
                    and (d.get('n_leak_sources', 0) >= 2 or d.get('tier') == 'anchor')}
+    # La map yanis n'est PAS du ground truth (partiellement construite depuis
+    # nos donnees -> circularite). validated = MAP PRIOR (budget serre), PAS
+    # frozen. rejected = exclu (robuste: cotes/routes/footprints = leak/AIWE).
+    MAP_PRIOR_LMS = {n for n in _map_ok if md.landmarks.get(n) is not None}
+    if _map_ok or _map_bad:
+        print(f"[cleanup] map prior (budget serre): {len(MAP_PRIOR_LMS)} | map-rejected excluded: {len(_map_bad)}")
+    WEAK_LMS |= {n for n in _map_bad if md.landmarks.get(n) is not None}
     BROKEN_LMS = {n for n, d in _lmeta.items()
                   if md.landmarks.get(n) is not None
                   and n not in WEAK_LMS
@@ -457,8 +473,12 @@ def compute_residuals(p):
             xyz = get_lm_xyz(p, n)
             init_xyz = lm_init[n]
             tier = lm_tier.get(n, 'unknown')
-            budget = TIER_LM_BUDGET_M.get(tier, TIER_LM_BUDGET_M['unknown'])
-            stiff = TIER_LM_STIFFNESS.get(tier, TIER_LM_STIFFNESS['unknown'])
+            if n in MAP_PRIOR_LMS:
+                budget = TIER_LM_BUDGET_M['high']
+                stiff = TIER_LM_STIFFNESS['high']
+            else:
+                budget = TIER_LM_BUDGET_M.get(tier, TIER_LM_BUDGET_M['unknown'])
+                stiff = TIER_LM_STIFFNESS.get(tier, TIER_LM_STIFFNESS['unknown'])
             # Hinge on total euclidean distance from init
             d = np.linalg.norm(xyz - init_xyz)
             excess = max(0.0, d - budget)
