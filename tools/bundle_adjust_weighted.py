@@ -147,6 +147,7 @@ print(f"Loaded tiers: {len(cam_tier)} cams, {len(lm_tier)} LMs")
 #
 # V2 audit-driven. See bundle_adjust.py for the full rationale.
 
+from common import is_excluded_marking
 from leak_cam_audit import (
     is_triangulation_trusted,
     is_excluded,
@@ -246,6 +247,7 @@ for cam_name, lm_pixels in md.pixels.items():
     cam_w = TIER_WEIGHTS.get(cam_t, 1.0)
     cam_xyz_arr = np.array(md.cameras[cam_name]['xyz'])
     for lm_name, pixel in lm_pixels.items():
+        if is_excluded_marking(cam_name, lm_name): continue
         if lm_name in WEAK_LMS: continue
         if lm_name not in candidate_lms and lm_name not in md.landmarks: continue
         if md.landmarks.get(lm_name) is None: continue

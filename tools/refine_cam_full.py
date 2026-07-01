@@ -75,6 +75,7 @@ sys.path.insert(0, REPO_DIR)
 import gtamaplib as ml
 
 # V2: per-class constraint awareness via the audit helper.
+from common import is_excluded_marking
 from leak_cam_audit import (
     get_class,
     class_b_roll_prior_sigma,
@@ -438,7 +439,8 @@ def main():
     init_params = list(cur_xyz) + list(cur_ypr) + [init_hfov]
 
     # Find visible LMs
-    cam_pixels = pixels.get(args.cam_name, {})
+    cam_pixels = {k: v for k, v in pixels.get(args.cam_name, {}).items()
+                  if not is_excluded_marking(args.cam_name, k)}
     if not cam_pixels:
         print(f"ERROR: No pixel markings on '{args.cam_name}'.")
         return 1
