@@ -6845,14 +6845,15 @@
   },
   "Port (C)": {
     "xyz": [
-      869.4047422371185,
-      -239.2390440982113,
-      0.0
+      801.1502940667892,
+      -182.25181875185143,
+      0.0011074149967661017
     ],
     "source_cameras": [
+      "Vice Beach (B)",
       "Vice City 08 (Ferris Wheel)"
     ],
-    "error_m": null,
+    "error_m": 19.142,
     "zone": "vice_city",
     "z_constraint": {
       "type": "fixed",
@@ -6861,14 +6862,15 @@
   },
   "Port (D)": {
     "xyz": [
-      845.8349476775027,
-      -267.33929167829115,
-      0.0
+      758.770626451469,
+      -191.6671596178262,
+      7.31567016130133
     ],
     "source_cameras": [
+      "Vice Beach (B)",
       "Vice City 08 (Ferris Wheel)"
     ],
-    "error_m": null,
+    "error_m": 4.474,
     "zone": "vice_city",
     "z_constraint": {
       "type": "fixed",
@@ -6877,14 +6879,15 @@
   },
   "Port (E)": {
     "xyz": [
-      830.510441449437,
-      -409.0082531912048,
-      0.0
+      609.3091422607658,
+      -193.79581600203136,
+      12.114759479086974
     ],
     "source_cameras": [
+      "Vice Beach (B)",
       "Vice City 08 (Ferris Wheel)"
     ],
-    "error_m": null,
+    "error_m": 6.088,
     "zone": "vice_city",
     "z_constraint": {
       "type": "fixed",
@@ -8218,15 +8221,15 @@
   },
   "Billboard (South Ambrosia)": {
     "xyz": [
-      -3132.3521,
-      6286.8097,
-      49.6397
+      -2833.131242377244,
+      3065.897580916887,
+      50.40306238028459
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": null,
+    "error_m": 23.306,
     "zone": "ambrosia"
   },
   "House C (E)": {

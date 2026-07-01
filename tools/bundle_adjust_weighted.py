@@ -119,6 +119,11 @@ ap.add_argument('--no-barriers', action='store_true',
                 help='Disable movement barriers (debug only).')
 ap.add_argument('--dry-run', action='store_true',
                 help="Don't write bundle_adjust_result.json")
+ap.add_argument('--cleanup', action='store_true',
+                help="V3 cleanup: exclude junk cams (low/unverified + median>30') "
+                     "weak LMs (low/unverified + <=1 good obs) and broken "
+                     "triangulations (free LM, median>60'); freeze leak-anchored "
+                     "and anchor-tier LMs (their rays become anchors)")
 args = ap.parse_args()
 
 
@@ -164,10 +169,50 @@ if EXCLUDED_CAMS:
 
 # ── Build candidate sets ────────────────────────────────────────────────────
 
+# CLEANUP_V3_MARKER — junk-cam / weak-LM / broken-LM exclusion + frozen anchor LMs
+JUNK_CAMS = set()
+WEAK_LMS = set()
+FROZEN_LMS = set()
+if args.cleanup:
+    _cmeta = tiers['cameras']
+    _lmeta = tiers['landmarks']
+    JUNK_CAMS = {n for n, d in _cmeta.items()
+                 if d.get('tier') in ('low', 'unverified')
+                 and (d.get('median_res_all') or 0) > 30.0
+                 and n not in LOCKED_XYZ_CAMS}
+    _good_obs = {}
+    for _cam, _d in md.pixels.items():
+        if _cam in JUNK_CAMS:
+            continue
+        if cam_tier.get(_cam) in ('anchor', 'high', 'medium') or _cam in LOCKED_XYZ_CAMS:
+            for _lm in _d:
+                _good_obs[_lm] = _good_obs.get(_lm, 0) + 1
+    WEAK_LMS = {n for n, d in _lmeta.items()
+                if d.get('tier') in ('low', 'unverified')
+                and _good_obs.get(n, 0) <= 1}
+    _frozen_pre = {n for n, d in _lmeta.items()
+                   if md.landmarks.get(n) is not None
+                   and (d.get('n_leak_sources', 0) >= 2 or d.get('tier') == 'anchor')}
+    BROKEN_LMS = {n for n, d in _lmeta.items()
+                  if md.landmarks.get(n) is not None
+                  and n not in WEAK_LMS
+                  and n not in _frozen_pre
+                  and (d.get('median_res') or 0) > 60.0}
+    if BROKEN_LMS:
+        print(f"[cleanup] broken triangulations excluded (retriangulate these, not BA):")
+        for _n in sorted(BROKEN_LMS):
+            print(f"    {_n}  (median {_lmeta[_n].get('median_res')}')")
+    WEAK_LMS |= BROKEN_LMS
+    FROZEN_LMS = _frozen_pre
+    print(f"[cleanup] junk cams excluded (param+obs): {len(JUNK_CAMS)}")
+    print(f"[cleanup] weak LMs excluded (param+obs):  {len(WEAK_LMS)}")
+    print(f"[cleanup] frozen LMs (xyz constant, rays kept): {len(FROZEN_LMS)}")
+
 candidate_cams = {
     n for n in md.pixels
     if n not in LOCKED_XYZ_CAMS
     and n not in EXCLUDED_CAMS
+    and n not in JUNK_CAMS
     and md.cameras.get(n, {}).get('xyz')
 }
 
@@ -176,6 +221,8 @@ candidate_lms = {
     if md.landmarks.get(n) is not None
     and not all(s in LOCKED_XYZ_CAMS for s in (data.get('source_cameras') or []))
     and data.get('source_cameras')
+    and n not in WEAK_LMS
+    and n not in FROZEN_LMS
     # Reject LMs with aberrant xyz (e.g. failed triangulations at e15+ meters)
     and max(abs(x) for x in md.landmarks[n]) < 1e6
 }
@@ -193,11 +240,13 @@ for cam_name, lm_pixels in md.pixels.items():
     if cam_name not in md.cameras: continue
     if md.cameras[cam_name].get('xyz') is None: continue
     if cam_name in EXCLUDED_CAMS: continue
+    if cam_name in JUNK_CAMS: continue
     cam_xyz_is_locked = cam_name in LOCKED_XYZ_CAMS
     cam_t = cam_tier.get(cam_name, 'unknown')
     cam_w = TIER_WEIGHTS.get(cam_t, 1.0)
     cam_xyz_arr = np.array(md.cameras[cam_name]['xyz'])
     for lm_name, pixel in lm_pixels.items():
+        if lm_name in WEAK_LMS: continue
         if lm_name not in candidate_lms and lm_name not in md.landmarks: continue
         if md.landmarks.get(lm_name) is None: continue
         if cam_xyz_is_locked and lm_name not in candidate_lms: continue
