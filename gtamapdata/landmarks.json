@@ -7917,15 +7917,15 @@
   },
   "The Waverly South Beach (NW)": {
     "xyz": [
-      1193.6125917539177,
-      611.741122058054,
-      108.48440535295083
+      1234.4996715726836,
+      628.997448971771,
+      106.40392757253196
     ],
     "source_cameras": [
       "Vice Beach (A)",
-      "Vice Beach (B)"
+      "Tennis Court (SE)"
     ],
-    "error_m": 0.921,
+    "error_m": 0.321,
     "zone": "vice_city"
   },
   "Winter Haven": {
@@ -8099,28 +8099,14 @@
     "zone": "ambrosia"
   },
   "1500 Sonora Ave (Silo) (N)": {
-    "xyz": [
-      -3645.284496583889,
-      -671.236069457765,
-      -85.58777125584186
-    ],
-    "source_cameras": [
-      "Ambrosia Postcard (X)",
-      "Ambrosia 02 (Panorama)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": 50.742,
     "zone": "ambrosia"
   },
   "1500 Sonora Ave (Silo) (R)": {
-    "xyz": [
-      -2709.744813488157,
-      3934.00721457187,
-      64.47787102632918
-    ],
-    "source_cameras": [
-      "Ambrosia Postcard (X)",
-      "Ambrosia 02 (Panorama)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": 14.163,
     "zone": "ambrosia"
   },
@@ -9097,15 +9083,8 @@
     "zone": "grassrivers"
   },
   "Palazzo del Sol": {
-    "xyz": [
-      1906.3003208190948,
-      -1541.7745901823828,
-      45.31345982994558
-    ],
-    "source_cameras": [
-      "Rooftop Party",
-      "Vice City 08 (Ferris Wheel)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": 2.583,
     "zone": "vice_city"
   },
