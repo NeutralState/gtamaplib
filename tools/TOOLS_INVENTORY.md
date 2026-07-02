@@ -8,46 +8,25 @@ Bookmark this file when you forget what tools exist.
 ```
 1. Place frame in frames/{Cam Name}.png
 2. Run: python3 tools/compute_confidence_tiers.py
+   (only once per session — produces tier classifications)
 3. Add cam entry to gtamapdata/cameras.json with dummy xyz/ypr/hfov
 4. Mark 3+ landmarks in the calib UI (http://localhost:8765)
-   -> mode Assist: fantomes priorises P1/P2, clic = armer le marquage
 5. Run: python3 tools/intake_camera.py "Cam Name"
-   -> see verdict (commit/review/reject) before applying
-6. If verdict OK: python3 tools/refine_cam_full.py "Cam Name" --apply
-   (les boutons UI Optimize/Update LMs sont DECOMMISSIONNES)
+   → see verdict (commit/review/reject) before applying
+6. If verdict OK: apply via calib UI Optimize, or refine_camera.py
 7. Re-run compute_confidence_tiers.py to update tiers
-8. Global: bundle_adjust_weighted.py --cleanup, puis guarded_apply
-   (JAMAIS bundle_adjust_apply.py — apply integral aveugle interdit)
+8. Run bundle_adjust.py for global refinement
 ```
 
-### Le cycle global (apply garde)
+### Calibration order — "What order to work on?"
 ```
-python3 tools/compute_confidence_tiers.py
-python3 tools/bundle_adjust_weighted.py --cleanup --max-iter 30
-python3 tools/refine/guarded_apply.py            # dry-run, verifier
-python3 tools/refine/guarded_apply.py --apply
-python3 tools/audit/rms_snapshot.py --tag <nom>
-PYTHONPATH=. python3 tools/ci_healthcheck.py --update-baseline  # si ameliore
+python3 tools/calibration_order.py --tier unverified
+python3 tools/calibration_order.py --cams "Cam A,Cam B"
 ```
 
-### Triage — "Ou est le mal?"
+### Outliers detection — "Which pixels are bad?"
 ```
-UI: bouton Triage (categorise les cams >5' + actions one-click)
-CLI: python3 tools/outliers_report.py
-     python3 tools/calibration_order.py --tier unverified
-```
-
-### Preuve map — "La position est-elle vraie?"
-```
-UI: inspecteur LM -> crop yanis + "proposer retriangulation" + verdict
-CLI: python3 tools/map_validate.py (contact sheet HTML)
-Semantique: valide = map prior (budget 5m), PAS frozen; rejete = exclu
-```
-
-### CI — garde-fou sur chaque push
-```
-PYTHONPATH=. python3 tools/ci_healthcheck.py   # local avant commit
-Baseline: tools/ci_baseline.json (--update-baseline apres amelioration)
+python3 tools/outliers_report.py
 ```
 
 ---
