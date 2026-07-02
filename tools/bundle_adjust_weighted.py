@@ -67,6 +67,24 @@ OUT_PATH   = os.path.join(TOOLS_DIR, 'bundle_adjust_result.json')
 
 # ── Tier definitions ─────────────────────────────────────────────────────────
 
+# [CONT-W-V1] Poids LM continus par maximum de vraisemblance: weight = K/sigma
+# (radius_m Monte-Carlo de lm_uncertainty.py), clamp [0.1, 15] pour rester dans
+# la plage des buckets. K=22 calibre le radius median (~11m) sur le poids
+# "medium" (2.0). Active par --continuous. Fallback bucket si LM absent du dump.
+CONT_K = 22.0
+CONT_MIN, CONT_MAX = 0.1, 15.0
+CONTINUOUS = '--continuous' in __import__('sys').argv
+LM_SIGMA = {}
+if CONTINUOUS:
+    import os as _os
+    _unc_path = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)), 'generated', 'lm_uncertainty.json')
+    with open(_unc_path) as _f:
+        _d = __import__('json').load(_f)
+    LM_SIGMA = {r['lm']: max(0.5, float(r['radius_m']))
+                for r in _d['results'] if r.get('status') == 'ok'}
+    print(f"# [CONT-W-V1] poids continus actifs: {len(LM_SIGMA)} LMs avec sigma "
+          f"(K={CONT_K}, clamp [{CONT_MIN},{CONT_MAX}])")
+
 TIER_WEIGHTS = {
     'anchor':     15.0,
     'high':        7.5,
@@ -274,7 +292,10 @@ for cam_name, lm_pixels in md.pixels.items():
         if dist < 50.0:
             continue
         lm_t = lm_tier.get(lm_name, 'unknown')
-        lm_w = TIER_WEIGHTS.get(lm_t, 1.0)
+        if CONTINUOUS and lm_name in LM_SIGMA:
+            lm_w = min(CONT_MAX, max(CONT_MIN, CONT_K / LM_SIGMA[lm_name]))  # [CONT-W-V1]
+        else:
+            lm_w = TIER_WEIGHTS.get(lm_t, 1.0)
         if cam_xyz_is_locked:
             # leak ray dominates: HUD-locked pose is ground truth, so the obs
             # weight must not be capped by the LM's tier (min() let medium

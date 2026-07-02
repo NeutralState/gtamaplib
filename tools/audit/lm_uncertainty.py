@@ -134,7 +134,12 @@ def mc_lm(lm_name, cams, pix, lms, tiers, n, sigma_px, use_pose, rng):
     d = lms.get(lm_name)
     if not isinstance(d, dict) or d.get('xyz') is None:
         return None
-    srcs = [c for c in (d.get('source_cameras') or []) if c in cams]
+    # [EXCL-AWARE-V1] honorer excluded_markings.json (meme trou que le
+    # bundle avait: une source dont le marking est exclu ne doit pas
+    # participer a l'incertitude du LM)
+    from common import is_excluded_marking as _iem
+    srcs = [c for c in (d.get('source_cameras') or [])
+            if c in cams and not _iem(c, lm_name)]
     if len(srcs) < 2:
         return None
     init = np.asarray(d['xyz'], float)
