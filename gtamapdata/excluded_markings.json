@@ -1,6 +1,7 @@
 {
   "_comment": "Per-(cam, landmark) markings excluded from solver (cam_rms + triangulation). Marking STAYS in pixels.json (visible in UI visualizer). Format: {\"Cam Name\": [\"LM A\"]}",
   "Vice City Postcard": [
+    "Marina Blue (SE)",
     "Reworld Miami-Dade (SE)"
   ],
   "Vice City 03 (Basketball)": [
@@ -20,5 +21,14 @@
   ],
   "Amphitheater": [
     "Container Crane (9)"
+  ],
+  "Tennis Court (SE)": [
+    "Portofino Tower (NE)"
+  ],
+  "Vice City 01 (Vice City Sign)": [
+    "Infinity at Brickell (SW)"
+  ],
+  "Airport (X)": [
+    "Nine at Mary Brickell Village (E)"
   ]
 }

@@ -6425,16 +6425,15 @@
   },
   "Nine at Mary Brickell Village (E)": {
     "xyz": [
-      -1060.9165035984947,
-      -1041.7954278030295,
-      117.06316191798282
+      -1066.717763833468,
+      -1034.565163546491,
+      118.75892018004214
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
-      "Airport (X)",
       "Tennis Stadium (4K)"
     ],
-    "error_m": 12.061,
+    "error_m": 0.359,
     "zone": "vice_city"
   },
   "One Miami Condominium East (NE)": {
@@ -6895,14 +6894,8 @@
     }
   },
   "Port (F)": {
-    "xyz": [
-      778.6333877362673,
-      -438.1150590054049,
-      0.0
-    ],
-    "source_cameras": [
-      "Vice City 08 (Ferris Wheel)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": null,
     "zone": "vice_city",
     "z_constraint": {
@@ -9116,15 +9109,8 @@
     "zone": "vice_city"
   },
   "Continuum on South Beach (S)": {
-    "xyz": [
-      1962.8301397218224,
-      -315.9166231838745,
-      138.97306504748133
-    ],
-    "source_cameras": [
-      "Rooftop Party",
-      "Leonida Keys 01 (Airplane) (X)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": 3.871,
     "zone": "vice_city"
   },
