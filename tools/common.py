@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""common.py — Fonctions partagees des outils gtamaplib.
+"""common.py — Shared helpers for the gtamaplib tools.
 
 NE PAS dupliquer ces fonctions dans les outils: la journee du 2026-06-10 a
 produit 3 copies de cam_rms, 2 de ray_ls_point et 2 conventions JSON

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""list_extra_observers.py — Trouve les landmarks qui ont des observers (cams
+"""list_extra_observers.py — Finds landmarks that have observers (cams
 avec pixels) au-delà de leurs source_cameras declarees. Ces extras sont les
 candidats a investiguer:
 - Soit name collision (delete pixel divergent)

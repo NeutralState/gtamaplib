@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""exclude_marking.py — exclure un marking (cam, lm) du solveur SANS le
+"""exclude_marking.py — exclude a (cam, lm) marking from the solver WITHOUT
 supprimer de pixels.json (il reste visible dans l'UI visualizer).
 
 Le marking liste ici est ignore par common.cam_rms et triangulate_lm.py.
@@ -7,7 +7,7 @@ Utile pour les markings rlx approximatifs: garder la trace visuelle,
 retirer la contamination du calcul.
 
 Usage:
-  python3 tools/exclude_marking.py "Cam Name" "LM Name"            # exclure (dry-run)
+  python3 tools/exclude_marking.py "Cam Name" "LM Name"            # exclude (dry-run)
   python3 tools/exclude_marking.py "Cam Name" "LM Name" --apply    # ecrire
   python3 tools/exclude_marking.py "Cam Name" "LM Name" --remove --apply  # re-inclure
   python3 tools/exclude_marking.py --list                          # tout lister

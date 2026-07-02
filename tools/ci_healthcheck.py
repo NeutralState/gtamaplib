@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""ci_healthcheck.py — Garde-fou CI: roule sur chaque push (GitHub Actions) et
+"""ci_healthcheck.py — CI guardrail: runs on every push (GitHub Actions) and
 localement avant commit. Exit 1 = le push introduit une regression.
 
 CHECKS:

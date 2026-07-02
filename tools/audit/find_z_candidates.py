@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-find_z_candidates.py — Scan landmarks.json pour proposer des candidats à
+find_z_candidates.py — Scans landmarks.json to propose candidates for
 contraindre à z=0 (coastal points, pins, marina, beach, etc.).
 
 Heuristic :

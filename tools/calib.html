@@ -351,7 +351,7 @@ body.dual-cam .lm-proj-svg{display:block}
 .lm-proj-svg .lm-proj-group:hover .lm-proj-line{opacity:1;stroke-width:3}
 .lm-proj-svg .lm-proj-group:hover .lm-proj-label{opacity:1}
 /* "Projections" toggle button — visible only when dual mode is on. */
-/* [ASSIST-V1] bouton toujours visible; libelle change selon le mode */
+/* [ASSIST-V1] button always visible; label changes with the mode */
 #proj-toggle{display:inline-block}
 body.assist-on #proj-toggle{background:#f59e0b22;color:#f59e0b;border-color:#f59e0b}
 #assist-panel{display:none;position:absolute;top:52px;right:12px;width:270px;max-height:60vh;
@@ -430,11 +430,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .btn-opt:hover{background:#93c5fd}.btn-opt:disabled{opacity:.4;cursor:default}
 .btn-opt.running{background:var(--yellow);animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
-/* [CALIB-DESIGN-V1.1] indep = rangee de stat pleine largeur, alignee au panneau */
+/* [CALIB-DESIGN-V1.1] indep = full-width stat row, aligned to the panel */
 .indep-chip{font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:space-between;
   width:100%;box-sizing:border-box;padding:8px 12px;border-radius:var(--radius,6px);
   background:var(--surface2);border:1px solid var(--border);color:var(--blue);white-space:nowrap}
-.indep-chip::before{content:'LOSS INDEPENDANT';font-size:9px;letter-spacing:1px;color:var(--dim)}
+.indep-chip::before{content:'INDEPENDENT LOSS';font-size:9px;letter-spacing:1px;color:var(--dim)}
 .indep-chip .v{font-weight:700}
 
 .opt-result{padding:8px 13px;background:#0f1a2e;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--blue);display:none}
@@ -512,7 +512,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .lm-info-close{margin-left:auto;color:var(--dim);cursor:pointer;font-family:var(--mono);font-size:11px}
 .lm-info-close:hover{color:var(--red)}
 
-/* ══ [CALIB-DESIGN-V1] passe visuelle 2026-07-02 — couche d'override, revert = supprimer ce bloc ══ */
+/* ══ [CALIB-DESIGN-V1] 2026-07-02 visual pass — override layer, revert = delete this block ══ */
 :root{ --bg:#0b0b10; --surface:#10101a; --surface2:#171722; --border:#222236; --radius:6px; }
 header{ padding:0 16px; height:46px; gap:8px;
   background:linear-gradient(180deg,#13131e 0%,#0e0e16 100%);
@@ -549,7 +549,7 @@ body.assist-on #proj-toggle{background:#f59e0b !important; border-color:#f59e0b 
 .btn-opt{display:none}
 
 
-/* ══ [CALIB-DESIGN-V1.1] visibilite des toggles par mode + retrait Suspicious ══ */
+/* ══ [CALIB-DESIGN-V1.1] per-mode toggle visibility + Suspicious removal ══ */
 #rays-toggle{display:none !important}
 body.view-map #rays-toggle{display:inline-flex !important}
 #dual-toggle{display:none !important}
@@ -579,20 +579,20 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
   <!-- [MULTICAM-STEP1] Dual toggle -->
   <button class="rays-toggle" id="dual-toggle" title="Compare two cams side-by-side (D)">Dual</button>
   <!-- [MULTICAM-STEP23] Toggle ghost LM projections in dual mode -->
-  <button class="rays-toggle" id="proj-toggle" title="Assist: LM non marques projetes en fantomes, priorises par gain">Assist</button>
-  <!-- [ASSIST-V1] panneau des LM a marquer, trie par priorite -->
-  <div id="assist-panel"><h4>&Agrave; marquer</h4><div id="assist-list"></div>
-  <div class="ap-note">Clic sur un fant&ocirc;me ou une ligne = armer le marquage, puis cliquez l'emplacement R&Eacute;EL dans le frame. Sur une cam mal calibr&eacute;e, les positions fant&ocirc;mes sont approximatives &mdash; fiez-vous aux noms.</div></div>
+  <button class="rays-toggle" id="proj-toggle" title="Assist: unmarked LMs projected as ghosts, prioritized by gain">Assist</button>
+  <!-- [ASSIST-V1] to-mark LM panel, sorted by priority -->
+  <div id="assist-panel"><h4>To mark</h4><div id="assist-list"></div>
+  <div class="ap-note">Click a ghost or a row = arm the marking, then click the REAL location in the frame. On a badly calibrated cam, ghost positions are approximate &mdash; trust the names.</div></div>
 
   <span id="cam-meta"></span>
   <span id="class-label" style="display:none;font-family:var(--mono);font-size:10px;font-weight:600;padding:3px 8px;border-radius:9px;border:1px solid var(--border);margin-left:4px"></span>
   <div class="chip" id="chip-all"><span style="color:var(--dim)">loss </span><span class="v" id="loss-all">—</span></div>
   <button class="btn btn-reset" id="btn-reset">Reset</button>
   <button class="btn btn-save" id="btn-save" disabled>Save</button>
-  <!-- [DECOM-V1] Update LMs retire: triangulation = tools/triangulate_lm.py -->
+  <!-- [DECOM-V1] Update LMs removed: triangulation = tools/triangulate_lm.py -->
   <button class="btn btn-ghost" id="btn-export">⬇ Export</button>
-  <!-- [CALIB-DESIGN-V1.1] Suspicious retire: la detection vit dans le Triage board (/api/suspicious reste dispo) -->
-  <button class="btn btn-ghost btn-ghost-red" id="triage-btn" title="Triage: cams categorisees avec action recommandee">Triage</button>
+  <!-- [CALIB-DESIGN-V1.1] Suspicious removed: detection lives in the Triage board (/api/suspicious still available) -->
+  <button class="btn btn-ghost btn-ghost-red" id="triage-btn" title="Triage: cams categorized with recommended action">Triage</button>
   <span class="saved" id="saved">✓ Saved</span>
 </header>
 
@@ -737,7 +737,7 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
       <div class="sl-row"><span class="sl-lbl">hFOV</span><input type="range" id="sl-hfov" min="10" max="130" step="0.01"><input class="num" id="num-hfov" type="number" step="0.01"></div>
     </div>
     <div class="opt-bar">
-      <!-- [DECOM-V1] Optimize retire: calibration = tools/refine_cam_*.py / calibrate_session.py -->
+      <!-- [DECOM-V1] Optimize removed: calibration = tools/refine_cam_*.py / calibrate_session.py -->
       <div class="indep-chip"><span class="v" id="loss-indep">—</span></div>
     </div>
     <div class="opt-result" id="opt-result">
@@ -752,19 +752,19 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
       <div class="lm-info-row" id="lm-info-status"></div>
       <div class="lm-info-row" id="lm-info-sources"></div>
       <div class="lm-info-row" id="lm-info-others"></div>
-      <!-- [MAP-EVIDENCE-V1] preuve map: crop yanis + verdict -->
+      <!-- [MAP-EVIDENCE-V1] map evidence: yanis crop + verdict -->
       <div id="lm-map-ev" style="display:none;margin-top:8px">
         <img id="lm-map-img" style="width:100%;border-radius:6px;border:1px solid var(--border);display:block" alt="map crop">
         <div id="lm-map-delta" style="font-family:var(--mono);font-size:9.5px;color:var(--mid);margin-top:4px"></div>
         <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap">
-          <button class="f-btn" id="lm-map-propose" style="font-size:10px">proposer retriangulation</button>
-          <button class="f-btn" id="lm-map-ok" style="font-size:10px;color:var(--green);border-color:var(--green)">✓ map-valide</button>
-          <button class="f-btn" id="lm-map-bad" style="font-size:10px;color:var(--red);border-color:var(--red)">✗ map-rejete</button>
-          <button class="f-btn" id="lm-map-clear" style="font-size:10px">effacer</button>
+          <button class="f-btn" id="lm-map-propose" style="font-size:10px">propose retriangulation</button>
+          <button class="f-btn" id="lm-map-ok" style="font-size:10px;color:var(--green);border-color:var(--green)">✓ map-validated</button>
+          <button class="f-btn" id="lm-map-bad" style="font-size:10px;color:var(--red);border-color:var(--red)">✗ map-rejected</button>
+          <button class="f-btn" id="lm-map-clear" style="font-size:10px">clear</button>
           <span id="lm-map-verdict" style="font-family:var(--mono);font-size:10px;align-self:center;color:var(--mid)"></span>
         </div>
         <div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:4px">
-          cyan = xyz actuel · orange = proposition · la map n'est pas du ground truth: valide = prior 5m, rejete = exclu du bundle</div>
+          cyan = current xyz · orange = proposal · the map is not ground truth: validated = 5m prior, rejected = excluded from bundle</div>
       </div>
     </div>
     <div class="lm-hdr">
@@ -1038,7 +1038,7 @@ const lmCount  = document.getElementById('lm-count');
 const lossAll  = document.getElementById('loss-all');
 const chipAll  = document.getElementById('chip-all');
 const lossIndep = document.getElementById('loss-indep');
-// [DECOM-V1] stub: l'element n'existe plus, les refs .disabled/.title restent inoffensives
+// [DECOM-V1] stub: element no longer exists, the .disabled/.title refs stay harmless
 const btnOpt = {disabled:true, title:'', textContent:'', classList:{add(){},remove(){}}, style:{}, addEventListener(){}};
 const btnReset = document.getElementById('btn-reset');
 const btnSave  = document.getElementById('btn-save');
@@ -3453,7 +3453,7 @@ window.draw2 = draw2;
 function drawGhostsOnCtx(ctxLocal, ghosts, mapper, hoveredName) {
   if (!ghosts || !ghosts.length) return;
   const VIOLET = '#c084fc';
-  // [ASSIST-V1] couleur par priorite quand presente (mode assist)
+  // [ASSIST-V1] priority color when present (assist mode)
   const gcol = g => g.priority === 1 ? '#f59e0b' : g.priority === 2 ? '#22d3ee' : VIOLET;
   for (const g of ghosts) {
     if (g.type === 'point') {
@@ -3588,7 +3588,7 @@ canvasWrap.addEventListener('mousemove', e => {
     if (dx*dx + dy*dy < 64) { foundGhost = g.name; break; }
   }
   if (foundGhost !== hoveredGhost1) { hoveredGhost1 = foundGhost; draw(); }
-  window._assistHoverGhost = foundGhost;  // [ASSIST-V1] pour le handler de clic
+  window._assistHoverGhost = foundGhost;  // [ASSIST-V1] for the click handler
 
   if (found) {
     const lm = projections.find(p => p.name === found);
@@ -4281,7 +4281,7 @@ function startAddPixel() {
 }
 
 // Handle add pixel click on main canvas
-// [ASSIST-V1] clic sur un fantome en mode assist = armer le marquage
+// [ASSIST-V1] clicking a ghost in assist mode = arm the marking
 canvasWrap.addEventListener('click', e => {
   if (addPxMode) return;
   if (!document.body.classList.contains('assist-on')) return;
@@ -4586,7 +4586,7 @@ async function showLmInfo(lmName) {
   }
 }
 
-// [MAP-EVIDENCE-V1] preuve map dans l'inspecteur de LM
+// [MAP-EVIDENCE-V1] map evidence in the LM inspector
 let _mapEvLm = null;
 async function updateLmMapEvidence(lmName, hasXyz) {
   const box = document.getElementById('lm-map-ev');
@@ -4600,7 +4600,7 @@ async function updateLmMapEvidence(lmName, hasXyz) {
 }
 function renderMapVerdict(v) {
   const el = document.getElementById('lm-map-verdict');
-  el.textContent = v === 'validated' ? '✓ valide (prior 5m)' : v === 'rejected' ? '✗ rejete (exclu bundle)' : '— sans verdict';
+  el.textContent = v === 'validated' ? '✓ validated (5m prior)' : v === 'rejected' ? '✗ rejected (excluded from bundle)' : '— no verdict';
   el.style.color = v === 'validated' ? 'var(--green)' : v === 'rejected' ? 'var(--red)' : 'var(--mid)';
 }
 document.getElementById('lm-map-propose').addEventListener('click', async () => {
@@ -4608,11 +4608,11 @@ document.getElementById('lm-map-propose').addEventListener('click', async () => 
   const d = document.getElementById('lm-map-delta');
   d.textContent = 'triangulation dry-run…';
   const r = await fetch('/api/triangulate?lm=' + encodeURIComponent(_mapEvLm) + '&dry=1').then(x => x.json()).catch(() => null);
-  if (!r || !r.xyz) { d.textContent = 'pas triangulable (' + ((r && r.error) || 'sources insuffisantes') + ')'; return; }
+  if (!r || !r.xyz) { d.textContent = 'not triangulable (' + ((r && r.error) || 'insufficient sources') + ')'; return; }
   document.getElementById('lm-map-img').src = '/api/lm_map_crop?lm=' + encodeURIComponent(_mapEvLm) +
     '&x2=' + r.xyz[0] + '&y2=' + r.xyz[1] + '&t=' + Date.now();
   const err = r.error_m != null ? r.error_m.toFixed(2) + 'm' : '?';
-  d.textContent = 'proposition (orange): err ' + err + ' · sources: ' + (r.source_cameras || r.sources || r.kept_sources || []).join(', ');
+  d.textContent = 'proposal (orange): err ' + err + ' · sources: ' + (r.source_cameras || r.sources || r.kept_sources || []).join(', ');
 });
 document.getElementById('lm-map-ok').addEventListener('click', async () => {
   if (!_mapEvLm) return;
@@ -5439,8 +5439,8 @@ window.addEventListener('load', () => {
       ghostMarkers2 = (d2 && d2.projections) || [];
     } else if (document.body.classList.contains('assist-on') && cam1 &&
                !document.body.classList.contains('dual-cam')) {
-      // [ASSIST-V1] mode assist single-cam: ghosts priorises, pas de cache
-      // (l'etat change apres chaque add_pixel)
+      // [ASSIST-V1] single-cam assist mode: prioritized ghosts, no cache
+      // (state changes after every add_pixel)
       let d1 = null;
       try {
         const r = await fetch('/api/lm_projections?cam=' + encodeURIComponent(cam1) + '&mode=assist');
@@ -5485,7 +5485,7 @@ window.addEventListener('load', () => {
     });
   }
 
-  // [ASSIST-V1] panneau: liste triee, hover = highlight, clic = armer
+  // [ASSIST-V1] panel: sorted list, hover = highlight, click = arm
   window.renderAssistPanel = function(ghosts) {
     const list = document.getElementById('assist-list');
     if (!list) return;
@@ -5503,15 +5503,15 @@ window.addEventListener('load', () => {
     }
   };
 
-  // [ASSIST-V1] armer le marquage d'un LM: prochain clic dans le frame = pixel
+  // [ASSIST-V1] arm marking a LM: next click in the frame = pixel
   window.armGhostMarking = function(lmName) {
     addPxSelectedLm = lmName;
     addPxMode = true;
     canvasWrap.style.cursor = 'crosshair';
     const t = document.getElementById('tri-toast');
     if (t) {
-      document.getElementById('tri-toast-title').textContent = 'Marquage arme: ' + lmName;
-      document.getElementById('tri-toast-meta').textContent = 'Cliquez l\'emplacement reel dans le frame (ESC annule)';
+      document.getElementById('tri-toast-title').textContent = 'Marking armed: ' + lmName;
+      document.getElementById('tri-toast-meta').textContent = 'Click the real location in the frame (ESC cancels)';
       t.style.display = 'block';
       setTimeout(() => { t.style.display = 'none'; }, 4000);
     }
@@ -5549,7 +5549,7 @@ window.addEventListener('load', () => {
   .view3d-wrap iframe { width:100%; height:100%; border:0; display:block; }
 </style>
 <div class="view3d-wrap" id="view3d-wrap"><iframe id="view3d-frame"></iframe></div>
-<!-- [TRIAGE-V1] modal du triage board -->
+<!-- [TRIAGE-V1] triage board modal -->
 <div id="triage-modal" style="display:none;position:fixed;inset:0;background:#000a;z-index:100">
  <div style="position:absolute;top:5vh;left:50%;transform:translateX(-50%);width:min(860px,94vw);max-height:88vh;
    overflow-y:auto;background:var(--surface,#16161c);border:1px solid var(--border,#2a2a33);border-radius:10px;padding:16px;
@@ -5558,7 +5558,7 @@ window.addEventListener('load', () => {
     <b style="color:#f59e0b;font-size:14px">Triage board</b>
     <span id="triage-count" style="color:var(--mid,#888)"></span>
     <button onclick="document.getElementById('triage-modal').style.display='none'"
-      style="background:none;border:1px solid var(--border,#333);color:var(--mid,#aaa);border-radius:5px;padding:3px 10px;cursor:pointer">fermer</button>
+      style="background:none;border:1px solid var(--border,#333);color:var(--mid,#aaa);border-radius:5px;padding:3px 10px;cursor:pointer">close</button>
   </div>
   <div id="triage-rows">chargement…</div>
  </div>
@@ -5566,14 +5566,14 @@ window.addEventListener('load', () => {
 <script>
 // [TRIAGE-V1]
 (() => {
-  const CAT_COL = {'LM fantome':'#e74c3c','outlier isole':'#f59e0b','markings a reviewer':'#c084fc',
-                   'erreur etalee':'#22d3ee','sous-determinee':'#888'};
+  const CAT_COL = {'phantom LM':'#e74c3c','isolated outlier':'#f59e0b','markings to review':'#c084fc',
+                   'spread error':'#22d3ee','under-determined':'#888'};
   const btn = document.getElementById('triage-btn');
   const modal = document.getElementById('triage-modal');
   const box = document.getElementById('triage-rows');
 
   async function load() {
-    box.textContent = 'analyse en cours…';
+    box.textContent = 'analyzing…';
     const d = await fetch('/api/triage').then(r => r.json());
     document.getElementById('triage-count').textContent = d.n + ' cams > 5\'';
     box.innerHTML = '';
@@ -5598,15 +5598,15 @@ window.addEventListener('load', () => {
                           'border-radius:5px;padding:3px 9px;cursor:pointer;white-space:nowrap';
       act.textContent = r.action;
       act.addEventListener('click', async () => {
-        if (r.categorie === 'outlier isole') {
-          if (!confirm('Exclure le marking "' + r.worst_lm + '" sur ' + r.cam + ' ?')) return;
+        if (r.categorie === 'isolated outlier') {
+          if (!confirm('Exclude marking "' + r.worst_lm + '" on ' + r.cam + '?')) return;
           const res = await fetch('/api/exclude_marking?cam=' + encodeURIComponent(r.cam) +
                                   '&lm=' + encodeURIComponent(r.worst_lm)).then(x => x.json());
           if (res.ok) load();
-        } else if (r.categorie === 'LM fantome') {
-          if (!confirm('Quarantaine (null xyz) de "' + r.worst_lm + '" ? Les markings restent dans pixels.json.')) return;
+        } else if (r.categorie === 'phantom LM') {
+          if (!confirm('Quarantine (null xyz) "' + r.worst_lm + '"? Markings remain in pixels.json.')) return;
           const res = await fetch('/api/quarantine_lm?lm=' + encodeURIComponent(r.worst_lm)).then(x => x.json());
-          if (res.ok) load(); else alert(res.error || 'erreur');
+          if (res.ok) load(); else alert(res.error || 'error');
         } else {
           selectCamByName(r.cam);
           modal.style.display = 'none';

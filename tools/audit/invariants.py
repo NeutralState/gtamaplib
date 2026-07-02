@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""invariants.py — Garde-fou pre-commit pour gtamapdata/. Exit 1 si violation.
+"""invariants.py — Pre-commit guardrail for gtamapdata/. Exit 1 on violation.
 
 Ne le contourne JAMAIS: chaque famille de bug d'aujourd'hui (2026-06-10) aurait
 ete pognee ici — poses fantomes (ecrit != simule), violations z ecrites en

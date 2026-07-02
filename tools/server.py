@@ -1315,9 +1315,9 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json({'lines': lines})
 
         elif path == '/api/optimize':
-            # [DECOM-V1] Decommissionne (decision 2026-05-26, executee 2026-07-02):
-            # l'UI visualise et marque; le solving vit au CLI.
-            self.send_json({'error': 'decommissionne — utiliser tools/refine_cam_full.py / '
+            # [DECOM-V1] Decommissioned (decision 2026-05-26, executed 2026-07-02):
+            # the UI visualizes and marks; solving lives in the CLI.
+            self.send_json({'error': 'decommissioned — use tools/refine_cam_full.py / '
                                      'refine_cam_ypr.py / calibrate_session.py'}, 410)
 
         elif path == '/api/render_loss':
@@ -1663,14 +1663,14 @@ class Handler(BaseHTTPRequestHandler):
             def _assist_score(lm_name, n_src):
                 lt = _lm_tier.get(lm_name)
                 if n_src == 1:
-                    return 1, '2e source -> triangulation'
+                    return 1, '2nd source -> triangulation'
                 if lt in ('anchor', 'high') and _cam_n_obs < 5:
-                    return 1, 'ancre pour cette cam sous-observee'
+                    return 1, 'anchor for this under-observed cam'
                 if lt in ('anchor', 'high'):
-                    return 2, 'ancre (redondance utile)'
+                    return 2, 'anchor (useful redundancy)'
                 if lt in ('low', 'medium'):
-                    return 2, 'source de plus -> tier'
-                return 3, 'couverture'
+                    return 2, 'one more source -> tier'
+                return 3, 'coverage'
 
             projections = []
             VIRTUAL_PREFIXES = ('Portofino Tower (',)
@@ -1759,7 +1759,7 @@ class Handler(BaseHTTPRequestHandler):
                         }
                         if assist:
                             _entry.update({'priority': 1,
-                                           'reason': '2e source -> triangulation (ligne epipolaire)',
+                                           'reason': '2nd source -> triangulation (epipolar line)',
                                            'tier': _lm_tier.get(lm_name),
                                            'n_sources': 1})
                         projections.append(_entry)
@@ -1890,16 +1890,16 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json({'ok': True})
 
         elif path == '/api/update_landmarks':
-            # [DECOM-V1] Decommissionne: triangulation = tools/triangulate_lm.py
-            self.send_json({'error': 'decommissionne — utiliser tools/triangulate_lm.py'}, 410)
+            # [DECOM-V1] Decommissioned: triangulation = tools/triangulate_lm.py
+            self.send_json({'error': 'decommissioned — use tools/triangulate_lm.py'}, 410)
 
         elif path == '/api/lm_map_crop':
-            # [MAP-EVIDENCE-V1] crop yanis V13 centre sur le LM. Crosshair cyan
-            # = xyz actuel; crosshair orange optionnel (x2,y2) = position proposee.
+            # [MAP-EVIDENCE-V1] yanis V13 crop centered on the LM. Cyan crosshair
+            # = current xyz; optional orange crosshair (x2,y2) = proposed position.
             lm_name = unquote(qs.get('lm', [''])[0])
             xyz = md.landmarks.get(lm_name)
             if xyz is None:
-                self.send_json({'error': 'LM sans xyz'}, 404); return
+                self.send_json({'error': 'LM without xyz'}, 404); return
             import sys as _sys, io as _io2, math as _m2
             if TOOL_DIR not in _sys.path: _sys.path.insert(0, TOOL_DIR)
             from map_validate import crop_at, MPPX
@@ -1914,7 +1914,7 @@ class Handler(BaseHTTPRequestHandler):
                 half = max(80.0, _m2.hypot(x2 - wx, y2 - wy) / 2 + 50)
             img = crop_at(cx, cy, half)
             if img is None:
-                self.send_json({'error': 'hors map / tuiles indisponibles'}, 404); return
+                self.send_json({'error': 'off-map / tiles unavailable'}, 404); return
             d = _ImageDraw.Draw(img)
             def _cross(wxp, wyp, col):
                 px = img.width / 2 + (wxp - cx) / MPPX
@@ -1922,8 +1922,8 @@ class Handler(BaseHTTPRequestHandler):
                 g, L = 10, 26
                 for seg in [((px-L,py),(px-g,py)),((px+g,py),(px+L,py)),((px,py-L),(px,py-g)),((px,py+g),(px,py+L))]:
                     d.line(seg, fill=col, width=2)
-            # crop_at dessine deja le crosshair CENTRE; si x2 present le centre
-            # est le midpoint -> redessiner les deux points explicitement
+            # crop_at already draws the CENTER crosshair; if x2 is present the
+            # center is the midpoint -> redraw both points explicitly
             if x2 is not None:
                 _cross(wx, wy, (0, 230, 255))
                 _cross(x2, y2, (245, 158, 11))
@@ -1938,7 +1938,7 @@ class Handler(BaseHTTPRequestHandler):
             self.end_headers(); self.wfile.write(data)
 
         elif path == '/api/map_verdict':
-            # [MAP-EVIDENCE-V1] lire/ecrire le verdict de preuve map d'un LM
+            # [MAP-EVIDENCE-V1] read/write a LM's map-evidence verdict
             lm_name = unquote(qs.get('lm', [''])[0])
             status = qs.get('status', [''])[0]
             import sys as _sys
@@ -1955,9 +1955,9 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json({'lm': lm_name, 'verdict': (cur.get(lm_name) or {}).get('status')})
 
         elif path == '/api/triage':
-            # [TRIAGE-V1] Categorisation par cam avec action recommandee.
-            # Reproduit le workflow de polish du 2026-07-01: outlier-isole
-            # (pattern CC9) / erreur etalee / sous-determinee, avec gain estime.
+            # [TRIAGE-V1] Per-cam categorization with a recommended action.
+            # Reproduces the 2026-07-01 polish workflow: isolated-outlier
+            # (CC9 pattern) / spread error / under-determined, with estimated gain.
             import math as _m
             zone_filter = unquote(qs.get('zone', [''])[0])
             _excl_path = os.path.join(os.path.dirname(TOOL_DIR), 'gtamapdata', 'excluded_markings.json')
@@ -2011,10 +2011,10 @@ class Handler(BaseHTTPRequestHandler):
                 worst, worst_lm = res[0]
                 med_o = sorted(vals[1:])[len(vals[1:])//2] if n > 1 else 0
                 if n <= 3:
-                    cat, action, gain = 'sous-determinee', 'marquer (mode Assist)', None
-                    detail = f'{n} obs seulement'
+                    cat, action, gain = 'under-determined', 'mark (Assist mode)', None
+                    detail = f'only {n} obs'
                 elif med_o > 0 and worst > max(10.0, 5*med_o):
-                    # le LM lui-meme est-il pourri partout? -> quarantaine plutot
+                    # is the LM itself rotten everywhere? -> quarantine instead
                     _lmm = _lm_tiermeta.get(worst_lm, {})
                     _lm_med = _lmm.get('median_res') or 0
                     _lm_anchor = (_lmm.get('tier') == 'anchor'
@@ -2031,36 +2031,36 @@ class Handler(BaseHTTPRequestHandler):
                     rms_sans = _m.sqrt(sum(v*v for v in vals[1:])/max(1, n-1))
                     gain = round(_rms - rms_sans, 1)
                     if _lm_anchor:
-                        # ancre/leak = ground truth: si la cam la contredit,
-                        # c'est la CAM qui est cassee (pattern Diner/Bay)
-                        cat, action, gain = 'erreur etalee', 'refine (selon classe) — contredit une ancre', None
-                        detail = f'"{worst_lm}" (ANCRE) {worst:.0f}\' -> pose de cam suspecte'
+                        # anchor/leak = ground truth: if the cam contradicts it,
+                        # the CAM is the broken one (Diner/Bay pattern)
+                        cat, action, gain = 'spread error', 'refine (per class) — contradicts an anchor', None
+                        detail = f'"{worst_lm}" (ANCHOR) {worst:.0f}\' -> cam pose suspect'
                     elif _lm_mapok:
-                        cat, action = 'markings a reviewer', 'ouvrir les frames en UI (LM map-valide)'
-                        detail = f'"{worst_lm}" {worst:.0f}\' mais position map-validee'
+                        cat, action = 'markings to review', 'open the frames in the UI (map-validated LM)'
+                        detail = f'"{worst_lm}" {worst:.0f}\' but map-validated position'
                     elif _lm_med and _lm_med > 30:
-                        cat, action = 'LM fantome', 'quarantaine LM'
-                        detail = f'"{worst_lm}" {worst:.0f}\' ici, median {_lm_med:.0f}\' partout'
+                        cat, action = 'phantom LM', 'quarantine LM'
+                        detail = f'"{worst_lm}" {worst:.0f}\' here, median {_lm_med:.0f}\' everywhere'
                     else:
-                        cat, action = 'outlier isole', 'exclure marking'
-                        detail = f'"{worst_lm}" {worst:.0f}\' vs mediane autres {med_o:.1f}\''
+                        cat, action = 'isolated outlier', 'exclude marking'
+                        detail = f'"{worst_lm}" {worst:.0f}\' vs median of others {med_o:.1f}\''
                 else:
-                    cat, action, gain = 'erreur etalee', 'refine (selon classe)', None
-                    detail = f'pire {worst:.0f}\', mediane autres {med_o:.1f}\''
+                    cat, action, gain = 'spread error', 'refine (per class)', None
+                    detail = f'worst {worst:.0f}\', median of others {med_o:.1f}\''
                 rows.append({'cam': cn, 'rms': round(_rms, 1), 'n_obs': n,
                              'categorie': cat, 'action': action, 'detail': detail,
                              'worst_lm': worst_lm, 'gain_estime': gain})
-            _order = {'LM fantome': 0, 'outlier isole': 1, 'markings a reviewer': 2, 'erreur etalee': 3, 'sous-determinee': 4}
+            _order = {'phantom LM': 0, 'isolated outlier': 1, 'markings to review': 2, 'spread error': 3, 'under-determined': 4}
             rows.sort(key=lambda r: (_order.get(r['categorie'], 9), -(r['gain_estime'] or r['rms'])))
             self.send_json({'rows': rows, 'n': len(rows)})
 
         elif path == '/api/exclude_marking':
-            # [TRIAGE-V1] action: exclure un marking (meme format que
+            # [TRIAGE-V1] action: exclude a marking (same format as
             # tools/exclude_marking.py)
             _cam = unquote(qs.get('cam', [''])[0])
             _lm = unquote(qs.get('lm', [''])[0])
             if not _cam or not _lm:
-                self.send_json({'error': 'cam et lm requis'}, 400); return
+                self.send_json({'error': 'cam and lm required'}, 400); return
             _excl_path = os.path.join(os.path.dirname(TOOL_DIR), 'gtamapdata', 'excluded_markings.json')
             try:
                 with open(_excl_path) as _f:
@@ -2076,11 +2076,11 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json({'ok': True, 'excluded': [_cam, _lm]})
 
         elif path == '/api/quarantine_lm':
-            # [TRIAGE-V1] action: nuller le xyz d'un LM connu-faux (les
-            # markings restent dans pixels.json pour retriangulation future)
+            # [TRIAGE-V1] action: null the xyz of a known-wrong LM (markings
+            # remain in pixels.json for future retriangulation)
             _lm = unquote(qs.get('lm', [''])[0])
             if _lm not in md.landmarks_meta and md.landmarks.get(_lm) is None:
-                self.send_json({'error': 'LM inconnu ou deja sans xyz'}, 400); return
+                self.send_json({'error': 'unknown LM or already without xyz'}, 400); return
             md.update_landmark(_lm, None, source_cameras=[], error_m=None)
             self.send_json({'ok': True, 'quarantined': _lm})
 
@@ -2316,7 +2316,7 @@ class Handler(BaseHTTPRequestHandler):
                 return
 
             # Save to landmarks. update_landmark() snaps xyz[2] if z_constraint
-            # [MAP-EVIDENCE-V1] dry=1: retourner la proposition sans ecrire
+            # [MAP-EVIDENCE-V1] dry=1: return the proposal without writing
             if qs.get('dry', [''])[0] == '1':
                 best['dry'] = True
                 self.send_json(best)

@@ -8,25 +8,46 @@ Bookmark this file when you forget what tools exist.
 ```
 1. Place frame in frames/{Cam Name}.png
 2. Run: python3 tools/compute_confidence_tiers.py
-   (only once per session — produces tier classifications)
 3. Add cam entry to gtamapdata/cameras.json with dummy xyz/ypr/hfov
 4. Mark 3+ landmarks in the calib UI (http://localhost:8765)
+   -> Assist mode: P1/P2 prioritized ghosts, click = arm the marking
 5. Run: python3 tools/intake_camera.py "Cam Name"
-   → see verdict (commit/review/reject) before applying
-6. If verdict OK: apply via calib UI Optimize, or refine_camera.py
+   -> see verdict (commit/review/reject) before applying
+6. If verdict OK: python3 tools/refine_cam_full.py "Cam Name" --apply
+   (the UI Optimize/Update LMs buttons are DECOMMISSIONED)
 7. Re-run compute_confidence_tiers.py to update tiers
-8. Run bundle_adjust.py for global refinement
+8. Global: bundle_adjust_weighted.py --cleanup, then guarded_apply
+   (NEVER bundle_adjust_apply.py — blind wholesale apply is forbidden)
 ```
 
-### Calibration order — "What order to work on?"
+### The global cycle (guarded apply)
 ```
-python3 tools/calibration_order.py --tier unverified
-python3 tools/calibration_order.py --cams "Cam A,Cam B"
+python3 tools/compute_confidence_tiers.py
+python3 tools/bundle_adjust_weighted.py --cleanup --max-iter 30
+python3 tools/refine/guarded_apply.py            # dry-run, review
+python3 tools/refine/guarded_apply.py --apply
+python3 tools/audit/rms_snapshot.py --tag <name>
+PYTHONPATH=. python3 tools/ci_healthcheck.py --update-baseline  # if improved
 ```
 
-### Outliers detection — "Which pixels are bad?"
+### Triage — "Where is the pain?"
 ```
-python3 tools/outliers_report.py
+UI: Triage button (categorizes cams >5' + one-click actions)
+CLI: python3 tools/outliers_report.py
+     python3 tools/calibration_order.py --tier unverified
+```
+
+### Map evidence — "Is the position real?"
+```
+UI: LM inspector -> yanis crop + "propose retriangulation" + verdict
+CLI: python3 tools/map_validate.py (HTML contact sheet)
+Semantics: validated = map prior (5m budget), NOT frozen; rejected = excluded
+```
+
+### CI — guardrail on every push
+```
+PYTHONPATH=. python3 tools/ci_healthcheck.py   # locally before commit
+Baseline: tools/ci_baseline.json (--update-baseline after an improvement)
 ```
 
 ---
@@ -99,7 +120,7 @@ python3 tools/calibration_order.py --tier unverified
 ```
 
 ### `ci_healthcheck.py`
-Garde-fou CI: roule sur chaque push (GitHub Actions) et
+CI guardrail: runs on every push (GitHub Actions) and
 
 **Usage:**
 ```
@@ -108,13 +129,13 @@ PYTHONPATH=. python3 tools/ci_healthcheck.py
 ```
 
 ### `common.py`
-Fonctions partagees des outils gtamaplib.
+Shared helpers for the gtamaplib tools.
 
 ### `compute_confidence_tiers.py`
 Classify every cam and landmark into a confidence tier.
 
 ### `compute_venetian_xyz.py`
-Calcule les xyz des LMs 1000 Venetian Way qui sont
+Computes the xyz of the 1000 Venetian Way LMs that are
 
 **Usage:**
 ```
@@ -129,11 +150,11 @@ densify_portofino_edges.py
 Find LM prefixes that could become procedural
 
 ### `exclude_marking.py`
-exclure un marking (cam, lm) du solveur SANS le
+exclude a (cam, lm) marking from the solver WITHOUT
 
 **Usage:**
 ```
-python3 tools/exclude_marking.py "Cam Name" "LM Name"            # exclure (dry-run)
+python3 tools/exclude_marking.py "Cam Name" "LM Name"            # exclude (dry-run)
   python3 tools/exclude_marking.py "Cam Name" "LM Name" --apply    # ecrire
   python3 tools/exclude_marking.py "Cam Name" "LM Name" --remove --apply  # re-inclure
   python3 tools/exclude_marking.py --list                          # tout lister
@@ -350,10 +371,10 @@ python3 tools/diagnose_camera.py "Ambrosia 04 (Fires)"
 List pixels with angular err > threshold that have
 
 ### `audit/find_z_candidates.py`
-Scan landmarks.json pour proposer des candidats à
+Scans landmarks.json to propose candidates for
 
 ### `audit/invariants.py`
-Garde-fou pre-commit pour gtamapdata/. Exit 1 si violation.
+Pre-commit guardrail for gtamapdata/. Exit 1 on violation.
 
 **Usage:**
 ```
@@ -375,7 +396,7 @@ python3 tools/investigate_landmark.py "Easy Hill"
 READ-ONLY. Where do the rays say sea level is?
 
 ### `audit/list_extra_observers.py`
-Trouve les landmarks qui ont des observers (cams
+Finds landmarks that have observers (cams
 
 ### `audit/lm_uncertainty.py`
 READ-ONLY (Chantier C1).
@@ -418,7 +439,7 @@ Total: 38 endpoints
 | `/api/cam_health` | Per-cam health metrics. Reuses compute_projections to get |
 | `/api/project` |  |
 | `/api/verticals` | return their pixel coords. Frontend overlays these as yellow |
-| `/api/optimize` | l'UI visualise et marque; le solving vit au CLI. |
+| `/api/optimize` | the UI visualizes and marks; solving lives in the CLI. |
 | `/api/render_loss` | Returns JSON with samples {x, y, loss, color, params}. |
 | `/api/export_validation` |  |
 | `/api/export_map_validation` |  |
@@ -427,12 +448,12 @@ Total: 38 endpoints
 | `/api/get_lines` | roll par _get_roll_from_vlines sur probe roll=0, puis pitch par |
 | `/api/solve_lines` | ordre valide (4 poses synthetiques exactes): roll (pure |
 | `/api/save` |  |
-| `/api/update_landmarks` | = xyz actuel; crosshair orange optionnel (x2,y2) = position proposee. |
-| `/api/lm_map_crop` | = xyz actuel; crosshair orange optionnel (x2,y2) = position proposee. |
+| `/api/update_landmarks` | = current xyz; optional orange crosshair (x2,y2) = proposed position. |
+| `/api/lm_map_crop` | = current xyz; optional orange crosshair (x2,y2) = proposed position. |
 | `/api/map_verdict` |  |
-| `/api/triage` | Reproduit le workflow de polish du 2026-07-01: outlier-isole |
+| `/api/triage` | Reproduces the 2026-07-01 polish workflow: isolated-outlier |
 | `/api/exclude_marking` | tools/exclude_marking.py) |
-| `/api/quarantine_lm` | markings restent dans pixels.json pour retriangulation future) |
+| `/api/quarantine_lm` | remain in pixels.json for future retriangulation) |
 | `/api/suspicious` | Find outlier pixels by consensus across cams |
 | `/api/set_pixel` | Update pixels.json |
 | `/api/set_class` |  |
@@ -462,11 +483,11 @@ Total: 36 buttons
 | `rays-toggle` | Show all rays from the selected cam to its landmarks |
 | `heat-toggle` | Show loss landscape for the selected cam (heat map) |
 | `dual-toggle` | Compare two cams side-by-side (D) |
-| `proj-toggle` | Assist: LM non marques projetes en fantomes, priorises par gain |
+| `proj-toggle` | Assist: unmarked LMs projected as ghosts, prioritized by gain |
 | `btn-reset` | Reset |
 | `btn-save` | Save |
 | `btn-export` | ⬇ Export |
-| `triage-btn` | Triage: cams categorisees avec action recommandee |
+| `triage-btn` | Triage: cams categorized with recommended action |
 | `(no id)` | LEAK |
 | `(no id)` | T1 |
 | `(no id)` | T2 |
@@ -474,10 +495,10 @@ Total: 36 buttons
 | `oc-toggle-btn` | Toggle other cams overlay (O) |
 | `mesh-ctrl-btn` | Per-mesh wireframe controls |
 | `verts-toggle-btn` | Toggle vertical-lines overlay (V) |
-| `lm-map-propose` | proposer retriangulation |
-| `lm-map-ok` | ✓ map-valide |
-| `lm-map-bad` | ✗ map-rejete |
-| `lm-map-clear` | effacer |
+| `lm-map-propose` | propose retriangulation |
+| `lm-map-ok` | ✓ map-validated |
+| `lm-map-bad` | ✗ map-rejected |
+| `lm-map-clear` | clear |
 | `btn-add-px` | + Add |
 | `(no id)` | All |
 | `(no id)` | Indep |
@@ -490,7 +511,7 @@ Total: 36 buttons
 | `(no id)` | ✕ |
 | `susp-filter-all` | All suspects |
 | `susp-filter-leak` | ★ Leak-anchored |
-| `(no id)` | fermer |
+| `(no id)` | close |
 
 ---
 

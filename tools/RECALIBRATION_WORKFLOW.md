@@ -9,40 +9,40 @@ system. For the architecture overview see `CLAUDE_CONTEXT.md` and
 
 ---
 
-## Outils d'audit READ-ONLY (tools/audit/) — sante du reseau
+## READ-ONLY audit tools (tools/audit/) — network health
 
-Ces outils ne modifient RIEN. A lancer periodiquement (surtout apres un gros
-batch de retriangulation/recalibration) pour verifier la sante globale, pas
-juste un LM a la fois.
+These tools modify NOTHING. Run them periodically (especially after a big
+retriangulation/recalibration batch) to check global health, not just one
+LM at a time.
 
 ### `retriangulation_candidates.py` (Chantier A)
-Scanne tous les LM, rejoue la selection de sources + triangulation, classe par
-GAIN potentiel (parallaxe >=15deg, delta >=2m, >=2 sources post-dedup).
-→ Quand: pour savoir QUELS LM beneficieraient d'une retriangulation avant de se
-  lancer. Sortie taggee CAND / NEAR / NOBASE / SKIP.
+Scans every LM, replays source selection + triangulation, ranks by potential
+GAIN (parallax >=15deg, delta >=2m, >=2 sources post-dedup).
+-> When: to know WHICH LMs would benefit from a retriangulation before diving
+  in. Output tagged CAND / NEAR / NOBASE / SKIP.
 
 ### `circular_deps.py` (Chantier B)
-Construit le graphe de dependance cam->cam (B-strict) + Tarjan SCC. Detecte les
-CYCLES: groupes de cams qui se valident mutuellement sans ancrage leak (PUR =
-suspect auto-referentiel, SAIN = ancre par une leak dans la boucle).
-→ Quand: apres avoir ajoute/recalibre des cams, pour s'assurer qu'on n'a pas
-  cree de zone auto-referentielle. `--dump-graph` pour le graphe complet.
-→ Connu (2026-06): 3 cycles purs = Ambrosia, Port Gellhorn, Chase2.
+Builds the cam->cam dependency graph (B-strict) + Tarjan SCC. Detects CYCLES:
+groups of cams that validate each other with no leak anchoring (PURE =
+self-referential suspect, HEALTHY = anchored by a leak inside the loop).
+-> When: after adding/recalibrating cams, to make sure no self-referential
+  zone was created. `--dump-graph` for the full graph.
+-> Known (2026-06): 3 pure cycles = Ambrosia, Port Gellhorn, Chase2.
 
 ### `lm_uncertainty.py` (Chantier C1)
-Incertitude 3D par LM via Monte-Carlo (perturbe pixels + poses, retriangule N
-fois, covariance du nuage). Sortie: r_pose (incertitude totale), r_pix (bruit
-pixel seul), ratio = r_pose/r_pix.
-→ Lecture: ratio ~1 = fragilite PHYSIQUE (point lointain, irreparable);
-  ratio >2 = fragilite REPARABLE (poses sources fragiles -> reancrer).
-→ Insight cle: le RMS ne mesure PAS l'incertitude. Un LM peut avoir un residu
-  parfait et etre incertain de 100m+. Cet outil voit ce que le RMS cache.
-→ Quand: pour prioriser quels LM/cams ont besoin d'une 3e source ou d'un reancrage.
-  ~3min pour 382 LM a N=200.
+Per-LM 3D uncertainty via Monte-Carlo (perturbs pixels + poses, retriangulates
+N times, covariance of the cloud). Output: r_pose (total uncertainty), r_pix
+(pixel noise only), ratio = r_pose/r_pix.
+-> Reading: ratio ~1 = PHYSICAL fragility (distant point, unfixable);
+  ratio >2 = FIXABLE fragility (fragile source poses -> re-anchor).
+-> Key insight: RMS does NOT measure uncertainty. An LM can have a perfect
+  residual and still be uncertain by 100m+. This tool sees what RMS hides.
+-> When: to prioritize which LMs/cams need a 3rd source or re-anchoring.
+  ~3min for 382 LMs at N=200.
 
 ### `audit_leak_influence_tree.py`
-Arbre d'influence descendante depuis chaque leak cam (quelle leak influence le
-plus de LM/cams en aval). → Quand: pour prioriser quelle leak calibrer en premier.
+Top-down influence tree from each leak cam (which leak influences the most
+downstream LMs/cams). -> When: to prioritize which leak to calibrate first.
 
 ---
 

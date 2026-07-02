@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-compute_venetian_xyz.py — Calcule les xyz des LMs 1000 Venetian Way qui sont
+compute_venetian_xyz.py — Computes the xyz of the 1000 Venetian Way LMs that are
 markés sur le cam 'Venetian Islands' mais pas encore triangulés.
 
 Strategy: ray-plane intersection
