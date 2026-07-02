@@ -275,28 +275,28 @@ If anything moves more than its tier budget, the soft barrier kicked in
 (still allowed, just sub-optimal). That's a signal: the cam/LM might want
 a different tier, or there's a marking outlier.
 
-Then apply — **via le guarded apply UNIQUEMENT** (doctrine 2026-07-01):
+Then apply — **through guarded apply ONLY** (doctrine 2026-07-01):
 
 ```bash
-python3 tools/refine/guarded_apply.py            # dry-run: lire la liste des deltas
-python3 tools/refine/guarded_apply.py --apply    # applique seulement ce qui ameliore
-python3 tools/audit/rms_snapshot.py --tag apres_<nom>
+python3 tools/refine/guarded_apply.py            # dry-run: read the delta list
+python3 tools/refine/guarded_apply.py --apply    # applies only what improves
+python3 tools/audit/rms_snapshot.py --tag after_<name>
 ```
 
-Le guarded evalue chaque delta individuellement contre les residuels bruts et
-rejette tout ce qui degrade quoi que ce soit (tol 0.25').
+The guard evaluates every delta individually against raw residuals and
+rejects anything that degrades anything (tol 0.25').
 
-> **INTERDIT**: `bundle_adjust_apply.py` (apply integral aveugle) — retire de
-> la doctrine le 2026-07-01. L'apply integral d'un resultat de bundle a cause
-> les regressions historiques (Pool/Motel). Toujours: bundle --cleanup ->
-> guarded dry -> guarded --apply -> snapshot. Le flag `--cleanup` est
-> obligatoire (exclut junk cams, weak LMs, triangulations cassees; garde les
-> rays leak-anchored comme ancres).
+> **FORBIDDEN**: `bundle_adjust_apply.py` (blind wholesale apply) — removed
+> from the doctrine on 2026-07-01. Wholesale-applying a bundle result caused
+> the historical regressions (Pool/Motel). Always: bundle --cleanup ->
+> guarded dry -> guarded --apply -> snapshot. The `--cleanup` flag is
+> mandatory (excludes junk cams, weak LMs, broken triangulations; keeps
+> leak-anchored rays as anchors).
 >
-> Option `--continuous`: poids LM continus 1/sigma depuis lm_uncertainty
-> (A/B 2026-07-02: harvest identique aux buckets sur l'etat courant — le
-> guarded est robuste au schema de ponderation; utile potentiellement dans
-> les clusters contestes).
+> `--continuous` option: continuous 1/sigma LM weights from lm_uncertainty
+> (A/B 2026-07-02: identical harvest vs buckets on the current state — the
+> guard is robust to the weighting scheme; potentially useful in contested
+> clusters).
 
 ---
 

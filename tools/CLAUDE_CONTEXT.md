@@ -1934,140 +1934,145 @@ mois. NE PAS l'utiliser tel quel. Preferer calibrate_session.py --from-order
 (branche sur calibration_order, a jour). TODO futur: rebrancher calibrate_batch
 sur calibration_order, ou le supprimer s'il fait doublon avec calibrate_session.
 
-## BUNDLE ADJUSTMENT — RESOLU (sessions 2026-07-01/02, voir blocs ci-dessous)
-L'etat "blocked, NOT applied" ci-avant est PERIME. Le bundle a ete debloque
-(--cleanup: 80px -> 9.4px), le premier apply global de l'histoire du projet a
-ete fait via guarded (mediane 5.25' -> 3.63', zero regression), et la doctrine
-a ete reecrite: bundle --cleanup -> guarded dry -> guarded --apply -> snapshot.
-bundle_adjust_apply.py = INTERDIT. Details dans les deux blocs de session
-2026-07-01/02 ci-dessous.
+## BUNDLE ADJUSTMENT — RESOLVED (sessions 2026-07-01/02, see blocks below)
+The "blocked, NOT applied" state above is STALE. The bundle was unblocked
+(--cleanup: 80px -> 9.4px), the project's first-ever global apply was done
+through the guard (median 5.25' -> 3.63', zero regressions), and the doctrine
+was rewritten: bundle --cleanup -> guarded dry -> guarded --apply -> snapshot.
+bundle_adjust_apply.py = FORBIDDEN. Details in the two 2026-07-01/02 session
+blocks below.
 
-## Session 2026-07-01/02 (nuit) — BUNDLE DEBLOQUE + PREMIER APPLY GLOBAL + MAP VALIDATION + VICE CITY POLISH
+## Session 2026-07-01/02 (night) — BUNDLE UNBLOCKED + FIRST GLOBAL APPLY + MAP VALIDATION + VICE CITY POLISH
 
-**Commits:** bf24856 (cleanup v3 + 4 retriangulations) -> commits map-validation/quarantaine/polish.
+**Commits:** bf24856 (cleanup v3 + 4 retriangulations) -> map-validation/quarantine/polish commits.
 
-**[DECISION] Bundle --cleanup (bundle_adjust_weighted.py):** junk cams exclues
-(low/unverified + median>30'), weak LMs (<=1 bonne obs), broken triangulations
-listees pour retriangulation, FROZEN = leak-anchored(>=2) + tier anchor (les
-rays leak restent des ancres). Regle critique: "broken" ne s'applique JAMAIS
-aux ancres. RMS 80.6px -> 9.4px.
+**[DECISION] Bundle --cleanup (bundle_adjust_weighted.py):** junk cams excluded
+(low/unverified + median>30'), weak LMs (<=1 good obs), broken triangulations
+listed for retriangulation, FROZEN = leak-anchored(>=2) + anchor tier (leak
+rays kept as anchors). Critical rule: "broken" NEVER applies to anchors.
+RMS 80.6px -> 9.4px.
 
-**[DECISION] PREMIER APPLY GLOBAL — doctrine reecrite:** "apply integral =
-JAMAIS" remplace par: compute_confidence_tiers -> bundle_adjust_weighted
---cleanup (jamais sans) -> guarded_apply dry -> --apply -> rms_snapshot.
-bundle_adjust_apply.py = NE PLUS UTILISER. Resultat: 59 deltas acceptes/405
-rejetes, mediane globale 5.246' -> 4.032' (-23%), ZERO regression. Prison
-Tower 1139'->0.04, Crest Kayak 136'->0. Iteration 2 = epuisee (hill-climbing
-converge; re-harvest seulement apres changement d'etat).
+**[DECISION] FIRST GLOBAL APPLY — doctrine rewritten:** "wholesale apply =
+NEVER" replaced with: compute_confidence_tiers -> bundle_adjust_weighted
+--cleanup (never without) -> guarded_apply dry -> --apply -> rms_snapshot.
+bundle_adjust_apply.py = DO NOT USE ANYMORE. Result: 59 deltas accepted / 405
+rejected, global median 5.246' -> 4.032' (-23%), ZERO regressions. Prison
+Tower 1139'->0.04, Crest Kayak 136'->0. Iteration 2 = exhausted (hill-climbing
+converged; re-harvest only after a state change).
 
-**Amphitheater REPAREE** (etait "non-reparable"): marking Container Crane (9)
-outlier (594' -> exclu) + solve ypr/fov avec xyz map-proof VERROUILLE (refine
-sans lock z plonge sous l'eau, degenerescence pitch/z). Reste blacklistee du
-guarded (xy map-proven, pas de lock xy dans le BA).
+**Amphitheater REPAIRED** (was "unrepairable"): Container Crane (9) marking was
+an outlier (594' -> excluded) + solve ypr/fov with the map-proven xyz LOCKED
+(refining without a z lock dives underwater, pitch/z degeneracy). Still
+blacklisted from the guard (map-proven xy, no xy lock in the BA).
 
-**[DECISION] TROU SYSTEMIQUE BOUCHE:** bundle_adjust_weighted.py ET
-refine_cam_full.py ignoraient excluded_markings.json. Patches. FOOTGUN:
-gtamapdata.py whiteliste les champs cams -> constraint_class invisible via
-md.cameras (triangulate_lm lit le JSON brut donc OK).
+**[DECISION] SYSTEMIC HOLE PLUGGED:** bundle_adjust_weighted.py AND
+refine_cam_full.py were ignoring excluded_markings.json. Patched. FOOTGUN:
+gtamapdata.py whitelists cam fields -> constraint_class invisible through
+md.cameras (triangulate_lm reads the raw JSON, so it's fine).
 
-**[DECISION] Map validation (tools/map_validate.py):** contact sheet HTML de
-crops yanis V13 (z=6, 0.5m/px, tuiles gtadb.org). EPISTEMOLOGIE: la map yanis
-est partiellement construite depuis nos donnees -> circularite -> validated =
-MAP PRIOR (budget 5m tier-high), PAS frozen; rejected = exclu + a
-retrianguler; gris = map ne dessine pas. Stockage: gtamapdata/map_validated.json.
-Pattern etabli: **triangulation propose, map arbitre** (crops aux positions
-PROPOSEES avant apply).
+**[DECISION] Map validation (tools/map_validate.py):** HTML contact sheet of
+yanis V13 crops (z=6, 0.5m/px, gtadb.org tiles). EPISTEMOLOGY: the yanis map
+is partially built from our own data -> circularity -> validated = MAP PRIOR
+(5m tier-high budget), NOT frozen; rejected = excluded + to retriangulate;
+gray = the map doesn't draw it. Storage: gtamapdata/map_validated.json.
+Established pattern: **triangulation proposes, the map arbitrates** (crops at
+the PROPOSED positions before applying).
 
-**Quarantaine des LM fantomes** (null xyz, markings preserves dans
-pixels.json): un xyz connu-faux pollue TOUTES les metriques (RMS cams, tiers
--> poids). Nulles: Sonora Silo R+N (intriangulables, parallaxe 3.5deg),
-Palazzo del Sol (position actuelle=ocean ET proposition=golf, les deux
-echouent la map), Port (F), Continuum S, Flamingo TSW, W South Beach SE
-(legacy sous-parallaxe <15deg). Ambrosia Postcard (X): 152' -> 4.7' (dette
-100% fictive d'un LM fantome).
+**Phantom-LM quarantine** (null xyz, markings preserved in pixels.json): a
+known-wrong xyz pollutes EVERY metric (cam RMS, tiers -> weights). Nulled:
+Sonora Silo R+N (untriangulable, 3.5deg parallax), Palazzo del Sol (current
+position=ocean AND proposal=golf course, both fail the map), Port (F),
+Continuum S, Flamingo TSW, W South Beach SE (legacy sub-parallax <15deg).
+Ambrosia Postcard (X): 152' -> 4.7' (its debt was 100% fictional, caused by
+a phantom LM).
 
-**Vice City polish** (detecteur outlier-isole = pattern CC9 industrialise):
-Vice Beach (B) 70.3' -> 3.9' (UN marking Port F a 594' polluait la cam de 72
-obs). Exclusions: Tennis Court->Portofino NE, VC Postcard->Marina Blue SE,
-VC01->Infinity Brickell, Airport(X)->Nine Mary Brickell E (retriangule
-0.35'), Vice Beach(B)->Asia Brickell CC1. Sidewalk (Jason)(E) refine ypr
-classe C: 13.8' -> 10.1' (plancher). vice_city mediane 2.87'.
+**Vice City polish** (isolated-outlier detector = the CC9 pattern
+industrialized): Vice Beach (B) 70.3' -> 3.9' (ONE Port F marking at 594' was
+polluting the 72-obs flagship cam). Exclusions: Tennis Court->Portofino NE,
+VC Postcard->Marina Blue SE, VC01->Infinity Brickell, Airport(X)->Nine Mary
+Brickell E (retriangulated 0.35'), Vice Beach(B)->Asia Brickell CC1.
+Sidewalk (Jason)(E) class-C ypr refine: 13.8' -> 10.1' (floor). vice_city
+median 2.87'.
 
-## Session 2026-07-02 — CHANTIER UI COMPLET + CI HEALTHCHECK + CHASE/U-TURN + POIDS CONTINUS
+## Session 2026-07-02 — FULL UI OVERHAUL + CI HEALTHCHECK + CHASE/U-TURN + CONTINUOUS WEIGHTS
 
 **Commits:** 012ce2e/e654552 (UI), 7be424e + d6eb421 (CI), e36f64b (Chase +
-harvest + contw). Mediane globale finale: **3.47'** (baseline CI committee).
+harvest + contw). Final global median: **3.47'** (committed CI baseline).
 
-**UI — frontiere definitive (decision 2026-05-26 executee):** l'UI
-visualise/marque/cure, le solving vit au CLI. Optimize + Update LMs +
-Suspicious DECOMMISSIONNES (endpoints 410 -> pointeurs CLI). Quatre briques:
-(1) **Assist** (mode Camera): /api/lm_projections?mode=assist — ghosts
-priorises P1 (2e source -> triangulation; ancre pour cam n_obs<5) / P2 / P3,
-panneau "A marquer", clic ghost/ligne = armer le marquage. Sur cam cassee:
-positions approximatives, se fier aux NOMS. (2) **Triage board**: /api/triage
-categorise cams >5' (LM fantome / outlier isole / markings a reviewer /
-erreur etalee / sous-determinee) + gain estime + actions one-click
-(/api/exclude_marking, /api/quarantine_lm). Garde-fous: ancres/leaks JAMAIS
-quarantinees, map-valides -> reviewer. (3) **Preuve map dans l'inspecteur
-LM**: /api/lm_map_crop (crosshair cyan=actuel, orange=propose),
-/api/triangulate?dry=1, /api/map_verdict -> map_validated.json live.
-(4) **Design**: segmented control Camera/Map/3D, header 28px, ghost buttons,
-toggles par mode (Rays=Map, Dual+Assist=Camera, rien en 3D). Blocs
-[CALIB-DESIGN-V1]/[V1.1]. LECON: check d'idempotence "DESIGN-V1" matchait le
-legacy [MAP-DESIGN-V1] -> marqueurs UNIQUES obligatoires.
+**UI — the definitive boundary (2026-05-26 decision executed):** the UI
+visualizes/marks/curates, solving lives in the CLI. Optimize + Update LMs +
+Suspicious DECOMMISSIONED (endpoints 410 -> CLI pointers). Four new bricks:
+(1) **Assist** (Camera mode): /api/lm_projections?mode=assist — ghosts
+prioritized P1 (2nd source -> triangulation; anchor for a cam with n_obs<5)
+/ P2 / P3, "To mark" panel, clicking a ghost/row arms the marking. On a
+broken cam: ghost positions are approximate, trust the NAMES. (2) **Triage
+board**: /api/triage categorizes cams >5' (phantom LM / isolated outlier /
+markings to review / spread error / under-determined) + estimated gain +
+one-click actions (/api/exclude_marking, /api/quarantine_lm). Guardrails:
+anchors/leaks are NEVER quarantined, map-validated -> review. (3) **Map
+evidence in the LM inspector**: /api/lm_map_crop (cyan crosshair=current,
+orange=proposed), /api/triangulate?dry=1, /api/map_verdict ->
+map_validated.json live. (4) **Design**: Camera/Map/3D segmented control,
+uniform 28px header, ghost buttons, per-mode toggles (Rays=Map only,
+Dual+Assist=Camera only, none in 3D). [CALIB-DESIGN-V1]/[V1.1] blocks.
+LESSON: the "DESIGN-V1" idempotency check matched the legacy [MAP-DESIGN-V1]
+-> UNIQUE markers are mandatory.
 
-**CI HEALTHCHECK (GitHub Actions, chaque push):** tools/ci_healthcheck.py —
-tiers, invariants (exit 1), nouveaux cycles PURS vs baseline = fail (2
-baselines: Ambrosia 3-cam + un 2-cam), mediane degradee >10% = fail, JSON
-parsable+ASCII. Baseline: tools/ci_baseline.json, --update-baseline apres
-amelioration + commit. Premier run VERT en 30s. invariants.py CLASS-AWARE:
-compare seulement les DOF verrouillees par classe V2 (A/B: tout, C: xyz+fov,
-Cm: xyz). Le checker a attrape 4 vraies violations: Port (C) z snap; Port
-(D)/(E) contrainte waterline RETIREE (2 observateurs confirment elevation
-7.3m/12.1m); building_meshes normalise ASCII. GitHub: PAT sans scope workflow
--> modifs du yml passent par l'UI web. Default branch = feature-solver, PR #8
-ferme (main = vieille branche gelee, PAS le miroir rlx; les syncs rlx passent
-par port_rlx_batch).
+**CI HEALTHCHECK (GitHub Actions, every push):** tools/ci_healthcheck.py —
+tiers, invariants (exit 1), any new PURE cycle vs baseline = fail (2
+baselined: the 3-cam Ambrosia one + a 2-cam one), global median degrading
+>10% = fail, JSON parsable+ASCII. Baseline: tools/ci_baseline.json,
+--update-baseline after a legit improvement + commit. First run GREEN in
+30s. invariants.py is CLASS-AWARE: only the DOFs locked by V2 class are
+compared (A/B: everything, C: xyz+fov, Cm: xyz). The checker itself caught 4
+real violations: Port (C) z snapped; Port (D)/(E) waterline constraint
+REMOVED (2 independent observers confirm 7.3m/12.1m elevation);
+building_meshes normalized to ASCII. GitHub: PAT without the workflow scope
+-> yml edits go through the web UI. Default branch = feature-solver, PR #8
+closed (main = old frozen branch, NOT an rlx mirror; rlx syncs go through
+port_rlx_batch).
 
-**Cycle Chase/U-Turn CRAQUE:** 3 markings contredisaient du ground truth AIWE
-(les LM contestes sont tous ancres AIWE 4K a 0.0'). Exclusions:
+**Chase/U-Turn cycle CRACKED:** 3 markings contradicted AIWE ground truth
+(the contested LMs are all AIWE-4K-anchored at 0.0'). Exclusions:
 U-Turn(NW)<->6232 E Hwy 98 (SE) (195'), Chase(2)(A)<->Wildfire Scooters (S)
-et (NW) (117'/69') + refine_cam_full Chase(2)(A). U-Turn(NW) 97.7'->0.00',
-Chase(2)(A) 40.9'->~10' (reste Oval Yellow Sign 19' a reviewer). Le "cycle
-pur" du backlog etait deja absorbe dans le SCC sain ancre Diner. Cascade:
-harvest guarded de 35 deltas (Street Bikers B -4.1', Miami Tower -3.2'),
-mediane 3.637' -> 3.47', port_gellhorn 6.42' -> 5.04'.
+and (NW) (117'/69') + refine_cam_full Chase(2)(A). U-Turn(NW) 97.7'->0.00',
+Chase(2)(A) 40.9'->~10' (Oval Yellow Sign 19' left to review). The backlog's
+"pure cycle" had already been absorbed into the healthy Diner-anchored SCC.
+Cascade: a 35-delta guarded harvest unlocked (Street Bikers B -4.1', Miami
+Tower -3.2'), median 3.637' -> 3.47', port_gellhorn 6.42' -> 5.04'.
 
-**Poids continus 1/sigma — verdict A/B honnete:** flag --continuous sur le
-bundle (weight = clamp(22/radius_m, 0.1, 15), K=22 calibre radius median 11m
-sur poids medium 2.0). A/B rigoureux: harvest guarded IDENTIQUE buckets vs
-continus — le guarded gate (residuels bruts) filtre deja ce que des mauvais
-poids corrompraient. Les buckets ne coutaient rien; architecture guarded
-robuste par design. Option conservee pour les clusters contestes (Diner).
-BUG FIX reel: lm_uncertainty.py ignorait excluded_markings (meme trou que le
-bundle) — Wildfire S radius 168m -> 7.0m apres fix (EXCL-AWARE-V1).
+**Continuous 1/sigma weights — honest A/B verdict:** --continuous flag on the
+bundle (weight = clamp(22/radius_m, 0.1, 15), K=22 maps the median radius
+~11m onto the medium bucket weight 2.0). Rigorous A/B: the guarded harvest is
+IDENTICAL under buckets vs continuous — the guarded gate (raw residuals)
+already filters what bad weights could corrupt. The buckets were costing
+nothing; the guarded architecture is robust by design. Option kept for
+contested clusters (Diner). Real BUG FIX along the way: lm_uncertainty.py
+was ignoring excluded_markings (same hole the bundle had) — Wildfire S
+radius 168m -> 7.0m after the fix (EXCL-AWARE-V1).
 
-**PROCESS SANDBOX CONFIRME:** Claude clone le repo dans son sandbox, teste
-tout (Playwright headless, curl, dry-runs), valide les patchs bit-identiques
-avant livraison. Pieges: pkill -f se suicide si le pattern matche le shell
-(utiliser [t]ools/...), commentaires `# ~33` colles -> zsh interprete ~N
-comme directory stack.
+**SANDBOX PROCESS CONFIRMED:** Claude clones the repo into its sandbox, tests
+everything (headless Playwright, curl, dry-runs), validates patches
+bit-identical against Alexandre's expected disk state before delivery.
+Traps: pkill -f kills itself if the pattern matches the shell (use
+[t]ools/...), pasted `# ~33` comments -> zsh interprets ~N as a directory
+stack entry.
 
-**DOC ROT CORRIGE (2026-07-02):** generate_inventory.py (quick-ref precha
-encore UI Optimize + bundle_adjust_apply; chemin ~/Downloads hardcode ->
-relatif au script), RECALIBRATION_WORKFLOW.md (bundle_adjust_apply ->
-guarded). RESTE A CORRIGER: message final de bundle_adjust_weighted ("Apply
-with: bundle_adjust_apply.py"), calibrate_cam.py (reference le bouton
-'Update LMs' decommissionne).
+**DOC ROT FIXED (2026-07-02):** generate_inventory.py (the quick-ref still
+preached UI Optimize + bundle_adjust_apply; hardcoded ~/Downloads path ->
+script-relative), RECALIBRATION_WORKFLOW.md (bundle_adjust_apply ->
+guarded). STILL TO FIX: bundle_adjust_weighted's final message ("Apply with:
+bundle_adjust_apply.py"), calibrate_cam.py (references the decommissioned
+'Update LMs' button).
 
-**PENDING (ordre suggere):** (1) Cluster Diner/Port Gellhorn — derniere
-grosse poche (13 cams; Diner SE(B) 722', SW 537', Pool 416'; "erreur etalee
-contredit une ancre"), session zone dediee. (2) Dossiers UI avec les nouveaux
-outils: Cruise Terminal D (preuve map + frames PVC-A/B — quel terminal est
-marque?), 8 sous-determinees via Assist (Vintage Pack 863', Rooftop 399',
-Green Sports Car, Yacht, Landing Gear, Ocean Drive NW, Police Chase B/C/J),
-Oval Yellow Sign (Chase 2A), mini-cluster Metro (SE) B+C. (3) map_validate
-run complet (~260 LM low+medium). (4) Backlog: get_class() dans
-triangulate_lm (TODO structurel), renommages rlx b287d7e, Diner(N) 6.42',
-onglet consensus Triage (/api/suspicious existe encore), fix export
-clipboard du contact sheet (execCommand fail en file:// Safari).
+**PENDING (suggested order):** (1) Diner/Port Gellhorn cluster — the last
+big pocket (13 cams; Diner SE(B) 722', SW 537', Pool 416'; "spread error
+contradicts an anchor"), dedicated zone session. (2) UI dossiers with the
+new tools: Cruise Terminal D (map evidence + PVC-A/B frames — which terminal
+is marked?), the 8 under-determined cams via Assist (Vintage Pack 863',
+Rooftop 399', Green Sports Car, Yacht, Landing Gear, Ocean Drive NW, Police
+Chase B/C/J), Oval Yellow Sign (Chase 2A), the Metro (SE) B+C mini-cluster.
+(3) Full map_validate run (~260 low+medium LMs). (4) Backlog: get_class() in
+triangulate_lm (structural TODO), rlx b287d7e renames, Diner(N) 6.42',
+Triage consensus tab (/api/suspicious still exists), contact-sheet clipboard
+export fix (execCommand fails on file:// Safari).
