@@ -54,6 +54,31 @@
 
 <!-- INDEX_DE_RETOUR_v1 -->
 
+## Session 2026-06-24 — PVC dans le tree + classes D + map V13
+
+**Commits (feature-solver):** `62142fc` export frame+map · `8681adb` fix classes D · `ae0968d` sweep PVC-B · `03b68cc` retrait CC2 · `74169e9` fix PVC-A · `e3dfd2c` batch optimize 9 cams · `3538301` map V13. (label-flip frame appliqué `.bak_label_flip`, pas re-commité.)
+
+**BUG STRUCTUREL classes D (le gros morceau):** `tools/triangulate_lm.py` lit `constraint_class` UNIQUEMENT inline dans cameras.json (`c.get('constraint_class')` ~ligne 90), il N'appelle PAS `leak_cam_audit.get_class()`. AIWE (4K) + Amphitheater (classe D_no_ground_truth) avaient inline=None → traitées à tort comme `leak_pos` de confiance → polluaient les triangulations (Container Crane 9 passait de 0.96' à 24' avec Amphitheater dans le pool). Fix CIBLÉ: `constraint_class:"D_no_ground_truth"` inline pour ces 2 cams seulement (aucune pose touchée). TODO robustesse: patcher triangulate_lm.py pour utiliser `get_class()` au lieu du lookup inline, sinon le bug revient sur toute future cam D.
+
+**PVC-B intégrée dans le tree (objectif de la session):** était feuille terminale (0 dépendant aval). Sweep de re-triangulation (`/tmp/sweep_pvcb.py`, shell-out vers CLI triangulate_lm.py car la fonction interne `triangulate(selected_cams,lm,pixels,cameras,init_xyz)` est bas-niveau): 13 LM passent le garde-fou (PVC-B retenue + résidu<3' + delta<5m) → PVC-B devient leur source → **0→18 dépendants aval, rejoint le SCC SAIN de 43 cams (ancré sur 19 leaks)**. Aucun cycle pur introduit (le nouveau cycle pur Chase(2)A/B+U-Turn NW est ailleurs). Nettoyée: retrait du marking CC2 (Asia Brickell Key (CC2), 24.3' outlier ISOLÉ, PVC-B pas source) → **loss 6.95'→4.25'**. Reste self-source divergence MIA North Terminal (11', mineure, biais de pose partagé PVC-A/B).
+
+**PVC-A réparée (BROKEN→OK):** diagnostic = erreur ÉTALÉE sur tous LM (Δpx systématiques -18/-17/+13, consensus élevé) = biais d'ORIENTATION de pose, PAS markings. Seul outlier isolé: Water Tower near Prison 42' (retiré). Retrait insuffisant (loss reste 13.3'), donc optimisation de pose: `batch_optimize.py --cams "Port Vice City (A)" --apply` → **12.40'→8.28' saved** (calibrate_cam recalcule 6.71'). Limitée par parallaxe ~1° avec PVC-B.
+
+**Batch optimize "toute la chaîne":** `batch_optimize.py --tier high,medium,low --apply` → 9 optimisées, 1 refusée (PVC-B regression 6.2→9.96, garde-fou OK), **52 erreurs HTTP 400**. Cause = `optimize_camera()` (server.py ~ligne 60) refuse si `n_indep < 3` (moins de 3 LM non-self-source). Beaucoup de cams piliers sont sources de leurs propres LM (ex Vice Beach A: 44 LM marqués, 44 self-source, 0 indep) → NON-optimisables individuellement (circularité). Gains: Metro (SE) (C) 381.8'→0.38', Motorboats B 4.4→3.3, VC08 4.8→3.9, Dominion 1.5→0.76. CONCLUSION: le cam-par-cam ne peut pas refaire la chaîne pour ces cams → il faut un BA global. Les 81 cams non-leak optimisables, mais ~79 déjà à 1-4' (rien à gagner); seules PVC-B, PVC-A, Diner(N) 6.42' avaient du potentiel.
+
+**Bundle global testé en DRY-RUN, NON APPLIQUÉ:** `bundle_adjust_weighted.py --dry-run` (tiers régénérés d'abord) → pixel RMS 3.03px, gain marginal. MAIS veut bouger **Amphitheater de 40m** (classe D pas verrouillée par le bundle car pas de ground-truth à locker, MAIS sa pose [-355.9,-154.0,4.7] est validée par PREUVE MAP, loss LM 20' normal — le bundle la tirerait vers ses 2 LM lointains peu fiables = défait la décision map-proof), Container Crane (9) 7.4m (à 0.34m parfait), MIA North Terminal 21m, Water Tower 18m (qu'on vient de nettoyer). DÉCISION: NE PAS appliquer — dégraderait du travail commité + poses map-validées. Un bundle propre nécessite d'abord de VERROUILLER les poses établies par preuve (Amphitheater, Container Crane 9, LM validés) = config pour session dédiée. Snapshot avant: `rms_snapshot.py --tag avant_bundle` → median 2.125', mean 12.764' (97 cams).
+
+**MAP V13 (yanis a posté V13, gtadb.org a remplacé V12):** tuiles V12→V13. Process: `/tmp/dl_yanis13.py` télécharge les 32748 équivalents V13 (même grille = même géoréférencement, coords valides) dans `vendor/gtadb.org/maps/tiles/6/yanis,13/` depuis `https://gtadb.org/maps/tiles/6/yanis,13/{z}/{z},{y},{x}.jpg`. Refs `yanis,12→yanis,13` dans server.py (TILES_DIR ligne 25 + commentaires).
+  **PIÈGE TROUVÉ (1h perdue):** `tilesUrl()` dans calib.html (~ligne 1336) générait `/tiles/${z}/${z},${y},${x}.jpg` — URL IDENTIQUE entre V12 et V13 (la version n'est que dans TILES_DIR côté serveur). Le navigateur + `window.tilesCache` (JS, ~ligne 1332) reservaient les vieilles tuiles éternellement. Avant (v11→v12) l'URL changeait (.png→.jpg) donc le cache s'invalidait seul; avec les tuiles c'était la 1ère fois. FIX = cache-buster `?v=13` sur tilesUrl. **POUR LA PROCHAINE VERSION: bumper `?v=13`→`?v=14` + basculer TILES_DIR, c'est tout.** (Navigation un peu lourde depuis le cache-buster — si gênant, ajouter `Cache-Control: max-age=...` sur les tuiles côté serveur ~ligne 590.)
+  **PNG monolithique PAS migré:** `maps.json` pointe toujours sur `maps/yanis,12.png` (utilisé par `ml.get_map('yanis')` pour les crops Python de l'export map). Reconstruction `yanis,13.png` depuis tuiles niveau 5 TENTÉE puis ABANDONNÉE: alignement off (offset dx=-6/dy=-10, la méthode de production exacte de yanis,12.png — stitch+resize? crop? — n'a pas été identifiée). yanis,13.png supprimé. Tuiles V12 supprimées du disque. SI l'export map doit passer en V13: retrouver comment yanis,12.png a été produit depuis ses tuiles, reproduire pour V13.
+
+**Export frame — fix label-flip:** dans la boucle labels de l'export frame (server.py ~ligne 1440), les labels en box au-dessus du marker sortaient du frame quand le marker était haut. Fix: calculer `paste_y`, si `<4` (dépasserait le haut) → basculer tige+label vers le BAS (`ty=py+stem`). Appliqué (`.bak_label_flip`), PAS re-commité.
+
+**PENDING prochaine session:** (1) bundle global PROPRE = verrouiller d'abord Amphitheater map-proof + Container Crane 9 + LM validés, puis appliquer. (2) BROKEN restants Chase(2)(A) + U-Turn(NW) = cycle pur, traiter ENSEMBLE. (3) Markings rlx: commit upstream `b287d7e` = renommages (Unknown Building near VCIA→South Florida Concrete Block/Titan America, Route 50→Ambrosia Road, I-404→Highway Bridge) dans gtamapdata.py MONOLITHIQUE (vs nos JSON séparés — pas de merge direct). Extraire juste les nouveaux noms/LM SANS importer la calib de rlx (divergente). `git fetch upstream` fait (upstream/main=b287d7e). (4) Re-commit label-flip frame. (5) Patcher triangulate_lm.py → get_class(). (6) Diner(N) 6.42'.
+
+**NOTE process:** JSON edits — TOUJOURS `json.dump(..., indent=2, ensure_ascii=True)` + `f.write('\n')` pour pixels.json/cameras.json. `ensure_ascii=False` convertit les accents échappés (\u00e9→é) = diff massif parasite (vu cette session: 17048 lignes au lieu de 4). `indent=1` reformate tout. Vérifier `git diff --stat` après chaque edit JSON.
+
+
 ## Session 2026-06-12 (fin) — Soiree polish + fermeture de la file UI
 
 **T3 bootstrap phase 3 — FOV:** _get_fov_from_lines avait des refs upstream
@@ -1908,3 +1933,141 @@ Et il ECRIT (applique ypr/xyz/fov + retriangule). Donc son ordre est perime d'un
 mois. NE PAS l'utiliser tel quel. Preferer calibrate_session.py --from-order
 (branche sur calibration_order, a jour). TODO futur: rebrancher calibrate_batch
 sur calibration_order, ou le supprimer s'il fait doublon avec calibrate_session.
+
+## BUNDLE ADJUSTMENT — RESOLU (sessions 2026-07-01/02, voir blocs ci-dessous)
+L'etat "blocked, NOT applied" ci-avant est PERIME. Le bundle a ete debloque
+(--cleanup: 80px -> 9.4px), le premier apply global de l'histoire du projet a
+ete fait via guarded (mediane 5.25' -> 3.63', zero regression), et la doctrine
+a ete reecrite: bundle --cleanup -> guarded dry -> guarded --apply -> snapshot.
+bundle_adjust_apply.py = INTERDIT. Details dans les deux blocs de session
+2026-07-01/02 ci-dessous.
+
+## Session 2026-07-01/02 (nuit) — BUNDLE DEBLOQUE + PREMIER APPLY GLOBAL + MAP VALIDATION + VICE CITY POLISH
+
+**Commits:** bf24856 (cleanup v3 + 4 retriangulations) -> commits map-validation/quarantaine/polish.
+
+**[DECISION] Bundle --cleanup (bundle_adjust_weighted.py):** junk cams exclues
+(low/unverified + median>30'), weak LMs (<=1 bonne obs), broken triangulations
+listees pour retriangulation, FROZEN = leak-anchored(>=2) + tier anchor (les
+rays leak restent des ancres). Regle critique: "broken" ne s'applique JAMAIS
+aux ancres. RMS 80.6px -> 9.4px.
+
+**[DECISION] PREMIER APPLY GLOBAL — doctrine reecrite:** "apply integral =
+JAMAIS" remplace par: compute_confidence_tiers -> bundle_adjust_weighted
+--cleanup (jamais sans) -> guarded_apply dry -> --apply -> rms_snapshot.
+bundle_adjust_apply.py = NE PLUS UTILISER. Resultat: 59 deltas acceptes/405
+rejetes, mediane globale 5.246' -> 4.032' (-23%), ZERO regression. Prison
+Tower 1139'->0.04, Crest Kayak 136'->0. Iteration 2 = epuisee (hill-climbing
+converge; re-harvest seulement apres changement d'etat).
+
+**Amphitheater REPAREE** (etait "non-reparable"): marking Container Crane (9)
+outlier (594' -> exclu) + solve ypr/fov avec xyz map-proof VERROUILLE (refine
+sans lock z plonge sous l'eau, degenerescence pitch/z). Reste blacklistee du
+guarded (xy map-proven, pas de lock xy dans le BA).
+
+**[DECISION] TROU SYSTEMIQUE BOUCHE:** bundle_adjust_weighted.py ET
+refine_cam_full.py ignoraient excluded_markings.json. Patches. FOOTGUN:
+gtamapdata.py whiteliste les champs cams -> constraint_class invisible via
+md.cameras (triangulate_lm lit le JSON brut donc OK).
+
+**[DECISION] Map validation (tools/map_validate.py):** contact sheet HTML de
+crops yanis V13 (z=6, 0.5m/px, tuiles gtadb.org). EPISTEMOLOGIE: la map yanis
+est partiellement construite depuis nos donnees -> circularite -> validated =
+MAP PRIOR (budget 5m tier-high), PAS frozen; rejected = exclu + a
+retrianguler; gris = map ne dessine pas. Stockage: gtamapdata/map_validated.json.
+Pattern etabli: **triangulation propose, map arbitre** (crops aux positions
+PROPOSEES avant apply).
+
+**Quarantaine des LM fantomes** (null xyz, markings preserves dans
+pixels.json): un xyz connu-faux pollue TOUTES les metriques (RMS cams, tiers
+-> poids). Nulles: Sonora Silo R+N (intriangulables, parallaxe 3.5deg),
+Palazzo del Sol (position actuelle=ocean ET proposition=golf, les deux
+echouent la map), Port (F), Continuum S, Flamingo TSW, W South Beach SE
+(legacy sous-parallaxe <15deg). Ambrosia Postcard (X): 152' -> 4.7' (dette
+100% fictive d'un LM fantome).
+
+**Vice City polish** (detecteur outlier-isole = pattern CC9 industrialise):
+Vice Beach (B) 70.3' -> 3.9' (UN marking Port F a 594' polluait la cam de 72
+obs). Exclusions: Tennis Court->Portofino NE, VC Postcard->Marina Blue SE,
+VC01->Infinity Brickell, Airport(X)->Nine Mary Brickell E (retriangule
+0.35'), Vice Beach(B)->Asia Brickell CC1. Sidewalk (Jason)(E) refine ypr
+classe C: 13.8' -> 10.1' (plancher). vice_city mediane 2.87'.
+
+## Session 2026-07-02 — CHANTIER UI COMPLET + CI HEALTHCHECK + CHASE/U-TURN + POIDS CONTINUS
+
+**Commits:** 012ce2e/e654552 (UI), 7be424e + d6eb421 (CI), e36f64b (Chase +
+harvest + contw). Mediane globale finale: **3.47'** (baseline CI committee).
+
+**UI — frontiere definitive (decision 2026-05-26 executee):** l'UI
+visualise/marque/cure, le solving vit au CLI. Optimize + Update LMs +
+Suspicious DECOMMISSIONNES (endpoints 410 -> pointeurs CLI). Quatre briques:
+(1) **Assist** (mode Camera): /api/lm_projections?mode=assist — ghosts
+priorises P1 (2e source -> triangulation; ancre pour cam n_obs<5) / P2 / P3,
+panneau "A marquer", clic ghost/ligne = armer le marquage. Sur cam cassee:
+positions approximatives, se fier aux NOMS. (2) **Triage board**: /api/triage
+categorise cams >5' (LM fantome / outlier isole / markings a reviewer /
+erreur etalee / sous-determinee) + gain estime + actions one-click
+(/api/exclude_marking, /api/quarantine_lm). Garde-fous: ancres/leaks JAMAIS
+quarantinees, map-valides -> reviewer. (3) **Preuve map dans l'inspecteur
+LM**: /api/lm_map_crop (crosshair cyan=actuel, orange=propose),
+/api/triangulate?dry=1, /api/map_verdict -> map_validated.json live.
+(4) **Design**: segmented control Camera/Map/3D, header 28px, ghost buttons,
+toggles par mode (Rays=Map, Dual+Assist=Camera, rien en 3D). Blocs
+[CALIB-DESIGN-V1]/[V1.1]. LECON: check d'idempotence "DESIGN-V1" matchait le
+legacy [MAP-DESIGN-V1] -> marqueurs UNIQUES obligatoires.
+
+**CI HEALTHCHECK (GitHub Actions, chaque push):** tools/ci_healthcheck.py —
+tiers, invariants (exit 1), nouveaux cycles PURS vs baseline = fail (2
+baselines: Ambrosia 3-cam + un 2-cam), mediane degradee >10% = fail, JSON
+parsable+ASCII. Baseline: tools/ci_baseline.json, --update-baseline apres
+amelioration + commit. Premier run VERT en 30s. invariants.py CLASS-AWARE:
+compare seulement les DOF verrouillees par classe V2 (A/B: tout, C: xyz+fov,
+Cm: xyz). Le checker a attrape 4 vraies violations: Port (C) z snap; Port
+(D)/(E) contrainte waterline RETIREE (2 observateurs confirment elevation
+7.3m/12.1m); building_meshes normalise ASCII. GitHub: PAT sans scope workflow
+-> modifs du yml passent par l'UI web. Default branch = feature-solver, PR #8
+ferme (main = vieille branche gelee, PAS le miroir rlx; les syncs rlx passent
+par port_rlx_batch).
+
+**Cycle Chase/U-Turn CRAQUE:** 3 markings contredisaient du ground truth AIWE
+(les LM contestes sont tous ancres AIWE 4K a 0.0'). Exclusions:
+U-Turn(NW)<->6232 E Hwy 98 (SE) (195'), Chase(2)(A)<->Wildfire Scooters (S)
+et (NW) (117'/69') + refine_cam_full Chase(2)(A). U-Turn(NW) 97.7'->0.00',
+Chase(2)(A) 40.9'->~10' (reste Oval Yellow Sign 19' a reviewer). Le "cycle
+pur" du backlog etait deja absorbe dans le SCC sain ancre Diner. Cascade:
+harvest guarded de 35 deltas (Street Bikers B -4.1', Miami Tower -3.2'),
+mediane 3.637' -> 3.47', port_gellhorn 6.42' -> 5.04'.
+
+**Poids continus 1/sigma — verdict A/B honnete:** flag --continuous sur le
+bundle (weight = clamp(22/radius_m, 0.1, 15), K=22 calibre radius median 11m
+sur poids medium 2.0). A/B rigoureux: harvest guarded IDENTIQUE buckets vs
+continus — le guarded gate (residuels bruts) filtre deja ce que des mauvais
+poids corrompraient. Les buckets ne coutaient rien; architecture guarded
+robuste par design. Option conservee pour les clusters contestes (Diner).
+BUG FIX reel: lm_uncertainty.py ignorait excluded_markings (meme trou que le
+bundle) — Wildfire S radius 168m -> 7.0m apres fix (EXCL-AWARE-V1).
+
+**PROCESS SANDBOX CONFIRME:** Claude clone le repo dans son sandbox, teste
+tout (Playwright headless, curl, dry-runs), valide les patchs bit-identiques
+avant livraison. Pieges: pkill -f se suicide si le pattern matche le shell
+(utiliser [t]ools/...), commentaires `# ~33` colles -> zsh interprete ~N
+comme directory stack.
+
+**DOC ROT CORRIGE (2026-07-02):** generate_inventory.py (quick-ref precha
+encore UI Optimize + bundle_adjust_apply; chemin ~/Downloads hardcode ->
+relatif au script), RECALIBRATION_WORKFLOW.md (bundle_adjust_apply ->
+guarded). RESTE A CORRIGER: message final de bundle_adjust_weighted ("Apply
+with: bundle_adjust_apply.py"), calibrate_cam.py (reference le bouton
+'Update LMs' decommissionne).
+
+**PENDING (ordre suggere):** (1) Cluster Diner/Port Gellhorn — derniere
+grosse poche (13 cams; Diner SE(B) 722', SW 537', Pool 416'; "erreur etalee
+contredit une ancre"), session zone dediee. (2) Dossiers UI avec les nouveaux
+outils: Cruise Terminal D (preuve map + frames PVC-A/B — quel terminal est
+marque?), 8 sous-determinees via Assist (Vintage Pack 863', Rooftop 399',
+Green Sports Car, Yacht, Landing Gear, Ocean Drive NW, Police Chase B/C/J),
+Oval Yellow Sign (Chase 2A), mini-cluster Metro (SE) B+C. (3) map_validate
+run complet (~260 LM low+medium). (4) Backlog: get_class() dans
+triangulate_lm (TODO structurel), renommages rlx b287d7e, Diner(N) 6.42',
+onglet consensus Triage (/api/suspicious existe encore), fix export
+clipboard du contact sheet (execCommand fail en file:// Safari).

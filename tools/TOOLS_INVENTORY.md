@@ -33,7 +33,7 @@ python3 tools/outliers_report.py
 
 ## CLI Scripts (tools/*.py)
 
-Total: 39 scripts
+Total: 41 scripts
 
 ### `batch_optimize.py`
 Batch-optimize multiple cams via the running server API.
@@ -98,6 +98,18 @@ python3 tools/calibration_order.py --tier unverified
     python3 tools/calibration_order.py --tier unverified,low
 ```
 
+### `ci_healthcheck.py`
+Garde-fou CI: roule sur chaque push (GitHub Actions) et
+
+**Usage:**
+```
+PYTHONPATH=. python3 tools/ci_healthcheck.py
+    PYTHONPATH=. python3 tools/ci_healthcheck.py --update-baseline
+```
+
+### `common.py`
+Fonctions partagees des outils gtamaplib.
+
 ### `compute_confidence_tiers.py`
 Classify every cam and landmark into a confidence tier.
 
@@ -115,6 +127,17 @@ densify_portofino_edges.py
 
 ### `discover_mesh_candidates.py`
 Find LM prefixes that could become procedural
+
+### `exclude_marking.py`
+exclure un marking (cam, lm) du solveur SANS le
+
+**Usage:**
+```
+python3 tools/exclude_marking.py "Cam Name" "LM Name"            # exclure (dry-run)
+  python3 tools/exclude_marking.py "Cam Name" "LM Name" --apply    # ecrire
+  python3 tools/exclude_marking.py "Cam Name" "LM Name" --remove --apply  # re-inclure
+  python3 tools/exclude_marking.py --list                          # tout lister
+```
 
 ### `extract_mesh_edges.py`
 Extract wireframe edges from gtamaplib's procedural Landmark classes
@@ -143,10 +166,6 @@ Portofino V4: corrected z levels and architecture.
 ### `generate_inventory.py`
 Generate TOOLS_INVENTORY.md — a comprehensive map of everything available
 
-### `global_solve.py`
-Global bundle adjustment, SHADOW mode. Scoped to one zone.
-
-### `global_solve_apply.py`
 ### `intake_camera.py`
 Validate a new (or existing) camera against the
 
@@ -169,6 +188,19 @@ python3 tools/intake_camera.py "Some Cam Name"                  # ypr + hfov
 
 ### `leak_cam_audit.py`
 Single source of truth for constraint-class semantics.
+
+### `map_validate.py`
+Map-proof at scale: generate a contact sheet of map crops
+
+**Usage:**
+```
+# Generer le contact sheet (defaut: tiers low+medium avec xyz, pas deja juges)
+  python3 tools/map_validate.py
+  python3 tools/map_validate.py --tier low --zone vice_city
+  python3 tools/map_validate.py --lms "Palazzo del Sol,Cruise Terminal D"
+  # -> tools/generated/map_validate_sheet.html  (ouvrir dans le navigateur,
+  #    cliquer les cartes: gris=?, vert=valide, rouge=rejete; Export -> JSON)
+```
 
 ### `migrate_constraint_classes.py`
 Migration step from V1 (no class info in
@@ -256,7 +288,7 @@ python3 tools/triangulate_lm.py "1000 Venetian Way (SW)"           # dry-run
 
 Diagnostic tools that NEVER modify data. Run periodically to check network health.
 
-Total: 18 audit scripts
+Total: 21 audit scripts
 
 ### `audit/audit_all_leak_opportunities.py`
 For each non-LEAK cam with zero all_leak LMs
@@ -320,6 +352,16 @@ List pixels with angular err > threshold that have
 ### `audit/find_z_candidates.py`
 Scan landmarks.json pour proposer des candidats à
 
+### `audit/invariants.py`
+Garde-fou pre-commit pour gtamapdata/. Exit 1 si violation.
+
+**Usage:**
+```
+python3 tools/audit/invariants.py            # check, exit 1 si echec
+    python3 tools/audit/invariants.py --freeze   # (re)gele la reference leaks
+Convention: rouler AVANT chaque `git commit` qui touche gtamapdata/.
+```
+
 ### `audit/investigate_landmark.py`
 For a given landmark, show where each camera's
 
@@ -328,6 +370,9 @@ For a given landmark, show where each camera's
 python3 tools/investigate_landmark.py "Easy Hill"
     python3 tools/investigate_landmark.py "Easy Inn Sign"
 ```
+
+### `audit/keys_z_bias_analysis.py`
+READ-ONLY. Where do the rays say sea level is?
 
 ### `audit/list_extra_observers.py`
 Trouve les landmarks qui ont des observers (cams
@@ -345,6 +390,9 @@ python3 tools/audit/lm_uncertainty.py --n 200 --top 60 --dump
 ### `audit/retriangulation_candidates.py`
 READ-ONLY audit (Chantier A, etape A1).
 
+### `audit/rms_snapshot.py`
+READ-ONLY. Per-cam RMS (arcmin) computed FRESH from disk.
+
 ### `audit/trace_ray_on_map.py`
 Draw a ray on the map from a camera through a marked
 
@@ -356,10 +404,11 @@ python3 tools/trace_ray_on_map.py "Airport (X)" "Bank of America Financial Cente
 
 ## Server Endpoints (tools/server.py)
 
-Total: 26 endpoints
+Total: 38 endpoints
 
 | Endpoint | Note |
 |---|---|
+| `/api/scene3d` |  |
 | `/api/map_data` | Single dump used by the SVG map view at load time. After this, |
 | `/api/building_meshes_procedural` |  |
 | `/api/building_meshes` | Reads gtamapdata/building_meshes.json and expands edges from |
@@ -369,11 +418,21 @@ Total: 26 endpoints
 | `/api/cam_health` | Per-cam health metrics. Reuses compute_projections to get |
 | `/api/project` |  |
 | `/api/verticals` | return their pixel coords. Frontend overlays these as yellow |
-| `/api/optimize` | LEAK-MODE-V1: optional flag — xyz and hfov frozen, only yaw/pitch/roll optimize |
+| `/api/optimize` | l'UI visualise et marque; le solving vit au CLI. |
 | `/api/render_loss` | Returns JSON with samples {x, y, loss, color, params}. |
+| `/api/export_validation` |  |
+| `/api/export_map_validation` |  |
 | `/api/lm_projections` | markers on this cam's image. |
+| `/api/save_lines` |  |
+| `/api/get_lines` | roll par _get_roll_from_vlines sur probe roll=0, puis pitch par |
+| `/api/solve_lines` | ordre valide (4 poses synthetiques exactes): roll (pure |
 | `/api/save` |  |
-| `/api/update_landmarks` | Safety: refuse if cam loss is too high. A high-loss cam in a bad |
+| `/api/update_landmarks` | = xyz actuel; crosshair orange optionnel (x2,y2) = position proposee. |
+| `/api/lm_map_crop` | = xyz actuel; crosshair orange optionnel (x2,y2) = position proposee. |
+| `/api/map_verdict` |  |
+| `/api/triage` | Reproduit le workflow de polish du 2026-07-01: outlier-isole |
+| `/api/exclude_marking` | tools/exclude_marking.py) |
+| `/api/quarantine_lm` | markings restent dans pixels.json pour retriangulation future) |
 | `/api/suspicious` | Find outlier pixels by consensus across cams |
 | `/api/set_pixel` | Update pixels.json |
 | `/api/set_class` |  |
@@ -386,33 +445,39 @@ Total: 26 endpoints
 | `/api/validate_pixel` | Just acknowledge — validation state is kept client-side |
 | `/api/minimap` | Render on demand (fallback for any cam added after startup). |
 | `/api/other_cams_overlay` |  |
+| `/view3d.html` |  |
 
 ---
 
 ## Calib UI Buttons (calib.html)
 
-Total: 30 buttons
+Total: 36 buttons
 
 | ID | Title / Description |
 |---|---|
 | `cam-toggle-btn` | Toggle camera list |
 | `(no id)` | Camera view (calibration) |
 | `(no id)` | Map view (overview) |
+| `(no id)` | 3D view (network in space) |
 | `rays-toggle` | Show all rays from the selected cam to its landmarks |
 | `heat-toggle` | Show loss landscape for the selected cam (heat map) |
 | `dual-toggle` | Compare two cams side-by-side (D) |
-| `proj-toggle` | Show ghost LM projections on the opposite pane |
+| `proj-toggle` | Assist: LM non marques projetes en fantomes, priorises par gain |
 | `btn-reset` | Reset |
 | `btn-save` | Save |
-| `btn-update` | Update LMs |
-| `btn-suspicious` | ⚠ Suspicious |
+| `btn-export` | ⬇ Export |
+| `triage-btn` | Triage: cams categorisees avec action recommandee |
 | `(no id)` | LEAK |
 | `(no id)` | T1 |
 | `(no id)` | T2 |
 | `(no id)` | SS |
 | `oc-toggle-btn` | Toggle other cams overlay (O) |
+| `mesh-ctrl-btn` | Per-mesh wireframe controls |
 | `verts-toggle-btn` | Toggle vertical-lines overlay (V) |
-| `btn-opt` | ⚡ Optimize |
+| `lm-map-propose` | proposer retriangulation |
+| `lm-map-ok` | ✓ map-valide |
+| `lm-map-bad` | ✗ map-rejete |
+| `lm-map-clear` | effacer |
 | `btn-add-px` | + Add |
 | `(no id)` | All |
 | `(no id)` | Indep |
@@ -425,6 +490,7 @@ Total: 30 buttons
 | `(no id)` | ✕ |
 | `susp-filter-all` | All suspects |
 | `susp-filter-leak` | ★ Leak-anchored |
+| `(no id)` | fermer |
 
 ---
 
