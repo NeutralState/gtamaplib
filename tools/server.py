@@ -1315,22 +1315,10 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json({'lines': lines})
 
         elif path == '/api/optimize':
-            cam_name = unquote(qs.get('cam', [''])[0])
-            xyz = [float(qs['x'][0]), float(qs['y'][0]), float(qs['z'][0])]
-            # V1-ROLL: parse roll from query string (defaults to 0 for backward compat)
-            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]),
-                   float(qs.get('roll', ['0.0'])[0])]
-            hfov = float(qs['hfov'][0])
-            # LEAK-MODE-V1: optional flag — xyz and hfov frozen, only yaw/pitch/roll optimize
-            leak_mode = qs.get('leak_mode', ['false'])[0].lower() == 'true'
-            mode_str = " (LEAK MODE — yaw/pitch/roll only)" if leak_mode else ""
-            print(f"Optimizing {cam_name}{mode_str}...")
-            res, err = optimize_camera(cam_name, xyz, ypr, hfov, leak_mode=leak_mode)
-            if err:
-                self.send_json({'error': err}, 400)
-            else:
-                print(f"  loss={res['loss']} ({res['n_constraints']} constraints)")
-                self.send_json(res)
+            # [DECOM-V1] Decommissionne (decision 2026-05-26, executee 2026-07-02):
+            # l'UI visualise et marque; le solving vit au CLI.
+            self.send_json({'error': 'decommissionne — utiliser tools/refine_cam_full.py / '
+                                     'refine_cam_ypr.py / calibrate_session.py'}, 410)
 
         elif path == '/api/render_loss':
             # [RENDER-LOSS-V1] Generate or load cached loss landscape for a cam.
@@ -1902,163 +1890,69 @@ class Handler(BaseHTTPRequestHandler):
             self.send_json({'ok': True})
 
         elif path == '/api/update_landmarks':
-            UPDATE_LMS_LOSS_THRESHOLD = 10.0  # arcmin — refuse if cam loss exceeds this
-            cam_name = unquote(qs.get('cam', [''])[0])
-            xyz = [float(qs['x'][0]), float(qs['y'][0]), float(qs['z'][0])]
-            # V1-ROLL: parse roll from query string (defaults to 0 for backward compat)
-            ypr = [float(qs['yaw'][0]), float(qs['pitch'][0]),
-                   float(qs.get('roll', ['0.0'])[0])]
-            hfov_val = float(qs['hfov'][0])
+            # [DECOM-V1] Decommissionne: triangulation = tools/triangulate_lm.py
+            self.send_json({'error': 'decommissionne — utiliser tools/triangulate_lm.py'}, 410)
 
-            # Safety: refuse if cam loss is too high. A high-loss cam in a bad
-            # local minimum will propagate garbage to its observed landmarks.
-            try:
-                _projs, _losses = compute_projections(cam_name, xyz, ypr, hfov_val)
-                _check_loss = _losses.get('independent') if _losses.get('independent') is not None else _losses.get('total')
-                if _check_loss is not None and _check_loss > UPDATE_LMS_LOSS_THRESHOLD:
-                    self.send_json({
-                        'error': f"Cam loss too high ({_check_loss:.2f}' > {UPDATE_LMS_LOSS_THRESHOLD}'). "
-                                 f"Refine the cam first or use bundle adjust to avoid propagating errors to landmarks.",
-                        'loss': _check_loss,
-                        'threshold': UPDATE_LMS_LOSS_THRESHOLD,
-                    }, 400)
-                    return
-            except Exception as _e:
-                print(f"Warning: could not check loss before update: {_e}")
+        elif path == '/api/lm_map_crop':
+            # [MAP-EVIDENCE-V1] crop yanis V13 centre sur le LM. Crosshair cyan
+            # = xyz actuel; crosshair orange optionnel (x2,y2) = position proposee.
+            lm_name = unquote(qs.get('lm', [''])[0])
+            xyz = md.landmarks.get(lm_name)
+            if xyz is None:
+                self.send_json({'error': 'LM sans xyz'}, 404); return
+            import sys as _sys, io as _io2, math as _m2
+            if TOOL_DIR not in _sys.path: _sys.path.insert(0, TOOL_DIR)
+            from map_validate import crop_at, MPPX
+            from PIL import ImageDraw as _ImageDraw
+            wx, wy = xyz[0], xyz[1]
+            x2 = qs.get('x2', [None])[0]; y2 = qs.get('y2', [None])[0]
+            half = 80.0
+            cx, cy = wx, wy
+            if x2 is not None and y2 is not None:
+                x2, y2 = float(x2), float(y2)
+                cx, cy = (wx + x2) / 2, (wy + y2) / 2
+                half = max(80.0, _m2.hypot(x2 - wx, y2 - wy) / 2 + 50)
+            img = crop_at(cx, cy, half)
+            if img is None:
+                self.send_json({'error': 'hors map / tuiles indisponibles'}, 404); return
+            d = _ImageDraw.Draw(img)
+            def _cross(wxp, wyp, col):
+                px = img.width / 2 + (wxp - cx) / MPPX
+                py = img.height / 2 - (wyp - cy) / MPPX
+                g, L = 10, 26
+                for seg in [((px-L,py),(px-g,py)),((px+g,py),(px+L,py)),((px,py-L),(px,py-g)),((px,py+g),(px,py+L))]:
+                    d.line(seg, fill=col, width=2)
+            # crop_at dessine deja le crosshair CENTRE; si x2 present le centre
+            # est le midpoint -> redessiner les deux points explicitement
+            if x2 is not None:
+                _cross(wx, wy, (0, 230, 255))
+                _cross(x2, y2, (245, 158, 11))
+            sz = 300
+            img = img.resize((sz, sz))
+            buf = _io2.BytesIO(); img.save(buf, 'JPEG', quality=82)
+            data = buf.getvalue()
+            self.send_response(200)
+            self.send_header('Content-Type', 'image/jpeg')
+            self.send_header('Cache-Control', 'no-store')
+            self.send_header('Content-Length', str(len(data)))
+            self.end_headers(); self.wfile.write(data)
 
-            cam = get_cam(cam_name, xyz, ypr, hfov_val)
-            cam_pixels = md.pixels.get(cam_name, {})
-            updated = []
-            skipped = []
-            errors = []
-
-            try:
-                import numpy as np
-                from scipy.optimize import minimize as _minimize
-            except ImportError:
-                self.send_json({'error': 'scipy not installed'}, 500)
-                return
-
-            def multi_cam_triangulate(observers, lm_name, p0):
-                """observers = [(cam_name, cam_obj)]. Returns (xyz, max_residual_arcmin) or None."""
-                rays = []
-                for cn, c in observers:
-                    if lm_name not in md.pixels.get(cn, {}):
-                        continue
-                    d = c.get_landmark_direction(lm_name)
-                    d = np.asarray(d, dtype=float)
-                    d = d / np.linalg.norm(d)
-                    rays.append((cn, np.asarray(c.xyz, dtype=float), d))
-                if len(rays) < 2:
-                    return None, "not enough rays"
-
-                def loss(p):
-                    p = np.asarray(p)
-                    total = 0.0
-                    for _, o, d in rays:
-                        v = p - o
-                        dist = np.linalg.norm(v)
-                        if dist < 1e-3: continue
-                        perp = v - np.dot(v, d) * d
-                        ang = np.linalg.norm(perp) / dist
-                        total += ang * ang
-                    return total
-
-                result = _minimize(loss, p0, method='Nelder-Mead',
-                                    options={'xatol':1e-3, 'fatol':1e-12,
-                                             'maxiter':10000, 'adaptive':True})
-
-                p_new = result.x
-                # Compute max residual in arcmin
-                max_res = 0.0
-                for _, o, d in rays:
-                    v = p_new - o
-                    dist = np.linalg.norm(v)
-                    if dist < 1e-3: continue
-                    perp = v - np.dot(v, d) * d
-                    ang_arcmin = math.degrees(np.linalg.norm(perp) / dist) * 60
-                    max_res = max(max_res, ang_arcmin)
-                return p_new.tolist(), max_res
-
-            for lm_name, marked_pixel in cam_pixels.items():
-                src = md.landmarks_meta.get(lm_name, {}).get('source_cameras', [])
-                if cam_name not in src:
-                    continue  # skip independent landmarks
-
-                other_cams_list = [s for s in src if s != cam_name]
-
-                if not other_cams_list:
-                    # Solo — project at zero elevation
-                    try:
-                        pt = cam.get_point_at_zero_elevation(marked_pixel)
-                        if pt is not None:
-                            md.update_landmark(lm_name, list(pt),
-                                source_cameras=[cam_name],
-                                error_m=None,
-                                zone=md.landmarks_meta.get(lm_name, {}).get('zone'))
-                            updated.append(lm_name)
-                    except Exception as e:
-                        errors.append(f"{lm_name}: {e}")
-                    continue
-
-                # Multi-cam: build observer list
-                observers = [(cam_name, cam)]
-                for ocn in other_cams_list:
-                    if ocn not in md.cameras:
-                        continue
-                    observers.append((ocn, ml.get_camera(ocn)))
-
-                # Skip re-triangulation for already-good LMs: if error_m < 0.5m,
-                # the LM is already well-placed. Re-triangulating from possibly-different
-                # current cam ypr would risk degrading a good placement.
-                _existing_err = md.landmarks_meta.get(lm_name, {}).get('error_m')
-                if _existing_err is not None and _existing_err < 0.5:
-                    skipped.append(f"{lm_name} (already good: error_m={_existing_err:.3f}m)")
-                    continue
-
-                # Co-location check: if all observers are within 50m of each other,
-                # there's no real triangulation baseline — refuse to update.
-                xs = [o[1].x for o in observers]
-                ys = [o[1].y for o in observers]
-                spread = max(max(xs)-min(xs), max(ys)-min(ys))
-                if spread < 50:
-                    skipped.append(f"{lm_name} (cams co-located within {spread:.0f}m)")
-                    continue
-
-                # Initial guess: current xyz, or compute one if missing
-                cur_xyz = md.landmarks.get(lm_name)
-                if cur_xyz is None:
-                    pt = cam.get_point_at_zero_elevation(marked_pixel)
-                    if pt is None:
-                        errors.append(f"{lm_name}: no init xyz available")
-                        continue
-                    cur_xyz = list(pt)
-
-                try:
-                    new_xyz, max_res = multi_cam_triangulate(observers, lm_name, cur_xyz)
-                    if new_xyz is None:
-                        errors.append(f"{lm_name}: {max_res}")
-                        continue
-                    md.update_landmark(lm_name, new_xyz,
-                        source_cameras=src,
-                        error_m=round(float(max_res), 3),
-                        zone=md.landmarks_meta.get(lm_name, {}).get('zone'))
-                    updated.append(lm_name)
-                except Exception as e:
-                    errors.append(f"{lm_name}: {e}")
-
-            print(f"Updated {len(updated)} landmarks for {cam_name}")
-            if skipped:
-                print(f"  Skipped {len(skipped)}: {skipped[:3]}")
-            if errors:
-                print(f"  Errors: {errors[:3]}")
-            self.send_json({
-                'updated': len(updated),
-                'skipped': len(skipped),
-                'errors': len(errors),
-                'names': updated,
-                'skipped_names': skipped,
-            })
+        elif path == '/api/map_verdict':
+            # [MAP-EVIDENCE-V1] lire/ecrire le verdict de preuve map d'un LM
+            lm_name = unquote(qs.get('lm', [''])[0])
+            status = qs.get('status', [''])[0]
+            import sys as _sys
+            if TOOL_DIR not in _sys.path: _sys.path.insert(0, TOOL_DIR)
+            from map_validate import load_validated, save_validated
+            cur = load_validated()
+            if status in ('validated', 'rejected'):
+                from datetime import date as _date
+                cur[lm_name] = {'status': status, 'date': _date.today().isoformat()}
+                save_validated(cur)
+            elif status == 'clear':
+                cur.pop(lm_name, None)
+                save_validated(cur)
+            self.send_json({'lm': lm_name, 'verdict': (cur.get(lm_name) or {}).get('status')})
 
         elif path == '/api/triage':
             # [TRIAGE-V1] Categorisation par cam avec action recommandee.
@@ -2422,6 +2316,11 @@ class Handler(BaseHTTPRequestHandler):
                 return
 
             # Save to landmarks. update_landmark() snaps xyz[2] if z_constraint
+            # [MAP-EVIDENCE-V1] dry=1: retourner la proposition sans ecrire
+            if qs.get('dry', [''])[0] == '1':
+                best['dry'] = True
+                self.send_json(best)
+                return
             # is set on this landmark (single source of truth — see gtamapdata.py).
             meta = md.landmarks_meta.get(lm_name, {})
             md.update_landmark(lm_name, best['xyz'],

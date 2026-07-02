@@ -430,7 +430,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .btn-opt:hover{background:#93c5fd}.btn-opt:disabled{opacity:.4;cursor:default}
 .btn-opt.running{background:var(--yellow);animation:pulse 1s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.6}}
-.indep-chip{font-family:var(--mono);font-size:11px;padding:5px 10px;border-radius:5px;background:#0f1a2e;border:1px solid var(--blue);color:var(--blue);text-align:center;white-space:nowrap}
+/* [CALIB-DESIGN-V1.1] indep = rangee de stat pleine largeur, alignee au panneau */
+.indep-chip{font-family:var(--mono);font-size:11px;display:flex;align-items:center;justify-content:space-between;
+  width:100%;box-sizing:border-box;padding:8px 12px;border-radius:var(--radius,6px);
+  background:var(--surface2);border:1px solid var(--border);color:var(--blue);white-space:nowrap}
+.indep-chip::before{content:'LOSS INDEPENDANT';font-size:9px;letter-spacing:1px;color:var(--dim)}
 .indep-chip .v{font-weight:700}
 
 .opt-result{padding:8px 13px;background:#0f1a2e;border-bottom:1px solid var(--border);font-family:var(--mono);font-size:10px;color:var(--blue);display:none}
@@ -507,6 +511,51 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
 .lm-info-cam.current{background:var(--blue);color:#000;border-color:var(--blue)}
 .lm-info-close{margin-left:auto;color:var(--dim);cursor:pointer;font-family:var(--mono);font-size:11px}
 .lm-info-close:hover{color:var(--red)}
+
+/* ══ [CALIB-DESIGN-V1] passe visuelle 2026-07-02 — couche d'override, revert = supprimer ce bloc ══ */
+:root{ --bg:#0b0b10; --surface:#10101a; --surface2:#171722; --border:#222236; --radius:6px; }
+header{ padding:0 16px; height:46px; gap:8px;
+  background:linear-gradient(180deg,#13131e 0%,#0e0e16 100%);
+  border-bottom:1px solid #1c1c2c; }
+header .view-toggle{height:28px; display:inline-flex; align-items:stretch;
+  border-radius:var(--radius); overflow:hidden; border:1px solid var(--border); background:var(--surface2)}
+header .view-toggle button[data-view]{
+  font-family:var(--mono); font-size:11px; font-weight:600;
+  height:100%; padding:0 14px; border:none; border-radius:0; cursor:pointer;
+  background:transparent; color:var(--mid);
+  border-right:1px solid var(--border); transition:color .12s, background .12s; }
+header .view-toggle button[data-view]:last-of-type{border-right:none}
+header .view-toggle button[data-view]:hover{color:var(--text)}
+header .view-toggle button[data-view].active{background:var(--green); color:#08120a; font-weight:700}
+header .btn, header .rays-toggle, header .nav-link, .cam-toggle-btn{
+  height:28px !important; display:inline-flex; align-items:center;
+  border-radius:var(--radius); font-weight:600; letter-spacing:.2px;
+  padding:0 12px; box-sizing:border-box; }
+header .rays-toggle{background:transparent; border:1px solid var(--border)}
+header .rays-toggle:hover{border-color:var(--mid); color:var(--text)}
+header .rays-toggle.active{background:var(--blue); border-color:var(--blue); color:#04101f}
+body.assist-on #proj-toggle{background:#f59e0b !important; border-color:#f59e0b !important; color:#1a1002 !important}
+.btn-ghost{background:transparent !important; color:var(--mid) !important; border:1px solid var(--border) !important}
+.btn-ghost:hover{color:var(--text) !important; border-color:var(--mid) !important; background:var(--surface2) !important}
+.btn-ghost-amber:hover{color:#f59e0b !important; border-color:#f59e0b88 !important}
+.btn-ghost-red:hover{color:#f87171 !important; border-color:#f8717188 !important}
+.btn-save:not(:disabled){box-shadow:0 1px 8px -2px #4ade8055}
+.btn-reset{background:transparent}
+.chip{height:28px; display:inline-flex; align-items:center; gap:5px;
+  padding:0 11px; border-radius:var(--radius);
+  background:var(--surface2); border:1px solid var(--border)}
+.ls-header #cam-search{border-radius:var(--radius); height:28px; box-sizing:border-box}
+.ls-list::-webkit-scrollbar{width:4px}
+.btn-opt{display:none}
+
+
+/* ══ [CALIB-DESIGN-V1.1] visibilite des toggles par mode + retrait Suspicious ══ */
+#rays-toggle{display:none !important}
+body.view-map #rays-toggle{display:inline-flex !important}
+#dual-toggle{display:none !important}
+body:not(.view-map):not(.view-view3d) #dual-toggle{display:inline-flex !important}
+#proj-toggle{display:none !important}
+body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !important}
 </style>
 <!-- Phase 7a.1.1: preload /yanis.jpg so the sidebar minimap is ready
      by the time the user picks a cam. The browser fetches it in
@@ -540,10 +589,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   <div class="chip" id="chip-all"><span style="color:var(--dim)">loss </span><span class="v" id="loss-all">—</span></div>
   <button class="btn btn-reset" id="btn-reset">Reset</button>
   <button class="btn btn-save" id="btn-save" disabled>Save</button>
-  <button class="btn" id="btn-update" disabled style="background:#7c3aed;color:#fff">Update LMs</button>
-  <button class="btn" id="btn-export" style="background:#0e7490;color:#fff">⬇ Export</button>
-  <button class="btn" id="btn-suspicious" style="background:#1c1c26;color:#f59e0b;border:1px solid #f59e0b">⚠ Suspicious</button>
-  <button class="btn" id="triage-btn" style="background:#1c1c26;color:#e74c3c;border:1px solid #e74c3c" title="Triage: cams categorisees avec action recommandee">Triage</button>
+  <!-- [DECOM-V1] Update LMs retire: triangulation = tools/triangulate_lm.py -->
+  <button class="btn btn-ghost" id="btn-export">⬇ Export</button>
+  <!-- [CALIB-DESIGN-V1.1] Suspicious retire: la detection vit dans le Triage board (/api/suspicious reste dispo) -->
+  <button class="btn btn-ghost btn-ghost-red" id="triage-btn" title="Triage: cams categorisees avec action recommandee">Triage</button>
   <span class="saved" id="saved">✓ Saved</span>
 </header>
 
@@ -688,8 +737,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div class="sl-row"><span class="sl-lbl">hFOV</span><input type="range" id="sl-hfov" min="10" max="130" step="0.01"><input class="num" id="num-hfov" type="number" step="0.01"></div>
     </div>
     <div class="opt-bar">
-      <button class="btn-opt" id="btn-opt" disabled>⚡ Optimize</button>
-      <div class="indep-chip"><span style="font-size:9px;color:var(--dim)">indep </span><span class="v" id="loss-indep">—</span></div>
+      <!-- [DECOM-V1] Optimize retire: calibration = tools/refine_cam_*.py / calibrate_session.py -->
+      <div class="indep-chip"><span class="v" id="loss-indep">—</span></div>
     </div>
     <div class="opt-result" id="opt-result">
       <div class="ol" id="opt-loss"></div>
@@ -703,6 +752,20 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
       <div class="lm-info-row" id="lm-info-status"></div>
       <div class="lm-info-row" id="lm-info-sources"></div>
       <div class="lm-info-row" id="lm-info-others"></div>
+      <!-- [MAP-EVIDENCE-V1] preuve map: crop yanis + verdict -->
+      <div id="lm-map-ev" style="display:none;margin-top:8px">
+        <img id="lm-map-img" style="width:100%;border-radius:6px;border:1px solid var(--border);display:block" alt="map crop">
+        <div id="lm-map-delta" style="font-family:var(--mono);font-size:9.5px;color:var(--mid);margin-top:4px"></div>
+        <div style="display:flex;gap:5px;margin-top:6px;flex-wrap:wrap">
+          <button class="f-btn" id="lm-map-propose" style="font-size:10px">proposer retriangulation</button>
+          <button class="f-btn" id="lm-map-ok" style="font-size:10px;color:var(--green);border-color:var(--green)">✓ map-valide</button>
+          <button class="f-btn" id="lm-map-bad" style="font-size:10px;color:var(--red);border-color:var(--red)">✗ map-rejete</button>
+          <button class="f-btn" id="lm-map-clear" style="font-size:10px">effacer</button>
+          <span id="lm-map-verdict" style="font-family:var(--mono);font-size:10px;align-self:center;color:var(--mid)"></span>
+        </div>
+        <div style="font-family:var(--mono);font-size:9px;color:var(--dim);margin-top:4px">
+          cyan = xyz actuel · orange = proposition · la map n'est pas du ground truth: valide = prior 5m, rejete = exclu du bundle</div>
+      </div>
     </div>
     <div class="lm-hdr">
       <div class="sb-title" style="margin:0;display:flex;align-items:center;gap:8px;flex:1">
@@ -975,12 +1038,13 @@ const lmCount  = document.getElementById('lm-count');
 const lossAll  = document.getElementById('loss-all');
 const chipAll  = document.getElementById('chip-all');
 const lossIndep = document.getElementById('loss-indep');
-const btnOpt   = document.getElementById('btn-opt');
+// [DECOM-V1] stub: l'element n'existe plus, les refs .disabled/.title restent inoffensives
+const btnOpt = {disabled:true, title:'', textContent:'', classList:{add(){},remove(){}}, style:{}, addEventListener(){}};
 const btnReset = document.getElementById('btn-reset');
 const btnSave  = document.getElementById('btn-save');
 const savedEl  = document.getElementById('saved');
-const btnUpdate = document.getElementById('btn-update');
-const btnSuspicious = document.getElementById('btn-suspicious');
+const btnUpdate = {disabled:true, title:'', textContent:'', classList:{add(){},remove(){}}, style:{}, addEventListener(){}};  // [DECOM-V1]
+const btnSuspicious = {disabled:true, classList:{add(){},remove(){}}, style:{}, addEventListener(){}, click(){}};  // [CALIB-DESIGN-V1.1] stub
 const btnExport = document.getElementById('btn-export');
 btnExport.addEventListener('click', () => {
   if (!currentCam) { return; }
@@ -4515,11 +4579,56 @@ async function showLmInfo(lmName) {
     }
 
     lmInfoPanel.classList.add('show');
+    updateLmMapEvidence(lmName, info.has_xyz);  // [MAP-EVIDENCE-V1]
   } catch (e) {
     console.error('lm_info failed:', e);
     lmInfoPanel.classList.remove('show');
   }
 }
+
+// [MAP-EVIDENCE-V1] preuve map dans l'inspecteur de LM
+let _mapEvLm = null;
+async function updateLmMapEvidence(lmName, hasXyz) {
+  const box = document.getElementById('lm-map-ev');
+  _mapEvLm = lmName;
+  if (!hasXyz) { box.style.display = 'none'; return; }
+  box.style.display = 'block';
+  document.getElementById('lm-map-delta').textContent = '';
+  document.getElementById('lm-map-img').src = '/api/lm_map_crop?lm=' + encodeURIComponent(lmName) + '&t=' + Date.now();
+  const v = await fetch('/api/map_verdict?lm=' + encodeURIComponent(lmName)).then(r => r.json()).catch(() => ({}));
+  renderMapVerdict(v.verdict);
+}
+function renderMapVerdict(v) {
+  const el = document.getElementById('lm-map-verdict');
+  el.textContent = v === 'validated' ? '✓ valide (prior 5m)' : v === 'rejected' ? '✗ rejete (exclu bundle)' : '— sans verdict';
+  el.style.color = v === 'validated' ? 'var(--green)' : v === 'rejected' ? 'var(--red)' : 'var(--mid)';
+}
+document.getElementById('lm-map-propose').addEventListener('click', async () => {
+  if (!_mapEvLm) return;
+  const d = document.getElementById('lm-map-delta');
+  d.textContent = 'triangulation dry-run…';
+  const r = await fetch('/api/triangulate?lm=' + encodeURIComponent(_mapEvLm) + '&dry=1').then(x => x.json()).catch(() => null);
+  if (!r || !r.xyz) { d.textContent = 'pas triangulable (' + ((r && r.error) || 'sources insuffisantes') + ')'; return; }
+  document.getElementById('lm-map-img').src = '/api/lm_map_crop?lm=' + encodeURIComponent(_mapEvLm) +
+    '&x2=' + r.xyz[0] + '&y2=' + r.xyz[1] + '&t=' + Date.now();
+  const err = r.error_m != null ? r.error_m.toFixed(2) + 'm' : '?';
+  d.textContent = 'proposition (orange): err ' + err + ' · sources: ' + (r.source_cameras || r.sources || r.kept_sources || []).join(', ');
+});
+document.getElementById('lm-map-ok').addEventListener('click', async () => {
+  if (!_mapEvLm) return;
+  const v = await fetch('/api/map_verdict?lm=' + encodeURIComponent(_mapEvLm) + '&status=validated').then(r => r.json());
+  renderMapVerdict(v.verdict);
+});
+document.getElementById('lm-map-bad').addEventListener('click', async () => {
+  if (!_mapEvLm) return;
+  const v = await fetch('/api/map_verdict?lm=' + encodeURIComponent(_mapEvLm) + '&status=rejected').then(r => r.json());
+  renderMapVerdict(v.verdict);
+});
+document.getElementById('lm-map-clear').addEventListener('click', async () => {
+  if (!_mapEvLm) return;
+  const v = await fetch('/api/map_verdict?lm=' + encodeURIComponent(_mapEvLm) + '&status=clear').then(r => r.json());
+  renderMapVerdict(v.verdict);
+});
 
 lmInfoClose.addEventListener('click', () => {
   selectedLm = null;
