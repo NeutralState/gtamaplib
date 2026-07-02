@@ -1950,17 +1950,16 @@
   },
   "The Floridian": {
     "xyz": [
-      1261.133046593967,
-      407.396715315042,
-      96.26785920431128
+      1263.9112010513954,
+      409.053003275611,
+      97.64300194937888
     ],
     "source_cameras": [
-      "Sidewalk (Jason) (E)",
+      "Jason Duval 05 (Machine Gun)",
       "Vice Beach (A)",
-      "Vice Beach (B)",
-      "Jason Duval 05 (Machine Gun)"
+      "Sidewalk (Jason) (E)"
     ],
-    "error_m": 3.633,
+    "error_m": 5.344,
     "zone": "vice_city"
   },
   "Traffic Sign": {
@@ -5983,15 +5982,8 @@
     "zone": "vice_city"
   },
   "Flamingo South Beach (TSW)": {
-    "xyz": [
-      1152.9353330333697,
-      943.6854498994904,
-      106.94247621213027
-    ],
-    "source_cameras": [
-      "Venetian Islands",
-      "Sidewalk (Jason) (E)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": null,
     "zone": "vice_city"
   },
@@ -9051,15 +9043,15 @@
   },
   "Star Island Water Tower": {
     "xyz": [
-      756.5326870912174,
-      480.07867940249065,
-      28.4869802468505
+      759.8387434370793,
+      481.3741382616631,
+      29.91588299275972
     ],
     "source_cameras": [
       "Vice Beach (B)",
       "Sidewalk (Jason) (E)"
     ],
-    "error_m": 5.375,
+    "error_m": 3.642,
     "zone": "vice_city"
   },
   "Tall Billboard": {
@@ -9141,15 +9133,8 @@
     "zone": "vice_city"
   },
   "W South Beach (SE)": {
-    "xyz": [
-      1947.8905656316847,
-      1558.9735945646748,
-      73.40938971061888
-    ],
-    "source_cameras": [
-      "Sidewalk (Jason) (E)",
-      "Venetian Islands"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": 2.048,
     "zone": "vice_city"
   },
