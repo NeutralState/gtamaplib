@@ -1656,6 +1656,34 @@ class Handler(BaseHTTPRequestHandler):
             except Exception:
                 _lm_meta = {}
 
+            # [ASSIST-V1] mode=assist: single-cam marking assistant. No
+            # filter_cam; every projectable unmarked LM is returned with a
+            # priority score describing what marking it would unlock.
+            assist = qs.get('mode', [''])[0] == 'assist'
+            _tiers_path = os.path.join(TOOL_DIR, 'generated', 'confidence_tiers.json')
+            _lm_tier, _cam_meta = {}, {}
+            if assist and os.path.exists(_tiers_path):
+                try:
+                    with open(_tiers_path) as _f:
+                        _t = json.load(_f)
+                    _lm_tier = {k: v.get('tier') for k, v in _t.get('landmarks', {}).items()}
+                    _cam_meta = _t.get('cameras', {}).get(cam_name, {})
+                except Exception:
+                    pass
+            _cam_n_obs = _cam_meta.get('n_obs', 99)
+
+            def _assist_score(lm_name, n_src):
+                lt = _lm_tier.get(lm_name)
+                if n_src == 1:
+                    return 1, '2e source -> triangulation'
+                if lt in ('anchor', 'high') and _cam_n_obs < 5:
+                    return 1, 'ancre pour cette cam sous-observee'
+                if lt in ('anchor', 'high'):
+                    return 2, 'ancre (redondance utile)'
+                if lt in ('low', 'medium'):
+                    return 2, 'source de plus -> tier'
+                return 3, 'couverture'
+
             projections = []
             VIRTUAL_PREFIXES = ('Portofino Tower (',)
             # If a filter_cam is given, restrict to LMs marked on it.
@@ -1689,11 +1717,17 @@ class Handler(BaseHTTPRequestHandler):
                     # Skip if out of frame (with small margin for labels)
                     if x < -50 or x > target_w + 50 or y < -50 or y > target_h + 50:
                         continue
-                    projections.append({
+                    _entry = {
                         'name': lm_name,
                         'type': 'point',
                         'pixel': [x, y],
-                    })
+                    }
+                    if assist:
+                        _p, _r = _assist_score(lm_name, len(src_cams))
+                        _entry.update({'priority': _p, 'reason': _r,
+                                       'tier': _lm_tier.get(lm_name),
+                                       'n_sources': len(src_cams)})
+                    projections.append(_entry)
                 elif len(src_cams) == 1:
                     # 1 source only -> epipolar line on the target cam
                     src_cam_name = src_cams[0]
@@ -1729,15 +1763,23 @@ class Handler(BaseHTTPRequestHandler):
                         )
                         if outside:
                             continue
-                        projections.append({
+                        _entry = {
                             'name': lm_name,
                             'type': 'epipolar',
                             'line': [[x1, y1], [x2, y2]],
                             'source_cam': src_cam_name,
-                        })
+                        }
+                        if assist:
+                            _entry.update({'priority': 1,
+                                           'reason': '2e source -> triangulation (ligne epipolaire)',
+                                           'tier': _lm_tier.get(lm_name),
+                                           'n_sources': 1})
+                        projections.append(_entry)
                     except Exception:
                         continue
 
+            if assist:
+                projections.sort(key=lambda p: (p.get('priority', 3), p['name']))
             self.send_json({
                 'cam': cam_name,
                 'cam_size': [target_w, target_h],
@@ -2017,6 +2059,136 @@ class Handler(BaseHTTPRequestHandler):
                 'names': updated,
                 'skipped_names': skipped,
             })
+
+        elif path == '/api/triage':
+            # [TRIAGE-V1] Categorisation par cam avec action recommandee.
+            # Reproduit le workflow de polish du 2026-07-01: outlier-isole
+            # (pattern CC9) / erreur etalee / sous-determinee, avec gain estime.
+            import math as _m
+            zone_filter = unquote(qs.get('zone', [''])[0])
+            _excl_path = os.path.join(os.path.dirname(TOOL_DIR), 'gtamapdata', 'excluded_markings.json')
+            try:
+                with open(_excl_path) as _f:
+                    _excl = json.load(_f)
+            except Exception:
+                _excl = {}
+            _tiers_path = os.path.join(TOOL_DIR, 'generated', 'confidence_tiers.json')
+            _lm_tiermeta, _zones = {}, {}
+            try:
+                with open(_tiers_path) as _f:
+                    _t = json.load(_f)
+                _lm_tiermeta = _t.get('landmarks', {})
+            except Exception:
+                pass
+
+            def _residuals(cn):
+                try:
+                    _cam = ml.get_camera(cn)
+                except Exception:
+                    return None
+                if _cam.xyz is None:
+                    return None
+                out = []
+                for _ln, _px in md.pixels.get(cn, {}).items():
+                    if _px is None: continue
+                    if _ln in (_excl.get(cn) or []): continue
+                    _xyz = md.landmarks.get(_ln)
+                    if _xyz is None: continue
+                    try:
+                        _p = _cam.get_pixel(_xyz)
+                    except Exception:
+                        continue
+                    if _p is None: continue
+                    _dx = (_p[0]-_px[0]) * _cam.hfov / _cam.w * 60
+                    _dy = (_p[1]-_px[1]) * _cam.vfov / _cam.h * 60
+                    out.append((_m.hypot(_dx, _dy), _ln))
+                return out
+
+            rows = []
+            for cn, cd in md.cameras.items():
+                if not cd.get('xyz'): continue
+                res = _residuals(cn)
+                if not res: continue
+                res.sort(reverse=True)
+                vals = [r[0] for r in res]
+                _rms = _m.sqrt(sum(v*v for v in vals)/len(vals))
+                if _rms <= 5.0: continue
+                n = len(vals)
+                worst, worst_lm = res[0]
+                med_o = sorted(vals[1:])[len(vals[1:])//2] if n > 1 else 0
+                if n <= 3:
+                    cat, action, gain = 'sous-determinee', 'marquer (mode Assist)', None
+                    detail = f'{n} obs seulement'
+                elif med_o > 0 and worst > max(10.0, 5*med_o):
+                    # le LM lui-meme est-il pourri partout? -> quarantaine plutot
+                    _lmm = _lm_tiermeta.get(worst_lm, {})
+                    _lm_med = _lmm.get('median_res') or 0
+                    _lm_anchor = (_lmm.get('tier') == 'anchor'
+                                  or (_lmm.get('n_leak_sources') or 0) >= 2)
+                    _mv = {}
+                    _mv_path = os.path.join(os.path.dirname(TOOL_DIR), 'gtamapdata', 'map_validated.json')
+                    if os.path.exists(_mv_path):
+                        try:
+                            with open(_mv_path) as _f:
+                                _mv = json.load(_f)
+                        except Exception:
+                            _mv = {}
+                    _lm_mapok = (_mv.get(worst_lm) or {}).get('status') == 'validated'
+                    rms_sans = _m.sqrt(sum(v*v for v in vals[1:])/max(1, n-1))
+                    gain = round(_rms - rms_sans, 1)
+                    if _lm_anchor:
+                        # ancre/leak = ground truth: si la cam la contredit,
+                        # c'est la CAM qui est cassee (pattern Diner/Bay)
+                        cat, action, gain = 'erreur etalee', 'refine (selon classe) — contredit une ancre', None
+                        detail = f'"{worst_lm}" (ANCRE) {worst:.0f}\' -> pose de cam suspecte'
+                    elif _lm_mapok:
+                        cat, action = 'markings a reviewer', 'ouvrir les frames en UI (LM map-valide)'
+                        detail = f'"{worst_lm}" {worst:.0f}\' mais position map-validee'
+                    elif _lm_med and _lm_med > 30:
+                        cat, action = 'LM fantome', 'quarantaine LM'
+                        detail = f'"{worst_lm}" {worst:.0f}\' ici, median {_lm_med:.0f}\' partout'
+                    else:
+                        cat, action = 'outlier isole', 'exclure marking'
+                        detail = f'"{worst_lm}" {worst:.0f}\' vs mediane autres {med_o:.1f}\''
+                else:
+                    cat, action, gain = 'erreur etalee', 'refine (selon classe)', None
+                    detail = f'pire {worst:.0f}\', mediane autres {med_o:.1f}\''
+                rows.append({'cam': cn, 'rms': round(_rms, 1), 'n_obs': n,
+                             'categorie': cat, 'action': action, 'detail': detail,
+                             'worst_lm': worst_lm, 'gain_estime': gain})
+            _order = {'LM fantome': 0, 'outlier isole': 1, 'markings a reviewer': 2, 'erreur etalee': 3, 'sous-determinee': 4}
+            rows.sort(key=lambda r: (_order.get(r['categorie'], 9), -(r['gain_estime'] or r['rms'])))
+            self.send_json({'rows': rows, 'n': len(rows)})
+
+        elif path == '/api/exclude_marking':
+            # [TRIAGE-V1] action: exclure un marking (meme format que
+            # tools/exclude_marking.py)
+            _cam = unquote(qs.get('cam', [''])[0])
+            _lm = unquote(qs.get('lm', [''])[0])
+            if not _cam or not _lm:
+                self.send_json({'error': 'cam et lm requis'}, 400); return
+            _excl_path = os.path.join(os.path.dirname(TOOL_DIR), 'gtamapdata', 'excluded_markings.json')
+            try:
+                with open(_excl_path) as _f:
+                    _d = json.load(_f)
+            except Exception:
+                _d = {}
+            _e = _d.setdefault(_cam, [])
+            if _lm not in _e:
+                _e.append(_lm)
+            with open(_excl_path, 'w') as _f:
+                json.dump(_d, _f, indent=2, ensure_ascii=True)
+                _f.write('\n')
+            self.send_json({'ok': True, 'excluded': [_cam, _lm]})
+
+        elif path == '/api/quarantine_lm':
+            # [TRIAGE-V1] action: nuller le xyz d'un LM connu-faux (les
+            # markings restent dans pixels.json pour retriangulation future)
+            _lm = unquote(qs.get('lm', [''])[0])
+            if _lm not in md.landmarks_meta and md.landmarks.get(_lm) is None:
+                self.send_json({'error': 'LM inconnu ou deja sans xyz'}, 400); return
+            md.update_landmark(_lm, None, source_cameras=[], error_m=None)
+            self.send_json({'ok': True, 'quarantined': _lm})
 
         elif path == '/api/suspicious':
             # Find outlier pixels by consensus across cams

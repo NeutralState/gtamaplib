@@ -351,7 +351,21 @@ body.dual-cam .lm-proj-svg{display:block}
 .lm-proj-svg .lm-proj-group:hover .lm-proj-line{opacity:1;stroke-width:3}
 .lm-proj-svg .lm-proj-group:hover .lm-proj-label{opacity:1}
 /* "Projections" toggle button — visible only when dual mode is on. */
-#proj-toggle{display:none}
+/* [ASSIST-V1] bouton toujours visible; libelle change selon le mode */
+#proj-toggle{display:inline-block}
+body.assist-on #proj-toggle{background:#f59e0b22;color:#f59e0b;border-color:#f59e0b}
+#assist-panel{display:none;position:absolute;top:52px;right:12px;width:270px;max-height:60vh;
+  overflow-y:auto;background:var(--surface,#16161c);border:1px solid var(--border,#2a2a33);
+  border-radius:8px;padding:10px;z-index:40;font-family:var(--mono,monospace);font-size:11.5px}
+body.assist-on #assist-panel{display:block}
+#assist-panel h4{margin:0 0 8px;font-size:12px;color:#f59e0b}
+#assist-panel .ap-row{padding:4px 6px;border-radius:4px;cursor:pointer;display:flex;gap:6px;align-items:baseline}
+#assist-panel .ap-row:hover{background:#ffffff12}
+#assist-panel .ap-p1{color:#f59e0b}
+#assist-panel .ap-p2{color:#22d3ee}
+#assist-panel .ap-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;flex:1}
+#assist-panel .ap-why{color:var(--mid,#888);font-size:10px;display:block;margin-left:22px}
+#assist-panel .ap-note{color:var(--mid,#888);font-size:10px;margin-top:6px;line-height:1.4}
 body.dual-cam #proj-toggle{display:inline-block}
 body.dual-cam.proj-off #proj-toggle{background:var(--surface2);color:var(--mid);border-color:var(--border)}
 body.dual-cam.proj-off .lm-proj-svg{display:none}
@@ -516,7 +530,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   <!-- [MULTICAM-STEP1] Dual toggle -->
   <button class="rays-toggle" id="dual-toggle" title="Compare two cams side-by-side (D)">Dual</button>
   <!-- [MULTICAM-STEP23] Toggle ghost LM projections in dual mode -->
-  <button class="rays-toggle" id="proj-toggle" title="Show ghost LM projections on the opposite pane">Projections</button>
+  <button class="rays-toggle" id="proj-toggle" title="Assist: LM non marques projetes en fantomes, priorises par gain">Assist</button>
+  <!-- [ASSIST-V1] panneau des LM a marquer, trie par priorite -->
+  <div id="assist-panel"><h4>&Agrave; marquer</h4><div id="assist-list"></div>
+  <div class="ap-note">Clic sur un fant&ocirc;me ou une ligne = armer le marquage, puis cliquez l'emplacement R&Eacute;EL dans le frame. Sur une cam mal calibr&eacute;e, les positions fant&ocirc;mes sont approximatives &mdash; fiez-vous aux noms.</div></div>
 
   <span id="cam-meta"></span>
   <span id="class-label" style="display:none;font-family:var(--mono);font-size:10px;font-weight:600;padding:3px 8px;border-radius:9px;border:1px solid var(--border);margin-left:4px"></span>
@@ -526,6 +543,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:13px;heigh
   <button class="btn" id="btn-update" disabled style="background:#7c3aed;color:#fff">Update LMs</button>
   <button class="btn" id="btn-export" style="background:#0e7490;color:#fff">⬇ Export</button>
   <button class="btn" id="btn-suspicious" style="background:#1c1c26;color:#f59e0b;border:1px solid #f59e0b">⚠ Suspicious</button>
+  <button class="btn" id="triage-btn" style="background:#1c1c26;color:#e74c3c;border:1px solid #e74c3c" title="Triage: cams categorisees avec action recommandee">Triage</button>
   <span class="saved" id="saved">✓ Saved</span>
 </header>
 
@@ -3371,15 +3389,18 @@ window.draw2 = draw2;
 function drawGhostsOnCtx(ctxLocal, ghosts, mapper, hoveredName) {
   if (!ghosts || !ghosts.length) return;
   const VIOLET = '#c084fc';
+  // [ASSIST-V1] couleur par priorite quand presente (mode assist)
+  const gcol = g => g.priority === 1 ? '#f59e0b' : g.priority === 2 ? '#22d3ee' : VIOLET;
   for (const g of ghosts) {
     if (g.type === 'point') {
       const hi = hoveredName === g.name;
+      const COL = gcol(g);
       const [mx, my] = mapper(g.pixel[0], g.pixel[1]);
-      const r = hi ? 8 : 5;
+      const r = hi ? 8 : (g.priority === 1 ? 6 : 5);
       ctxLocal.beginPath(); ctxLocal.arc(mx, my, r, 0, Math.PI * 2);
-      ctxLocal.fillStyle = VIOLET + '44';  // 27% alpha fill — matches existing markers
+      ctxLocal.fillStyle = COL + '44';
       ctxLocal.fill();
-      ctxLocal.strokeStyle = VIOLET; ctxLocal.lineWidth = hi ? 2.5 : 1.5; ctxLocal.stroke();
+      ctxLocal.strokeStyle = COL; ctxLocal.lineWidth = hi ? 2.5 : 1.5; ctxLocal.stroke();
       if (hi) {
         ctxLocal.font = '11px JetBrains Mono, monospace';
         const labelText = g.name;
@@ -3396,7 +3417,7 @@ function drawGhostsOnCtx(ctxLocal, ghosts, mapper, hoveredName) {
       const [x2, y2] = mapper(g.line[1][0], g.line[1][1]);
       ctxLocal.beginPath();
       ctxLocal.moveTo(x1, y1); ctxLocal.lineTo(x2, y2);
-      ctxLocal.strokeStyle = VIOLET;
+      ctxLocal.strokeStyle = gcol(g);
       ctxLocal.lineWidth = 1.5;
       ctxLocal.setLineDash([6, 4]);
       ctxLocal.stroke();
@@ -3503,6 +3524,7 @@ canvasWrap.addEventListener('mousemove', e => {
     if (dx*dx + dy*dy < 64) { foundGhost = g.name; break; }
   }
   if (foundGhost !== hoveredGhost1) { hoveredGhost1 = foundGhost; draw(); }
+  window._assistHoverGhost = foundGhost;  // [ASSIST-V1] pour le handler de clic
 
   if (found) {
     const lm = projections.find(p => p.name === found);
@@ -4195,6 +4217,14 @@ function startAddPixel() {
 }
 
 // Handle add pixel click on main canvas
+// [ASSIST-V1] clic sur un fantome en mode assist = armer le marquage
+canvasWrap.addEventListener('click', e => {
+  if (addPxMode) return;
+  if (!document.body.classList.contains('assist-on')) return;
+  if (document.body.classList.contains('dual-cam')) return;
+  if (window._assistHoverGhost) armGhostMarking(window._assistHoverGhost);
+});
+
 canvasWrap.addEventListener('click', async e => {
   if (!addPxMode) return;
   const rect = getMainPaneRect();  // [MULTICAM-STEP20]
@@ -4213,6 +4243,7 @@ canvasWrap.addEventListener('click', async e => {
     document.getElementById('no-img').style.display = 'none';
     canvasWrap.style.cursor = 'crosshair';
     await loadProjections();
+    if (window._refreshGhosts) window._refreshGhosts();  // [ASSIST-V1]
   }
 });
 
@@ -5297,9 +5328,22 @@ window.addEventListener('load', () => {
       ghostMarkers1 = (d1 && d1.projections) || [];
       const d2 = await fetchProjections(cam2, cam1);
       ghostMarkers2 = (d2 && d2.projections) || [];
+    } else if (document.body.classList.contains('assist-on') && cam1 &&
+               !document.body.classList.contains('dual-cam')) {
+      // [ASSIST-V1] mode assist single-cam: ghosts priorises, pas de cache
+      // (l'etat change apres chaque add_pixel)
+      let d1 = null;
+      try {
+        const r = await fetch('/api/lm_projections?cam=' + encodeURIComponent(cam1) + '&mode=assist');
+        d1 = await r.json();
+      } catch (e) { d1 = null; }
+      ghostMarkers1 = (d1 && d1.projections) || [];
+      ghostMarkers2 = [];
+      renderAssistPanel(ghostMarkers1);
     } else {
       ghostMarkers1 = [];
       ghostMarkers2 = [];
+      renderAssistPanel([]);
     }
     if (typeof draw === 'function') draw();
     if (typeof draw2 === 'function') draw2();
@@ -5320,12 +5364,49 @@ window.addEventListener('load', () => {
   const btnProj = document.getElementById('proj-toggle');
   if (btnProj) {
     btnProj.addEventListener('click', () => {
-      const off = document.body.classList.toggle('proj-off');
-      btnProj.classList.toggle('active', !off);
+      if (document.body.classList.contains('dual-cam')) {
+        const off = document.body.classList.toggle('proj-off');
+        btnProj.classList.toggle('active', !off);
+      } else {
+        // [ASSIST-V1]
+        const on = document.body.classList.toggle('assist-on');
+        btnProj.classList.toggle('active', on);
+      }
       refresh();
     });
-    btnProj.classList.add('active');
   }
+
+  // [ASSIST-V1] panneau: liste triee, hover = highlight, clic = armer
+  window.renderAssistPanel = function(ghosts) {
+    const list = document.getElementById('assist-list');
+    if (!list) return;
+    const pts = ghosts.filter(g => g.priority === 1 || g.priority === 2).slice(0, 30);
+    list.innerHTML = '';
+    for (const g of pts) {
+      const row = document.createElement('div');
+      row.className = 'ap-row ap-p' + g.priority;
+      row.innerHTML = '<span>P' + g.priority + '</span><span class="ap-name">' + g.name + '</span>' +
+                      '<span class="ap-why">' + (g.reason || '') + '</span>';
+      row.addEventListener('mouseenter', () => { hoveredGhost1 = g.name; if (typeof draw === 'function') draw(); });
+      row.addEventListener('mouseleave', () => { hoveredGhost1 = null; if (typeof draw === 'function') draw(); });
+      row.addEventListener('click', () => armGhostMarking(g.name));
+      list.appendChild(row);
+    }
+  };
+
+  // [ASSIST-V1] armer le marquage d'un LM: prochain clic dans le frame = pixel
+  window.armGhostMarking = function(lmName) {
+    addPxSelectedLm = lmName;
+    addPxMode = true;
+    canvasWrap.style.cursor = 'crosshair';
+    const t = document.getElementById('tri-toast');
+    if (t) {
+      document.getElementById('tri-toast-title').textContent = 'Marquage arme: ' + lmName;
+      document.getElementById('tri-toast-meta').textContent = 'Cliquez l\'emplacement reel dans le frame (ESC annule)';
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 4000);
+    }
+  };
 
   console.log('[CANVAS-GHOSTS] ghost loader wired up');
 })();
@@ -5359,5 +5440,89 @@ window.addEventListener('load', () => {
   .view3d-wrap iframe { width:100%; height:100%; border:0; display:block; }
 </style>
 <div class="view3d-wrap" id="view3d-wrap"><iframe id="view3d-frame"></iframe></div>
+<!-- [TRIAGE-V1] modal du triage board -->
+<div id="triage-modal" style="display:none;position:fixed;inset:0;background:#000a;z-index:100">
+ <div style="position:absolute;top:5vh;left:50%;transform:translateX(-50%);width:min(860px,94vw);max-height:88vh;
+   overflow-y:auto;background:var(--surface,#16161c);border:1px solid var(--border,#2a2a33);border-radius:10px;padding:16px;
+   font-family:var(--mono,monospace);font-size:12px">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+    <b style="color:#f59e0b;font-size:14px">Triage board</b>
+    <span id="triage-count" style="color:var(--mid,#888)"></span>
+    <button onclick="document.getElementById('triage-modal').style.display='none'"
+      style="background:none;border:1px solid var(--border,#333);color:var(--mid,#aaa);border-radius:5px;padding:3px 10px;cursor:pointer">fermer</button>
+  </div>
+  <div id="triage-rows">chargement…</div>
+ </div>
+</div>
+<script>
+// [TRIAGE-V1]
+(() => {
+  const CAT_COL = {'LM fantome':'#e74c3c','outlier isole':'#f59e0b','markings a reviewer':'#c084fc',
+                   'erreur etalee':'#22d3ee','sous-determinee':'#888'};
+  const btn = document.getElementById('triage-btn');
+  const modal = document.getElementById('triage-modal');
+  const box = document.getElementById('triage-rows');
+
+  async function load() {
+    box.textContent = 'analyse en cours…';
+    const d = await fetch('/api/triage').then(r => r.json());
+    document.getElementById('triage-count').textContent = d.n + ' cams > 5\'';
+    box.innerHTML = '';
+    let lastCat = null;
+    for (const r of d.rows) {
+      if (r.categorie !== lastCat) {
+        lastCat = r.categorie;
+        const h = document.createElement('div');
+        h.style.cssText = 'margin:12px 0 4px;font-weight:700;color:' + (CAT_COL[r.categorie] || '#ccc');
+        h.textContent = r.categorie.toUpperCase();
+        box.appendChild(h);
+      }
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;gap:10px;align-items:center;padding:5px 6px;border-radius:5px;border-bottom:1px solid #ffffff0e';
+      const gain = r.gain_estime ? ' <span style="color:#2ecc71">−' + r.gain_estime + '\'</span>' : '';
+      row.innerHTML = '<a href="#" data-cam="' + r.cam.replace(/"/g,'&quot;') + '" class="tr-cam" ' +
+        'style="color:var(--text,#ddd);min-width:220px;text-decoration:none">' + r.cam + '</a>' +
+        '<span style="color:' + (CAT_COL[r.categorie]||'#ccc') + ';min-width:52px">' + r.rms + "'" + '</span>' +
+        '<span style="flex:1;color:var(--mid,#999)">' + r.detail + gain + '</span>';
+      const act = document.createElement('button');
+      act.style.cssText = 'background:#ffffff14;border:1px solid var(--border,#333);color:var(--text,#ddd);' +
+                          'border-radius:5px;padding:3px 9px;cursor:pointer;white-space:nowrap';
+      act.textContent = r.action;
+      act.addEventListener('click', async () => {
+        if (r.categorie === 'outlier isole') {
+          if (!confirm('Exclure le marking "' + r.worst_lm + '" sur ' + r.cam + ' ?')) return;
+          const res = await fetch('/api/exclude_marking?cam=' + encodeURIComponent(r.cam) +
+                                  '&lm=' + encodeURIComponent(r.worst_lm)).then(x => x.json());
+          if (res.ok) load();
+        } else if (r.categorie === 'LM fantome') {
+          if (!confirm('Quarantaine (null xyz) de "' + r.worst_lm + '" ? Les markings restent dans pixels.json.')) return;
+          const res = await fetch('/api/quarantine_lm?lm=' + encodeURIComponent(r.worst_lm)).then(x => x.json());
+          if (res.ok) load(); else alert(res.error || 'erreur');
+        } else {
+          selectCamByName(r.cam);
+          modal.style.display = 'none';
+        }
+      });
+      row.appendChild(act);
+      row.querySelector('.tr-cam').addEventListener('click', e => {
+        e.preventDefault();
+        selectCamByName(r.cam);
+        modal.style.display = 'none';
+      });
+      box.appendChild(row);
+    }
+  }
+
+  function selectCamByName(name) {
+    const sel = document.getElementById('cam-sel') || document.querySelector('select');
+    if (!sel) return;
+    for (const o of sel.options) if (o.value === name || o.value.includes(name)) { sel.value = o.value; break; }
+    sel.dispatchEvent(new Event('change'));
+  }
+
+  if (btn) btn.addEventListener('click', () => { modal.style.display = 'block'; load(); });
+  modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+})();
+</script>
 </body>
 </html>
