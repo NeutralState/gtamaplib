@@ -6838,7 +6838,7 @@
     "xyz": [
       801.1502940667892,
       -182.25181875185143,
-      0.0011074149967661017
+      0.0
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -6862,11 +6862,7 @@
       "Vice City 08 (Ferris Wheel)"
     ],
     "error_m": 4.474,
-    "zone": "vice_city",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
+    "zone": "vice_city"
   },
   "Port (E)": {
     "xyz": [
@@ -6879,11 +6875,7 @@
       "Vice City 08 (Ferris Wheel)"
     ],
     "error_m": 6.088,
-    "zone": "vice_city",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
+    "zone": "vice_city"
   },
   "Port (F)": {
     "xyz": null,

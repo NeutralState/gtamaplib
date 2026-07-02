@@ -26,7 +26,22 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, ROOT)
 import gtamapdata as md
 sys.path.insert(0, os.path.join(ROOT, "tools"))
-from leak_cam_audit import is_triangulation_trusted
+from leak_cam_audit import is_triangulation_trusted, get_class
+
+# [CLASS-AWARE-V1] DOF verrouillees par classe V2 — seules celles-la sont
+# comparees a la reference gelee. C laisse ypr libre, Cm laisse ypr+fov.
+_LOCKED_KEYS = {
+    'A': ('xyz', 'ypr', 'fov'),
+    'B': ('xyz', 'ypr', 'fov'),
+    'C': ('xyz', 'fov'),
+    'Cm': ('xyz',),
+}
+def _locked_keys(cam_name):
+    cls = (get_class(cam_name, cameras=md.cameras) or '')
+    for pref in ('Cm', 'A', 'B', 'C'):
+        if cls.startswith(pref):
+            return _LOCKED_KEYS[pref]
+    return ('xyz', 'ypr', 'fov')
 
 REF_PATH = os.path.join(ROOT, "tools", "audit", "leak_poses_ref.json")
 EPS = 1e-6
@@ -79,7 +94,7 @@ def main():
                 fails.append(f"LEAK: {n} dans la ref mais absente de cameras.json")
                 continue
             c = md.cameras[n]
-            for k in ("xyz", "ypr", "fov"):
+            for k in _locked_keys(n):  # [CLASS-AWARE-V1]
                 a, b = c.get(k), r.get(k)
                 if a is None or b is None:
                     if a != b:

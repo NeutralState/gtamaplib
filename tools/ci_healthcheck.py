@@ -1,0 +1,163 @@
+#!/usr/bin/env python3
+"""ci_healthcheck.py — Garde-fou CI: roule sur chaque push (GitHub Actions) et
+localement avant commit. Exit 1 = le push introduit une regression.
+
+CHECKS:
+  1. TIERS      : compute_confidence_tiers.py doit reussir (donnees chargeables)
+  2. INVARIANTS : tools/audit/invariants.py (z-constraints, leaks immobiles
+                  class-aware, schema, doublons) — exit 1 propage
+  3. CYCLES     : circular_deps.py — tout NOUVEAU cycle PUR (auto-referentiel,
+                  aucune leak d'ancrage) vs la baseline = FAIL
+  4. RMS        : rms_snapshot vs baseline committee — mediane globale qui
+                  degrade de plus de TOL_MEDIAN_PCT = FAIL (mean informatif)
+  5. JSON       : gtamapdata/*.json parsables + ASCII pur (convention
+                  ensure_ascii, evite les diffs parasites)
+
+Baseline: tools/ci_baseline.json (committee). Apres une amelioration legitime:
+    python3 tools/ci_healthcheck.py --update-baseline
+    git add tools/ci_baseline.json && git commit ...
+
+Usage:
+    PYTHONPATH=. python3 tools/ci_healthcheck.py
+    PYTHONPATH=. python3 tools/ci_healthcheck.py --update-baseline
+"""
+import argparse
+import glob
+import json
+import os
+import re
+import subprocess
+import sys
+
+ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+BASELINE = os.path.join(ROOT, 'tools', 'ci_baseline.json')
+SNAP_PATH = os.path.join(ROOT, 'tools', 'generated', 'rms_snapshot_ci.json')
+TOL_MEDIAN_PCT = 10.0     # degradation de mediane globale toleree
+PY = sys.executable
+
+
+def run(cmd, **kw):
+    return subprocess.run([PY] + cmd, cwd=ROOT, capture_output=True, text=True,
+                          env={**os.environ, 'PYTHONPATH': ROOT}, **kw)
+
+
+def parse_pure_cycles(stdout):
+    """Extrait les ensembles de cams des cycles PURS depuis la sortie de
+    circular_deps.py (sections apres '### CYCLES PURS')."""
+    cycles = []
+    in_pure = False
+    for line in stdout.splitlines():
+        if 'CYCLES PURS' in line:
+            in_pure = True
+            continue
+        if in_pure and line.startswith('### '):
+            in_pure = False
+        if in_pure:
+            m = re.search(r"SCC \(\d+ cams?\): \[(.*)\]", line)
+            if m:
+                cams = sorted(re.findall(r"'([^']+)'", m.group(1)))
+                cycles.append(cams)
+    return sorted(cycles)
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--update-baseline', action='store_true')
+    args = ap.parse_args()
+
+    fails = []
+    print('══ CI HEALTHCHECK ══')
+
+    # ── 1. tiers ──────────────────────────────────────────────────────────
+    r = run(['tools/compute_confidence_tiers.py'])
+    if r.returncode != 0:
+        fails.append('TIERS: compute_confidence_tiers.py a echoue')
+        print(r.stdout[-800:], r.stderr[-800:])
+    else:
+        print('✓ tiers regeneres')
+
+    # ── 2. invariants ────────────────────────────────────────────────────
+    r = run(['tools/audit/invariants.py'])
+    if r.returncode != 0:
+        fails.append('INVARIANTS: violations (voir sortie)')
+        print(r.stdout[-1500:])
+    else:
+        print('✓ invariants OK')
+
+    # ── 3. cycles purs ───────────────────────────────────────────────────
+    r = run(['tools/audit/circular_deps.py'])
+    pure = parse_pure_cycles(r.stdout)
+    print(f'  cycles purs actuels: {len(pure)}')
+
+    # ── 4. rms snapshot ──────────────────────────────────────────────────
+    r = run(['tools/audit/rms_snapshot.py', '--tag', 'ci'])
+    summary = None
+    if r.returncode != 0 or not os.path.exists(SNAP_PATH):
+        fails.append('RMS: rms_snapshot a echoue')
+    else:
+        with open(SNAP_PATH) as f:
+            summary = json.load(f)['summary']
+        print(f"  mediane globale: {summary['global_median_arcmin']}'  "
+              f"mean: {summary['global_mean_arcmin']}'")
+
+    # ── 5. json hygiene ──────────────────────────────────────────────────
+    for p in sorted(glob.glob(os.path.join(ROOT, 'gtamapdata', '*.json'))):
+        try:
+            raw = open(p, 'rb').read()
+            json.loads(raw)
+            if any(b > 127 for b in raw):
+                fails.append(f'JSON: {os.path.basename(p)} contient du non-ASCII '
+                             '(convention ensure_ascii=True)')
+        except Exception as e:
+            fails.append(f'JSON: {os.path.basename(p)} invalide: {e}')
+    if not any(f_.startswith('JSON') for f_ in fails):
+        print('✓ json hygiene OK')
+
+    # ── baseline ─────────────────────────────────────────────────────────
+    if args.update_baseline:
+        if summary is None:
+            print('FAIL: impossible de geler une baseline sans snapshot valide')
+            return 1
+        with open(BASELINE, 'w') as f:
+            json.dump({'global_median_arcmin': summary['global_median_arcmin'],
+                       'global_mean_arcmin': summary['global_mean_arcmin'],
+                       'pure_cycles': pure}, f, indent=1, sort_keys=True)
+            f.write('\n')
+        print(f'BASELINE GELEE -> {BASELINE} (a committer)')
+        return 0
+
+    if not os.path.exists(BASELINE):
+        fails.append('BASELINE: tools/ci_baseline.json absent — roule '
+                     '--update-baseline une premiere fois et committe-le')
+    elif summary is not None:
+        with open(BASELINE) as f:
+            base = json.load(f)
+        # cycles: tout nouveau cycle pur = fail
+        known = [tuple(c) for c in base.get('pure_cycles', [])]
+        new_cycles = [c for c in pure if tuple(c) not in known]
+        if new_cycles:
+            fails.append(f'CYCLES: {len(new_cycles)} NOUVEAU(X) cycle(s) PUR(S) '
+                         f'(auto-referentiels, aucune leak): {new_cycles}')
+        else:
+            print(f'✓ cycles purs: aucun nouveau (baseline: {len(known)})')
+        # mediane
+        bm = base['global_median_arcmin']
+        cm = summary['global_median_arcmin']
+        if bm > 0 and (cm - bm) / bm * 100 > TOL_MEDIAN_PCT:
+            fails.append(f'RMS: mediane globale degradee {bm}\' -> {cm}\' '
+                         f'(> {TOL_MEDIAN_PCT}% tolere)')
+        else:
+            print(f'✓ mediane vs baseline: {bm}\' -> {cm}\'')
+
+    print()
+    if fails:
+        print(f'HEALTHCHECK: {len(fails)} ECHEC(S)')
+        for f_ in fails:
+            print('  FAIL', f_)
+        return 1
+    print('HEALTHCHECK OK')
+    return 0
+
+
+if __name__ == '__main__':
+    sys.exit(main())
