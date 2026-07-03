@@ -71,11 +71,27 @@ def residuals_arcmin(cam, obs):
     return out
 
 
-def make_cam(cam_name, ypr, hfov):
-    """Camera object with overridden ypr/hfov (xyz stays as stored)."""
+def fov_slot(cam_data):
+    """[VFOV-V1] Some cams are vfov-primary: fov = (None, vfov). Return
+    (index, value) of the active slot."""
+    fv = cam_data.get('fov')
+    if isinstance(fv, (list, tuple)):
+        if fv[0] is not None:
+            return 0, float(fv[0])
+        return 1, float(fv[1])
+    return 0, float(fv)
+
+
+def make_cam(cam_name, ypr, fov_val):
+    """Camera object with overridden ypr/fov (xyz stays as stored)."""
     saved = dict(md.cameras[cam_name])
     md.cameras[cam_name]['ypr'] = list(ypr)
-    md.cameras[cam_name]['fov'] = [hfov, saved['fov'][1] if isinstance(saved.get('fov'), (list, tuple)) and len(saved['fov']) > 1 else None]
+    idx, _ = fov_slot(saved)
+    new_fov = [None, None]
+    if isinstance(saved.get('fov'), (list, tuple)) and len(saved['fov']) > 1:
+        new_fov = list(saved['fov'])
+    new_fov[idx] = fov_val
+    md.cameras[cam_name]['fov'] = new_fov
     try:
         ml.get_camera.cache_clear()
     except Exception:
@@ -93,7 +109,7 @@ def fit(cam_name, obs, solve_roll, roll_sigma=2.0):
     from scipy.optimize import minimize
     c0 = md.cameras[cam_name]
     y0, p0, r0 = list(c0['ypr'])
-    f0 = c0['fov'][0] if isinstance(c0.get('fov'), (list, tuple)) else c0.get('fov')
+    _, f0 = fov_slot(c0)  # [VFOV-V1]
 
     def loss(v):
         if solve_roll:
@@ -215,8 +231,8 @@ def main():
         print(f"  {r:9.2f}'  {lm}")
     c0 = md.cameras[cn]
     print(f"ypr:  {[round(float(v), 4) for v in c0['ypr']]} -> {[round(float(v), 4) for v in ypr]}")
-    f0 = c0['fov'][0] if isinstance(c0.get('fov'), (list, tuple)) else c0.get('fov')
-    print(f'hfov: {round(float(f0), 4)} -> {round(float(hfov), 4)}')
+    _idx, f0 = fov_slot(c0)  # [VFOV-V1]
+    print(f"{'vfov' if _idx else 'hfov'}: {round(float(f0), 4)} -> {round(float(hfov), 4)}")
 
     worst = max(r for r, _ in after)
     if worst > 5.0:
@@ -234,10 +250,12 @@ def main():
     with open(CAMERAS_JSON) as f:
         cameras = json.load(f)
     cameras[cn]['ypr'] = [round(float(v), 6) for v in ypr]
+    _idx, _ = fov_slot(md.cameras[cn])  # [VFOV-V1] write back to the active slot
     if isinstance(cameras[cn].get('fov'), list):
-        cameras[cn]['fov'][0] = round(float(hfov), 6)
+        cameras[cn]['fov'][_idx] = round(float(hfov), 6)
     else:
-        cameras[cn]['fov'] = [round(float(hfov), 6), None]
+        _f = [None, None]; _f[_idx] = round(float(hfov), 6)
+        cameras[cn]['fov'] = _f
     with open(CAMERAS_JSON, 'w') as f:
         json.dump(cameras, f, indent=2)
     print('APPLIED: cameras.json updated. (Re-run compute_confidence_tiers.py)')
