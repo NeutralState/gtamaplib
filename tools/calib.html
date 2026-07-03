@@ -5665,5 +5665,322 @@ window.addEventListener('load', () => {
   modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
 })();
 </script>
+
+<!-- [MARKING-V1] precision marking layer: loupe, drag, inline add -->
+<div id="mk-loupe" style="display:none;position:fixed;z-index:400;pointer-events:none">
+  <canvas id="mk-loupe-cv" width="160" height="160"
+    style="border-radius:50%;border:2px solid #4ade80;box-shadow:0 4px 18px #000c;background:#000"></canvas>
+  <div id="mk-loupe-info" style="text-align:center;font-family:var(--mono,monospace);font-size:11px;
+    color:#4ade80;background:#000c;border-radius:5px;padding:2px 6px;margin-top:4px"></div>
+</div>
+<div id="mk-add-box" style="display:none;position:fixed;z-index:401;background:var(--surface,#16161c);
+  border:1px solid #4ade80;border-radius:6px;padding:8px;box-shadow:0 4px 18px #000c">
+  <input id="mk-add-input" list="mk-add-list" type="text" placeholder="LM name (existing = 2nd source)"
+    style="font-family:var(--mono,monospace);font-size:11px;background:var(--surface2,#0f0f14);
+    border:1px solid var(--border,#333);color:var(--text,#ddd);padding:5px 8px;border-radius:4px;width:260px;outline:none">
+  <datalist id="mk-add-list"></datalist>
+  <div style="font-family:var(--mono,monospace);font-size:9px;color:var(--mid,#888);margin-top:4px">
+    Enter = arm &amp; drag-place · Esc = cancel</div>
+</div>
+
+<script>
+// ══ [MARKING-V1] Precision marking: ghost-click -> instant marker -> drag ══
+// Paradigm: never mark from scratch — correct a prediction. Ghost = the
+// model's best guess; the human slides it to the truth. Loupe (6x) kills the
+// display-scale precision floor (~2.4 frame-px/screen-px). Live delta while
+// dragging a triangulated LM. Epipolar snap for line ghosts (Alt = free).
+(() => {
+  const MAG = 6, LOUPE = 160;
+  const loupe = document.getElementById('mk-loupe');
+  const loupeCv = document.getElementById('mk-loupe-cv');
+  const loupeCtx = loupeCv.getContext('2d');
+  const loupeInfo = document.getElementById('mk-loupe-info');
+  const addBox = document.getElementById('mk-add-box');
+  const addInput = document.getElementById('mk-add-input');
+  const _imgs = new Map();   // cam -> Image (full res)
+  const mk = { drag: null, swallowClick: false, nudgeTimer: null };
+  window._mk = mk;  // test hook
+
+  function fullImg(cam) {
+    if (_imgs.has(cam)) return _imgs.get(cam);
+    const im = new Image();
+    im.src = '/frame/' + encodeURIComponent(cam);
+    _imgs.set(cam, im);
+    return im;
+  }
+
+  function imgPt(e) {
+    const rect = getMainPaneRect();
+    return canvasToImg(e.clientX - rect.left, e.clientY - rect.top);
+  }
+
+  function vfovDeg() {
+    if (!camData?.size) return null;
+    const [w, h] = camData.size;
+    const hf = (typeof params !== 'undefined' && params.hfov) ? params.hfov : null;
+    if (!hf) return null;
+    return 2 * Math.atan(Math.tan(hf * Math.PI / 360) * h / w) * 180 / Math.PI;
+  }
+
+  function liveDelta(lm, px) {
+    const p = projections.find(x => x.name === lm);
+    if (!p || !p.proj || !camData?.size) return null;
+    const [w, h] = camData.size;
+    const hf = params.hfov, vf = vfovDeg();
+    if (!hf || !vf) return null;
+    const dx = (p.proj[0] - px[0]) * hf / w * 60;
+    const dy = (p.proj[1] - px[1]) * vf / h * 60;
+    return Math.hypot(dx, dy);
+  }
+
+  function epipolarFor(lm) {
+    for (const g of (ghostMarkers1 || []))
+      if (g.type === 'epipolar' && g.name === lm) return g.line;
+    return null;
+  }
+
+  function snapToLine(px, line) {
+    const [a, b] = line;
+    const abx = b[0] - a[0], aby = b[1] - a[1];
+    const t = Math.max(0, Math.min(1,
+      ((px[0] - a[0]) * abx + (px[1] - a[1]) * aby) / (abx * abx + aby * aby)));
+    return [a[0] + t * abx, a[1] + t * aby];
+  }
+
+  function markerHit(e) {
+    const rect = getMainPaneRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    for (const p of (projections || [])) {
+      if (!p.marked_pixel) continue;
+      const [cx, cy] = toCanvas(p.marked_pixel[0], p.marked_pixel[1]);
+      if ((mx - cx) ** 2 + (my - cy) ** 2 < 100) return p;
+    }
+    return null;
+  }
+
+  function showLoupe(e, px, lm) {
+    const im = fullImg(currentCam);
+    loupe.style.display = 'block';
+    const lx = Math.min(window.innerWidth - LOUPE - 20, e.clientX + 26);
+    const ly = Math.max(10, e.clientY - LOUPE - 30);
+    loupe.style.left = lx + 'px';
+    loupe.style.top = ly + 'px';
+    loupeCtx.fillStyle = '#000';
+    loupeCtx.fillRect(0, 0, LOUPE, LOUPE);
+    if (im.complete && im.naturalWidth) {
+      const src = LOUPE / MAG;
+      loupeCtx.imageSmoothingEnabled = false;
+      loupeCtx.drawImage(im, px[0] - src / 2, px[1] - src / 2, src, src, 0, 0, LOUPE, LOUPE);
+    }
+    loupeCtx.strokeStyle = '#4ade80'; loupeCtx.lineWidth = 1;
+    loupeCtx.beginPath();
+    loupeCtx.moveTo(LOUPE / 2, 0); loupeCtx.lineTo(LOUPE / 2, LOUPE);
+    loupeCtx.moveTo(0, LOUPE / 2); loupeCtx.lineTo(LOUPE, LOUPE / 2);
+    loupeCtx.stroke();
+    const d = liveDelta(lm, px);
+    loupeInfo.textContent = lm.slice(0, 26) + ' · ' + px[0].toFixed(1) + ',' + px[1].toFixed(1) +
+      (d != null ? " · d=" + d.toFixed(2) + "'" : '');
+    loupeInfo.style.color = d == null ? '#c084fc' : d < 1 ? '#4ade80' : d < 5 ? '#f59e0b' : '#f87171';
+  }
+
+  function paintPending() {
+    if (!mk.drag) return;
+    draw();
+    const [cx, cy] = toCanvas(mk.drag.px[0], mk.drag.px[1]);
+    ctx.save();
+    ctx.strokeStyle = '#4ade80'; ctx.lineWidth = 2;
+    ctx.beginPath(); ctx.arc(cx, cy, 7, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(cx - 12, cy); ctx.lineTo(cx - 4, cy);
+    ctx.moveTo(cx + 4, cy); ctx.lineTo(cx + 12, cy);
+    ctx.moveTo(cx, cy - 12); ctx.lineTo(cx, cy - 4);
+    ctx.moveTo(cx, cy + 4); ctx.lineTo(cx, cy + 12);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function beginDrag(kind, lm, px, e, isNew) {
+    mk.drag = { kind, lm, px, isNew: !!isNew, line: epipolarFor(lm) };
+    fullImg(currentCam);
+    canvasWrap.style.cursor = 'none';
+    showLoupe(e, px, lm);
+    paintPending();
+  }
+
+  async function commit() {
+    const d = mk.drag;
+    mk.drag = null;
+    loupe.style.display = 'none';
+    canvasWrap.style.cursor = 'crosshair';
+    const nx = Math.round(d.px[0] * 10) / 10, ny = Math.round(d.px[1] * 10) / 10;
+    const ep = d.kind === 'place' ? '/api/add_pixel' : '/api/set_pixel';
+    const nf = d.isNew ? '&new=1' : '';
+    const res = await fetch(ep + '?cam=' + encodeURIComponent(currentCam) +
+      '&lm=' + encodeURIComponent(d.lm) + '&px=' + nx + '&py=' + ny + nf).then(r => r.json());
+    if (res.ok) {
+      addPxMode = false;
+      await loadProjections();
+      if (window._refreshGhosts) window._refreshGhosts();
+      // auto-advance hint: next P1 ghost
+      const next = (ghostMarkers1 || []).find(g => g.type === 'point' && g.priority === 1 && g.name !== d.lm);
+      const t = document.getElementById('tri-toast');
+      if (t) {
+        document.getElementById('tri-toast-title').textContent = d.lm + ' @ ' + nx + ',' + ny + ' saved';
+        document.getElementById('tri-toast-meta').textContent =
+          next ? 'next P1: ' + next.name + ' (click its ghost)' : '';
+        t.style.display = 'block';
+        setTimeout(() => { t.style.display = 'none'; }, 2600);
+      }
+    } else {
+      alert(res.error || 'save failed');
+    }
+  }
+
+  // ── capture-phase mousedown: take over marking gestures ──
+  canvasWrap.addEventListener('mousedown', e => {
+    if (e.button !== 0) return;
+    if (e.target.closest && e.target.closest('#pane-2, #trace-pop, #mesh-ctrl-pop')) return;
+    if (typeof fanPushOn !== 'undefined' && fanPushOn) return;
+    if (typeof traceMode !== 'undefined' && traceMode) return;
+    // 1. armed placement (assist ghost click or +Add/inline): drag-place
+    if (addPxMode && addPxSelectedLm) {
+      const g = (ghostMarkers1 || []).find(x => x.type === 'point' && x.name === addPxSelectedLm);
+      const start = (window._assistHoverGhost === addPxSelectedLm && g) ? g.pixel.slice() : imgPt(e);
+      beginDrag('place', addPxSelectedLm, start, e, !!window._mkAddIsNew);
+      e.stopImmediatePropagation(); e.preventDefault();
+      mk.swallowClick = true;
+      return;
+    }
+    // 2. assist mode: mousedown directly on a point ghost = instant marker + drag
+    if (document.body.classList.contains('assist-on') && window._assistHoverGhost) {
+      const g = (ghostMarkers1 || []).find(x => x.type === 'point' && x.name === window._assistHoverGhost);
+      if (g) {
+        addPxSelectedLm = g.name;
+        beginDrag('place', g.name, g.pixel.slice(), e, false);
+        e.stopImmediatePropagation(); e.preventDefault();
+        mk.swallowClick = true;
+        return;
+      }
+    }
+    // 3. drag an existing marker
+    const hit = markerHit(e);
+    if (hit) {
+      beginDrag('move', hit.name, hit.marked_pixel.slice(), e, false);
+      mk.drag.orig = hit.marked_pixel.slice();
+      e.stopImmediatePropagation(); e.preventDefault();
+      mk.swallowClick = true;
+      return;
+    }
+  }, true);
+
+  window.addEventListener('mousemove', e => {
+    if (!mk.drag) return;
+    let px = imgPt(e);
+    if (mk.drag.line && !e.altKey) px = snapToLine(px, mk.drag.line);
+    mk.drag.px = px;
+    showLoupe(e, px, mk.drag.lm);
+    paintPending();
+  });
+
+  window.addEventListener('mouseup', e => {
+    if (!mk.drag) return;
+    const d = mk.drag;
+    // moved less than 0.5 img px on a 'move' drag = accidental click -> revert
+    if (d.kind === 'move' && d.orig &&
+        Math.hypot(d.px[0] - d.orig[0], d.px[1] - d.orig[1]) < 0.5) {
+      mk.drag = null;
+      loupe.style.display = 'none';
+      canvasWrap.style.cursor = 'crosshair';
+      draw();
+      return;
+    }
+    commit();
+  });
+
+  canvasWrap.addEventListener('click', e => {
+    if (mk.swallowClick) { mk.swallowClick = false; e.stopImmediatePropagation(); e.preventDefault(); }
+  }, true);
+
+  // ── Alt+arrows: sub-pixel nudge of the hovered marker ──
+  document.addEventListener('keydown', async e => {
+    if (!e.altKey || mk.drag) return;
+    if (!hoveredLm) return;
+    const step = e.shiftKey ? 1.0 : 0.2;
+    const map = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
+    const dxy = map[e.key];
+    if (!dxy) return;
+    e.preventDefault(); e.stopImmediatePropagation();
+    const p = projections.find(x => x.name === hoveredLm);
+    if (!p || !p.marked_pixel) return;
+    p.marked_pixel[0] = Math.round((p.marked_pixel[0] + dxy[0]) * 10) / 10;
+    p.marked_pixel[1] = Math.round((p.marked_pixel[1] + dxy[1]) * 10) / 10;
+    draw();
+    clearTimeout(mk.nudgeTimer);
+    const lm = hoveredLm, npx = p.marked_pixel.slice();
+    mk.nudgeTimer = setTimeout(async () => {
+      await fetch('/api/set_pixel?cam=' + encodeURIComponent(currentCam) +
+        '&lm=' + encodeURIComponent(lm) + '&px=' + npx[0] + '&py=' + npx[1]).then(r => r.json());
+      await loadProjections();
+    }, 450);
+  }, true);
+
+  // ── 'A' inline add with autocomplete (existing LM = 2nd source first) ──
+  let _allLms = null;
+  document.addEventListener('keydown', async e => {
+    if (e.key !== 'a' && e.key !== 'A') return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (mk.drag || addPxMode) return;
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    e.preventDefault();
+    if (_allLms === null) {
+      try { _allLms = (await fetch('/api/all_landmarks').then(r => r.json())).landmarks || []; }
+      catch (_) { _allLms = []; }
+      const dl = document.getElementById('mk-add-list');
+      const markedHere = new Set((projections || []).filter(p => p.marked_pixel).map(p => p.name));
+      for (const n of _allLms) {
+        if (markedHere.has(n)) continue;
+        const o = document.createElement('option');
+        o.value = n;
+        dl.appendChild(o);
+      }
+    }
+    addBox.style.left = Math.min(window.innerWidth - 300, (window._mkMouseX || 300)) + 'px';
+    addBox.style.top = Math.max(10, (window._mkMouseY || 200) - 60) + 'px';
+    addBox.style.display = 'block';
+    addInput.value = '';
+    addInput.focus();
+  });
+  window.addEventListener('mousemove', e => { window._mkMouseX = e.clientX; window._mkMouseY = e.clientY; });
+  addInput.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { addBox.style.display = 'none'; return; }
+    if (e.key !== 'Enter') return;
+    const name = addInput.value.trim();
+    if (!name) return;
+    addBox.style.display = 'none';
+    window._mkAddIsNew = !(_allLms || []).includes(name);
+    addPxSelectedLm = name;
+    addPxMode = true;
+    canvasWrap.style.cursor = 'crosshair';
+    const t = document.getElementById('tri-toast');
+    if (t) {
+      document.getElementById('tri-toast-title').textContent = 'Marking armed: ' + name + (window._mkAddIsNew ? ' (new)' : ' (2nd source)');
+      document.getElementById('tri-toast-meta').textContent = 'Press and drag on the frame · loupe follows · release = save';
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 4000);
+    }
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && mk.drag) {
+      mk.drag = null;
+      loupe.style.display = 'none';
+      canvasWrap.style.cursor = 'crosshair';
+      draw();
+    }
+  });
+
+  console.log('[MARKING-V1] precision marking layer active');
+})();
+</script>
 </body>
 </html>
