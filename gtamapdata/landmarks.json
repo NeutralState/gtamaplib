@@ -4663,28 +4663,28 @@
   },
   "Naval Air Station Key West (Control Tower)": {
     "xyz": [
-      -5807.391336089802,
-      -6538.491602188704,
-      37.08730877477414
+      -5807.497027630292,
+      -6538.503874097203,
+      36.67767526535813
     ],
     "source_cameras": [
       "Key Lento",
       "Grassrivers Postcard (X)"
     ],
-    "error_m": null,
+    "error_m": 0.325,
     "zone": "leonida_keys"
   },
   "Naval Air Station Key West (Radar Tower)": {
     "xyz": [
-      -5658.81770461461,
-      -6405.872343099341,
-      34.1563313165988
+      -5658.684896915181,
+      -6405.821930736622,
+      34.548421015416416
     ],
     "source_cameras": [
       "Key Lento",
       "Grassrivers Postcard (X)"
     ],
-    "error_m": null,
+    "error_m": 0.322,
     "zone": "leonida_keys"
   },
   "House with Pier (E)": {
@@ -8968,16 +8968,15 @@
   },
   "Hotel Breakwater (K)": {
     "xyz": [
-      1949.4954027641438,
-      564.2759501390918,
-      13.654980572730894
+      1949.490871046357,
+      564.2807159047181,
+      13.643761927348173
     ],
     "source_cameras": [
       "Park",
-      "Ocean Drive (NW)",
       "Dominion Hotel"
     ],
-    "error_m": null,
+    "error_m": 1.93,
     "zone": "vice_city"
   },
   "Quarry": {

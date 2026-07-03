@@ -114,6 +114,28 @@ def fit(cam_name, obs, solve_roll, roll_sigma=2.0):
         return rms
 
     x0 = [y0, p0, r0, f0] if solve_roll else [y0, p0, f0]
+
+    # [MULTISTART-V1] if the current pose projects a marking behind the cam
+    # (inf residual) or is wildly off, Nelder-Mead sits on a flat 1e9 plateau
+    # and never escapes. Coarse yaw x pitch grid to find a finite basin first.
+    if loss(x0) >= 1e9:
+        best_seed, best_val = None, 1e9
+        for yaw_g in range(0, 360, 15):
+            for pitch_g in (-30.0, -10.0, 0.0, 10.0):
+                seed = ([float(yaw_g), pitch_g, r0, f0] if solve_roll
+                        else [float(yaw_g), pitch_g, f0])
+                v = loss(seed)
+                if v < best_val:
+                    best_val, best_seed = v, seed
+        if best_seed is not None and best_val < 1e9:
+            print(f'  [multi-start] plateau at current pose; best seed '
+                  f'yaw={best_seed[0]:.0f} pitch={best_seed[1]:.0f} '
+                  f"({best_val:.1f}')")
+            x0 = best_seed
+        else:
+            print('  [multi-start] no finite basin found on the coarse grid — '
+                  'the xyz is likely far off or a LM xyz is wrong.')
+
     best = minimize(loss, x0, method='Nelder-Mead',
                     options={'xatol': 1e-5, 'fatol': 1e-8,
                              'maxiter': 8000, 'adaptive': True})
