@@ -51,6 +51,32 @@ def locked_cams():
     return sorted(n for n in md.cameras if is_triangulation_trusted(n, cameras=md.cameras))
 
 
+# [CAM-Z-V1] No camera below ground/water. Catches depth-degenerate solves
+# that slide underground while keeping perfect residuals (Gas Station (Chase)
+# (S) was found at z=-34.7 on 2026-07-02).
+CAM_Z_MIN = -1.0
+CAM_Z_WHITELIST = {
+    # legit out-of-bounds glitch view (rough east-coast sketch)
+    'Glitch (A)': 'out-of-bounds glitch capture',
+    # 4 obs = all high towers (Four Seasons x3 + WDNA 409m): depth-degenerate,
+    # sub-arcmin solutions span 2.4km. Pending a LOW anchor (the sign itself).
+    'Vice City 01 (Vice City Sign)': 'depth-degenerate, pending low anchor',
+    # z=-2.34, mild — but load-bearing source of 14 km-fragile triangulations
+    # (Sunny Isles towers). Solo re-solve shatters them (near-miss 2026-07-02).
+    # Fix must go through the bundle (joint move), never solo.
+    'Jet Ski': 'load-bearing source of 14 fragile LMs; fix via bundle only',
+}
+
+def check_cam_z(fails):
+    for n, c in md.cameras.items():
+        xyz = c.get('xyz')
+        if not xyz:
+            continue
+        if xyz[2] < CAM_Z_MIN and n not in CAM_Z_WHITELIST:
+            fails.append(f"CAM-Z: {n} at z={xyz[2]:.2f} (< {CAM_Z_MIN}) — "
+                         f"underground/underwater camera (depth-degenerate solve?)")
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--freeze", action="store_true",
@@ -68,6 +94,7 @@ def main():
         return 0
 
     fails = []
+    check_cam_z(fails)  # [CAM-Z-V1]
     warns = []
 
     def is_provenance_marker(s_):
