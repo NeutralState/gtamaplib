@@ -113,6 +113,23 @@ def main():
     if not any(f_.startswith('JSON') for f_ in fails):
         print('✓ json hygiene OK')
 
+    # ── 6. fossil scan (WARNING only, never fails) [FOSSIL-SCAN-V1] ─────
+    # LMs whose own source cams reject them = stale xyz from an old pose.
+    try:
+        from common import find_fossils
+        fossils = find_fossils()
+        if fossils:
+            print(f'⚠ fossils: {len(fossils)} LM(s) rejected by their own source')
+            for x in fossils[:5]:
+                r = f"{x['resid']}'" if x['resid'] is not None else 'no-proj'
+                print(f"    {r:>9s}  {x['lm']}  (source: {x['source']})")
+            if len(fossils) > 5:
+                print(f'    ... +{len(fossils)-5} more (see Triage board)')
+        else:
+            print('✓ fossils: none')
+    except Exception as e:
+        print(f'⚠ fossil scan failed: {e}')
+
     # ── baseline ─────────────────────────────────────────────────────────
     if args.update_baseline:
         if summary is None:

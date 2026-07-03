@@ -2052,7 +2052,13 @@ class Handler(BaseHTTPRequestHandler):
                              'worst_lm': worst_lm, 'gain_estime': gain})
             _order = {'phantom LM': 0, 'isolated outlier': 1, 'markings to review': 2, 'spread error': 3, 'under-determined': 4}
             rows.sort(key=lambda r: (_order.get(r['categorie'], 9), -(r['gain_estime'] or r['rms'])))
-            self.send_json({'rows': rows, 'n': len(rows)})
+            # [FOSSIL-SCAN-V1] LMs rejected by their own source cams
+            try:
+                from common import find_fossils
+                _fossils = find_fossils()
+            except Exception:
+                _fossils = []
+            self.send_json({'rows': rows, 'n': len(rows), 'fossils': _fossils})
 
         elif path == '/api/exclude_marking':
             # [TRIAGE-V1] action: exclude a marking (same format as

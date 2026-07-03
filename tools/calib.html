@@ -5560,7 +5560,7 @@ window.addEventListener('load', () => {
     <button onclick="document.getElementById('triage-modal').style.display='none'"
       style="background:none;border:1px solid var(--border,#333);color:var(--mid,#aaa);border-radius:5px;padding:3px 10px;cursor:pointer">close</button>
   </div>
-  <div id="triage-rows">chargement…</div>
+  <div id="triage-rows">loading…</div>
  </div>
 </div>
 <script>
@@ -5619,6 +5619,38 @@ window.addEventListener('load', () => {
         modal.style.display = 'none';
       });
       box.appendChild(row);
+    }
+
+    // [FOSSIL-SCAN-V1] LMs rejected by their own source cams (stale xyz
+    // from an old pose of the source). One-click quarantine.
+    if (d.fossils && d.fossils.length) {
+      const h = document.createElement('div');
+      h.style.cssText = 'margin:16px 0 4px;font-weight:700;color:#f97316';
+      h.textContent = 'FOSSILS — LM rejected by its own source (' + d.fossils.length + ')';
+      box.appendChild(h);
+      const note = document.createElement('div');
+      note.style.cssText = 'color:var(--mid,#888);margin:0 0 6px;font-size:11px';
+      note.textContent = 'Stale xyz from an old source pose. Quarantine, or re-mark + retriangulate from the current pose.';
+      box.appendChild(note);
+      for (const f of d.fossils) {
+        const row = document.createElement('div');
+        row.style.cssText = 'display:flex;gap:10px;align-items:center;padding:5px 6px;border-radius:5px;border-bottom:1px solid #ffffff0e';
+        const r = f.resid !== null ? f.resid + "'" : 'no-proj';
+        row.innerHTML = '<span style="color:var(--text,#ddd);min-width:220px">' + f.lm + '</span>' +
+          '<span style="color:#f97316;min-width:62px">' + r + '</span>' +
+          '<span style="flex:1;color:var(--mid,#999)">source: ' + f.source + ' · ' + f.n_sources + ' src</span>';
+        const act = document.createElement('button');
+        act.style.cssText = 'background:#ffffff14;border:1px solid var(--border,#333);color:var(--text,#ddd);' +
+                            'border-radius:5px;padding:3px 9px;cursor:pointer;white-space:nowrap';
+        act.textContent = 'quarantine LM';
+        act.addEventListener('click', async () => {
+          if (!confirm('Quarantine (null xyz) "' + f.lm + '"? Markings remain in pixels.json.')) return;
+          const res = await fetch('/api/quarantine_lm?lm=' + encodeURIComponent(f.lm)).then(x => x.json());
+          if (res.ok) load(); else alert(res.error || 'error');
+        });
+        row.appendChild(act);
+        box.appendChild(row);
+      }
     }
   }
 

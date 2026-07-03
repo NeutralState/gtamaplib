@@ -131,3 +131,47 @@ def save_json(path, data):
     with open(tmp, "w") as f:
         json.dump(data, f, indent=2)
     os.replace(tmp, path)
+
+
+# [FOSSIL-SCAN-V1] A "fossil" is a landmark whose OWN source cameras now
+# reject it: its xyz was triangulated/derived from an old pose of a source
+# cam, the cam got refined since, the LM stayed frozen. Pattern caught 3x by
+# hand during 2026-07 (Easy Hill, the Diner Bays, the WDNA mast sub-points).
+FOSSIL_THRESHOLD_ARCMIN = 15.0
+
+def find_fossils(threshold=FOSSIL_THRESHOLD_ARCMIN):
+    """Scan all triangulated LMs; return [{lm, source, resid, n_sources}]
+    for every LM where a source cam that still marks it disagrees by more
+    than threshold arcmin. Blind spot: a fossil whose source no longer has
+    a marking is undetectable (no ray to compare)."""
+    import math as _math
+    out = []
+    for lm, xyz in md.landmarks.items():
+        if xyz is None:
+            continue
+        srcs = (md.landmarks_meta.get(lm) or {}).get('source_cameras', []) or []
+        worst = None
+        n_checked = 0
+        for cn in srcs:
+            if cn not in md.cameras or not md.cameras[cn].get('xyz'):
+                continue
+            px = md.pixels.get(cn, {}).get(lm)
+            if px is None or is_excluded_marking(cn, lm):
+                continue
+            cam = get_cam(cn)
+            p = cam.get_pixel(xyz)
+            if p is None:
+                r = float('inf')
+            else:
+                dx = (p[0] - px[0]) * cam.hfov / cam.w * 60
+                dy = (p[1] - px[1]) * cam.vfov / cam.h * 60
+                r = _math.hypot(dx, dy)
+            n_checked += 1
+            if worst is None or r > worst[0]:
+                worst = (r, cn)
+        if worst is not None and worst[0] > threshold:
+            out.append({'lm': lm, 'source': worst[1],
+                        'resid': None if worst[0] == float('inf') else round(worst[0], 1),
+                        'n_sources': len(srcs), 'n_checked': n_checked})
+    out.sort(key=lambda x: -(x['resid'] if x['resid'] is not None else 1e9))
+    return out
