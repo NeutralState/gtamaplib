@@ -1954,6 +1954,54 @@ class Handler(BaseHTTPRequestHandler):
                 save_validated(cur)
             self.send_json({'lm': lm_name, 'verdict': (cur.get(lm_name) or {}).get('status')})
 
+        elif path == '/api/fit_minimal':
+            # [PANEL-V2] fit ypr(+roll)+fov with xyz LOCKED at the CLIENT's
+            # (possibly unsaved) values. Returns the fitted pose WITHOUT
+            # writing — the user reviews residuals then Saves normally.
+            cam_name = unquote(qs.get('cam', [''])[0])
+            if cam_name not in md.cameras:
+                self.send_json({'error': 'unknown cam'}, 404); return
+            try:
+                cx = float(qs.get('x', [''])[0]); cy = float(qs.get('y', [''])[0])
+                cz = float(qs.get('z', [''])[0])
+            except (ValueError, IndexError):
+                self.send_json({'error': 'x, y, z required'}, 400); return
+            solve_roll = qs.get('roll', ['0'])[0] == '1'
+            sys.path.insert(0, TOOL_DIR)
+            import fit_minimal as fm
+            obs = fm.gather_obs(cam_name)
+            if len(obs) < 2:
+                self.send_json({'error': f'only {len(obs)} triangulated marking(s) — need >= 2'}, 400)
+                return
+            saved = dict(md.cameras[cam_name])
+            try:
+                st = dict(saved)
+                st['xyz'] = [cx, cy, cz]
+                # init ypr/fov from client too when provided
+                try:
+                    st['ypr'] = [float(qs.get('yaw', [saved['ypr'][0]])[0]),
+                                 float(qs.get('pitch', [saved['ypr'][1]])[0]),
+                                 float(qs.get('rollv', [saved['ypr'][2]])[0])]
+                except (ValueError, TypeError):
+                    pass
+                md.cameras[cam_name] = st
+                ypr, fov_val, res = fm.fit(cam_name, obs, solve_roll)
+                # effective hfov at the fitted state
+                _idx, _ = fm.fov_slot(md.cameras[cam_name])
+                cam_fit = fm.make_cam(cam_name, ypr, fov_val)
+                self.send_json({'ok': True,
+                                'ypr': [round(float(v), 4) for v in ypr],
+                                'hfov': round(float(cam_fit.hfov), 4),
+                                'residuals': sorted([{'lm': ln, 'arcmin': (None if r == float('inf') else round(r, 2))}
+                                                     for r, ln in res], key=lambda x: -(x['arcmin'] or 1e9)),
+                                'n_obs': len(obs)})
+            finally:
+                md.cameras[cam_name] = saved
+                try:
+                    ml.get_camera.cache_clear()
+                except Exception:
+                    pass
+
         elif path == '/api/triage':
             # [TRIAGE-V1] Per-cam categorization with a recommended action.
             # Reproduces the 2026-07-01 polish workflow: isolated-outlier

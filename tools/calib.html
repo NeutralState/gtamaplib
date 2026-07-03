@@ -556,6 +556,14 @@ body.view-map #rays-toggle{display:inline-flex !important}
 body:not(.view-map):not(.view-view3d) #dual-toggle{display:inline-flex !important}
 #proj-toggle{display:none !important}
 body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !important}
+
+/* [PANEL-V2] sliders -> scrubbable value fields */
+.sl-row input[type=range]{display:none}
+.sl-row .num{width:100%;cursor:ew-resize;font-size:13px;padding:6px 10px;text-align:right;
+  -moz-appearance:textfield}
+.sl-row .num::-webkit-outer-spin-button,.sl-row .num::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.sl-row .num:focus{cursor:text;border-color:var(--green,#4ade80)}
+.sl-row .num.pv2-scrubbing{border-color:var(--green,#4ade80);color:var(--green,#4ade80)}
 </style>
 <!-- Phase 7a.1.1: preload /yanis.jpg so the sidebar minimap is ready
      by the time the user picks a cam. The browser fetches it in
@@ -735,6 +743,17 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
       <!-- CALIB-ROLL-PATCH-V1 -->
       <div class="sl-row"><span class="sl-lbl">Roll</span><input type="range" id="sl-roll" min="-15" max="15" step="0.01"><input class="num" id="num-roll" type="number" step="0.01"></div>
       <div class="sl-row"><span class="sl-lbl">hFOV</span><input type="range" id="sl-hfov" min="10" max="130" step="0.01"><input class="num" id="num-hfov" type="number" step="0.01"></div>
+      <!-- [PANEL-V2] -->
+      <div style="display:flex;gap:6px;margin-top:8px">
+        <button id="pv2-fit" title="fit yaw/pitch/fov on this cam's markings, xyz locked at the values above (dry — review then Save)"
+          style="flex:1;font-family:var(--mono,monospace);font-size:10px;padding:5px 8px;background:#ffffff10;
+          border:1px solid var(--border,#333);color:var(--text,#ddd);border-radius:5px;cursor:pointer">⌖ Fit ypr+fov (xyz locked)</button>
+        <button id="pv2-fit-roll" title="same, also freeing roll (soft prior at 0)"
+          style="font-family:var(--mono,monospace);font-size:10px;padding:5px 8px;background:#ffffff10;
+          border:1px solid var(--border,#333);color:var(--mid,#999);border-radius:5px;cursor:pointer">+roll</button>
+      </div>
+      <div id="pv2-fit-out" style="display:none;font-family:var(--mono,monospace);font-size:10px;
+        color:var(--mid,#999);margin-top:5px;line-height:1.5"></div>
     </div>
     <div class="opt-bar">
       <!-- [DECOM-V1] Optimize removed: calibration = tools/refine_cam_*.py / calibrate_session.py -->
@@ -5980,6 +5999,77 @@ window.addEventListener('load', () => {
   });
 
   console.log('[MARKING-V1] precision marking layer active');
+})();
+</script>
+
+<script>
+// ══ [PANEL-V2] scrubbable param fields + one-click orientation fit ══
+// Sliders spanned the whole map (1 slider px = meters): useless for fine
+// work. Pro-tool pattern instead: drag horizontally ON the number
+// (Shift = x0.1 fine, Ctrl = x10 coarse), click = type exact, arrows = step.
+// The "Fit ypr+fov" button turns the panel into a Position Lab: scrub xyz,
+// one click re-aims orientation+fov on the markings (server-side
+// fit_minimal, xyz locked at the CURRENT unsaved values, dry — then Save).
+(() => {
+  const GAIN = { x: 0.25, y: 0.25, z: 0.1, yaw: 0.02, pitch: 0.02, roll: 0.02, hfov: 0.02 };
+  const DEC  = { x: 2, y: 2, z: 2, yaw: 3, pitch: 3, roll: 3, hfov: 3 };
+  let scrub = null;
+
+  Object.keys(NUM_IDS).forEach(key => {
+    const el = document.getElementById(NUM_IDS[key]);
+    el.addEventListener('mousedown', e => {
+      if (document.activeElement === el) return;   // typing mode
+      scrub = { key, el, x0: e.clientX, v0: parseFloat(el.value) || 0, moved: false };
+      e.preventDefault();
+    });
+  });
+  window.addEventListener('mousemove', e => {
+    if (!scrub) return;
+    const dx = e.clientX - scrub.x0;
+    if (!scrub.moved && Math.abs(dx) < 3) return;
+    if (!scrub.moved) { scrub.moved = true; scrub.el.classList.add('pv2-scrubbing'); scrub.el.blur(); }
+    const g = GAIN[scrub.key] * (e.shiftKey ? 0.1 : 1) * (e.ctrlKey || e.metaKey ? 10 : 1);
+    const v = scrub.v0 + dx * g;
+    onParam(scrub.key, v.toFixed(DEC[scrub.key]));
+  });
+  window.addEventListener('mouseup', () => {
+    if (!scrub) return;
+    const s0 = scrub; scrub = null;
+    s0.el.classList.remove('pv2-scrubbing');
+    if (!s0.moved) { s0.el.focus(); s0.el.select(); }   // plain click = type
+  });
+
+  // ── one-click fit ──
+  const out = document.getElementById('pv2-fit-out');
+  async function runFit(withRoll) {
+    if (!currentCam) return;
+    out.style.display = 'block';
+    out.textContent = 'fitting…';
+    const q = new URLSearchParams({
+      cam: currentCam, x: params.x, y: params.y, z: params.z,
+      yaw: params.yaw, pitch: params.pitch, rollv: params.roll,
+      roll: withRoll ? '1' : '0'
+    });
+    let d;
+    try { d = await fetch('/api/fit_minimal?' + q).then(r => r.json()); }
+    catch (err) { out.textContent = 'fit failed: ' + err; return; }
+    if (!d.ok) { out.textContent = d.error || 'fit failed'; return; }
+    onParam('yaw', d.ypr[0]); onParam('pitch', d.ypr[1]); onParam('roll', d.ypr[2]);
+    onParam('hfov', d.hfov);
+    const worst = d.residuals[0];
+    const lines = d.residuals.slice(0, 4).map(r =>
+      (r.arcmin === null ? 'no-proj' : r.arcmin + "'") + ' ' + r.lm).join('<br>');
+    const w = worst && worst.arcmin !== null ? worst.arcmin : Infinity;
+    const col = w < 2 ? '#4ade80' : w < 8 ? '#f59e0b' : '#f87171';
+    out.innerHTML = '<span style="color:' + col + '">fit on ' + d.n_obs + ' obs — worst ' +
+      (worst ? (worst.arcmin === null ? 'no-proj' : worst.arcmin + "'") : '?') + '</span>' +
+      (w >= 5 ? ' <span style="color:var(--mid)">(xyz off? scrub &amp; re-fit)</span>' : '') +
+      '<br>' + lines;
+    window._pv2LastFit = d;   // test hook
+  }
+  document.getElementById('pv2-fit').addEventListener('click', () => runFit(false));
+  document.getElementById('pv2-fit-roll').addEventListener('click', () => runFit(true));
+  console.log('[PANEL-V2] scrub fields + fit button active');
 })();
 </script>
 </body>
