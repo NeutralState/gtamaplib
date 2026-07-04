@@ -11861,9 +11861,9 @@
       "Vice City Postcard"
     ],
     "xyz": [
-      -324.55083724797646,
-      934.6378507943379,
-      176.51329630861073
+      -324.55059170531285,
+      934.6382688482126,
+      176.51323578752843
     ],
     "zone": null
   },
@@ -14535,15 +14535,29 @@
     "zone": "unknown"
   },
   "One Miami Condo East (NW)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -304.8940925224168,
+      -560.6542863854206,
+      176.49251576757464
+    ],
+    "source_cameras": [
+      "Vice City Postcard",
+      "Landing Gear (B)"
+    ],
+    "error_m": 2.985,
     "zone": "unknown"
   },
   "One Miami Condo West (NW)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -385.77001200474854,
+      -595.1534501476305,
+      187.15913037735532
+    ],
+    "source_cameras": [
+      "Vice City Postcard",
+      "Landing Gear (B)"
+    ],
+    "error_m": 1.979,
     "zone": "unknown"
   },
   "Quantum on the Bay Condominium (S) (SE)": {
@@ -14584,6 +14598,18 @@
     "zone": "unknown"
   },
   "Miami Tower (NW)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown"
+  },
+  "One Miami Condo West (SW)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown"
+  },
+  "One Miami Condo East (SW)": {
     "xyz": null,
     "source_cameras": [],
     "error_m": null,
