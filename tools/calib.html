@@ -557,13 +557,19 @@ body:not(.view-map):not(.view-view3d) #dual-toggle{display:inline-flex !importan
 #proj-toggle{display:none !important}
 body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !important}
 
-/* [PANEL-V2] sliders -> scrubbable value fields */
-.sl-row input[type=range]{display:none}
-.sl-row .num{width:100%;cursor:ew-resize;font-size:13px;padding:6px 10px;text-align:right;
-  -moz-appearance:textfield}
-.sl-row .num::-webkit-outer-spin-button,.sl-row .num::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
-.sl-row .num:focus{cursor:text;border-color:var(--green,#4ade80)}
-.sl-row .num.pv2-scrubbing{border-color:var(--green,#4ade80);color:var(--green,#4ade80)}
+/* [PANEL-V3] pose = read-only display, terminal-first. Sliders and inputs
+   hidden; clean value rows, click = copy. */
+.sl-row input[type=range],.sl-row .num{display:none}
+.pv3-val{flex:1;text-align:right;font-family:var(--mono,monospace);font-size:13.5px;
+  color:var(--text,#e8e8ee);padding:5px 8px;border-radius:5px;cursor:copy;
+  letter-spacing:.2px;transition:background .12s}
+.pv3-val:hover{background:#ffffff0d}
+.pv3-val .pv3-unit{color:var(--dim,#555);font-size:10px;margin-left:4px}
+.pv3-val.pv3-flash{background:#4ade8022;color:var(--green,#4ade80)}
+#pv3-copy-pose{width:100%;margin-top:8px;font-family:var(--mono,monospace);font-size:10px;
+  padding:5px 8px;background:transparent;border:1px solid var(--border,#2a2a33);
+  color:var(--mid,#999);border-radius:5px;cursor:pointer;transition:all .12s}
+#pv3-copy-pose:hover{border-color:var(--green,#4ade80);color:var(--green,#4ade80)}
 </style>
 <!-- Phase 7a.1.1: preload /yanis.jpg so the sidebar minimap is ready
      by the time the user picks a cam. The browser fetches it in
@@ -743,17 +749,8 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
       <!-- CALIB-ROLL-PATCH-V1 -->
       <div class="sl-row"><span class="sl-lbl">Roll</span><input type="range" id="sl-roll" min="-15" max="15" step="0.01"><input class="num" id="num-roll" type="number" step="0.01"></div>
       <div class="sl-row"><span class="sl-lbl">hFOV</span><input type="range" id="sl-hfov" min="10" max="130" step="0.01"><input class="num" id="num-hfov" type="number" step="0.01"></div>
-      <!-- [PANEL-V2] -->
-      <div style="display:flex;gap:6px;margin-top:8px">
-        <button id="pv2-fit" title="fit yaw/pitch/fov on this cam's markings, xyz locked at the values above (dry — review then Save)"
-          style="flex:1;font-family:var(--mono,monospace);font-size:10px;padding:5px 8px;background:#ffffff10;
-          border:1px solid var(--border,#333);color:var(--text,#ddd);border-radius:5px;cursor:pointer">⌖ Fit ypr+fov (xyz locked)</button>
-        <button id="pv2-fit-roll" title="same, also freeing roll (soft prior at 0)"
-          style="font-family:var(--mono,monospace);font-size:10px;padding:5px 8px;background:#ffffff10;
-          border:1px solid var(--border,#333);color:var(--mid,#999);border-radius:5px;cursor:pointer">+roll</button>
-      </div>
-      <div id="pv2-fit-out" style="display:none;font-family:var(--mono,monospace);font-size:10px;
-        color:var(--mid,#999);margin-top:5px;line-height:1.5"></div>
+      <!-- [PANEL-V3] -->
+      <button id="pv3-copy-pose" title="copy the full pose, ready to paste in a terminal command">⧉ copy pose</button>
     </div>
     <div class="opt-bar">
       <!-- [DECOM-V1] Optimize removed: calibration = tools/refine_cam_*.py / calibrate_session.py -->
@@ -3447,18 +3444,12 @@ function draw2() {
                   : (lm.delta != null && lm.delta > 5);
     ctx2.globalAlpha = visible ? 1 : 0.12;
     const [mx, my] = toCanvas2(lm.marked_pixel[0], lm.marked_pixel[1]);
-    const r = hi ? 8 : (lm.is_circular ? 3 : 5);
-    ctx2.beginPath(); ctx2.arc(mx, my, r, 0, Math.PI * 2);
-    ctx2.fillStyle = color + '44'; ctx2.fill();
-    ctx2.strokeStyle = color; ctx2.lineWidth = hi ? 2.5 : 1.5; ctx2.stroke();
+    const r = hi ? 8 : (lm.is_circular ? 4.5 : 5.5);
+    _mv2Reticle(ctx2, mx, my, r, color, { hi, dash: lm.is_circular });   // [MARKERS-V2]
     if (hi) {
-      ctx2.font = '11px JetBrains Mono, monospace';
-      ctx2.fillStyle = '#fff';
-      ctx2.fillText(lm.name, mx + 10, my - 8);
-      if (lm.delta != null) {
-        ctx2.fillStyle = color;
-        ctx2.fillText(`d=${lm.delta.toFixed(3)} arcmin`, mx + 10, my + 6);
-      }
+      const lines = [[lm.name + (lm.is_circular ? '  ↻' : '  ★'), '#e8e8ee']];
+      if (lm.delta != null) lines.push(["d = " + lm.delta.toFixed(2) + "'", color]);
+      _mv2Chip(ctx2, mx, my, lines);
     }
     ctx2.globalAlpha = 1;
   }
@@ -3467,6 +3458,64 @@ function draw2() {
   drawGhostsOnCtx(ctx2, ghostMarkers2, toCanvas2, hoveredGhost2);
 }
 window.draw2 = draw2;
+
+// ══ [MARKERS-V2] shared drawing helpers: precision-instrument look ══
+// Reticle = center dot + open ring (+ticks when highlighted). Circular
+// provenance = dashed ring. Labels = rounded chips, not raw text.
+function _mv2Reticle(c, x, y, r, color, opts) {
+  const hi = opts && opts.hi, dash = opts && opts.dash;
+  c.save();
+  if (hi) { c.shadowColor = color; c.shadowBlur = 9; }
+  c.beginPath(); c.arc(x, y, 1.6, 0, Math.PI * 2);
+  c.fillStyle = color; c.fill();
+  c.beginPath(); c.arc(x, y, r, 0, Math.PI * 2);
+  if (dash) c.setLineDash([3.5, 3]);
+  c.strokeStyle = color; c.lineWidth = hi ? 1.8 : 1.25; c.stroke();
+  c.setLineDash([]);
+  if (hi) {
+    c.beginPath();
+    c.moveTo(x - r - 6, y); c.lineTo(x - r - 1, y);
+    c.moveTo(x + r + 1, y); c.lineTo(x + r + 6, y);
+    c.moveTo(x, y - r - 6); c.lineTo(x, y - r - 1);
+    c.moveTo(x, y + r + 1); c.lineTo(x, y + r + 6);
+    c.stroke();
+  }
+  c.restore();
+}
+function _mv2Diamond(c, x, y, r, color, opts) {
+  const hi = opts && opts.hi;
+  c.save();
+  if (hi) { c.shadowColor = color; c.shadowBlur = 9; }
+  c.beginPath();
+  c.moveTo(x, y - r); c.lineTo(x + r, y); c.lineTo(x, y + r); c.lineTo(x - r, y);
+  c.closePath();
+  if (hi) { c.fillStyle = color + '33'; c.fill(); }
+  c.strokeStyle = color; c.lineWidth = hi ? 1.8 : 1.25; c.stroke();
+  c.restore();
+}
+function _mv2Chip(c, x, y, lines) {
+  c.save();
+  c.font = '11px JetBrains Mono, monospace';
+  const pad = 7, lh = 14;
+  const w = Math.max(...lines.map(l => c.measureText(l[0]).width)) + pad * 2;
+  const h = lines.length * lh + pad;
+  let bx = x + 12, by = y - h - 8;
+  if (by < 4) by = y + 12;
+  c.beginPath();
+  const rr = 5;
+  c.moveTo(bx + rr, by);
+  c.arcTo(bx + w, by, bx + w, by + h, rr);
+  c.arcTo(bx + w, by + h, bx, by + h, rr);
+  c.arcTo(bx, by + h, bx, by, rr);
+  c.arcTo(bx, by, bx + w, by, rr);
+  c.fillStyle = '#0a0a10e6'; c.fill();
+  c.strokeStyle = lines[0][1] + '66'; c.lineWidth = 1; c.stroke();
+  lines.forEach((l, i) => {
+    c.fillStyle = l[1];
+    c.fillText(l[0], bx + pad, by + pad / 2 + (i + 1) * lh - 4);
+  });
+  c.restore();
+}
 
 // [CANVAS-GHOSTS] Shared helper: draw ghost markers on any ctx with any toCanvas mapper.
 function drawGhostsOnCtx(ctxLocal, ghosts, mapper, hoveredName) {
@@ -3479,20 +3528,11 @@ function drawGhostsOnCtx(ctxLocal, ghosts, mapper, hoveredName) {
       const hi = hoveredName === g.name;
       const COL = gcol(g);
       const [mx, my] = mapper(g.pixel[0], g.pixel[1]);
-      const r = hi ? 8 : (g.priority === 1 ? 6 : 5);
-      ctxLocal.beginPath(); ctxLocal.arc(mx, my, r, 0, Math.PI * 2);
-      ctxLocal.fillStyle = COL + '44';
-      ctxLocal.fill();
-      ctxLocal.strokeStyle = COL; ctxLocal.lineWidth = hi ? 2.5 : 1.5; ctxLocal.stroke();
+      const r = hi ? 9 : (g.priority === 1 ? 7 : 5.5);
+      _mv2Diamond(ctxLocal, mx, my, r, COL, { hi });   // [MARKERS-V2] ghost = diamond
       if (hi) {
-        ctxLocal.font = '11px JetBrains Mono, monospace';
-        const labelText = g.name;
-        const labelW = ctxLocal.measureText(labelText).width;
-        // Black background rect (matches the cone-label style — see line ~3991)
-        ctxLocal.fillStyle = '#000';
-        ctxLocal.fillRect(mx + 6, my - 14, labelW + 8, 16);
-        ctxLocal.fillStyle = '#fff';
-        ctxLocal.fillText(labelText, mx + 10, my - 2);
+        const pr = g.priority ? 'P' + g.priority + ' · ' : '';
+        _mv2Chip(ctxLocal, mx, my, [[pr + g.name, COL], ['ghost — press & drag to mark', '#8a8a95']]);
       }
     } else if (g.type === 'epipolar') {
       // Epipolar line in violet, dashed
@@ -3500,11 +3540,14 @@ function drawGhostsOnCtx(ctxLocal, ghosts, mapper, hoveredName) {
       const [x2, y2] = mapper(g.line[1][0], g.line[1][1]);
       ctxLocal.beginPath();
       ctxLocal.moveTo(x1, y1); ctxLocal.lineTo(x2, y2);
+      ctxLocal.save();                                 // [MARKERS-V2]
+      ctxLocal.shadowColor = gcol(g); ctxLocal.shadowBlur = 4;
       ctxLocal.strokeStyle = gcol(g);
-      ctxLocal.lineWidth = 1.5;
-      ctxLocal.setLineDash([6, 4]);
+      ctxLocal.lineWidth = 1.1;
+      ctxLocal.setLineDash([7, 5]);
       ctxLocal.stroke();
       ctxLocal.setLineDash([]);
+      ctxLocal.restore();
     }
   }
 }
@@ -3546,24 +3589,18 @@ function draw() {
       ctx.setLineDash([3, 3]); ctx.stroke(); ctx.setLineDash([]);
     }
 
-    // Marked pixel circle
+    // [MARKERS-V2] marked pixel = precision reticle
     if (lm.marked_pixel) {
       const [mx, my] = toCanvas(lm.marked_pixel[0], lm.marked_pixel[1]);
-      const r = hi ? 8 : (lm.is_circular ? 3 : 5);
-      ctx.beginPath(); ctx.arc(mx, my, r, 0, Math.PI * 2);
-      ctx.fillStyle = color + '44'; ctx.fill();
-      ctx.strokeStyle = color; ctx.lineWidth = hi ? 2.5 : 1.5; ctx.stroke();
-
+      const r = hi ? 8 : (lm.is_circular ? 4.5 : 5.5);
+      _mv2Reticle(ctx, mx, my, r, color, { hi, dash: lm.is_circular });
       if (hi) {
-        ctx.font = '11px JetBrains Mono, monospace';
-        ctx.fillStyle = '#fff';
-        ctx.fillText(lm.name, mx + 10, my - 8);
-        if (lm.delta != null) {
-          ctx.fillStyle = color;
-          ctx.fillText(`d=${lm.delta.toFixed(3)} arcmin`, mx + 10, my + 6);
-        }
+        const lines = [[lm.name + (lm.is_circular ? '  ↻' : '  ★'), '#e8e8ee']];
+        if (lm.delta != null) lines.push(["d = " + lm.delta.toFixed(2) + "'", color]);
+        _mv2Chip(ctx, mx, my, lines);
       }
     }
+
 
     // Projected cross (independent only, skip virtual LMs for wireframes)
     if (lm.projected && !lm.is_circular && !lm.is_virtual) {
@@ -6003,73 +6040,47 @@ window.addEventListener('load', () => {
 </script>
 
 <script>
-// ══ [PANEL-V2] scrubbable param fields + one-click orientation fit ══
-// Sliders spanned the whole map (1 slider px = meters): useless for fine
-// work. Pro-tool pattern instead: drag horizontally ON the number
-// (Shift = x0.1 fine, Ctrl = x10 coarse), click = type exact, arrows = step.
-// The "Fit ypr+fov" button turns the panel into a Position Lab: scrub xyz,
-// one click re-aims orientation+fov on the markings (server-side
-// fit_minimal, xyz locked at the CURRENT unsaved values, dry — then Save).
+// ══ [PANEL-V3] pose display: read-only, formatted, click-to-copy ══
+// Editing lives in the terminal (fit_minimal & co). The UI shows the pose
+// beautifully and hands it to the clipboard: click a value = copy it (full
+// precision), "copy pose" = the whole thing ready to paste.
 (() => {
-  const GAIN = { x: 0.25, y: 0.25, z: 0.1, yaw: 0.02, pitch: 0.02, roll: 0.02, hfov: 0.02 };
-  const DEC  = { x: 2, y: 2, z: 2, yaw: 3, pitch: 3, roll: 3, hfov: 3 };
-  let scrub = null;
-
+  const UNITS = { x: 'm', y: 'm', z: 'm', yaw: '°', pitch: '°', roll: '°', hfov: '°' };
+  const spans = {};
   Object.keys(NUM_IDS).forEach(key => {
-    const el = document.getElementById(NUM_IDS[key]);
-    el.addEventListener('mousedown', e => {
-      if (document.activeElement === el) return;   // typing mode
-      scrub = { key, el, x0: e.clientX, v0: parseFloat(el.value) || 0, moved: false };
-      e.preventDefault();
+    const row = document.getElementById(NUM_IDS[key]).parentElement;
+    const v = document.createElement('span');
+    v.className = 'pv3-val';
+    v.title = 'click = copy exact value';
+    v.addEventListener('click', async () => {
+      try { await navigator.clipboard.writeText(String(params[key])); } catch (_) {}
+      v.classList.add('pv3-flash');
+      setTimeout(() => v.classList.remove('pv3-flash'), 350);
     });
+    row.appendChild(v);
+    spans[key] = v;
   });
-  window.addEventListener('mousemove', e => {
-    if (!scrub) return;
-    const dx = e.clientX - scrub.x0;
-    if (!scrub.moved && Math.abs(dx) < 3) return;
-    if (!scrub.moved) { scrub.moved = true; scrub.el.classList.add('pv2-scrubbing'); scrub.el.blur(); }
-    const g = GAIN[scrub.key] * (e.shiftKey ? 0.1 : 1) * (e.ctrlKey || e.metaKey ? 10 : 1);
-    const v = scrub.v0 + dx * g;
-    onParam(scrub.key, v.toFixed(DEC[scrub.key]));
-  });
-  window.addEventListener('mouseup', () => {
-    if (!scrub) return;
-    const s0 = scrub; scrub = null;
-    s0.el.classList.remove('pv2-scrubbing');
-    if (!s0.moved) { s0.el.focus(); s0.el.select(); }   // plain click = type
-  });
-
-  // ── one-click fit ──
-  const out = document.getElementById('pv2-fit-out');
-  async function runFit(withRoll) {
-    if (!currentCam) return;
-    out.style.display = 'block';
-    out.textContent = 'fitting…';
-    const q = new URLSearchParams({
-      cam: currentCam, x: params.x, y: params.y, z: params.z,
-      yaw: params.yaw, pitch: params.pitch, rollv: params.roll,
-      roll: withRoll ? '1' : '0'
-    });
-    let d;
-    try { d = await fetch('/api/fit_minimal?' + q).then(r => r.json()); }
-    catch (err) { out.textContent = 'fit failed: ' + err; return; }
-    if (!d.ok) { out.textContent = d.error || 'fit failed'; return; }
-    onParam('yaw', d.ypr[0]); onParam('pitch', d.ypr[1]); onParam('roll', d.ypr[2]);
-    onParam('hfov', d.hfov);
-    const worst = d.residuals[0];
-    const lines = d.residuals.slice(0, 4).map(r =>
-      (r.arcmin === null ? 'no-proj' : r.arcmin + "'") + ' ' + r.lm).join('<br>');
-    const w = worst && worst.arcmin !== null ? worst.arcmin : Infinity;
-    const col = w < 2 ? '#4ade80' : w < 8 ? '#f59e0b' : '#f87171';
-    out.innerHTML = '<span style="color:' + col + '">fit on ' + d.n_obs + ' obs — worst ' +
-      (worst ? (worst.arcmin === null ? 'no-proj' : worst.arcmin + "'") : '?') + '</span>' +
-      (w >= 5 ? ' <span style="color:var(--mid)">(xyz off? scrub &amp; re-fit)</span>' : '') +
-      '<br>' + lines;
-    window._pv2LastFit = d;   // test hook
+  function fmt(key) {
+    const val = params[key];
+    if (val == null || isNaN(val)) return '—';
+    return Number(val).toFixed(2);
   }
-  document.getElementById('pv2-fit').addEventListener('click', () => runFit(false));
-  document.getElementById('pv2-fit-roll').addEventListener('click', () => runFit(true));
-  console.log('[PANEL-V2] scrub fields + fit button active');
+  function refresh() {
+    for (const key of Object.keys(spans)) {
+      spans[key].innerHTML = fmt(key) + '<span class="pv3-unit">' + UNITS[key] + '</span>';
+    }
+  }
+  setInterval(refresh, 200);
+  refresh();
+  document.getElementById('pv3-copy-pose').addEventListener('click', async e => {
+    const r3 = v => Math.round(v * 1000) / 1000;
+    const txt = `xyz=[${r3(params.x)}, ${r3(params.y)}, ${r3(params.z)}] ` +
+                `ypr=[${r3(params.yaw)}, ${r3(params.pitch)}, ${r3(params.roll)}] hfov=${r3(params.hfov)}`;
+    try { await navigator.clipboard.writeText(txt); } catch (_) {}
+    e.target.textContent = '✓ copied';
+    setTimeout(() => { e.target.textContent = '⧉ copy pose'; }, 900);
+  });
+  console.log('[PANEL-V3] read-only pose display active');
 })();
 </script>
 </body>
