@@ -570,6 +570,16 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
   padding:5px 8px;background:transparent;border:1px solid var(--border,#2a2a33);
   color:var(--mid,#999);border-radius:5px;cursor:pointer;transition:all .12s}
 #pv3-copy-pose:hover{border-color:var(--green,#4ade80);color:var(--green,#4ade80)}
+
+/* [POLISH-V3.1] compact pose panel — reclaim vertical space for the LM list */
+.sl-row{margin-bottom:0;min-height:0}
+.pv3-val{font-size:11px;padding:1px 6px;letter-spacing:.1px}
+.pv3-val .pv3-unit{font-size:8.5px;margin-left:3px}
+#pv3-copy-pose{margin-top:4px;padding:2px 6px;font-size:9px;opacity:.75}
+#pv3-copy-pose:hover{opacity:1}
+.sb-sec{padding:6px 13px}
+.sb-title{margin-bottom:3px;font-size:8.5px}
+.indep-chip{padding:5px 9px;font-size:10px}
 </style>
 <!-- Phase 7a.1.1: preload /yanis.jpg so the sidebar minimap is ready
      by the time the user picks a cam. The browser fetches it in
@@ -3445,12 +3455,7 @@ function draw2() {
     ctx2.globalAlpha = visible ? 1 : 0.12;
     const [mx, my] = toCanvas2(lm.marked_pixel[0], lm.marked_pixel[1]);
     const r = hi ? 8 : (lm.is_circular ? 4.5 : 5.5);
-    _mv2Reticle(ctx2, mx, my, r, color, { hi, dash: lm.is_circular });   // [MARKERS-V2]
-    if (hi) {
-      const lines = [[lm.name + (lm.is_circular ? '  ↻' : '  ★'), '#e8e8ee']];
-      if (lm.delta != null) lines.push(["d = " + lm.delta.toFixed(2) + "'", color]);
-      _mv2Chip(ctx2, mx, my, lines);
-    }
+    _mv2Reticle(ctx2, mx, my, r, color, { hi, dash: lm.is_circular });   // [MARKERS-V2] [POLISH-V3.1] chip removed (duplicate of tooltip)
     ctx2.globalAlpha = 1;
   }
 
@@ -3594,11 +3599,8 @@ function draw() {
       const [mx, my] = toCanvas(lm.marked_pixel[0], lm.marked_pixel[1]);
       const r = hi ? 8 : (lm.is_circular ? 4.5 : 5.5);
       _mv2Reticle(ctx, mx, my, r, color, { hi, dash: lm.is_circular });
-      if (hi) {
-        const lines = [[lm.name + (lm.is_circular ? '  ↻' : '  ★'), '#e8e8ee']];
-        if (lm.delta != null) lines.push(["d = " + lm.delta.toFixed(2) + "'", color]);
-        _mv2Chip(ctx, mx, my, lines);
-      }
+      // [POLISH-V3.1] no chip here: the existing cursor tooltip already
+      // shows name + indep + delta (chip was a duplicate)
     }
 
 
