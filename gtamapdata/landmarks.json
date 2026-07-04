@@ -9172,16 +9172,8 @@
     "zone": "vice_city"
   },
   "Infinity at Brickell": {
-    "xyz": [
-      -1188.4845483271397,
-      -1391.1760696961376,
-      174.5891686337317
-    ],
-    "source_cameras": [
-      "Metro (SE) (B)",
-      "Highway (Peacock Bay) (A)",
-      "Highway (Peacock Bay) (B)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": 0.492,
     "zone": "vice_city"
   },
@@ -14390,8 +14382,15 @@
     "zone": "unknown"
   },
   "Infinity at Brickell (A)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -1188.4845483271397,
+      -1391.1760696961376,
+      174.5891686337317
+    ],
+    "source_cameras": [
+      "Highway (Peacock Bay) (A)",
+      "Highway (Peacock Bay) (B)"
+    ],
     "error_m": null,
     "zone": "unknown"
   }
