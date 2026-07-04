@@ -130,6 +130,33 @@ def main():
     except Exception as e:
         print(f'⚠ fossil scan failed: {e}')
 
+    # ── 7. orphan scan (WARNING) [ORPHAN-SCAN-V1] ────────────────────────
+    # LM with xyz whose NO source cam still has a marking on it: the fossil
+    # detector's documented blind spot (e.g. after renaming markings).
+    try:
+        import gtamapdata as _md
+        orphans = []
+        for _lm, _xyz in _md.landmarks.items():
+            if _xyz is None:
+                continue
+            _src = (_md.landmarks_meta.get(_lm) or {}).get('source_cameras', []) or []
+            # empty sources = derived/procedural LM (rigid bodies, mast levels,
+            # z-constraint solves) — legitimate. Orphan = sources LISTED but
+            # none of them still has a marking (e.g. after a rename).
+            _real = [_c for _c in _src if not str(_c).startswith('(legacy')]
+            if _real and not any(_md.pixels.get(_c, {}).get(_lm) is not None for _c in _real):
+                orphans.append(_lm)
+        if orphans:
+            print(f'⚠ orphans: {len(orphans)} LM(s) with xyz but no source marking left')
+            for _o in orphans[:5]:
+                print(f'      {_o}')
+            if len(orphans) > 5:
+                print(f'      ... +{len(orphans)-5} more')
+        else:
+            print('✓ orphans: none')
+    except Exception as e:
+        print(f'⚠ orphan scan failed: {e}')
+
     # ── baseline ─────────────────────────────────────────────────────────
     if args.update_baseline:
         if summary is None:

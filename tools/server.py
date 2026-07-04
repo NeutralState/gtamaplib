@@ -2418,8 +2418,24 @@ class Handler(BaseHTTPRequestHandler):
             os.replace(tmp, px_path)
             del md.pixels[cam_name][lm_name]
             ml.get_camera.cache_clear()
+            # [PROVENANCE-V1] keep landmarks_meta coherent: a deleted marking
+            # removes this cam from the LM's source_cameras; if no source
+            # remains, the xyz is a fossil-blind-spot orphan -> quarantine.
+            prov_note = None
+            meta = md.landmarks_meta.get(lm_name)
+            if meta and cam_name in (meta.get('source_cameras') or []):
+                new_src = [c for c in meta['source_cameras'] if c != cam_name]
+                if new_src:
+                    md.update_landmark(lm_name, md.landmarks.get(lm_name),
+                                       source_cameras=new_src,
+                                       error_m=meta.get('error_m'))
+                    prov_note = f'source dropped ({len(new_src)} left)'
+                else:
+                    md.update_landmark(lm_name, None, source_cameras=[], error_m=None)
+                    prov_note = 'orphaned -> quarantined (xyz=None)'
+                print(f"Provenance: {lm_name}: {prov_note}")
             print(f"Deleted pixel {lm_name} from {cam_name}")
-            self.send_json({'ok': True})
+            self.send_json({'ok': True, 'provenance': prov_note})
 
         elif path == '/api/validate_pixel':
             # Just acknowledge — validation state is kept client-side

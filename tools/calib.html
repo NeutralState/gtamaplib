@@ -677,6 +677,9 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
              background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
              border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;
              font-family:JetBrains Mono,monospace">⊕ cams</button>
+    <button id="btn-mkadj" onclick="window._mkAdjToggle()" style="position:absolute;top:12px;right:270px;z-index:30;
+             background:#1a1a22cc;border:1px solid #333;color:#999;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;
+             font-family:JetBrains Mono,monospace">◐ adjust</button>
     <!-- ── VERTICALS-FE-V1 ── -->
     <!-- [T3-LINES-V1] mode tracage de lignes (bootstrap VP) -->
     <!-- [MESH-CTRL-V1] controle par mesh + opacite -->
@@ -6390,6 +6393,197 @@ window.addEventListener('load', () => {
   }, true);
 
   console.log('[UNIFY-V1] unified marking entries active');
+})();
+</script>
+
+<!-- [QOL-V1] image adjust: SVG tone filter + panel -->
+<svg width="0" height="0" style="position:absolute">
+  <filter id="mkadj" x="0" y="0" width="100%" height="100%">
+    <feComponentTransfer id="mkadj-tone" result="tone">
+      <feFuncR type="table" tableValues="0 1"/>
+      <feFuncG type="table" tableValues="0 1"/>
+      <feFuncB type="table" tableValues="0 1"/>
+    </feComponentTransfer>
+    <feGaussianBlur in="tone" stdDeviation="1.5" result="btex"/>
+    <feComposite id="mkadj-tex" in="tone" in2="btex" operator="arithmetic" k1="0" k2="1" k3="0" k4="0" result="tex"/>
+    <feGaussianBlur in="tex" stdDeviation="10" result="bcla"/>
+    <feComposite id="mkadj-cla" in="tex" in2="bcla" operator="arithmetic" k1="0" k2="1" k3="0" k4="0"/>
+  </filter>
+</svg>
+<div id="mkadj-panel" style="display:none;position:fixed;right:14px;top:64px;z-index:390;width:230px;
+  background:#101016f2;border:1px solid var(--border,#2a2a33);border-radius:9px;padding:10px 12px;
+  box-shadow:0 8px 28px #000c;font-family:var(--mono,monospace)">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:7px">
+    <span style="font-size:9px;letter-spacing:.12em;color:var(--dim,#666)">IMAGE ADJUST</span>
+    <div>
+      <button id="mkadj-reset" style="background:none;border:none;color:var(--mid,#999);cursor:pointer;font-size:12px" title="reset all">↺</button>
+      <button id="mkadj-close" style="background:none;border:none;color:var(--mid,#999);cursor:pointer;font-size:12px">✕</button>
+    </div>
+  </div>
+  <div id="mkadj-sliders"></div>
+  <div style="font-size:8.5px;color:var(--dim,#555);margin-top:6px">display only — never touches the data · auto-reset on close</div>
+</div>
+
+
+<script>
+// ══ [QOL-V1] marking quality-of-life: rename, fresh LM cache, image adjust ══
+(() => {
+  // ── #2: fresh LM cache shared by every autocomplete ──
+  window._mkKnownNew = new Set();
+  window._mkRegisterLm = function(name) {
+    if (window._mkKnownNew.has(name)) return;
+    window._mkKnownNew.add(name);
+    const dl = document.getElementById('mk-add-list');
+    if (dl) {
+      const o = document.createElement('option');
+      o.value = name;
+      dl.appendChild(o);
+    }
+  };
+
+  // ── #1: rename field in the pending confirm bar ──
+  const bar = document.getElementById('mk-confirm');
+  const renameWrap = document.createElement('div');
+  renameWrap.style.cssText = 'margin:5px 0 2px';
+  renameWrap.innerHTML = '<input id="mk-rename" list="mk-add-list" type="text" ' +
+    'style="width:100%;box-sizing:border-box;font-family:inherit;font-size:10.5px;background:#ffffff0a;' +
+    'border:1px solid var(--border,#333);color:var(--text,#ddd);padding:3px 7px;border-radius:4px;outline:none" ' +
+    'title="change the LM name — applied on confirm">';
+  bar.insertBefore(renameWrap, bar.querySelector('#mk-confirm-delta').nextSibling);
+  const renameInput = document.getElementById('mk-rename');
+  renameInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') { e.preventDefault(); e.stopPropagation(); window._mkConfirmPending(); }
+    e.stopPropagation();   // les fleches editent le texte, pas le nudge
+  });
+
+  // pre-remplir a l'entree en pending
+  const _enter = window._mkEnterPending;
+  window._mkEnterPending = function(d) {
+    _enter(d);
+    renameInput.value = d.lm;
+  };
+
+  // wrapper le confirm: si le nom a change -> delete old (move) + add new
+  const _confirm = window._mkConfirmPending;
+  window._mkConfirmPending = async function() {
+    const pd = window._mkPending;
+    if (!pd) return;
+    const newName = renameInput.value.trim();
+    if (newName && newName !== pd.lm) {
+      const oldName = pd.lm, wasMove = pd.kind === 'move';
+      window._mkPending = null;
+      bar.style.display = 'none';
+      if (wasMove) {
+        await fetch('/api/delete_pixel?cam=' + encodeURIComponent(currentCam) +
+          '&lm=' + encodeURIComponent(oldName)).then(r => r.json());
+      }
+      const known = await window._mkLmKnown(newName);
+      const nx = Math.round(pd.px[0] * 10) / 10, ny = Math.round(pd.px[1] * 10) / 10;
+      const res = await fetch('/api/add_pixel?cam=' + encodeURIComponent(currentCam) +
+        '&lm=' + encodeURIComponent(newName) + '&px=' + nx + '&py=' + ny +
+        (known ? '' : '&new=1')).then(r => r.json());
+      if (res.ok) {
+        window._mkRegisterLm(newName);
+        await loadProjections();
+        if (window._refreshGhosts) window._refreshGhosts();
+        const t = document.getElementById('tri-toast');
+        if (t) {
+          document.getElementById('tri-toast-title').textContent =
+            (wasMove ? oldName + ' → ' : '') + newName + ' @ ' + nx + ',' + ny + ' saved';
+          document.getElementById('tri-toast-meta').textContent = '';
+          t.style.display = 'block';
+          setTimeout(() => { t.style.display = 'none'; }, 2600);
+        }
+      } else { alert(res.error || 'rename failed'); }
+      return;
+    }
+    // nom inchange: flux normal + enregistrer si nouveau
+    const wasNew = pd.isNew, name = pd.lm;
+    await _confirm();
+    if (wasNew) window._mkRegisterLm(name);
+  };
+
+  // helper: le nom existe-t-il deja (serveur ou cree cette session)?
+  let _lmsCache = null;
+  window._mkLmKnown = async function(name) {
+    if (window._mkKnownNew.has(name)) return true;
+    if (_lmsCache === null) {
+      try { _lmsCache = (await fetch('/api/all_landmarks').then(r => r.json())).landmarks || []; }
+      catch (_) { _lmsCache = []; }
+    }
+    return _lmsCache.includes(name);
+  };
+
+  // ── #4: image adjust ──
+  const PARAMS = [
+    ['exposure',   -200, 200, 0], ['highlights', -100, 100, 0],
+    ['shadows',    -100, 100, 0], ['brightness', -100, 100, 0],
+    ['contrast',   -100, 100, 0], ['blackpoint', -100, 100, 0],
+    ['texture',       0, 100, 0], ['clarity',       0, 100, 0]];
+  const st = Object.fromEntries(PARAMS.map(p => [p[0], p[3]]));
+  const panel = document.getElementById('mkadj-panel');
+  const box = document.getElementById('mkadj-sliders');
+  for (const [k, mn, mx, dv] of PARAMS) {
+    const row = document.createElement('div');
+    row.style.cssText = 'margin-bottom:5px';
+    row.innerHTML = '<div style="display:flex;justify-content:space-between;font-size:9.5px;color:var(--mid,#aaa)">' +
+      '<span>' + k + '</span><span id="mkadj-v-' + k + '">' + dv + '</span></div>' +
+      '<input type="range" id="mkadj-s-' + k + '" min="' + mn + '" max="' + mx + '" value="' + dv + '" step="1" ' +
+      'style="width:100%;height:3px;accent-color:#4ade80">';
+    box.appendChild(row);
+    document.getElementById('mkadj-s-' + k).addEventListener('input', e => {
+      st[k] = parseFloat(e.target.value);
+      document.getElementById('mkadj-v-' + k).textContent = st[k];
+      applyAdj();
+    });
+  }
+  function toneCurve() {
+    const N = 33, vals = [];
+    const e = Math.pow(2, st.exposure / 200);
+    for (let i = 0; i < N; i++) {
+      let v = i / (N - 1);
+      const bp = st.blackpoint / 400;
+      v = Math.max(0, (v - bp) / Math.max(0.05, 1 - bp));
+      v *= e;
+      v += st.brightness / 350;
+      v = (v - 0.5) * (1 + st.contrast / 130) + 0.5;
+      if (v > 0.55) v = 0.55 + (v - 0.55) * (1 + st.highlights / 160);
+      if (v < 0.45) v = 0.45 - (0.45 - v) * (1 - st.shadows / 160);
+      vals.push(Math.min(1, Math.max(0, v)).toFixed(4));
+    }
+    return vals.join(' ');
+  }
+  function applyAdj() {
+    const tone = document.getElementById('mkadj-tone');
+    const tv = toneCurve();
+    for (const f of tone.children) f.setAttribute('tableValues', tv);
+    const kt = st.texture / 130, kc = st.clarity / 160;
+    const tex = document.getElementById('mkadj-tex');
+    tex.setAttribute('k2', (1 + kt).toFixed(3)); tex.setAttribute('k3', (-kt).toFixed(3));
+    const cla = document.getElementById('mkadj-cla');
+    cla.setAttribute('k2', (1 + kc).toFixed(3)); cla.setAttribute('k3', (-kc).toFixed(3));
+    const active = PARAMS.some(p => st[p[0]] !== p[3]);
+    frameImg.style.filter = active ? 'url(#mkadj)' : '';
+    window._mkAdjActive = active;
+  }
+  function resetAdj() {
+    for (const [k, , , dv] of PARAMS) {
+      st[k] = dv;
+      document.getElementById('mkadj-s-' + k).value = dv;
+      document.getElementById('mkadj-v-' + k).textContent = dv;
+    }
+    applyAdj();
+  }
+  window._mkAdjToggle = function() {
+    const on = panel.style.display !== 'block';
+    panel.style.display = on ? 'block' : 'none';
+    document.getElementById('btn-mkadj').style.color = on ? '#4ade80' : '#999';
+    if (!on) resetAdj();   // sortir du mode = image normale
+  };
+  document.getElementById('mkadj-close').addEventListener('click', window._mkAdjToggle);
+  document.getElementById('mkadj-reset').addEventListener('click', resetAdj);
+  window._mkAdjState = st;   // test hook
+  console.log('[QOL-V1] rename + fresh cache + image adjust active');
 })();
 </script>
 </body>
