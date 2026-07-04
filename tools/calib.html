@@ -557,6 +557,11 @@ body:not(.view-map):not(.view-view3d) #dual-toggle{display:inline-flex !importan
 #proj-toggle{display:none !important}
 body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !important}
 
+/* [ADJFIX-V1] filter via class: draw() rewrites frameImg.style.cssText
+   every frame, wiping inline filters — a class survives */
+#frame-img.mkadj-on, img.mkadj-on { filter: url(#mkadj) !important; }
+
+
 /* [PANEL-V3] pose = read-only display, terminal-first. Sliders and inputs
    hidden; clean value rows, click = copy. */
 .sl-row input[type=range],.sl-row .num{display:none}
@@ -6568,7 +6573,7 @@ window.addEventListener('load', () => {
     document.querySelector('#mkadj feGaussianBlur[result="btex"]').setAttribute('stdDeviation', kt > 0 ? '1.5' : '0');
     document.querySelector('#mkadj feGaussianBlur[result="bcla"]').setAttribute('stdDeviation', kc > 0 ? '10' : '0');
     const active = PARAMS.some(p => st[p[0]] !== p[3]);
-    frameImg.style.filter = active ? 'url(#mkadj)' : '';
+    frameImg.classList.toggle('mkadj-on', active);   // [ADJFIX-V1]
     window._mkAdjActive = active;
   }
   function resetAdj() {
