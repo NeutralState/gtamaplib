@@ -6263,5 +6263,111 @@ window.addEventListener('load', () => {
   console.log('[EDIT-MODE-V1] pending confirm layer active');
 })();
 </script>
+
+<script>
+// ══ [UNIFY-V1] one marking flow to rule them all ══
+// The pxe modal (✎), the +Add "Place on Image" path and a brand-new
+// RIGHT-CLICK all route into the same pending flow (drag + loupe + arrows +
+// confirm/revert). The modal only survives as a fallback for edge cases.
+(() => {
+  const addBox = document.getElementById('mk-add-box');
+  const addInput = document.getElementById('mk-add-input');
+
+  // lm list cache for isNew resolution (shares the datalist with 'A')
+  let _lms = null;
+  async function ensureLms() {
+    if (_lms) return _lms;
+    try { _lms = (await fetch('/api/all_landmarks').then(r => r.json())).landmarks || []; }
+    catch (_) { _lms = []; }
+    const dl = document.getElementById('mk-add-list');
+    if (dl && !dl.children.length) {
+      const markedHere = new Set((projections || []).filter(p => p.marked_pixel).map(p => p.name));
+      for (const n of _lms) {
+        if (markedHere.has(n)) continue;
+        const o = document.createElement('option');
+        o.value = n; dl.appendChild(o);
+      }
+    }
+    return _lms;
+  }
+
+  function centerOnImgPt(ix, iy) {
+    const [cx, cy] = toCanvas(ix, iy);
+    const r = getMainPaneRect();
+    const dx = r.width / 2 - cx, dy = r.height / 2 - cy;
+    if (Math.abs(dx) > r.width * 0.35 || Math.abs(dy) > r.height * 0.35) {
+      mainPanX += dx; mainPanY += dy;
+      draw();
+    }
+  }
+
+  // ── ✎ Edit pixel: straight to pending on the canvas ──
+  const _origOpenPx = openPxEditor;
+  openPxEditor = function(cam, lmName) {
+    if (cam === currentCam && window._mkEnterPending) {
+      const p = (projections || []).find(x => x.name === lmName);
+      if (p && p.marked_pixel) {
+        centerOnImgPt(p.marked_pixel[0], p.marked_pixel[1]);
+        window._mkEnterPending({ kind: 'move', lm: lmName,
+          px: p.marked_pixel.slice(), orig: p.marked_pixel.slice(), isNew: false });
+        return;
+      }
+    }
+    _origOpenPx(cam, lmName);   // fallback (unmarked / other cam)
+  };
+
+  // ── +Add "Place on Image": arm the drag flow instead of the modal ──
+  const _origStartAdd = startAddPixel;
+  startAddPixel = async function() {
+    if (!addPxSelectedLm) return;
+    document.getElementById('add-px-modal').style.display = 'none';
+    const lms = await ensureLms();
+    window._mkAddIsNew = !lms.includes(addPxSelectedLm);
+    addPxMode = true;
+    canvasWrap.style.cursor = 'crosshair';
+    const t = document.getElementById('tri-toast');
+    if (t) {
+      document.getElementById('tri-toast-title').textContent = 'Marking armed: ' + addPxSelectedLm + (window._mkAddIsNew ? ' (new)' : ' (2nd source)');
+      document.getElementById('tri-toast-meta').textContent = 'Press & drag on the frame · release = review · Enter = save';
+      t.style.display = 'block';
+      setTimeout(() => { t.style.display = 'none'; }, 4000);
+    }
+  };
+
+  // ── RIGHT-CLICK anywhere: add a marking right there ──
+  window._mkRcPx = null;
+  canvasWrap.addEventListener('contextmenu', async e => {
+    if (e.target.closest && e.target.closest('#pane-2, #trace-pop, #mesh-ctrl-pop')) return;
+    if (window._mkPending || (window._mk && window._mk.drag)) return;
+    e.preventDefault();
+    const rect = getMainPaneRect();
+    window._mkRcPx = canvasToImg(e.clientX - rect.left, e.clientY - rect.top);
+    await ensureLms();
+    addBox.style.left = Math.min(window.innerWidth - 300, e.clientX + 8) + 'px';
+    addBox.style.top = Math.max(10, e.clientY - 56) + 'px';
+    addBox.style.display = 'block';
+    addInput.value = '';
+    addInput.focus();
+  });
+
+  // Enter dans la boite APRES un right-click: pending direct a la position
+  addInput.addEventListener('keydown', async e => {
+    if (e.key === 'Escape') { window._mkRcPx = null; return; }
+    if (e.key !== 'Enter' || !window._mkRcPx) return;
+    const name = addInput.value.trim();
+    if (!name) return;
+    e.stopImmediatePropagation(); e.preventDefault();
+    addBox.style.display = 'none';
+    const lms = await ensureLms();
+    const px = window._mkRcPx;
+    window._mkRcPx = null;
+    addPxSelectedLm = name;
+    window._mkEnterPending({ kind: 'place', lm: name, px: [px[0], px[1]],
+                             orig: null, isNew: !lms.includes(name) });
+  }, true);
+
+  console.log('[UNIFY-V1] unified marking entries active');
+})();
+</script>
 </body>
 </html>
