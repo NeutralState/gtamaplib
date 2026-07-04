@@ -349,13 +349,28 @@ def main():
         print(f"ERROR: No pixel markings on '{args.cam_name}'.")
         return 1
 
+    # [EXCL-FIX-V1] honor excluded_markings.json (same fix as lm_uncertainty
+    # in e36f64b — this tool was silently refitting against excluded markings)
+    import json as _json, os as _os
+    _excl_path = _os.path.join(_os.path.dirname(_os.path.dirname(_os.path.abspath(__file__))),
+                               'gtamapdata', 'excluded_markings.json')
+    try:
+        with open(_excl_path) as _f:
+            _excl = set(_json.load(_f).get(args.cam_name, []))
+    except Exception:
+        _excl = set()
+
     visible_classified = {}
     for lm_name in cam_pixels:
+        if lm_name in _excl:
+            continue
         if lm_name not in landmarks:
             continue
         if not isinstance(landmarks[lm_name], dict) or not landmarks[lm_name].get('xyz'):
             continue
         visible_classified[lm_name] = classify_lm(lm_name, lm_tiers)
+    if _excl:
+        print(f"Excluded markings honored: {sorted(_excl & set(cam_pixels))}")
 
     if not visible_classified:
         print(f"ERROR: No LMs with positions visible on '{args.cam_name}'.")

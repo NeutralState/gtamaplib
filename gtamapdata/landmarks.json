@@ -9040,9 +9040,16 @@
     "zone": "grassrivers"
   },
   "Palazzo del Sol": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": 2.583,
+    "xyz": [
+      1907.489059008014,
+      -1335.3490267503971,
+      51.68523546533588
+    ],
+    "source_cameras": [
+      "Leonida Keys Postcard (X)",
+      "Rooftop Party"
+    ],
+    "error_m": 1.144,
     "zone": "vice_city"
   },
   "1111 Lincoln Rd (SE)": {
@@ -11547,9 +11554,16 @@
   },
   "50 Biscayne Blvd": {
     "author": "rlx",
-    "error_m": null,
-    "source_cameras": [],
-    "xyz": null,
+    "error_m": 3.623,
+    "source_cameras": [
+      "Shitzu Squalo 01 (Bay)",
+      "Port Vice City (A)"
+    ],
+    "xyz": [
+      -456.2199382537292,
+      -229.55207419073258,
+      147.30998030051825
+    ],
     "zone": null
   },
   "Jason's Boat Ramp": {
@@ -11575,9 +11589,16 @@
   },
   "1450 Brickell Ave": {
     "author": "rlx",
-    "error_m": null,
-    "source_cameras": [],
-    "xyz": null,
+    "error_m": 1.376,
+    "source_cameras": [
+      "Motorboats (B)",
+      "Metro (SE) (C)"
+    ],
+    "xyz": [
+      -973.5108145291415,
+      -1409.5808068657411,
+      174.27299502101977
+    ],
     "zone": null
   },
   "Jason's House (VNE)": {
@@ -11589,9 +11610,16 @@
   },
   "Southeast Financial Center (A)": {
     "author": "rlx",
-    "error_m": null,
-    "source_cameras": [],
-    "xyz": null,
+    "error_m": 3.271,
+    "source_cameras": [
+      "Shitzu Squalo 01 (Bay)",
+      "Port Vice City (A)"
+    ],
+    "xyz": [
+      -484.11116325461086,
+      -465.07751539353853,
+      278.91001152654434
+    ],
     "zone": null
   },
   "Unknown Mast (South Leonida) (1)": {
@@ -12898,9 +12926,16 @@
   },
   "Brickell Arch (W)": {
     "author": "rlx",
-    "error_m": null,
-    "source_cameras": [],
-    "xyz": null,
+    "error_m": 3.458,
+    "source_cameras": [
+      "Metro (SE) (B)",
+      "Port Vice City (A)"
+    ],
+    "xyz": [
+      -830.7020025029583,
+      -1119.4455702235166,
+      167.83949710885236
+    ],
     "zone": null
   },
   "Unknown Mast (South Leonida) (2)": {
@@ -13520,9 +13555,16 @@
   },
   "Miami-Dade County Courthouse": {
     "author": "rlx",
-    "error_m": null,
-    "source_cameras": [],
-    "xyz": null,
+    "error_m": 0.239,
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Vice Beach (B)"
+    ],
+    "xyz": [
+      -729.0516905270706,
+      -3.248191642059636,
+      117.73244328870126
+    ],
     "zone": null
   },
   "Billboard with Oval Motif #1 (TE)": {
@@ -14329,9 +14371,16 @@
     "zone": "unknown"
   },
   "Infinity at Brickell (NW)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -1169.5433676663386,
+      -1366.2265161858677,
+      174.44102914539474
+    ],
+    "source_cameras": [
+      "Prison",
+      "Metro (SE) (B)"
+    ],
+    "error_m": 6.227,
     "zone": "unknown"
   },
   "Infinity at Brickell (SE)": {
