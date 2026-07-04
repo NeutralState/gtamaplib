@@ -5782,12 +5782,12 @@ window.addEventListener('load', () => {
 
   function liveDelta(lm, px) {
     const p = projections.find(x => x.name === lm);
-    if (!p || !p.proj || !camData?.size) return null;
+    if (!p || !p.projected || !camData?.size) return null;
     const [w, h] = camData.size;
     const hf = params.hfov, vf = vfovDeg();
     if (!hf || !vf) return null;
-    const dx = (p.proj[0] - px[0]) * hf / w * 60;
-    const dy = (p.proj[1] - px[1]) * vf / h * 60;
+    const dx = (p.projected[0] - px[0]) * hf / w * 60;
+    const dy = (p.projected[1] - px[1]) * vf / h * 60;
     return Math.hypot(dx, dy);
   }
 
@@ -5944,7 +5944,7 @@ window.addEventListener('load', () => {
     if (!mk.drag) return;
     const d = mk.drag;
     // moved less than 0.5 img px on a 'move' drag = accidental click -> revert
-    if (d.kind === 'move' && d.orig &&
+    if (d.kind === 'move' && d.orig && !d.fromPending &&
         Math.hypot(d.px[0] - d.orig[0], d.px[1] - d.orig[1]) < 0.5) {
       mk.drag = null;
       loupe.style.display = 'none';
@@ -5952,7 +5952,12 @@ window.addEventListener('load', () => {
       draw();
       return;
     }
-    commit();
+    // [EDIT-MODE-V1] release = review, not commit
+    mk.drag = null;
+    loupe.style.display = 'none';
+    canvasWrap.style.cursor = 'crosshair';
+    if (window._mkEnterPending) window._mkEnterPending(d);
+    else commit.call(null);
   });
 
   canvasWrap.addEventListener('click', e => {
@@ -6083,6 +6088,179 @@ window.addEventListener('load', () => {
     setTimeout(() => { e.target.textContent = '⧉ copy pose'; }, 900);
   });
   console.log('[PANEL-V3] read-only pose display active');
+})();
+</script>
+<!-- [EDIT-MODE-V1] pending marking confirm bar -->
+<div id="mk-confirm" style="display:none;position:fixed;z-index:402;background:#0a0a10f2;
+  border:1px solid #f59e0b;border-radius:7px;padding:7px 10px;box-shadow:0 6px 22px #000d;
+  font-family:var(--mono,monospace);font-size:11px;color:var(--text,#ddd)">
+  <div id="mk-confirm-title" style="font-weight:700;margin-bottom:2px"></div>
+  <div id="mk-confirm-delta" style="color:var(--mid,#999);margin-bottom:6px"></div>
+  <div style="display:flex;gap:6px;align-items:center">
+    <button id="mk-confirm-ok" style="background:#4ade8022;border:1px solid #4ade80;color:#4ade80;
+      border-radius:5px;padding:3px 10px;cursor:pointer;font-family:inherit;font-size:11px">✓ confirm ⏎</button>
+    <button id="mk-confirm-rv" style="background:#ffffff10;border:1px solid var(--border,#333);color:var(--text,#ddd);
+      border-radius:5px;padding:3px 10px;cursor:pointer;font-family:inherit;font-size:11px">↩ revert esc</button>
+    <span style="color:var(--dim,#666);font-size:9px">arrows = 0.1px · shift = 1px</span>
+  </div>
+</div>
+
+<script>
+// ══ [EDIT-MODE-V1] pending markings: release = review, not commit ══
+// Any drag release enters a PENDING state: the original stays visible as a
+// faint ghost with a connector, the confirm bar shows delta before -> after,
+// bare arrows nudge 0.1px (Shift = 1px), Enter confirms, Esc reverts.
+// Nothing touches the API until you confirm. Kills accidental-drag damage
+// and hosts the sub-pixel refinement step.
+(() => {
+  const mk = window._mk;
+  const bar = document.getElementById('mk-confirm');
+  const barT = document.getElementById('mk-confirm-title');
+  const barD = document.getElementById('mk-confirm-delta');
+
+  function fmtD(v) { return v == null ? '—' : v.toFixed(2) + "'"; }
+
+  function liveDeltaOf(lm, px) {
+    const p = projections.find(x => x.name === lm);
+    if (!p || !p.projected || !camData?.size) return null;
+    const [w, h] = camData.size;
+    const hf = params.hfov;
+    if (!hf) return null;
+    const vf = 2 * Math.atan(Math.tan(hf * Math.PI / 360) * h / w) * 180 / Math.PI;
+    return Math.hypot((p.projected[0] - px[0]) * hf / w * 60, (p.projected[1] - px[1]) * vf / h * 60);
+  }
+
+  window._mkPending = null;
+
+  function paintPendingStatic() {
+    const pd = window._mkPending;
+    if (!pd) return;
+    // original en fantome pale + connecteur
+    if (pd.orig) {
+      const [ox, oy] = toCanvas(pd.orig[0], pd.orig[1]);
+      const [nx, ny] = toCanvas(pd.px[0], pd.px[1]);
+      ctx.save();
+      ctx.globalAlpha = 0.45;
+      ctx.setLineDash([3, 3]);
+      ctx.strokeStyle = '#8a8a95'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(ox, oy, 5.5, 0, Math.PI * 2); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ox, oy); ctx.lineTo(nx, ny); ctx.stroke();
+      ctx.restore();
+    }
+    const [nx, ny] = toCanvas(pd.px[0], pd.px[1]);
+    ctx.save();
+    ctx.shadowColor = '#f59e0b'; ctx.shadowBlur = 8;
+    ctx.strokeStyle = '#f59e0b'; ctx.lineWidth = 1.8;
+    ctx.beginPath(); ctx.arc(nx, ny, 6.5, 0, Math.PI * 2); ctx.stroke();
+    ctx.beginPath(); ctx.arc(nx, ny, 1.6, 0, Math.PI * 2);
+    ctx.fillStyle = '#f59e0b'; ctx.fill();
+    ctx.restore();
+  }
+  // repeindre le pending par-dessus chaque draw()
+  const _edDraw = draw;
+  draw = function() { _edDraw(); paintPendingStatic(); };
+
+  function placeBar() {
+    const pd = window._mkPending;
+    if (!pd) return;
+    const [nx, ny] = toCanvas(pd.px[0], pd.px[1]);
+    const r = getMainPaneRect();
+    bar.style.left = Math.min(window.innerWidth - 320, Math.max(8, r.left + nx + 18)) + 'px';
+    bar.style.top = Math.max(8, r.top + ny - 90) + 'px';
+  }
+
+  function refreshBar() {
+    const pd = window._mkPending;
+    if (!pd) return;
+    barT.textContent = pd.lm + '  @ ' + pd.px[0].toFixed(1) + ', ' + pd.px[1].toFixed(1);
+    const before = pd.orig ? liveDeltaOf(pd.lm, pd.orig) : null;
+    const after = liveDeltaOf(pd.lm, pd.px);
+    barD.textContent = pd.orig
+      ? 'd: ' + fmtD(before) + '  →  ' + fmtD(after)
+      : (after != null ? 'd = ' + fmtD(after) : 'new marking');
+    placeBar();
+  }
+
+  window._mkEnterPending = function(d) {
+    window._mkPending = { kind: d.kind, lm: d.lm, px: d.px.slice(),
+                          orig: d.orig ? d.orig.slice() : null, isNew: d.isNew };
+    bar.style.display = 'block';
+    refreshBar();
+    draw();
+  };
+
+  async function confirmPending() {
+    const pd = window._mkPending;
+    if (!pd) return;
+    window._mkPending = null;
+    bar.style.display = 'none';
+    const nx = Math.round(pd.px[0] * 10) / 10, ny = Math.round(pd.px[1] * 10) / 10;
+    const ep = pd.kind === 'place' ? '/api/add_pixel' : '/api/set_pixel';
+    const res = await fetch(ep + '?cam=' + encodeURIComponent(currentCam) +
+      '&lm=' + encodeURIComponent(pd.lm) + '&px=' + nx + '&py=' + ny +
+      (pd.isNew ? '&new=1' : '')).then(r => r.json());
+    if (res.ok) {
+      addPxMode = false;
+      await loadProjections();
+      if (window._refreshGhosts) window._refreshGhosts();
+      const next = (ghostMarkers1 || []).find(g => g.type === 'point' && g.priority === 1 && g.name !== pd.lm);
+      const t = document.getElementById('tri-toast');
+      if (t) {
+        document.getElementById('tri-toast-title').textContent = pd.lm + ' @ ' + nx + ',' + ny + ' saved';
+        document.getElementById('tri-toast-meta').textContent = next ? 'next P1: ' + next.name : '';
+        t.style.display = 'block';
+        setTimeout(() => { t.style.display = 'none'; }, 2400);
+      }
+    } else { alert(res.error || 'save failed'); }
+  }
+
+  function revertPending() {
+    window._mkPending = null;
+    bar.style.display = 'none';
+    addPxMode = false;
+    draw();
+  }
+  window._mkConfirmPending = confirmPending;
+  window._mkRevertPending = revertPending;
+
+  document.getElementById('mk-confirm-ok').addEventListener('click', confirmPending);
+  document.getElementById('mk-confirm-rv').addEventListener('click', revertPending);
+
+  document.addEventListener('keydown', e => {
+    const pd = window._mkPending;
+    if (!pd) return;
+    if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+    if (e.key === 'Enter') { e.preventDefault(); e.stopImmediatePropagation(); confirmPending(); return; }
+    if (e.key === 'Escape') { e.preventDefault(); e.stopImmediatePropagation(); revertPending(); return; }
+    const step = e.shiftKey ? 1.0 : 0.1;
+    const map = { ArrowLeft: [-step, 0], ArrowRight: [step, 0], ArrowUp: [0, -step], ArrowDown: [0, step] };
+    const d = map[e.key];
+    if (!d) return;
+    e.preventDefault(); e.stopImmediatePropagation();
+    pd.px[0] = Math.round((pd.px[0] + d[0]) * 10) / 10;
+    pd.px[1] = Math.round((pd.px[1] + d[1]) * 10) / 10;
+    refreshBar();
+    draw();
+  }, true);
+
+  // re-drag du marker pending
+  canvasWrap.addEventListener('mousedown', e => {
+    const pd = window._mkPending;
+    if (!pd || e.button !== 0) return;
+    const rect = getMainPaneRect();
+    const [cx, cy] = toCanvas(pd.px[0], pd.px[1]);
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    if ((mx - cx) ** 2 + (my - cy) ** 2 < 144) {
+      bar.style.display = 'none';
+      mk.drag = { kind: pd.kind, lm: pd.lm, px: pd.px.slice(), isNew: pd.isNew,
+                  orig: pd.orig, line: null, fromPending: true };
+      window._mkPending = null;
+      e.stopImmediatePropagation(); e.preventDefault();
+      mk.swallowClick = true;
+    }
+  }, true);
+
+  console.log('[EDIT-MODE-V1] pending confirm layer active');
 })();
 </script>
 </body>

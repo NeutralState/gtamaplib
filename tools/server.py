@@ -14,7 +14,7 @@ import sys
 from http.server import BaseHTTPRequestHandler, HTTPServer, ThreadingHTTPServer
 from urllib.parse import urlparse, parse_qs, unquote
 
-GTAMAP_DIR = os.path.expanduser("~/Downloads/gtamaplib-main")
+GTAMAP_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))  # [EDIT-MODE-V1] portable (was hardcoded ~/Downloads/gtamaplib-main)
 DATA_DIR = os.path.join(GTAMAP_DIR, "gtamapdata")
 FRAMES_DIR = os.path.join(GTAMAP_DIR, "frames")
 TOOL_DIR = os.path.dirname(os.path.abspath(__file__))
