@@ -677,9 +677,9 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
              background:rgba(0,0,0,0.6);color:#fff;border:1px solid #555;
              border-radius:4px;padding:4px 8px;font-size:11px;cursor:pointer;
              font-family:JetBrains Mono,monospace">⊕ cams</button>
-    <button id="btn-mkadj" onclick="window._mkAdjToggle()" style="position:absolute;top:12px;right:270px;z-index:30;
-             background:#1a1a22cc;border:1px solid #333;color:#999;padding:6px 12px;border-radius:6px;cursor:pointer;font-size:12px;
-             font-family:JetBrains Mono,monospace">◐ adjust</button>
+    <button id="btn-mkadj" onclick="window._mkAdjToggle()" style="position:absolute;top:8px;right:248px;z-index:30;
+             background:#1a1a22cc;border:1px solid #333;color:#999;padding:4px 8px;border-radius:6px;cursor:pointer;font-size:11px;
+             font-family:JetBrains Mono,monospace">◐ adjust</button><!-- [UIFIX-V1] aligned with mesh/verts/cams -->
     <!-- ── VERTICALS-FE-V1 ── -->
     <!-- [T3-LINES-V1] mode tracage de lignes (bootstrap VP) -->
     <!-- [MESH-CTRL-V1] controle par mesh + opacite -->
@@ -5952,6 +5952,7 @@ window.addEventListener('load', () => {
       mk.drag = null;
       loupe.style.display = 'none';
       canvasWrap.style.cursor = 'crosshair';
+      if (window._mkSelectLm) window._mkSelectLm(d.lm);   // [UIFIX-V1] click = select
       draw();
       return;
     }
@@ -6562,6 +6563,10 @@ window.addEventListener('load', () => {
     tex.setAttribute('k2', (1 + kt).toFixed(3)); tex.setAttribute('k3', (-kt).toFixed(3));
     const cla = document.getElementById('mkadj-cla');
     cla.setAttribute('k2', (1 + kc).toFixed(3)); cla.setAttribute('k3', (-kc).toFixed(3));
+    // [UIFIX-V1] the two feGaussianBlur are the whole GPU cost — kill them
+    // when their sharpen stage is unused (tone-only = instant)
+    document.querySelector('#mkadj feGaussianBlur[result="btex"]').setAttribute('stdDeviation', kt > 0 ? '1.5' : '0');
+    document.querySelector('#mkadj feGaussianBlur[result="bcla"]').setAttribute('stdDeviation', kc > 0 ? '10' : '0');
     const active = PARAMS.some(p => st[p[0]] !== p[3]);
     frameImg.style.filter = active ? 'url(#mkadj)' : '';
     window._mkAdjActive = active;
@@ -6584,6 +6589,41 @@ window.addEventListener('load', () => {
   document.getElementById('mkadj-reset').addEventListener('click', resetAdj);
   window._mkAdjState = st;   // test hook
   console.log('[QOL-V1] rename + fresh cache + image adjust active');
+})();
+</script>
+
+<script>
+// ══ [UIFIX-V1] click a marker on canvas -> select + scroll in the LM list ══
+(() => {
+  window._mkSelectLm = function(name) {
+    selectedLm = selectedLm === name ? null : name;
+    renderLmList(); draw(); showLmInfo(selectedLm);
+    if (selectedLm) {
+      for (const row of lmList.children) {
+        const n = row.querySelector && row.querySelector('.lm-name');
+        if (n && n.textContent === selectedLm) {
+          row.scrollIntoView({ block: 'center', behavior: 'smooth' });
+          break;
+        }
+      }
+    }
+  };
+  canvasWrap.addEventListener('click', e => {
+    if (addPxMode || (window._mk && window._mk.drag) || window._mkPending) return;
+    if (window._assistHoverGhost) return;   // ghost click = arming, not select
+    const rect = getMainPaneRect();
+    const mx = e.clientX - rect.left, my = e.clientY - rect.top;
+    let best = null, bd = 144;
+    for (const lm of projections) {
+      if (!lm.marked_pixel) continue;
+      const [cx, cy] = toCanvas(lm.marked_pixel[0], lm.marked_pixel[1]);
+      const d = (cx - mx) ** 2 + (cy - my) ** 2;
+      if (d < bd) { bd = d; best = lm.name; }
+    }
+    if (!best) return;
+    window._mkSelectLm(best);
+  });
+  console.log('[UIFIX-V1] canvas marker click-to-list active');
 })();
 </script>
 </body>
