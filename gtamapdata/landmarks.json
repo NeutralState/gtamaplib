@@ -8471,28 +8471,33 @@
   },
   "One Miami Condominium East (SE)": {
     "xyz": [
-      -233.25279035649123,
-      -553.4007358176025,
-      182.23991616267847
+      -231.97225941004655,
+      -550.5228768087435,
+      182.30022827227498
     ],
     "source_cameras": [
+      "Prison",
       "Skyline",
-      "Vice City 03 (Basketball)"
+      "Vice Beach (B)",
+      "Vice City 03 (Basketball)",
+      "Vice City Postcard"
     ],
-    "error_m": 0.134,
+    "error_m": 2.147,
     "zone": "vice_city"
   },
   "One Miami Condominium West (SE)": {
     "xyz": [
-      -318.28871773883264,
-      -584.9244001192515,
-      187.45759742322312
+      -316.45346486633645,
+      -583.7365734555713,
+      187.91370446266154
     ],
     "source_cameras": [
+      "Prison",
       "Skyline",
-      "Vice City 03 (Basketball)"
+      "Vice City 03 (Basketball)",
+      "Vice City Postcard"
     ],
-    "error_m": 0.365,
+    "error_m": 1.328,
     "zone": "vice_city"
   },
   "Pole near Signature Hangar 2": {
@@ -9172,9 +9177,16 @@
     "zone": "vice_city"
   },
   "Infinity at Brickell": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": 0.492,
+    "xyz": [
+      -1198.1809671715907,
+      -1419.7584604255248,
+      180.03426647357992
+    ],
+    "source_cameras": [
+      "Prison",
+      "Metro (SE) (A) (4K)"
+    ],
+    "error_m": 4.082,
     "zone": "vice_city"
   },
   "One Broadway (W)": {
@@ -11236,15 +11248,16 @@
   },
   "Infinity at Brickell (SW)": {
     "xyz": [
-      -1220.3814171291056,
-      -1401.5135998737787,
-      171.07210169006342
+      -1215.7878769883243,
+      -1441.686290556423,
+      177.2455342868833
     ],
     "source_cameras": [
-      "Highway (Peacock Bay) (A)",
-      "Metro (SE) (C)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Prison",
+      "Metro (SE) (A) (4K)"
     ],
-    "error_m": 4.7,
+    "error_m": 7.101,
     "zone": "unknown",
     "notes": "Manual triangulation: Peacock Bay A + Metro SE C, parallax 140deg, ray gap 4.7m, 34m from generic Infinity (SW corner of tower). Metro SE C used despite unverified tier (pose validated reproj ~10px)."
   },
@@ -14357,9 +14370,16 @@
     "zone": "unknown"
   },
   "Infinity at Brickell (NE)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -1169.2710578696347,
+      -1362.6350533620202,
+      175.15640396341925
+    ],
+    "source_cameras": [
+      "Prison",
+      "Highway (Peacock Bay) (A)"
+    ],
+    "error_m": 1.939,
     "zone": "unknown"
   },
   "Infinity at Brickell (NW)": {
