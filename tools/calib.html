@@ -6101,6 +6101,8 @@ window.addEventListener('load', () => {
       border-radius:5px;padding:3px 10px;cursor:pointer;font-family:inherit;font-size:11px">✓ confirm ⏎</button>
     <button id="mk-confirm-rv" style="background:#ffffff10;border:1px solid var(--border,#333);color:var(--text,#ddd);
       border-radius:5px;padding:3px 10px;cursor:pointer;font-family:inherit;font-size:11px">↩ revert esc</button>
+    <button id="mk-confirm-del" title="delete this marking (removes the pixel from pixels.json)" style="background:#f8717118;border:1px solid #f87171;color:#f87171;
+      border-radius:5px;padding:3px 9px;cursor:pointer;font-family:inherit;font-size:11px">🗑</button><!-- [DELETE-BTN-V1] -->
     <span style="color:var(--dim,#666);font-size:9px">arrows = 0.1px · shift = 1px</span>
   </div>
 </div>
@@ -6185,6 +6187,7 @@ window.addEventListener('load', () => {
     window._mkPending = { kind: d.kind, lm: d.lm, px: d.px.slice(),
                           orig: d.orig ? d.orig.slice() : null, isNew: d.isNew };
     bar.style.display = 'block';
+    document.getElementById('mk-confirm-del').style.display = d.kind === 'move' ? '' : 'none';  // [DELETE-BTN-V1]
     refreshBar();
     draw();
   };
@@ -6225,6 +6228,26 @@ window.addEventListener('load', () => {
 
   document.getElementById('mk-confirm-ok').addEventListener('click', confirmPending);
   document.getElementById('mk-confirm-rv').addEventListener('click', revertPending);
+  document.getElementById('mk-confirm-del').addEventListener('click', async () => {   // [DELETE-BTN-V1]
+    const pd = window._mkPending;
+    if (!pd) return;
+    if (!confirm('Delete the marking "' + pd.lm + '" on this cam? (pixel removed from pixels.json)')) return;
+    window._mkPending = null;
+    bar.style.display = 'none';
+    const res = await fetch('/api/delete_pixel?cam=' + encodeURIComponent(currentCam) +
+      '&lm=' + encodeURIComponent(pd.lm)).then(r => r.json());
+    if (res.ok) {
+      await loadProjections();
+      if (window._refreshGhosts) window._refreshGhosts();
+      const t = document.getElementById('tri-toast');
+      if (t) {
+        document.getElementById('tri-toast-title').textContent = pd.lm + ' marking deleted';
+        document.getElementById('tri-toast-meta').textContent = '';
+        t.style.display = 'block';
+        setTimeout(() => { t.style.display = 'none'; }, 2200);
+      }
+    } else { alert(res.error || 'delete failed'); }
+  });
 
   document.addEventListener('keydown', e => {
     const pd = window._mkPending;
