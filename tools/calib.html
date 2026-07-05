@@ -1910,6 +1910,11 @@ async function init() {
     raysGroup.setAttribute('id', 'rays-layer');
     window.mapOverlay.appendChild(raysGroup);
 
+    // [SELRAY-V1] rays from a selected LM's source cameras toward the LM.
+    const selRayGroup = document.createElementNS(SVG_NS, 'g');
+    selRayGroup.setAttribute('id', 'sel-lm-rays-layer');
+    window.mapOverlay.appendChild(selRayGroup);
+
     for (const c of window.mapData.cameras) {
       if (!c.xyz) continue;  // shouldn't happen since /api/map_data filters
       const type = getCamTypeForMap(c);
@@ -6629,6 +6634,59 @@ window.addEventListener('load', () => {
     window._mkSelectLm(best);
   });
   console.log('[UIFIX-V1] canvas marker click-to-list active');
+})();
+</script>
+
+<script>
+// ══ [SELRAY-V1] map: draw rays from a selected LM's source cams to the LM ══
+// Complements the click-to-select: when an LM is selected, the map shows
+// which cameras see it and from where — one line per source camera.
+(() => {
+  const SVG_NS = 'http://www.w3.org/2000/svg';
+  function render() {
+    const layer = document.getElementById('sel-lm-rays-layer');
+    if (!layer || !window.mapData || !window.worldToSvg) return;
+    while (layer.firstChild) layer.removeChild(layer.firstChild);
+    if (!selectedLm) return;
+    const lm = window.mapData.landmarks.find(l => l.name === selectedLm);
+    if (!lm || !lm.xyz) return;                         // no xyz = nothing to draw
+    const [bx, by] = window.worldToSvg(lm.xyz[0], lm.xyz[1]);
+    const srcs = lm.source_cameras || lm.observed_by || [];
+    const camByName = window.mapCamByName ||
+      (window.mapCamByName = new Map(window.mapData.cameras.map(c => [c.name, c])));
+    for (const cn of srcs) {
+      const cam = camByName.get(cn);
+      if (!cam || !cam.xyz) continue;
+      const [ax, ay] = window.worldToSvg(cam.xyz[0], cam.xyz[1]);
+      const line = document.createElementNS(SVG_NS, 'line');
+      line.setAttribute('x1', ax); line.setAttribute('y1', ay);
+      line.setAttribute('x2', bx); line.setAttribute('y2', by);
+      line.setAttribute('stroke', '#4ade80');
+      line.setAttribute('stroke-width', '2.5');
+      line.setAttribute('opacity', '0.8');
+      line.setAttribute('stroke-dasharray', '1 6');
+      line.setAttribute('stroke-linecap', 'round');
+      layer.appendChild(line);
+    }
+    // a small ring on the LM itself so it reads as the convergence point
+    const ring = document.createElementNS(SVG_NS, 'circle');
+    ring.setAttribute('cx', bx); ring.setAttribute('cy', by);
+    ring.setAttribute('r', '9'); ring.setAttribute('fill', 'none');
+    ring.setAttribute('stroke', '#4ade80'); ring.setAttribute('stroke-width', '2.5');
+    layer.appendChild(ring);
+  }
+  window._selRayRender = render;
+
+  // hook selection: wrap _mkSelectLm (canvas click) + the list click path
+  const _sel = window._mkSelectLm;
+  if (_sel) window._mkSelectLm = function(n) { _sel(n); render(); };
+  // list clicks call showLmInfo — wrap it too so both paths refresh
+  const _info = window.showLmInfo || showLmInfo;
+  window.showLmInfo = async function(n) { const r = await _info(n); render(); return r; };
+  // redraw on pan/zoom (rays live in SVG user-space; the wrap transform
+  // already moves them, but a re-render keeps them crisp after rebuilds)
+  const _tx = window.applyMapTx;
+  console.log('[SELRAY-V1] selected-LM ray display active');
 })();
 </script>
 </body>
