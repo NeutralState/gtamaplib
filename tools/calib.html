@@ -5140,7 +5140,8 @@ async function updateMinimap(camArg) {
   minimapWrap.style.display = 'block';
   const myToken = ++_minimapFetchToken;
   try {
-    const res = await fetch('/api/minimap?cam=' + encodeURIComponent(targetCam));
+    // [MINIMAP-DIAG-V1] cache-buster defeats any HTTP caching of this URL
+    const res = await fetch('/api/minimap?cam=' + encodeURIComponent(targetCam) + '&_t=' + Date.now());
     if (myToken !== _minimapFetchToken) return;        // superseded by a newer call
     if (targetCam !== currentCam) return;              // user moved on since we fired
     if (!res.ok) { console.warn('minimap fetch status', res.status); return; }
@@ -5148,9 +5149,26 @@ async function updateMinimap(camArg) {
     if (myToken !== _minimapFetchToken) return;
     if (targetCam !== currentCam) return;              // re-check after await
     if (data.error) { console.warn('minimap error', data.error); return; }
-    if (data.cam && data.cam !== currentCam) return;   // server echoed a different cam
+    if (data.cam && data.cam !== currentCam) {
+      console.warn('[MINIMAP-DIAG] server echoed', data.cam, 'but currentCam is', currentCam, '- skipping');
+      return;
+    }
     minimapBg.src = 'data:image/png;base64,' + data.image_b64;
     minimapRotator.style.transform = `rotate(${data.yaw}deg)`;   /* [YAW-FIX-V1] */
+    // label overlay so you can SEE which cam the minimap is showing
+    let _lbl = document.getElementById('minimap-diag-label');
+    if (!_lbl) {
+      _lbl = document.createElement('div');
+      _lbl.id = 'minimap-diag-label';
+      _lbl.style.cssText = 'position:absolute;bottom:2px;left:2px;right:2px;z-index:20;'
+        + 'font:9px/1.2 JetBrains Mono,monospace;color:#4ade80;background:#000a;'
+        + 'padding:1px 4px;border-radius:3px;pointer-events:none;text-align:center;'
+        + 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
+      minimapWrap.appendChild(_lbl);
+    }
+    _lbl.textContent = (data.cam || targetCam) + '  ·  yaw ' + Math.round(data.yaw);
+    console.log('[MINIMAP-DIAG] painted', data.cam || targetCam, '(currentCam:', currentCam + ')');
+
   } catch (e) {
     if (myToken === _minimapFetchToken) console.error('minimap fetch failed', e);
   }
@@ -5177,7 +5195,7 @@ let _previewLastCam = null;
 setInterval(() => {
   if (currentCam !== _previewLastCam) {
     _previewLastCam = currentCam;
-    updateMinimap();
+    updateMinimap(currentCam);   // [MINIMAP-DIAG-V1] explicit cam
     updateCamPreview();
   }
 }, 250);
