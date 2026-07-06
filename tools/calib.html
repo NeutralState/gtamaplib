@@ -5194,7 +5194,11 @@ let _previewLastCam = null;
 setInterval(() => {
   if (currentCam !== _previewLastCam) {
     _previewLastCam = currentCam;
-    updateMinimap(currentCam);   // [MINIMAP-DIAG-V1] explicit cam
+    // [MINIMAP-DEDUP-V1] minimap is driven ONLY by the cam-change handler
+    // (line ~2659), which fires immediately. This interval used to ALSO call
+    // updateMinimap, so every switch fired TWO fetches — the diagnostic showed
+    // each cam requested x2, and on fast switches a stale duplicate could
+    // paint briefly before settling. Preview polling stays; minimap doesn't.
     updateCamPreview();
   }
 }, 250);
