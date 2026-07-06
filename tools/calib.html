@@ -96,6 +96,8 @@ body.view-map #cam-preview-wrap{display:flex}
 .map-legend .ring{border:2px solid #fff;background:transparent;width:7px;height:7px}
 .map-legend .halo{border:2px solid #ef4444;background:transparent;width:7px;height:7px}
 .map-legend .dim{opacity:.55}
+.map-coordread{position:absolute;right:10px;bottom:10px;z-index:30;background:rgba(10,10,13,.55);backdrop-filter:blur(5px);border-radius:8px;padding:4px 10px;font:11px ui-monospace,monospace;color:#8a8a94;pointer-events:none;letter-spacing:.02em;white-space:nowrap;opacity:0;transition:opacity .12s}
+.map-coordread.show{opacity:1}
 .map-health{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:30;display:flex;gap:0;align-items:center;background:rgba(10,10,13,.55);backdrop-filter:blur(5px);border:none;border-radius:8px;padding:4px 14px;font:11px ui-monospace,monospace;color:#9a9aa4;pointer-events:none;letter-spacing:.02em;white-space:nowrap}
 .map-health .lbl{opacity:.65;margin-right:5px}
 .map-health b{color:#4ade80;font-weight:600;font-size:12px}
@@ -750,6 +752,8 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
     <canvas class="map-tile-canvas" id="map-tile-canvas"></canvas>
     <div class="map-svg-wrap" id="map-svg-wrap"></div>
     <div class="map-loading" id="map-loading">Loading yanis map…</div>
+    <!-- [COORDREAD-V1] live cursor world coordinates -->
+    <div class="map-coordread" id="map-coordread"></div>
   </div>
   <div id="rsb-toggle" title="Collapse panel">&#9656;</div>
   <div class="sidebar">
@@ -1627,6 +1631,25 @@ async function init() {
     window.mapTx = { scale: ns, tx: ntx, ty: nty };
     applyMapTx();
   }, { passive: false });
+  // [COORDREAD-V1] live cursor world X/Y readout in map view.
+  (() => {
+    const readEl = document.getElementById('map-coordread');
+    if (!readEl) return;
+    mapView.addEventListener('mousemove', e => {
+      if (window.currentView !== 'map' || !window.mapImg || !window.mapTx || !window.svgToWorld) {
+        readEl.classList.remove('show'); return;
+      }
+      const rect = mapView.getBoundingClientRect();
+      const { scale, tx, ty } = window.mapTx;
+      // screen -> svg (inverse of applyMapTx: screen = svg*scale + t)
+      const svgX = (e.clientX - rect.left - tx) / scale;
+      const svgY = (e.clientY - rect.top  - ty) / scale;
+      const [wx, wy] = window.svgToWorld(svgX, svgY);
+      readEl.textContent = `X ${wx.toFixed(1)}   Y ${wy.toFixed(1)}`;
+      readEl.classList.add('show');
+    });
+    mapView.addEventListener('mouseleave', () => readEl.classList.remove('show'));
+  })();
 
   mapView.addEventListener('mousedown', e => {
     if (window.currentView !== 'map' || !window.mapImg) return;
