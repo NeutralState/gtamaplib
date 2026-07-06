@@ -76,7 +76,7 @@ if _legacy_cams:
 # cache forever after. First-cam hit: ~1-2s. Subsequent: instant.
 _MINIMAP_CACHE_DIR = os.path.join(TOOL_DIR, 'generated', 'minimaps')
 os.makedirs(_MINIMAP_CACHE_DIR, exist_ok=True)
-_MINIMAP_RADIUS_M = 800.0  # [MINIMAP-ZOOM-V2] 350->800 for more context
+_MINIMAP_RADIUS_M = 600.0  # [MINIMAP-ZOOM-V3] 600m
 _MINIMAP_SIZE_PX = 480
 
 def _minimap_safe_name(cam_name):

@@ -5150,7 +5150,7 @@ async function updateMinimap() {
     }
     minimapBg.src = 'data:image/png;base64,' + data.image_b64;
     // Rotate so cam direction (yaw) points UP. Yaw 0 = north.
-    minimapRotator.style.transform = `rotate(${-data.yaw}deg)`;
+    minimapRotator.style.transform = `rotate(${data.yaw}deg)`;   /* [YAW-FIX-V1] stored yaw is CCW (dir = 360-yaw); +yaw points heading up */
   } catch (e) {
     if (myToken === _minimapFetchToken) {
       console.error('minimap fetch failed', e);
@@ -5189,7 +5189,7 @@ const _slYaw = document.getElementById('sl-yaw');
 if (_slYaw) {
   _slYaw.addEventListener('input', () => {
     const yaw = parseFloat(_slYaw.value);
-    if (!isNaN(yaw)) minimapRotator.style.transform = `rotate(${-yaw}deg)`;
+    if (!isNaN(yaw)) minimapRotator.style.transform = `rotate(${yaw}deg)`;   /* [YAW-FIX-V1] */
   });
 }
 
