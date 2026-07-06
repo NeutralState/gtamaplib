@@ -96,7 +96,7 @@ body.view-map #cam-preview-wrap{display:flex}
 .map-legend .ring{border:2px solid #fff;background:transparent;width:7px;height:7px}
 .map-legend .halo{border:2px solid #ef4444;background:transparent;width:7px;height:7px}
 .map-legend .dim{opacity:.55}
-.map-coordread{position:absolute;right:10px;bottom:10px;z-index:30;background:rgba(10,10,13,.55);backdrop-filter:blur(5px);border-radius:8px;padding:4px 10px;font:11px ui-monospace,monospace;color:#8a8a94;pointer-events:none;letter-spacing:.02em;white-space:nowrap;opacity:0;transition:opacity .12s}
+/* [COORDREAD-V2] top-right, visible */ .map-coordread{position:absolute;right:10px;top:10px;z-index:31;background:rgba(10,10,13,.72);backdrop-filter:blur(6px);border:1px solid #2c2c33;border-radius:8px;padding:5px 11px;font:11px ui-monospace,monospace;color:#4ade80;pointer-events:none;letter-spacing:.03em;white-space:nowrap;opacity:.55;transition:opacity .12s}
 .map-coordread.show{opacity:1}
 .map-health{position:absolute;left:50%;top:10px;transform:translateX(-50%);z-index:30;display:flex;gap:0;align-items:center;background:rgba(10,10,13,.55);backdrop-filter:blur(5px);border:none;border-radius:8px;padding:4px 14px;font:11px ui-monospace,monospace;color:#9a9aa4;pointer-events:none;letter-spacing:.02em;white-space:nowrap}
 .map-health .lbl{opacity:.65;margin-right:5px}
@@ -753,7 +753,7 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
     <div class="map-svg-wrap" id="map-svg-wrap"></div>
     <div class="map-loading" id="map-loading">Loading yanis map…</div>
     <!-- [COORDREAD-V1] live cursor world coordinates -->
-    <div class="map-coordread" id="map-coordread"></div>
+    <div class="map-coordread" id="map-coordread">X —  Y —</div>
   </div>
   <div id="rsb-toggle" title="Collapse panel">&#9656;</div>
   <div class="sidebar">
