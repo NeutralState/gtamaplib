@@ -29,6 +29,24 @@ sys.path.insert(0, GTAMAP_DIR)
 import gtamaplib as ml
 import gtamapdata as md
 
+# [GETCAM-THREADSAFE-V1] ml.get_camera is functools.lru_cache — NOT thread-safe.
+# The server is a ThreadingHTTPServer and many endpoints (minimap, project,
+# save, etc.) call get_camera concurrently, while some call cache_clear().
+# Under contention the lru_cache returns the WRONG cam's object (proven: a cam
+# served another cam's byte-identical minimap). Wrap it once, here, so EVERY
+# call site is serialized behind a single reentrant lock. cache_clear/cache_info
+# are preserved for the code that uses them.
+import threading as _threading
+_GETCAM_LOCK = _threading.RLock()
+_ml_get_camera_orig = ml.get_camera
+def _get_camera_locked(*a, **k):
+    with _GETCAM_LOCK:
+        return _ml_get_camera_orig(*a, **k)
+_get_camera_locked.cache_clear = _ml_get_camera_orig.cache_clear
+_get_camera_locked.cache_info = _ml_get_camera_orig.cache_info
+ml.get_camera = _get_camera_locked
+
+
 print("gtamaplib loaded ✓")
 
 # V2: audit-driven sets replace V1's date-regex LEAK_CAMS.
