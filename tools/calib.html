@@ -5153,21 +5153,20 @@ async function updateMinimap(camArg) {
       console.warn('[MINIMAP-DIAG] server echoed', data.cam, 'but currentCam is', currentCam, '- skipping');
       return;
     }
-    minimapBg.src = 'data:image/png;base64,' + data.image_b64;
-    minimapRotator.style.transform = `rotate(${data.yaw}deg)`;   /* [YAW-FIX-V1] */
-    // label overlay so you can SEE which cam the minimap is showing
-    let _lbl = document.getElementById('minimap-diag-label');
-    if (!_lbl) {
-      _lbl = document.createElement('div');
-      _lbl.id = 'minimap-diag-label';
-      _lbl.style.cssText = 'position:absolute;bottom:2px;left:2px;right:2px;z-index:20;'
-        + 'font:9px/1.2 JetBrains Mono,monospace;color:#4ade80;background:#000a;'
-        + 'padding:1px 4px;border-radius:3px;pointer-events:none;text-align:center;'
-        + 'white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
-      minimapWrap.appendChild(_lbl);
-    }
-    _lbl.textContent = (data.cam || targetCam) + '  ·  yaw ' + Math.round(data.yaw);
-    console.log('[MINIMAP-DIAG] painted', data.cam || targetCam, '(currentCam:', currentCam + ')');
+    // [MINIMAP-ATOMIC-V1] preload the image, then apply image + rotation
+    // together, with a FINAL cam check right before painting — so a stale
+    // response can never land on the wrong cam. No label (removed).
+    const imgSrc = 'data:image/png;base64,' + data.image_b64;
+    const yawDeg = data.yaw;
+    await new Promise((resolve) => {
+      const pre = new Image();
+      pre.onload = pre.onerror = resolve;
+      pre.src = imgSrc;
+    });
+    if (myToken !== _minimapFetchToken) return;        // superseded during preload
+    if (targetCam !== currentCam) return;              // cam changed during preload
+    minimapBg.src = imgSrc;
+    minimapRotator.style.transform = `rotate(${yawDeg}deg)`;   /* [YAW-FIX-V1] */
 
   } catch (e) {
     if (myToken === _minimapFetchToken) console.error('minimap fetch failed', e);

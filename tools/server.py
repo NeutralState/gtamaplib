@@ -83,7 +83,18 @@ def _minimap_safe_name(cam_name):
     return ''.join(c if c.isalnum() else '_' for c in cam_name)
 
 def _minimap_cache_path(cam_name):
-    return os.path.join(_MINIMAP_CACHE_DIR, f'{_minimap_safe_name(cam_name)}.png')
+    # [MINIMAP-CACHEKEY-V1] include position+yaw+radius in the filename so a
+    # cam that moved (or the radius changing) can NEVER serve a stale/other
+    # cam's cached crop — a different pose => a different file, period.
+    try:
+        cam = ml.get_camera(cam_name)
+        if cam.xyz is not None:
+            key = f'{cam.xyz[0]:.0f}_{cam.xyz[1]:.0f}_{float(cam.ypr[0]):.0f}_{int(_MINIMAP_RADIUS_M)}'
+        else:
+            key = 'noxyz'
+    except Exception:
+        key = 'err'
+    return os.path.join(_MINIMAP_CACHE_DIR, f'{_minimap_safe_name(cam_name)}__{key}.png')
 
 def _render_minimap_for_cam(cam_name):
     # [MINIMAP-TILES-V1] Render a minimap PNG by compositing rlx tiles
