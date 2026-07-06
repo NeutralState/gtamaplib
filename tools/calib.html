@@ -2656,7 +2656,7 @@ camSel.addEventListener('change', async () => {
   frameImg.onerror = () => { noImg.textContent = 'No image'; };
 
   await loadProjections();
-  if (typeof updateMinimap === 'function') updateMinimap();   // [MINIMAP-FIX-V1] was never called on direct cam change -> stale minimap
+  if (typeof updateMinimap === 'function') updateMinimap(currentCam);   // [MINIMAP-FIX-V2] pass cam explicitly
 });
 
 // ── Projections ────────────────────────────────────────────────────────────
@@ -5123,12 +5123,16 @@ async function ensureMapTransform() {
 // Tracks an in-flight token to avoid race conditions when the user
 // clicks through cams quickly.
 let _minimapFetchToken = 0;
-async function updateMinimap() {
+async function updateMinimap(camArg) {
+  // [MINIMAP-FIX-V2] capture the target cam explicitly so a fast switch
+  // can't paint a stale cam. The token guards against out-of-order fetches;
+  // we ALSO verify the captured cam still matches currentCam before painting.
   if (!minimapEnabled) {
     minimapWrap.style.display = 'none';
     return;
   }
-  if (!currentCam) {
+  const targetCam = camArg || currentCam;
+  if (!targetCam) {
     minimapWrap.style.display = 'block';
     minimapBg.removeAttribute('src');
     return;
@@ -5136,25 +5140,19 @@ async function updateMinimap() {
   minimapWrap.style.display = 'block';
   const myToken = ++_minimapFetchToken;
   try {
-    const res = await fetch('/api/minimap?cam=' + encodeURIComponent(currentCam));
-    if (myToken !== _minimapFetchToken) return;  // newer request superseded
-    if (!res.ok) {
-      console.warn('minimap fetch status', res.status);
-      return;
-    }
+    const res = await fetch('/api/minimap?cam=' + encodeURIComponent(targetCam));
+    if (myToken !== _minimapFetchToken) return;        // superseded by a newer call
+    if (targetCam !== currentCam) return;              // user moved on since we fired
+    if (!res.ok) { console.warn('minimap fetch status', res.status); return; }
     const data = await res.json();
     if (myToken !== _minimapFetchToken) return;
-    if (data.error) {
-      console.warn('minimap error', data.error);
-      return;
-    }
+    if (targetCam !== currentCam) return;              // re-check after await
+    if (data.error) { console.warn('minimap error', data.error); return; }
+    if (data.cam && data.cam !== currentCam) return;   // server echoed a different cam
     minimapBg.src = 'data:image/png;base64,' + data.image_b64;
-    // Rotate so cam direction (yaw) points UP. Yaw 0 = north.
-    minimapRotator.style.transform = `rotate(${data.yaw}deg)`;   /* [YAW-FIX-V1] stored yaw is CCW (dir = 360-yaw); +yaw points heading up */
+    minimapRotator.style.transform = `rotate(${data.yaw}deg)`;   /* [YAW-FIX-V1] */
   } catch (e) {
-    if (myToken === _minimapFetchToken) {
-      console.error('minimap fetch failed', e);
-    }
+    if (myToken === _minimapFetchToken) console.error('minimap fetch failed', e);
   }
 }
 window.updateMinimap = updateMinimap;
