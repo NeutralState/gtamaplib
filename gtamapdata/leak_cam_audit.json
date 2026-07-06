@@ -2153,5 +2153,64 @@
     },
     "hud_fov_v": 49.6,
     "hud_fov_h": 78.658
+  },
+  "Hedge (B) (X)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      1409.6,
+      1405.0,
+      0.8
+    ],
+    "hud_C_xyz": [
+      1411.3,
+      1403.4,
+      1.2
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Game-test debugger (regionstest.meta). HUD shows P, C, Fov but no Dir. xyz+fov locked, ypr free. Distinct view from Hedge (A)/(D)."
+  },
+  "Hedge (C) (X)": {
+    "constraint_class": "C_pos_fov_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      1409.6,
+      1405.0,
+      0.5
+    ],
+    "hud_C_xyz": [
+      1411.3,
+      1403.4,
+      0.8
+    ],
+    "hud_fov": 49.6,
+    "player_visible": true,
+    "notes": "Game-test debugger (regionstest.meta). HUD shows P, C, Fov but no Dir. xyz+fov locked, ypr free. Distinct view from Hedge (A)/(D)."
+  },
+  "Grassrivers Sign": {
+    "constraint_class": "Cm_pos_only",
+    "has_debug_hud": true,
+    "has_dir": false,
+    "hud_P_xyz": [
+      -1132.8,
+      383.5,
+      12.6
+    ],
+    "hud_C_xyz": [
+      -1133.1,
+      390.2,
+      4.7
+    ],
+    "hud_gizmo_xyz": [
+      -1135.5,
+      391.3,
+      2.7
+    ],
+    "hud_fov": null,
+    "player_visible": true,
+    "notes": "AIWE Scenario Editor + AI World Editor Tools, Display Game HUD on. HUD shows P, C, Gizmo but no Fov and no Dir. xyz locked, ypr+fov free."
   }
 }
