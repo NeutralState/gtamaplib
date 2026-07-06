@@ -2076,3 +2076,108 @@ Chase B/C/J), Oval Yellow Sign (Chase 2A), the Metro (SE) B+C mini-cluster.
 triangulate_lm (structural TODO), rlx b287d7e renames, Diner(N) 6.42',
 Triage consensus tab (/api/suspicious still exists), contact-sheet clipboard
 export fix (execCommand fails on file:// Safari).
+
+# ===================================================================
+## Sessions 2026-07-03/04 — MARKING UI COMPLET + FOSSILES + COINS + ROOFTOP RIVER-FORENSICS + HARVEST
+# ===================================================================
+## >>> RELAIS OPUS 4.8: CE BLOC + le bloc demarrage en tete = l'essentiel. <<<
+
+### ETAT COURANT (2026-07-04 pm)
+- HEAD: commit HARVEST (post-76fa3fe). Mediane globale 2.31' (baseline a jour;
+  hausse vs 2.108 = 56 nouveaux LM de couverture entres dans les stats, trade assume).
+- 2817 markings. fit_minimal --list: AUCUNE cam sous-determinee >1.3' (tout est fitte).
+- CI: `PYTHONPATH=. python3 tools/ci_healthcheck.py` = invariants + mediane-vs-baseline
+  + FOSSIL-SCAN (27 connus) + ORPHAN-SCAN (152 historiques, pile de review non urgente).
+
+### DOCTRINES NOUVELLES (s'ajoutent a la regle d'or du bloc 4)
+1. **JAMAIS de modele camera custom.** Tout solve passe par common.get_cam(cn,
+   cam_state={...}) + cam.get_pixel / get_pixel_direction. Un modele numpy maison
+   a produit 44 deg d'erreur de yaw (lecon Gas Station Chase). cam_state accepte
+   xyz/ypr/fov sans toucher le disque = solve dry parfait.
+2. **Ambiguite de coin (maladie #1 du dataset).** Des cams differentes marquent des
+   coins differents d'une meme tour sous UN nom. Quantifie: Infinity at Brickell,
+   coin NW a 31.3m du principal, meme hauteur. Symptomes: residuels 10-45' sur un
+   LM multi-source "vrai"; triangulation refusee avec gros desaccord (ex Vizcayne S
+   NW: 15.2', 57m). REMEDE: sous-LM par face (ex "(NW)"), exclure les vieux markings
+   ambigus (tools/exclude_marking.py "Cam" "LM" --apply), retrianguler le sous-LM.
+3. **Degenerescence de profondeur.** Obs = tours lointaines en cone etroit -> famille
+   de solutions exactes (Rooftop: z=190-270 tous rms 0.00, positions sur 2.4km).
+   Un fit qui plonge (z<0, fov colle une borne, saut de 400m+) = degenere, NE PAS
+   appliquer. Garde-fou invariant CAM-Z-V1 (z<-1 interdit sauf whitelist).
+4. **Forensique map (l'arbitre de profondeur).** Markings de features AU SOL
+   (riviere, route) = rays qui doivent frapper la couleur dessinee sur la map yanis
+   (map_validate.crop_at -> couleur; eau = bleu dominant >150, route = rouge-brun).
+   A tue la degenerescence du Rooftop. Reutilisable pour toute cam voyant du sol.
+5. **roll=0 = connaissance utilisateur.** Un screenshot normal a roll~0. L'imposer
+   transforme 3 obs (6 eqs) en systeme SURDETERMINE a z fixe -> la famille s'effondre
+   en solution unique. Si un solve propose un roll bizarre, LE SOLVE A TORT.
+6. **Gates du harvest** (encodes dans harvest_run.py, racine du repo): dry TOUJOURS;
+   apply si max_resid <8'; upgrades: en plus delta <15m sinon file de review;
+   cascade/retriangulation: TOUJOURS dry + seuil de delta (near-miss historique:
+   14 LM deplaces de 1km par une cascade non gatee).
+7. **Provenance**: PROVENANCE-V1 (serveur): supprimer un marking retire la cam des
+   source_cameras du LM; orphelin (plus aucune source marquante) -> xyz quarantine
+   AUTOMATIQUEMENT. Renommer le marking d'un LM mono-source quarantine l'ancien
+   xyz PAR DESIGN. ORPHAN-SCAN-V1 au CI ferme l'angle mort du detecteur de fossiles.
+
+### CHANTIERS FERMES 07-03/04 (resume dense)
+- **fit_minimal.py** (nouveau tool): fit ypr(+roll)+fov, xyz verrouille, sur les obs
+  triangulees. --list = scan des sous-determinees. Campagne appliquee.
+- **MULTISTART-V1** + baseline CI. **Zone Diner** 2.679 (SE(A)/(B): vfov HUD ment
+  ~28%, dossier frames). **GSC (S)**: z=-34.7 -> z=2 (degenerescence), pose vrai-modele,
+  worst 0.95'. **FOSSIL-SCAN-V1**: common.find_fossils (LM rejete par ses propres
+  sources >15'), 27 connus, CI + section Triage. **Grassrivers**: 8 Police Chase
+  re-visees, GLOBAL 2.136. **Mat WDNA**: re-derive (closest-approach), 5/15 points
+  marques sur Prison — 10 RESTANTS a marquer (fantomes ~5m sous la vraie attache).
+- **Prison comme source**: Infinity ressuscite (Prison+MetroA 4.1'), (NE) debloque
+  1.9', (SW) corrige (41m!), One Miami E/W resserres -> Landing Gear (B) gueri en
+  cascade 8.35'->2.17'.
+- **Metro (SE)**: A saine (3.1', 8 obs) mais traine des LM test "Metro SE temp_a-d"
+  a supprimer. B/C: ypr refines mais PLAFONNENT ~19' — markings Park Grove (B, 29')
+  et Ritz (C, 27') = suspects de coin (meme maladie), dossier frames utilisateur.
+  NE(B): ZERO LM triangule, attend des 2e sources (ponts).
+- **Rooftop (Vintage VC Outfits 04)**: 435' -> sub-arcmin. Methode: 3 tours propres
+  (Vizcayne S NW EXCLU) + roll=0 + forensique riviere (10 rays -> eau dessinee 10/10).
+  POSE COMMITEE: xyz=[-578.4, 508.3, 188.0] ypr=[150.313, -10.675, 0.0] hfov=43.947.
+  PENDING: (a) supprimer serie "Route 35 (A-J)" = doublons pixel-exact des "Vice
+  River (A-J)" (10 suppressions UI); (b) sur "go seed": xyz des 10 Vice River par
+  ray∩z~1 (methode mat WDNA) = 10 LM terrestres Brickell map-verifiables.
+- **HARVEST (2026-07-04)**: 56 appliques / 246 refuses (surtout groupes pair-only:
+  Jason's House ~45 pts, Vice City Sign ~35 (VC01 suspect!), Ambrosia STA/STR ~20
+  = sessions dediees avec ancrage externe) / 2 en review: Cruise Ship (RT) 16m,
+  Water Tower near Prison 18m a 0.2' (corrections probablement legitimes).
+- **EXCL-FIX-V1**: refine_cam_ypr honorait PAS excluded_markings.json (bug historique).
+- **Portabilite serveur**: GTAMAP_DIR etait hardcode ~/Downloads/gtamaplib-main.
+
+### UI CALIB — STACK COMPLET (chaine de patchs racine repo, ordre obligatoire,
+### tous idempotents, tous appliques+commites)
+patch_marking_v1 -> patch_panel_v2 (client auto-reverte par le suivant; endpoint
+serveur /api/fit_minimal RESTE, utilisable via curl) -> patch_ui_polish (PANEL-V3
+pose read-only clic=copie + MARKERS-V2 reticules/losanges) -> patch_ui_polish2 ->
+patch_edit_mode (pending: release=review, delta avant->apres, fleches 0.1px,
+Enter/Esc) -> patch_unify_marking (pencil/+Add/RIGHT-CLICK -> meme flow pending) ->
+patch_delete_btn -> patch_refine_excl -> patch_marking_qol (RENAME dans la barre,
+cache LM frais, PROVENANCE-V1 serveur, ORPHAN-SCAN CI, panneau ◐ adjust 8 sliders
+affichage pur) -> patch_ui_fixes (clic marker = selection+scroll liste, bouton
+aligne, blurs off si inutilises) -> patch_adjust_fix (filtre via classe CSS —
+draw() reecrit frameImg.style.cssText a chaque frame et effacait le filtre inline).
+NOTE VISUEL: reticules/losanges MARKERS-V2 conserves sur decision utilisateur
+(revert teste dispo dans l'historique si jamais).
+
+### BACKLOG PRIORISE (au moment du relais)
+1. UI: clic LM -> ray(s) affiches en vue Map (demande explicite, non fait).
+2. Dossiers frames utilisateur: coins Park Grove/Ritz (Metro B/C), 10 pts mat WDNA
+   sur Prison, Diner SE vfov, doublons Route 35, go-seed Vice River.
+3. File coins: Vizcayne S (NW) 57m, les 23 refuses du batch 07-04 matin, les 2 review.
+4. Sessions dediees: Jason's House, Vice City Sign (ancre basse potentielle pour
+   VC01 degenere!), Ambrosia (cycle pur, ancrage externe a trouver).
+5. auto_harvest.py: polir harvest_run.py (re-fit auto des cams touchees, rapport).
+6. Review des 152 orphelins historiques. Sync rlx periodique (fetch upstream).
+
+### PROCESS DE TRAVAIL AVEC CLAUDE (a reproduire)
+Claude clone le repo dans son sandbox, teste TOUT (Playwright headless,
+PLAYWRIGHT_BROWSERS_PATH, serveur en subprocess.Popen DANS le meme process python),
+valide chaque patch bit-identique contre git archive HEAD + la chaine de patchs,
+livre UN .py one-shot par chantier + la sequence bash exacte (incluant git add
+gtamapdata/ quand des donnees changent!). JSON: indent=2, ensure_ascii=True.
+CLAUDE_CONTEXT.md et inspect_cam.py restent locaux (jamais commites).

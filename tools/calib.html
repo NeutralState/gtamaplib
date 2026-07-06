@@ -2359,17 +2359,28 @@ async function init() {
   window.setMapCamHovered = setMapCamHovered;
   // [SELRAY-V1] draw rays from the selected LM's source cams to the LM.
   function renderSelLmRays() {
-    const layer = document.getElementById('sel-lm-rays-layer');
-    if (!layer || !window.mapData || !window.worldToSvg) return;
+    const NS = 'http://www.w3.org/2000/svg';
+    // [SELRAY-V2] lazy-ensure the layer exists AND sits on top (rebuilds
+    // sometimes recreate the overlay without it, or below other layers).
+    let layer = document.getElementById('sel-lm-rays-layer');
+    if (!window.mapOverlay) { console.warn('[SELRAY] no mapOverlay yet'); return; }
+    if (!layer) {
+      layer = document.createElementNS(NS, 'g');
+      layer.setAttribute('id', 'sel-lm-rays-layer');
+    }
+    // always move to top of the overlay so nothing paints over the rays
+    window.mapOverlay.appendChild(layer);
     while (layer.firstChild) layer.removeChild(layer.firstChild);
+    if (!window.mapData || !window.worldToSvg) { console.warn('[SELRAY] mapData/worldToSvg missing'); return; }
     if (!mapSelectedLm) return;
     const lm = window.mapData.landmarks.find(l => l.name === mapSelectedLm);
-    if (!lm || !lm.xyz) return;
-    const NS = 'http://www.w3.org/2000/svg';
+    if (!lm) { console.warn('[SELRAY] LM not in mapData:', mapSelectedLm); return; }
+    if (!lm.xyz) { console.warn('[SELRAY] LM has no xyz (untriangulated):', mapSelectedLm); return; }
     const [bx, by] = window.worldToSvg(lm.xyz[0], lm.xyz[1]);
     const srcs = lm.source_cameras || lm.observed_by || [];
     if (!window.mapCamByName)
       window.mapCamByName = new Map(window.mapData.cameras.map(c => [c.name, c]));
+    let drawn = 0;
     for (const cn of srcs) {
       const cam = window.mapCamByName.get(cn);
       if (!cam || !cam.xyz) continue;
@@ -2378,18 +2389,23 @@ async function init() {
       line.setAttribute('x1', ax); line.setAttribute('y1', ay);
       line.setAttribute('x2', bx); line.setAttribute('y2', by);
       line.setAttribute('stroke', '#4ade80');
-      line.setAttribute('stroke-width', '2.5');
-      line.setAttribute('opacity', '0.85');
-      line.setAttribute('stroke-dasharray', '1 6');
+      line.setAttribute('stroke-width', '3');
+      line.setAttribute('opacity', '0.9');
+      line.setAttribute('stroke-dasharray', '2 7');
       line.setAttribute('stroke-linecap', 'round');
+      line.setAttribute('vector-effect', 'non-scaling-stroke');
       layer.appendChild(line);
+      drawn++;
     }
     const ring = document.createElementNS(NS, 'circle');
     ring.setAttribute('cx', bx); ring.setAttribute('cy', by);
-    ring.setAttribute('r', '9'); ring.setAttribute('fill', 'none');
-    ring.setAttribute('stroke', '#4ade80'); ring.setAttribute('stroke-width', '2.5');
+    ring.setAttribute('r', '10'); ring.setAttribute('fill', 'none');
+    ring.setAttribute('stroke', '#4ade80'); ring.setAttribute('stroke-width', '3');
+    ring.setAttribute('vector-effect', 'non-scaling-stroke');
     layer.appendChild(ring);
+    console.log(`[SELRAY] ${mapSelectedLm}: ${drawn}/${srcs.length} rays drawn, LM at svg(${bx.toFixed(0)},${by.toFixed(0)})`);
   }
+
 
   function setMapSelectedLm(name) {
     if (window.mapOverlay) {
@@ -2640,6 +2656,7 @@ camSel.addEventListener('change', async () => {
   frameImg.onerror = () => { noImg.textContent = 'No image'; };
 
   await loadProjections();
+  if (typeof updateMinimap === 'function') updateMinimap();   // [MINIMAP-FIX-V1] was never called on direct cam change -> stale minimap
 });
 
 // ── Projections ────────────────────────────────────────────────────────────

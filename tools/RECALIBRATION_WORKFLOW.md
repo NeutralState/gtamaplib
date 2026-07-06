@@ -506,3 +506,16 @@ no audit    → refine_cam_full.py
 class X     → no tool (excluded)
 _legacy_date → no tool (treated as anchor)
 ```
+
+## ADDENDUM 2026-07-04 — doctrines nouvelles (voir CLAUDE_CONTEXT.md sessions 07-03/04)
+1. Tout solve via common.get_cam(cam_state=...) — JAMAIS de modele custom (lecon: 44 deg d'erreur).
+2. Coin ambigu (maladie #1): sous-LM par face + exclude_marking des vieux + retrianguler.
+3. Fit degenere (z<0, fov en borne, saut 100m+) = NE PAS appliquer. Arbitres de
+   profondeur: forensique map (rays sol -> couleur eau/route via map_validate.crop_at)
+   et roll=0 (connaissance utilisateur, rend le systeme surdetermine).
+4. Harvest apres chaque batch de markings: PYTHONPATH=. python3 harvest_run.py
+   (gates: dry, resid <8', delta upgrade <15m, review sinon) puis tiers + CI
+   (+ --update-baseline si la hausse de mediane = couverture assumee).
+5. refine_cam_ypr honore excluded_markings.json depuis EXCL-FIX-V1.
+6. Supprimer/renommer un marking gere la provenance AUTOMATIQUEMENT (quarantaine
+   des orphelins). ORPHAN-SCAN au CI.
