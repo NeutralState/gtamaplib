@@ -2458,8 +2458,19 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json({'error': f'cam load failed: {e}'}, 400)
                 return
             cache_path = _minimap_cache_path(cam_name)
-            if not os.path.exists(cache_path):
-                # Render on demand (fallback for any cam added after startup).
+            # [MINIMAP-STALE-V1] The cache was only rendered when the file was
+            # ABSENT — so moving/recalibrating a cam left its minimap centered
+            # on the OLD position forever. Re-render when cameras.json is newer
+            # than the cached PNG (the freshness rule the comment always claimed
+            # but the code had lost in the lazy-render refactor).
+            _cam_json = os.path.join(DATA_DIR, 'cameras.json')
+            _stale = False
+            try:
+                if os.path.exists(cache_path) and os.path.exists(_cam_json):
+                    _stale = os.path.getmtime(_cam_json) > os.path.getmtime(cache_path)
+            except OSError:
+                _stale = True
+            if not os.path.exists(cache_path) or _stale:
                 try:
                     _render_minimap_for_cam(cam_name)
                 except Exception:
