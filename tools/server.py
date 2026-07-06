@@ -7,6 +7,7 @@ Open: http://localhost:8765
 
 import json
 import math
+import threading
 import os
 import re
 import sys
@@ -75,6 +76,12 @@ if _legacy_cams:
 # demand the first time a cam is requested, then serves from disk
 # cache forever after. First-cam hit: ~1-2s. Subsequent: instant.
 _MINIMAP_CACHE_DIR = os.path.join(TOOL_DIR, 'generated', 'minimaps')
+# [MINIMAP-THREADLOCK-V1] ml.get_camera is @lru_cache — NOT thread-safe.
+# ThreadingHTTPServer runs /api/minimap concurrently, so parallel calls
+# corrupted the lru_cache and returned another cam's camera object, making
+# _minimap_cache_path point at the WRONG file — a cam served another cam's
+# exact image+yaw. Serialize the whole minimap endpoint behind one lock.
+_MINIMAP_LOCK = threading.Lock()
 os.makedirs(_MINIMAP_CACHE_DIR, exist_ok=True)
 _MINIMAP_RADIUS_M = 600.0  # [MINIMAP-ZOOM-V3] 600m
 _MINIMAP_SIZE_PX = 480
@@ -2463,9 +2470,14 @@ class Handler(BaseHTTPRequestHandler):
             if cam_name not in md.cameras:
                 self.send_json({'error': 'invalid cam'}, 400)
                 return
+            # [MINIMAP-THREADLOCK-V1] hold the lock across get_camera +
+            # cache-path + render + read, so concurrent requests can't corrupt
+            # the lru_cache or read a file mid-write.
+            _MINIMAP_LOCK.acquire()
             try:
                 cam = ml.get_camera(cam_name)
             except Exception as e:
+                _MINIMAP_LOCK.release()
                 self.send_json({'error': f'cam load failed: {e}'}, 400)
                 return
             cache_path = _minimap_cache_path(cam_name)
@@ -2487,6 +2499,7 @@ class Handler(BaseHTTPRequestHandler):
                 except Exception:
                     pass
             if not os.path.exists(cache_path):
+                _MINIMAP_LOCK.release()
                 self.send_json({'error': 'minimap render failed'}, 500)
                 return
             try:
@@ -2503,6 +2516,11 @@ class Handler(BaseHTTPRequestHandler):
                 })
             except Exception as e:
                 self.send_json({'error': f'minimap read failed: {e}'}, 500)
+            finally:
+                try:
+                    _MINIMAP_LOCK.release()
+                except RuntimeError:
+                    pass   # already released on an error path
 
         elif path == '/api/other_cams_overlay':
             cam_name = qs.get('cam', [''])[0]
