@@ -10,7 +10,8 @@ fonts/
 frames/
 maps/
 make_zips.py
-render_all.jsonrenders/
+render_all.json
+renders/
 
 # Generated outputs
 *.png
@@ -37,3 +38,11 @@ vendor/
 vendor/gtadb.org/
 gtamapdata/*.pre-*
 _bak_archive_20260604/
+
+# Repo hygiene 2026-07-06
+render_camera_out/
+tools/CLAUDE_CONTEXT.md
+tools/_archive/rlx_originals/triangulate_outputs/
+tools/*.pre-*
+inspect_cam.py
+cleanup_repo_0706.py
