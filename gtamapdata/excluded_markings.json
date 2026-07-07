@@ -1,6 +1,7 @@
 {
   "_comment": "Per-(cam, landmark) markings excluded from solver (cam_rms + triangulation). Marking STAYS in pixels.json (visible in UI visualizer). Format: {\"Cam Name\": [\"LM A\"]}",
   "Vice City Postcard": [
+    "Cruise Ship (RT)",
     "Marina Blue (SE)",
     "Reworld Miami-Dade (SE)",
     "West Venetian Causeway Bridge"
@@ -9,17 +10,25 @@
     "W South Beach (BNW)"
   ],
   "Port Vice City (A)": [
+    "Asia Brickell Key (CC2)",
     "Cruise Terminal D",
-    "Marina Blue (SE)"
+    "Marina Blue (SE)",
+    "Miami-Dade County Courthouse",
+    "Three Tequesta Point"
   ],
   "Highway (Peacock Bay) (A)": [
+    "Infinity at Brickell (SW)",
+    "One Broadway (W)",
     "Stephen P. Clark Government Center (E)"
   ],
   "Highway (Peacock Bay) (B)": [
+    "Infinity at Brickell (SW)",
+    "One Broadway (W)",
     "Stephen P. Clark Government Center (E)"
   ],
   "Shitzu Squalo 01 (Bay)": [
-    "Marina Blue (SE)"
+    "Marina Blue (SE)",
+    "Vizcayne South Condominium (NW)"
   ],
   "Amphitheater": [
     "Container Crane (9)"
@@ -35,7 +44,9 @@
   ],
   "Vice Beach (B)": [
     "Asia Brickell Key (CC1)",
-    "Flagler on the River"
+    "Asia Brickell Key (CC2)",
+    "Flagler on the River",
+    "Flamingo South Beach (SRSW)"
   ],
   "U-Turn (NW)": [
     "6232 E Hwy 98 (SE)"
@@ -49,11 +60,14 @@
   ],
   "Metro (SE) (B)": [
     "Infinity at Brickell",
-    "Infinity at Brickell (SW)"
+    "Infinity at Brickell (SW)",
+    "Nine at Mary Brickell Village (A)",
+    "The Ritz-Carlton Coconut Grove (S)"
   ],
   "Metro (SE) (C)": [
     "Infinity at Brickell",
-    "Infinity at Brickell (SW)"
+    "Infinity at Brickell (SW)",
+    "Park Grove Condominium (N)"
   ],
   "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)": [
     "Vizcayne South Condominium (NW)"
@@ -65,6 +79,41 @@
     "Flagler on the River"
   ],
   "Port Vice City (B)": [
+    "Asia Brickell Key (CC2)",
+    "Container Crane (1)",
+    "Container Crane (9)",
     "Cruise Terminal D"
+  ],
+  "Glitch (A)": [
+    "US Sugar Mill (Factory)",
+    "White Silos (W)"
+  ],
+  "Vintage Vice City Pack 02 (Port)": [
+    "Container Crane (1)",
+    "Container Crane (2)",
+    "Container Crane (9)"
+  ],
+  "Mount Kalaga National Park 04 (Mountain Pass) (X)": [
+    "Billboard (Delights)",
+    "Water Tower near Prison"
+  ],
+  "Vice City 08 (Ferris Wheel)": [
+    "Palazzo del Sol"
+  ],
+  "Vice City Sign": [
+    "Infinity at Brickell (SW)"
+  ],
+  "Diner (W) (B)": [
+    "Port of Tampa Container Crane (2)"
+  ],
+  "Ocean Drive (NW)": [
+    "Hotel Breakwater (K)",
+    "The Tides South Beach"
+  ],
+  "Sidewalk (Jason) (E)": [
+    "Flamingo South Beach (SRSW)"
+  ],
+  "Ambrosia 02 (Panorama)": [
+    "1500 Sonora Ave (Tank) (R)"
   ]
 }
