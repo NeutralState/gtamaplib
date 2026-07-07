@@ -519,3 +519,18 @@ _legacy_date → no tool (treated as anchor)
 5. refine_cam_ypr honore excluded_markings.json depuis EXCL-FIX-V1.
 6. Supprimer/renommer un marking gere la provenance AUTOMATIQUEMENT (quarantaine
    des orphelins). ORPHAN-SCAN au CI.
+
+## ADDENDUM 2026-07-06 — WAR-SCAN + pieges (voir CLAUDE_CONTEXT session 07-06)
+1. Apres CHAQUE batch d'imports/markings, avant le bundle:
+   PYTHONPATH=. python3 tools/audit/collision_scan.py            (scan seul)
+   PYTHONPATH=. python3 tools/audit/collision_scan.py --apply    (plan gate resid<8' delta<15m)
+   Detecte collisions de nom (outliers coherents ENTRE EUX = autre objet) vs
+   badpixels (isoles). Maladie #1 confirmee: 4 reviews manuelles + 43 LM scannes.
+2. triangulate_lm.py CLI ne respecte PAS z_constraint (fixed) — snap z
+   manuellement apres --apply (le serveur update_landmark le fait, pas le CLI).
+   collision_scan --apply le fait automatiquement. TODO: patcher le CLI.
+3. Ne JAMAIS appliquer une retriangulation dont le pool a ecarte silencieusement
+   un observer sain: verifier le residu de TOUS les observers a la position
+   proposee (cas Flagler: pool proposait 54m, Interchange passait 0.0'->123.8').
+4. exclude_marking != delete: pixels conserves pour reconciliation sub-LM future.
+   Les exclusions seules (sans retri) suffisent a sortir un menteur du solveur.
