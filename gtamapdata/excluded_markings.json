@@ -2,12 +2,14 @@
   "_comment": "Per-(cam, landmark) markings excluded from solver (cam_rms + triangulation). Marking STAYS in pixels.json (visible in UI visualizer). Format: {\"Cam Name\": [\"LM A\"]}",
   "Vice City Postcard": [
     "Marina Blue (SE)",
-    "Reworld Miami-Dade (SE)"
+    "Reworld Miami-Dade (SE)",
+    "West Venetian Causeway Bridge"
   ],
   "Vice City 03 (Basketball)": [
     "W South Beach (BNW)"
   ],
   "Port Vice City (A)": [
+    "Cruise Terminal D",
     "Marina Blue (SE)"
   ],
   "Highway (Peacock Bay) (A)": [
@@ -32,7 +34,8 @@
     "Nine at Mary Brickell Village (E)"
   ],
   "Vice Beach (B)": [
-    "Asia Brickell Key (CC1)"
+    "Asia Brickell Key (CC1)",
+    "Flagler on the River"
   ],
   "U-Turn (NW)": [
     "6232 E Hwy 98 (SE)"
@@ -57,5 +60,11 @@
   ],
   "Gas Station (Chase) (S)": [
     "The Grand (W)"
+  ],
+  "Leonida Keys 01 (Airplane) (X)": [
+    "Flagler on the River"
+  ],
+  "Port Vice City (B)": [
+    "Cruise Terminal D"
   ]
 }
