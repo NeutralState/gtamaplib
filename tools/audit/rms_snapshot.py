@@ -13,7 +13,7 @@ sys.path.insert(0, ROOT)
 
 import gtamapdata as md
 sys.path.insert(0, os.path.join(ROOT, "tools"))
-from common import cam_rms
+from common import cam_rms_dual
 
 
 def main():
@@ -30,11 +30,11 @@ def main():
     for cam_name, lm_pixels in pixels.items():
         if cam_name not in cameras:
             continue
-        rms = cam_rms(cam_name)
-        if rms is not None:
-            n_obs = sum(1 for l, p in lm_pixels.items()
-                        if p is not None and landmarks.get(l) is not None)
-            out[cam_name] = {"rms_arcmin": round(rms, 3), "n_obs": n_obs}
+        d = cam_rms_dual(cam_name)
+        if d is not None:
+            out[cam_name] = {"rms_arcmin": round(d["rms_arcmin"], 3),
+                             "median_m": None if d["median_m"] is None else round(d["median_m"], 3),
+                             "n_obs": d["n"]}
 
     # global + zone rollup (zone inferred from landmarks seen, majority vote)
     lm_zone = {n: (landmarks_meta.get(n) or {}).get("zone") for n in landmarks}
@@ -45,13 +45,22 @@ def main():
         zones = [lm_zone.get(l) for l in lm_pixels if lm_zone.get(l)]
         zone = max(set(zones), key=zones.count) if zones else "unknown"
         out[cam_name]["zone"] = zone
-        zone_acc.setdefault(zone, []).append(out[cam_name]["rms_arcmin"])
+        zone_acc.setdefault(zone, []).append(
+            (out[cam_name]["rms_arcmin"], out[cam_name]["median_m"]))
+
+    def _med(vals):
+        vals = sorted(v for v in vals if v is not None)
+        return round(vals[len(vals) // 2], 3) if vals else None
 
     summary = {
         "n_cams": len(out),
         "global_median_arcmin": round(sorted(v["rms_arcmin"] for v in out.values())[len(out) // 2], 3),
         "global_mean_arcmin": round(sum(v["rms_arcmin"] for v in out.values()) / len(out), 3),
-        "zones": {z: {"n": len(v), "median": round(sorted(v)[len(v) // 2], 3)} for z, v in sorted(zone_acc.items())},
+        "global_median_m": _med(v["median_m"] for v in out.values()),
+        "zones": {z: {"n": len(v),
+                      "median": _med(a for a, _m in v),
+                      "median_m": _med(m for _a, m in v)}
+                  for z, v in sorted(zone_acc.items())},
     }
 
     dest = os.path.join(ROOT, "tools", "generated", f"rms_snapshot_{args.tag}.json")
@@ -59,9 +68,10 @@ def main():
         json.dump({"summary": summary, "cams": out}, f, indent=1, sort_keys=True)
 
     print(f"# rms_snapshot tag={args.tag} | cams={summary['n_cams']} "
-          f"median={summary['global_median_arcmin']}' mean={summary['global_mean_arcmin']}'")
+          f"median={summary['global_median_arcmin']}' mean={summary['global_mean_arcmin']}' "
+          f"| median_m={summary['global_median_m']}m")
     for z, s in summary["zones"].items():
-        print(f"  {z:<16} n={s['n']:<4} median={s['median']}'")
+        print(f"  {z:<16} n={s['n']:<4} median={s['median']}'  /  {s['median_m']}m")
     print(f"-> {dest}")
 
 

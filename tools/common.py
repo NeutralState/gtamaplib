@@ -100,6 +100,78 @@ def cam_rms(cam_name, lm_override=None, cam_state=None, lms=None):
     return math.sqrt(acc / n) if n else None
 
 
+# ── DUAL-METRIC-V1 (2026-07-07) ─────────────────────────────────────────
+# L'erreur angulaire explose mecaniquement a courte portee (0.9m lateral a
+# 15-20m = 188'): 9 des 20 WAR du scan etaient des artefacts metriques.
+# Le discriminant honnete = l'ecart transverse rayon<->point en METRES.
+# L'arcmin reste la mesure du BA et des LM lointains; le metre juge la
+# courte portee. Verdicts sains = dual (voir find_fossils, collision_scan V2).
+
+FOSSIL_GAP_M = 3.0
+
+
+def residual_dual(cam, mk, xyz):
+    """(arcmin, gap_m, dist_m) pour une observation (cam deja instanciee).
+    gap_m = ecart transverse du rayon(marking) au point; None si direction
+    indisponible. Retourne (None, None, None) si le point ne projette pas."""
+    p = cam.get_pixel(xyz)
+    if p is None:
+        return None, None, None
+    dx = (p[0] - mk[0]) * cam.hfov / cam.w * 60
+    dy = (p[1] - mk[1]) * cam.vfov / cam.h * 60
+    ang = math.hypot(dx, dy)
+    try:
+        import numpy as _np
+        o = _np.asarray(cam.xyz, dtype=float)
+        d = _np.asarray(cam.get_pixel_direction(mk), dtype=float)
+        d = d / _np.linalg.norm(d)
+        v = _np.asarray(xyz, dtype=float) - o
+        t = float(_np.dot(v, d))
+        gap = float(_np.linalg.norm(v - max(t, 0.0) * d))
+        dist = float(_np.linalg.norm(v))
+    except Exception:
+        gap = dist = None
+    return ang, gap, dist
+
+
+def cam_rms_dual(cam_name, cam_state=None, lms=None):
+    """Version duale de cam_rms — memes filtres exacts (exclusions, None).
+    Retourne {'rms_arcmin', 'median_m', 'max_m', 'n'} ou None."""
+    obs = md.pixels.get(cam_name)
+    if not obs or cam_name not in md.cameras:
+        return None
+    cam = get_cam(cam_name, cam_state)
+    base = lms if lms is not None else md.landmarks
+    acc = 0.0
+    gaps = []
+    n = 0
+    for ln, px in obs.items():
+        if px is None or is_excluded_marking(cam_name, ln):
+            continue
+        x = base.get(ln)
+        if x is None:
+            continue
+        try:
+            ang, gap, _dist = residual_dual(cam, px, x)
+        except Exception:
+            continue
+        if ang is None:
+            continue
+        acc += ang * ang
+        if gap is not None:
+            gaps.append(gap)
+        n += 1
+    if not n:
+        return None
+    gaps.sort()
+    return {
+        'rms_arcmin': math.sqrt(acc / n),
+        'median_m': gaps[len(gaps) // 2] if gaps else None,
+        'max_m': gaps[-1] if gaps else None,
+        'n': n,
+    }
+
+
 def ray_ls_point(rays):
     """Point least-squares minimisant la distance a tous les rayons
     (origin, direction). Releve numpy.linalg.LinAlgError si degenere."""
@@ -139,7 +211,7 @@ def save_json(path, data):
 # hand during 2026-07 (Easy Hill, the Diner Bays, the WDNA mast sub-points).
 FOSSIL_THRESHOLD_ARCMIN = 15.0
 
-def find_fossils(threshold=FOSSIL_THRESHOLD_ARCMIN):
+def find_fossils(threshold=FOSSIL_THRESHOLD_ARCMIN, gap_threshold_m=FOSSIL_GAP_M):
     """Scan all triangulated LMs; return [{lm, source, resid, n_sources}]
     for every LM where a source cam that still marks it disagrees by more
     than threshold arcmin. Blind spot: a fossil whose source no longer has
@@ -161,17 +233,22 @@ def find_fossils(threshold=FOSSIL_THRESHOLD_ARCMIN):
             cam = get_cam(cn)
             p = cam.get_pixel(xyz)
             if p is None:
-                r = float('inf')
+                r, g = float('inf'), None
             else:
-                dx = (p[0] - px[0]) * cam.hfov / cam.w * 60
-                dy = (p[1] - px[1]) * cam.vfov / cam.h * 60
-                r = _math.hypot(dx, dy)
+                r, g, _d = residual_dual(cam, px, xyz)
+                if r is None:
+                    r, g = float('inf'), None
             n_checked += 1
-            if worst is None or r > worst[0]:
-                worst = (r, cn)
-        if worst is not None and worst[0] > threshold:
+            # DUAL-METRIC-V1: fossile seulement si l'angulaire ET le metre
+            # condamnent (no-proj = condamne d'office). Anti fausses guerres
+            # de courte portee.
+            qualifies = (r > threshold) and (g is None or g > gap_threshold_m)
+            if qualifies and (worst is None or r > worst[0]):
+                worst = (r, cn, g)
+        if worst is not None:
             out.append({'lm': lm, 'source': worst[1],
                         'resid': None if worst[0] == float('inf') else round(worst[0], 1),
+                        'gap_m': None if worst[2] is None else round(worst[2], 1),
                         'n_sources': len(srcs), 'n_checked': n_checked})
     out.sort(key=lambda x: -(x['resid'] if x['resid'] is not None else 1e9))
     return out

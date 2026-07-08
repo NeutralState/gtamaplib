@@ -448,6 +448,29 @@ def main():
 
     cam_tiers, lm_tiers = two_pass_classify()
 
+    # ── DUAL-METRIC-V1: annotation metres (post-passe, regles INCHANGEES) ──
+    # L'arcmin explose a courte portee; median_res_m est la mesure honnete.
+    # Phase 1 = annoter + rapporter les candidats a promotion; la regle de
+    # tier ne change pas tant que le rapport n'est pas valide humainement.
+    from common import cam_rms_dual
+    promo = []
+    for cam_name, rec in cam_tiers.items():
+        d = cam_rms_dual(cam_name)
+        rec['median_res_m'] = (None if d is None or d['median_m'] is None
+                               else round(d['median_m'], 3))
+        if (rec['tier'] in ('low', 'unverified')
+                and rec['median_res_m'] is not None
+                and rec['median_res_m'] <= 1.0
+                and d['n'] >= 3):
+            promo.append((rec['median_res_m'], d['n'], cam_name, rec['tier']))
+    if promo:
+        promo.sort()
+        print(f"\n⚑ DUAL-METRIC: {len(promo)} cam(s) low/unverified avec "
+              f"median <= 1.0m sur >= 3 obs — punies par l'arcmin, candidates "
+              f"a promotion (Phase 2, validation humaine):")
+        for m, n, cam_name, tier in promo:
+            print(f"    {m:6.3f}m  n={n:<3d} [{tier:10s}] {cam_name}")
+
     # ── Summary ────────────────────────────────────────────────────────────
     cam_tier_counts = Counter(v['tier'] for v in cam_tiers.values())
     lm_tier_counts  = Counter(v['tier'] for v in lm_tiers.values())

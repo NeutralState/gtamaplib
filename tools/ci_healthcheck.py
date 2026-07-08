@@ -98,7 +98,8 @@ def main():
         with open(SNAP_PATH) as f:
             summary = json.load(f)['summary']
         print(f"  mediane globale: {summary['global_median_arcmin']}'  "
-              f"mean: {summary['global_mean_arcmin']}'")
+              f"mean: {summary['global_mean_arcmin']}'  "
+              f"median_m: {summary.get('global_median_m')}m")
 
     # ── 5. json hygiene ──────────────────────────────────────────────────
     for p in sorted(glob.glob(os.path.join(ROOT, 'gtamapdata', '*.json'))):
@@ -165,6 +166,7 @@ def main():
         with open(BASELINE, 'w') as f:
             json.dump({'global_median_arcmin': summary['global_median_arcmin'],
                        'global_mean_arcmin': summary['global_mean_arcmin'],
+                       'global_median_m': summary.get('global_median_m'),
                        'pure_cycles': pure}, f, indent=1, sort_keys=True)
             f.write('\n')
         print(f'BASELINE GELEE -> {BASELINE} (a committer)')
@@ -192,6 +194,18 @@ def main():
                          f'(> {TOL_MEDIAN_PCT}% tolere)')
         else:
             print(f'✓ mediane vs baseline: {bm}\' -> {cm}\'')
+        # DUAL-METRIC-V1: mediane metres — tolerant si baseline ancienne
+        bm_m = base.get('global_median_m')
+        cm_m = summary.get('global_median_m')
+        if bm_m is not None and cm_m is not None:
+            if bm_m > 0 and (cm_m - bm_m) / bm_m * 100 > TOL_MEDIAN_PCT:
+                fails.append(f'RMS-M: mediane metres degradee {bm_m}m -> {cm_m}m '
+                             f'(> {TOL_MEDIAN_PCT}% tolere)')
+            else:
+                print(f'✓ mediane metres vs baseline: {bm_m}m -> {cm_m}m')
+        elif cm_m is not None:
+            print(f'  mediane metres: {cm_m}m (baseline ancienne sans metres — '
+                  f'--update-baseline pour geler)')
 
     print()
     if fails:
