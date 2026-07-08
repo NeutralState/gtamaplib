@@ -389,6 +389,39 @@ def classify_cameras(lm_tiers):
 
 # ── Two-pass driver ─────────────────────────────────────────────────────────
 
+# ── DUAL-METRIC-V2 (Phase 2, 2026-07-07): regle de promotion ────────────
+# Une cam low/unverified dont la mediane METRES <= 1.0m sur >= 3 obs est
+# promue MEDIUM (pas high: medium suffit pour redevenir source de
+# triangulation et recevoir un poids BA decent, sans en faire une ancre).
+# Justification: l'arcmin explose a courte portee; 12 cams etaient punies
+# a tort (Metro SE B: 0.046m reels). Liste validee humainement 2026-07-07.
+PROMO_MAX_MEDIAN_M = 1.0
+PROMO_MIN_OBS = 3
+_dual_memo = {}
+
+def _median_m(cam_name):
+    if cam_name not in _dual_memo:
+        from common import cam_rms_dual
+        d = cam_rms_dual(cam_name)
+        _dual_memo[cam_name] = (None, 0) if d is None else (d['median_m'], d['n'])
+    return _dual_memo[cam_name]
+
+def apply_dual_promotions(cam_tiers):
+    promoted = []
+    for cam_name, rec in cam_tiers.items():
+        if rec['tier'] not in ('low', 'unverified'):
+            continue
+        m, n = _median_m(cam_name)
+        if m is not None and m <= PROMO_MAX_MEDIAN_M and n >= PROMO_MIN_OBS:
+            rec['tier'] = 'medium'
+            rec['reason'] = (f'DUAL-METRIC promotion: median {m:.3f}m <= '
+                             f'{PROMO_MAX_MEDIAN_M}m sur {n} obs '
+                             f'(arcmin trompeur a courte portee) — etait: '
+                             + rec.get('reason', '?'))
+            promoted.append((m, n, cam_name))
+    return promoted
+
+
 def two_pass_classify():
     """
     v2: 6-pass alternating classifier. The medium-LM fallback in cam tiering
@@ -416,6 +449,7 @@ def two_pass_classify():
             # Even pass: classify cams
             print(f"Pass {pass_num}: classifying cams using pass-{pass_num-1} LM tiers...")
             new_tiers = classify_cameras(lm_tiers)
+            apply_dual_promotions(new_tiers)  # DUAL-METRIC-V2
             changes = sum(1 for c in new_tiers
                           if cam_tiers.get(c, {}).get('tier') != new_tiers[c]['tier'])
             cam_tiers = new_tiers
@@ -448,28 +482,21 @@ def main():
 
     cam_tiers, lm_tiers = two_pass_classify()
 
-    # ── DUAL-METRIC-V1: annotation metres (post-passe, regles INCHANGEES) ──
-    # L'arcmin explose a courte portee; median_res_m est la mesure honnete.
-    # Phase 1 = annoter + rapporter les candidats a promotion; la regle de
-    # tier ne change pas tant que le rapport n'est pas valide humainement.
+    # ── DUAL-METRIC: annotation metres + log des promotions appliquees ──
     from common import cam_rms_dual
-    promo = []
+    promoted = []
     for cam_name, rec in cam_tiers.items():
         d = cam_rms_dual(cam_name)
         rec['median_res_m'] = (None if d is None or d['median_m'] is None
                                else round(d['median_m'], 3))
-        if (rec['tier'] in ('low', 'unverified')
-                and rec['median_res_m'] is not None
-                and rec['median_res_m'] <= 1.0
-                and d['n'] >= 3):
-            promo.append((rec['median_res_m'], d['n'], cam_name, rec['tier']))
-    if promo:
-        promo.sort()
-        print(f"\n⚑ DUAL-METRIC: {len(promo)} cam(s) low/unverified avec "
-              f"median <= 1.0m sur >= 3 obs — punies par l'arcmin, candidates "
-              f"a promotion (Phase 2, validation humaine):")
-        for m, n, cam_name, tier in promo:
-            print(f"    {m:6.3f}m  n={n:<3d} [{tier:10s}] {cam_name}")
+        if rec.get('reason', '').startswith('DUAL-METRIC promotion'):
+            promoted.append((rec['median_res_m'], d['n'] if d else 0, cam_name))
+    if promoted:
+        promoted.sort()
+        print(f"\n⚑ DUAL-METRIC-V2: {len(promoted)} cam(s) PROMUES medium "
+              f"(median <= {PROMO_MAX_MEDIAN_M}m, arcmin trompeur):")
+        for m, n, cam_name in promoted:
+            print(f"    {m:6.3f}m  n={n:<3d} {cam_name}")
 
     # ── Summary ────────────────────────────────────────────────────────────
     cam_tier_counts = Counter(v['tier'] for v in cam_tiers.values())
