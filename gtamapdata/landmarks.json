@@ -2285,9 +2285,9 @@
   },
   "Homestead Water Tower": {
     "xyz": [
-      -2959.0855787699197,
-      -3035.406838789557,
-      72.76560670746422
+      -2957.7260180060634,
+      -3034.757192506712,
+      72.54394386246958
     ],
     "source_cameras": [
       "Tennis Stadium (4K)",
@@ -2690,9 +2690,9 @@
   },
   "Seven Mile Bridge (6T)": {
     "xyz": [
-      -3640.842257551668,
-      -6926.8740212450475,
-      8.235761046112286
+      -3640.7339795047938,
+      -6927.018344230361,
+      8.23270283438843
     ],
     "source_cameras": [
       "Ocean near Keys (N)",
@@ -2907,9 +2907,9 @@
   },
   "Water Tower near Prison": {
     "xyz": [
-      -5163.687577557438,
-      1551.0349713526957,
-      97.14351954607534
+      -5164.088929906327,
+      1550.7597579132878,
+      97.227514037209
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4488,14 +4488,15 @@
   },
   "Vake Island (E)": {
     "xyz": [
-      -3655.0998081097414,
-      -7861.041445801072,
+      -3592.114460202086,
+      -7878.513482307881,
       0.0
     ],
     "source_cameras": [
+      "Key Lento",
       "Keys"
     ],
-    "error_m": null,
+    "error_m": 4.178,
     "zone": "leonida_keys",
     "z_constraint": {
       "type": "fixed",
@@ -4504,14 +4505,15 @@
   },
   "Vake Island (W)": {
     "xyz": [
-      -3712.024157374019,
-      -7897.145481852532,
+      -3659.8985966484033,
+      -7912.55395396626,
       0.0
     ],
     "source_cameras": [
+      "Key Lento",
       "Keys"
     ],
-    "error_m": null,
+    "error_m": 4.425,
     "zone": "leonida_keys",
     "z_constraint": {
       "type": "fixed",
@@ -4597,38 +4599,6 @@
     ],
     "error_m": 0.814,
     "zone": "leonida_keys"
-  },
-  "Island K (E)": {
-    "xyz": [
-      -4134.663053995032,
-      -8652.010399642038,
-      0.0
-    ],
-    "source_cameras": [
-      "Key Lento"
-    ],
-    "error_m": null,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
-  },
-  "Island K (W)": {
-    "xyz": [
-      -4411.428360909352,
-      -8960.110939892798,
-      0.0
-    ],
-    "source_cameras": [
-      "Key Lento"
-    ],
-    "error_m": null,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 0.0
-    }
   },
   "Marina Club at Blackwater Sound (N)": {
     "xyz": [
@@ -4754,9 +4724,9 @@
   },
   "Sebring Water Tower": {
     "xyz": [
-      -3981.4304326753663,
-      2926.5010788934637,
-      74.38695228705105
+      -3981.287028501695,
+      2926.536201202197,
+      74.293267649093
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -5096,9 +5066,9 @@
   },
   "Asia Brickell Key": {
     "xyz": [
-      -118.93922284246985,
-      -881.7155749118592,
-      184.09641269005587
+      -118.96057548902395,
+      -881.7202785377044,
+      184.08989094662545
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -5919,9 +5889,9 @@
   },
   "Flagler on the River": {
     "xyz": [
-      -1047.9819072270789,
-      -279.98799889896515,
-      137.13335543954938
+      -1052.0755600904424,
+      -283.42980419413385,
+      137.29530986496866
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -8231,9 +8201,9 @@
   },
   "Bridge Island (W)": {
     "xyz": [
-      -2357.6777527966046,
-      -5035.24207315615,
-      0.2156133377249829
+      -2357.426426495807,
+      -5035.103907800683,
+      0.22202095143089362
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -8669,9 +8639,9 @@
   },
   "City View Parking Garage (S)": {
     "xyz": [
-      -184.62871187552676,
-      2061.886215126273,
-      34.057482343843276
+      -184.72390541756974,
+      2061.782814293994,
+      34.051609765937236
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8682,9 +8652,9 @@
   },
   "City View Parking Garage (SE)": {
     "xyz": [
-      -159.63236432555954,
-      2059.249484999125,
-      33.94016385465399
+      -159.53665341027383,
+      2059.3452401000513,
+      33.94564180097351
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8801,9 +8771,9 @@
   },
   "Portofino Tower (S)": {
     "xyz": [
-      1730.1601146606797,
-      -227.28372853994136,
-      142.08786174797615
+      1730.2379456425017,
+      -227.25678889566146,
+      142.10810680143257
     ],
     "source_cameras": [
       "Port",
@@ -11271,9 +11241,9 @@
   },
   "Infinity at Brickell (SW)": {
     "xyz": [
-      -1215.2402246492845,
-      -1441.4350671432471,
-      177.52742466317773
+      -1215.2392395300744,
+      -1441.443558615894,
+      177.5313614586222
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -14783,6 +14753,27 @@
     "source_cameras": [],
     "error_m": null,
     "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Grassrivers River Mouth (W)": {
+    "xyz": [
+      -3096.645479725292,
+      -5207.388252270002,
+      -7.119061859002107
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
+    ],
+    "error_m": 2.351,
+    "zone": "grassrivers",
+    "author": "rlx"
+  },
+  "Grassrivers River Mouth (E)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "grassrivers",
     "author": "rlx"
   }
 }
