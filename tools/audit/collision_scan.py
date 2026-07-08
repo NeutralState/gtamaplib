@@ -265,7 +265,14 @@ def main():
             reviews += 1
             continue
         resid, delta = float(mr.group(1)), float(md.group(1))
-        if resid < GATE_RESID and delta < GATE_DELTA:
+        _sig = None
+        try:
+            from common import lm_sigma_m
+            _sig = lm_sigma_m(lm)
+        except Exception:
+            pass
+        gate_d = max(GATE_DELTA, 3.0 * _sig) if _sig is not None else GATE_DELTA
+        if resid < GATE_RESID and delta < gate_d:  # SIGMA-GATES-V1
             subprocess.run(['python3', 'tools/triangulate_lm.py', lm, '--apply'],
                            capture_output=True, text=True)
             zc = (lms[lm] or {}).get('z_constraint')

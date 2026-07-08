@@ -110,6 +110,25 @@ def cam_rms(cam_name, lm_override=None, cam_state=None, lms=None):
 FOSSIL_GAP_M = 3.0
 
 
+_COV_CACHE = None
+
+def lm_sigma_m(lm_name):
+    """Sigma (m, norme xyz) du LM depuis le dernier covariances.json du BA
+    [COVARIANCE-V1]. None si le LM n'etait pas dans le solve ou pas de fichier.
+    Usage gates: delta statistiquement insignifiant si delta <= 3*sigma."""
+    global _COV_CACHE
+    if _COV_CACHE is None:
+        try:
+            import os as _os
+            p = _os.path.join(_os.path.dirname(_os.path.abspath(__file__)),
+                              'generated', 'covariances.json')
+            _COV_CACHE = json.load(open(p)).get('lms', {})
+        except Exception:
+            _COV_CACHE = {}
+    e = _COV_CACHE.get(lm_name)
+    return None if e is None else e.get('sigma_m')
+
+
 def residual_dual(cam, mk, xyz):
     """(arcmin, gap_m, dist_m) pour une observation (cam deja instanciee).
     gap_m = ecart transverse du rayon(marking) au point; None si direction

@@ -449,6 +449,20 @@ def main():
     else:
         delta = None
 
+    # OBSERVER-GUARD-V1 (2026-07-07, regle Flagler EN CODE): residus de TOUS
+    # les observers non-exclus au point final — pas juste le pool retenu. Le
+    # pool peut ecarter silencieusement un observer sain (Flagler: pool
+    # Grassrivers+Skyline propose un point qui met Interchange 0.0'->21.8').
+    all_obs = [c for c in observers_classified
+               if observers_classified[c] != 'excluded']
+    all_rays = _build_rays(all_obs, args.lm_name, pixels)
+    all_res = _residuals_arcmin(new_xyz, all_rays)
+    all_max = max(all_res.values()) if all_res else None
+    if all_res:
+        worst_cam = max(all_res, key=all_res.get)
+        print(f"All-observer residual: max {all_max:.3f} arcmin "
+              f"({len(all_res)} obs, worst: {worst_cam})")
+
     print(f"Triangulation result:")
     print(f"  New xyz: [{new_xyz[0]:.4f}, {new_xyz[1]:.4f}, {new_xyz[2]:.4f}]")
     print(f"  Max residual: {max_res:.3f} arcmin")

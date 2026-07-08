@@ -40,20 +40,37 @@ for kind, lm in todo:
                        env={**os.environ, 'PYTHONPATH': '.'})
     mx = re.search(r'Max residual: ([\d.]+)', r.stdout)
     dl = re.search(r'Delta from current: ([\d.]+)', r.stdout)
+    ao = re.search(r'All-observer residual: max ([\d.]+)', r.stdout)
     why = re.search(r'reason: (.+)', r.stdout)
     key = kind + ':' + lm
     if mx is None:
         state['refused'].append((kind, lm, (why.group(1).strip() if why else 'dry fail')[:60]))
     else:
         mxv = float(mx.group(1)); dlv = float(dl.group(1)) if dl else None
-        ok = mxv < 8 and (kind == 'tri' or (dlv is not None and dlv < 15))
+        # SIGMA-GATES-V1: la gate delta devient relative a l'incertitude du
+        # LM (COVARIANCE-V1): un move <= 3*sigma est statistiquement
+        # insignifiant meme s'il depasse 15m (ex: Water Tower near Prison
+        # 18m avec sigma=32.5m). Plancher 15 conserve pour les LM hors solve.
+        try:
+            sys.path.insert(0, 'tools')
+            from common import lm_sigma_m
+            _sig = lm_sigma_m(lm)
+        except Exception:
+            _sig = None
+        gate_d = max(15.0, 3.0 * _sig) if _sig is not None else 15.0
+        # OBSERVER-GUARD-V1 (regle Flagler en code): le point propose doit
+        # satisfaire TOUS les observers non-exclus (<8'), pas juste le pool.
+        aov = float(ao.group(1)) if ao else None
+        obs_ok = (aov is None) or (aov < 8)
+        ok = mxv < 8 and obs_ok and (kind == 'tri' or (dlv is not None and dlv < gate_d))
         if ok:
             subprocess.run([sys.executable, 'tools/triangulate_lm.py', lm, '--apply'],
                            capture_output=True, text=True, timeout=60,
                            env={**os.environ, 'PYTHONPATH': '.'})
             state['applied'].append((kind, lm, mxv, dlv))
         elif mxv < 8:
-            state['review'].append((kind, lm, mxv, dlv))
+            why_rev = f'all-obs {aov:.1f}' if (aov is not None and aov >= 8) else f'delta {dlv}'
+            state['review'].append((kind, lm, mxv, dlv, why_rev))
         else:
             state['refused'].append((kind, lm, f'resid {mxv:.0f}'))
     state['done'].append(key)
