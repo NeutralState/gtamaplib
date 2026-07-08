@@ -27,6 +27,7 @@ Usage:
 READ-ONLY sans --apply. Respecte excluded_markings.json et la blacklist.
 """
 import argparse, json, math, os, subprocess, sys
+import numpy as np
 
 ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..'))
 os.chdir(ROOT)
@@ -37,6 +38,8 @@ import numpy as np
 import common
 
 T_OK = 8.0        # arcmin: en dessous = majorite saine
+GAP_OK = 1.0      # m: sous ce gap transverse, observer SAIN peu importe l'angulaire
+GAP_BAD = 3.0     # m: outlier requiert ang>T_BAD ET gap>GAP_BAD (anti fausses guerres)
 T_BAD = 15.0      # arcmin: au dessus = outlier a classifier
 CLUSTER_M = 50.0  # coherence interne d'une collision
 FAR_M = 100.0     # distance min du LM courant pour parler d'un autre objet
@@ -47,10 +50,20 @@ BLACKLIST_LM = {'Amphitheater'}  # poses/LM proteges par preuve map
 def ang_err(cam, mk, xyz):
     p = cam.get_pixel(xyz)
     if p is None:
-        return None
+        return None, None
     dx = (p[0] - mk[0]) * cam.hfov / cam.w * 60
     dy = (p[1] - mk[1]) * cam.vfov / cam.h * 60
-    return math.hypot(dx, dy)
+    ang = math.hypot(dx, dy)
+    try:
+        o = np.asarray(cam.xyz, float)
+        d = np.asarray(cam.get_pixel_direction(mk), float)
+        d = d / np.linalg.norm(d)
+        v = np.asarray(xyz, float) - o
+        t = float(np.dot(v, d))
+        gap = float(np.linalg.norm(v - max(t, 0.0) * d))
+    except Exception:
+        gap = None
+    return ang, gap
 
 def pair_point(cam_a, mk_a, cam_b, mk_b):
     try:
@@ -104,20 +117,20 @@ def main():
             cam = get_cam(cam_name)
             if cam is None:
                 continue
-            e = ang_err(cam, mk, xyz)
+            e, gap = ang_err(cam, mk, xyz)
             if e is not None:
-                errs.append((cam_name, mk, e))
+                errs.append((cam_name, mk, e, gap))
         if len(errs) < 2:
             continue
-        majority = [t for t in errs if t[2] <= T_OK]
-        outliers = [t for t in errs if t[2] > T_BAD]
+        majority = [t for t in errs if t[2] <= T_OK or (t[3] is not None and t[3] <= GAP_OK)]
+        outliers = [t for t in errs if t[2] > T_BAD and (t[3] is None or t[3] > GAP_BAD)]
         if not outliers:
             continue
 
         # classifier les outliers: collision (coherents entre eux) vs badpixel
         collisions, badpixels = [], []
         used = set()
-        for i, (ca, ma, ea) in enumerate(outliers):
+        for i, (ca, ma, ea, _ga) in enumerate(outliers):
             if i in used:
                 continue
             group = [(ca, ma, ea)]
@@ -125,7 +138,7 @@ def main():
             for j in range(i + 1, len(outliers)):
                 if j in used:
                     continue
-                cb, mb, eb = outliers[j]
+                cb, mb, eb, _gb = outliers[j]
                 pt = pair_point(get_cam(ca), ma, get_cam(cb), mb)
                 if pt is None:
                     continue
@@ -146,10 +159,11 @@ def main():
         findings.append({
             'lm': lm_name, 'kind': kind, 'zone': (entry or {}).get('zone'),
             'n_obs': len(errs), 'n_major': len(majority),
-            'worst': max(e for _, _, e in errs),
+            'worst': max(e for _, _, e, _g in errs),
+            'worst_m': max((g for _, _, _e, g in errs if g is not None), default=None),
             'collisions': [[(c, round(e, 1)) for c, _, e in g] for g in collisions],
             'badpixels': [(c, round(e, 1)) for c, _, e in badpixels],
-            'excl': [c for c, _, e in errs if e > T_BAD],
+            'excl': [c for c, _, e, g in errs if e > T_BAD and (g is None or g > GAP_BAD)],
         })
 
     findings.sort(key=lambda f: -f['worst'])
@@ -165,7 +179,7 @@ def main():
         if f['badpixels']:
             tags.append('BADPIXEL ' + ', '.join(f'{c}({e}\')' for c, e in f['badpixels']))
         print(f"{f['kind']:7s} {f['lm'][:44]:44s} {str(f['zone'])[:12]:12s} "
-              f"obs={f['n_obs']:2d} maj={f['n_major']:2d} worst={f['worst']:7.1f}'  {'; '.join(tags)}")
+              f"obs={f['n_obs']:2d} maj={f['n_major']:2d} worst={f['worst']:7.1f}'/" + (f"{f['worst_m']:.1f}m" if f['worst_m'] is not None else "?m") + f"  {'; '.join(tags)}")
     if len(findings) > args.top:
         print(f'  ... +{len(findings) - args.top} (utilise --top)')
 
