@@ -534,3 +534,15 @@ _legacy_date → no tool (treated as anchor)
    proposee (cas Flagler: pool proposait 54m, Interchange passait 0.0'->123.8').
 4. exclude_marking != delete: pixels conserves pour reconciliation sub-LM future.
    Les exclusions seules (sans retri) suffisent a sortir un menteur du solveur.
+
+## ADDENDUM 2026-07-07 — CYCLE + SYNC-RLX + DUAL-METRIC
+1. LE CYCLE (remplace toute sequence memorisee):
+   python3 tools/cycle.py --tag <nom> [--harvest] [--scan] [--update-baseline] [--commit "msg"]
+   Fail-fast, resume avant/apres. Push manuel apres relecture.
+2. Imports upstream: git fetch upstream, puis
+   PYTHONPATH=. python3 tools/sync_rlx.py            (dry, vs sync_state)
+   PYTHONPATH=. python3 tools/sync_rlx.py --apply    (ADD+SNAP<=2px, gele sync_state)
+   MOVE>2px/RENAME/DEL = reports a juger. Poses/xyz rlx JAMAIS importes (solves).
+3. DUAL-METRIC: tout verdict sain = arcmin ET metres (l'arcmin ment a courte
+   portee). Tiers: promotion auto low/unverified -> medium si median<=1.0m/>=3 obs.
+   Lire les zones du tracker dans LES DEUX colonnes avant de prioriser.
