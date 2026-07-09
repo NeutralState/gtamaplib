@@ -147,3 +147,5 @@
 {"ts": "2026-07-08T20:39:51", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 12, "n_accepted": 12}
 {"ts": "2026-07-08T20:51:18", "tool": "guarded_apply", "action": "apply", "n_cams": 4, "n_lms": 11, "n_accepted": 9}
 {"ts": "2026-07-08T21:11:04", "tool": "guarded_apply", "action": "apply", "n_cams": 1, "n_lms": 5, "n_accepted": 5}
+{"ts": "2026-07-08T21:25:20", "tool": "triangulate_lm", "action": "retriangulate", "lm": "C. Clyde Atkins U.S Courthouse (SE)", "old_xyz": null, "new_xyz": [-701.7323, 775.7343, 51.4732], "kept": ["Jason Duval 05 (Machine Gun)", "Port Vice City (A)"], "max_res": 4.646}
+{"ts": "2026-07-08T21:26:34", "tool": "guarded_apply", "action": "apply", "n_cams": 3, "n_lms": 8, "n_accepted": 6}
