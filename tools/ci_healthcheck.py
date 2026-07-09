@@ -198,9 +198,14 @@ def main():
         bm_m = base.get('global_median_m')
         cm_m = summary.get('global_median_m')
         if bm_m is not None and cm_m is not None:
-            if bm_m > 0 and (cm_m - bm_m) / bm_m * 100 > TOL_MEDIAN_PCT:
+            # tolerance plancher (lecon 0708): la mediane sur 119 cams bouge
+            # par pas discrets — un switch de point median de 0.02m = 12% a
+            # 0.17m sans vraie regression. Fail seulement au-dela de
+            # max(TOL%, 0.03m absolu).
+            tol_abs = max(bm_m * TOL_MEDIAN_PCT / 100.0, 0.03)
+            if bm_m > 0 and (cm_m - bm_m) > tol_abs:
                 fails.append(f'RMS-M: mediane metres degradee {bm_m}m -> {cm_m}m '
-                             f'(> {TOL_MEDIAN_PCT}% tolere)')
+                             f'(> max({TOL_MEDIAN_PCT}%, 0.03m) tolere)')
             else:
                 print(f'✓ mediane metres vs baseline: {bm_m}m -> {cm_m}m')
         elif cm_m is not None:

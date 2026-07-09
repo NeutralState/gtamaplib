@@ -32,6 +32,7 @@ sys.path.insert(0, PROJ)
 import gtamapdata as md
 sys.path.insert(0, os.path.join(PROJ, "tools"))
 from common import cam_rms as _common_cam_rms
+from common import cam_rms_dual as _common_cam_rms_dual
 
 CAM_BLACKLIST_DEFAULT = ["Amphitheater", "Beach", "Vice City Sign"]
 
@@ -59,6 +60,12 @@ def cam_rms(cam_name, cams, lms):
     return _common_cam_rms(cam_name, cam_state=cams.get(cam_name), lms=lms)
 
 
+def cam_m(cam_name, cams, lms):
+    """(median_m, max_m) — contexte metres pour le guard dual [GUARD-DUAL-V1]."""
+    d = _common_cam_rms_dual(cam_name, cam_state=cams.get(cam_name), lms=lms)
+    return (None, None) if d is None else (d['median_m'], d['max_m'])
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--result", default=os.path.join(PROJ, "tools", "bundle_adjust_result.json"))
@@ -83,6 +90,7 @@ def main():
     # baseline RMS for EVERY cam: regression budget is cumulative vs this,
     # so many small accepted deltas can never silently stack on one victim.
     baseline0 = {c: cam_rms(c, cams, lms) for c in md.pixels if c in cams}
+    baseline0_m = {c: cam_m(c, cams, lms) for c in md.pixels if c in cams}
 
     def affected_for(delta):
         aff = set()
@@ -113,9 +121,30 @@ def main():
         after = {a: cam_rms(a, cams, lms) for a in aff}
         valid = [a for a in aff if before[a] is not None and after[a] is not None]
         # cumulative guard: regression measured against the session baseline
+        # GUARD-DUAL-V1 (2026-07-08): un blocage n'est legitime que si la
+        # regression est reelle en METRES aussi (l'arcmin explose a courte
+        # portee: 0.3' sur une cam de rue = millimetres). Par cam: bloque si
+        # arcmin_reg > tol ET (median_m_reg > 0.05m OU max_m_reg > 3m) — le OU
+        # couvre une obs lointaine unique wreckee que la mediane cacherait.
+        # Cams sans donnees metres: regle arcmin pure (conservateur).
         worst = max((after[a] - (baseline0.get(a) if baseline0.get(a) is not None else before[a])) for a in valid)
         net = sum((after[a] - before[a]) for a in valid)
-        if worst <= args.tol and net < -1e-6:
+        blocked = False
+        for a in valid:
+            reg = after[a] - (baseline0.get(a) if baseline0.get(a) is not None else before[a])
+            if reg <= args.tol:
+                continue
+            bm, bx = baseline0_m.get(a, (None, None))
+            am, ax = cam_m(a, cams, lms)
+            if bm is None or am is None:
+                blocked = True
+                break
+            med_reg = am - bm
+            max_reg = (ax - bx) if (ax is not None and bx is not None) else None
+            if med_reg > 0.05 or (max_reg is not None and max_reg > 3.0):
+                blocked = True
+                break
+        if not blocked and net < -1e-6:
             return True, net
         # rollback
         for cn, st in staged_c.items():
