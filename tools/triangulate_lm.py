@@ -141,6 +141,22 @@ def select_sources(observers_classified):
     if len(pool) < 2 and other:
         pool += other
         reason_parts.append(f"other({len(other)})")
+    # SIGMA-POOL-V1 (2026-07-08): les cams a gros sigma de pose tirent les
+    # points de travers (les 6 menteurs du 0708 etaient TOUS des cams a sigma
+    # eleve: Green Sports Car 90m, Rooftop 81m, VC Sign 181m, Ambrosia 02).
+    # Demotion des sources CONNUES-mauvaises (sigma>30m) si >=2 sources a
+    # position fiable (sigma<=30m ou xyz HUD) restent. Les sigma inconnues
+    # restent neutres. Les demotees restent observers (all-observer guard).
+    try:
+        from common import cam_sigma_pos
+        bad = [c for c in pool if (cam_sigma_pos(c) is not None and cam_sigma_pos(c) > 30.0)]
+        reliable = [c for c in pool if (cam_sigma_pos(c) is not None and cam_sigma_pos(c) <= 30.0)]
+        if bad and len(reliable) >= 2:
+            pool = [c for c in pool if c not in bad]
+            reason_parts.append("sigma-demoted(" + ", ".join(
+                f"{c} {cam_sigma_pos(c):.0f}m" for c in bad) + ")")
+    except Exception:
+        pass
     if len(pool) >= 2:
         return pool, " + ".join(reason_parts)
     return [], "insufficient observers"

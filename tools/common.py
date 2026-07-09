@@ -129,6 +129,37 @@ def lm_sigma_m(lm_name):
     return None if e is None else e.get('sigma_m')
 
 
+_COV_CACHE_CAMS = None
+_LEAK_CLASS_CACHE = None
+
+def cam_sigma_pos(cam_name):
+    # Sigma position (m) de la cam [COVARIANCE-V1 / SIGMA-POOL-V1]:
+    # - covariances.json si la cam etait dans le dernier solve
+    # - 0.0 si xyz HUD-locked (classes A/B/C du leak_cam_audit)
+    # - None sinon (inconnue = neutre, jamais penalisee)
+    global _COV_CACHE_CAMS, _LEAK_CLASS_CACHE
+    import os as _os
+    base = _os.path.dirname(_os.path.abspath(__file__))
+    if _COV_CACHE_CAMS is None:
+        try:
+            _COV_CACHE_CAMS = json.load(open(_os.path.join(base, 'generated', 'covariances.json'))).get('cams', {})
+        except Exception:
+            _COV_CACHE_CAMS = {}
+    e = _COV_CACHE_CAMS.get(cam_name)
+    if e is not None:
+        return e.get('sigma_pos_m')
+    if _LEAK_CLASS_CACHE is None:
+        try:
+            a = json.load(open(_os.path.join(base, '..', 'gtamapdata', 'leak_cam_audit.json')))
+            _LEAK_CLASS_CACHE = {n: (v or {}).get('constraint_class') for n, v in a.items()}
+        except Exception:
+            _LEAK_CLASS_CACHE = {}
+    cls = _LEAK_CLASS_CACHE.get(cam_name) or ''
+    if cls.startswith(('A_', 'B_', 'C_')):
+        return 0.0
+    return None
+
+
 def residual_dual(cam, mk, xyz):
     """(arcmin, gap_m, dist_m) pour une observation (cam deja instanciee).
     gap_m = ecart transverse du rayon(marking) au point; None si direction
