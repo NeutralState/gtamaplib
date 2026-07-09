@@ -122,6 +122,20 @@ def main():
 
     print("Chargement + build_indices (B-strict)...", file=sys.stderr)
     cameras, landmarks, pixels, lm_tiers = L.load_data()
+    # CYCLE-DETECT-FIX (2026-07-09): les LM demotees par TIERS-SIGMA comptent
+    # encore comme anchor/high pour les ARETES de dependance — la demotion
+    # retire leur poids BA, pas la realite de la dependance. Sans ca, une
+    # demotion (qui depend des covariances du dernier solve) peut MASQUER un
+    # cycle pur du detecteur. Deterministe donne les data.
+    try:
+        import json as _json
+        _full = _json.load(open('tools/generated/confidence_tiers.json'))
+        _lmrec = _full.get('landmarks', _full.get('lms', {}))
+        for _n, _r in _lmrec.items():
+            if str(_r.get('reason', '')).startswith('TIERS-SIGMA demotion'):
+                lm_tiers[_n] = 'high'
+    except Exception:
+        pass
     lm_to_sources, cam_to_sourced, lm_to_anchor_markers, cam_to_anchor_marks = \
         L.build_indices(cameras, landmarks, pixels, lm_tiers)
 
