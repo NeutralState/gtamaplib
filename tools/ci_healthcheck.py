@@ -128,6 +128,33 @@ def main():
                 print(f'    ... +{len(fossils)-5} more (see Triage board)')
         else:
             print('✓ fossils: none')
+        # ── WAR-SCAN light (WARNING only) [WAR-CI-V1, 2026-07-08] ──────
+        # Compte les LM avec >=1 observer en outlier DUAL (ang>15' ET
+        # gap>3m) — version legere du collision_scan pour le CI.
+        try:
+            from common import get_cam, residual_dual, is_excluded_marking
+            import gtamapdata as _md
+            war_lms = set()
+            for _c, _obs in _md.pixels.items():
+                _cam = get_cam(_c)
+                if _cam is None:
+                    continue
+                for _l, _px in _obs.items():
+                    if _px is None or is_excluded_marking(_c, _l):
+                        continue
+                    _xyz = _md.landmarks.get(_l)
+                    if _xyz is None:
+                        continue
+                    _a, _g, _d = residual_dual(_cam, _px, _xyz)
+                    if _a is not None and _a > 15 and (_g is None or _g > 3.0):
+                        war_lms.add(_l)
+            if war_lms:
+                print(f'⚠ wars: {len(war_lms)} LM avec outlier dual '
+                      f'(collision_scan pour le detail)')
+            else:
+                print('✓ wars: aucun outlier dual')
+        except Exception as _e:
+            print(f'  (war-scan light indisponible: {_e})')
     except Exception as e:
         print(f'⚠ fossil scan failed: {e}')
 

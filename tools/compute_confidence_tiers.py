@@ -406,6 +406,33 @@ def _median_m(cam_name):
         _dual_memo[cam_name] = (None, 0) if d is None else (d['median_m'], d['n'])
     return _dual_memo[cam_name]
 
+# ── TIERS-SIGMA-V1 (2026-07-08): demotion des LM a confiance non meritee ──
+# Un LM anchor/high avec sigma_m > 20m (COVARIANCE-V1) a des sources qui
+# s'accordent angulairement mais une geometrie molle (parallaxe faible):
+# sa confiance de tier n'est pas meritee — il ne doit ni peser fort au BA
+# ni cascader des promotions de cams. Symetrique de la promotion V2.
+LM_DEMOTE_SIGMA_M = 20.0
+
+def apply_sigma_demotions(lm_tiers):
+    demoted = []
+    try:
+        from common import lm_sigma_m
+    except Exception:
+        return demoted
+    for lm_name, rec in lm_tiers.items():
+        if rec.get('tier') not in ('anchor', 'high'):
+            continue
+        s = lm_sigma_m(lm_name)
+        if s is not None and s > LM_DEMOTE_SIGMA_M:
+            old_tier = rec['tier']
+            rec['tier'] = 'medium'
+            rec['reason'] = (f'TIERS-SIGMA demotion: sigma {s:.1f}m > '
+                             f'{LM_DEMOTE_SIGMA_M}m (geometrie molle) — etait '
+                             f'{old_tier}: ' + str(rec.get('reason', '?')))
+            demoted.append((s, lm_name, old_tier))
+    return demoted
+
+
 def apply_dual_promotions(cam_tiers):
     promoted = []
     for cam_name, rec in cam_tiers.items():
@@ -442,6 +469,7 @@ def two_pass_classify():
 
     print("Pass 1: classifying landmarks (cam source field only)...")
     lm_tiers = classify_landmarks(source_only_cam_tier)
+    apply_sigma_demotions(lm_tiers)  # TIERS-SIGMA-V1
     cam_tiers = {}
 
     for pass_num in range(2, 7):  # passes 2 through 6
@@ -459,6 +487,7 @@ def two_pass_classify():
             def cam_tier_lookup(cam_name, _ct=cam_tiers):
                 return _ct.get(cam_name, {}).get('tier', 'unknown')
             new_tiers = classify_landmarks(cam_tier_lookup)
+            apply_sigma_demotions(new_tiers)  # TIERS-SIGMA-V1
             changes = sum(1 for l in new_tiers
                           if lm_tiers.get(l, {}).get('tier') != new_tiers[l]['tier'])
             lm_tiers = new_tiers
@@ -491,6 +520,18 @@ def main():
                                else round(d['median_m'], 3))
         if rec.get('reason', '').startswith('DUAL-METRIC promotion'):
             promoted.append((rec['median_res_m'], d['n'] if d else 0, cam_name))
+    lm_demoted = [(None, n) for n, r in lm_tiers.items()
+                  if str(r.get('reason', '')).startswith('TIERS-SIGMA demotion')]
+    try:
+        from common import lm_sigma_m as _lsm
+        lm_demoted = sorted((_lsm(n) or 0, n) for _s, n in lm_demoted)
+    except Exception:
+        pass
+    if lm_demoted:
+        print(f"\n⚑ TIERS-SIGMA-V1: {len(lm_demoted)} LM anchor/high DEMOTES "
+              f"medium (sigma > {LM_DEMOTE_SIGMA_M}m, geometrie molle):")
+        for s, n in lm_demoted:
+            print(f"    {s:6.1f}m  {n}")
     if promoted:
         promoted.sort()
         print(f"\n⚑ DUAL-METRIC-V2: {len(promoted)} cam(s) PROMUES medium "
