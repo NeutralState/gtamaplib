@@ -14,10 +14,15 @@
 # Le tool ne sait pas si le feature est VISIBLE/identifiable dans le frame:
 # skip humain legitime, passe au suivant. Le grind a l'aveugle est mort.
 #
+# [NEXT-CLICK-V2] --pose --cam X: le DUAL — gain sur la POSE de la cam.
+# Prior honnete reconstruit des observations existantes (Jacobien numerique),
+# pas des covariances flattees par les barrieres (lecon JD05). La diversite
+# ANGULAIRE bat la proximite (vecu Rooftop: un pont des Keys a 9.4km vaut
+# 20.8m de gain — direction orthogonale au cluster downtown).
+#
 # Usage:
-#   PYTHONPATH=. python3 tools/audit/next_clicks.py [--top 15]
-#   PYTHONPATH=. python3 tools/audit/next_clicks.py --cam "Motorboats (B)"
-#   PYTHONPATH=. python3 tools/audit/next_clicks.py --zone vice_city
+#   PYTHONPATH=. python3 tools/audit/next_clicks.py [--top 15] [--zone Z]
+#   PYTHONPATH=. python3 tools/audit/next_clicks.py --pose --cam "NomCam"
 import argparse
 import json
 import math
@@ -31,11 +36,127 @@ os.chdir(ROOT)
 sys.path.insert(0, ROOT)
 sys.path.insert(0, os.path.join(ROOT, 'tools'))
 
-from common import get_cam, cam_sigma_pos, is_excluded_marking
+from common import get_cam, cam_sigma_pos, is_excluded_marking, lm_sigma_m
 
 SIGMA_ANG_RAD = math.radians(3.0 / 60.0)   # bruit d'observation ~3 arcmin
 D_MAX = 12000.0
 RANK = {'anchor': 0, 'high': 1, 'medium': 2}
+
+
+def pose_mode(cam_name, top, min_gain):
+    # ── NEXT-CLICK-V2 [2026-07-09]: GAIN DE POSE — le dual du V1 ────────────
+    # Pour consolider une cam faible: chaque clic candidat (LM solide visible)
+    # ajoute Lambda_pose += J^T J / sigma_eff^2, ou J = d(pixel)/d(pose 7p)
+    # numerique et sigma_eff^2 = sigma_clic_px^2 + (sigma_LM projete en px)^2
+    # — cliquer un LM mou enseigne peu. Greedy sur sigma_pos de la cam.
+    import numpy as _np
+    lms = json.load(open('gtamapdata/landmarks.json'))
+    px = json.load(open('gtamapdata/pixels.json'))
+    meta = json.load(open('gtamapdata/cameras.json'))[cam_name]
+    # Prior HONNETE [lecon JD05/barrieres]: les sigmas de covariances.json
+    # incluent les priors du BA (flattes). Ici Lambda_old = ce que les
+    # observations EXISTANTES de la cam contraignent vraiment (meme Jacobien
+    # numerique sur ses markings de LM solides) + prior faible. La geometrie
+    # parle, pas les barrieres.
+    sig7 = _np.array([50., 50., 50., 3., 3., 3., 3.], float)
+    Lam = _np.diag(1.0 / sig7 ** 2)
+    w, h = meta['size']
+    f_px = (w / 2.0) / math.tan(math.radians(meta['fov'][0] / 2.0))
+    SIG_CLICK_PX = 2.0
+    EPS = [0.5, 0.5, 0.5, 0.02, 0.02, 0.02, 0.02]  # m, m, m, deg x4
+
+    def proj(state, xyz):
+        cam = get_cam(cam_name, cam_state=state)
+        return cam.get_pixel(xyz)
+
+    base_state = {'xyz': list(meta['xyz']), 'ypr': list(meta['ypr']),
+                  'fov': [meta['fov'][0], None]}
+
+    def jac_for(xyz_lm):
+        p0 = proj(base_state, xyz_lm)
+        if p0 is None or not (0 <= p0[0] <= w and 0 <= p0[1] <= h):
+            return None, None
+        J = _np.zeros((2, 7))
+        for i in range(7):
+            st2 = {'xyz': list(base_state['xyz']), 'ypr': list(base_state['ypr']),
+                   'fov': [base_state['fov'][0], None]}
+            if i < 3:
+                st2['xyz'][i] += EPS[i]
+            elif i < 6:
+                st2['ypr'][i - 3] += EPS[i]
+            else:
+                st2['fov'][0] += EPS[i]
+            p1 = proj(st2, xyz_lm)
+            if p1 is None:
+                return None, None
+            J[0, i] = (p1[0] - p0[0]) / EPS[i]
+            J[1, i] = (p1[1] - p0[1]) / EPS[i]
+        return J, p0
+
+    n_exist = 0
+    for ln in px.get(cam_name, {}):
+        e = lms.get(ln)
+        if not e or not e.get('xyz') or is_excluded_marking(cam_name, ln):
+            continue
+        s_lm = lm_sigma_m(ln)
+        if s_lm is None:
+            s_lm = 5.0
+        d = math.dist(e['xyz'], meta['xyz'])
+        if d < 1.0:
+            continue
+        J, p0 = jac_for(e['xyz'])
+        if J is None:
+            continue
+        sig_lm_px = (s_lm / d) * f_px
+        Lam += (J.T @ J) / (SIG_CLICK_PX ** 2 + sig_lm_px ** 2)
+        n_exist += 1
+    cands = []
+    for ln, e in lms.items():
+        if not e or not e.get('xyz') or ln in px.get(cam_name, {}):
+            continue
+        if is_excluded_marking(cam_name, ln):
+            continue
+        s_lm = lm_sigma_m(ln)
+        if s_lm is None:
+            s_lm = 5.0
+        d = math.dist(e['xyz'], meta['xyz'])
+        if d < 1.0 or d > D_MAX:
+            continue
+        J, p0 = jac_for(e['xyz'])
+        if J is None:
+            continue
+        sig_lm_px = (s_lm / d) * f_px
+        w_eff = 1.0 / (SIG_CLICK_PX ** 2 + sig_lm_px ** 2)
+        cands.append((ln, p0, d, s_lm, J, w_eff))
+
+    def spos(L):
+        try:
+            S = _np.linalg.inv(L)
+            return float(math.sqrt(max(S[0, 0] + S[1, 1] + S[2, 2], 0.0)))
+        except Exception:
+            return float('inf')
+
+    print(f'NEXT-CLICK-V2 (gain de POSE) — {cam_name}')
+    print(f'  sigma_pos GEOMETRIQUE (obs existantes: {n_exist}): {spos(Lam):.1f}m | {len(cands)} clics candidats\n')
+    chosen = 0
+    while cands and chosen < top:
+        s0 = spos(Lam)
+        best = None
+        for i, (ln, p0, d, s_lm, J, w_eff) in enumerate(cands):
+            L2 = Lam + (J.T @ J) * w_eff
+            g = s0 - spos(L2)
+            if best is None or g > best[0]:
+                best = (g, i, L2)
+        g, i, L2 = best
+        if g < min_gain:
+            break
+        ln, p0, d, s_lm, J, w_eff = cands.pop(i)
+        Lam = L2
+        chosen += 1
+        print(f'  #{chosen} gain {g:6.1f}m  sigma_pos -> {spos(Lam):5.1f}m   '
+              f'{ln} (s_lm {s_lm:.1f}m)')
+        print(f'      -> @({p0[0]:.0f},{p0[1]:.0f}), {d:.0f}m')
+    print(f'\n  sigma_pos final si tout clique: {spos(Lam):.1f}m')
 
 
 def main():
@@ -44,7 +165,14 @@ def main():
     ap.add_argument('--cam', default=None, help='limiter aux clics sur cette cam')
     ap.add_argument('--zone', default=None)
     ap.add_argument('--min-gain', type=float, default=0.5, help='gain minimal (m)')
+    ap.add_argument('--pose', action='store_true',
+                    help='NEXT-CLICK-V2: gain de POSE de --cam (consolidation)')
     args = ap.parse_args()
+    if args.pose:
+        if not args.cam:
+            sys.exit('--pose exige --cam')
+        pose_mode(args.cam, args.top, args.min_gain)
+        return
 
     lms = json.load(open('gtamapdata/landmarks.json'))
     px = json.load(open('gtamapdata/pixels.json'))
