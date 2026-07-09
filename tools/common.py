@@ -129,6 +129,25 @@ def lm_sigma_m(lm_name):
     return None if e is None else e.get('sigma_m')
 
 
+# ── PROVENANCE-V2 (2026-07-08): journal append-only ─────────────────────
+# Chaque ecriture outillee loggue dans gtamapdata/events.jsonl (commite).
+# Historique de provenance ET filet de recuperation (la quarantaine
+# d'orphelins loggue l'ancien xyz -> reversible).
+
+def log_event(tool, action, **payload):
+    import os as _os, datetime as _dt
+    base = _os.path.dirname(_os.path.abspath(__file__))
+    p = _os.path.join(base, '..', 'gtamapdata', 'events.jsonl')
+    ev = {'ts': _dt.datetime.now().isoformat(timespec='seconds'),
+          'tool': tool, 'action': action}
+    ev.update(payload)
+    try:
+        with open(p, 'a') as f:
+            f.write(json.dumps(ev, ensure_ascii=True) + '\n')
+    except Exception:
+        pass
+
+
 _COV_CACHE_CAMS = None
 _LEAK_CLASS_CACHE = None
 

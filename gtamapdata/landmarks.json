@@ -752,14 +752,8 @@
     "author": "rlx"
   },
   "Big Cat Cage Roof": {
-    "xyz": [
-      -716.491,
-      1324.161,
-      13.204
-    ],
-    "source_cameras": [
-      "Sidewalk (Jason) (S)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": null,
     "zone": "vice_city",
     "author": "rlx"
@@ -1062,14 +1056,8 @@
     }
   },
   "Elephant": {
-    "xyz": [
-      -376.573,
-      1279.046,
-      3.687
-    ],
-    "source_cameras": [
-      "Sidewalk (Jason) (S)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": null,
     "zone": "vice_city",
     "author": "rlx"
@@ -1157,14 +1145,8 @@
     "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
   },
   "Four Seasons Hotel Miami (E)": {
-    "xyz": [
-      -816.3804,
-      -1317.3545,
-      257.5709
-    ],
-    "source_cameras": [
-      "(legacy: Penthouse (SE))"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": null,
     "zone": "vice_city",
     "author": "rlx"
@@ -1406,14 +1388,8 @@
     "author": "rlx"
   },
   "Liquor Store": {
-    "xyz": [
-      -662.87,
-      1219.216,
-      3.009
-    ],
-    "source_cameras": [
-      "Sidewalk (Jason) (S)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": null,
     "zone": "vice_city",
     "author": "rlx"
@@ -1842,14 +1818,8 @@
     "author": "rlx"
   },
   "Sidewalk Creep": {
-    "xyz": [
-      -667.412,
-      1087.195,
-      2.47
-    ],
-    "source_cameras": [
-      "Sidewalk (Jason) (S)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": null,
     "zone": "vice_city",
     "author": "rlx"
@@ -1896,27 +1866,15 @@
     "author": "rlx"
   },
   "Sunshine Skyway Bridge (SR)": {
-    "xyz": [
-      -6690.837,
-      4348.569,
-      33.585
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": null,
     "zone": "port_gellhorn",
     "author": "rlx"
   },
   "Sunshine Skyway Bridge (SSR)": {
-    "xyz": [
-      -6654.03,
-      4221.579,
-      30.96
-    ],
-    "source_cameras": [
-      "Diner (W) (A)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": null,
     "zone": "port_gellhorn",
     "author": "rlx"
@@ -2018,14 +1976,8 @@
     "author": "rlx"
   },
   "Unknown Object": {
-    "xyz": [
-      -2575.5,
-      -49.8,
-      5.9
-    ],
-    "source_cameras": [
-      "(legacy: Gizmo)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": null,
     "zone": "vice_city",
     "author": "rlx"
@@ -2216,14 +2168,8 @@
     "author": "rlx"
   },
   "Wyman (Pool)": {
-    "xyz": [
-      -5322.43,
-      3472.47,
-      66.79
-    ],
-    "source_cameras": [
-      "Pool"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": null,
     "zone": "port_gellhorn",
     "author": "rlx"
@@ -2390,9 +2336,9 @@
   },
   "Island V (S)": {
     "xyz": [
-      -3727.703160265101,
-      -5910.164240518859,
-      -1.463975873966671
+      -3727.6736159505904,
+      -5910.119548033847,
+      -1.4653694366522447
     ],
     "source_cameras": [
       "Key Lento",
@@ -5066,9 +5012,9 @@
   },
   "Asia Brickell Key": {
     "xyz": [
-      -119.15266631358145,
-      -882.1140084278899,
-      184.11058896893184
+      -119.15831081933085,
+      -882.1166840870345,
+      184.11069783576355
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -5975,9 +5921,9 @@
   },
   "InterContinental Miami (N)": {
     "xyz": [
-      -255.41229350377623,
-      -461.7511901073967,
-      132.09380947904154
+      -255.4305894171661,
+      -461.76746047163044,
+      132.09422128320878
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -6375,9 +6321,9 @@
   },
   "Nine at Mary Brickell Village (E)": {
     "xyz": [
-      -1066.3285081849435,
-      -1034.864058212115,
-      118.79089064134142
+      -1066.3272502727993,
+      -1034.865019184774,
+      118.79075470817837
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -6592,14 +6538,8 @@
     }
   },
   "PTCC (1) (BB2)": {
-    "xyz": [
-      -8261.673,
-      4785.312,
-      40.5
-    ],
-    "source_cameras": [
-      "Port Gellhorn Postcard (X)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": null,
     "zone": "port_gellhorn",
     "author": "rlx"
@@ -7353,9 +7293,9 @@
   },
   "Three Tequesta Point": {
     "xyz": [
-      -0.7979706773337386,
-      -944.515695454657,
-      206.39026547651508
+      -0.8027507936878425,
+      -944.5173820518695,
+      206.39038729157434
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -8642,9 +8582,9 @@
   },
   "City View Parking Garage (S)": {
     "xyz": [
-      -185.03251760741705,
-      2061.4476052089512,
-      34.0325424843995
+      -185.06204991871914,
+      2061.415528605911,
+      34.03071565534124
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8655,9 +8595,9 @@
   },
   "City View Parking Garage (SE)": {
     "xyz": [
-      -159.2273198528111,
-      2059.6547066578114,
-      33.96338166155532
+      -159.19779429510507,
+      2059.6842440982864,
+      33.96507770951868
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -9198,21 +9138,13 @@
     "zone": "vice_city"
   },
   "sss": {
-    "xyz": [
-      0.0,
-      0.0,
-      0.0
-    ],
+    "xyz": null,
     "source_cameras": [],
     "error_m": null,
     "zone": "unknown"
   },
   "Allied Crystal Pointy Building (N)": {
-    "xyz": [
-      0.0,
-      0.0,
-      0.0
-    ],
+    "xyz": null,
     "source_cameras": [],
     "error_m": null,
     "zone": "unknown"
@@ -9286,14 +9218,8 @@
     "zone": "port_gellhorn"
   },
   "Bank of America Financial Center (Downtown)": {
-    "xyz": [
-      -2785.5236,
-      -120.4853,
-      0.0
-    ],
-    "source_cameras": [
-      "Airport (X)"
-    ],
+    "xyz": null,
+    "source_cameras": [],
     "error_m": null,
     "zone": "vice_city"
   },
@@ -9350,9 +9276,9 @@
   },
   "Four Seasons Hotel Miami (32NE)": {
     "xyz": [
-      -797.2310247510477,
-      -1275.4632753270769,
-      155.8795544834599
+      -797.2303097299053,
+      -1275.4638018108105,
+      155.8794178040123
     ],
     "source_cameras": [
       "Tennis Stadium (4K)",
@@ -9379,9 +9305,9 @@
   },
   "Four Seasons Hotel Miami (HB28SE)": {
     "xyz": [
-      -815.3652126609494,
-      -1314.7171746376653,
-      140.12421646897698
+      -815.3645176484727,
+      -1314.717630732861,
+      140.12410748766794
     ],
     "source_cameras": [
       "Tennis Stadium (4K)",
@@ -9435,17 +9361,9 @@
     "zone": "unknown"
   },
   "Hotel Victor (SE)": {
-    "xyz": [
-      1975.3296,
-      736.2734,
-      42.1067
-    ],
-    "source_cameras": [
-      "Park",
-      "Beach",
-      "Dominion Hotel"
-    ],
-    "error_m": 0.102,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "unknown"
   },
   "Portofino Tower (NE)": {
@@ -9475,1587 +9393,795 @@
     "zone": "vice_city"
   },
   "Portofino Tower (B-frontL-NW)": {
-    "xyz": [
-      1703.7303,
-      -211.3711,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (B-frontR-NW)": {
-    "xyz": [
-      1709.6406,
-      -188.7298,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (B-innerL-NW)": {
-    "xyz": [
-      1723.7591,
-      -216.5994,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (B-innerR-NW)": {
-    "xyz": [
-      1729.6694,
-      -193.9581,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (L-frontL-NW)": {
-    "xyz": [
-      1703.7303,
-      -211.3711,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (L-frontR-NW)": {
-    "xyz": [
-      1709.6406,
-      -188.7298,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (L-innerL-NW)": {
-    "xyz": [
-      1723.7591,
-      -216.5994,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (L-innerR-NW)": {
-    "xyz": [
-      1729.6694,
-      -193.9581,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (K-frontL-NW)": {
-    "xyz": [
-      1703.7303,
-      -211.3711,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (K-frontR-NW)": {
-    "xyz": [
-      1709.6406,
-      -188.7298,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (K-innerL-NW)": {
-    "xyz": [
-      1723.7591,
-      -216.5994,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (K-innerR-NW)": {
-    "xyz": [
-      1729.6694,
-      -193.9581,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (M-frontL-NW)": {
-    "xyz": [
-      1703.7303,
-      -211.3711,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (M-frontR-NW)": {
-    "xyz": [
-      1709.6406,
-      -188.7298,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (M-innerL-NW)": {
-    "xyz": [
-      1723.7591,
-      -216.5994,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (M-innerR-NW)": {
-    "xyz": [
-      1729.6694,
-      -193.9581,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (P-frontL-NW)": {
-    "xyz": [
-      1703.7303,
-      -211.3711,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (P-frontR-NW)": {
-    "xyz": [
-      1709.6406,
-      -188.7298,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (P-innerL-NW)": {
-    "xyz": [
-      1723.7591,
-      -216.5994,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (P-innerR-NW)": {
-    "xyz": [
-      1729.6694,
-      -193.9581,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (B-frontL-NE)": {
-    "xyz": [
-      1743.5571,
-      -179.4767,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (B-frontR-NE)": {
-    "xyz": [
-      1760.1466,
-      -195.9797,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (B-innerL-NE)": {
-    "xyz": [
-      1728.9583,
-      -194.1521,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (B-innerR-NE)": {
-    "xyz": [
-      1745.5479,
-      -210.655,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (L-frontL-NE)": {
-    "xyz": [
-      1743.5571,
-      -179.4767,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (L-frontR-NE)": {
-    "xyz": [
-      1760.1466,
-      -195.9797,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (L-innerL-NE)": {
-    "xyz": [
-      1728.9583,
-      -194.1521,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (L-innerR-NE)": {
-    "xyz": [
-      1745.5479,
-      -210.655,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (K-frontL-NE)": {
-    "xyz": [
-      1743.5571,
-      -179.4767,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (K-frontR-NE)": {
-    "xyz": [
-      1760.1466,
-      -195.9797,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (K-innerL-NE)": {
-    "xyz": [
-      1728.9583,
-      -194.1521,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (K-innerR-NE)": {
-    "xyz": [
-      1745.5479,
-      -210.655,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (M-frontL-NE)": {
-    "xyz": [
-      1743.5571,
-      -179.4767,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (M-frontR-NE)": {
-    "xyz": [
-      1760.1466,
-      -195.9797,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (M-innerL-NE)": {
-    "xyz": [
-      1728.9583,
-      -194.1521,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (M-innerR-NE)": {
-    "xyz": [
-      1745.5479,
-      -210.655,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (P-frontL-NE)": {
-    "xyz": [
-      1743.5571,
-      -179.4767,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (P-frontR-NE)": {
-    "xyz": [
-      1760.1466,
-      -195.9797,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (P-innerL-NE)": {
-    "xyz": [
-      1728.9583,
-      -194.1521,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (P-innerR-NE)": {
-    "xyz": [
-      1745.5479,
-      -210.655,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (B-frontL-S)": {
-    "xyz": [
-      1751.1758,
-      -229.861,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (B-frontR-S)": {
-    "xyz": [
-      1728.5933,
-      -235.9923,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (B-innerL-S)": {
-    "xyz": [
-      1745.752,
-      -209.8842,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (B-innerR-S)": {
-    "xyz": [
-      1723.1695,
-      -216.0155,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (L-frontL-S)": {
-    "xyz": [
-      1751.1758,
-      -229.861,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (L-frontR-S)": {
-    "xyz": [
-      1728.5933,
-      -235.9923,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (L-innerL-S)": {
-    "xyz": [
-      1745.752,
-      -209.8842,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (L-innerR-S)": {
-    "xyz": [
-      1723.1695,
-      -216.0155,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (K-frontL-S)": {
-    "xyz": [
-      1751.1758,
-      -229.861,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (K-frontR-S)": {
-    "xyz": [
-      1728.5933,
-      -235.9923,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (K-innerL-S)": {
-    "xyz": [
-      1745.752,
-      -209.8842,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (K-innerR-S)": {
-    "xyz": [
-      1723.1695,
-      -216.0155,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (M-frontL-S)": {
-    "xyz": [
-      1751.1758,
-      -229.861,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (M-frontR-S)": {
-    "xyz": [
-      1728.5933,
-      -235.9923,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (M-innerL-S)": {
-    "xyz": [
-      1745.752,
-      -209.8842,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (M-innerR-S)": {
-    "xyz": [
-      1723.1695,
-      -216.0155,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (P-frontL-S)": {
-    "xyz": [
-      1751.1758,
-      -229.861,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (P-frontR-S)": {
-    "xyz": [
-      1728.5933,
-      -235.9923,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (P-innerL-S)": {
-    "xyz": [
-      1745.752,
-      -209.8842,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (P-innerR-S)": {
-    "xyz": [
-      1723.1695,
-      -216.0155,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-B-cyl0)": {
-    "xyz": [
-      1732.81,
-      -198.77,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-B-cyl1)": {
-    "xyz": [
-      1738.5376,
-      -201.1424,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-B-cyl2)": {
-    "xyz": [
-      1740.91,
-      -206.87,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-B-cyl3)": {
-    "xyz": [
-      1738.5376,
-      -212.5976,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-B-cyl4)": {
-    "xyz": [
-      1732.81,
-      -214.97,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-B-cyl5)": {
-    "xyz": [
-      1727.0824,
-      -212.5976,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-B-cyl6)": {
-    "xyz": [
-      1724.71,
-      -206.87,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-B-cyl7)": {
-    "xyz": [
-      1727.0824,
-      -201.1424,
-      -15.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-L-cyl0)": {
-    "xyz": [
-      1732.81,
-      -198.77,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-L-cyl1)": {
-    "xyz": [
-      1738.5376,
-      -201.1424,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-L-cyl2)": {
-    "xyz": [
-      1740.91,
-      -206.87,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-L-cyl3)": {
-    "xyz": [
-      1738.5376,
-      -212.5976,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-L-cyl4)": {
-    "xyz": [
-      1732.81,
-      -214.97,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-L-cyl5)": {
-    "xyz": [
-      1727.0824,
-      -212.5976,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-L-cyl6)": {
-    "xyz": [
-      1724.71,
-      -206.87,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-L-cyl7)": {
-    "xyz": [
-      1727.0824,
-      -201.1424,
-      14.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-K-cyl0)": {
-    "xyz": [
-      1732.81,
-      -198.77,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-K-cyl1)": {
-    "xyz": [
-      1738.5376,
-      -201.1424,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-K-cyl2)": {
-    "xyz": [
-      1740.91,
-      -206.87,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-K-cyl3)": {
-    "xyz": [
-      1738.5376,
-      -212.5976,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-K-cyl4)": {
-    "xyz": [
-      1732.81,
-      -214.97,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-K-cyl5)": {
-    "xyz": [
-      1727.0824,
-      -212.5976,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-K-cyl6)": {
-    "xyz": [
-      1724.71,
-      -206.87,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-K-cyl7)": {
-    "xyz": [
-      1727.0824,
-      -201.1424,
-      83.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-M-cyl0)": {
-    "xyz": [
-      1732.81,
-      -198.77,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-M-cyl1)": {
-    "xyz": [
-      1738.5376,
-      -201.1424,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-M-cyl2)": {
-    "xyz": [
-      1740.91,
-      -206.87,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-M-cyl3)": {
-    "xyz": [
-      1738.5376,
-      -212.5976,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-M-cyl4)": {
-    "xyz": [
-      1732.81,
-      -214.97,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-M-cyl5)": {
-    "xyz": [
-      1727.0824,
-      -212.5976,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-M-cyl6)": {
-    "xyz": [
-      1724.71,
-      -206.87,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-M-cyl7)": {
-    "xyz": [
-      1727.0824,
-      -201.1424,
-      91.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-P-cyl0)": {
-    "xyz": [
-      1732.81,
-      -198.77,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-P-cyl1)": {
-    "xyz": [
-      1738.5376,
-      -201.1424,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-P-cyl2)": {
-    "xyz": [
-      1740.91,
-      -206.87,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-P-cyl3)": {
-    "xyz": [
-      1738.5376,
-      -212.5976,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-P-cyl4)": {
-    "xyz": [
-      1732.81,
-      -214.97,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-P-cyl5)": {
-    "xyz": [
-      1727.0824,
-      -212.5976,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-P-cyl6)": {
-    "xyz": [
-      1724.71,
-      -206.87,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-P-cyl7)": {
-    "xyz": [
-      1727.0824,
-      -201.1424,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-CT-cyl0)": {
-    "xyz": [
-      1732.81,
-      -198.77,
-      137.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-CT-cyl1)": {
-    "xyz": [
-      1738.5376,
-      -201.1424,
-      137.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-CT-cyl2)": {
-    "xyz": [
-      1740.91,
-      -206.87,
-      137.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-CT-cyl3)": {
-    "xyz": [
-      1738.5376,
-      -212.5976,
-      137.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-CT-cyl4)": {
-    "xyz": [
-      1732.81,
-      -214.97,
-      137.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-CT-cyl5)": {
-    "xyz": [
-      1727.0824,
-      -212.5976,
-      137.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-CT-cyl6)": {
-    "xyz": [
-      1724.71,
-      -206.87,
-      137.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (cyl-CT-cyl7)": {
-    "xyz": [
-      1727.0824,
-      -201.1424,
-      137.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PB-pbOL-NW)": {
-    "xyz": [
-      1709.8815,
-      -200.8847,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PB-pbOR-NW)": {
-    "xyz": [
-      1716.7837,
-      -196.8401,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PB-pbIL-NW)": {
-    "xyz": [
-      1713.9261,
-      -207.787,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PB-pbIR-NW)": {
-    "xyz": [
-      1720.8284,
-      -203.7423,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PT-pbOL-NW)": {
-    "xyz": [
-      1709.8815,
-      -200.8847,
-      142.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PT-pbOR-NW)": {
-    "xyz": [
-      1716.7837,
-      -196.8401,
-      142.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PT-pbIL-NW)": {
-    "xyz": [
-      1713.9261,
-      -207.787,
-      142.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PT-pbIR-NW)": {
-    "xyz": [
-      1720.8284,
-      -203.7423,
-      142.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PB-pbOL-NE)": {
-    "xyz": [
-      1749.5223,
-      -190.07,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PB-pbOR-NE)": {
-    "xyz": [
-      1749.5432,
-      -198.07,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PB-pbIL-NE)": {
-    "xyz": [
-      1741.5223,
-      -190.0909,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PB-pbIR-NE)": {
-    "xyz": [
-      1741.5433,
-      -198.0909,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PT-pbOL-NE)": {
-    "xyz": [
-      1749.5223,
-      -190.07,
-      142.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PT-pbOR-NE)": {
-    "xyz": [
-      1749.5432,
-      -198.07,
-      142.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PT-pbIL-NE)": {
-    "xyz": [
-      1741.5223,
-      -190.0909,
-      142.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PT-pbIR-NE)": {
-    "xyz": [
-      1741.5433,
-      -198.0909,
-      142.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PB-pbOL-S)": {
-    "xyz": [
-      1739.0191,
-      -229.7389,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PB-pbOR-S)": {
-    "xyz": [
-      1732.0776,
-      -225.7619,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PB-pbIL-S)": {
-    "xyz": [
-      1742.9961,
-      -222.7975,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PB-pbIR-S)": {
-    "xyz": [
-      1736.0546,
-      -218.8205,
-      125.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PT-pbOL-S)": {
-    "xyz": [
-      1739.0191,
-      -229.7389,
-      142.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PT-pbOR-S)": {
-    "xyz": [
-      1732.0776,
-      -225.7619,
-      142.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PT-pbIL-S)": {
-    "xyz": [
-      1742.9961,
-      -222.7975,
-      142.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "Portofino Tower (PT-pbIR-S)": {
-    "xyz": [
-      1736.0546,
-      -218.8205,
-      142.0
-    ],
-    "source_cameras": [
-      "CONSTRUCTED_FINAL_FIT"
-    ],
-    "error_m": 0.0,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "vice_city"
   },
   "1000 Venetian Way (B-NW)": {
@@ -11480,9 +10606,9 @@
       "Metro (SE) (B)"
     ],
     "xyz": [
-      -825.1678606127717,
-      -1140.1747720048638,
-      171.89900709483615
+      -825.1677119235087,
+      -1140.1749335986449,
+      171.8990283115878
     ],
     "zone": null
   },
@@ -11615,9 +10741,9 @@
       "Metro (SE) (C)"
     ],
     "xyz": [
-      -978.3353427095692,
-      -1410.7542097251232,
-      174.85222371941524
+      -978.3350148867993,
+      -1410.7548189283737,
+      174.85224252006566
     ],
     "zone": null
   },
@@ -12198,9 +11324,9 @@
       "Port Vice City (B)"
     ],
     "xyz": [
-      -445.5433408335713,
-      -166.3714382636979,
-      92.42518556693948
+      -445.55035316545235,
+      -166.37280755510068,
+      92.42519677938516
     ],
     "zone": null
   },

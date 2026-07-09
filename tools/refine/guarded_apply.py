@@ -207,6 +207,12 @@ def main():
         if cur is None or list(cur) != list(xyz):
             md.update_landmark(ln, xyz)
             n_l += 1
+    try:
+        from common import log_event
+        log_event('guarded_apply', 'apply', n_cams=n_c, n_lms=n_l,
+                  n_accepted=len(accepted))
+    except Exception:
+        pass
     print(f"\nAPPLIED: {n_c} cams, {n_l} landmarks written (backups .bak_guarded).")
 
 

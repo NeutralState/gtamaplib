@@ -281,6 +281,12 @@ def main():
                 cur[lm]['xyz'][2] = float(zc['value'])
                 with open('gtamapdata/landmarks.json', 'w') as fh:
                     json.dump(cur, fh, indent=2, ensure_ascii=True); fh.write('\n')
+            try:
+                from common import log_event
+                log_event('collision_scan', 'war_fix', lm=lm, excl=f['excl'],
+                          resid=round(resid, 3), delta_m=round(delta, 2))
+            except Exception:
+                pass
             print(f"  APPLIED {lm}: excl {f['excl']}, retri {resid:.2f}' / {delta:.1f}m")
             applied += 1
         else:

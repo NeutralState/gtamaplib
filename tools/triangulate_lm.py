@@ -499,6 +499,13 @@ def main():
     with open(LANDMARKS_JSON, 'w') as f:
         json.dump(landmarks, f, indent=2)
 
+    try:
+        from common import log_event
+        log_event('triangulate_lm', 'retriangulate', lm=args.lm_name,
+                  old_xyz=cur_xyz, new_xyz=[round(v, 4) for v in new_xyz],
+                  kept=kept, max_res=round(max_res, 3))
+    except Exception:
+        pass
     print(f"APPLIED: landmarks.json updated.")
     return 0
 
