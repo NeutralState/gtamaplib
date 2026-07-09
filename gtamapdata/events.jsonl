@@ -149,3 +149,8 @@
 {"ts": "2026-07-08T21:11:04", "tool": "guarded_apply", "action": "apply", "n_cams": 1, "n_lms": 5, "n_accepted": 5}
 {"ts": "2026-07-08T21:25:20", "tool": "triangulate_lm", "action": "retriangulate", "lm": "C. Clyde Atkins U.S Courthouse (SE)", "old_xyz": null, "new_xyz": [-701.7323, 775.7343, 51.4732], "kept": ["Jason Duval 05 (Machine Gun)", "Port Vice City (A)"], "max_res": 4.646}
 {"ts": "2026-07-08T21:26:34", "tool": "guarded_apply", "action": "apply", "n_cams": 3, "n_lms": 8, "n_accepted": 6}
+{"ts": "2026-07-08T21:29:11", "tool": "triangulate_lm", "action": "retriangulate", "lm": "C. Clyde Atkins U.S Courthouse (SE)", "old_xyz": [-701.7323487160079, 775.734346338337, 51.47319799022611], "new_xyz": [-701.7323, 775.7343, 51.4732], "kept": ["Jason Duval 05 (Machine Gun)", "Port Vice City (A)"], "max_res": 4.646}
+{"ts": "2026-07-08T21:50:20", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Marquis Miami (SE)", "old_xyz": [-459.448502833097, 524.7583025423228, 174.3858014207624], "new_xyz": [-459.2548, 524.8478, 174.5], "kept": ["Vice City 03 (Basketball)", "Port Vice City (B)"], "max_res": 3.278}
+{"ts": "2026-07-08T21:50:21", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Highway Sign (404) (BL)", "old_xyz": [-114.63141809196566, 550.4872075751246, 32.30062040979998], "new_xyz": [-114.6314, 550.4872, 32.3006], "kept": ["Convertible", "Vice City 08 (Ferris Wheel)"], "max_res": 6.604}
+{"ts": "2026-07-08T21:50:21", "tool": "collision_scan", "action": "war_fix", "lm": "Highway Sign (404) (BL)", "excl": ["Shitzu Squalo 01 (Bay)"], "resid": 6.604, "delta_m": 0.0}
+{"ts": "2026-07-08T21:51:17", "tool": "guarded_apply", "action": "apply", "n_cams": 3, "n_lms": 12, "n_accepted": 9}
