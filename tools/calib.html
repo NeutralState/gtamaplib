@@ -5618,11 +5618,13 @@ window.addEventListener('load', () => {
       // (state changes after every add_pixel)
       let d1 = null;
       try {
-        const r = await fetch('/api/lm_projections?cam=' + encodeURIComponent(cam1) + '&mode=assist');
+        const r = await fetch('/api/lm_projections?cam=' + encodeURIComponent(cam1) + '&mode=assist' +
+                              (window._assistSmart === false ? '&smart=0' : ''));   // [ASSIST-SMART-V1]
         d1 = await r.json();
       } catch (e) { d1 = null; }
       ghostMarkers1 = (d1 && d1.projections) || [];
       ghostMarkers2 = [];
+      window._assistHidden = (d1 && d1.smart_hidden) || 0;   // [ASSIST-SMART-V1]
       renderAssistPanel(ghostMarkers1);
     } else {
       ghostMarkers1 = [];
@@ -5666,6 +5668,17 @@ window.addEventListener('load', () => {
     if (!list) return;
     const pts = ghosts.filter(g => g.priority === 1 || g.priority === 2).slice(0, 30);
     list.innerHTML = '';
+    // [ASSIST-SMART-V1] footer: compte des masques + toggle
+    const smartOn = window._assistSmart !== false;
+    const hid = window._assistHidden || 0;
+    const foot = document.createElement('div');
+    foot.className = 'ap-note';
+    foot.style.cursor = 'pointer';
+    foot.textContent = smartOn
+      ? ('smart: ' + hid + ' ghost(s) masques (occlusion/sub-res) — clic pour tout montrer')
+      : 'smart OFF (tout affiche) — clic pour reactiver';
+    foot.onclick = () => { window._assistSmart = !smartOn; window._refreshGhosts && window._refreshGhosts(); };
+    list.appendChild(foot);
     for (const g of pts) {
       const row = document.createElement('div');
       row.className = 'ap-row ap-p' + g.priority;

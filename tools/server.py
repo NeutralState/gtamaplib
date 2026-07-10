@@ -1662,6 +1662,17 @@ class Handler(BaseHTTPRequestHandler):
             # filter_cam; every projectable unmarked LM is returned with a
             # priority score describing what marking it would unlock.
             assist = qs.get('mode', [''])[0] == 'assist'
+            # [ASSIST-SMART-V1] filtres intelligents (assist seulement,
+            # debrayables par &smart=0): sub-resolution + occlusion pairwise.
+            smart = assist and qs.get('smart', ['1'])[0] != '0'
+            _smart_hidden = 0
+            _f_px = None
+            try:
+                _hfov = md.cameras[cam_name].get('fov', [None])[0]
+                if _hfov:
+                    _f_px = (target_w / 2.0) / math.tan(math.radians(_hfov / 2.0))
+            except Exception:
+                pass
             _tiers_path = os.path.join(TOOL_DIR, 'generated', 'confidence_tiers.json')
             _lm_tier, _cam_meta = {}, {}
             if assist and os.path.exists(_tiers_path):
@@ -1724,6 +1735,13 @@ class Handler(BaseHTTPRequestHandler):
                         'type': 'point',
                         'pixel': [x, y],
                     }
+                    if smart and target_cam.xyz is not None:
+                        _dx = [lm_xyz[k] - target_cam.xyz[k] for k in range(3)]
+                        _d = math.sqrt(sum(v * v for v in _dx))
+                        if _f_px and _d > 1.0 and (6.0 / _d) * _f_px < 2.0:
+                            _smart_hidden += 1
+                            continue
+                        _entry['_d'] = _d
                     if assist:
                         _p, _r = _assist_score(lm_name, len(src_cams))
                         _entry.update({'priority': _p, 'reason': _r,
@@ -1782,9 +1800,30 @@ class Handler(BaseHTTPRequestHandler):
 
             if assist:
                 projections.sort(key=lambda p: (p.get('priority', 3), p['name']))
+            # [ASSIST-SMART-V1] occlusion pairwise sur les points projetes
+            if smart:
+                _pts = [p for p in projections if p.get('_d') is not None]
+                _drop = set()
+                for _i in range(len(_pts)):
+                    for _j in range(len(_pts)):
+                        if _i == _j or _pts[_i]['name'] in _drop:
+                            continue
+                        _a, _b = _pts[_i], _pts[_j]
+                        if _a['_d'] > 1.35 * _b['_d']:
+                            _dpx = math.hypot(_a['pixel'][0] - _b['pixel'][0],
+                                              _a['pixel'][1] - _b['pixel'][1])
+                            if _dpx < 18.0:
+                                _drop.add(_a['name'])
+                                break
+                if _drop:
+                    _smart_hidden += len(_drop)
+                    projections = [p for p in projections if p.get('name') not in _drop]
+            for _p in projections:
+                _p.pop('_d', None)
             self.send_json({
                 'cam': cam_name,
                 'cam_size': [target_w, target_h],
+                'smart_hidden': _smart_hidden if smart else None,
                 'projections': projections,
             })
 
