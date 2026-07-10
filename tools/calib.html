@@ -5933,10 +5933,15 @@ window.addEventListener('load', () => {
     loupe.style.top = ly + 'px';
     loupeCtx.fillStyle = '#000';
     loupeCtx.fillRect(0, 0, LOUPE, LOUPE);
-    if (im.complete && im.naturalWidth) {
+    // [LOUPE-GL-V1] si l'image-adjust est actif, la loupe lit le canvas GL
+    // (meme resolution que l'img, coords 1:1) — tu zoomes sur ce que tu VOIS.
+    const _adjCv = document.getElementById('mkadj-gl');
+    const _useGl = _adjCv && _adjCv.style.display === 'block' && _adjCv.width > 0;
+    const _srcEl = _useGl ? _adjCv : im;
+    if (_useGl || (im.complete && im.naturalWidth)) {
       const src = LOUPE / MAG;
       loupeCtx.imageSmoothingEnabled = false;
-      loupeCtx.drawImage(im, px[0] - src / 2, px[1] - src / 2, src, src, 0, 0, LOUPE, LOUPE);
+      loupeCtx.drawImage(_srcEl, px[0] - src / 2, px[1] - src / 2, src, src, 0, 0, LOUPE, LOUPE);
     }
     loupeCtx.strokeStyle = '#4ade80'; loupeCtx.lineWidth = 1;
     loupeCtx.beginPath();
@@ -6654,7 +6659,7 @@ window.addEventListener('load', () => {
   glCanvas.id = 'mkadj-gl';
   glCanvas.style.cssText = 'display:none;pointer-events:none';
   frameImg.parentNode.insertBefore(glCanvas, frameImg.nextSibling);
-  const gl = glCanvas.getContext('webgl', { premultipliedAlpha: false });
+  const gl = glCanvas.getContext('webgl', { premultipliedAlpha: false, preserveDrawingBuffer: true });
   let prog = null, tex = null, texCam = null, uni = {};
   const VS = 'attribute vec2 p;varying vec2 t;void main(){t=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}';
   const FS = [
@@ -6800,5 +6805,48 @@ window.addEventListener('load', () => {
 })();
 </script>
 
+
+<!-- [VERDICT-V1] toast de verdict instantane au clic (wrapper fetch, zero
+     modification des sites d'appel existants). -->
+<div id="vd-toast" style="display:none;position:fixed;bottom:26px;left:50%;transform:translateX(-50%);
+     z-index:500;padding:8px 16px;border-radius:8px;font-family:var(--mono,monospace);font-size:12.5px;
+     box-shadow:0 6px 24px #000c;pointer-events:none;border:1px solid"></div>
+<script>
+(function () {
+  const toast = document.getElementById('vd-toast');
+  let timer = null;
+  function show(lm, v) {
+    let col, icon, msg;
+    if (v.arcmin < 4)       { col = '#4ade80'; icon = '\u2713'; msg = 'solide'; }
+    else if (v.arcmin < 12) { col = '#f59e0b'; icon = '\u26a0'; msg = 'a verifier'; }
+    else                    { col = '#f87171'; icon = '\u2715'; msg = 'mauvais feature?'; }
+    const m = v.meters != null ? ' / ' + v.meters + 'm' : '';
+    toast.textContent = icon + ' ' + lm + ' \u2014 ' + v.arcmin + "'" + m + ' \u00b7 ' + msg;
+    toast.style.color = col;
+    toast.style.borderColor = col;
+    toast.style.background = '#0f0f14ee';
+    toast.style.display = 'block';
+    clearTimeout(timer);
+    timer = setTimeout(() => { toast.style.display = 'none'; }, 4000);
+  }
+  const _fetch = window.fetch;
+  window.fetch = function (url, opts) {
+    const p = _fetch(url, opts);
+    try {
+      const u = String(url);
+      if (u.includes('/api/add_pixel') || u.includes('/api/set_pixel')) {
+        p.then(r => r.clone().json()).then(d => {
+          if (d && d.verdict) {
+            const lm = decodeURIComponent((u.match(/[?&]lm=([^&]*)/) || [,''])[1] || '?');
+            show(lm, d.verdict);
+          }
+        }).catch(() => {});
+      }
+    } catch (e) {}
+    return p;
+  };
+  console.log('[VERDICT-V1] toast actif');
+})();
+</script>
 </body>
 </html>

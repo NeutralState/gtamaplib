@@ -2257,7 +2257,22 @@ class Handler(BaseHTTPRequestHandler):
             md.pixels[cam_name][lm_name] = (px_x, px_y)
             ml.get_camera.cache_clear()
             print(f"Set pixel {lm_name} in {cam_name}: ({px_x}, {px_y})")
-            self.send_json({'ok': True})
+            verdict = None   # [VERDICT-V1] meme feedback au drag/set
+            try:
+                xyz_v = md.landmarks.get(lm_name)
+                if xyz_v is not None:
+                    sys.path.insert(0, TOOL_DIR)
+                    from common import get_cam as _gc, residual_dual as _rd
+                    _cam = _gc(cam_name)
+                    if _cam is not None:
+                        _a, _g, _d = _rd(_cam, (px_x, px_y), list(xyz_v))
+                        if _a is not None:
+                            verdict = {'arcmin': round(_a, 1),
+                                       'meters': None if _g is None else round(_g, 2),
+                                       'dist': round(_d) if _d else None}
+            except Exception:
+                pass
+            self.send_json({'ok': True, 'verdict': verdict})
 
         elif path == '/api/set_class':
             cam_name = unquote(qs.get('cam', [''])[0])
@@ -2345,7 +2360,24 @@ class Handler(BaseHTTPRequestHandler):
             md.pixels[cam_name][lm_name] = (px_x, px_y)
             ml.get_camera.cache_clear()
             print(f"Added pixel {lm_name} in {cam_name}: ({px_x}, {px_y})")
-            self.send_json({'ok': True, 'is_new': is_new})
+            # [VERDICT-V1] residuel instantane du rayon vs xyz existant du LM.
+            # Non-bloquant: un verdict qui plante ne bloque jamais l'ecriture.
+            verdict = None
+            try:
+                xyz_v = md.landmarks.get(lm_name)
+                if xyz_v is not None:
+                    sys.path.insert(0, TOOL_DIR)
+                    from common import get_cam as _gc, residual_dual as _rd
+                    _cam = _gc(cam_name)
+                    if _cam is not None:
+                        _a, _g, _d = _rd(_cam, (px_x, px_y), list(xyz_v))
+                        if _a is not None:
+                            verdict = {'arcmin': round(_a, 1),
+                                       'meters': None if _g is None else round(_g, 2),
+                                       'dist': round(_d) if _d else None}
+            except Exception:
+                pass
+            self.send_json({'ok': True, 'is_new': is_new, 'verdict': verdict})
 
         elif path == '/api/triangulate':
             lm_name = unquote(qs.get('lm', [''])[0])
