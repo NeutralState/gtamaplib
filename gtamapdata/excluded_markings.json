@@ -131,10 +131,5 @@
     "Infinity at Brickell (SW)",
     "FAA Miami ATCT (MIA)"
   ],
-  "Vintage Vice City Pack 02 (Port)": [
-    "Container Crane (1)",
-    "Container Crane (2)",
-    "Container Crane (9)"
-  ],
   "_comment": "Per-(cam, landmark) markings excluded from solver (cam_rms + triangulation). Marking STAYS in pixels.json (visible in UI visualizer). Format: {\"Cam Name\": [\"LM A\"]}"
 }
