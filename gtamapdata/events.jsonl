@@ -240,3 +240,7 @@
 {"ts": "2026-07-09T14:46:31", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 15, "n_accepted": 14}
 {"ts": "2026-07-09T18:51:14", "tool": "guarded_apply", "action": "apply", "n_cams": 1, "n_lms": 8, "n_accepted": 8}
 {"ts": "2026-07-09T19:13:32", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 11, "n_accepted": 11}
+{"ts": "2026-07-10T10:33:31", "tool": "crane_split", "action": "rename_markings", "lm": "Asia Brickell Key (CC2B)", "cams": ["Vice Beach (B)", "Port Vice City (A)", "Port Vice City (B)"], "reason": "fleche de grue mobile: 2 positions coherentes a 15m (dz+3.3m), split temporel CC2/CC2B, exclusions retirees"}
+{"ts": "2026-07-10T10:33:31", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Asia Brickell Key (CC2B)", "old_xyz": null, "new_xyz": [-130.6392, -861.2595, 225.421], "kept": ["Vice Beach (B)", "Port Vice City (B)"], "max_res": 2.697}
+{"ts": "2026-07-10T10:33:31", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Asia Brickell Key (CC2)", "old_xyz": [-143.92405211593635, -853.4518228016425, 223.15691206488495], "new_xyz": [-143.9241, -853.4518, 223.1569], "kept": ["Motorboats (A)", "Skyline"], "max_res": 0.763}
+{"ts": "2026-07-10T10:34:34", "tool": "guarded_apply", "action": "apply", "n_cams": 4, "n_lms": 19, "n_accepted": 17}
