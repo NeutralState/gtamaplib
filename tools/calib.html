@@ -562,6 +562,7 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
 /* [ADJFIX-V1] filter via class: draw() rewrites frameImg.style.cssText
    every frame, wiping inline filters — a class survives */
 #frame-img.mkadj-on, img.mkadj-on { filter: url(#mkadj) !important; }
+#frame-img.mkadj-hide { visibility: hidden !important; } /* [GLFIX-V2] survit aux reecritures de cssText par draw() */
 
 
 /* [PANEL-V3] pose = read-only display, terminal-first. Sliders and inputs
@@ -6659,7 +6660,10 @@ window.addEventListener('load', () => {
   glCanvas.id = 'mkadj-gl';
   glCanvas.style.cssText = 'display:none;pointer-events:none';
   frameImg.parentNode.insertBefore(glCanvas, frameImg.nextSibling);
-  const gl = glCanvas.getContext('webgl', { premultipliedAlpha: false, preserveDrawingBuffer: true });
+  // [GLFIX-V1] WebGL2 d'abord: en WebGL1, mipmap sur texture non-power-of-2
+  // (3840x2160) = texture incomplete = echantillonnee NOIRE. WebGL2 = NPOT ok.
+  const gl2 = glCanvas.getContext('webgl2', { premultipliedAlpha: false, preserveDrawingBuffer: true });
+  const gl = gl2 || glCanvas.getContext('webgl', { premultipliedAlpha: false, preserveDrawingBuffer: true });
   let prog = null, tex = null, texCam = null, uni = {};
   const VS = 'attribute vec2 p;varying vec2 t;void main(){t=vec2(p.x*.5+.5,.5-p.y*.5);gl_Position=vec4(p,0.,1.);}';
   const FS = [
@@ -6711,8 +6715,16 @@ window.addEventListener('load', () => {
     if (!tex) tex = gl.createTexture();
     gl.bindTexture(gl.TEXTURE_2D, tex);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, frameImg);
-    gl.generateMipmap(gl.TEXTURE_2D);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    if (gl2) {                       // [GLFIX-V1] mipmaps seulement en WebGL2
+      gl.generateMipmap(gl.TEXTURE_2D);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR);
+    } else {
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    }
+    const err = gl.getError();
+    if (err) console.error('[ADJUST-GL] texture err', err);
     glCanvas.width = frameImg.naturalWidth; glCanvas.height = frameImg.naturalHeight;
     gl.viewport(0, 0, glCanvas.width, glCanvas.height);
     texCam = frameImg.src;
@@ -6737,7 +6749,6 @@ window.addEventListener('load', () => {
         lastCss = css;
       }
       if (texCam !== frameImg.src && frameImg.complete) { glDraw(); }
-      frameImg.style.visibility = 'hidden';
     }
     requestAnimationFrame(track);
   })();
@@ -6756,11 +6767,14 @@ window.addEventListener('load', () => {
     }
     panel.style.display = on ? 'block' : 'none';
     document.getElementById('btn-mkadj').style.color = on ? '#4ade80' : '#999';
-    if (on) { lastCss = ''; texCam = null; glDraw(); }
-    else {
+    if (on) {
+      lastCss = ''; texCam = null;
+      frameImg.classList.add('mkadj-hide');   // [GLFIX-V2] rewrite-proof
+      glDraw();
+    } else {
       resetAdj();
       glCanvas.style.display = 'none';
-      frameImg.style.visibility = 'visible';
+      frameImg.classList.remove('mkadj-hide');
     }
   };
   document.getElementById('mkadj-close').addEventListener('click', window._mkAdjToggle);
