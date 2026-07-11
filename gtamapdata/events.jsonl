@@ -286,3 +286,5 @@
 {"ts": "2026-07-10T17:02:11", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 20, "n_accepted": 19}
 {"ts": "2026-07-10T19:57:11", "tool": "pack02_placement", "action": "provisional_pose", "cam": "Vintage Vice City Pack 02 (Port)", "old": {"xyz": [1000.0, -1250.0, 0.5], "ypr": [355.294862, 3.640582, 0.0], "fov": [33.169082, null]}, "new": {"xyz": [905.7, -1179.1, 1.5], "ypr": [343.2, 3.7, -0.8], "fov": [39.7, null]}, "reason": "placeholder jamais resolu; fit borne z>=1 sur les 3 grues (RMS 1.0), pas de swap ni de grues mobiles; PROVISOIRE a consolider"}
 {"ts": "2026-07-10T19:58:12", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 15, "n_accepted": 12}
+{"ts": "2026-07-10T20:27:21", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Round Water Tower", "old_xyz": [-2237.641635944019, 506.6870005802647, 73.0337792776028], "new_xyz": [-2160.8015, 518.9732, 69.3381], "kept": ["Vice City Postcard", "Port Vice City (A)"], "max_res": 2.209}
+{"ts": "2026-07-10T20:28:20", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 18, "n_accepted": 17}
