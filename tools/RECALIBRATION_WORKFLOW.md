@@ -546,3 +546,15 @@ _legacy_date → no tool (treated as anchor)
 3. DUAL-METRIC: tout verdict sain = arcmin ET metres (l'arcmin ment a courte
    portee). Tiers: promotion auto low/unverified -> medium si median<=1.0m/>=3 obs.
    Lire les zones du tracker dans LES DEUX colonnes avant de prioriser.
+
+## Addendum 2026-07-10 — nouveaux outils dans la boucle
+- Verdict instantane au clic (UI): add/set_pixel retournent le residuel vs
+  xyz existant — toast vert <4' / ambre <12' / rouge. Un rouge au clic =
+  regle-le TOUT DE SUITE (pattern MSE: pourri decouvert une session plus tard).
+- Assist smart: ghosts filtres (sub-resolution + occlusion pairwise), footer
+  toggle, &smart=0 pour tout voir.
+- Planification de session: PYTHONPATH=. python3 tools/audit/next_clicks.py
+  --top 15 (gains marginaux greedy) ou --pose --cam "X" (consolider une pose).
+  READ-ONLY, filtre avec tes yeux (le tool ne voit pas les occlusions).
+- Banc CV permanent: tools/audit/template_bench.py (toute idee vision se
+  juge la avant d'etre construite).
