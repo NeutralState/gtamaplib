@@ -388,3 +388,4 @@
 {"ts": "2026-07-13T14:06:47", "tool": "lamppost_split_0713", "action": "name_collision_split", "lm": "Lamp Post (SW)", "reason": "collision de nom: le marking LK01 pointe un lampadaire des Keys a 5km du groupe NE/NW/SE (z50); le sweep avait croise deux objets differents -> point fantome z=-23. Split + quarantaine"}
 {"ts": "2026-07-13T14:07:51", "tool": "guarded_apply", "action": "apply", "n_cams": 5, "n_lms": 28, "n_accepted": 31}
 {"ts": "2026-07-13T14:42:47", "tool": "guarded_apply", "action": "apply", "n_cams": 3, "n_lms": 16, "n_accepted": 18}
+{"ts": "2026-07-13T17:49:37", "tool": "guarded_apply", "action": "apply", "n_cams": 3, "n_lms": 16, "n_accepted": 18}

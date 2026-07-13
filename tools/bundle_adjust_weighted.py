@@ -447,6 +447,12 @@ RIGID_BODY_DEFS = {
     'portofino': ['Portofino Tower (NW)', 'Portofino Tower (NE)', 'Portofino Tower (S)'],
     'vizcayne_north': ['Vizcayne North Condominium (NE)', 'Vizcayne North Condominium (SE)',
                        'Vizcayne North Condominium (NW)'],
+    'jasons_house': ["Jason's House (Main) (BNE)", "Jason's House (Main) (TSE)",
+                     "Jason's House (Main) (TSW)", "Jason's House (Main) (TNE)",
+                     "Jason's House (Roof) (SE)", "Jason's House (Roof) (S)",
+                     "Jason's House (Roof) (SW)", "Jason's House (Roof) (NE)",
+                     "Jason's House (South Veranda) (TNE)", "Jason's House (South Veranda) (TSE)",
+                     "Jason's House (South Veranda) (TSW)", "Jason's House (Upper Veranda) (TNE)"],
 }
 K_RIGID = 3.0
 _rigid_pairs = []
