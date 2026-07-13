@@ -1166,9 +1166,9 @@
   },
   "Four Seasons Hotel Miami (NW)": {
     "xyz": [
-      -847.957008468495,
-      -1255.8887014431034,
-      257.67200756796194
+      -847.8467400559732,
+      -1255.4324760789827,
+      257.9025641451902
     ],
     "source_cameras": [
       "Prison",
@@ -2231,9 +2231,9 @@
   },
   "Homestead Water Tower": {
     "xyz": [
-      -2957.7260180060634,
-      -3034.757192506712,
-      72.54394386246958
+      -2955.720141267191,
+      -3033.2273928952104,
+      73.69368942274811
     ],
     "source_cameras": [
       "Tennis Stadium (4K)",
@@ -2391,9 +2391,9 @@
   },
   "Red Billboard (Hamlet)": {
     "xyz": [
-      -2547.6513231794243,
-      -3487.4414042161693,
-      21.31679377508629
+      -2547.893907334347,
+      -3487.086488903116,
+      21.23480387313955
     ],
     "source_cameras": [
       "Police Chase (D)",
@@ -2611,9 +2611,9 @@
   },
   "Seven Mile Bridge (5B)": {
     "xyz": [
-      -3618.4741205352257,
-      -6914.2050802508475,
-      -1.6200814716775305
+      -3618.876729067355,
+      -6914.154320669196,
+      -1.1591497673385072
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -2636,9 +2636,9 @@
   },
   "Seven Mile Bridge (6T)": {
     "xyz": [
-      -3640.783594589504,
-      -6926.952061036345,
-      8.235232013226629
+      -3641.026524315094,
+      -6926.626022948424,
+      8.258732259705187
     ],
     "source_cameras": [
       "Ocean near Keys (N)",
@@ -2711,23 +2711,23 @@
   },
   "Sunshine Skyway Bridge (S)": {
     "xyz": [
-      -6687.80861847838,
-      4315.905804807355,
-      115.91180128493147
+      -6686.584619606579,
+      4309.808714528866,
+      115.24410816501333
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Chase (2) (B)"
     ],
-    "error_m": 2.05,
+    "error_m": 1.596,
     "zone": "port_gellhorn",
     "notes": "[SUNSHINE-SKYWAY-RIGID-V2] xyz=st south-pylon-top z=119.352 from SunshineSkywayBridge rigid model; identical to rlx 73bbf43. Far LM (~2.5km from 04), residual at resolution limit. | source A->B: A is a chase frame, SSB at 1km exceeds A angular precision (~0.8deg). Marking kept on A as observation but excluded from A pose fit."
   },
   "Ambrosia Main St (A)": {
     "xyz": [
-      -2954.984,
-      4207.923,
-      5.0
+      -2956.866,
+      4157.581,
+      4.387
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)"
@@ -2738,9 +2738,9 @@
   },
   "Ambrosia Main St (B)": {
     "xyz": [
-      -2943.365,
-      4169.656,
-      5.0
+      -2945.078,
+      4118.908,
+      4.387
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)"
@@ -2751,9 +2751,9 @@
   },
   "Ambrosia Main St (C)": {
     "xyz": [
-      -2836.319,
-      3948.15,
-      5.0
+      -2836.393,
+      3894.752,
+      4.387
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)"
@@ -2764,9 +2764,9 @@
   },
   "Ambrosia Main St (D)": {
     "xyz": [
-      -2764.894,
-      3821.085,
-      5.0
+      -2763.877,
+      3766.121,
+      4.387
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)"
@@ -2777,35 +2777,35 @@
   },
   "Billboard with Irregular Shape": {
     "xyz": [
-      -2942.6288143017214,
-      4356.583933645674,
-      51.476483405264986
+      -2934.537618159411,
+      4330.888854360294,
+      48.7357808854989
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 01 (Bikers)"
+      "Ambrosia 01 (Bikers)",
+      "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 4.513,
+    "error_m": 7.434,
     "zone": "ambrosia"
   },
   "Billboard with Oval Motif #1": {
     "xyz": [
-      -3031.11122800688,
-      4340.768410448492,
-      60.89392184942293
+      -3020.6629249910966,
+      4318.437267680454,
+      58.21178405046962
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 01 (Bikers)"
+      "Ambrosia 01 (Bikers)",
+      "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 1.9,
+    "error_m": 7.539,
     "zone": "ambrosia"
   },
   "Light Pollution (A)": {
     "xyz": [
-      -8495.684322666908,
-      -11152.543139301339,
-      -6.261971971957933
+      -8429.12,
+      -10859.904,
+      0.0
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)"
@@ -2815,9 +2815,9 @@
   },
   "Light Pollution (B)": {
     "xyz": [
-      -7770.0084687210365,
-      -7983.013056108336,
-      -4.860657758471947
+      -7725.498,
+      -7801.86,
+      0.0
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)"
@@ -2827,9 +2827,9 @@
   },
   "Light Pollution (C)": {
     "xyz": [
-      -9896.018406191368,
-      -10652.44110498813,
-      -4.815610366150803
+      -9814.562,
+      -10359.666,
+      0.0
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)"
@@ -2839,55 +2839,54 @@
   },
   "MIA North Terminal Tower": {
     "xyz": [
-      -2379.9720960349537,
-      -512.3498918533692,
-      58.74856917510086
+      -2375.95302998749,
+      -513.4824531583802,
+      59.072238331850144
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
-      "Ambrosia 02 (Panorama)",
       "Port Vice City (B)"
     ],
-    "error_m": 5.151,
+    "error_m": 2.994,
     "zone": "vice_city"
   },
   "Water Tower near Prison": {
     "xyz": [
-      -5164.284082237489,
-      1550.6266992458177,
-      97.27515689248057
+      -5136.572690713095,
+      1569.766552603736,
+      91.90155803696487
     ],
     "source_cameras": [
       "Loading Zone near Prison (SW)",
       "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 0.196,
+    "error_m": 0.015,
     "zone": "port_gellhorn"
   },
   "Wheelabrator South Broward": {
     "xyz": [
-      -2403.8654540734333,
-      2354.386162314965,
-      96.04886998743007
+      -2398.499767449892,
+      2399.2422271698397,
+      93.97493618887401
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 2.682,
+    "error_m": 5.236,
     "zone": "ambrosia"
   },
   "Wheelabrator South Broward (W)": {
     "xyz": [
-      -2453.4934766236065,
-      2513.73009736603,
-      52.26042905506324
+      -2496.2926821639808,
+      2291.096041237046,
+      44.51703142175488
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.813,
+    "error_m": 5.681,
     "zone": "ambrosia"
   },
   "102180 Overseas Hwy": {
@@ -2953,9 +2952,9 @@
   },
   "Island G (W)": {
     "xyz": [
-      -2136.949677097099,
-      -6262.427733417126,
-      -4.649746047390711
+      -2136.9234845187566,
+      -6261.2785392524875,
+      -4.2851894954946035
     ],
     "source_cameras": [
       "Key Lento",
@@ -4025,9 +4024,9 @@
   },
   "New Bahia Honda Bridge (15B)": {
     "xyz": [
-      -5224.253040938775,
-      -7106.421930046237,
-      -13.709363983505414
+      -5243.532730929244,
+      -7106.149722689287,
+      -10.379408995622384
     ],
     "source_cameras": [
       "Keys"
@@ -4468,15 +4467,15 @@
   },
   "Large Billboard (Ambrosia)": {
     "xyz": [
-      -2908.755002901637,
-      4162.461962397387,
-      35.589588725023745
+      -2900.0315036737975,
+      4139.432369107245,
+      33.711980766127425
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 01 (Bikers)"
+      "Ambrosia 01 (Bikers)",
+      "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 6.517,
+    "error_m": 7.985,
     "zone": "ambrosia"
   },
   "Sunshine Skyway Bridge (N)": {
@@ -4574,28 +4573,28 @@
   },
   "Naval Air Station Key West (Control Tower)": {
     "xyz": [
-      -5807.497027630292,
-      -6538.503874097203,
-      36.67767526535813
+      -6452.585098854972,
+      -6755.27764998928,
+      38.55733539811904
     ],
     "source_cameras": [
       "Key Lento",
       "Grassrivers Postcard (X)"
     ],
-    "error_m": 0.325,
+    "error_m": 0.275,
     "zone": "leonida_keys"
   },
   "Naval Air Station Key West (Radar Tower)": {
     "xyz": [
-      -5658.684896915181,
-      -6405.821930736622,
-      34.548421015416416
+      -6199.717913373692,
+      -6576.358373133629,
+      33.762788745424686
     ],
     "source_cameras": [
       "Key Lento",
       "Grassrivers Postcard (X)"
     ],
-    "error_m": 0.322,
+    "error_m": 1.178,
     "zone": "leonida_keys"
   },
   "House with Pier (E)": {
@@ -4626,16 +4625,15 @@
   },
   "1500 Sonora Ave (Tank)": {
     "xyz": [
-      -2969.9918641940008,
-      3683.840714925309,
-      40.12130062944038
+      -2919.4650941952245,
+      3553.719144045581,
+      39.54298200297312
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 10.254,
+    "error_m": 8.844,
     "zone": "ambrosia"
   },
   "Easy Hill": {
@@ -4646,9 +4644,9 @@
   },
   "Radio Tower (Ambrosia)": {
     "xyz": [
-      -2075.2506982098016,
-      3178.00767544295,
-      140.1511050211689
+      -2074.852,
+      3169.762,
+      124.043
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)"
@@ -4658,9 +4656,9 @@
   },
   "Radio Tower (Ambrosia) (B)": {
     "xyz": [
-      -2076.059564581837,
-      3177.2588854192913,
-      -7.431041940135632
+      -2074.852,
+      3169.762,
+      5.0
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)"
@@ -4670,120 +4668,113 @@
   },
   "Sebring Water Tower": {
     "xyz": [
-      -3980.9398079393704,
-      2926.656426017269,
-      74.47961479839606
+      -3899.861201992898,
+      2821.528994523209,
+      65.65209877520911
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 1.06,
+    "error_m": 4.059,
     "zone": "ambrosia"
   },
   "US Sugar Mill (Factory)": {
     "xyz": [
-      -3019.217422465268,
-      3332.4648078286514,
-      102.0947032900674
+      -3019.7224369098803,
+      3195.997086045837,
+      88.50299436508412
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 3.588,
+    "error_m": 17.821,
     "zone": "ambrosia"
   },
   "USSM Smokestack (4)": {
     "xyz": [
-      -2913.7108970445192,
-      3560.448407738089,
-      98.35634956338727
+      -2900.022470511338,
+      3430.560077582613,
+      83.4693005509562
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 6.971,
+    "error_m": 30.294,
     "zone": "ambrosia"
   },
   "USSM Smokestack (5)": {
     "xyz": [
-      -2950.055445403544,
-      3533.8207928164925,
-      80.20275109131583
+      -2933.7804462891118,
+      3403.623765715047,
+      69.0985930553332
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 8.79,
+    "error_m": 15.941,
     "zone": "ambrosia"
   },
   "USSM Smokestack (6)": {
     "xyz": [
-      -2956.7022201946634,
-      3536.0609964390915,
-      84.64346709497084
+      -2938.9112419436196,
+      3405.7573260398085,
+      72.74959686001539
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 9.01,
+    "error_m": 19.374,
     "zone": "ambrosia"
   },
   "USSM Smokestack (7)": {
     "xyz": [
-      -2983.8701588372655,
-      3536.621342913991,
-      98.07465919586878
+      -2961.3378843853334,
+      3405.752490867389,
+      83.92954255363003
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 12.398,
+    "error_m": 24.797,
     "zone": "ambrosia"
   },
   "USSM Smokestack (8)": {
     "xyz": [
-      -3035.1170326794077,
-      3608.044530107069,
-      46.89406322948301
+      -2989.0283479158697,
+      3477.7974842434933,
+      43.28190284632528
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 16.82,
+    "error_m": 2.089,
     "zone": "ambrosia"
   },
   "USSM Smokestack (9)": {
     "xyz": [
-      -3041.1107881840776,
-      3610.9892789181295,
-      56.94198929455622
+      -2993.6997557622726,
+      3480.157623061671,
+      51.119426929225924
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 16.965,
+    "error_m": 5.425,
     "zone": "ambrosia"
   },
   "1500 Sonora Ave (Silo)": {
     "xyz": [
-      -2738.9923519806293,
-      3792.6909873864392,
-      61.627436412622664
+      -2707.074807565045,
+      3785.817850715075,
+      60.69217308279834
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4807,28 +4798,28 @@
   },
   "USSM Smokestack (10)": {
     "xyz": [
-      -2952.1125489052256,
-      3753.80490850261,
-      59.54021247821795
+      -3023.812923491915,
+      3506.636027582748,
+      54.25853717782563
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia Postcard (X)",
+      "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 2.635,
+    "error_m": 1.398,
     "zone": "ambrosia"
   },
   "USSM Smokestack (11)": {
     "xyz": [
-      -2954.880754025479,
-      3759.474765264335,
-      49.45736155020987
+      -3027.0574882916203,
+      3513.4977809135935,
+      42.50787568727597
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia Postcard (X)",
+      "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 1.044,
+    "error_m": 2.508,
     "zone": "ambrosia"
   },
   "USSM Smokestack (2)": {
@@ -4846,15 +4837,15 @@
   },
   "USSM Smokestack (3)": {
     "xyz": [
-      -2953.4545762164967,
-      3042.838732029929,
-      41.77664111008865
+      -2989.796156459787,
+      2887.8623565912085,
+      31.25058164530827
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 1.65,
+    "error_m": 2.129,
     "zone": "ambrosia"
   },
   "1000 Venetian Way (4)": {
@@ -5306,8 +5297,8 @@
   },
   "Bay (Q)": {
     "xyz": [
-      -7049.364892274903,
-      4584.269490261763,
+      -7049.495462225967,
+      4584.517223759178,
       0.0
     ],
     "source_cameras": [
@@ -6028,9 +6019,9 @@
   },
   "Keys Bridge (C)": {
     "xyz": [
-      -431.09941695557313,
-      -2993.900511538922,
-      18.969352761274017
+      -426.99055149299363,
+      -2993.6936010531313,
+      16.582434860244536
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -7383,9 +7374,9 @@
   },
   "Turkey Point Nuclear Power Station (3)": {
     "xyz": [
-      -1492.7770144254846,
-      -3784.224417591131,
-      79.64741380082663
+      -1491.3956195437543,
+      -3784.5833874877094,
+      80.5304633527247
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7413,9 +7404,9 @@
   },
   "Turkey Point Nuclear Power Station (S)": {
     "xyz": [
-      -1566.4381682220965,
-      -3546.1173459196443,
-      55.59207205340624
+      -1563.854918000391,
+      -3546.6240364114005,
+      56.579433365269345
     ],
     "source_cameras": [
       "Prison",
@@ -7600,9 +7591,9 @@
   },
   "West Venetian Causeway Bridge": {
     "xyz": [
-      -112.25424390798298,
-      1065.3487771713576,
-      14.101631331934348
+      -112.25424086267836,
+      1065.3487743821192,
+      14.101471929613657
     ],
     "source_cameras": [
       "Tennis Court (SE)",
@@ -7613,28 +7604,28 @@
   },
   "Billboard with Diversity Motif (E)": {
     "xyz": [
-      -2770.955198495439,
-      3852.787924628506,
-      33.020090024501
+      -2764.9934338234634,
+      3824.6980354703223,
+      27.68012940812956
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 01 (Bikers)"
+      "Ambrosia 01 (Bikers)",
+      "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 1.384,
+    "error_m": 3.794,
     "zone": "ambrosia"
   },
   "Billboard with Diversity Motif (W)": {
     "xyz": [
-      -2786.404959408655,
-      3851.4787382305813,
-      33.59458189784569
+      -2778.75901398631,
+      3829.068402301459,
+      29.20595372532579
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 01 (Bikers)"
+      "Ambrosia 01 (Bikers)",
+      "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 1.138,
+    "error_m": 0.45,
     "zone": "ambrosia"
   },
   "Cardozo South Beach": {
@@ -7996,29 +7987,28 @@
   },
   "1500 Sonora Ave (Tank) (L)": {
     "xyz": [
-      -2963.291191939637,
-      3661.160384959949,
-      39.883856385108786
+      -2921.267442633983,
+      3530.7778512203176,
+      38.661528553745185
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 21.194,
+    "error_m": 6.76,
     "zone": "ambrosia"
   },
   "1500 Sonora Ave (Tank) (R)": {
     "xyz": [
-      -2973.40184089623,
-      3707.1445693264295,
-      40.6061141766219
+      -2915.876376348456,
+      3575.807458046621,
+      40.48875065142468
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 3.076,
+    "error_m": 11.428,
     "zone": "ambrosia"
   },
   "Industrial Building (Ambrosia)": {
@@ -8036,30 +8026,28 @@
   },
   "Sebring Water Tower (B)": {
     "xyz": [
-      -3980.169839408891,
-      2921.179666202727,
-      56.62149072487114
+      -3899.7338035909665,
+      2821.6208907553564,
+      48.905410512450494
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 3.364,
+    "error_m": 5.148,
     "zone": "ambrosia"
   },
   "US Sugar Mill (Factory) (R)": {
     "xyz": [
-      -3020.3434000931184,
-      3331.5807133785224,
-      72.73544643528436
+      -3019.561969294219,
+      3196.209591621953,
+      62.85398027448984
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 2.75,
+    "error_m": 9.146,
     "zone": "ambrosia"
   },
   "White Silos (W)": {
@@ -8077,28 +8065,28 @@
   },
   "Wheelabrator South Broward (3B)": {
     "xyz": [
-      -2461.283718799655,
-      2507.3219660198365,
-      43.34555388479366
+      -2454.3908349460844,
+      2321.158091097735,
+      35.958813965361344
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 1.708,
+    "error_m": 0.845,
     "zone": "ambrosia"
   },
   "Billboard (South Ambrosia)": {
     "xyz": [
-      -2833.131242377244,
-      3065.897580916887,
-      50.40306238028459
+      -2877.6204929874666,
+      2904.9654897062983,
+      39.29188959156459
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 23.306,
+    "error_m": 12.325,
     "zone": "ambrosia"
   },
   "House C (E)": {
@@ -8155,9 +8143,9 @@
   },
   "House D (SW)": {
     "xyz": [
-      -2297.0339279201266,
-      -5451.700286860327,
-      13.845810854222412
+      -2297.4577430251807,
+      -5452.585435937448,
+      13.749842366929938
     ],
     "source_cameras": [
       "House with Boat (X)",
@@ -8582,9 +8570,9 @@
   },
   "City View Parking Garage (S)": {
     "xyz": [
-      -185.2462144607667,
-      2061.2155014184837,
-      34.01931483988975
+      -185.25155856049793,
+      2061.209697109363,
+      34.01898379217654
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8595,9 +8583,9 @@
   },
   "City View Parking Garage (SE)": {
     "xyz": [
-      -159.01396534632437,
-      2059.8681436891125,
-      33.975648064375015
+      -159.00863848252018,
+      2059.8734725120858,
+      33.97595463928628
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -9113,9 +9101,9 @@
   },
   "Infinity at Brickell": {
     "xyz": [
-      -1198.4979473503079,
-      -1418.7784656806564,
-      180.2365674813594
+      -1198.5613411778636,
+      -1418.5771357411181,
+      180.24763093428402
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -9277,9 +9265,9 @@
   },
   "Four Seasons Hotel Miami (32NE)": {
     "xyz": [
-      -797.2577090162243,
-      -1275.4435985629023,
-      155.88453479147512
+      -797.4422817101672,
+      -1275.3074944272078,
+      155.9189073046381
     ],
     "source_cameras": [
       "Tennis Stadium (4K)",
@@ -9306,9 +9294,9 @@
   },
   "Four Seasons Hotel Miami (HB28SE)": {
     "xyz": [
-      -815.3924829984721,
-      -1314.6992408208732,
-      140.12850566428617
+      -815.6036391306388,
+      -1314.5603691968167,
+      140.16174546146704
     ],
     "source_cameras": [
       "Tennis Stadium (4K)",
@@ -10373,9 +10361,9 @@
   },
   "Infinity at Brickell (SW)": {
     "xyz": [
-      -1215.2662585309088,
-      -1441.336633349937,
-      177.56015664702966
+      -1215.338470827677,
+      -1441.074791476462,
+      177.57271945027074
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -10607,9 +10595,9 @@
       "Metro (SE) (B)"
     ],
     "xyz": [
-      -825.5093834647265,
-      -1139.797905030387,
-      171.82992934264104
+      -825.5743462535808,
+      -1139.7272388726026,
+      171.82293372657233
     ],
     "zone": null
   },
@@ -10742,9 +10730,9 @@
       "Metro (SE) (C)"
     ],
     "xyz": [
-      -978.3522107222569,
-      -1410.7242854086314,
-      174.86886872228357
+      -978.490128129596,
+      -1410.4640862935405,
+      174.86241818656802
     ],
     "zone": null
   },
@@ -11711,15 +11699,15 @@
   },
   "Embassy Suites Miami Airport (?)": {
     "author": "rlx",
-    "error_m": 2.324,
+    "error_m": 1.98,
     "source_cameras": [
       "Vice City Postcard",
       "Ambrosia 02 (Panorama)"
     ],
     "xyz": [
-      -1925.9603904357175,
-      18.62610580561569,
-      48.94550497748419
+      -1921.8460683298126,
+      21.934442769116195,
+      49.08696245614031
     ],
     "zone": null
   },
@@ -12328,15 +12316,15 @@
   },
   "Billboard with Diversity Motif (TW)": {
     "author": "rlx",
-    "error_m": 0.673,
+    "error_m": 0.45,
     "source_cameras": [
       "Ambrosia 01 (Bikers)",
       "Ambrosia 02 (Panorama)"
     ],
     "xyz": [
-      -2786.393762547255,
-      3851.445560728187,
-      33.60277546336694
+      -2778.758765667738,
+      3829.0676888103944,
+      29.20581214367771
     ],
     "zone": null
   },
@@ -12833,15 +12821,15 @@
   },
   "Billboard with Oval Motif #1 (BE)": {
     "author": "rlx",
-    "error_m": 2.074,
+    "error_m": 6.334,
     "source_cameras": [
       "Ambrosia 01 (Bikers)",
       "Ambrosia 02 (Panorama)"
     ],
     "xyz": [
-      -3024.5133990946315,
-      4339.395678138704,
-      52.45507256361428
+      -3014.2799950726485,
+      4316.841613986866,
+      50.100987943202384
     ],
     "zone": null
   },
@@ -13120,15 +13108,15 @@
   },
   "Billboard with Oval Motif #1 (BW)": {
     "author": "rlx",
-    "error_m": 6.812,
+    "error_m": 6.911,
     "source_cameras": [
       "Ambrosia 01 (Bikers)",
       "Ambrosia 02 (Panorama)"
     ],
     "xyz": [
-      -3038.0940128899783,
-      4340.312490048654,
-      51.69436213342695
+      -3026.71770306858,
+      4319.2180732344805,
+      49.96212892052701
     ],
     "zone": null
   },
@@ -13344,15 +13332,15 @@
   },
   "Billboard with Diversity Motif (TE)": {
     "author": "rlx",
-    "error_m": 0.802,
+    "error_m": 3.942,
     "source_cameras": [
       "Ambrosia 01 (Bikers)",
       "Ambrosia 02 (Panorama)"
     ],
     "xyz": [
-      -2770.8819627958565,
-      3852.4195443117965,
-      32.93476311973858
+      -2764.9201038482597,
+      3824.353064384744,
+      27.61493243491613
     ],
     "zone": null
   },
@@ -13990,5 +13978,921 @@
     "source_cameras": [],
     "error_m": null,
     "zone": "unknown"
+  },
+  "Billboard with Hat-Shaped Motif": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (P)": {
+    "xyz": [
+      -2614.034,
+      4197.927,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay (G)": {
+    "xyz": [
+      -5192.455,
+      -3348.762,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "US Sugar Mill (Office)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees D (Grassrivers) (6)": {
+    "xyz": [
+      -4094.65,
+      -4440.481,
+      9.754
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (Q)": {
+    "xyz": [
+      -2561.904,
+      4117.022,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (N)": {
+    "xyz": [
+      -2633.407,
+      4225.947,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Ambrosia Airfield (N)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees C (Grassrivers) (3)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "US Sugar Mill (Warehouse)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (T)": {
+    "xyz": [
+      -2517.278,
+      4018.263,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Path E (Ambrosia) (2)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Road D (Ambrosia) (2)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (R)": {
+    "xyz": [
+      -2580.365,
+      4072.587,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (I)": {
+    "xyz": [
+      -2661.948,
+      4374.273,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Unknown Billboard #1": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Orlando Station": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay Water Tower": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Train Tracks (Ambrosia) (C)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (J)": {
+    "xyz": [
+      -2669.277,
+      4329.255,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Billboard with Oval Motif #2": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay (E)": {
+    "xyz": [
+      -5182.79,
+      -3339.66,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Road E (Ambrosia)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Unknown Billboard #3": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (M)": {
+    "xyz": [
+      -2641.33,
+      4237.541,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "WDNA FM (B)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees D (Grassrivers) (5)": {
+    "xyz": [
+      -4081.578,
+      -4436.554,
+      9.967
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (W)": {
+    "xyz": [
+      -2325.353,
+      3786.11,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Billboard with Irregular Shape (B)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Factory C (Ambrosia) (S)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Construction Crane (Ambrosia)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Boat (Grassrivers)": {
+    "xyz": [
+      -3610.237,
+      -4001.297,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Unknown Billboard #2": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Blimp (R)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay (I)": {
+    "xyz": [
+      -5179.337,
+      -3361.786,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (C)": {
+    "xyz": [
+      -2594.58,
+      4824.048,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay (F)": {
+    "xyz": [
+      -5188.063,
+      -3344.35,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay (C)": {
+    "xyz": [
+      -5174.627,
+      -3331.239,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (F)": {
+    "xyz": [
+      -2621.257,
+      4573.774,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (U)": {
+    "xyz": [
+      -2417.979,
+      3890.105,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (B)": {
+    "xyz": [
+      -2594.618,
+      4905.692,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay (J)": {
+    "xyz": [
+      -5184.025,
+      -3371.281,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Blimp (F)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Tower (Grassrivers)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Ambrosia Airfield (S)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay (A)": {
+    "xyz": [
+      -5198.975,
+      -3311.405,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Path F (Ambrosia) (1)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Police Car (Grassrivers)": {
+    "xyz": [
+      -3828.566,
+      -4139.228,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees A (Grassrivers) (1)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Factory D (Ambrosia) (NW)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (V)": {
+    "xyz": [
+      -2374.25,
+      3837.522,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (L)": {
+    "xyz": [
+      -2648.132,
+      4262.516,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Billboard with Oval Motif #2 (B)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Factory A (Ambrosia) (S)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Unknown Radio Tower (Vice City)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees B (Grassrivers) (3)": {
+    "xyz": [
+      -3874.498,
+      -4282.366,
+      6.604
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Small Billboard (Ambrosia) (W)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees D (Grassrivers) (3)": {
+    "xyz": [
+      -4065.221,
+      -4443.525,
+      10.249
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay (K)": {
+    "xyz": [
+      -5189.771,
+      -3376.721,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Shark Valley Observation Tower": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Pylon (Ambrosia) (E)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees D (Grassrivers) (2)": {
+    "xyz": [
+      -4060.871,
+      -4449.238,
+      9.503
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (S)": {
+    "xyz": [
+      -2526.612,
+      3950.377,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "STA18": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Tree near Port Gellhorn": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Path D (Ambrosia) (1)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Route 10 (E)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Unknown Structure 2 (Grassrivers)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Route 10 (W)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "SFUWO School": {
+    "xyz": [
+      -5191.629,
+      -5965.646,
+      29.486
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Billboard with Oval Motif #1 (B)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Met 1 Condominium": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Road C (Ambrosia) (3)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Factory C (Ambrosia) (N)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Flat Water Tower": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Path D (Ambrosia) (2)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Single White Silo": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay (M)": {
+    "xyz": [
+      -5177.014,
+      -3389.244,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Very Tall Water Tower": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Unknown Structure 1 (Grassrivers)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees D (Grassrivers) (1)": {
+    "xyz": [
+      -4049.217,
+      -4449.353,
+      8.184
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees E (Grassrivers) (2)": {
+    "xyz": [
+      -4179.016,
+      -4456.478,
+      7.55
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Pylon (Ambrosia) (W)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (A)": {
+    "xyz": [
+      -2590.074,
+      4931.728,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (X)": {
+    "xyz": [
+      -2303.049,
+      3761.849,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees B (Grassrivers) (2)": {
+    "xyz": [
+      -3857.83,
+      -4271.744,
+      7.273
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Road B (Ambrosia) (3)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (G)": {
+    "xyz": [
+      -2595.633,
+      4552.719,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (O)": {
+    "xyz": [
+      -2628.109,
+      4196.829,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Unknown Mast (Grassrivers)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (D)": {
+    "xyz": [
+      -2602.897,
+      4820.905,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay (D)": {
+    "xyz": [
+      -5179.109,
+      -3335.53,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Old Bahia Honda Bridge (Barrier) (SE)": {
+    "xyz": [
+      -5257.315,
+      -7349.013,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay (N)": {
+    "xyz": [
+      -5170.791,
+      -3395.75,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Path E (Ambrosia) (1)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Path F (Ambrosia) (2)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees C (Grassrivers) (1)": {
+    "xyz": [
+      -3980.527,
+      -4484.402,
+      10.484
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Shack (NB)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay (L)": {
+    "xyz": [
+      -5183.153,
+      -3382.776,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Factory B (Ambrosia) (NW)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Road D (Ambrosia) (1)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (E)": {
+    "xyz": [
+      -2579.903,
+      4637.198,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (K)": {
+    "xyz": [
+      -2666.707,
+      4286.739,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay (H)": {
+    "xyz": [
+      -5185.963,
+      -3355.247,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees B (Grassrivers) (1)": {
+    "xyz": [
+      -3849.596,
+      -4268.403,
+      5.96
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Factory A (Ambrosia) (N)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Watson Bay (B)": {
+    "xyz": [
+      -5198.391,
+      -3317.148,
+      0.0
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees D (Grassrivers) (4)": {
+    "xyz": [
+      -4078.77,
+      -4446.476,
+      10.039
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Very Tall Billboard": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Hospice Billboard (R)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Small Billboard (Ambrosia) (E)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Lake Leonida (H)": {
+    "xyz": [
+      -2629.908,
+      4448.865,
+      4.861
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Hendry County Motorsports Park": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees C (Grassrivers) (2)": {
+    "xyz": [
+      -3987.732,
+      -4484.369,
+      10.496
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Trees E (Grassrivers) (1)": {
+    "xyz": [
+      -4168.083,
+      -4451.768,
+      6.925
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
+  },
+  "Radio Mast (Ambrosia)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia_grassrivers_rlx"
   }
 }
