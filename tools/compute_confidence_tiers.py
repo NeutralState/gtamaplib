@@ -149,6 +149,16 @@ def all_residuals_for_landmark(lm_name):
 
 # ── Tiering logic ───────────────────────────────────────────────────────────
 
+_RAW_LMS_CACHE = None
+def _raw_lms():
+    # [MAP-TRUTH-V1] le module gtamapdata whiteliste les champs meta —
+    # map_anchored se lit dans le JSON brut (doctrine: ne pas toucher le module)
+    global _RAW_LMS_CACHE
+    if _RAW_LMS_CACHE is None:
+        import json as _j
+        _RAW_LMS_CACHE = _j.load(open('gtamapdata/landmarks.json'))
+    return _RAW_LMS_CACHE
+
 def classify_landmarks(cam_tier_fn):
     """
     First-pass landmark classification. cam_tier_fn(cam_name) returns a tier
@@ -161,6 +171,15 @@ def classify_landmarks(cam_tier_fn):
         meta = md.landmarks_meta.get(lm_name, {})
         sources = meta.get('source_cameras', [])
         z_const = meta.get('z_constraint')
+
+        # [MAP-TRUTH-V1] LM map-ancre (xyz = verite yanis,13) => anchor direct
+        if xyz is not None and _raw_lms().get(lm_name, {}).get('map_anchored'):
+            out[lm_name] = {
+                'tier': 'anchor', 'n_sources': len(sources),
+                'n_leak_sources': 0, 'median_res': None, 'max_res': None,
+                'reason': 'map_anchored: verite-map yanis (MAP-TRUTH-V1)',
+            }
+            continue
 
         # No xyz = no triangulation yet; not in bundle pool
         if xyz is None:
