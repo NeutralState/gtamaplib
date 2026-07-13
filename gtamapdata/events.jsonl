@@ -379,3 +379,5 @@
 {"ts": "2026-07-13T12:14:12", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Park Grove Condominium (C)", "old_xyz": [-1317.0892135918587, -2059.499548841819, 97.3165905249147], "new_xyz": [-1319.4149, -2060.1678, 97.6132], "kept": ["Grassrivers 02 (Watson Bay)", "Leonida Keys 01 (Airplane) (X)", "Port Vice City (B)", "Tennis Stadium (4K)"], "max_res": 2.074}
 {"ts": "2026-07-13T12:14:12", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Nine at Mary Brickell Village (E)", "old_xyz": [-1063.8135256677078, -1036.8046521028948, 118.56907806620971], "new_xyz": [-1067.4343, -1034.0063, 118.8622], "kept": ["Grassrivers 02 (Watson Bay)", "Tennis Stadium (4K)"], "max_res": 0.833}
 {"ts": "2026-07-13T12:15:20", "tool": "guarded_apply", "action": "apply", "n_cams": 11, "n_lms": 59, "n_accepted": 58}
+{"ts": "2026-07-13T13:21:54", "tool": "rederive_0713", "action": "mono_source_rederive", "count": 7, "reason": "LMs mono-source re-derives le long du rayon actuel (drift de pose accumule)"}
+{"ts": "2026-07-13T13:23:01", "tool": "guarded_apply", "action": "apply", "n_cams": 9, "n_lms": 35, "n_accepted": 35}
