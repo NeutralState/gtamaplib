@@ -382,3 +382,6 @@
 {"ts": "2026-07-13T13:21:54", "tool": "rederive_0713", "action": "mono_source_rederive", "count": 7, "reason": "LMs mono-source re-derives le long du rayon actuel (drift de pose accumule)"}
 {"ts": "2026-07-13T13:23:01", "tool": "guarded_apply", "action": "apply", "n_cams": 9, "n_lms": 35, "n_accepted": 35}
 {"ts": "2026-07-13T13:31:52", "tool": "guarded_apply", "action": "apply", "n_cams": 6, "n_lms": 26, "n_accepted": 28}
+{"ts": "2026-07-13T13:48:12", "tool": "triangulate_lm", "action": "retriangulate", "lm": "MIA North Terminal Tower", "old_xyz": [-2377.20056454391, -512.0318355192758, 59.338296705807956], "new_xyz": [-2376.4257, -515.2924, 57.8676], "kept": ["Leonida Keys 01 (Airplane) (X)", "Port Vice City (B)"], "max_res": 3.515}
+{"ts": "2026-07-13T13:48:13", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Sebring Water Tower", "old_xyz": [-3980.875863343405, 2926.667752699654, 74.52589363159917], "new_xyz": [-3980.6683, 2921.0696, 75.4535], "kept": ["Ambrosia 04 (Fires)", "Ambrosia Postcard (X)"], "max_res": 0.473}
+{"ts": "2026-07-13T13:49:13", "tool": "guarded_apply", "action": "apply", "n_cams": 4, "n_lms": 11, "n_accepted": 14}
