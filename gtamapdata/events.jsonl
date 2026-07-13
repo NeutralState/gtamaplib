@@ -381,3 +381,4 @@
 {"ts": "2026-07-13T12:15:20", "tool": "guarded_apply", "action": "apply", "n_cams": 11, "n_lms": 59, "n_accepted": 58}
 {"ts": "2026-07-13T13:21:54", "tool": "rederive_0713", "action": "mono_source_rederive", "count": 7, "reason": "LMs mono-source re-derives le long du rayon actuel (drift de pose accumule)"}
 {"ts": "2026-07-13T13:23:01", "tool": "guarded_apply", "action": "apply", "n_cams": 9, "n_lms": 35, "n_accepted": 35}
+{"ts": "2026-07-13T13:31:52", "tool": "guarded_apply", "action": "apply", "n_cams": 6, "n_lms": 26, "n_accepted": 28}
