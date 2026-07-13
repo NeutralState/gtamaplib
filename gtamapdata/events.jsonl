@@ -288,3 +288,8 @@
 {"ts": "2026-07-10T19:58:12", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 15, "n_accepted": 12}
 {"ts": "2026-07-10T20:27:21", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Round Water Tower", "old_xyz": [-2237.641635944019, 506.6870005802647, 73.0337792776028], "new_xyz": [-2160.8015, 518.9732, 69.3381], "kept": ["Vice City Postcard", "Port Vice City (A)"], "max_res": 2.209}
 {"ts": "2026-07-10T20:28:20", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 18, "n_accepted": 17}
+{"ts": "2026-07-13T11:52:59", "tool": "readd_0713", "action": "markings_restored", "cams": ["Motorboats (A)", "Port Vice City (A)"], "reason": "6 markings weekend reinjectes apres perte au checkout (cams retrouvees par resolution geometrique inverse)"}
+{"ts": "2026-07-13T11:53:02", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Three Tequesta Point (NE)", "old_xyz": null, "new_xyz": [1.6501, -930.0537, 206.3619], "kept": ["Motorboats (A)", "Port Vice City (A)"], "max_res": 1.373}
+{"ts": "2026-07-13T11:53:02", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Three Tequesta Point (SE)", "old_xyz": null, "new_xyz": [6.6874, -963.4367, 206.8694], "kept": ["Motorboats (A)", "Port Vice City (A)"], "max_res": 0.937}
+{"ts": "2026-07-13T11:53:03", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Two Tequesta Point (SE)", "old_xyz": null, "new_xyz": [63.072, -1078.3138, 160.6908], "kept": ["Motorboats (A)", "Port Vice City (A)"], "max_res": 2.422}
+{"ts": "2026-07-13T11:54:08", "tool": "guarded_apply", "action": "apply", "n_cams": 3, "n_lms": 17, "n_accepted": 15}
