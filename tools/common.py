@@ -179,6 +179,52 @@ def cam_sigma_pos(cam_name):
     return None
 
 
+# [SIGMA-TRI-V1] priors angulaires (arcmin) quand la cam n'est pas dans le
+# dernier solve BA. Classes A = ypr HUD (quasi-verite), B/C = ypr refine sur
+# ancres (bon), inconnu = prudent.
+SIGMA_ANG_CLASS_A = 1.0
+SIGMA_ANG_CLASS_BC = 3.0
+SIGMA_ANG_UNKNOWN = 8.0
+
+
+def cam_sigma_ang_arcmin(cam_name):
+    """Sigma DIRECTION du rayon (arcmin) [SIGMA-TRI-V1]:
+    - covariances.json (sigma_ypr yaw/pitch en quadrature) si la cam etait
+      dans le dernier solve BA
+    - prior par classe sinon (A=1', B/C=3', inconnu=8').
+    Le roll est ignore (transverse negligeable pres du centre image)."""
+    global _COV_CACHE_CAMS, _LEAK_CLASS_CACHE
+    import os as _os
+    base = _os.path.dirname(_os.path.abspath(__file__))
+    if _COV_CACHE_CAMS is None:
+        cam_sigma_pos(cam_name)  # peuple les deux caches
+    e = _COV_CACHE_CAMS.get(cam_name)
+    if e is not None and e.get('sigma_ypr_deg'):
+        sy, sp = e['sigma_ypr_deg'][0], e['sigma_ypr_deg'][1]
+        return math.hypot(sy, sp) * 60.0
+    if _LEAK_CLASS_CACHE is None:
+        cam_sigma_pos(cam_name)
+    cls = _LEAK_CLASS_CACHE.get(cam_name) or ''
+    if cls.startswith('A_'):
+        return SIGMA_ANG_CLASS_A
+    if cls.startswith(('B_', 'C_')):
+        return SIGMA_ANG_CLASS_BC
+    return SIGMA_ANG_UNKNOWN
+
+
+def ray_sigma_m(cam_name, dist_m, px_noise_arcmin=0.0):
+    """Sigma TRANSVERSE (metres) d'un rayon au point situe a dist_m
+    [SIGMA-TRI-V1]: sigma_ray^2 = sigma_pos^2 + (sigma_ang * dist)^2.
+    sigma_pos None (inconnue) -> prior 5m. px_noise_arcmin s'ajoute en
+    quadrature au sigma angulaire (bruit de marquage, ~1.5px converti par
+    l'appelant qui connait hfov/w)."""
+    sp = cam_sigma_pos(cam_name)
+    if sp is None:
+        sp = 5.0
+    sa = math.hypot(cam_sigma_ang_arcmin(cam_name), px_noise_arcmin)
+    return math.sqrt(sp * sp + (math.radians(sa / 60.0) * dist_m) ** 2)
+
+
 def residual_dual(cam, mk, xyz):
     """(arcmin, gap_m, dist_m) pour une observation (cam deja instanciee).
     gap_m = ecart transverse du rayon(marking) au point; None si direction

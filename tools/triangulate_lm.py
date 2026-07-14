@@ -162,8 +162,16 @@ def select_sources(observers_classified):
     return [], "insufficient observers"
 
 
-def triangulate(selected_cams, lm_name, pixels, cameras, init_xyz):
+PX_NOISE_PX = 1.5  # [SIGMA-TRI-V1] bruit de marquage nominal (pixels)
+
+
+def triangulate(selected_cams, lm_name, pixels, cameras, init_xyz, weighted=False):
     """Multi-cam triangulation using the selected cams. Returns (xyz, max_residual_arcmin).
+
+    weighted=True [SIGMA-TRI-V1]: closed-form IRLS weighted by per-ray sigma
+    (pose covariance + direction sigma * distance) instead of the equal-weight
+    angular Nelder-Mead. A HUD-locked leak ray at 500m and a sigma=8m cam at
+    8km no longer vote equally.
 
     Returns (None, error_str) on failure.
     """
@@ -174,6 +182,7 @@ def triangulate(selected_cams, lm_name, pixels, cameras, init_xyz):
         return None, "scipy/numpy not installed"
 
     rays = []
+    px_noise = {}
     for cn in selected_cams:
         if cn not in pixels.get(cn, {}) and lm_name not in pixels.get(cn, {}):
             continue
@@ -183,6 +192,7 @@ def triangulate(selected_cams, lm_name, pixels, cameras, init_xyz):
             d = np.asarray(d, dtype=float)
             d = d / np.linalg.norm(d)
             rays.append((cn, np.asarray(cam.xyz, dtype=float), d))
+            px_noise[cn] = PX_NOISE_PX * cam.hfov * 60.0 / cam.w
         except Exception as e:
             return None, f"failed to build ray for {cn}: {e}"
 
@@ -199,23 +209,42 @@ def triangulate(selected_cams, lm_name, pixels, cameras, init_xyz):
     if max_par < 3.0:
         return None, f"insufficient parallax (max {max_par:.2f} deg between all ray pairs)"
 
-    def loss(p):
-        p = np.asarray(p)
-        total = 0.0
-        for _, o, d in rays:
-            v = p - o
-            dist = np.linalg.norm(v)
-            if dist < 1e-3:
-                continue
-            perp = v - np.dot(v, d) * d
-            ang = np.linalg.norm(perp) / dist
-            total += ang * ang
-        return total
+    if weighted:
+        # [SIGMA-TRI-V1] IRLS ferme: min sum w_i |P_i (p - o_i)|^2 avec
+        # P_i = I - d_i d_i^T et w_i = 1/sigma_ray^2 (common.ray_sigma_m).
+        # Les poids dependent de la distance au point -> 3 iterations.
+        from common import ray_sigma_m
+        p_new = np.asarray(init_xyz, dtype=float)
+        for _ in range(3):
+            A = np.zeros((3, 3)); b = np.zeros(3)
+            for cn, o, d in rays:
+                dist = float(np.linalg.norm(p_new - o))
+                sig = ray_sigma_m(cn, max(dist, 1.0), px_noise_arcmin=px_noise[cn])
+                w = 1.0 / max(sig * sig, 1e-6)
+                P = np.eye(3) - np.outer(d, d)
+                A += w * P; b += w * (P @ o)
+            try:
+                p_new = np.linalg.solve(A, b)
+            except np.linalg.LinAlgError:
+                return None, "degenerate weighted system"
+    else:
+        def loss(p):
+            p = np.asarray(p)
+            total = 0.0
+            for _, o, d in rays:
+                v = p - o
+                dist = np.linalg.norm(v)
+                if dist < 1e-3:
+                    continue
+                perp = v - np.dot(v, d) * d
+                ang = np.linalg.norm(perp) / dist
+                total += ang * ang
+            return total
 
-    result = minimize(loss, init_xyz, method='Nelder-Mead',
-                      options={'xatol': 1e-3, 'fatol': 1e-12,
-                               'maxiter': 10000, 'adaptive': True})
-    p_new = result.x
+        result = minimize(loss, init_xyz, method='Nelder-Mead',
+                          options={'xatol': 1e-3, 'fatol': 1e-12,
+                                   'maxiter': 10000, 'adaptive': True})
+        p_new = result.x
 
     # Compute max residual in arcmin
     max_res = 0.0
@@ -286,7 +315,7 @@ def _residuals_dual(point, rays):
 def robust_triangulate(candidate_cams, lm_name, pixels, cameras, init_xyz,
                        min_parallax=15.0, outlier_mult=2.0, outlier_floor=5.0,
                        verbose=True, observers_classified_global=None,
-                       dual=True, outlier_floor_m=12.0):
+                       dual=True, outlier_floor_m=12.0, weighted=False):
     """Choose a consensus subset of sources automatically.
 
     1. Drop cams that have NO pairing >= min_parallax with any other cam
@@ -369,7 +398,8 @@ def robust_triangulate(candidate_cams, lm_name, pixels, cameras, init_xyz,
     cur = list(survivors)
     while True:
         names_cur = [r[0] for r in cur]
-        xyz, max_res = triangulate(names_cur, lm_name, pixels, cameras, init_xyz)
+        xyz, max_res = triangulate(names_cur, lm_name, pixels, cameras, init_xyz,
+                                   weighted=weighted)
         if xyz is None:
             return None, max_res, names_cur, dropped
         res = _residuals_arcmin(xyz, cur)
@@ -415,6 +445,11 @@ def main():
     parser.add_argument('lm_name', help="Name of the landmark to triangulate.")
     parser.add_argument('--apply', action='store_true',
                         help="Actually write the update. Default is dry-run.")
+    parser.add_argument('--weighted', action='store_true',
+                        help="[SIGMA-TRI-V1, opt-in] sigma-weighted closed-form solve "
+                             "instead of equal-weight angular. Default stays off until "
+                             "the Keys-zone poses (Chantier 1) stop poisoning the "
+                             "covariances — see dual_metric_bench --ab weighted.")
     args = parser.parse_args()
 
     cameras, pixels, landmarks, cam_tiers = load_all()
@@ -481,7 +516,8 @@ def main():
     new_xyz, max_res, kept, dropped = robust_triangulate(
         candidate, args.lm_name, pixels, cameras, init,
         observers_classified_global=observers_classified,
-        dual=True, outlier_floor_m=12.0)  # [DUAL-METRIC-V3]
+        dual=True, outlier_floor_m=12.0,        # [DUAL-METRIC-V3]
+        weighted=args.weighted)                 # [SIGMA-TRI-V1 opt-in]
     print()
     if dropped:
         print("Dropped sources:")
