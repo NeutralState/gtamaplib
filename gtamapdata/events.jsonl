@@ -464,3 +464,9 @@
 {"ts": "2026-07-13T20:06:21", "tool": "guarded_apply", "action": "apply", "n_cams": 10, "n_lms": 78, "n_accepted": 74}
 {"ts": "2026-07-13T20:07:40", "tool": "rlx_markings_prune", "action": "discordant_prune", "count": 126, "reason": "markings rlx discordants avec NOS xyz (>12 arcmin) retires \u2014 ils appartiennent a son etat mid-chantier; 1266 coherents gardes"}
 {"ts": "2026-07-13T20:09:07", "tool": "guarded_apply", "action": "apply", "n_cams": 12, "n_lms": 122, "n_accepted": 112}
+{"ts": "2026-07-13T20:14:40", "tool": "rlx_skeleton_quarantine", "action": "xyz_prune", "count": 133, "reason": "xyz rlx discordants avec nos poses (>12 arcmin) -> skeletons; markings conserves (observations pures), retriangulation apres reconciliation des poses zone"}
+{"ts": "2026-07-13T20:16:01", "tool": "guarded_apply", "action": "apply", "n_cams": 8, "n_lms": 56, "n_accepted": 55}
+{"ts": "2026-07-14T09:18:29", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Skyviews Miami Observation Wheel", "old_xyz": [32.09997652217413, 129.95269012998799, 71.41023173362669], "new_xyz": [33.1311, 131.4935, 71.2125], "kept": ["Vice City Postcard", "Port Vice City (B)", "Shitzu Squalo 01 (Bay)"], "max_res": 2.206}
+{"ts": "2026-07-14T09:19:52", "tool": "guarded_apply", "action": "apply", "n_cams": 8, "n_lms": 57, "n_accepted": 54}
+{"ts": "2026-07-14T10:27:30", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Skyviews Miami Observation Wheel", "old_xyz": [33.14586824445898, 129.32153757467017, 71.45571632341137], "new_xyz": [33.6479, 129.5951, 71.4332], "kept": ["Skyline", "Vice City Postcard", "Port Vice City (B)", "Shitzu Squalo 01 (Bay)"], "max_res": 5.373}
+{"ts": "2026-07-14T10:28:58", "tool": "guarded_apply", "action": "apply", "n_cams": 6, "n_lms": 36, "n_accepted": 28}
