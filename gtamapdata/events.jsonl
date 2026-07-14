@@ -640,3 +640,7 @@
 {"ts": "2026-07-14T13:48:59", "tool": "c1_keys_batch", "action": "pins_retri", "reason": "17 pins retriangules (min_parallax 10, all-obs<8), 37 refuses"}
 {"ts": "2026-07-14T13:50:58", "tool": "guarded_apply", "action": "apply", "n_cams": 5, "n_lms": 29, "n_accepted": 30}
 {"ts": "2026-07-14T13:53:36", "tool": "guarded_apply", "action": "apply", "n_cams": 6, "n_lms": 41, "n_accepted": 39}
+{"ts": "2026-07-14T14:14:25", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Continuum on South Beach (S)", "old_xyz": null, "new_xyz": [1964.6271, -195.612, 147.9493], "kept": ["Leonida Keys 01 (Airplane) (X)", "Rooftop Party", "Sidewalk (Jason) (E)"], "max_res": 27.103}
+{"ts": "2026-07-14T14:14:50", "tool": "sidewalk_polish", "action": "requarantine", "lm": "Continuum on South Beach (S)", "reason": "triangulation revele collision (all-obs 81 arcmin / 186m, 5 obs) \u2014 retour skeleton"}
+{"ts": "2026-07-14T14:15:11", "tool": "triangulate_lm", "action": "retriangulate", "lm": "1000 Venetian Way (SW)", "old_xyz": [303.0074421740535, 1109.1026744983997, 67.92231948427116], "new_xyz": [303.0451, 1109.1329, 67.9084], "kept": ["Venetian Islands", "Vice Beach (A)", "Vice City Postcard", "Sidewalk (Jason) (E)"], "max_res": 5.985}
+{"ts": "2026-07-14T14:16:34", "tool": "guarded_apply", "action": "apply", "n_cams": 4, "n_lms": 18, "n_accepted": 17}
