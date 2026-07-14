@@ -43,13 +43,17 @@
     "White Silos (W)"
   ],
   "Highway (Peacock Bay) (A)": [
+    "Infinity at Brickell",
     "Infinity at Brickell (SW)",
     "One Broadway (W)",
     "Park Grove Condominium (N)",
     "Stephen P. Clark Government Center (E)"
   ],
   "Highway (Peacock Bay) (B)": [
+    "Infinity at Brickell",
     "Infinity at Brickell (SW)",
+    "Nine at Mary Brickell Village (E)",
+    "One Broadway (SW)",
     "One Broadway (W)",
     "Park Grove Condominium (N)",
     "Stephen P. Clark Government Center (E)"
@@ -68,6 +72,7 @@
   ],
   "Metro (SE) (C)": [
     "Infinity at Brickell",
+    "Infinity at Brickell (NE)",
     "Infinity at Brickell (SW)",
     "Park Grove Condominium (N)",
     "The Ritz-Carlton Coconut Grove (S)"
@@ -132,5 +137,18 @@
     "Infinity at Brickell (SW)",
     "FAA Miami ATCT (MIA)"
   ],
-  "_comment": "Per-(cam, landmark) markings excluded from solver (cam_rms + triangulation). Marking STAYS in pixels.json (visible in UI visualizer). Format: {\"Cam Name\": [\"LM A\"]}"
+  "_comment": "Per-(cam, landmark) markings excluded from solver (cam_rms + triangulation). Marking STAYS in pixels.json (visible in UI visualizer). Format: {\"Cam Name\": [\"LM A\"]}",
+  "Crest Kayak": [
+    "Pin A08R"
+  ],
+  "Jason Duval 03 (Boat)": [
+    "Island G (W)",
+    "Pin D02R"
+  ],
+  "Mount Kalaga National Park 02 (Helicopter) (X)": [
+    "Water Tower near Prison"
+  ],
+  "Street (Bikers) (B)": [
+    "Four Seasons Hotel Miami (SW)"
+  ]
 }

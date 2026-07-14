@@ -89,5 +89,65 @@
         "SR"
       ]
     ]
+  },
+  "Jason's House (Main)": {
+    "color": "#4ade80",
+    "edges": [
+      [
+        "TNE",
+        "TSE"
+      ],
+      [
+        "TSE",
+        "TSW"
+      ],
+      [
+        "BNE",
+        "TNE"
+      ]
+    ]
+  },
+  "Jason's House (Roof)": {
+    "color": "#4ade80",
+    "edges": [
+      [
+        "SE",
+        "S"
+      ],
+      [
+        "S",
+        "SW"
+      ],
+      [
+        "SE",
+        "NE"
+      ]
+    ]
+  },
+  "Jason's House (South Veranda)": {
+    "color": "#4ade80",
+    "edges": [
+      [
+        "TNE",
+        "TSE"
+      ],
+      [
+        "TSE",
+        "TSW"
+      ]
+    ]
+  },
+  "Jason's House (Boat Ramp)": {
+    "color": "#4ade80",
+    "edges": [
+      [
+        "S",
+        "SW"
+      ],
+      [
+        "SW",
+        "NW"
+      ]
+    ]
   }
 }
