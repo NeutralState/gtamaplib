@@ -644,3 +644,5 @@
 {"ts": "2026-07-14T14:14:50", "tool": "sidewalk_polish", "action": "requarantine", "lm": "Continuum on South Beach (S)", "reason": "triangulation revele collision (all-obs 81 arcmin / 186m, 5 obs) \u2014 retour skeleton"}
 {"ts": "2026-07-14T14:15:11", "tool": "triangulate_lm", "action": "retriangulate", "lm": "1000 Venetian Way (SW)", "old_xyz": [303.0074421740535, 1109.1026744983997, 67.92231948427116], "new_xyz": [303.0451, 1109.1329, 67.9084], "kept": ["Venetian Islands", "Vice Beach (A)", "Vice City Postcard", "Sidewalk (Jason) (E)"], "max_res": 5.985}
 {"ts": "2026-07-14T14:16:34", "tool": "guarded_apply", "action": "apply", "n_cams": 4, "n_lms": 18, "n_accepted": 17}
+{"ts": "2026-07-14T14:31:04", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Old City Hall", "old_xyz": [1682.5484732830698, 605.9076090221564, 51.56557318789392], "new_xyz": [1683.5876, 607.1164, 51.5471], "kept": ["Rooftop Party", "Vice Beach (A)", "Sidewalk (Jason) (E)"], "max_res": 6.443}
+{"ts": "2026-07-14T14:47:09", "tool": "guarded_apply", "action": "apply", "n_cams": 3, "n_lms": 22, "n_accepted": 22}
