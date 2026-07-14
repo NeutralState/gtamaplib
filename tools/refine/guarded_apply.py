@@ -34,7 +34,8 @@ sys.path.insert(0, os.path.join(PROJ, "tools"))
 from common import cam_rms as _common_cam_rms
 from common import cam_rms_dual as _common_cam_rms_dual
 
-CAM_BLACKLIST_DEFAULT = ["Amphitheater", "Beach", "Vice City Sign"]
+CAM_BLACKLIST_DEFAULT = ["Amphitheater", "Beach", "Vice City Sign",
+                         "Jason Duval 03 (Boat)"]  # 3 obs, depth-degenere (z<0 au BA 07-14)
 
 
 def snap_z(lm_name, xyz):
