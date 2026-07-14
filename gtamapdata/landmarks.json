@@ -1128,9 +1128,9 @@
   },
   "Four Seasons Hotel Miami (BW)": {
     "xyz": [
-      -850.3546961226887,
-      -1279.329605390942,
-      262.6995963613505
+      -850.5802616740591,
+      -1279.515306338668,
+      262.7018818213209
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -2202,9 +2202,9 @@
   },
   "Blue Billboard (Key Lento)": {
     "xyz": [
-      -3435.6662820667057,
-      -6766.192826492505,
-      24.21282585062365
+      -3435.6787638118735,
+      -6766.977829943973,
+      24.159584732664445
     ],
     "source_cameras": [
       "Key Lento",
@@ -3555,31 +3555,39 @@
   },
   "Pin B02L": {
     "xyz": [
-      -3300.734516748516,
-      -6435.01762856596,
-      3.20940415723612
+      -3310.4812390336956,
+      -6437.4103515020615,
+      3.33
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
-      "Leonida Keys 05 (Boats)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 45.579,
-    "zone": "leonida_keys"
+    "error_m": 0.572,
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 3.33,
+      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
+    }
   },
   "Pin B02R": {
     "xyz": [
-      -3268.0689857033394,
-      -6435.121051574252,
-      3.9306355635563284
+      -3277.3373971246983,
+      -6437.316137123796,
+      3.33
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
-      "Leonida Keys 05 (Boats)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 33.765,
-    "zone": "leonida_keys"
+    "error_m": 1.064,
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 3.33,
+      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
+    }
   },
   "Pin B03L": {
     "xyz": [
@@ -3622,30 +3630,38 @@
   },
   "Pin B04R": {
     "xyz": [
-      -3270.0492077020162,
-      -6328.259632380235,
-      3.1950962289868934
+      -3270.232109187717,
+      -6328.489474330248,
+      3.33
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 1.162,
-    "zone": "leonida_keys"
+    "error_m": 1.0,
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 3.33,
+      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
+    }
   },
   "Pin C01R": {
     "xyz": [
-      -3379.8916934161625,
-      -6561.642370277958,
-      2.972027307181375
+      -3390.424864143447,
+      -6563.1800820294175,
+      3.33
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
-      "Leonida Keys 05 (Boats)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 32.927,
-    "zone": "leonida_keys"
+    "error_m": 0.245,
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 3.33,
+      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
+    }
   },
   "Pin C01R (B)": {
     "xyz": [
@@ -3662,44 +3678,56 @@
   },
   "Pin C02L": {
     "xyz": [
-      -3456.8365592967134,
-      -6554.520959555598,
-      1.5907220527523624
+      -3468.7603034968406,
+      -6557.637489911278,
+      3.33
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
-      "Leonida Keys 05 (Boats)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 44.495,
-    "zone": "leonida_keys"
+    "error_m": 0.84,
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 3.33,
+      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
+    }
   },
   "Pin C02R": {
     "xyz": [
-      -3424.0367795443212,
-      -6530.820041130683,
-      2.35623746057471
+      -3435.2948325824927,
+      -6533.283691579885,
+      3.33
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
-      "Leonida Keys 05 (Boats)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 44.798,
-    "zone": "leonida_keys"
+    "error_m": 0.757,
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 3.33,
+      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
+    }
   },
   "Pin C03L": {
     "xyz": [
-      -3512.8955622200565,
-      -6526.330006091148,
-      2.365989871004569
+      -3514.809349330846,
+      -6527.705296748487,
+      3.33
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 1.75,
-    "zone": "leonida_keys"
+    "error_m": 1.0,
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 3.33,
+      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
+    }
   },
   "Pin C03R": {
     "xyz": [
@@ -3729,16 +3757,20 @@
   },
   "Pin C04R": {
     "xyz": [
-      -3534.4048276410244,
-      -6468.489347313111,
-      3.578561317727085
+      -3534.0412818788186,
+      -6468.04201700386,
+      3.33
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 1.592,
-    "zone": "leonida_keys"
+    "error_m": 1.0,
+    "zone": "leonida_keys",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 3.33,
+      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
+    }
   },
   "Pin D01L": {
     "xyz": [
@@ -4888,9 +4920,9 @@
   },
   "1000 Venetian Way (SE)": {
     "xyz": [
-      349.48040648681274,
-      1123.7678972781607,
-      68.20745743144685
+      349.4538342256675,
+      1123.7811959741516,
+      68.19358696156026
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -5168,8 +5200,8 @@
   },
   "Bay (H)": {
     "xyz": [
-      -8165.866610720045,
-      4695.93198873721,
+      -8166.162290242868,
+      4696.133275770137,
       0.0
     ],
     "source_cameras": [
@@ -6361,9 +6393,9 @@
   },
   "One Miami Condominium West (NE)": {
     "xyz": [
-      -318.6424437621283,
-      -558.2670956432487,
-      187.7637624928538
+      -318.64454037183094,
+      -558.2810911531848,
+      187.7628729544241
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -8421,9 +8453,9 @@
   },
   "One Miami Condominium East (SE)": {
     "xyz": [
-      -231.84916510621227,
-      -550.254539616741,
-      182.38204059760187
+      -231.8890434000222,
+      -550.2611156244944,
+      182.39262648045894
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -8605,9 +8637,9 @@
   },
   "City View Parking Garage (S)": {
     "xyz": [
-      -185.27747716317188,
-      2061.1815465915947,
-      34.01737806017352
+      -185.27763092072118,
+      2061.1813795939825,
+      34.01736853360637
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8618,9 +8650,9 @@
   },
   "City View Parking Garage (SE)": {
     "xyz": [
-      -158.98280950573118,
-      2059.8993109175235,
-      33.97744137870115
+      -158.98265630940645,
+      2059.899464169406,
+      33.977450197915914
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8899,9 +8931,9 @@
   },
   "Office in the Grove": {
     "xyz": [
-      -1171.6661968194664,
-      -2093.6361966025056,
-      42.65140060093865
+      -1171.7021062890508,
+      -2093.6484040946334,
+      42.651678371769414
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -9122,9 +9154,9 @@
   },
   "Stephen P. Clark Government Center (E)": {
     "xyz": [
-      -846.0869662398871,
-      69.65634820022218,
-      155.37674208726327
+      -846.0295036219704,
+      69.6231432851365,
+      155.3705820444505
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -10732,9 +10764,9 @@
       "Port Vice City (B)"
     ],
     "xyz": [
-      -456.9504141394578,
-      -230.2262945306288,
-      146.83325338643877
+      -456.94046559361766,
+      -230.24037259775568,
+      146.83302028580334
     ],
     "zone": null
   },
@@ -14921,9 +14953,9 @@
   },
   "One Broadway (SW)": {
     "xyz": [
-      -1082.727154106857,
-      -1327.7606977219702,
-      138.7438609530059
+      -1082.577312633256,
+      -1328.083100400241,
+      138.77898492171454
     ],
     "source_cameras": [
       "Metro (SE) (C)",

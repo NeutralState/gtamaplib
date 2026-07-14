@@ -657,3 +657,5 @@
 {"ts": "2026-07-14T15:42:49", "tool": "guarded_apply", "action": "apply", "n_cams": 7, "n_lms": 26, "n_accepted": 25}
 {"ts": "2026-07-14T15:44:13", "tool": "c1_tranche2", "action": "restore_pose", "cams": ["Jason Duval 03 (Boat)"], "reason": "BA depth-degenere (3 obs) -> z=-2.67 underwater; pose rlx restauree + blacklist guarded"}
 {"ts": "2026-07-14T15:45:31", "tool": "guarded_apply", "action": "apply", "n_cams": 5, "n_lms": 12, "n_accepted": 13}
+{"ts": "2026-07-14T16:20:19", "tool": "pin_fix_v1", "action": "ground_prior_fix", "lms": ["Pin B02L", "Pin B02R", "Pin C01R", "Pin C02L", "Pin C02R", "Pin B04R", "Pin C03L", "Pin C04R"], "reason": "prior rlx z=3.33m (hauteur pin->eau): 5 midpoints rays concordants + 3 arbitres continuite pont; parallaxe 14.8deg mal-conditionnee resolue par le prior"}
+{"ts": "2026-07-14T16:26:35", "tool": "guarded_apply", "action": "apply", "n_cams": 5, "n_lms": 12, "n_accepted": 12}
