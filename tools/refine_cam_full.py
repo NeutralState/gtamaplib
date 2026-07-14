@@ -54,6 +54,12 @@ TIERS_JSON = os.path.join(GEN_DIR, 'confidence_tiers.json')
 GOOD_RMS_ARCMIN = 3.0      # Below this: cam is clearly well-calibrated
 HIGH_RMS_ARCMIN = 5.0      # Above this: probably stale marking, flag warning
 DANGER_RMS_ARCMIN = 10.0   # Above this: needs --force-apply to write
+# DUAL-METRIC-V3: arcmin explodes at short range (a close cam can read 13' but
+# be 1cm off). The hard --force-apply gate fires only if the arcmin RMS is
+# high AND the METRIC residual is also bad, so close-range cams aren't blocked
+# for an inflated angle they can't help. Median transverse gap over the fitted
+# LMs, in metres.
+DANGER_RMS_M = 2.0
 
 # Bounds
 HFOV_MIN = 20.0
@@ -247,7 +253,25 @@ def compute_residuals(cam_name, params, cameras, pixels, landmarks, selected_lms
     rms = math.sqrt(sum(weighted_sq_errors) / total_weight)
     max_arcmin = max(per_lm.values())
     return rms, max_arcmin, per_lm, per_lm_weight
-    return rms, max_arcmin, per_lm, per_lm_weight
+
+
+def _median_metric_from_arcmin(per_lm_arcmin, cam_xyz, landmarks):
+    """Median transverse gap in metres from per-LM arcmin residuals.
+    transverse_m ~= radians(arcmin/60) * distance(cam, lm). [DUAL-METRIC-V3]"""
+    gaps = []
+    for lm_name, arc in per_lm_arcmin.items():
+        if arc is None or not math.isfinite(arc):
+            continue
+        lm = landmarks.get(lm_name)
+        xyz = lm.get('xyz') if isinstance(lm, dict) else None
+        if not xyz:
+            continue
+        dist = math.sqrt(sum((cam_xyz[i] - xyz[i]) ** 2 for i in range(3)))
+        gaps.append(math.radians(arc / 60.0) * dist)
+    if not gaps:
+        return None
+    gaps.sort()
+    return gaps[len(gaps) // 2]
 
 
 def optimize_full(cam_name, initial_params, cameras, pixels, landmarks, selected_lms, lm_tiers,
@@ -548,6 +572,13 @@ def main():
         print(f"  weight={w:5.1f} [{tier:10}] {err:7.2f}'  {lm_name}")
     print()
 
+    # DUAL-METRIC-V3: metric residual (median transverse gap in metres) at the
+    # fitted pose. Derived from the per-LM arcmin and the LM distance
+    # (transverse_m ~= radians(arcmin/60) * dist), so it needs no re-projection.
+    final_median_m = _median_metric_from_arcmin(final_per_lm, new_xyz, landmarks)
+    _median_m_str = 'n/a' if final_median_m is None else f"{final_median_m:.2f}m"
+    print(f"Final metric residual (median gap): {_median_m_str}")
+
     # Validation
     apply_allowed = False
     if final_rms < GOOD_RMS_ARCMIN:
@@ -563,11 +594,23 @@ def main():
         print(f"  --apply still allowed but consider reviewing markings.")
         apply_allowed = True
     else:
+        # High arcmin. Only a HARD block (force-apply) if metres are ALSO bad —
+        # a close-range cam can read >10' yet be sub-metre (arcmin lies at
+        # short range). [DUAL-METRIC-V3]
         worst = sorted_lms[0]
-        print(f"✗ Final RMS {final_rms:.2f}' > {DANGER_RMS_ARCMIN}' — calibration is suspect.")
-        print(f"  Worst LM: '{worst[0]}' at {worst[1]:.2f}'")
-        print(f"  --apply DISABLED. Use --force-apply to override, or review markings first.")
-        apply_allowed = False
+        metric_bad = (final_median_m is None or final_median_m >= DANGER_RMS_M)
+        if metric_bad:
+            print(f"✗ Final RMS {final_rms:.2f}' > {DANGER_RMS_ARCMIN}' AND metric "
+                  f"{_median_m_str} >= {DANGER_RMS_M}m — calibration is suspect.")
+            print(f"  Worst LM: '{worst[0]}' at {worst[1]:.2f}'")
+            print(f"  --apply DISABLED. Use --force-apply to override, or review markings first.")
+            apply_allowed = False
+        else:
+            print(f"~ Final RMS {final_rms:.2f}' > {DANGER_RMS_ARCMIN}' but metric "
+                  f"{_median_m_str} < {DANGER_RMS_M}m — arcmin over-penalizes close range.")
+            print(f"  Worst LM: '{worst[0]}' at {worst[1]:.2f}'")
+            print(f"  --apply allowed (metric residual is fine).")
+            apply_allowed = True
     print()
 
     # Decide whether to write
@@ -576,7 +619,8 @@ def main():
         return 0
 
     if args.apply and not apply_allowed and not args.force_apply:
-        print(f"REFUSED: RMS {final_rms:.2f}' exceeds {DANGER_RMS_ARCMIN}'. Use --force-apply to override.")
+        print(f"REFUSED: RMS {final_rms:.2f}' exceeds {DANGER_RMS_ARCMIN}' and metric "
+              f"{_median_m_str} exceeds {DANGER_RMS_M}m. Use --force-apply to override.")
         return 1
 
     # Apply

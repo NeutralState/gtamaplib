@@ -263,9 +263,30 @@ def _residuals_arcmin(point, rays):
     return out
 
 
+def _residuals_dual(point, rays):
+    """Per-cam DUAL residual {cn: (arcmin, gap_m)} for a candidate point.
+
+    d is the marked-PIXEL ray (get_landmark_direction), so the transverse
+    component of (point - origin) is the metric gap in metres directly, and
+    its angle is the arcmin residual. [DUAL-METRIC-V3]"""
+    import numpy as np, math
+    out = {}
+    p = np.asarray(point, dtype=float)
+    for cn, o, d in rays:
+        v = p - o
+        dist = np.linalg.norm(v)
+        if dist < 1e-3:
+            out[cn] = (0.0, 0.0); continue
+        perp = v - np.dot(v, d) * d
+        gap_m = float(np.linalg.norm(perp))
+        out[cn] = (math.degrees(gap_m / dist) * 60.0, gap_m)
+    return out
+
+
 def robust_triangulate(candidate_cams, lm_name, pixels, cameras, init_xyz,
                        min_parallax=15.0, outlier_mult=2.0, outlier_floor=5.0,
-                       verbose=True, observers_classified_global=None):
+                       verbose=True, observers_classified_global=None,
+                       dual=True, outlier_floor_m=12.0):
     """Choose a consensus subset of sources automatically.
 
     1. Drop cams that have NO pairing >= min_parallax with any other cam
@@ -273,6 +294,16 @@ def robust_triangulate(candidate_cams, lm_name, pixels, cameras, init_xyz,
     2. Triangulate with survivors, compute per-cam reprojection residual.
     3. Reject the worst cam if its residual > outlier_mult * median AND
        > outlier_floor; retriangulate; repeat until stable or < 3 cams.
+
+    DUAL-METRIC-V3 (dual=True): the outlier step is judged on the METRIC gap
+    (metres), not pure arcmin. Arcmin explodes at short range (over-penalizes
+    near witnesses) and stays small at long range even for large ground
+    errors (under-penalizes far witnesses). A source is an outlier iff its
+    metric gap > outlier_mult * median_gap AND > outlier_floor_m. Sources
+    with no computable gap fall back to the arcmin rule. This keeps a near
+    witness whose arcmin is inflated but whose metres are small, and flags a
+    far witness whose arcmin looks clean but whose ground gap is large.
+
     Returns (xyz, max_res, kept, dropped_log).
     """
     import numpy as np, math, itertools
@@ -346,7 +377,26 @@ def robust_triangulate(candidate_cams, lm_name, pixels, cameras, init_xyz,
         median = vals[len(vals) // 2]
         worst_cam = max(res, key=res.get)
         worst_res = res[worst_cam]
-        if len(cur) > 3 and worst_res > outlier_mult * median and worst_res > outlier_floor:
+        if dual:
+            # DUAL-METRIC-V3: judge outliers in metres (arcmin lies with range).
+            dres = _residuals_dual(xyz, cur)
+            gaps = sorted(g for _, g in dres.values())
+            median_g = gaps[len(gaps) // 2] if gaps else 0.0
+            # Worst offender = largest metric gap; fall back to arcmin only for
+            # sources with no computable gap (never here, but defensive).
+            worst_cam = max(dres, key=lambda c: dres[c][1])
+            worst_a, worst_g = dres[worst_cam]
+            is_out = (worst_g > outlier_mult * median_g and worst_g > outlier_floor_m)
+            if len(cur) > 3 and is_out:
+                dropped.append((worst_cam,
+                    f"outlier gap {worst_g:.1f}m / {worst_a:.1f}' "
+                    f"(>{outlier_mult}x median {median_g:.1f}m)"))
+                if verbose:
+                    print(f"  reject outlier: {worst_cam} "
+                          f"({worst_g:.1f}m / {worst_a:.1f}', median {median_g:.1f}m)")
+                cur = [r for r in cur if r[0] != worst_cam]
+                continue
+        elif len(cur) > 3 and worst_res > outlier_mult * median and worst_res > outlier_floor:
             dropped.append((worst_cam, f"outlier residual {worst_res:.1f}' (>{outlier_mult}x median {median:.1f}')"))
             if verbose:
                 print(f"  reject outlier: {worst_cam} ({worst_res:.1f}', median {median:.1f}')")
@@ -430,7 +480,8 @@ def main():
     print("Robust source selection:")
     new_xyz, max_res, kept, dropped = robust_triangulate(
         candidate, args.lm_name, pixels, cameras, init,
-        observers_classified_global=observers_classified)
+        observers_classified_global=observers_classified,
+        dual=True, outlier_floor_m=12.0)  # [DUAL-METRIC-V3]
     print()
     if dropped:
         print("Dropped sources:")
@@ -476,8 +527,15 @@ def main():
     all_max = max(all_res.values()) if all_res else None
     if all_res:
         worst_cam = max(all_res, key=all_res.get)
+        # [DUAL-METRIC-V3] report the metric alongside the arcmin so downstream
+        # gates (harvest observer-guard) can judge in metres too.
+        all_dual = _residuals_dual(new_xyz, all_rays)
+        all_gaps = sorted(g for _, g in all_dual.values())
+        all_max_m = max(g for _, g in all_dual.values())
+        all_med_m = all_gaps[len(all_gaps) // 2]
         print(f"All-observer residual: max {all_max:.3f} arcmin "
               f"({len(all_res)} obs, worst: {worst_cam})")
+        print(f"All-observer metric: median {all_med_m:.3f} m, max {all_max_m:.3f} m")
 
     print(f"Triangulation result:")
     print(f"  New xyz: [{new_xyz[0]:.4f}, {new_xyz[1]:.4f}, {new_xyz[2]:.4f}]")
