@@ -1109,9 +1109,9 @@
   },
   "Four Seasons Hotel Miami (BE)": {
     "xyz": [
-      -818.1356392060854,
-      -1307.097906172083,
-      262.93444673877275
+      -817.3843236023902,
+      -1307.298508237765,
+      263.0257285017382
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -1128,9 +1128,9 @@
   },
   "Four Seasons Hotel Miami (BW)": {
     "xyz": [
-      -850.5802616740591,
-      -1279.515306338668,
-      262.7018818213209
+      -850.5236637051386,
+      -1280.1628661704203,
+      262.5897640368277
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -1154,9 +1154,9 @@
   },
   "Four Seasons Hotel Miami (NE)": {
     "xyz": [
-      -802.8709839104923,
-      -1273.5188605374653,
-      258.03585408250166
+      -802.8038757100865,
+      -1273.5495703453144,
+      258.0116024558636
     ],
     "source_cameras": [
       "Shitzu Squalo 01 (Bay)",
@@ -2176,41 +2176,44 @@
   },
   "99353 Overseas Hwy": {
     "xyz": [
-      -3366.161019617708,
-      -6766.900699682608,
-      76.72552140592262
+      -3366.54031721442,
+      -6768.914637343055,
+      76.30438695680907
     ],
     "source_cameras": [
+      "Ocean near Keys (N)",
       "Key Lento",
-      "Ocean near Keys (N)"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 0.13,
+    "error_m": 0.965,
     "zone": "leonida_keys"
   },
   "Blimp Bay": {
     "xyz": [
-      -4026.7562600424712,
-      -7355.020183200255,
-      0.7296498955057493
+      -4019.679681686689,
+      -7358.265076567423,
+      2.8525351309039193
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Keys"
     ],
-    "error_m": 0.019,
+    "error_m": 0.243,
     "zone": "leonida_keys"
   },
   "Blue Billboard (Key Lento)": {
     "xyz": [
-      -3435.6787638118735,
-      -6766.977829943973,
-      24.159584732664445
+      -3435.7776583751556,
+      -6771.3653509265805,
+      23.9492521895097
     ],
     "source_cameras": [
+      "Ocean near Keys (N)",
       "Key Lento",
-      "Ocean near Keys (N)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Leonida Keys 05 (Boats)"
     ],
-    "error_m": 0.631,
+    "error_m": 1.606,
     "zone": "leonida_keys"
   },
   "FAA Miami ATCT (MIA)": {
@@ -2228,9 +2231,9 @@
   },
   "Homestead Water Tower": {
     "xyz": [
-      -2960.3538378973226,
-      -3035.056606344332,
-      74.01180557138498
+      -2955.604600069717,
+      -3033.330936945019,
+      73.79426188096267
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -2242,9 +2245,9 @@
   },
   "Island A (W)": {
     "xyz": [
-      -2547.319470401167,
-      -5585.766257911313,
-      1.0911184105811946
+      -2543.378428342069,
+      -5589.9600217018515,
+      -0.09473092228062374
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -2255,22 +2258,22 @@
   },
   "Island J (E)": {
     "xyz": [
-      -2430.2201535818494,
-      -6535.90859165063,
-      -3.5478548413813846
+      -2423.226036650908,
+      -6527.733063777503,
+      -3.470883474984334
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 18.447,
+    "error_m": 1.701,
     "zone": "leonida_keys"
   },
   "Island N (E)": {
     "xyz": [
-      -4036.530206323825,
-      -6964.3605920746595,
+      -4019.547097504628,
+      -6970.122187872838,
       0.0
     ],
     "source_cameras": [
@@ -2285,8 +2288,8 @@
   },
   "Island N (W)": {
     "xyz": [
-      -4157.418968193174,
-      -6886.947681494357,
+      -4138.4908,
+      -6889.3203,
       0.0
     ],
     "source_cameras": [
@@ -2301,8 +2304,8 @@
   },
   "Island S (E)": {
     "xyz": [
-      -3932.6894283711827,
-      -5454.71478472747,
+      -3920.839542389374,
+      -5474.717436940471,
       0.0
     ],
     "source_cameras": [
@@ -2317,8 +2320,8 @@
   },
   "Island U (S)": {
     "xyz": [
-      -3801.3187123458533,
-      -5561.871489624422,
+      -3790.2255853249826,
+      -5579.536692350815,
       0.0
     ],
     "source_cameras": [
@@ -2333,22 +2336,22 @@
   },
   "Island V (S)": {
     "xyz": [
-      -3748.395384721509,
-      -5917.538973623728,
-      -1.217203963174553
+      -3727.486011557192,
+      -5909.853456677338,
+      -1.6890425607324708
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 1.718,
+    "error_m": 0.551,
     "zone": "leonida_keys"
   },
   "Key Lento (A)": {
     "xyz": [
-      -2592.2904498396897,
-      -5717.284091815729,
-      0.15021217176976476
+      -2588.660154032804,
+      -5721.5874773823325,
+      -1.0067315727482598
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -2359,15 +2362,15 @@
   },
   "Key Lento (J)": {
     "xyz": [
-      -2996.9603075855166,
-      -6681.535193019003,
-      -0.1539021283617833
+      -2978.6051566184933,
+      -6678.686241494753,
+      -1.9978765513278711
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.434,
+    "error_m": 0.79,
     "zone": "leonida_keys"
   },
   "Park Grove Condominium (S)": {
@@ -2388,327 +2391,309 @@
   },
   "Red Billboard (Hamlet)": {
     "xyz": [
-      -2551.346380545593,
-      -3482.019641419207,
-      20.141049830737206
+      -2548.3044454411706,
+      -3486.484169828694,
+      21.101291891901422
     ],
     "source_cameras": [
+      "Police Chase (D)",
       "Leonida Keys 01 (Airplane) (X)",
-      "Police Chase (D)"
+      "Grassrivers 02 (Watson Bay)"
     ],
-    "error_m": 10.301,
+    "error_m": 12.162,
     "zone": "grassrivers"
   },
   "Seven Mile Bridge (10B)": {
     "xyz": [
-      -3746.8039242421783,
-      -6981.793650305366,
-      0.16117149585299
+      -3732.214620169333,
+      -6983.218422529764,
+      -0.19227998286237882
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.599,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (11B)": {
     "xyz": [
-      -3768.747365019973,
-      -6994.745660493218,
-      0.11186374348534228
+      -3753.8020526419464,
+      -6995.966348165272,
+      -0.20447373872619348
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.792,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (12B)": {
     "xyz": [
-      -3792.3372479413088,
-      -7008.514043688363,
-      0.050267011720492874
+      -3777.0531803957424,
+      -7009.5562262720705,
+      -0.22971137458630705
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.78,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (13B)": {
     "xyz": [
-      -3815.7636972439795,
-      -7022.977201315149,
-      0.15704381862672556
+      -3800.1952909145293,
+      -7023.88195938191,
+      -0.08975315486714823
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.574,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (14B)": {
     "xyz": [
-      -3837.4121197564755,
-      -7035.836971370267,
-      0.16996708294727486
+      -3821.6113878208794,
+      -7036.651827116558,
+      -0.042050505023640244
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.342,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (15B)": {
     "xyz": [
-      -3857.4293114054235,
-      -7046.848218999927,
-      0.06318437033181692
+      -3841.429842035574,
+      -7047.609761374128,
+      -0.1116267374747557
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.128,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (16B)": {
     "xyz": [
-      -3879.52507481934,
-      -7060.212254810029,
-      0.028200604840953075
+      -3863.349850452833,
+      -7060.947616157307,
+      -0.10635276526419886
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 1.668,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (17B)": {
     "xyz": [
-      -3901.678064733481,
-      -7073.505769388634,
-      0.07009503330490412
+      -3885.480052398821,
+      -7074.36527445165,
+      0.0691299417725096
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 1.154,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (18B)": {
     "xyz": [
-      -3923.4593963738,
-      -7086.4758264565335,
-      0.3137888727874728
+      -3907.0242337521095,
+      -7087.278480888901,
+      0.2873199989065856
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 1.241,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (19B)": {
     "xyz": [
-      -3946.7379103875955,
-      -7099.720810788547,
-      -0.08939406043123156
+      -3930.1967450901293,
+      -7100.620141836474,
+      -0.026665142048366956
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 1.64,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (1B)": {
     "xyz": [
-      -3537.9058626308615,
-      -6854.164056053274,
-      -0.4799518424852941
+      -3529.4580702942726,
+      -6859.734195932319,
+      -0.8846062346773733
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 3.954,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (20B)": {
     "xyz": [
-      -3969.62156541659,
-      -7114.104115699611,
-      0.13398309517464962
+      -3953.450326997005,
+      -7115.552115191554,
+      0.3166931217390876
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Keys"
     ],
-    "error_m": 0.223,
+    "error_m": 2.334,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (21B)": {
     "xyz": [
-      -3990.278506533962,
-      -7125.878566421581,
-      0.0005163308353252855
+      -3973.5881768418476,
+      -7127.03835444994,
+      0.18925185327955166
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 0.001,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (2B)": {
     "xyz": [
-      -3563.5489132200355,
-      -6869.504966685866,
-      -0.620042073888273
+      -3554.0252052379105,
+      -6874.338810546823,
+      -1.0519327905021902
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 3.339,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (3B)": {
     "xyz": [
-      -3587.513083301162,
-      -6885.514810016199,
-      -0.3171855437824379
+      -3577.06705418127,
+      -6889.694778324875,
+      -0.7699797038478241
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.956,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (3T)": {
     "xyz": [
-      -3579.113012705271,
-      -6876.537038222548,
-      3.4952672264700455
+      -3574.952306804968,
+      -6886.143226910503,
+      3.4000873044789475
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Ocean near Keys (N)"
+      "Ocean near Keys (N)",
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 0.714,
+    "error_m": 0.991,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (4B)": {
     "xyz": [
-      -3612.1777707646343,
-      -6900.601455269875,
-      -0.3289957278383005
+      -3600.878386433016,
+      -6904.193445930396,
+      -0.8069194212712636
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.176,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (5B)": {
     "xyz": [
-      -3638.295951791948,
-      -6917.2660561141765,
-      0.06336557447138648
+      -3625.5158466731164,
+      -6919.828147362136,
+      -0.5213699013162302
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Keys"
     ],
-    "error_m": 1.056,
+    "error_m": 0.6,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (6B)": {
     "xyz": [
-      -3658.9753636489013,
-      -6929.489379103271,
-      -0.12257265848460984
+      -3646.2869741975896,
+      -6932.130614523727,
+      -0.6012272293405279
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 1.55,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (6T)": {
     "xyz": [
-      -3647.381627483432,
-      -6918.147759985961,
-      8.495064208816341
+      -3641.0056120558943,
+      -6926.654205285606,
+      8.255990338583755
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Ocean near Keys (N)"
+      "Ocean near Keys (N)",
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 0.255,
+    "error_m": 0.426,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (7B)": {
     "xyz": [
-      -3680.03216961024,
-      -6941.889446772042,
-      -0.062220802313171814
+      -3666.809710648022,
+      -6944.178431868381,
+      -0.5150819719255271
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 1.786,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (8B)": {
     "xyz": [
-      -3702.227209781264,
-      -6955.19754018051,
-      -0.027752102472553403
+      -3688.5019682795323,
+      -6957.1610049808605,
+      -0.42793208814174827
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.665,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (9B)": {
     "xyz": [
-      -3723.849106400052,
-      -6967.911453540007,
-      -0.01453413219806627
+      -3709.6816541421795,
+      -6969.597790279176,
+      -0.3763598798168776
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 3.1,
+    "error_m": null,
     "zone": "leonida_keys"
   },
   "White Billboard (Hamlet)": {
     "xyz": [
-      -2594.2548155263603,
-      -3793.3270079773997,
-      34.052529843166816
+      -2594.307059467268,
+      -3794.907188844592,
+      34.16440795710925
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Police Chase (A)"
     ],
-    "error_m": 3.698,
+    "error_m": 4.938,
     "zone": "grassrivers"
   },
   "Oval Yellow Sign": {
@@ -2854,9 +2839,9 @@
   },
   "MIA North Terminal Tower": {
     "xyz": [
-      -2373.636969881258,
-      -513.8603991498791,
-      59.5936262883455
+      -2373.7071862019393,
+      -513.8378687203484,
+      59.5389749754856
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -2906,9 +2891,9 @@
   },
   "102180 Overseas Hwy": {
     "xyz": [
-      -2628.405524935858,
-      -6010.251518745747,
-      40.100306071656995
+      -2633.903431647142,
+      -6018.606832906953,
+      40.20849254371755
     ],
     "source_cameras": [
       "Key Lento",
@@ -2916,13 +2901,13 @@
       "Leonida Keys Postcard (X)",
       "Ocean near Keys (N)"
     ],
-    "error_m": 12.419,
+    "error_m": 2.55,
     "zone": "leonida_keys"
   },
   "Island F (E)": {
     "xyz": [
-      -1788.3667344005182,
-      -5720.581499310134,
+      -1718.3818430914168,
+      -5674.609422284569,
       0.0
     ],
     "source_cameras": [
@@ -2937,15 +2922,14 @@
   },
   "Island F (W)": {
     "xyz": [
-      -1984.1652284385975,
-      -5956.861586951218,
+      -1764.9763118018418,
+      -5856.8525346881315,
       0.0
     ],
     "source_cameras": [
-      "Leonida Keys Postcard (X)",
-      "Jason Duval 03 (Boat)"
+      "Leonida Keys Postcard (X)"
     ],
-    "error_m": 26.665,
+    "error_m": null,
     "zone": "leonida_keys",
     "z_constraint": {
       "type": "fixed",
@@ -2954,49 +2938,50 @@
   },
   "Island G (E)": {
     "xyz": [
-      -2046.8418778436826,
-      -6181.251854641124,
-      -4.124579726278547
+      -2043.4497563948885,
+      -6173.500274833048,
+      -3.83313393407904
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 16.61,
+    "error_m": 3.338,
     "zone": "leonida_keys"
   },
   "Island G (W)": {
     "xyz": [
-      -2140.880392606465,
-      -6268.8763130924135,
-      -4.2662414307765575
+      -2136.758870120676,
+      -6261.244837165387,
+      -4.037761848411732
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 16.767,
+    "error_m": 3.891,
     "zone": "leonida_keys"
   },
   "Island J (W)": {
     "xyz": [
-      -2507.332732003182,
-      -6616.9515528171705,
-      -4.4269768540383385
+      -2501.369016844912,
+      -6606.563479471546,
+      -3.65957059286493
     ],
     "source_cameras": [
       "Key Lento",
+      "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 2.064,
+    "error_m": 0.898,
     "zone": "leonida_keys"
   },
   "Island X (S)": {
     "xyz": [
-      -3152.8909149860983,
-      -5988.678664765033,
+      -3142.5132314890893,
+      -5996.909858646588,
       0.0
     ],
     "source_cameras": [
@@ -3011,8 +2996,8 @@
   },
   "Island Y (S)": {
     "xyz": [
-      -3059.953111408178,
-      -5934.044764012307,
+      -3057.540258055585,
+      -5942.106849052684,
       0.0
     ],
     "source_cameras": [
@@ -3027,8 +3012,8 @@
   },
   "Island Z (S)": {
     "xyz": [
-      -2837.2490569469383,
-      -5664.8252343775375,
+      -2833.076063960595,
+      -5670.36111081431,
       0.0
     ],
     "source_cameras": [
@@ -3043,8 +3028,8 @@
   },
   "Key Lento (E)": {
     "xyz": [
-      -2194.1216237226176,
-      -5101.277347111685,
+      -2156.1372166306032,
+      -5072.623006064775,
       0.0
     ],
     "source_cameras": [
@@ -3059,8 +3044,8 @@
   },
   "Key Lento (U)": {
     "xyz": [
-      -3358.48711413401,
-      -6630.007793031428,
+      -3350.576021407111,
+      -6635.932589403994,
       0.0
     ],
     "source_cameras": [
@@ -3075,8 +3060,8 @@
   },
   "Key Lento (V)": {
     "xyz": [
-      -3350.524804233756,
-      -6578.012261280242,
+      -3342.628993340747,
+      -6584.627244580348,
       0.0
     ],
     "source_cameras": [
@@ -3091,8 +3076,8 @@
   },
   "Key Lento (W)": {
     "xyz": [
-      -3103.9050290893933,
-      -6389.993212015419,
+      -3094.558777207666,
+      -6393.544103606098,
       0.0
     ],
     "source_cameras": [
@@ -3119,9 +3104,9 @@
   },
   "Keys Bridge (2B)": {
     "xyz": [
-      -760.331234161573,
-      -3310.0790152375625,
-      10.324074115584917
+      -758.4912315749999,
+      -3312.209878284554,
+      10.118881253059667
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3131,9 +3116,9 @@
   },
   "Keys Bridge (3B)": {
     "xyz": [
-      -769.9540554350865,
-      -3337.6949984926528,
-      10.105377062778585
+      -768.1420382100755,
+      -3339.845464623288,
+      9.906603765084409
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3143,9 +3128,9 @@
   },
   "Keys Bridge (4B)": {
     "xyz": [
-      -778.4567046800754,
-      -3366.0688635988613,
-      9.911422631575013
+      -777.0012596759868,
+      -3367.9499006219453,
+      9.508487718358285
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3155,9 +3140,9 @@
   },
   "Keys Bridge (5B)": {
     "xyz": [
-      -788.2727567449983,
-      -3394.4542446156993,
-      9.658200039283052
+      -786.4572725001368,
+      -3396.5694242028726,
+      9.47349877275517
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3167,9 +3152,9 @@
   },
   "Keys Bridge (6B)": {
     "xyz": [
-      -796.112960350846,
-      -3422.8882709940794,
-      9.821690717291563
+      -794.377727565413,
+      -3425.0679294099873,
+      9.643229219729102
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3179,9 +3164,9 @@
   },
   "Keys Bridge (7B)": {
     "xyz": [
-      -804.7483132752299,
-      -3449.735667256291,
-      9.628429828267027
+      -803.1112137155221,
+      -3452.0042343271716,
+      9.458612256928118
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3191,9 +3176,9 @@
   },
   "Lake Surprise Viaduct (10B)": {
     "xyz": [
-      -2385.1978,
-      -5028.7235,
-      12.8075
+      -2377.1279003420505,
+      -5035.381275345045,
+      13.49052323994258
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3203,9 +3188,9 @@
   },
   "Lake Surprise Viaduct (11B)": {
     "xyz": [
-      -2388.5993656515757,
-      -5008.485836456834,
-      12.060201828806209
+      -2385.6808375672686,
+      -5013.615083304451,
+      11.182406140961072
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3215,9 +3200,9 @@
   },
   "Lake Surprise Viaduct (12B)": {
     "xyz": [
-      -2395.813903353534,
-      -4985.268997141396,
-      11.986109239174084
+      -2392.7991158509644,
+      -4990.384411753733,
+      11.101545568565287
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3227,9 +3212,9 @@
   },
   "Lake Surprise Viaduct (13B)": {
     "xyz": [
-      -2407.4844297659497,
-      -4965.806781486628,
-      11.964789147606886
+      -2404.3067033995753,
+      -4970.833282844139,
+      11.06705364733164
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3239,9 +3224,9 @@
   },
   "Lake Surprise Viaduct (14B)": {
     "xyz": [
-      -2418.2259098776863,
-      -4946.12438529511,
-      12.093740675541873
+      -2415.274019756855,
+      -4951.558950870105,
+      11.213892901959575
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3251,9 +3236,9 @@
   },
   "Lake Surprise Viaduct (15B)": {
     "xyz": [
-      -2428.0838633446992,
-      -4917.719425138756,
-      12.01642721405417
+      -2425.0524021325186,
+      -4923.1837436124015,
+      11.130870850834073
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3263,9 +3248,9 @@
   },
   "Lake Surprise Viaduct (2B)": {
     "xyz": [
-      -2292.8002612112305,
-      -5192.147494192469,
-      11.41969230614353
+      -2291.474976136382,
+      -5197.220445722212,
+      10.599763080272277
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3275,9 +3260,9 @@
   },
   "Lake Surprise Viaduct (3B)": {
     "xyz": [
-      -2304.142632683707,
-      -5173.053787414726,
-      11.415872246040301
+      -2302.6606703468474,
+      -5178.114521420009,
+      10.582306111334589
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3287,9 +3272,9 @@
   },
   "Lake Surprise Viaduct (4B)": {
     "xyz": [
-      -2316.826917333083,
-      -5153.757027070765,
-      11.449534070740485
+      -2315.0592534023126,
+      -5158.668627999698,
+      10.592054937472232
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3299,9 +3284,9 @@
   },
   "Lake Surprise Viaduct (5B)": {
     "xyz": [
-      -2329.862842993975,
-      -5135.0476865228775,
-      11.519758919261797
+      -2327.132039802474,
+      -5139.0848341715855,
+      10.588059140054913
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3311,9 +3296,9 @@
   },
   "Lake Surprise Viaduct (6B)": {
     "xyz": [
-      -2339.0402818026923,
-      -5112.727951631238,
-      11.530095828989028
+      -2337.0696136017245,
+      -5118.358433640995,
+      10.729567000195404
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3323,9 +3308,9 @@
   },
   "Lake Surprise Viaduct (7B)": {
     "xyz": [
-      -2345.4582299392546,
-      -5089.735627151587,
-      11.44067220148566
+      -2343.1802651189487,
+      -5094.548576236484,
+      10.543247254775476
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3335,9 +3320,9 @@
   },
   "Lake Surprise Viaduct (8B)": {
     "xyz": [
-      -2358.0029582325624,
-      -5070.379761746655,
-      11.803535767377234
+      -2355.6390123526317,
+      -5075.81259253196,
+      10.971064455255776
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3347,9 +3332,9 @@
   },
   "Lake Surprise Viaduct (9B)": {
     "xyz": [
-      -2373.9908,
-      -5048.2206,
-      12.7833
+      -2366.2086143412184,
+      -5054.759325325961,
+      13.510208602077038
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3359,48 +3344,48 @@
   },
   "Pin A02R": {
     "xyz": [
-      -3500.058885051428,
-      -6366.418562269576,
-      3.582104666709414
+      -3490.3326514328382,
+      -6377.034242504341,
+      3.38278542383131
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.263,
+    "error_m": 0.112,
     "zone": "leonida_keys"
   },
   "Pin A03L": {
     "xyz": [
-      -3377.705868226074,
-      -6244.623781756259,
-      3.10711229561006
+      -3367.450477024446,
+      -6253.667393690423,
+      2.783127613646192
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.769,
+    "error_m": 0.183,
     "zone": "leonida_keys"
   },
   "Pin A03R": {
     "xyz": [
-      -3345.916224852613,
-      -6287.48338373468,
-      3.6927120219399763
+      -3335.487576193039,
+      -6295.398749984789,
+      3.293760204723931
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.134,
+    "error_m": 0.463,
     "zone": "leonida_keys"
   },
   "Pin A04L": {
     "xyz": [
-      -3187.3399971247836,
-      -6127.367139853112,
-      3.4356392018012114
+      -3184.6131546935862,
+      -6135.071618719622,
+      2.3073914624137397
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -3411,22 +3396,22 @@
   },
   "Pin A04R": {
     "xyz": [
-      -3131.492819243296,
-      -6169.612843461289,
-      2.8724193728768173
+      -3117.8355090565483,
+      -6172.298553163322,
+      1.9909206441447873
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.688,
+    "error_m": 0.185,
     "zone": "leonida_keys"
   },
   "Pin A05L": {
     "xyz": [
-      -3093.559458009586,
-      -6078.153173599307,
-      3.6446909577740447
+      -3090.8093679797166,
+      -6085.261938600924,
+      2.492471884432739
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -3437,22 +3422,22 @@
   },
   "Pin A05R": {
     "xyz": [
-      -3038.5542971312316,
-      -6121.050213206023,
-      3.5031756478084306
+      -3022.6032901778876,
+      -6120.869342754282,
+      2.3380681533363683
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.052,
+    "error_m": 0.448,
     "zone": "leonida_keys"
   },
   "Pin A06L": {
     "xyz": [
-      -3005.1399376009717,
-      -6010.983803171819,
-      3.3224558056771394
+      -3002.15811923456,
+      -6017.488224891548,
+      2.1311138821208315
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -3463,9 +3448,9 @@
   },
   "Pin A06R": {
     "xyz": [
-      -2940.6683354975107,
-      -6051.393519539417,
-      3.8221330864430625
+      -2938.3055699776983,
+      -6057.710039674869,
+      2.7342565066999507
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -3476,9 +3461,9 @@
   },
   "Pin A07L": {
     "xyz": [
-      -2924.6928304958224,
-      -5905.8598429799395,
-      4.340294260938876
+      -2921.188782086925,
+      -5911.733830942852,
+      3.0705963303661132
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -3489,9 +3474,9 @@
   },
   "Pin A07R": {
     "xyz": [
-      -2852.8615694573346,
-      -5911.540001255648,
-      3.9494422494838353
+      -2849.636664452414,
+      -5917.135182029433,
+      2.742859132507288
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -3502,9 +3487,9 @@
   },
   "Pin A08L": {
     "xyz": [
-      -2791.1294776676136,
-      -5690.308077049429,
-      3.6677717781439894
+      -2786.958773649154,
+      -5695.398008832677,
+      2.3446147974744593
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -3515,9 +3500,9 @@
   },
   "Pin A08R": {
     "xyz": [
-      -2724.4205931079714,
-      -5701.3569832382755,
-      4.501076579794998
+      -2720.4746080042482,
+      -5706.2238722769835,
+      3.2304514233270663
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -3528,316 +3513,286 @@
   },
   "Pin B01L": {
     "xyz": [
-      -3305.3748854424653,
-      -6487.786941524274,
-      3.046779919863798
+      -3304.752316911764,
+      -6495.176114944007,
+      2.469061156779497
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys 05 (Boats)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 32.91,
+    "error_m": 0.613,
     "zone": "leonida_keys"
   },
   "Pin B01R": {
     "xyz": [
-      -3281.837939955384,
-      -6489.338722918963,
-      3.2353566835350893
+      -3270.064902430451,
+      -6493.520063327702,
+      2.4050510294282894
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.291,
+    "error_m": 0.618,
     "zone": "leonida_keys"
   },
   "Pin B02L": {
     "xyz": [
-      -3310.4812390336956,
-      -6437.4103515020615,
-      3.33
+      -3299.2172807148145,
+      -6442.576382465896,
+      2.4971522693230543
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
+      "Leonida Keys 05 (Boats)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.572,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 3.33,
-      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
-    }
+    "error_m": 0.754,
+    "zone": "leonida_keys"
   },
   "Pin B02R": {
     "xyz": [
-      -3277.3373971246983,
-      -6437.316137123796,
-      3.33
+      -3267.0961784335223,
+      -6442.506973698782,
+      3.17738777934436
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
+      "Leonida Keys 05 (Boats)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 1.064,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 3.33,
-      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
-    }
+    "error_m": 1.97,
+    "zone": "leonida_keys"
   },
   "Pin B03L": {
     "xyz": [
-      -3304.7866384498184,
-      -6383.243568836868,
-      2.8554480987216584
+      -3293.603442708281,
+      -6389.007033024787,
+      2.239440224503201
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 1.078,
+    "error_m": 0.36,
     "zone": "leonida_keys"
   },
   "Pin B03R": {
     "xyz": [
-      -3272.284371512709,
-      -6383.565198377137,
-      3.3782623836657706
+      -3260.6058112266924,
+      -6388.445030634186,
+      2.631494734630295
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.396,
+    "error_m": 1.102,
     "zone": "leonida_keys"
   },
   "Pin B04L": {
     "xyz": [
-      -3303.3857572942006,
-      -6330.171670260408,
-      3.2522844844240284
+      -3292.3438956205555,
+      -6336.46025506227,
+      2.690309870862264
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.372,
+    "error_m": 0.274,
     "zone": "leonida_keys"
   },
   "Pin B04R": {
     "xyz": [
-      -3270.232109187717,
-      -6328.489474330248,
-      3.33
+      -3258.515149638721,
+      -6333.623743962443,
+      2.5106583601358063
     ],
     "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 1.0,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 3.33,
-      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
-    }
+    "error_m": 1.798,
+    "zone": "leonida_keys"
   },
   "Pin C01R": {
     "xyz": [
-      -3390.424864143447,
-      -6563.1800820294175,
-      3.33
+      -3379.1868289279623,
+      -6568.873692632823,
+      2.6319851449352494
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
+      "Leonida Keys 05 (Boats)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.245,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 3.33,
-      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
-    }
+    "error_m": 1.672,
+    "zone": "leonida_keys"
   },
   "Pin C01R (B)": {
     "xyz": [
-      -3390.9753517478466,
-      -6563.538576412959,
-      -0.23120279839921376
+      -3380.519139455085,
+      -6569.515516731205,
+      -0.7358690145272815
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 1.207,
+    "error_m": 0.098,
     "zone": "leonida_keys"
   },
   "Pin C02L": {
     "xyz": [
-      -3468.7603034968406,
-      -6557.637489911278,
-      3.33
+      -3455.4934285382924,
+      -6562.333176480967,
+      1.3307516410085949
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
+      "Leonida Keys 05 (Boats)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.84,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 3.33,
-      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
-    }
+    "error_m": 7.231,
+    "zone": "leonida_keys"
   },
   "Pin C02R": {
     "xyz": [
-      -3435.2948325824927,
-      -6533.283691579885,
-      3.33
+      -3422.7641714655233,
+      -6538.640536912443,
+      1.9924846881688103
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
+      "Leonida Keys 05 (Boats)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.757,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 3.33,
-      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
-    }
+    "error_m": 5.419,
+    "zone": "leonida_keys"
   },
   "Pin C03L": {
     "xyz": [
-      -3514.809349330846,
-      -6527.705296748487,
-      3.33
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": 1.0,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 3.33,
-      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
-    }
-  },
-  "Pin C03R": {
-    "xyz": [
-      -3480.170256554695,
-      -6501.263845708612,
-      2.8012321573284042
+      -3503.3270992999655,
+      -6535.437256754665,
+      2.1992065018540115
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 1.503,
+    "error_m": 1.053,
+    "zone": "leonida_keys"
+  },
+  "Pin C03R": {
+    "xyz": [
+      -3470.4891636066586,
+      -6509.97399490234,
+      2.5671852629585277
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": 0.779,
     "zone": "leonida_keys"
   },
   "Pin C04L": {
     "xyz": [
-      -3567.321879371223,
-      -6491.965272656746,
-      3.07276615124879
+      -3557.7931488471477,
+      -6502.622887433814,
+      2.982133851859685
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 2.533,
+    "error_m": 2.224,
     "zone": "leonida_keys"
   },
   "Pin C04R": {
     "xyz": [
-      -3534.0412818788186,
-      -6468.04201700386,
-      3.33
+      -3524.8629271878954,
+      -6478.765291160277,
+      3.4431298678775737
     ],
     "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 1.0,
-    "zone": "leonida_keys",
-    "z_constraint": {
-      "type": "fixed",
-      "value": 3.33,
-      "note": "rlx: hauteur pin->eau ~3.33m (2026-07-14)"
-    }
+    "error_m": 1.181,
+    "zone": "leonida_keys"
   },
   "Pin D01L": {
     "xyz": [
-      -2363.7747192619167,
-      -6348.728812760776,
-      -0.6266671205905865
+      -2358.5568404211435,
+      -6342.6019010216605,
+      -0.5372511537449796
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 15.178,
+    "error_m": 1.685,
     "zone": "leonida_keys"
   },
   "Pin D01R": {
     "xyz": [
-      -2348.366831610657,
-      -6374.997929261426,
-      -1.770838033558988
+      -2342.859127548382,
+      -6365.262384529031,
+      -1.230987131461962
     ],
     "source_cameras": [
       "Key Lento",
+      "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.094,
+    "error_m": 1.555,
     "zone": "leonida_keys"
   },
   "Pin D02L": {
     "xyz": [
-      -2097.234323393669,
-      -6053.313365017206,
-      -1.1062742625813322
+      -2094.3703601668535,
+      -6048.247003272385,
+      -0.9286579432937911
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 14.838,
+    "error_m": 0.999,
     "zone": "leonida_keys"
   },
   "Pin D02R": {
     "xyz": [
-      -2072.8311455062376,
-      -6073.229826074064,
-      -1.0778941242126572
+      -2069.9231408052765,
+      -6067.63397456417,
+      -0.8593647140459184
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 14.613,
+    "error_m": 1.524,
     "zone": "leonida_keys"
   },
   "Tree on Island J": {
     "xyz": [
-      -2441.514947423093,
-      -6552.791252695315,
-      5.433341908159326
+      -2435.566001454726,
+      -6542.429279246064,
+      6.040733150054907
     ],
     "source_cameras": [
       "Key Lento",
+      "Leonida Keys 01 (Airplane) (X)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.236,
+    "error_m": 3.086,
     "zone": "leonida_keys"
   },
   "Asia Brickell Key (CC1)": {
@@ -3996,15 +3951,15 @@
   },
   "Island W (N)": {
     "xyz": [
-      -3705.4405284813356,
-      -6017.978445374938,
+      -3697.007232471696,
+      -6038.303363623443,
       0.0
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Keys"
     ],
-    "error_m": 4.582,
+    "error_m": 1.447,
     "zone": "leonida_keys",
     "z_constraint": {
       "type": "fixed",
@@ -4457,9 +4412,9 @@
   },
   "Old Bahia Honda Bridge (21B)": {
     "xyz": [
-      -5841.2825,
-      -7079.1295,
-      42.3429
+      -5854.949363712844,
+      -7066.83124968389,
+      11.815492285073068
     ],
     "source_cameras": [
       "Keys"
@@ -4469,28 +4424,28 @@
   },
   "Unnamed Building #1 (Blimp Key)": {
     "xyz": [
-      -4285.034749773012,
-      -6850.466017859602,
-      9.112924007882258
+      -4261.470777149445,
+      -6846.66075716004,
+      9.288458183005082
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Keys"
     ],
-    "error_m": 10.15,
+    "error_m": 1.139,
     "zone": "leonida_keys"
   },
   "Vake Island (E)": {
     "xyz": [
-      -3596.6907298258966,
-      -7885.641610579159,
+      -3594.983773078139,
+      -7880.717123794627,
       0.0
     ],
     "source_cameras": [
       "Key Lento",
       "Keys"
     ],
-    "error_m": 2.805,
+    "error_m": 4.178,
     "zone": "leonida_keys",
     "z_constraint": {
       "type": "fixed",
@@ -4499,15 +4454,15 @@
   },
   "Vake Island (W)": {
     "xyz": [
-      -3663.4946878889955,
-      -7917.961065849761,
+      -3662.8304912711956,
+      -7915.025547083324,
       0.0
     ],
     "source_cameras": [
       "Key Lento",
       "Keys"
     ],
-    "error_m": 4.366,
+    "error_m": 4.425,
     "zone": "leonida_keys",
     "z_constraint": {
       "type": "fixed",
@@ -4544,119 +4499,119 @@
   },
   "180 Pompano Dr": {
     "xyz": [
-      -1781.7472797581781,
-      -5338.3401590906005,
-      6.503551240691815
+      -1778.4270965585001,
+      -5332.09237132628,
+      7.139362493548691
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 1.826,
+    "error_m": 0.491,
     "zone": "leonida_keys"
   },
   "200 Pompano Dr": {
     "xyz": [
-      -1759.4032954679324,
-      -5301.1577695428205,
-      3.728219751613833
+      -1756.2358980757433,
+      -5294.99031125682,
+      4.620441192323234
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.015,
+    "error_m": 1.075,
     "zone": "leonida_keys"
   },
   "500 Pompano Dr": {
     "xyz": [
-      -1799.363754121714,
-      -5225.916046194786,
-      12.159934490019046
+      -1795.0802667830453,
+      -5223.208884895161,
+      12.640509081694953
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 2.094,
+    "error_m": 0.081,
     "zone": "leonida_keys"
   },
   "Billboard #2 (Key Lento)": {
     "xyz": [
-      -3011.2079392441356,
-      -6453.234900907771,
-      22.739052509529255
+      -3017.230241265046,
+      -6460.04641584589,
+      24.674373517687695
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 2.967,
+    "error_m": 0.814,
     "zone": "leonida_keys"
   },
   "Marina Club at Blackwater Sound (N)": {
     "xyz": [
-      -2505.739278627452,
-      -5794.4151769194195,
-      10.839667405506619
+      -2508.2781493497537,
+      -5798.114125436021,
+      11.168037828725971
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 6.83,
+    "error_m": 0.363,
     "zone": "leonida_keys"
   },
   "Marina Club at Blackwater Sound (S)": {
     "xyz": [
-      -2498.3007419842515,
-      -5852.465199520316,
-      10.97511489639264
+      -2506.9620784625104,
+      -5860.9122485299395,
+      11.550949129730771
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 2.93,
+    "error_m": 1.452,
     "zone": "leonida_keys"
   },
   "Naval Air Station Key West (Control Tower)": {
     "xyz": [
-      -6402.846926413266,
-      -6737.022941534179,
-      39.875109415315585
+      -5807.560587421997,
+      -6538.506710344026,
+      36.660106132565254
     ],
     "source_cameras": [
       "Key Lento",
       "Grassrivers Postcard (X)"
     ],
-    "error_m": 0.359,
+    "error_m": 0.325,
     "zone": "leonida_keys"
   },
   "Naval Air Station Key West (Radar Tower)": {
     "xyz": [
-      -6161.605473568455,
-      -6562.8012304815475,
-      35.09555004980785
+      -5658.684896915181,
+      -6405.821930736622,
+      34.548421015416416
     ],
     "source_cameras": [
       "Key Lento",
       "Grassrivers Postcard (X)"
     ],
-    "error_m": 1.305,
+    "error_m": 0.322,
     "zone": "leonida_keys"
   },
   "House with Pier (E)": {
     "xyz": [
-      -3125.599681402083,
-      -6458.057490957151,
-      12.592965341435162
+      -3128.3620592167936,
+      -6465.670534073388,
+      11.539509847900725
     ],
     "source_cameras": [
       "Leonida Keys 05 (Boats)",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 1.599,
+    "error_m": 0.132,
     "zone": "leonida_keys"
   },
   "Container Crane (2)": {
@@ -5200,8 +5155,8 @@
   },
   "Bay (H)": {
     "xyz": [
-      -8166.162290242868,
-      4696.133275770137,
+      -8166.696501405078,
+      4696.491012018573,
       0.0
     ],
     "source_cameras": [
@@ -5882,9 +5837,9 @@
   },
   "Flagler on the River": {
     "xyz": [
-      -1070.4016356932857,
-      -301.5927431421136,
-      138.4690438546339
+      -1070.2995739230919,
+      -301.49011074425056,
+      138.45716699536243
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -6075,9 +6030,9 @@
   },
   "Keys Bridge (C)": {
     "xyz": [
-      -438.1982978243045,
-      -2991.242478474405,
-      19.37815868355439
+      -423.80872555234737,
+      -2988.990812678799,
+      16.778236720922926
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -6130,9 +6085,9 @@
   },
   "Latitude on the River (S) (NW)": {
     "xyz": [
-      -970.8332891832165,
-      -809.2390976171392,
-      92.06845105882896
+      -970.8303630413103,
+      -809.2401492329575,
+      92.06838596569929
     ],
     "source_cameras": [
       "Airport (X)",
@@ -6170,9 +6125,9 @@
   },
   "Loft Downtown II": {
     "xyz": [
-      -540.863994858132,
-      56.57497202566524,
-      123.80846688139762
+      -540.6828615308159,
+      56.52349082669161,
+      123.73219047293108
     ],
     "source_cameras": [
       "Prison",
@@ -6294,9 +6249,9 @@
   },
   "Miami Tower": {
     "xyz": [
-      -782.594441839658,
-      -416.44583304006034,
-      161.46080012436045
+      -782.6232314084214,
+      -416.4397528307386,
+      161.46012984704706
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -6393,9 +6348,9 @@
   },
   "One Miami Condominium West (NE)": {
     "xyz": [
-      -318.64454037183094,
-      -558.2810911531848,
-      187.7628729544241
+      -318.6733739662801,
+      -558.2725114782576,
+      187.75518979275157
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -6409,9 +6364,9 @@
   },
   "Opera Tower": {
     "xyz": [
-      -427.76855034348483,
-      871.970989691171,
-      199.49931861646064
+      -427.72393595202976,
+      871.9059416892211,
+      199.4386014471545
     ],
     "source_cameras": [
       "Prison",
@@ -7400,9 +7355,9 @@
   },
   "Turkey Point Nuclear Power Station (1)": {
     "xyz": [
-      -1494.8801472701261,
-      -3698.867912829449,
-      80.4185161326117
+      -1490.9262765384156,
+      -3701.2811508592117,
+      79.50079763863938
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7410,14 +7365,14 @@
       "Prison",
       "Port Vice City (B)"
     ],
-    "error_m": 4.388,
+    "error_m": 0.687,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (2)": {
     "xyz": [
-      -1493.8828822927062,
-      -3738.9051160512386,
-      80.24519668296466
+      -1490.4025901779353,
+      -3741.3159125270813,
+      79.4187528753887
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7425,14 +7380,14 @@
       "Prison",
       "Port Vice City (B)"
     ],
-    "error_m": 4.281,
+    "error_m": 0.48,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (3)": {
     "xyz": [
-      -1494.6699570507228,
-      -3780.6941371994544,
-      80.0328318710168
+      -1489.8497426088722,
+      -3783.9196888351034,
+      79.56930756625101
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7440,14 +7395,14 @@
       "Prison",
       "Port Vice City (B)"
     ],
-    "error_m": 4.867,
+    "error_m": 1.5,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (N)": {
     "xyz": [
-      -1571.8938592182744,
-      -3477.6194871381776,
-      56.167212261461586
+      -1566.842667078899,
+      -3480.1069422206688,
+      55.6267674688612
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7455,21 +7410,21 @@
       "Prison",
       "Port Vice City (B)"
     ],
-    "error_m": 2.737,
+    "error_m": 1.863,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (S)": {
     "xyz": [
-      -1573.1485601357908,
-      -3541.5823214994616,
-      56.32545883872996
+      -1562.6957502048788,
+      -3545.996571977475,
+      55.84524437970925
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Leonida Keys 01 (Airplane) (X)",
       "Prison"
     ],
-    "error_m": 1.616,
+    "error_m": 1.129,
     "zone": "grassrivers"
   },
   "Two Tequesta Point": {
@@ -7561,9 +7516,9 @@
   },
   "Vizcayne North Condominium (SE)": {
     "xyz": [
-      -540.9265956704336,
-      107.35371021064216,
-      176.88352237465563
+      -540.6623415460302,
+      107.40997680831019,
+      176.763833633645
     ],
     "source_cameras": [
       "Skyline",
@@ -7647,9 +7602,9 @@
   },
   "West Venetian Causeway Bridge": {
     "xyz": [
-      -114.57121206057182,
-      1066.5839269218984,
-      13.992357033742453
+      -114.57121896783127,
+      1066.5839309453677,
+      13.992678205172384
     ],
     "source_cameras": [
       "Tennis Court (SE)",
@@ -7969,54 +7924,54 @@
   },
   "Turkey Point Nuclear Power Station (CNE)": {
     "xyz": [
-      -1596.9155123394003,
-      -3443.1078357362603,
-      37.60494196048735
+      -1588.7072780167603,
+      -3443.2287972342183,
+      37.5960694987034
     ],
     "source_cameras": [
-      "Grassrivers 02 (Watson Bay)",
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Grassrivers 02 (Watson Bay)"
     ],
-    "error_m": 0.033,
+    "error_m": 1.344,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (CNW)": {
     "xyz": [
-      -1638.6587344120317,
-      -3448.821540646817,
-      37.66843954555579
+      -1630.1812623872406,
+      -3449.0764319228665,
+      37.53116741336268
     ],
     "source_cameras": [
-      "Grassrivers 02 (Watson Bay)",
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Grassrivers 02 (Watson Bay)"
     ],
-    "error_m": 0.192,
+    "error_m": 1.525,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (CSE)": {
     "xyz": [
-      -1772.568617141481,
-      -3787.381115228879,
-      35.87789267530299
+      -1763.8554658290361,
+      -3787.7679607461723,
+      34.583851137163194
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.812,
+    "error_m": 3.688,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (CSW)": {
     "xyz": [
-      -1811.1540063713753,
-      -3804.3049485791857,
-      35.386674972350654
+      -1806.8081472965523,
+      -3805.0474046448107,
+      34.35557742399804
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 3.23,
+    "error_m": 4.145,
     "zone": "grassrivers"
   },
   "1500 Sonora Ave (Silo) (L)": {
@@ -8153,48 +8108,48 @@
   },
   "House C (E)": {
     "xyz": [
-      -2251.7516826396777,
-      -5427.1709679296255,
-      3.2069200527855757
+      -2235.3096273517326,
+      -5419.208906507968,
+      3.8490623930405032
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 3.153,
+    "error_m": 3.171,
     "zone": "leonida_keys"
   },
   "House D (E)": {
     "xyz": [
-      -2236.6868700106584,
-      -5398.056358212723,
-      8.070340978549627
+      -2221.8472152475056,
+      -5391.476317920874,
+      8.517360198542827
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 0.182,
+    "error_m": 0.382,
     "zone": "leonida_keys"
   },
   "Unknown Residential Building": {
     "xyz": [
-      -1820.1522880462871,
-      -5324.085286846127,
-      7.753055414377511
+      -1814.4542545164056,
+      -5316.960798543744,
+      8.483138705181979
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": 1.953,
+    "error_m": 0.952,
     "zone": "leonida_keys"
   },
   "Bridge Island (W)": {
     "xyz": [
-      -2361.7727088077672,
-      -5029.618320997309,
-      2.1614325627083653
+      -2358.098385162507,
+      -5033.070163636189,
+      0.993647572050009
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -8205,23 +8160,23 @@
   },
   "House D (SW)": {
     "xyz": [
-      -2291.7704300998475,
-      -5440.708336834116,
-      15.040958113399864
+      -2297.1951432812048,
+      -5452.037262142686,
+      13.81002352981276
     ],
     "source_cameras": [
+      "House with Boat (X)",
       "Leonida Keys 01 (Airplane) (X)",
-      "Leonida Keys Postcard (X)",
-      "House with Boat (X)"
+      "Leonida Keys Postcard (X)"
     ],
-    "error_m": 8.874,
+    "error_m": 3.436,
     "zone": "leonida_keys"
   },
   "House with Boat (X)": {
     "xyz": [
-      -2308.5484421956276,
-      -5491.360578991999,
-      3.5070042122286273
+      -2304.86202317929,
+      -5494.77092285264,
+      2.431495736810403
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -8453,9 +8408,9 @@
   },
   "One Miami Condominium East (SE)": {
     "xyz": [
-      -231.8890434000222,
-      -550.2611156244944,
-      182.39262648045894
+      -231.91463606697116,
+      -550.2574270883971,
+      182.38421460656974
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -8611,35 +8566,35 @@
   },
   "Seven Mile Bridge (E)": {
     "xyz": [
-      -3513.2439957614015,
-      -6835.219321299428,
-      4.468100235687916
+      -3504.5652711637445,
+      -6841.012233033627,
+      3.6518279684563675
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Keys"
     ],
-    "error_m": 0.086,
+    "error_m": 2.726,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (W)": {
     "xyz": [
-      -4108.596055915927,
-      -7194.744569457613,
-      7.051683715861585
+      -4092.025095279668,
+      -7197.8702588149945,
+      7.786546685750502
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Keys"
     ],
-    "error_m": 2.956,
+    "error_m": 0.245,
     "zone": "leonida_keys"
   },
   "City View Parking Garage (S)": {
     "xyz": [
-      -185.27763092072118,
-      2061.1813795939825,
-      34.01736853360637
+      -185.27785803522877,
+      2061.181132922627,
+      34.01735446197305
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8650,9 +8605,9 @@
   },
   "City View Parking Garage (SE)": {
     "xyz": [
-      -158.98265630940645,
-      2059.899464169406,
-      33.977450197915914
+      -158.9824300244382,
+      2059.8996905364615,
+      33.97746322469291
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8931,9 +8886,9 @@
   },
   "Office in the Grove": {
     "xyz": [
-      -1171.7021062890508,
-      -2093.6484040946334,
-      42.651678371769414
+      -1168.621455770757,
+      -2092.6020781019065,
+      42.62940563630761
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -9010,9 +8965,9 @@
   },
   "Star Island Water Tower": {
     "xyz": [
-      760.0378638391841,
-      481.75441430665177,
-      29.55746551375296
+      760.0586843857882,
+      481.74135402775704,
+      29.54892594879706
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -9154,9 +9109,9 @@
   },
   "Stephen P. Clark Government Center (E)": {
     "xyz": [
-      -846.0295036219704,
-      69.6231432851365,
-      155.3705820444505
+      -845.8650845981258,
+      69.57767159212935,
+      155.2930368030992
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -9169,9 +9124,9 @@
   },
   "Infinity at Brickell": {
     "xyz": [
-      -1198.3720737314031,
-      -1419.1768932757243,
-      180.35865325102404
+      -1198.3761879964386,
+      -1419.1720682690445,
+      180.35752768633594
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -9425,9 +9380,9 @@
   },
   "Portofino Tower (NE)": {
     "xyz": [
-      1756.3075617655986,
-      -181.44947046251028,
-      145.79719474287756
+      1756.2524665977285,
+      -181.75206644649623,
+      145.82006907494775
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -10663,9 +10618,9 @@
       "Metro (SE) (B)"
     ],
     "xyz": [
-      -825.649571949717,
-      -1139.6436615500495,
-      171.80422413061237
+      -825.2458576667092,
+      -1140.089376961186,
+      171.88630271400163
     ],
     "zone": null
   },
@@ -10764,9 +10719,9 @@
       "Port Vice City (B)"
     ],
     "xyz": [
-      -456.94046559361766,
-      -230.24037259775568,
-      146.83302028580334
+      -456.9780295973473,
+      -230.22818888801626,
+      146.8256432241183
     ],
     "zone": null
   },
@@ -11489,15 +11444,15 @@
   },
   "Island H (W)": {
     "author": "rlx",
-    "error_m": 1.4,
+    "error_m": 1.916,
     "source_cameras": [
       "Key Lento",
       "Leonida Keys Postcard (X)"
     ],
     "xyz": [
-      -2174.208848894902,
-      -6352.116293091403,
-      -7.79400971569021
+      -2169.603342229454,
+      -6339.139856676813,
+      -7.1287233815764
     ],
     "zone": null
   },
@@ -14082,15 +14037,15 @@
   },
   "Grassrivers River Mouth (W)": {
     "xyz": [
-      -3043.493809690406,
-      -5084.214309623738,
-      -10.179893567725603
+      -3098.212732820015,
+      -5211.970911207239,
+      -6.864947746247872
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Keys"
     ],
-    "error_m": 1.59,
+    "error_m": 2.351,
     "zone": "grassrivers",
     "author": "rlx"
   },
@@ -14134,9 +14089,9 @@
   },
   "Asia Brickell Key (CC2B)": {
     "xyz": [
-      -133.81391708508954,
-      -863.6881545113933,
-      226.36707341645774
+      -133.1753797058718,
+      -863.4332789720465,
+      226.44236069399182
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -14553,16 +14508,9 @@
     "zone": "rlx_markings_0713"
   },
   "Island V (N)": {
-    "xyz": [
-      -3781.497718048231,
-      -5653.950644184875,
-      -1.4520803884180942
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
-    ],
-    "error_m": 3.427,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "rlx_markings_0713"
   },
   "Island W (S)": {
@@ -14852,16 +14800,9 @@
     "zone": "rlx_markings_0713"
   },
   "Pin D03L": {
-    "xyz": [
-      -1872.7005160863173,
-      -5776.448077372648,
-      -2.9474319126830757
-    ],
-    "source_cameras": [
-      "Key Lento",
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": 0.753,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "rlx_markings_0713"
   },
   "Island K (E)": {
@@ -14871,16 +14812,9 @@
     "zone": "rlx_markings_0713"
   },
   "Island K (W)": {
-    "xyz": [
-      -2506.7761829923147,
-      -6616.99421983358,
-      -3.564524211803647
-    ],
-    "source_cameras": [
-      "Key Lento",
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": 4.042,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "rlx_markings_0713"
   },
   "Tree on Island K": {
@@ -14890,29 +14824,15 @@
     "zone": "rlx_markings_0713"
   },
   "Small Radio Tower (Key Lento)": {
-    "xyz": [
-      -2019.4530515134068,
-      -5590.260816383439,
-      42.0226276494078
-    ],
-    "source_cameras": [
-      "Key Lento",
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": 0.825,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "rlx_markings_0713"
   },
   "House C (W)": {
-    "xyz": [
-      -2273.4482433184985,
-      -5431.138980968666,
-      3.1578807264080124
-    ],
-    "source_cameras": [
-      "Key Lento",
-      "Leonida Keys Postcard (X)"
-    ],
-    "error_m": 1.93,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "rlx_markings_0713"
   },
   "House D (SE)": {
@@ -14953,9 +14873,9 @@
   },
   "One Broadway (SW)": {
     "xyz": [
-      -1082.577312633256,
-      -1328.083100400241,
-      138.77898492171454
+      -1082.3212614659406,
+      -1328.6339495445038,
+      138.83898737198203
     ],
     "source_cameras": [
       "Metro (SE) (C)",
@@ -14989,29 +14909,15 @@
     "zone": "rlx_markings_0713"
   },
   "105 Front St (S)": {
-    "xyz": [
-      -2818.4840748332695,
-      -6427.427587743349,
-      22.57926833080422
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)",
-      "Jason Duval 03 (Boat)"
-    ],
-    "error_m": 0.276,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "rlx_markings_0713"
   },
   "Roof (Key Lento)": {
-    "xyz": [
-      -2942.433864511726,
-      -6676.342846470416,
-      2.3261007540042744
-    ],
-    "source_cameras": [
-      "Leonida Keys Postcard (X)",
-      "Jason Duval 03 (Boat)"
-    ],
-    "error_m": 27.863,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "rlx_markings_0713"
   },
   "Small Radio Tower (Key Lento) (C)": {
@@ -15021,16 +14927,9 @@
     "zone": "rlx_markings_0713"
   },
   "Boat (Grassrivers)": {
-    "xyz": [
-      -3608.416987537239,
-      -4000.9091099329094,
-      2.7024461483872533
-    ],
-    "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Grassrivers Postcard (X)"
-    ],
-    "error_m": 0.001,
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
     "zone": "rlx_markings_0713"
   },
   "Seybold Pointe (SW)": {
@@ -15411,9 +15310,9 @@
   },
   "50 Biscayne Blvd (NE)": {
     "xyz": [
-      -439.23797911083466,
-      -199.76682648695927,
-      138.03758894098502
+      -440.2420563602942,
+      -199.71161640309364,
+      138.37509036901255
     ],
     "source_cameras": [
       "Vice City Postcard",
