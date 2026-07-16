@@ -35,7 +35,8 @@ from common import cam_rms as _common_cam_rms
 from common import cam_rms_dual as _common_cam_rms_dual
 
 CAM_BLACKLIST_DEFAULT = ["Amphitheater", "Beach", "Vice City Sign",
-                         "Jason Duval 03 (Boat)"]  # 3 obs, depth-degenere (z<0 au BA 07-14)
+                         "Jason Duval 03 (Boat)",  # 3 obs, depth-degenere (z<0 au BA 07-14)
+                         "Green Sports Car"]      # idem, coule a z=-1.05 (07-16)
 
 
 def snap_z(lm_name, xyz):

@@ -711,3 +711,6 @@
 {"ts": "2026-07-16T16:52:16", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Maison Grande Condominium (TS)", "old_xyz": [1689.8295672510967, 2378.1336236979505, 63.60366253760996], "new_xyz": [1688.9869, 2377.6692, 64.5918], "kept": ["Highway (NE)", "Jet Ski", "Venetian Islands"], "max_res": 2.561}
 {"ts": "2026-07-16T16:52:16", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Maison Grande Condominium (NW)", "old_xyz": [1615.4226730980201, 2427.6679207977086, 58.99394693107188], "new_xyz": [1615.3529, 2427.8367, 59.1942], "kept": ["Highway (NE)", "Jet Ski", "Venetian Islands"], "max_res": 1.888}
 {"ts": "2026-07-16T16:53:30", "tool": "guarded_apply", "action": "apply", "n_cams": 3, "n_lms": 20, "n_accepted": 19}
+{"ts": "2026-07-16T17:09:38", "tool": "triangulate_lm", "action": "retriangulate", "lm": "5959 Collins Ave", "old_xyz": null, "new_xyz": [1686.2651, 2273.1956, 81.0849], "kept": ["Jet Ski", "Venetian Islands"], "max_res": 1.671}
+{"ts": "2026-07-16T17:10:57", "tool": "guarded_apply", "action": "apply", "n_cams": 3, "n_lms": 21, "n_accepted": 19}
+{"ts": "2026-07-16T17:14:31", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 21, "n_accepted": 20}
