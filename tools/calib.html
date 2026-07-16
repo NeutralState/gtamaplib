@@ -659,7 +659,7 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
         <button class="cam-filter-chip on" data-lclass="C">C</button>
         <button class="cam-filter-chip on" data-lclass="Cm">Cm</button>
         <button class="cam-filter-chip on" data-lclass="D">D</button>
-        <button class="cam-filter-chip" id="cam-sort-campaign" title="Tri campagne: leaks les moins marquees d'abord (sinon alphabetique)">↕ campagne</button>
+        <button class="cam-filter-chip" id="cam-sort-campaign" title="Basculer l'ordre de la liste: alphabetique / cams les moins marquees en premier">tri a→z</button>
       </div>
     </div>
     <div class="ls-list">
@@ -2699,6 +2699,7 @@ async function init() {
   if (sortBtn) sortBtn.addEventListener('click', () => {
     camSortCampaign = !camSortCampaign;
     sortBtn.classList.toggle('on', camSortCampaign);
+    sortBtn.textContent = camSortCampaign ? 'tri 0px↑' : 'tri a→z';
     renderCamDropdown();
   });
   // Auto-load if URL has ?cam=
