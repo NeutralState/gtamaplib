@@ -714,3 +714,4 @@
 {"ts": "2026-07-16T17:09:38", "tool": "triangulate_lm", "action": "retriangulate", "lm": "5959 Collins Ave", "old_xyz": null, "new_xyz": [1686.2651, 2273.1956, 81.0849], "kept": ["Jet Ski", "Venetian Islands"], "max_res": 1.671}
 {"ts": "2026-07-16T17:10:57", "tool": "guarded_apply", "action": "apply", "n_cams": 3, "n_lms": 21, "n_accepted": 19}
 {"ts": "2026-07-16T17:14:31", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 21, "n_accepted": 20}
+{"ts": "2026-07-16T17:44:48", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 20, "n_accepted": 19}
