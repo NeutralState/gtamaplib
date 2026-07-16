@@ -701,3 +701,8 @@
 {"ts": "2026-07-14T22:36:14", "tool": "guarded_apply", "action": "apply", "n_cams": 6, "n_lms": 38, "n_accepted": 42}
 {"ts": "2026-07-14T22:39:13", "tool": "keys_revert", "action": "clean_room_rebuild", "reason": "etat mixte irreparable -> gtamapdata=2d71528 + gains frame-independants (92 LMs Jason/OCH, House Keys pose, Sidewalk ypr, pixels courants, exclusions purgees arbitrage rlx)"}
 {"ts": "2026-07-14T22:40:58", "tool": "guarded_apply", "action": "apply", "n_cams": 5, "n_lms": 38, "n_accepted": 37}
+{"ts": "2026-07-16T16:37:46", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Maison Grande Condominium (NW)", "old_xyz": null, "new_xyz": [1613.2687, 2426.826, 59.6906], "kept": ["Highway (NE)", "Venetian Islands"], "max_res": 2.59}
+{"ts": "2026-07-16T16:37:47", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Maison Grande Condominium (TN)", "old_xyz": null, "new_xyz": [1640.2231, 2429.5163, 63.6806], "kept": ["Highway (NE)", "Venetian Islands"], "max_res": 0.178}
+{"ts": "2026-07-16T16:37:47", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Maison Grande Condominium (TC)", "old_xyz": null, "new_xyz": [1667.2518, 2399.8927, 63.9845], "kept": ["Highway (NE)", "Venetian Islands"], "max_res": 0.423}
+{"ts": "2026-07-16T16:37:47", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Maison Grande Condominium (TS)", "old_xyz": null, "new_xyz": [1689.8296, 2378.1336, 63.6037], "kept": ["Highway (NE)", "Venetian Islands"], "max_res": 0.311}
+{"ts": "2026-07-16T16:40:07", "tool": "guarded_apply", "action": "apply", "n_cams": 3, "n_lms": 23, "n_accepted": 22}

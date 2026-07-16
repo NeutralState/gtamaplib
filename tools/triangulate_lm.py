@@ -209,6 +209,18 @@ def triangulate(selected_cams, lm_name, pixels, cameras, init_xyz, weighted=Fals
     if max_par < 3.0:
         return None, f"insufficient parallax (max {max_par:.2f} deg between all ray pairs)"
 
+    # [COLD-INIT-V1] Nouveau LM (init origine/absente): la loss angulaire du
+    # Nelder-Mead ne distingue pas devant/derriere (sin symetrique) et peut
+    # diverger dans le bassin arriere vers -inf (cas Maison Grande 2026-07-16,
+    # solution a 1e18 m avec 20 deg de parallaxe saine). Seed par le LS ferme
+    # perpendiculaire (unique, global) avant toute optimisation.
+    if init_xyz is None or float(np.linalg.norm(np.asarray(init_xyz, dtype=float))) < 1e-6:
+        try:
+            from common import ray_ls_point
+            init_xyz = ray_ls_point([(o, d) for _, o, d in rays])
+        except Exception:
+            init_xyz = np.asarray([0.0, 0.0, 0.0])
+
     if weighted:
         # [SIGMA-TRI-V1] IRLS ferme: min sum w_i |P_i (p - o_i)|^2 avec
         # P_i = I - d_i d_i^T et w_i = 1/sigma_ray^2 (common.ray_sigma_m).
