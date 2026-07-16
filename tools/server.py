@@ -943,6 +943,7 @@ class Handler(BaseHTTPRequestHandler):
                     'fov': list(data['fov']) if data.get('fov') else None,
                     'size': list(data['size']) if data.get('size') else None,
                     'source': data.get('source'),
+                    'id': data.get('id'),  # [L2-PANORAMA] L*/T*/S* — le client tague LEAK sur id L* meme sans date
                     # V2: is_leak now means "xyz is HUD-locked". The
                     # constraint_class field exposes the granular V2 class
                     # for richer client-side handling.
