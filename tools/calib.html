@@ -311,6 +311,18 @@ header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(
 .cam-filter-chip[data-type=screenshots].on{border-color:var(--purple);color:var(--purple)}
 .cam-filter-chip[data-type="Screenshot 1"].on{border-color:var(--purple);color:var(--purple)} /* [SS-SPLIT-V1] */
 .cam-filter-chip[data-type="Screenshot 2"].on{border-color:#e879f9;color:#e879f9}
+/* [LEAK-TYPE-V1] sous-chips classe (A=vert anchor ... D=rouge libre) + tag liste */
+#leak-class-chips{margin-top:2px}
+.cam-filter-chip[data-lclass=A].on{border-color:#4ade80;color:#4ade80}
+.cam-filter-chip[data-lclass=B].on{border-color:#a3e635;color:#a3e635}
+.cam-filter-chip[data-lclass=C].on{border-color:#facc15;color:#facc15}
+.cam-filter-chip[data-lclass=Cm].on{border-color:#fb923c;color:#fb923c}
+.cam-filter-chip[data-lclass=D].on{border-color:#f87171;color:#f87171}
+#cam-sort-campaign.on{border-color:var(--blue);color:var(--blue)}
+.leak-class-tag{font-weight:700}
+.leak-class-tag.lc-A{color:#4ade80}.leak-class-tag.lc-B{color:#a3e635}
+.leak-class-tag.lc-C{color:#facc15}.leak-class-tag.lc-Cm{color:#fb923c}
+.leak-class-tag.lc-D{color:#f87171}
 #cam-sel{font-family:var(--mono);font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:5px;cursor:pointer;flex:1;max-width:320px}
 #cam-meta{font-family:var(--mono);font-size:10px;color:var(--dim);flex:1}
 .chip{font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:12px;background:var(--surface2);border:1px solid var(--border)}
@@ -640,6 +652,14 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
         <button class="cam-filter-chip on" data-type="Trailer 2">T2</button>
         <button class="cam-filter-chip on" data-type="Screenshot 1">S1</button><!-- [SS-SPLIT-V1] -->
         <button class="cam-filter-chip on" data-type="Screenshot 2">S2</button>
+      </div>
+      <div class="ls-filter-chips" id="leak-class-chips" title="Sous-filtre des LEAKs par classe de contrainte (A=pose HUD complete ... D=rien de verrouille)"><!-- [LEAK-TYPE-V1] -->
+        <button class="cam-filter-chip on" data-lclass="A">A</button>
+        <button class="cam-filter-chip on" data-lclass="B">B</button>
+        <button class="cam-filter-chip on" data-lclass="C">C</button>
+        <button class="cam-filter-chip on" data-lclass="Cm">Cm</button>
+        <button class="cam-filter-chip on" data-lclass="D">D</button>
+        <button class="cam-filter-chip" id="cam-sort-campaign" title="Tri campagne: leaks les moins marquees d'abord (sinon alphabetique)">↕ campagne</button>
       </div>
     </div>
     <div class="ls-list">
@@ -1138,6 +1158,19 @@ const NUM_IDS = {x:'num-x',y:'num-y',z:'num-z',yaw:'num-yaw',pitch:'num-pitch',r
 let allCams = [];
 const camFilters = { 'LEAK': true, 'Trailer 1': true, 'Trailer 2': true, 'Screenshot 1': true, 'Screenshot 2': true, 'screenshots': true }; // [SS-SPLIT-V1]
 let camSearchQ = '';
+// [LEAK-TYPE-V1] sous-filtre des leaks par classe de contrainte + tri campagne
+const leakClassFilters = { A: true, B: true, C: true, Cm: true, D: true };
+let camSortCampaign = false;
+
+function leakClassOf(c) {
+  const cc = c.constraint_class || '';
+  if (cc.startsWith('A_') || cc === '_legacy_date') return 'A';
+  if (cc.startsWith('B_')) return 'B';
+  if (cc === 'Cm_pos_only') return 'Cm';
+  if (cc.startsWith('C_')) return 'C';
+  if (cc.startsWith('D_')) return 'D';
+  return null;
+}
 
 function getCamType(c) {
   const src = c.source || '';
@@ -1155,9 +1188,16 @@ function renderCamDropdown() {
   const filtered = allCams.filter(c => {
     const t = getCamType(c);
     if (!camFilters[t]) return false;
+    if (t === 'LEAK') { // [LEAK-TYPE-V1] sous-filtre par classe (leaks seulement)
+      const lc = leakClassOf(c);
+      if (lc && !leakClassFilters[lc]) return false;
+    }
     if (camSearchQ && !c.name.toLowerCase().includes(camSearchQ.toLowerCase())) return false;
     return true;
   });
+  if (camSortCampaign) { // [LEAK-TYPE-V1] leaks les moins marquees d'abord
+    filtered.sort((a, b) => (a.n_pixels - b.n_pixels) || a.name.localeCompare(b.name));
+  }
   if (filtered.length === 0) {
     dd.innerHTML = '<div class="cam-opt" style="color:var(--dim);cursor:default">No cams match</div>';
   } else {
@@ -1165,9 +1205,10 @@ function renderCamDropdown() {
       const t = getCamType(c);
       const cls = c.has_image ? 'cam-opt' : 'cam-opt no-image';
       const sel = c.name === currentCam ? ' selected' : '';
+      const lc = t === 'LEAK' ? leakClassOf(c) : null; // [LEAK-TYPE-V1]
       return `<div class="${cls}${sel}" data-name="${c.name.replace(/"/g, '&quot;')}">
         ${c.name}${c.has_image ? '' : ' ✗'}
-        <span class="cam-opt-tag">${t} · ${c.n_pixels}px / ${c.n_independent} indep</span>
+        <span class="cam-opt-tag">${t}${lc ? ' <b class="leak-class-tag lc-' + lc + '">' + lc + '</b>' : ''} · ${c.n_pixels}px / ${c.n_independent} indep</span>
       </div>`;
     }).join('');
   }
@@ -2639,12 +2680,26 @@ async function init() {
     renderRaysForSelectedCam();
   });
   // ── end Phase 5 ───────────────────────────────────────────────────────
-  document.querySelectorAll('.cam-filter-chip').forEach(btn => {
+  document.querySelectorAll('.cam-filter-chip[data-type]').forEach(btn => {
     btn.addEventListener('click', () => {
       btn.classList.toggle('on');
       camFilters[btn.dataset.type] = btn.classList.contains('on');
       renderCamDropdown();
     });
+  });
+  // [LEAK-TYPE-V1] sous-chips classe de contrainte + tri campagne
+  document.querySelectorAll('.cam-filter-chip[data-lclass]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('on');
+      leakClassFilters[btn.dataset.lclass] = btn.classList.contains('on');
+      renderCamDropdown();
+    });
+  });
+  const sortBtn = document.getElementById('cam-sort-campaign');
+  if (sortBtn) sortBtn.addEventListener('click', () => {
+    camSortCampaign = !camSortCampaign;
+    sortBtn.classList.toggle('on', camSortCampaign);
+    renderCamDropdown();
   });
   // Auto-load if URL has ?cam=
   const urlCam = new URLSearchParams(window.location.search).get('cam');
