@@ -717,3 +717,4 @@
 {"ts": "2026-07-16T17:44:48", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 20, "n_accepted": 19}
 {"ts": "2026-07-16T18:04:07", "tool": "l2_panorama", "action": "new_cams", "cams": ["Highway (Panorama) (S)", "Highway (Panorama) (W)"], "reason": "frames leak L2/1 recuperees de rlx (declarees non-calibrees chez eux), classe D, cold-start"}
 {"ts": "2026-07-16T18:17:30", "tool": "l2_panorama", "action": "preliminary_pose", "cams": ["Highway (Panorama) (S)", "Highway (Panorama) (W)"], "reason": "pose preliminaire fournie par Alexandre (coordread map X -675.9 Y 1434.0, z=15 estime), yaw selon direction du nom (S=180, W=270)"}
+{"ts": "2026-07-16T18:26:32", "tool": "l2_panorama", "action": "yaw_fix", "cams": ["Highway (Panorama) (W)"], "reason": "yaw 270 pointait est (convention anti-horaire du projet: 90=ouest) \u2014 corrige a 90"}
