@@ -901,3 +901,6 @@
 {"ts": "2026-07-18T14:29:45", "tool": "spc_mesh", "action": "metro_ne_b_mesh_calib", "cams": ["Metro (NE) (B)"], "reason": "ypr calibre par aretes verticales du mesh SPC (markings BW/BSW, z resolu le long des aretes) \u2014 mesh-as-ruler V1"}
 {"ts": "2026-07-18T14:33:04", "tool": "guarded_apply", "action": "apply", "n_cams": 6, "n_lms": 32, "n_accepted": 33}
 {"ts": "2026-07-18T16:20:57", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 22, "n_accepted": 23}
+{"ts": "2026-07-18T16:25:42", "tool": "peacock_fix", "action": "quarantine_circular", "lms": ["Infinity at Brickell (SE)", "Infinity at Brickell (A)"], "reason": "diagnostic Alexandre confirme: (A) source EXCLUSIVEMENT par Peacock A+B (circularite pure), (SE) a moitie \u2014 poses refittees sur leurs propres erreurs. Skeletons en attente de temoins independants"}
+{"ts": "2026-07-18T16:30:45", "tool": "peacock_fix", "action": "pose_5p_realmodel", "cams": ["Highway (Peacock Bay) (B)"], "reason": "diagnostic Alexandre (decalage uniforme + ancres circulaires): solve 5p au vrai modele cam sur ses 9 markings (Infinity A/SE quarantines), yaw -1.88 pos 15.7m fov +1.6, median 8.1m \u2014 reste LM-side: One Broadway (W) 21m suspect"}
+{"ts": "2026-07-18T16:33:07", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 21, "n_accepted": 22}
