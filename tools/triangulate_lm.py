@@ -558,6 +558,25 @@ def main():
                 max_res = max(snapped_res.values())
                 print(f"  residus recalcules au point snappe: max {max_res:.3f}'")
 
+    # [STRUCT-V1] snap structurel (contraintes enforce de structures.json:
+    # fixed_z de groupe, plans, aretes verticales) — meme semantique que le
+    # z_constraint ci-dessus: le dry-run montre la geometrie finale.
+    try:
+        import structures as _structs
+        _snapped, _applied = _structs.snap(args.lm_name, new_xyz, landmarks)
+        if _applied and _snapped != list(new_xyz):
+            print(f"structure snap ({', '.join(_applied)}): "
+                  f"[{new_xyz[0]:.2f},{new_xyz[1]:.2f},{new_xyz[2]:.2f}] -> "
+                  f"[{_snapped[0]:.2f},{_snapped[1]:.2f},{_snapped[2]:.2f}]")
+            new_xyz = _snapped
+            rays = _build_rays(kept, args.lm_name, pixels)
+            _res2 = _residuals_arcmin(new_xyz, rays)
+            if _res2:
+                max_res = max(_res2.values())
+                print(f"  residus au point structure: max {max_res:.3f}'")
+    except Exception as _e:
+        print(f"  (structures.py indisponible: {_e})")
+
     # Compute diff
     if cur_xyz:
         delta = math.sqrt(sum((new_xyz[i] - cur_xyz[i]) ** 2 for i in range(3)))

@@ -1,0 +1,90 @@
+{
+ "_comment": "STRUCT-V1: contraintes structurelles declaratives. enforce=true = verite connue (le solveur snappe dessus); enforce=false = surface de validation (check CI seulement, la mesure reste le juge). Consommees par tools/structures.py, gardees par invariants.py.",
+ "old-bridge-pins": {
+  "type": "fixed_z",
+  "z": 3.33,
+  "tol_m": 1.2,
+  "enforce": true,
+  "members_pattern": "^Pin [A-D]\\d+[LR]$",
+  "note": "hauteur pin->eau mesuree par rlx (2026-07-14); valide: 25 pins tri z median 3.32"
+ },
+ "vice-city-sign-plane": {
+  "type": "plane",
+  "tol_m": 3.0,
+  "enforce": false,
+  "point": [
+   -3523.984,
+   -523.26,
+   46.128
+  ],
+  "normal": [
+   -0.02589,
+   0.67631,
+   -0.73616
+  ],
+  "members_pattern": "^Vice City Sign \\([CEIV]\\d+\\)$",
+  "note": "panneau type Hollywood sur pente; fit gele 2026-07-18 (26/31 lettres <2m); check-only: les lettres restent mesurees"
+ },
+ "spc-roof-plane": {
+  "type": "fixed_z",
+  "z": 155.35,
+  "tol_m": 1.0,
+  "enforce": false,
+  "members": [
+   "Stephen P. Clark Government Center (E)",
+   "Stephen P. Clark Government Center (N)",
+   "Stephen P. Clark Government Center (NE)",
+   "Stephen P. Clark Government Center (NW)",
+   "Stephen P. Clark Government Center (S)",
+   "Stephen P. Clark Government Center (SE)",
+   "Stephen P. Clark Government Center (SW)",
+   "Stephen P. Clark Government Center (W)"
+  ],
+  "note": "ligne de toit SPC (IRL 510ft=155m, 28 etages x 5.5m); E/N/NE mesures independamment 155.2-155.4 = validation \u2014 check-only pour garder ce juge"
+ },
+ "spc-vertical-edges": {
+  "type": "vertical_edge",
+  "tol_m": 2.0,
+  "enforce": true,
+  "edges": {
+   "Stephen P. Clark Government Center (BW)": "Stephen P. Clark Government Center (W)",
+   "Stephen P. Clark Government Center (BSW)": "Stephen P. Clark Government Center (SW)"
+  },
+  "note": "points d arete verticale (base visible) \u2014 xy herite du coin de toit, z libre (mesh-as-ruler Metro NE B)"
+ },
+ "spc-prism": {
+  "type": "mesh_prism",
+  "building": "Stephen P. Clark Government Center",
+  "roof_corners": [
+   "NW",
+   "N",
+   "NE",
+   "E",
+   "SE",
+   "S",
+   "SW",
+   "W"
+  ],
+  "z_roof": 155.35,
+  "floors": 28,
+  "floor_h": 5.5,
+  "z_ground": 1.35,
+  "note": "metadata du generateur (tools/gen_spc_mesh.py); geometrie portee par spc-roof-plane + spc-vertical-edges"
+ },
+ "_baseline_violations": {
+  "_comment": "Backlog assume au gel (2026-07-18): pins D/A09R = zone Keys parkee arbitrage; I1/V2 = lettres a re-marquer. Le CI ne bloque que sur les violations NOUVELLES ou aggravees (+0.5m).",
+  "items": {
+   "old-bridge-pins::Pin A04R": 1.339,
+   "old-bridge-pins::Pin C02L": 1.999,
+   "old-bridge-pins::Pin C02R": 1.338,
+   "old-bridge-pins::Pin D01L": 3.867,
+   "old-bridge-pins::Pin D01R": 4.561,
+   "old-bridge-pins::Pin D02L": 4.259,
+   "old-bridge-pins::Pin D02R": 4.189,
+   "old-bridge-pins::Pin D03L": 5.793,
+   "old-bridge-pins::Pin A09R": 4.671,
+   "vice-city-sign-plane::Vice City Sign (I1)": 4.598,
+   "vice-city-sign-plane::Vice City Sign (V2)": 3.56
+  }
+ }
+}

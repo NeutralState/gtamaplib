@@ -109,6 +109,18 @@ def main():
             if abs(md.landmarks[n][2] - float(zc["value"])) > EPS:
                 fails.append(f"Z-CONSTRAINT: {n} z={md.landmarks[n][2]:+.3f} != {zc['value']}")
 
+    # ── 1b. [STRUCT-V1] contraintes structurelles (nouvelles violations
+    #        seulement — la baseline gelee dans structures.json est le
+    #        backlog assume, voir tools/structures.py) ────────────────────
+    try:
+        import structures as _structs
+        lms_full = json.load(open(os.path.join(ROOT, "gtamapdata", "landmarks.json")))
+        for name, m, d, tol, prev in _structs.new_violations(lms_full):
+            prev_s = f" (baseline {prev}m)" if prev is not None else ""
+            fails.append(f"STRUCTURE: {name}: {m} ecart {d}m > tol {tol}m{prev_s}")
+    except Exception as _e:
+        fails.append(f"STRUCTURE: check impossible: {_e}")
+
     # ── 2. leaks immobiles vs reference gelee ───────────────────────────
     if not os.path.exists(REF_PATH):
         fails.append(f"LEAK-REF: {REF_PATH} absent — roule --freeze une premiere fois")
