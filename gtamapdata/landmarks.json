@@ -11296,10 +11296,19 @@
   },
   "Stephen P. Clark Government Center (W)": {
     "author": "rlx",
-    "error_m": null,
+    "error_m": 10.0,
     "source_cameras": [],
-    "xyz": null,
-    "zone": null
+    "xyz": [
+      -899.897,
+      74.593,
+      155.35
+    ],
+    "zone": null,
+    "z_constraint": {
+      "type": "fixed",
+      "value": 155.35,
+      "note": "derive par symetrie centrale du plan-toit (centre=milieu NW-SE) \u2014 a confirmer par temoins nord/est"
+    }
   },
   "South Hill": {
     "author": "rlx",
@@ -16950,16 +16959,34 @@
     "zone": "unknown"
   },
   "Stephen P. Clark Government Center (S)": {
-    "xyz": null,
+    "xyz": [
+      -891.209,
+      54.681,
+      155.35
+    ],
     "source_cameras": [],
-    "error_m": null,
-    "zone": "unknown"
+    "error_m": 10.0,
+    "zone": "unknown",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 155.35,
+      "note": "derive par symetrie centrale du plan-toit (centre=milieu NW-SE) \u2014 a confirmer par temoins nord/est"
+    }
   },
   "Stephen P. Clark Government Center (SW)": {
-    "xyz": null,
+    "xyz": [
+      -896.612,
+      66.186,
+      155.35
+    ],
     "source_cameras": [],
-    "error_m": null,
-    "zone": "unknown"
+    "error_m": 10.0,
+    "zone": "unknown",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 155.35,
+      "note": "derive par symetrie centrale du plan-toit (centre=milieu NW-SE) \u2014 a confirmer par temoins nord/est"
+    }
   },
   "Highway (Panorama) (SE)": {
     "xyz": null,

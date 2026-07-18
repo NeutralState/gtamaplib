@@ -149,5 +149,43 @@
         "NW"
       ]
     ]
+  },
+  "Stephen P. Clark Government Center": {
+    "color": "#4ade80",
+    "source": "plan-toit octogonal 2026-07-18: E/N/NE/NW/SE triangules (z=155.2-155.4), S/SW/W derives par symetrie centrale",
+    "edges": [
+      [
+        "NW",
+        "N"
+      ],
+      [
+        "N",
+        "NE"
+      ],
+      [
+        "NE",
+        "E"
+      ],
+      [
+        "E",
+        "SE"
+      ],
+      [
+        "SE",
+        "S"
+      ],
+      [
+        "S",
+        "SW"
+      ],
+      [
+        "SW",
+        "W"
+      ],
+      [
+        "W",
+        "NW"
+      ]
+    ]
   }
 }
