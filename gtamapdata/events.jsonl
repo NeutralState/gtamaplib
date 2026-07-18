@@ -885,3 +885,5 @@
 {"ts": "2026-07-18T11:04:30", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Quantum on the Bay Condominium (S) (SE)", "old_xyz": [-389.3978829548228, 1103.7991207284224, 207.3850499185886], "new_xyz": [-380.2849, 1113.0715, 206.1359], "kept": ["Vice City 03 (Basketball)", "Vice City Postcard"], "max_res": 0.611}
 {"ts": "2026-07-18T11:06:04", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 30, "n_accepted": 31}
 {"ts": "2026-07-18T11:09:50", "tool": "wdna_revert", "action": "restore_pixel", "reason": "pixel re-marque [446.3,315.0] etait pire (10.6m); ancien [446.3,310.5] restaure (8.4m vs consensus 3 temoins)"}
+{"ts": "2026-07-18T11:23:24", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Infinity at Brickell (SE)", "old_xyz": null, "new_xyz": [-1187.9535, -1428.3728, 167.7116], "kept": ["Motorboats (A)", "Highway (Peacock Bay) (A)"], "max_res": 7.564}
+{"ts": "2026-07-18T11:31:54", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 25, "n_accepted": 26}
