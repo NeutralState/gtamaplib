@@ -900,3 +900,4 @@
 {"ts": "2026-07-18T14:26:23", "tool": "spc_mesh", "action": "base_corners_seed", "reason": "BW/BSW seedes du mesh pour calibrer Metro (NE) (B) \u2014 mesh-as-ruler"}
 {"ts": "2026-07-18T14:29:45", "tool": "spc_mesh", "action": "metro_ne_b_mesh_calib", "cams": ["Metro (NE) (B)"], "reason": "ypr calibre par aretes verticales du mesh SPC (markings BW/BSW, z resolu le long des aretes) \u2014 mesh-as-ruler V1"}
 {"ts": "2026-07-18T14:33:04", "tool": "guarded_apply", "action": "apply", "n_cams": 6, "n_lms": 32, "n_accepted": 33}
+{"ts": "2026-07-18T16:20:57", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 22, "n_accepted": 23}
