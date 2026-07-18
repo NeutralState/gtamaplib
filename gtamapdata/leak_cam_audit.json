@@ -2215,7 +2215,7 @@
   },
   "Highway (Panorama) (S)": {
     "constraint_class": "D_no_ground_truth",
-    "notes": "Frame leak L2/1 (rlx la declare non-calibree, frame hebergee chez eux). Pas de HUD visible -> rien de verrouille, pose dummy en attente de markings + intake. 2026-07-16"
+    "notes": "Frame leak L2/1 (rlx placeholder jamais calibre \u2014 on sait maintenant pourquoi). DIAGNOSTIC 2026-07-16: warp horizontal progressif (pan filme/stitche qui derive) \u2014 RANSAC 12 obs de tours downtown etablies: consensus max 4/12, tous dans une bande de ~400px (Three Tequesta + cluster Vizcayne, 0.0-7.4 arcmin entre eux); pinhole, cylindrique et recherche map-entiere echouent tous (median 69-194 arcmin). INCALIBRABLE en single-cam. Options futures: decoupage en bandes virtuelles (chaque bande ~400px est localement pinhole) ou abandon. Markings conserves."
   },
   "Highway (Panorama) (W)": {
     "constraint_class": "D_no_ground_truth",
