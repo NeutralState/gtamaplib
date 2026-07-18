@@ -893,3 +893,5 @@
 {"ts": "2026-07-18T12:47:47", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Stephen P. Clark Government Center (N)", "old_xyz": null, "new_xyz": [-852.4765, 86.7032, 154.765], "kept": ["Motorboats (B)", "Vice City 03 (Basketball)", "Port Vice City (A)"], "max_res": 3.184}
 {"ts": "2026-07-18T12:47:48", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Stephen P. Clark Government Center (NE)", "old_xyz": null, "new_xyz": [-841.7101, 73.2444, 154.8108], "kept": ["Motorboats (B)", "Skyline", "Vice City 03 (Basketball)", "Port Vice City (A)"], "max_res": 5.111}
 {"ts": "2026-07-18T12:49:18", "tool": "guarded_apply", "action": "apply", "n_cams": 5, "n_lms": 32, "n_accepted": 36}
+{"ts": "2026-07-18T13:05:51", "tool": "spc_mesh", "action": "roofplane_consensus", "lms": ["Stephen P. Clark Government Center (NW)", "Stephen P. Clark Government Center (SE)"], "reason": "consensus plan-toit z=155.35 + 12 exclusions (rayons hors-volume: Peacock/LK01 marquent une autre tour au sud, coherents entre eux \u2014 pixels bankes)"}
+{"ts": "2026-07-18T13:07:37", "tool": "guarded_apply", "action": "apply", "n_cams": 7, "n_lms": 57, "n_accepted": 51}
