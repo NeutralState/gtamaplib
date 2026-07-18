@@ -920,3 +920,4 @@
 {"ts": "2026-07-18T17:08:45", "tool": "convertible_recal", "action": "resurrect_pair_vetted", "lms": ["Highway Sign (404) (TL)", "Highway Sign (404) (TR)", "Highway Sign (404) (BR)", "KC01", "KC02", "KC07", "KC08"], "reason": "paire VC08xSqualo VETTED (VC08 confirme 4 indep, Squalo 0.43m/21 indep) \u2014 accord 0.02-0.35m; les LMs deviennent les ancres OUEST de Convertible"}
 {"ts": "2026-07-18T17:09:35", "tool": "struct", "action": "activate_sign404", "reason": "coins ressuscites paire vetted, plan fitte, structure active"}
 {"ts": "2026-07-18T17:13:41", "tool": "guarded_apply", "action": "apply", "n_cams": 3, "n_lms": 20, "n_accepted": 20}
+{"ts": "2026-07-18T17:15:02", "tool": "struct", "action": "sign404_br_snap", "reason": "BA avait pousse BR 0.62m hors-plan \u2014 premiere prise de la structure! BR restaure par rigidite (TR+BL-TL)"}
