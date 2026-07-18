@@ -86,5 +86,31 @@
    "vice-city-sign-plane::Vice City Sign (I1)": 4.598,
    "vice-city-sign-plane::Vice City Sign (V2)": 3.56
   }
+ },
+ "highway-sign-404": {
+  "type": "plane",
+  "tol_m": 0.5,
+  "enforce": false,
+  "members": [
+   "Highway Sign (404) (TL)",
+   "Highway Sign (404) (TR)",
+   "Highway Sign (404) (BR)",
+   "Highway Sign (404) (BL)"
+  ],
+  "point": [
+   -100.305,
+   545.537,
+   30.622
+  ],
+  "normal": [
+   -0.99783,
+   0.05783,
+   0.03139
+  ],
+  "dims": {
+   "width_m": 15.17,
+   "height_m": 3.75
+  },
+  "note": "panneau autoroutier rigide 15.17x3.75m (mesure 2026-07-18, diagonales validees). Coins quarantines en attente arbitrage VC08/Squalo/Convertible \u2014 au reveil: fit du plan (point/normal) puis activer le check. La rigidite a deja servi (BL=TL+BR-TR)."
  }
 }
