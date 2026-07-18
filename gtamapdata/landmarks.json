@@ -590,9 +590,16 @@
     }
   },
   "Bay (AAA)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -6194.933257230499,
+      4504.585291915189,
+      15.982913293345407
+    ],
+    "source_cameras": [
+      "Diner (SW)",
+      "Diner (W) (B)"
+    ],
+    "error_m": 0.435,
     "zone": "port_gellhorn",
     "author": "rlx"
   },
@@ -1127,9 +1134,9 @@
   },
   "Four Seasons Hotel Miami (BW)": {
     "xyz": [
-      -849.6788676375759,
-      -1278.953283936832,
-      262.6352832329635
+      -850.1705304057099,
+      -1279.2230760445173,
+      262.50877896460594
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -1166,9 +1173,9 @@
   },
   "Four Seasons Hotel Miami (NW)": {
     "xyz": [
-      -846.55283580973,
-      -1254.996007109498,
-      258.0285656215311
+      -847.3228650345934,
+      -1255.1027620925984,
+      258.1476725639649
     ],
     "source_cameras": [
       "Prison",
@@ -1200,9 +1207,9 @@
   },
   "Four Seasons Hotel Miami (SW)": {
     "xyz": [
-      -871.4624031409838,
-      -1294.81266389516,
-      255.0707372803907
+      -871.9797228978925,
+      -1294.487733221285,
+      255.2295503528313
     ],
     "source_cameras": [
       "Tennis Stadium (4K)",
@@ -2217,15 +2224,15 @@
   },
   "FAA Miami ATCT (MIA)": {
     "xyz": [
-      -2373.3758461856587,
-      -772.1519881085496,
-      95.78158046931803
+      -2370.5483676023096,
+      -771.0283899709193,
+      95.94716776403662
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Vice Beach (B)"
     ],
-    "error_m": 1.611,
+    "error_m": 1.791,
     "zone": "vice_city"
   },
   "Homestead Water Tower": {
@@ -2335,15 +2342,15 @@
   },
   "Island V (S)": {
     "xyz": [
-      -3727.486011557192,
-      -5909.853456677338,
-      -1.6890425607324708
+      -3728.0876903605304,
+      -5910.056138530126,
+      -1.4429155368600002
     ],
     "source_cameras": [
       "Key Lento",
       "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 0.551,
+    "error_m": 0.952,
     "zone": "leonida_keys"
   },
   "Key Lento (A)": {
@@ -2404,134 +2411,145 @@
   },
   "Seven Mile Bridge (10B)": {
     "xyz": [
-      -3732.214620169333,
-      -6983.218422529764,
-      -0.19227998286237882
+      -3732.1271632687904,
+      -6983.135525812157,
+      -0.3628877678777934
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 3.297,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (11B)": {
     "xyz": [
-      -3753.8020526419464,
-      -6995.966348165272,
-      -0.20447373872619348
+      -3753.6993366946745,
+      -6995.8542071581915,
+      -0.39048651637061993
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 3.633,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (12B)": {
     "xyz": [
-      -3777.0531803957424,
-      -7009.5562262720705,
-      -0.22971137458630705
+      -3776.924723072085,
+      -7009.405556260372,
+      -0.42156150505828316
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 3.79,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (13B)": {
     "xyz": [
-      -3800.1952909145293,
-      -7023.88195938191,
-      -0.08975315486714823
+      -3800.0310551640705,
+      -7023.685937740147,
+      -0.2786818816075755
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 3.763,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (14B)": {
     "xyz": [
-      -3821.6113878208794,
-      -7036.651827116558,
-      -0.042050505023640244
+      -3821.408628402255,
+      -7036.409608764288,
+      -0.22708769409323637
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 3.696,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (15B)": {
     "xyz": [
-      -3841.429842035574,
-      -7047.609761374128,
-      -0.1116267374747557
+      -3841.1874446126103,
+      -7047.320297208783,
+      -0.29470223212134095
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 3.632,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (16B)": {
     "xyz": [
-      -3863.349850452833,
-      -7060.947616157307,
-      -0.10635276526419886
+      -3863.0602213991897,
+      -7060.60326347603,
+      -0.2788184822190484
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 3.347,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (17B)": {
     "xyz": [
-      -3885.480052398821,
-      -7074.36527445165,
-      0.0691299417725096
+      -3885.1406127544406,
+      -7073.962993787369,
+      -0.08756400841954254
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 2.898,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (18B)": {
     "xyz": [
-      -3907.0242337521095,
-      -7087.278480888901,
-      0.2873199989065856
+      -3906.6230165359357,
+      -7086.8045542955,
+      0.11047370832480434
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 3.217,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (19B)": {
     "xyz": [
-      -3930.1967450901293,
-      -7100.620141836474,
-      -0.026665142048366956
+      -3929.725648509034,
+      -7100.062461182681,
+      -0.2312442245540301
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 3.694,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (1B)": {
     "xyz": [
-      -3529.4580702942726,
-      -6859.734195932319,
-      -0.8846062346773733
+      -3528.441346649415,
+      -6859.222853112546,
+      -1.1668466590987308
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 3.011,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (20B)": {
@@ -2549,38 +2567,41 @@
   },
   "Seven Mile Bridge (21B)": {
     "xyz": [
-      -3973.5881768418476,
-      -7127.03835444994,
-      0.18925185327955166
+      -3973.0172485651565,
+      -7126.351739734822,
+      0.017557764175966526
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 2.385,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (2B)": {
     "xyz": [
-      -3554.0252052379105,
-      -6874.338810546823,
-      -1.0519327905021902
+      -3553.274011466787,
+      -6873.9737344834575,
+      -1.277726092983925
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 2.627,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (3B)": {
     "xyz": [
-      -3577.06705418127,
-      -6889.694778324875,
-      -0.7699797038478241
+      -3576.5182331748833,
+      -6889.439709649679,
+      -0.9602478932171983
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 2.446,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (3T)": {
@@ -2598,14 +2619,15 @@
   },
   "Seven Mile Bridge (4B)": {
     "xyz": [
-      -3600.878386433016,
-      -6904.193445930396,
-      -0.8069194212712636
+      -3600.4954472427676,
+      -6904.025973953738,
+      -0.9400529248332874
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 1.906,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (5B)": {
@@ -2623,14 +2645,15 @@
   },
   "Seven Mile Bridge (6B)": {
     "xyz": [
-      -3646.2869741975896,
-      -6932.130614523727,
-      -0.6012272293405279
+      -3646.108003695377,
+      -6932.06018010371,
+      -0.6948261007257641
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 1.675,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (6T)": {
@@ -2648,51 +2671,54 @@
   },
   "Seven Mile Bridge (7B)": {
     "xyz": [
-      -3666.809710648022,
-      -6944.178431868381,
-      -0.5150819719255271
+      -3666.6814712651494,
+      -6944.12425346475,
+      -0.6260152633778795
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 2.052,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (8B)": {
     "xyz": [
-      -3688.5019682795323,
-      -6957.1610049808605,
-      -0.42793208814174827
+      -3688.398712193639,
+      -6957.103719434299,
+      -0.593706027846353
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 3.028,
     "zone": "leonida_keys"
   },
   "Seven Mile Bridge (9B)": {
     "xyz": [
-      -3709.6816541421795,
-      -6969.597790279176,
-      -0.3763598798168776
+      -3709.5892851305452,
+      -6969.52919900861,
+      -0.5700307685658765
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
     ],
-    "error_m": null,
+    "error_m": 3.59,
     "zone": "leonida_keys"
   },
   "White Billboard (Hamlet)": {
     "xyz": [
-      -2594.3058108738605,
-      -3794.8695382073506,
-      34.16176626251323
+      -2594.302731513487,
+      -3794.7765948665156,
+      34.15511358324925
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Police Chase (A)"
     ],
-    "error_m": 4.938,
+    "error_m": 4.557,
     "zone": "grassrivers"
   },
   "Oval Yellow Sign": {
@@ -3247,9 +3273,9 @@
   },
   "Lake Surprise Viaduct (2B)": {
     "xyz": [
-      -2292.300676051719,
-      -5198.201811546781,
-      10.584871669834454
+      -2290.5867357580773,
+      -5196.320272927712,
+      10.687292015250865
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3259,9 +3285,9 @@
   },
   "Lake Surprise Viaduct (3B)": {
     "xyz": [
-      -2303.4550134496476,
-      -5179.062788835752,
-      10.564765524577615
+      -2301.8258334556604,
+      -5177.22506170685,
+      10.66683583736419
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3271,9 +3297,9 @@
   },
   "Lake Surprise Viaduct (4B)": {
     "xyz": [
-      -2310.9171024892917,
-      -5155.002551099893,
-      10.393670964640087
+      -2309.964930701136,
+      -5153.029970482504,
+      10.33333399065871
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3283,9 +3309,9 @@
   },
   "Lake Surprise Viaduct (5B)": {
     "xyz": [
-      -2323.3489279545124,
-      -5135.714744382794,
-      10.418364428087012
+      -2322.5322214487296,
+      -5133.866133651503,
+      10.35842243524075
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3295,9 +3321,9 @@
   },
   "Lake Surprise Viaduct (6B)": {
     "xyz": [
-      -2333.4389879046344,
-      -5114.471930986519,
-      10.501610501149
+      -2332.788348229738,
+      -5112.788279590837,
+      10.444793912630866
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3307,9 +3333,9 @@
   },
   "Lake Surprise Viaduct (7B)": {
     "xyz": [
-      -2339.7317556263506,
-      -5091.375097910058,
-      10.403020326939059
+      -2339.0381679672673,
+      -5089.622835714527,
+      10.332948457422518
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -3319,9 +3345,9 @@
   },
   "Lake Surprise Viaduct (8B)": {
     "xyz": [
-      -2352.4897793139935,
-      -5072.326122173315,
-      10.781194952605368
+      -2351.9940110972034,
+      -5070.7837186854795,
+      10.71718175326032
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
@@ -4576,9 +4602,9 @@
   },
   "Naval Air Station Key West (Control Tower)": {
     "xyz": [
-      -5807.560587421997,
-      -6538.506710344026,
-      36.660106132565254
+      -5806.631930338329,
+      -6537.521033705678,
+      35.51691121458683
     ],
     "source_cameras": [
       "Key Lento",
@@ -4589,9 +4615,9 @@
   },
   "Naval Air Station Key West (Radar Tower)": {
     "xyz": [
-      -5658.684896915181,
-      -6405.821930736622,
-      34.548421015416416
+      -5658.568066985468,
+      -6405.3311453457545,
+      33.12643230496761
     ],
     "source_cameras": [
       "Key Lento",
@@ -4672,9 +4698,9 @@
   },
   "Sebring Water Tower": {
     "xyz": [
-      -3981.080943707635,
-      2926.4702353742323,
-      74.62008688796922
+      -3980.232688463162,
+      2926.501619772954,
+      75.11986518080194
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
@@ -4983,9 +5009,9 @@
   },
   "50 Biscayne Blvd (SE)": {
     "xyz": [
-      -448.5928445346996,
-      -256.94715010060446,
-      144.57058299897594
+      -448.95849512464815,
+      -257.02938351510556,
+      144.44708057245765
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -5156,8 +5182,8 @@
   },
   "Bay (H)": {
     "xyz": [
-      -8165.1563252056585,
-      4695.442883927688,
+      -8165.694988411797,
+      4695.808682450506,
       0.0
     ],
     "source_cameras": [
@@ -5838,15 +5864,15 @@
   },
   "Flagler on the River": {
     "xyz": [
-      -1069.5995674502315,
-      -300.8471723312255,
-      138.44136508290975
+      -1071.571526621125,
+      -302.44433440689056,
+      138.5114489638999
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Skyline"
     ],
-    "error_m": 2.21,
+    "error_m": 1.742,
     "zone": "vice_city"
   },
   "Flamingo South Beach (NENE)": {
@@ -5924,9 +5950,9 @@
   },
   "InterContinental Miami (N)": {
     "xyz": [
-      -255.50289561838295,
-      -462.2861058958962,
-      132.2100833487589
+      -256.07503063711334,
+      -462.6261702393633,
+      132.2373452558612
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -6031,15 +6057,15 @@
   },
   "Keys Bridge (C)": {
     "xyz": [
-      -428.076669430843,
-      -2992.0398151462505,
-      19.030458068225826
+      -429.87456337025014,
+      -2991.897252417119,
+      19.168364728045574
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Prison"
     ],
-    "error_m": 2.453,
+    "error_m": 2.15,
     "zone": "vice_city"
   },
   "Lamp Post (NE)": {
@@ -6099,15 +6125,15 @@
   },
   "Latitude on the River (S) (SW)": {
     "xyz": [
-      -984.5588347384709,
-      -847.1884850916294,
-      92.1815413603897
+      -984.7904167866784,
+      -847.2811635180753,
+      91.74913574469488
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Airport (X)"
     ],
-    "error_m": 1.992,
+    "error_m": 2.111,
     "zone": "vice_city"
   },
   "Loews Miami Beach": {
@@ -6126,9 +6152,9 @@
   },
   "Loft Downtown II": {
     "xyz": [
-      -540.843898081411,
-      56.64203588534609,
-      123.80776668375034
+      -541.0529266224959,
+      56.72431246438267,
+      123.57359780985752
     ],
     "source_cameras": [
       "Prison",
@@ -6138,14 +6164,14 @@
       "Vice City Postcard",
       "Shitzu Squalo 01 (Bay)"
     ],
-    "error_m": 4.835,
+    "error_m": 4.229,
     "zone": "vice_city"
   },
   "Margaret Pace Park": {
     "xyz": [
-      -284.67443725512874,
-      1090.1568212586371,
-      8.551074979424245
+      -284.77670893298074,
+      1090.3153853555573,
+      8.489084729460043
     ],
     "source_cameras": [
       "Sidewalk (Jason) (E)",
@@ -6205,9 +6231,9 @@
   },
   "Marina Blue (NE)": {
     "xyz": [
-      -456.4367195191511,
-      420.45924745358434,
-      175.1030420403539
+      -455.22089821860294,
+      420.156611084398,
+      175.1458467186452
     ],
     "source_cameras": [
       "Jason Duval 05 (Machine Gun)",
@@ -6215,9 +6241,10 @@
       "Skyline",
       "Vice Beach (B)",
       "Vice City 03 (Basketball)",
-      "Port Vice City (B)"
+      "Vice City Postcard",
+      "Port Vice City (A)"
     ],
-    "error_m": 2.216,
+    "error_m": 3.241,
     "zone": "vice_city"
   },
   "Marriott Miami Biscayne Bay (E)": {
@@ -6349,9 +6376,9 @@
   },
   "One Miami Condominium West (NE)": {
     "xyz": [
-      -318.92258721964026,
-      -558.0056778268295,
-      187.68437220079142
+      -318.7260919798546,
+      -558.2388590514215,
+      187.69910418611866
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -6365,18 +6392,17 @@
   },
   "Opera Tower": {
     "xyz": [
-      -427.88291280190793,
-      871.9781702421897,
-      199.4972719891291
+      -427.4464398198163,
+      872.0659774954552,
+      199.3402511446999
     ],
     "source_cameras": [
       "Prison",
-      "Skyline",
       "Vice Beach (A)",
       "Vice City 03 (Basketball)",
       "Vice City Postcard"
     ],
-    "error_m": 5.552,
+    "error_m": 1.934,
     "zone": "vice_city"
   },
   "PGH Barrier Island (E)": {
@@ -6939,9 +6965,9 @@
   },
   "Prison Tower (3)": {
     "xyz": [
-      -2601.804743096462,
-      -2803.92113887992,
-      36.302989490036765
+      -2602.406540838441,
+      -2804.157943082961,
+      36.221144814495155
     ],
     "source_cameras": [
       "Tennis Stadium (4K)",
@@ -6954,9 +6980,9 @@
   },
   "Prison Tower (4)": {
     "xyz": [
-      -2643.0196890873553,
-      -2873.679204734934,
-      36.05399326030612
+      -2643.6560580300006,
+      -2873.9378532594033,
+      35.96454455595711
     ],
     "source_cameras": [
       "Tennis Stadium (4K)",
@@ -7179,19 +7205,22 @@
   },
   "Southeast Financial Center": {
     "xyz": [
-      -481.22394813031474,
-      -461.3280709148729,
-      248.71526547099413
+      -481.0902516090853,
+      -460.6195840035798,
+      248.76991748250913
     ],
     "source_cameras": [
+      "Grassrivers 02 (Watson Bay)",
+      "Leonida Keys 01 (Airplane) (X)",
       "Prison",
-      "Vice Beach (A)",
-      "Vice Beach (B)",
       "Skyline",
+      "Vice Beach (A)",
       "Vice City 03 (Basketball)",
-      "Vice City Postcard"
+      "Vice City Postcard",
+      "Port Vice City (A)",
+      "Airport (X)"
     ],
-    "error_m": 3.467,
+    "error_m": 3.931,
     "zone": "vice_city"
   },
   "St. Moritz Hotel (SW)": {
@@ -7268,15 +7297,15 @@
   },
   "The Tides South Beach": {
     "xyz": [
-      1993.2184066789969,
-      891.8935535505473,
-      54.42306355899925
+      1992.8917719387036,
+      891.7726775334245,
+      54.40936419014339
     ],
     "source_cameras": [
       "Beach",
       "Vice Beach (A)"
     ],
-    "error_m": 1.237,
+    "error_m": 1.236,
     "zone": "vice_city"
   },
   "The Waverly South Beach (SE)": {
@@ -7295,9 +7324,9 @@
   },
   "Three Tequesta Point": {
     "xyz": [
-      -3.5548575817776293,
-      -946.8917225158817,
-      206.61618765829263
+      -3.612798530057674,
+      -946.6328551718377,
+      206.65838582336045
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -7309,7 +7338,7 @@
       "Vice City Postcard",
       "Port Vice City (B)"
     ],
-    "error_m": 5.727,
+    "error_m": 5.442,
     "zone": "vice_city"
   },
   "Train Signal (S) (E)": {
@@ -7430,17 +7459,21 @@
   },
   "Two Tequesta Point": {
     "xyz": [
-      49.4932199938069,
-      -1063.6281732096381,
-      160.75140295953227
+      50.18765056439621,
+      -1064.1672577972104,
+      160.58790004834708
     ],
     "source_cameras": [
-      "Vice Beach (B)",
-      "Motorboats (A)",
+      "Grassrivers 02 (Watson Bay)",
       "Leonida Keys 01 (Airplane) (X)",
-      "Vice City Postcard"
+      "Motorboats (A)",
+      "Rooftop Party",
+      "Skyline",
+      "Vice Beach (A)",
+      "Vice City Postcard",
+      "Port Vice City (B)"
     ],
-    "error_m": 3.938,
+    "error_m": 3.863,
     "zone": "vice_city"
   },
   "Unknown Sphere": {
@@ -7500,19 +7533,21 @@
   },
   "Vizcayne North Condominium (NE)": {
     "xyz": [
-      -542.2104542223143,
-      156.74529225697282,
-      178.10506362504273
+      -541.2682615161488,
+      157.28439975389824,
+      176.9580541026363
     ],
     "source_cameras": [
       "Jason Duval 05 (Machine Gun)",
       "Motorboats (B)",
-      "Vice Beach (B)",
+      "Skyline",
+      "Vice Beach (A)",
       "Vice City 03 (Basketball)",
       "Vice City Postcard",
-      "Port Vice City (B)"
+      "Port Vice City (A)",
+      "Shitzu Squalo 01 (Bay)"
     ],
-    "error_m": 3.735,
+    "error_m": 3.992,
     "zone": "vice_city"
   },
   "Vizcayne North Condominium (SE)": {
@@ -7545,15 +7580,15 @@
   },
   "WDNA FM": {
     "xyz": [
-      -2526.6218998858194,
-      -2301.2048247182324,
-      409.5755580939476
+      -2528.031347830984,
+      -2303.371892042436,
+      408.9422730181937
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Prison"
     ],
-    "error_m": 1.049,
+    "error_m": 0.785,
     "zone": "grassrivers"
   },
   "Water Tower (West Port Gellhorn)": {
@@ -7586,9 +7621,9 @@
   },
   "Wells Fargo Center (N)": {
     "xyz": [
-      -671.3804432990166,
-      -418.0037099373344,
-      187.07015322775052
+      -671.1610218056454,
+      -417.84633838482677,
+      186.9651259203251
     ],
     "source_cameras": [
       "Prison",
@@ -7603,9 +7638,9 @@
   },
   "West Venetian Causeway Bridge": {
     "xyz": [
-      -114.571212024357,
-      1066.5839276008971,
-      13.99241742151191
+      -114.57121656933077,
+      1066.58392945517,
+      13.992531242564196
     ],
     "source_cameras": [
       "Tennis Court (SE)",
@@ -7681,15 +7716,15 @@
   },
   "Container Crane (9)": {
     "xyz": [
-      1057.188232002977,
-      -235.91158807558452,
-      72.09287463017193
+      1048.9510899291306,
+      -245.0562734742369,
+      72.1416309256854
     ],
     "source_cameras": [
-      "Vice Beach (A)",
-      "Port Vice City (B)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Vice Beach (A)"
     ],
-    "error_m": 3.467,
+    "error_m": 1.308,
     "zone": "vice_city"
   },
   "Courtyard by Marriott (NE)": {
@@ -7805,15 +7840,15 @@
   },
   "The Waverly South Beach (NW)": {
     "xyz": [
-      1234.4996715726836,
-      628.997448971771,
-      106.40392757253196
+      1233.9580398036612,
+      629.4109352796477,
+      106.36828396256543
     ],
     "source_cameras": [
       "Vice Beach (A)",
-      "Tennis Court (SE)"
+      "Sidewalk (Jason) (E)"
     ],
-    "error_m": 0.321,
+    "error_m": 1.703,
     "zone": "vice_city"
   },
   "Winter Haven": {
@@ -7845,15 +7880,16 @@
   },
   "Bank of America Financial Center (NW)": {
     "xyz": [
-      1699.760943816404,
-      1375.4711179924166,
-      67.0045569927808
+      1699.8195926088815,
+      1375.5275131389353,
+      66.97055332791246
     ],
     "source_cameras": [
       "Venetian Islands",
-      "Vice City 03 (Basketball)"
+      "Vice City 03 (Basketball)",
+      "Sidewalk (Jason) (E)"
     ],
-    "error_m": 0.691,
+    "error_m": 1.611,
     "zone": "vice_city"
   },
   "Flamingo South Beach (NWNW)": {
@@ -7897,15 +7933,16 @@
   },
   "Sunset Harbour South Condo (RS)": {
     "xyz": [
-      1443.6858151978206,
-      1633.9910190373766,
-      81.45145346840893
+      1443.38578010719,
+      1634.008900047481,
+      81.40376207981508
     ],
     "source_cameras": [
       "Venetian Islands",
-      "Vice City 03 (Basketball)"
+      "Vice City 03 (Basketball)",
+      "Sidewalk (Jason) (E)"
     ],
-    "error_m": 3.028,
+    "error_m": 2.163,
     "zone": "vice_city"
   },
   "The Gates Hotel South Beach (NW)": {
@@ -8014,15 +8051,15 @@
   },
   "1500 Sonora Ave (Tank) (R)": {
     "xyz": [
-      -2973.40184089623,
-      3707.1445693264295,
-      40.6061141766219
+      -2973.5625799067943,
+      3706.9918294986846,
+      40.627272647578366
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 3.076,
+    "error_m": 3.947,
     "zone": "ambrosia"
   },
   "Industrial Building (Ambrosia)": {
@@ -8309,9 +8346,9 @@
   },
   "Sherry Frontenac Oceanfront Hotel (N)": {
     "xyz": [
-      1524.7191468541455,
-      2577.243563173893,
-      49.40607875521724
+      1524.7200082462682,
+      2577.257652946659,
+      49.48871249689626
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8591,9 +8628,9 @@
   },
   "City View Parking Garage (S)": {
     "xyz": [
-      -185.27700697732067,
-      2061.182057265215,
-      34.0174071921091
+      -185.27738114309633,
+      2061.18165087996,
+      34.017384009453195
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8604,9 +8641,9 @@
   },
   "City View Parking Garage (SE)": {
     "xyz": [
-      -158.98327797803813,
-      2059.8988422753305,
-      33.97741440980337
+      -158.98290517582814,
+      2059.899215212721,
+      33.977435871161006
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8671,9 +8708,9 @@
   },
   "Economy Inn (RE)": {
     "xyz": [
-      -5340.126780767462,
-      3497.026864242928,
-      68.13119560557165
+      -5340.130168479633,
+      3497.0271103200344,
+      68.12955197709796
     ],
     "source_cameras": [
       "Motel",
@@ -8684,9 +8721,9 @@
   },
   "Starlet Motel Sign (BS)": {
     "xyz": [
-      -5320.3210078542015,
-      3497.5543036140666,
-      62.66812677426047
+      -5320.322202711117,
+      3497.5542371019915,
+      62.66586891826773
     ],
     "source_cameras": [
       "Motel",
@@ -8697,9 +8734,9 @@
   },
   "Red-Yellow Umbrella (1)": {
     "xyz": [
-      -5326.120637513494,
-      3470.1838077660163,
-      69.74162574042296
+      -5326.123506500362,
+      3470.183568904659,
+      69.74075546545107
     ],
     "source_cameras": [
       "Pool",
@@ -8710,9 +8747,9 @@
   },
   "Red-Yellow Umbrella (2)": {
     "xyz": [
-      -5295.138458682769,
-      3437.192009292741,
-      70.50164705319168
+      -5295.140508289727,
+      3437.194494331579,
+      70.50148360286417
     ],
     "source_cameras": [
       "Pool",
@@ -8844,15 +8881,16 @@
   },
   "Bank of America Financial Center (SW)": {
     "xyz": [
-      1692.5508434998735,
-      1356.5047502176576,
-      66.55056457721084
+      1692.5215655897682,
+      1356.68255067653,
+      66.65064355270604
     ],
     "source_cameras": [
       "Beach",
-      "Venetian Islands"
+      "Venetian Islands",
+      "Sidewalk (Jason) (E)"
     ],
-    "error_m": 0.861,
+    "error_m": 1.442,
     "zone": "vice_city"
   },
   "Four Seasons Hotel Miami (40NE)": {
@@ -8963,9 +9001,9 @@
   },
   "Star Island Water Tower": {
     "xyz": [
-      760.0097351453122,
-      481.7715625871922,
-      29.554437603823896
+      759.9959814140833,
+      481.779822467547,
+      29.547676127670993
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -9107,17 +9145,17 @@
   },
   "Stephen P. Clark Government Center (E)": {
     "xyz": [
-      -847.203722287061,
-      69.11305573838298,
-      155.45773512053003
+      -846.3800425038563,
+      69.80632958097578,
+      155.3180786031594
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Motorboats (B)",
       "Vice City 03 (Basketball)",
-      "Port Vice City (B)"
+      "Port Vice City (A)"
     ],
-    "error_m": 4.378,
+    "error_m": 4.036,
     "zone": "vice_city"
   },
   "Infinity at Brickell": {
@@ -9136,15 +9174,15 @@
   },
   "One Broadway (W)": {
     "xyz": [
-      -1092.4965589101262,
-      -1296.3867811406535,
-      144.4316834405277
+      -1092.276697495279,
+      -1296.4568277808012,
+      144.55296889783233
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Vice City Sign"
     ],
-    "error_m": 5.024,
+    "error_m": 5.258,
     "zone": "vice_city"
   },
   "sss": {
@@ -9286,9 +9324,9 @@
   },
   "Four Seasons Hotel Miami (32NE)": {
     "xyz": [
-      -797.288458305619,
-      -1275.4208721980904,
-      155.8902067490066
+      -797.2951927481512,
+      -1275.4159562426821,
+      155.89148946500242
     ],
     "source_cameras": [
       "Tennis Stadium (4K)",
@@ -9315,9 +9353,9 @@
   },
   "Four Seasons Hotel Miami (HB28SE)": {
     "xyz": [
-      -815.4166561000545,
-      -1314.6833623815824,
-      140.1322868195035
+      -815.4202260527667,
+      -1314.6809973405873,
+      140.1329026978969
     ],
     "source_cameras": [
       "Tennis Stadium (4K)",
@@ -10610,15 +10648,16 @@
   },
   "Brickell Arch": {
     "author": "rlx",
-    "error_m": 2.999,
+    "error_m": 1.358,
     "source_cameras": [
-      "Port Vice City (B)",
+      "Grassrivers 02 (Watson Bay)",
+      "Port Vice City (A)",
       "Metro (SE) (B)"
     ],
     "xyz": [
-      -825.3262697873718,
-      -1140.0013952690972,
-      171.87646234400773
+      -824.3260008205834,
+      -1141.1396047699895,
+      171.97016869055625
     ],
     "zone": null
   },
@@ -10638,15 +10677,15 @@
   },
   "Stephen P. Clark Government Center (SE)": {
     "author": "rlx",
-    "error_m": 0.922,
+    "error_m": 1.098,
     "source_cameras": [
       "Shitzu Squalo 01 (Bay)",
       "Highway (Peacock Bay) (A)"
     ],
     "xyz": [
-      -936.0451364862945,
-      3.4429699644177063,
-      165.68141928061715
+      -936.2788184579045,
+      2.325692529490869,
+      165.7310920361527
     ],
     "zone": null
   },
@@ -10666,17 +10705,18 @@
   },
   "Vizcayne South Condominium (NW)": {
     "author": "rlx",
-    "error_m": 1.804,
+    "error_m": 3.018,
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Jason Duval 05 (Machine Gun)",
       "Prison",
-      "Skyline"
+      "Skyline",
+      "Port Vice City (A)"
     ],
     "xyz": [
-      -629.0787851144038,
-      95.91764206953668,
-      178.25484826012053
+      -629.0396533068267,
+      95.08868255043333,
+      178.2668449253458
     ],
     "zone": null
   },
@@ -10710,15 +10750,15 @@
   },
   "50 Biscayne Blvd": {
     "author": "rlx",
-    "error_m": 0.621,
+    "error_m": 2.923,
     "source_cameras": [
       "Skyline",
-      "Port Vice City (B)"
+      "Port Vice City (A)"
     ],
     "xyz": [
-      -457.20029574904817,
-      -230.34061476474884,
-      146.8961715504549
+      -457.06067363350076,
+      -230.11777997959533,
+      146.77363721239496
     ],
     "zone": null
   },
@@ -10745,15 +10785,15 @@
   },
   "1450 Brickell Ave": {
     "author": "rlx",
-    "error_m": 2.534,
+    "error_m": 2.533,
     "source_cameras": [
       "Motorboats (A)",
       "Metro (SE) (C)"
     ],
     "xyz": [
-      -978.3641569208643,
-      -1410.7093903787772,
-      174.93718014125017
+      -978.3650059538667,
+      -1410.709843719696,
+      174.96002010934524
     ],
     "zone": null
   },
@@ -10766,15 +10806,15 @@
   },
   "Southeast Financial Center (A)": {
     "author": "rlx",
-    "error_m": 1.299,
+    "error_m": 2.88,
     "source_cameras": [
-      "Port Vice City (B)",
+      "Port Vice City (A)",
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -483.89364876295633,
-      -464.2707084802124,
-      278.3865433476117
+      -483.8729104810342,
+      -464.0807437169557,
+      278.217126037739
     ],
     "zone": null
   },
@@ -11665,9 +11705,16 @@
   },
   "Cardozo South Beach (O1)": {
     "author": "rlx",
-    "error_m": null,
-    "source_cameras": [],
-    "xyz": null,
+    "error_m": 6.599,
+    "source_cameras": [
+      "Vice Beach (B)",
+      "Dominion Hotel"
+    ],
+    "xyz": [
+      2014.7684984458024,
+      908.9695039290725,
+      8.300244406069503
+    ],
     "zone": null
   },
   "EB Hotel Miami (SW)": {
@@ -12141,9 +12188,9 @@
       "Metro (SE) (B)"
     ],
     "xyz": [
-      -840.8607380345056,
-      -1122.8751714913562,
-      168.9248673329237
+      -840.9695227561471,
+      -1122.7167591674245,
+      168.91489826024937
     ],
     "zone": null
   },
@@ -12177,15 +12224,15 @@
   },
   "100 Biscayne Blvd (NE)": {
     "author": "rlx",
-    "error_m": 0.616,
+    "error_m": 1.117,
     "source_cameras": [
-      "Port Vice City (B)",
+      "Port Vice City (A)",
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -453.64580149045673,
-      -112.0978303882936,
-      92.82964283257056
+      -453.46034811759756,
+      -111.88325201969643,
+      92.71724328849238
     ],
     "zone": null
   },
@@ -12319,9 +12366,16 @@
   },
   "Daytona Beach Water Tower (B)": {
     "author": "rlx",
-    "error_m": null,
-    "source_cameras": [],
-    "xyz": null,
+    "error_m": 2.751,
+    "source_cameras": [
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
+    ],
+    "xyz": [
+      -3980.216621245058,
+      2921.1363272934846,
+      57.150788460109055
+    ],
     "zone": null
   },
   "Jason's House (Pillar 8) (TNE)": {
@@ -12731,9 +12785,16 @@
   },
   "Daytona Beach Water Tower": {
     "author": "rlx",
-    "error_m": null,
-    "source_cameras": [],
-    "xyz": null,
+    "error_m": 0.476,
+    "source_cameras": [
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
+    ],
+    "xyz": [
+      -3980.1157550428948,
+      2926.432763780643,
+      75.12037667301777
+    ],
     "zone": null
   },
   "Canal B (Ambrosia) (2)": {
@@ -12809,9 +12870,16 @@
   },
   "Billboard with Oval Motif #1 (TE)": {
     "author": "rlx",
-    "error_m": null,
-    "source_cameras": [],
-    "xyz": null,
+    "error_m": 0.317,
+    "source_cameras": [
+      "Ambrosia 01 (Bikers)",
+      "Ambrosia 02 (Panorama)"
+    ],
+    "xyz": [
+      -3024.5125363777806,
+      4339.071270873736,
+      60.772489006365824
+    ],
     "zone": null
   },
   "Jason's House (Boat Ramp) (NW)": {
@@ -13049,9 +13117,16 @@
   },
   "White Silos (E) (NE)": {
     "author": "rlx",
-    "error_m": null,
-    "source_cameras": [],
-    "xyz": null,
+    "error_m": 4.665,
+    "source_cameras": [
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
+    ],
+    "xyz": [
+      -2833.124690756741,
+      3580.2110117471134,
+      36.18945458458706
+    ],
     "zone": null
   },
   "Road C (Ambrosia) (1)": {
@@ -13063,9 +13138,16 @@
   },
   "Billboard with Oval Motif #1 (TW)": {
     "author": "rlx",
-    "error_m": null,
-    "source_cameras": [],
-    "xyz": null,
+    "error_m": 0.069,
+    "source_cameras": [
+      "Ambrosia 01 (Bikers)",
+      "Ambrosia 02 (Panorama)"
+    ],
+    "xyz": [
+      -3037.3459210608976,
+      4341.374515380739,
+      60.60245909473084
+    ],
     "zone": null
   },
   "Jason's House (Roof) (SE)": {
@@ -13300,9 +13382,16 @@
   },
   "Large Billboard (Ambrosia) (TE)": {
     "author": "rlx",
-    "error_m": null,
-    "source_cameras": [],
-    "xyz": null,
+    "error_m": 0.514,
+    "source_cameras": [
+      "Ambrosia 01 (Bikers)",
+      "Ambrosia 02 (Panorama)"
+    ],
+    "xyz": [
+      -2898.392983696927,
+      4164.8854573558165,
+      35.214503670347376
+    ],
     "zone": null
   },
   "STA01": {
@@ -13357,9 +13446,16 @@
   },
   "Billboard with Irregular Shape (C)": {
     "author": "rlx",
-    "error_m": null,
-    "source_cameras": [],
-    "xyz": null,
+    "error_m": 0.059,
+    "source_cameras": [
+      "Ambrosia 01 (Bikers)",
+      "Ambrosia 02 (Panorama)"
+    ],
+    "xyz": [
+      -2942.5636683402154,
+      4356.439736499035,
+      44.84600441462932
+    ],
     "zone": null
   },
   "STA22": {
@@ -13466,18 +13562,18 @@
   },
   "Vizcayne South Condominium (NE)": {
     "author": "rlx",
-    "error_m": 2.634,
+    "error_m": 2.995,
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Jason Duval 05 (Machine Gun)",
       "Motorboats (B)",
       "Vice City Postcard",
-      "Port Vice City (B)"
+      "Port Vice City (A)"
     ],
     "xyz": [
-      -583.1505791910494,
-      100.6793134999826,
-      177.38052977083328
+      -581.2498732586548,
+      100.03123270282796,
+      177.26063749395087
     ],
     "zone": null
   },
@@ -13761,15 +13857,17 @@
   },
   "Two Tequesta Point (NE)": {
     "xyz": [
-      59.55019673524612,
-      -1051.7276374965666,
-      158.54204184024502
+      57.62720393910414,
+      -1051.1492578815146,
+      159.42425253649378
     ],
     "source_cameras": [
+      "Grassrivers 02 (Watson Bay)",
       "Motorboats (A)",
-      "Vice City Postcard"
+      "Vice City Postcard",
+      "Port Vice City (A)"
     ],
-    "error_m": 2.218,
+    "error_m": 3.908,
     "zone": "unknown"
   },
   "One Miami Condo East (NW)": {
@@ -13814,15 +13912,16 @@
   },
   "Two Tequesta Point (SE)": {
     "xyz": [
-      63.07196005793087,
-      -1078.313836771984,
-      160.69077644536915
+      63.066123338215874,
+      -1078.318274660483,
+      160.69486161201667
     ],
     "source_cameras": [
+      "Grassrivers 02 (Watson Bay)",
       "Motorboats (A)",
       "Port Vice City (A)"
     ],
-    "error_m": 2.422,
+    "error_m": 2.414,
     "zone": "unknown"
   },
   "Quantum on the Bay South (SE)": {
@@ -14061,9 +14160,9 @@
   },
   "C. Clyde Atkins U.S Courthouse (SE)": {
     "xyz": [
-      -702.3344550553284,
-      774.3361960102503,
-      49.51264060559667
+      -702.2090487566265,
+      774.5943803139893,
+      48.881179325626306
     ],
     "source_cameras": [
       "Jason Duval 05 (Machine Gun)",
@@ -14086,9 +14185,9 @@
   },
   "Asia Brickell Key (CC2B)": {
     "xyz": [
-      -133.7634321760034,
-      -863.6308831034321,
-      226.44445309664525
+      -134.04099090458934,
+      -863.8924246183072,
+      226.61369824583113
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -14117,15 +14216,16 @@
   },
   "Three Tequesta Point (SE)": {
     "xyz": [
-      6.687394899559848,
-      -963.4366755285278,
-      206.86942036590895
+      6.7035443401706605,
+      -963.4362089061061,
+      206.86666158129896
     ],
     "source_cameras": [
+      "Grassrivers 02 (Watson Bay)",
       "Motorboats (A)",
       "Port Vice City (A)"
     ],
-    "error_m": 0.937,
+    "error_m": 0.938,
     "zone": "brickell"
   },
   "Three Tequesta Point (NE)": {
@@ -14511,15 +14611,29 @@
     "zone": "rlx_markings_0713"
   },
   "Island V (N)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3775.435369531364,
+      -5686.807939231621,
+      1.7513415196445328
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Keys"
+    ],
+    "error_m": 0.555,
     "zone": "rlx_markings_0713"
   },
   "Island W (S)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3445.7413915201623,
+      -6145.992095983385,
+      -2.0403584804329467
+    ],
+    "source_cameras": [
+      "Key Lento",
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": 1.494,
     "zone": "rlx_markings_0713"
   },
   "Old Bahia Honda Bridge (Barrier) (NW)": {
@@ -14784,15 +14898,16 @@
   },
   "Apogee Condominium": {
     "xyz": [
-      1603.0875405054312,
-      -177.10798246464685,
-      89.20930282607713
+      1603.087035789018,
+      -176.6892367714105,
+      88.98894627960287
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
-      "Rooftop Party"
+      "Rooftop Party",
+      "Sidewalk (Jason) (E)"
     ],
-    "error_m": 0.422,
+    "error_m": 0.885,
     "zone": "rlx_markings_0713"
   },
   "Stephen P. Clark Government Center (A)": {
@@ -14802,39 +14917,83 @@
     "zone": "rlx_markings_0713"
   },
   "Pin D03L": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -1870.15994462124,
+      -5768.140917848948,
+      -2.4627357504057645
+    ],
+    "source_cameras": [
+      "Key Lento",
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": 1.25,
     "zone": "rlx_markings_0713"
   },
   "Island K (E)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -2424.060105213731,
+      -6528.812499767997,
+      -3.5185102560689816
+    ],
+    "source_cameras": [
+      "Key Lento",
+      "Leonida Keys 01 (Airplane) (X)",
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": 3.301,
     "zone": "rlx_markings_0713"
   },
   "Island K (W)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -2502.0222619901424,
+      -6607.649233108499,
+      -3.8541381747864047
+    ],
+    "source_cameras": [
+      "Key Lento",
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": 1.261,
     "zone": "rlx_markings_0713"
   },
   "Tree on Island K": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -2436.30477006037,
+      -6543.351527589963,
+      6.006861532967882
+    ],
+    "source_cameras": [
+      "Key Lento",
+      "Leonida Keys 01 (Airplane) (X)",
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": 0.987,
     "zone": "rlx_markings_0713"
   },
   "Small Radio Tower (Key Lento)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -2017.9120842940288,
+      -5588.264352100998,
+      41.97537378803442
+    ],
+    "source_cameras": [
+      "Key Lento",
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": 0.899,
     "zone": "rlx_markings_0713"
   },
   "House C (W)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -2255.5223909105434,
+      -5422.713488846681,
+      3.71831770677802
+    ],
+    "source_cameras": [
+      "Key Lento",
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": 2.561,
     "zone": "rlx_markings_0713"
   },
   "House D (SE)": {
@@ -14844,9 +15003,16 @@
     "zone": "rlx_markings_0713"
   },
   "Pin A09R": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -2573.8073747928047,
+      -5484.184372887074,
+      -1.3405138046326424
+    ],
+    "source_cameras": [
+      "Key Lento",
+      "Leonida Keys Postcard (X)"
+    ],
+    "error_m": 2.244,
     "zone": "rlx_markings_0713"
   },
   "Jason's House (Pillar 11) (TSW)": {
@@ -14874,9 +15040,16 @@
     "zone": "rlx_markings_0713"
   },
   "One Broadway (SW)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -1080.4785620819482,
+      -1332.7157136775795,
+      138.37929961934645
+    ],
+    "source_cameras": [
+      "Metro (SE) (C)",
+      "Vice City Sign"
+    ],
+    "error_m": 6.874,
     "zone": "rlx_markings_0713"
   },
   "One Broadway (SE)": {
@@ -14922,9 +15095,16 @@
     "zone": "rlx_markings_0713"
   },
   "Boat (Grassrivers)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3638.8015479784485,
+      -4164.750069694329,
+      4.791427144564166
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Grassrivers Postcard (X)"
+    ],
+    "error_m": 5.422,
     "zone": "rlx_markings_0713"
   },
   "Seybold Pointe (SW)": {
@@ -15170,21 +15350,42 @@
     "zone": "rlx_markings_0713"
   },
   "Factory A (Ambrosia) (S)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -2977.3720452022585,
+      3450.2634241512515,
+      46.72308859048312
+    ],
+    "source_cameras": [
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
+    ],
+    "error_m": 2.878,
     "zone": "rlx_markings_0713"
   },
   "Factory A (Ambrosia) (N)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -2968.54249761641,
+      3482.4652833169794,
+      46.00955396528366
+    ],
+    "source_cameras": [
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
+    ],
+    "error_m": 1.705,
     "zone": "rlx_markings_0713"
   },
   "Factory D (Ambrosia) (NW)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3179.073713535113,
+      3586.8918250983743,
+      38.44664586093269
+    ],
+    "source_cameras": [
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
+    ],
+    "error_m": 3.457,
     "zone": "rlx_markings_0713"
   },
   "Road E (Ambrosia)": {
@@ -15305,15 +15506,15 @@
   },
   "50 Biscayne Blvd (NE)": {
     "xyz": [
-      -439.23708761876003,
-      -199.76730894213654,
-      138.03774053704805
+      -439.34327457046385,
+      -200.05414107167297,
+      138.27207265680434
     ],
     "source_cameras": [
       "Vice City Postcard",
-      "Port Vice City (B)"
+      "Port Vice City (A)"
     ],
-    "error_m": 0.873,
+    "error_m": 1.216,
     "zone": "rlx_markings_0713"
   },
   "Key Lento (F)": {
@@ -15461,9 +15662,16 @@
     "zone": "rlx_markings_0713"
   },
   "SFUWO School": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -5078.596427113101,
+      -5963.324463315638,
+      30.08777261374305
+    ],
+    "source_cameras": [
+      "Key Lento",
+      "Grassrivers Postcard (X)"
+    ],
+    "error_m": 4.3,
     "zone": "rlx_markings_0713"
   },
   "Trees C (Grassrivers) (3)": {
@@ -15701,5 +15909,529 @@
     "source_cameras": [],
     "error_m": null,
     "zone": "unknown"
+  },
+  "Bay Parc Apartments": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown"
+  },
+  "Alpha Gas Station (A1)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": null,
+    "author": "rlx"
+  },
+  "Billboard near Starlet Motel (B)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": null,
+    "author": "rlx"
+  },
+  "Starlet Motel (P)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": null,
+    "author": "rlx"
+  },
+  "Starlet Motel (RS)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": null,
+    "author": "rlx"
+  },
+  "Billboard near Intersection (BN)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "port_gellhorn",
+    "author": "rlx"
+  },
+  "Radio Tower near Intersection 1 (C)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "port_gellhorn",
+    "author": "rlx"
+  },
+  "Starlet Motel Parassol 1": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "port_gellhorn",
+    "author": "rlx"
+  },
+  "Starlet Motel Parassol 2": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "port_gellhorn",
+    "author": "rlx"
+  },
+  "Starlet Motel Pool (A)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "port_gellhorn",
+    "author": "rlx"
+  },
+  "Starlet Motel Pool (B)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "port_gellhorn",
+    "author": "rlx"
+  },
+  "Starlet Motel Pool (C)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "port_gellhorn",
+    "author": "rlx"
+  },
+  "Starlet Motel Pool (D)": {
+    "xyz": [
+      -5296.723491754512,
+      3447.6026745149206,
+      64.3210055578232
+    ],
+    "source_cameras": [
+      "Pool",
+      "Port Gellhorn 01 (Starlet Motel)"
+    ],
+    "error_m": 1.062,
+    "zone": "port_gellhorn",
+    "author": "rlx"
+  },
+  "Blimp (F)": {
+    "xyz": [
+      -4468.606367179182,
+      -6857.600960900074,
+      34.35285231110581
+    ],
+    "source_cameras": [
+      "Key Lento",
+      "Keys"
+    ],
+    "error_m": 2.606,
+    "zone": "rlx_markings_0713",
+    "author": "rlx"
+  },
+  "Blimp (R)": {
+    "xyz": [
+      -4587.30574608515,
+      -6838.0577682260555,
+      37.7902716611519
+    ],
+    "source_cameras": [
+      "Key Lento",
+      "Keys"
+    ],
+    "error_m": 2.82,
+    "zone": "rlx_markings_0713",
+    "author": "rlx"
+  },
+  "Alpha Gas Station (A2)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": null,
+    "author": "rlx"
+  },
+  "Alpha Gas Station (S)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": null,
+    "author": "rlx"
+  },
+  "Billboard near Starlet Motel (C)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": null,
+    "author": "rlx"
+  },
+  "Billboard near Starlet Motel (TC)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": null,
+    "author": "rlx"
+  },
+  "Building near Pool (E)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": null,
+    "author": "rlx"
+  },
+  "Building near Pool (S)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": null,
+    "author": "rlx"
+  },
+  "Starlet Motel Sign (B)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": null,
+    "author": "rlx"
+  },
+  "Starlet Motel Sign (C)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": null,
+    "author": "rlx"
+  },
+  "Wheelabrator South Broward (SE)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "leonida_keys",
+    "author": "rlx"
+  },
+  "Wheelabrator South Broward (TE)": {
+    "xyz": [
+      -2356.311918728157,
+      2439.9717708278595,
+      58.42065220481098
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Ambrosia 02 (Panorama)"
+    ],
+    "error_m": 4.23,
+    "zone": "leonida_keys",
+    "author": "rlx"
+  },
+  "Wheelabrator South Broward (TW)": {
+    "xyz": [
+      -2409.7707457543534,
+      2435.11128370787,
+      58.29745218614519
+    ],
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Ambrosia 02 (Panorama)"
+    ],
+    "error_m": 4.329,
+    "zone": "leonida_keys",
+    "author": "rlx"
+  },
+  "Billboard near Intersection (TN)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "port_gellhorn",
+    "author": "rlx"
+  },
+  "Radio Tower near Intersection 2": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "port_gellhorn",
+    "author": "rlx"
+  },
+  "Starlet Motel Parassol 3": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "port_gellhorn",
+    "author": "rlx"
+  },
+  "Orlando Station (BC)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Orlando Station (BW)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "US Sugar Mill (Factory) (A)": {
+    "xyz": [
+      -3024.405756740818,
+      3332.1465342137117,
+      101.09467119227651
+    ],
+    "source_cameras": [
+      "Ambrosia 04 (Fires)",
+      "Ambrosia 02 (Panorama)"
+    ],
+    "error_m": 3.932,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "US Sugar Mill (Factory) (AC)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "US Sugar Mill (Factory) (NW)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "US Sugar Mill (Factory) (R2)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "US Sugar Mill (Factory) (SE)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Wheelabrator South Broward (5)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Wheelabrator South Broward (E)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Wheelabrator South Broward (R)": {
+    "xyz": [
+      -2424.9982350864325,
+      2513.852017962041,
+      52.36357332122279
+    ],
+    "source_cameras": [
+      "Ambrosia 04 (Fires)",
+      "Ambrosia 02 (Panorama)"
+    ],
+    "error_m": 2.859,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Billboard (South Ambrosia) (TE)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Building A (Ambrosia) (NW)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Building B (Ambrosia) (NW)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Industrial Building 1 (Ambrosia)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Industrial Building 2 (Ambrosia) (TE)": {
+    "xyz": [
+      -2740.3920313181206,
+      3373.6738219036342,
+      35.36782036391473
+    ],
+    "source_cameras": [
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
+    ],
+    "error_m": 1.246,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Road E (Ambrosia) (1)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Road E (Ambrosia) (2)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Road F (Ambrosia)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "US Sugar Mill (Factory) (P1)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "US Sugar Mill (Factory) (P2)": {
+    "xyz": [
+      -3018.6252603405073,
+      3384.9038262484864,
+      66.0688739760565
+    ],
+    "source_cameras": [
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
+    ],
+    "error_m": 2.197,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "US Sugar Mill (Factory) (P3)": {
+    "xyz": [
+      -3017.7501062602914,
+      3394.882835893707,
+      65.92655069903704
+    ],
+    "source_cameras": [
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
+    ],
+    "error_m": 1.99,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "1500 Sonora Ave (Silo) (BR)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Billboard (South Ambrosia) (TW)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Guard Booth (Ambrosia) (E)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Guard Booth (Ambrosia) (N)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Guard Booth (Ambrosia) (W)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Industrial Building 2 (Ambrosia) (TW)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Train Signal (Ambrosia) (2WB)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Worker (Ambrosia) (B)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Worker (Ambrosia) (T)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "ambrosia",
+    "author": "rlx"
+  },
+  "Dirt Road (Grassrivers) (A)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "rlx_markings_0713",
+    "author": "rlx"
+  },
+  "Dirt Road (Grassrivers) (B)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "rlx_markings_0713",
+    "author": "rlx"
+  },
+  "Trees A (Grassrivers) (1)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "rlx_markings_0713",
+    "author": "rlx"
+  },
+  "Trees B (Grassrivers) (1B)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "rlx_markings_0713",
+    "author": "rlx"
+  },
+  "Trees G (Grassrivers) (1)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "rlx_markings_0713",
+    "author": "rlx"
+  },
+  "Unknown Stucture (Keys)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "rlx_markings_0713",
+    "author": "rlx"
   }
 }
