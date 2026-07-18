@@ -270,6 +270,8 @@ def _classify_cam(cam_name):
     back-compat with the dashboard CSS; the underlying check is audit-driven."""
     if _audit_xyz_trusted(cam_name, cameras=md.cameras):
         return 'leak'
+    if re.match(r'^L\d', md.cameras.get(cam_name, {}).get('id') or ''):
+        return 'leak'  # [L2-PANORAMA] frames leak sans HUD (classe D/X, id L*)
     src = md.cameras.get(cam_name, {}).get('source', '') or ''
     if src.startswith('Trailer'): return 'trailer'
     return 'screenshot'
@@ -1043,6 +1045,8 @@ class Handler(BaseHTTPRequestHandler):
             def get_source_type(name):
                 if _audit_xyz_trusted(name, cameras=md.cameras):
                     return 'leak'
+                if re.match(r'^L\d', md.cameras.get(name, {}).get('id') or ''):
+                    return 'leak'  # [L2-PANORAMA]
                 src = md.cameras.get(name, {}).get('source', '') or ''
                 if src.startswith('Trailer'):
                     return 'trailer'

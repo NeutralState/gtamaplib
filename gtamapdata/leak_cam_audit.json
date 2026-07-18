@@ -2218,7 +2218,7 @@
     "notes": "WARP PROGRESSIF (pan stitche) \u2014 incalibrable en pinhole single-cam, voir diagnostic RANSAC 2026-07-16. Classe X + 21 markings exclus le 2026-07-18: AUCUNE prise en compte pipeline tant que le de-warp en bandes virtuelles n existe pas. Pixels conserves pour ce jour-la."
   },
   "Highway (Panorama) (W)": {
-    "constraint_class": "D_no_ground_truth",
-    "notes": "Frame leak L2/1 (rlx la declare non-calibree, frame hebergee chez eux). Pas de HUD visible -> rien de verrouille, pose dummy en attente de markings + intake. 2026-07-16"
+    "constraint_class": "X_invalid_ground_truth",
+    "notes": "Frame leak L2/1 (soeur de la (S) au warp confirme). Classe X preventive le 2026-07-18 en attente du test de format (4-5 markings repartis) / du de-warp. Aucune prise en compte pipeline."
   }
 }

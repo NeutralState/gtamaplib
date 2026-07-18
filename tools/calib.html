@@ -318,11 +318,13 @@ header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(
 .cam-filter-chip[data-lclass=C].on{border-color:#facc15;color:#facc15}
 .cam-filter-chip[data-lclass=Cm].on{border-color:#fb923c;color:#fb923c}
 .cam-filter-chip[data-lclass=D].on{border-color:#f87171;color:#f87171}
+.cam-filter-chip[data-lclass=X].on{border-color:#6b7280;color:#6b7280}
 #cam-sort-campaign.on{border-color:var(--blue);color:var(--blue)}
 .leak-class-tag{font-weight:700}
 .leak-class-tag.lc-A{color:#4ade80}.leak-class-tag.lc-B{color:#a3e635}
 .leak-class-tag.lc-C{color:#facc15}.leak-class-tag.lc-Cm{color:#fb923c}
 .leak-class-tag.lc-D{color:#f87171}
+.leak-class-tag.lc-X{color:#6b7280;text-decoration:line-through}
 #cam-sel{font-family:var(--mono);font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:5px 8px;border-radius:5px;cursor:pointer;flex:1;max-width:320px}
 #cam-meta{font-family:var(--mono);font-size:10px;color:var(--dim);flex:1}
 .chip{font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:12px;background:var(--surface2);border:1px solid var(--border)}
@@ -659,6 +661,7 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
         <button class="cam-filter-chip on" data-lclass="C">C</button>
         <button class="cam-filter-chip on" data-lclass="Cm">Cm</button>
         <button class="cam-filter-chip on" data-lclass="D">D</button>
+        <button class="cam-filter-chip on" data-lclass="X">X</button>
         <button class="cam-filter-chip" id="cam-sort-campaign" title="Basculer l'ordre de la liste: alphabetique / cams les moins marquees en premier">tri a→z</button>
       </div>
     </div>
@@ -1159,7 +1162,7 @@ let allCams = [];
 const camFilters = { 'LEAK': true, 'Trailer 1': true, 'Trailer 2': true, 'Screenshot 1': true, 'Screenshot 2': true, 'screenshots': true }; // [SS-SPLIT-V1]
 let camSearchQ = '';
 // [LEAK-TYPE-V1] sous-filtre des leaks par classe de contrainte + tri campagne
-const leakClassFilters = { A: true, B: true, C: true, Cm: true, D: true };
+const leakClassFilters = { A: true, B: true, C: true, Cm: true, D: true, X: true };
 let camSortCampaign = false;
 
 function leakClassOf(c) {
@@ -1169,6 +1172,7 @@ function leakClassOf(c) {
   if (cc === 'Cm_pos_only') return 'Cm';
   if (cc.startsWith('C_')) return 'C';
   if (cc.startsWith('D_')) return 'D';
+  if (cc.startsWith('X_')) return 'X'; // [L2-PANORAMA] invalides/quarantaine
   return null;
 }
 
@@ -1767,6 +1771,7 @@ async function init() {
     // to be self-contained for clarity.
     const src = c.source || '';
     if (/^\d{4}-\d{2}-\d{2}/.test(src)) return 'LEAK';
+    if (/^L\d/.test(c.id || '')) return 'LEAK'; // [L2-PANORAMA]
     if (src.startsWith('Trailer 1')) return 'Trailer 1';
     if (src.startsWith('Trailer 2') || src === 'Trailer 2') return 'Trailer 2';
     if (src.startsWith('Trailer')) return 'Trailer 2';
@@ -2771,7 +2776,7 @@ async function loadProjections() {
     syncSliders();
     camMeta.textContent = `${camData.source || ''} · ${camData.size ? camData.size.join('×') : ''}`;
   // Handle leak cam
-  const isLeak = /^\d{4}-\d{2}-\d{2}/.test(camData.source || '');
+  const isLeak = /^\d{4}-\d{2}-\d{2}/.test(camData.source || '') || /^L\d/.test(camData.id || ''); // [L2-PANORAMA]
   document.getElementById('chip-all').style.opacity = isLeak ? '0.4' : '1';
   btnOpt.disabled = false;
   btnOpt.title = isLeak ? 'Leak cam — only yaw/pitch/roll will be optimized (xyz + hfov frozen)' : '';
@@ -2784,7 +2789,7 @@ async function loadProjections() {
   losses = data.losses || {};
   updateLoss();
   // Leak cam detection — update after losses
-  const isLeakCam = /^\d{4}-\d{2}-\d{2}/.test(camData.source || '');
+  const isLeakCam = /^\d{4}-\d{2}-\d{2}/.test(camData.source || '') || /^L\d/.test(camData.id || ''); // [L2-PANORAMA]
   if (isLeakCam) {
     chipAll.className = 'chip';
     chipAll.style.borderColor = '#f59e0b';
@@ -2854,7 +2859,7 @@ btnOpt.addEventListener('click', async () => {
   btnOpt.classList.add('running');
   btnOpt.disabled = true;
 
-  const isLeakOpt = camData && /^\d{4}-\d{2}-\d{2}/.test(camData.source || '');
+  const isLeakOpt = camData && (/^\d{4}-\d{2}-\d{2}/.test(camData.source || '') || /^L\d/.test(camData.id || '')); // [L2-PANORAMA]
   const leakParam = isLeakOpt ? '&leak_mode=true' : '';
   const url = `/api/optimize?cam=${encodeURIComponent(currentCam)}&x=${params.x}&y=${params.y}&z=${params.z}&yaw=${params.yaw}&pitch=${params.pitch}&roll=${params.roll}&hfov=${params.hfov}${leakParam}`;
   const data = await fetch(url).then(r => r.json());
