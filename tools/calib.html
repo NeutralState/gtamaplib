@@ -945,7 +945,8 @@ let currentCam = null, camData = null, projections = [], losses = {};
 // ── [CLASS-LABEL] read-only badge: leak class or cam type ──
 const _CLASS_SHORT = {
   'A_full_hud':'A · full HUD','B_pos_fov_player':'B · pos+fov+ped',
-  'C_pos_fov_only':'C · pos+fov','Cm_pos_only':'Cm · pos only','D_no_ground_truth':'D · no GT'
+  'C_pos_fov_only':'C · pos+fov','Cm_pos_only':'Cm · pos only','D_no_ground_truth':'D · no GT',
+  'X_invalid_ground_truth':'X · quarantaine' // [L2-PANORAMA]
 };
 function updateClassLabel() {
   const el = document.getElementById('class-label');
@@ -955,9 +956,11 @@ function updateClassLabel() {
   if (!cam) { el.style.display='none'; return; }
   el.style.display = '';
   const cls = cam.constraint_class;
-  if (cam.is_leak && cls && _CLASS_SHORT[cls]) {
-    el.textContent = _CLASS_SHORT[cls];
-    el.style.color = '#f59e0b'; el.style.borderColor = '#f59e0b';
+  const leakish = cam.is_leak || /^L\d/.test(cam.id || ''); // [L2-PANORAMA] leaks sans HUD
+  if (leakish && cls && _CLASS_SHORT[cls]) {
+    el.textContent = 'LEAK ' + _CLASS_SHORT[cls];
+    const xcls = cls.startsWith('X_');
+    el.style.color = xcls ? '#6b7280' : '#f59e0b'; el.style.borderColor = xcls ? '#6b7280' : '#f59e0b';
   } else {
     const src = cam.source || '';
     let t = 'Screenshot';
