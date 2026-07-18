@@ -897,3 +897,6 @@
 {"ts": "2026-07-18T13:07:37", "tool": "guarded_apply", "action": "apply", "n_cams": 7, "n_lms": 57, "n_accepted": 51}
 {"ts": "2026-07-18T13:21:49", "tool": "spc_mesh", "action": "octagon_mesh", "lms": ["Stephen P. Clark Government Center (S)", "Stephen P. Clark Government Center (SW)", "Stephen P. Clark Government Center (W)"], "reason": "mesh octogonal du toit: 5 coins triangules + 3 derives par symetrie centrale; Interchange (W) exclu (80m hors plan)"}
 {"ts": "2026-07-18T13:43:27", "tool": "spc_mesh", "action": "nw_widen", "reason": "juge visuel Bikers: batiment deborde ouest; NW = candidat Bikers [-899,86], S/SW/W re-derives"}
+{"ts": "2026-07-18T14:26:23", "tool": "spc_mesh", "action": "base_corners_seed", "reason": "BW/BSW seedes du mesh pour calibrer Metro (NE) (B) \u2014 mesh-as-ruler"}
+{"ts": "2026-07-18T14:29:45", "tool": "spc_mesh", "action": "metro_ne_b_mesh_calib", "cams": ["Metro (NE) (B)"], "reason": "ypr calibre par aretes verticales du mesh SPC (markings BW/BSW, z resolu le long des aretes) \u2014 mesh-as-ruler V1"}
+{"ts": "2026-07-18T14:33:04", "tool": "guarded_apply", "action": "apply", "n_cams": 6, "n_lms": 32, "n_accepted": 33}
