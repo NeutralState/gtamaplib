@@ -2214,8 +2214,8 @@
     "notes": "AIWE Scenario Editor + AI World Editor Tools, Display Game HUD on. HUD shows P, C, Gizmo but no Fov and no Dir. xyz locked, ypr+fov free."
   },
   "Highway (Panorama) (S)": {
-    "constraint_class": "D_no_ground_truth",
-    "notes": "Frame leak L2/1 (rlx placeholder jamais calibre \u2014 on sait maintenant pourquoi). DIAGNOSTIC 2026-07-16: warp horizontal progressif (pan filme/stitche qui derive) \u2014 RANSAC 12 obs de tours downtown etablies: consensus max 4/12, tous dans une bande de ~400px (Three Tequesta + cluster Vizcayne, 0.0-7.4 arcmin entre eux); pinhole, cylindrique et recherche map-entiere echouent tous (median 69-194 arcmin). INCALIBRABLE en single-cam. Options futures: decoupage en bandes virtuelles (chaque bande ~400px est localement pinhole) ou abandon. Markings conserves."
+    "constraint_class": "X_invalid_ground_truth",
+    "notes": "WARP PROGRESSIF (pan stitche) \u2014 incalibrable en pinhole single-cam, voir diagnostic RANSAC 2026-07-16. Classe X + 21 markings exclus le 2026-07-18: AUCUNE prise en compte pipeline tant que le de-warp en bandes virtuelles n existe pas. Pixels conserves pour ce jour-la."
   },
   "Highway (Panorama) (W)": {
     "constraint_class": "D_no_ground_truth",

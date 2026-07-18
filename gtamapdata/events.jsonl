@@ -887,3 +887,4 @@
 {"ts": "2026-07-18T11:09:50", "tool": "wdna_revert", "action": "restore_pixel", "reason": "pixel re-marque [446.3,315.0] etait pire (10.6m); ancien [446.3,310.5] restaure (8.4m vs consensus 3 temoins)"}
 {"ts": "2026-07-18T11:23:24", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Infinity at Brickell (SE)", "old_xyz": null, "new_xyz": [-1187.9535, -1428.3728, 167.7116], "kept": ["Motorboats (A)", "Highway (Peacock Bay) (A)"], "max_res": 7.564}
 {"ts": "2026-07-18T11:31:54", "tool": "guarded_apply", "action": "apply", "n_cams": 2, "n_lms": 25, "n_accepted": 26}
+{"ts": "2026-07-18T12:24:19", "tool": "l2_panorama", "action": "full_quarantine", "cams": ["Highway (Panorama) (S)"], "reason": "classe X + 9 markings exclus \u2014 hors-jeu total en attendant le de-warp en bandes"}
