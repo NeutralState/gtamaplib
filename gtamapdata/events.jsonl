@@ -923,3 +923,4 @@
 {"ts": "2026-07-18T17:15:02", "tool": "struct", "action": "sign404_br_snap", "reason": "BA avait pousse BR 0.62m hors-plan \u2014 premiere prise de la structure! BR restaure par rigidite (TR+BL-TL)"}
 {"ts": "2026-07-19T09:21:03", "tool": "edge_ba", "action": "joint_applied", "reason": "EDGE-BA pilote: 17 cams ypr + 3 buildings, clics 0.938->0.844m"}
 {"ts": "2026-07-19T09:24:21", "tool": "guarded_apply", "action": "apply", "n_cams": 3, "n_lms": 31, "n_accepted": 33}
+{"ts": "2026-07-19T12:53:29", "tool": "triangulate_lm", "action": "retriangulate", "lm": "C. Clyde Atkins U.S Courthouse (SE)", "old_xyz": [-703.0099589606846, 772.814882459795, 48.44454693427592], "new_xyz": [-701.2006, 772.1935, 52.0824], "kept": ["Jason Duval 05 (Machine Gun)", "Port Vice City (A)"], "max_res": 3.397}
