@@ -35,65 +35,15 @@ sys.path.insert(0, THIS)
 sys.path.insert(0, REPO)
 
 import numpy as np
-from PIL import Image
 import common
-
-SEARCH = 10
-STEP = 4
-MIN_EDGE_PX = 15
-MIN_PEAK = 12.0
-PROMINENCE = 2.5
-
-
-class FrameCtx:
-    def __init__(self, cam_name):
-        self.name = cam_name
-        self.cam = common.get_cam(cam_name)
-        img = np.asarray(Image.open(os.path.join(REPO, 'frames', f'{cam_name}.png')).convert('L'), dtype=float)
-        gy, gx = np.gradient(img)
-        self.gmag = np.hypot(gx, gy)
-        self.H, self.W = img.shape
-
-    def recam(self, cam_state):
-        self.cam = common.get_cam(self.name, cam_state)
+from edgefit_core import FrameCtx, sample as _core_sample
 
 
 def sample_cost(ctx, edges_world, collect=False):
-    """Cout soft-l1 des offsets perpendiculaires + (option) liste des offsets."""
-    pts, nrms = [], []
-    for a, b in edges_world:
-        pa, pb = ctx.cam.get_pixel(a), ctx.cam.get_pixel(b)
-        if pa is None or pb is None:
-            continue
-        pa = np.asarray(pa, float); pb = np.asarray(pb, float)
-        L = float(np.hypot(*(pb - pa)))
-        if L < MIN_EDGE_PX:
-            continue
-        t = (pb - pa) / L
-        n = np.array([-t[1], t[0]])
-        for s in np.arange(3, L - 3, STEP):
-            pts.append(pa + t * s); nrms.append(n)
-    if not pts:
-        return 0.0, 0, []
-    P = np.array(pts); N = np.array(nrms)
-    ok = (P[:, 0] > SEARCH) & (P[:, 0] < ctx.W - SEARCH - 1) & (P[:, 1] > SEARCH) & (P[:, 1] < ctx.H - SEARCH - 1)
-    P, N = P[ok], N[ok]
-    if not len(P):
-        return 0.0, 0, []
-    offs_range = np.arange(-SEARCH, SEARCH + 1)
-    # matrice (npts, 21) des gradients le long de la normale
-    X = (P[:, 0:1] + N[:, 0:1] * offs_range[None, :]).astype(int)
-    Y = (P[:, 1:2] + N[:, 1:2] * offs_range[None, :]).astype(int)
-    G = ctx.gmag[Y, X]
-    k = np.argmax(G, axis=1)
-    peak = G[np.arange(len(G)), k]
-    med = np.median(G, axis=1)
-    valid = (peak >= MIN_PEAK) & (peak >= PROMINENCE * np.maximum(med, 1e-6))
-    off = (k - SEARCH)[valid].astype(float)
-    if not len(off):
-        return 0.0, 0, []
-    cost = float(np.sum(np.sqrt(1 + (off / 3.0) ** 2) - 1))
-    return cost, len(off), (off if collect else [])
+    """Wrapper edgefit_core [V3 sub-pixel]. -> (cost, n, offsets)"""
+    r = _core_sample(ctx, edges_world, collect=collect)
+    off = r['offsets']
+    return r.get('cost', 0.0), r['n_sil'], (off if collect else [])
 
 
 def transform_edges(edges, centroid, dx, dy, dz, dth, ds):

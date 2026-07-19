@@ -48,6 +48,19 @@ def main():
     ap.add_argument('buildings', nargs='+')
     args = ap.parse_args()
     C = args.cam
+    # [V3] stats sub-pixel + IC bootstrap via edgefit_core
+    import json as _j
+    _bp = _j.load(open(os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')))
+    _ctx = FrameCtx(C)
+    _meshes = {b: _bp[b]['world_edges'] for b in args.buildings if b in _bp}
+    _hulls = build_hulls(_ctx, _meshes)
+    for _b, _e in _meshes.items():
+        _r = core_sample(_ctx, _e, self_name=_b, hulls=_hulls)
+        _o = _r['offsets']
+        if len(_o) > 30:
+            _boots = [float(np.median(np.random.choice(_o, len(_o)))) for _ in range(200)]
+            lo, hi = np.percentile(_boots, [2.5, 97.5])
+            print(f'[V3] {_b}: {len(_o)} pts | biais {np.median(_o):+.2f}px IC95 [{lo:+.2f}, {hi:+.2f}] | |off| {np.median(np.abs(_o)):.1f}px')
     cam = common.get_cam(C)
     frame = os.path.join(REPO, 'frames', f'{C}.png')
     img = np.asarray(Image.open(frame).convert('L'), dtype=float)
