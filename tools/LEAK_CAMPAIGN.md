@@ -66,3 +66,21 @@ Tennis Court (SW), Highway (E: classe A), Motel, Intersection (N)…
 Densité leaks ↑ → arbitrages parkés tranchés → covariances régénérées sur
 réseau densément ancré → flip SIGMA-TRI-V1 (voir dual_metric_bench --ab
 weighted). L'ordre vertueux: la vérité en amont du solveur.
+
+
+## MAJ 2026-07-19 — TRIAGE DE VISIBILITE (etage 3)
+
+Lecon mesuree: l'ordre de bataille comptait le FRUSTUM; la vraie monnaie est
+la VISIBILITE. Verifies a l'image ce matin:
+- **Farm**: interieur de grange (scene editor) — les "148 cibles" sont derriere
+  les murs. DECLASSE.
+- **Alley (W)** (classe A): mur de ruelle + HUD dev sur la zone Kaseya. Le
+  referee ouest N'EXISTE PAS dans le stock actuel — zone sign-404/Kaseya
+  PARKEE en attente d'un leak en hauteur de ce secteur.
+- **Hangar (B)**: habitacle de voiture. **Bar**: bouteilles/comptoir.
+  **Hotel (W)**: HUD dev + vegetation.
+
+NOUVEL OUTIL: `tools/audit/leak_visibility_sheet.py` — planche-contact des
+65 leaks sous-marquees avec cibles projetees (rouge 1obs / jaune 2 / vert 3+)
+-> tools/generated/leak_triage/sheet.html. LE point de depart de toute
+session de clics: 5 secondes d'oeil par frame, garder les vraies fenetres.
