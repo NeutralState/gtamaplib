@@ -38,6 +38,7 @@ for z in levels:
 
 p = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
 bp = json.load(open(p))
-bp[B] = {'color': '#4ade80', 'world_edges': edges}
-json.dump(bp, open(p, 'w'), indent=1, ensure_ascii=True)
+bp[B] = {'color': '#fb923c', 'world_edges': edges}
+json.dump(bp, open(p + '.tmp', 'w'), indent=1, ensure_ascii=True)
+os.replace(p + '.tmp', p)
 print(f'{B} V2: {len(edges)} aretes — sol z={z_ground:.2f}, {N_FLOORS} etages x {FLOOR_H}m, toit z={z_roof:.2f}')
