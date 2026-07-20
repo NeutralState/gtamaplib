@@ -1364,7 +1364,16 @@ async function init() {
     document.body.classList.toggle('view-view3d', name === 'view3d');
     if (name === 'view3d') {
       const fr = document.getElementById('view3d-frame');
-      if (fr && !fr.src) fr.src = '/view3d.html';
+      // [VIEW3D-SYNC] en entrant dans l'onglet 3D, la cam selectionnee est
+      // mise en evidence dans l'espace (marqueur + vol vers elle)
+      const focus = () => {
+        try {
+          fr.contentWindow.postMessage(
+            { type: 'gtamaplib-focus-cam', name: window.currentCam || currentCam }, '*');
+        } catch (e) {}
+      };
+      if (fr && !fr.src) { fr.src = '/view3d.html'; fr.addEventListener('load', focus, { once: true }); }
+      else setTimeout(focus, 50);
     }
     viewToggle.querySelectorAll('button[data-view]').forEach(b => {
       b.classList.toggle('active', b.dataset.view === name);
@@ -5903,6 +5912,17 @@ window.addEventListener('load', () => {
   body.view-view3d #trace-pop,
   body.view-view3d #mesh-ctrl-btn,
   body.view-view3d #mesh-ctrl-pop { display:none !important; }
+  /* [VIEW3D-SYNC] en mode 3D, les actions d'edition camera n'ont pas de
+     sens — on garde le contexte (nom de cam, Assist off) et la navigation */
+  body.view-view3d #chip-all,
+  body.view-view3d #btn-reset,
+  body.view-view3d #btn-save,
+  body.view-view3d #btn-export,
+  body.view-view3d #triage-btn,
+  body.view-view3d #saved,
+  body.view-view3d #proj-toggle,
+  body.view-view3d #assist-panel,
+  body.view-view3d #btn-mkadj { display:none !important; }
   .view3d-wrap iframe { width:100%; height:100%; border:0; display:block; }
 </style>
 <div class="view3d-wrap" id="view3d-wrap"><iframe id="view3d-frame"></iframe></div>

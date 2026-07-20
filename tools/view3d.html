@@ -46,6 +46,7 @@
     <span class="lchip on" id="ly-cams">cams</span>
     <span class="lchip on" id="ly-lms">landmarks</span>
     <span class="lchip on" id="ly-meshes">meshes</span>
+    <span class="lchip" id="btn-shot" title="PNG de la vue + frame en medaillon">&#8681; shot</span>
   </div>
 </div>
 <div class="panel" id="info"></div>
@@ -124,6 +125,16 @@ for (const k of ['cams', 'lms', 'meshes']) {
     layers[k].visible = on;
   });
 }
+
+// [VIEW3D-SYNC] le parent peut envoyer le focus-cam AVANT la fin du build
+// de la scene (module en await) — on bufferise et on applique apres.
+let pendingFocus = null, sceneReady = false;
+addEventListener('message', ev => {
+  if (ev.data && ev.data.type === 'gtamaplib-focus-cam' && ev.data.name) {
+    if (sceneReady) focusCam(ev.data.name);
+    else pendingFocus = ev.data.name;
+  }
+});
 
 const data = await (await fetch('/api/scene3d')).json();
 
@@ -340,6 +351,78 @@ window.__enterPOV = name => {
   return !!c;
 };
 
+// ── [VIEW3D-SYNC] focus d'une cam (message du parent): marqueur + vol ──
+let focusMarker = null, activeCamRef = null, flyAnim = null;
+function focusCam(name) {
+  const c = camPickRefs.find(c => c.name === name);
+  if (!c) return false;
+  activeCamRef = c;
+  if (povPrev) exitPOV();
+  if (!focusMarker) {
+    const g = new THREE.SphereGeometry(9, 12, 8);
+    focusMarker = new THREE.Mesh(g, new THREE.MeshBasicMaterial({
+      color: 0xfacc15, transparent: true, opacity: 0.9 }));
+    scene.add(focusMarker);
+  }
+  focusMarker.position.set(...c.xyz);
+  focusMarker.visible = true;
+  // vol: on se place derriere la cam par rapport a sa direction de visee
+  let back = new THREE.Vector3(0, 0, 0);
+  if (c.corners) {
+    for (const d of c.corners) back.add(new THREE.Vector3(...d));
+    back.normalize().multiplyScalar(-420);
+  } else back.set(300, -300, 0);
+  const dst = new THREE.Vector3(...c.xyz).add(back).add(new THREE.Vector3(0, 0, 160));
+  const p0 = camera.position.clone(), t0 = controls.target.clone();
+  const tgt = new THREE.Vector3(...c.xyz);
+  const start = performance.now();
+  flyAnim = () => {
+    const k = Math.min(1, (performance.now() - start) / 700);
+    const e = k * k * (3 - 2 * k);            // smoothstep
+    camera.position.lerpVectors(p0, dst, e);
+    controls.target.lerpVectors(t0, tgt, e);
+    if (k >= 1) flyAnim = null;
+  };
+  return true;
+}
+window.__focusCam = focusCam;
+sceneReady = true;                               // [VIEW3D-SYNC]
+if (pendingFocus) { focusCam(pendingFocus); pendingFocus = null; }
+
+// ── [VIEW3D-SHOT] export PNG: vue 3D + frame de la cam active en medaillon ──
+document.getElementById('btn-shot').addEventListener('click', async () => {
+  renderer.render(scene, camera);
+  const w = renderer.domElement.width, h = renderer.domElement.height;
+  const out = document.createElement('canvas');
+  out.width = w; out.height = h;
+  const octx = out.getContext('2d');
+  octx.drawImage(renderer.domElement, 0, 0);
+  const cRef = (povPrev && povPanel.style.display !== 'none')
+    ? camPickRefs.find(c => c.name === document.getElementById('pov-name').textContent)
+    : activeCamRef;
+  if (cRef) {
+    try {
+      const img = new Image();
+      await new Promise((res, rej) => {
+        img.onload = res; img.onerror = rej;
+        img.src = '/frame/' + encodeURIComponent(cRef.name);
+      });
+      const mw = Math.round(w * 0.24), mh = Math.round(mw * img.naturalHeight / img.naturalWidth);
+      octx.fillStyle = '#0a0a0c';
+      octx.fillRect(w - mw - 18, h - mh - 18, mw + 8, mh + 8);
+      octx.drawImage(img, w - mw - 14, h - mh - 14, mw, mh);
+      octx.strokeStyle = '#facc15'; octx.lineWidth = 2;
+      octx.strokeRect(w - mw - 14, h - mh - 14, mw, mh);
+      octx.fillStyle = '#e2e2f0'; octx.font = '13px monospace';
+      octx.fillText(cRef.name, w - mw - 14, h - mh - 22);
+    } catch (e) {}
+  }
+  const a = document.createElement('a');
+  a.download = 'gtamaplib-3d' + (cRef ? '-' + cRef.name.replace(/[^\w]+/g, '_') : '') + '.png';
+  a.href = out.toDataURL('image/png');
+  a.click();
+});
+
 // ── hover ──
 const ray = new THREE.Raycaster();
 ray.params.Points.threshold = 30;
@@ -406,7 +489,11 @@ window.__camScreen = name => {
   return { x: (v.x + 1) / 2 * innerWidth, y: (1 - v.y) / 2 * innerHeight, behind: v.z > 1 };
 };
 
-renderer.setAnimationLoop(() => { controls.update(); renderer.render(scene, camera); });
+renderer.setAnimationLoop(() => {
+  if (flyAnim) flyAnim();                       // [VIEW3D-SYNC] vol vers la cam
+  controls.update();
+  renderer.render(scene, camera);
+});
 </script>
 </body>
 </html>
