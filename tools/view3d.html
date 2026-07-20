@@ -131,7 +131,7 @@ for (const k of ['cams', 'lms', 'meshes']) {
 let pendingFocus = null, sceneReady = false;
 addEventListener('message', ev => {
   if (ev.data && ev.data.type === 'gtamaplib-focus-cam' && ev.data.name) {
-    if (sceneReady) focusCam(ev.data.name);
+    if (sceneReady) syncToCam(ev.data.name);
     else pendingFocus = ev.data.name;
   }
 });
@@ -293,6 +293,7 @@ const povAlpha = document.getElementById('pov-alpha');
 let povPrev = null;
 function enterPOV(c) {
   if (!c.corners) return;
+  flyAnim = null;                                 // [VIEW3D-SYNC-V2] stop tout vol en cours
   const [tl, tr, br, bl] = c.corners.map(d => new THREE.Vector3(...d));
   const right = new THREE.Vector3().subVectors(tr, tl).normalize();
   const up = new THREE.Vector3().subVectors(tl, bl).normalize();
@@ -344,6 +345,12 @@ function exitPOV() {
 povAlpha.addEventListener('input', () => { povFrame.style.opacity = povAlpha.value / 100; });
 document.getElementById('pov-exit').addEventListener('click', exitPOV);
 addEventListener('keydown', ev => { if (ev.key === 'Escape') exitPOV(); });
+// en iframe, le focus clavier vit chez le parent — on ecoute aussi la-bas
+try {
+  if (window.parent !== window) {
+    window.parent.addEventListener('keydown', ev => { if (ev.key === 'Escape') exitPOV(); });
+  }
+} catch (e) {}
 // hook de test/debug + usage programmatique
 window.__enterPOV = name => {
   const c = camPickRefs.find(c => c.name === name);
@@ -385,9 +392,38 @@ function focusCam(name) {
   };
   return true;
 }
+// [VIEW3D-SYNC-V2] selection d'une cam depuis calib = entrer DIRECTEMENT
+// dans sa vue exacte (POV + frame en opacite reglable, la demande
+// d'Alexandre). Esc sort vers une vue libre placee derriere la cam (on voit
+// ou elle vit dans l'espace), et de la on dezoome librement sur la map.
+function syncToCam(name) {
+  const c = camPickRefs.find(c => c.name === name);
+  if (!c) return false;
+  if (!c.corners) return focusCam(name);         // pas de frustum -> survol
+  activeCamRef = c;
+  if (!focusMarker) {
+    focusMarker = new THREE.Mesh(new THREE.SphereGeometry(9, 12, 8),
+      new THREE.MeshBasicMaterial({ color: 0xfacc15, transparent: true, opacity: 0.9 }));
+    scene.add(focusMarker);
+  }
+  focusMarker.position.set(...c.xyz);
+  focusMarker.visible = true;
+  flyAnim = null;                                 // un vol en cours ne doit pas tirer sur le POV
+  if (povPrev) exitPOV();
+  enterPOV(c);
+  // la sortie du POV atterrit derriere la cam, pas a la vue d'avant
+  const back = new THREE.Vector3(0, 0, 0);
+  for (const d of c.corners) back.add(new THREE.Vector3(...d));
+  back.normalize().multiplyScalar(-420);
+  const dst = new THREE.Vector3(...c.xyz).add(back).add(new THREE.Vector3(0, 0, 160));
+  povPrev = { pos: dst, quat: camera.quaternion.clone(), fov: 55, near: 1,
+              target: new THREE.Vector3(...c.xyz) };
+  return true;
+}
 window.__focusCam = focusCam;
+window.__syncToCam = syncToCam;
 sceneReady = true;                               // [VIEW3D-SYNC]
-if (pendingFocus) { focusCam(pendingFocus); pendingFocus = null; }
+if (pendingFocus) { syncToCam(pendingFocus); pendingFocus = null; }
 
 // ── [VIEW3D-SHOT] export PNG: vue 3D + frame de la cam active en medaillon ──
 document.getElementById('btn-shot').addEventListener('click', async () => {
