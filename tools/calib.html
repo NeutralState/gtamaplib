@@ -3514,12 +3514,18 @@ window.loadProceduralMeshes = loadProceduralMeshes;
     if (pop.style.display === 'block') rebuild();
   });
   alpha.addEventListener('input', () => { wireAlpha = alpha.value / 100; draw(); });
-  // [MESH-VERDICT-V1] verdicts humains fit/off par (cam x building)
+  // [MESH-VERDICT-V2] human verdicts per (cam x building), with quantitative
+  // detail on 'off': direction the mesh should MOVE (image space), ~px, note.
   let meshVerdicts = {};
-  async function sendVerdict(bld, v) {
+  async function sendVerdict(bld, v, extra) {
+    let url = '/api/mesh_verdict?cam=' + encodeURIComponent(currentCam) +
+              '&building=' + encodeURIComponent(bld) + '&verdict=' + v;
+    for (const [k, val] of Object.entries(extra || {})) {
+      if (val !== undefined && val !== null && val !== '')
+        url += '&' + k + '=' + encodeURIComponent(val);
+    }
     try {
-      const r = await fetch('/api/mesh_verdict?cam=' + encodeURIComponent(currentCam) +
-                            '&building=' + encodeURIComponent(bld) + '&verdict=' + v);
+      const r = await fetch(url);
       const d = await r.json();
       meshVerdicts = d.verdicts || {};
     } catch (e) { console.warn('mesh_verdict failed', e); }
@@ -3538,10 +3544,10 @@ window.loadProceduralMeshes = loadProceduralMeshes;
     ];
     list.innerHTML = names.length ? '' : '<span style="color:var(--dim)">no mesh on this cam</span>';
     if (names.length) {
-      // [MESH-CTRL-V2] tout on / tout off d'un coup
+      // [MESH-CTRL-V2] toggle all at once
       const anyVisible = names.some(n => !hiddenMeshes.has(n));
       const allBtn = document.createElement('button');
-      allBtn.textContent = anyVisible ? 'tout masquer' : 'tout afficher';
+      allBtn.textContent = anyVisible ? 'hide all' : 'show all';
       allBtn.style.cssText = 'display:block;width:100%;margin-bottom:7px;padding:3px 6px;' +
         'background:#1c2431;color:var(--fg);border:1px solid #2c3a4f;border-radius:4px;' +
         'cursor:pointer;font-family:inherit;font-size:11px';
@@ -3570,22 +3576,68 @@ window.loadProceduralMeshes = loadProceduralMeshes;
       lbl.style.cssText = 'flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
       lbl.title = n;
       row.appendChild(lbl);
-      // verdict humain: le mesh fit-il dans CETTE frame?
-      const v = (meshVerdicts[n] || {}).verdict;
+      // human verdict: does the mesh fit in THIS frame?
+      const ve = meshVerdicts[n] || {};
+      const v = ve.verdict;
       const mk = (sym, val, col) => {
         const b = document.createElement('button');
         b.textContent = sym;
         const active = v === val;
-        b.title = val === 'fit' ? 'mesh fit dans cette frame' : 'mesh decale dans cette frame';
+        b.title = val === 'fit' ? 'mesh fits this frame' : 'mesh misaligned in this frame';
         b.style.cssText = 'padding:1px 6px;border-radius:3px;cursor:pointer;font-size:11px;' +
           'font-family:inherit;border:1px solid ' + (active ? col : '#2c3a4f') + ';' +
           'background:' + (active ? col + '33' : 'transparent') + ';color:' + (active ? col : 'var(--dim)');
-        b.addEventListener('click', () => sendVerdict(n, active ? 'clear' : val));
+        b.addEventListener('click', () => sendVerdict(n, active ? 'clear' : val, {}));
         return b;
       };
       row.appendChild(mk('✓', 'fit', '#4ade80'));
       row.appendChild(mk('✗', 'off', '#f87171'));
       list.appendChild(row);
+      // [MESH-VERDICT-V2] detail panel when 'off': which way should the
+      // mesh move (image space), by roughly how much, plus a free note.
+      if (v === 'off') {
+        const det = document.createElement('div');
+        det.style.cssText = 'margin:0 0 6px 20px;padding:4px 6px;border-left:2px solid #f87171;' +
+          'display:flex;flex-direction:column;gap:4px';
+        const chipRow = (items, cur, key) => {
+          const r = document.createElement('div');
+          r.style.cssText = 'display:flex;gap:3px;flex-wrap:wrap';
+          for (const [label, val] of items) {
+            const c = document.createElement('button');
+            c.textContent = label;
+            const act = String(cur) === String(val);
+            c.style.cssText = 'padding:0 5px;border-radius:3px;cursor:pointer;font-size:11px;' +
+              'font-family:inherit;border:1px solid ' + (act ? '#f87171' : '#2c3a4f') + ';' +
+              'background:' + (act ? '#f8717133' : 'transparent') + ';color:' + (act ? '#f87171' : 'var(--dim)');
+            c.title = key === 'dir' ? 'mesh should move ' + val : '~' + val + 'px off';
+            c.addEventListener('click', () => {
+              const extra = {dir: ve.dir, mag: ve.mag_px, note: ve.note};
+              extra[key === 'mag' ? 'mag' : key] = act ? '' : val;
+              sendVerdict(n, 'off', extra);
+            });
+            r.appendChild(c);
+          }
+          return r;
+        };
+        det.appendChild(chipRow([['←', 'left'], ['→', 'right'], ['↑', 'up'], ['↓', 'down'],
+                                 ['↖', 'up-left'], ['↗', 'up-right'], ['↙', 'down-left'], ['↘', 'down-right']],
+                                ve.dir, 'dir'));
+        det.appendChild(chipRow([['~5px', 5], ['~15px', 15], ['~40px', 40], ['~100px', 100]],
+                                ve.mag_px, 'mag'));
+        const note = document.createElement('input');
+        note.type = 'text';
+        note.placeholder = 'note (optional) — e.g. "roof ok, base shifted"';
+        note.value = ve.note || '';
+        note.style.cssText = 'background:#141a24;border:1px solid #2c3a4f;border-radius:3px;' +
+          'color:var(--fg);font-family:inherit;font-size:11px;padding:2px 5px;width:100%';
+        note.addEventListener('keydown', ev => { if (ev.key === 'Enter') note.blur(); });
+        note.addEventListener('blur', () => {
+          if (note.value.trim() !== (ve.note || ''))
+            sendVerdict(n, 'off', {dir: ve.dir, mag: ve.mag_px, note: note.value.trim()});
+        });
+        det.appendChild(note);
+        list.appendChild(det);
+      }
     }
   }
   window.rebuildMeshCtrl = rebuild;

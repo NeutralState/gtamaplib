@@ -2059,8 +2059,22 @@ class Handler(BaseHTTPRequestHandler):
                 cur = {}
             if verdict in ('fit', 'off') and cam_name and bld:
                 from datetime import date as _date
-                cur.setdefault(cam_name, {})[bld] = {'verdict': verdict,
-                                                     'date': _date.today().isoformat()}
+                entry = {'verdict': verdict, 'date': _date.today().isoformat()}
+                # [MESH-VERDICT-V2] detail quantitatif du 'off': direction du
+                # decalage en espace IMAGE (ou le mesh devrait bouger pour
+                # fitter), ampleur ~px, note libre — directement comparable
+                # aux jacobiennes de blame_matrix.
+                d = unquote(qs.get('dir', [''])[0])
+                if d in ('left', 'right', 'up', 'down', 'up-left', 'up-right',
+                         'down-left', 'down-right'):
+                    entry['dir'] = d
+                mag = qs.get('mag', [''])[0]
+                if mag.isdigit():
+                    entry['mag_px'] = int(mag)
+                note = unquote(qs.get('note', [''])[0]).strip()
+                if note:
+                    entry['note'] = note[:300]
+                cur.setdefault(cam_name, {})[bld] = entry
             elif verdict == 'clear' and cam_name and bld:
                 cur.get(cam_name, {}).pop(bld, None)
                 if cam_name in cur and not cur[cam_name]:
