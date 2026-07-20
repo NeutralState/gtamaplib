@@ -36,6 +36,12 @@ for z in levels:
     for i in range(n):
         edges.append([r[i], r[(i + 1) % n]])
 
+# [SPC-V3] le mat d'antenne (LM (A), triangule 07-20: 3 temoins 3-6') —
+# regle verticale fine du toit a la pointe, visible de partout
+ant = lms.get(B + ' (A)', {}).get('xyz')
+if ant:
+    edges.append([[ant[0], ant[1], z_roof], [ant[0], ant[1], ant[2]]])
+
 p = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
 bp = json.load(open(p))
 bp[B] = {'color': '#fb923c', 'world_edges': edges}
