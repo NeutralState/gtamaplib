@@ -924,3 +924,4 @@
 {"ts": "2026-07-19T09:21:03", "tool": "edge_ba", "action": "joint_applied", "reason": "EDGE-BA pilote: 17 cams ypr + 3 buildings, clics 0.938->0.844m"}
 {"ts": "2026-07-19T09:24:21", "tool": "guarded_apply", "action": "apply", "n_cams": 3, "n_lms": 31, "n_accepted": 33}
 {"ts": "2026-07-19T12:53:29", "tool": "triangulate_lm", "action": "retriangulate", "lm": "C. Clyde Atkins U.S Courthouse (SE)", "old_xyz": [-703.0099589606846, 772.814882459795, 48.44454693427592], "new_xyz": [-701.2006, 772.1935, 52.0824], "kept": ["Jason Duval 05 (Machine Gun)", "Port Vice City (A)"], "max_res": 3.397}
+{"ts": "2026-07-20T11:16:26", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Stephen P. Clark Government Center (A)", "old_xyz": null, "new_xyz": [-850.2568, 63.6899, 180.1851], "kept": ["Skyline", "Port Vice City (A)", "Shitzu Squalo 01 (Bay)"], "max_res": 6.398}

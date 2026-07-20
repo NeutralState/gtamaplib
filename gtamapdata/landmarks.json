@@ -14990,9 +14990,17 @@
     "zone": "rlx_markings_0713"
   },
   "Stephen P. Clark Government Center (A)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -850.2567702886118,
+      63.68992054198595,
+      180.18514719895273
+    ],
+    "source_cameras": [
+      "Skyline",
+      "Port Vice City (A)",
+      "Shitzu Squalo 01 (Bay)"
+    ],
+    "error_m": 6.398,
     "zone": "rlx_markings_0713"
   },
   "Pin D03L": {
