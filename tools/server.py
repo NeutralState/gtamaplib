@@ -2044,6 +2044,34 @@ class Handler(BaseHTTPRequestHandler):
                 save_validated(cur)
             self.send_json({'lm': lm_name, 'verdict': (cur.get(lm_name) or {}).get('status')})
 
+        elif path == '/api/mesh_verdict':
+            # [MESH-VERDICT-V1] l'oeil d'Alexandre comme famille de donnees:
+            # verdict fit/off par (cam x building), consomme par blame_matrix/
+            # dossier comme temoignage humain. verdict=fit|off|clear ecrit,
+            # sans verdict= -> lecture seule (tous les verdicts de la cam).
+            cam_name = unquote(qs.get('cam', [''])[0])
+            bld = unquote(qs.get('building', [''])[0])
+            verdict = qs.get('verdict', [''])[0]
+            vpath = os.path.join(GTAMAP_DIR, 'gtamapdata', 'mesh_verdicts.json')
+            try:
+                cur = json.load(open(vpath))
+            except Exception:
+                cur = {}
+            if verdict in ('fit', 'off') and cam_name and bld:
+                from datetime import date as _date
+                cur.setdefault(cam_name, {})[bld] = {'verdict': verdict,
+                                                     'date': _date.today().isoformat()}
+            elif verdict == 'clear' and cam_name and bld:
+                cur.get(cam_name, {}).pop(bld, None)
+                if cam_name in cur and not cur[cam_name]:
+                    cur.pop(cam_name)
+            if verdict:
+                tmp = vpath + '.tmp'
+                with open(tmp, 'w') as f:
+                    json.dump(cur, f, indent=1, ensure_ascii=True)
+                os.replace(tmp, vpath)
+            self.send_json({'cam': cam_name, 'verdicts': cur.get(cam_name, {})})
+
         elif path == '/api/fit_minimal':
             # [PANEL-V2] fit ypr(+roll)+fov with xyz LOCKED at the CLIENT's
             # (possibly unsaved) values. Returns the fitted pose WITHOUT

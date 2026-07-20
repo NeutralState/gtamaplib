@@ -3514,25 +3514,77 @@ window.loadProceduralMeshes = loadProceduralMeshes;
     if (pop.style.display === 'block') rebuild();
   });
   alpha.addEventListener('input', () => { wireAlpha = alpha.value / 100; draw(); });
-  function rebuild() {
+  // [MESH-VERDICT-V1] verdicts humains fit/off par (cam x building)
+  let meshVerdicts = {};
+  async function sendVerdict(bld, v) {
+    try {
+      const r = await fetch('/api/mesh_verdict?cam=' + encodeURIComponent(currentCam) +
+                            '&building=' + encodeURIComponent(bld) + '&verdict=' + v);
+      const d = await r.json();
+      meshVerdicts = d.verdicts || {};
+    } catch (e) { console.warn('mesh_verdict failed', e); }
+    rebuild(true);
+  }
+  async function rebuild(skipFetch) {
+    if (!skipFetch) {
+      try {
+        const r = await fetch('/api/mesh_verdict?cam=' + encodeURIComponent(currentCam));
+        meshVerdicts = (await r.json()).verdicts || {};
+      } catch (e) { meshVerdicts = {}; }
+    }
     const names = [
       ...BUILDING_WIREFRAMES.filter(b => b.edges && b.edges.length).map(b => b.name),
       ...Object.keys(BUILDING_PROCEDURAL_PIXEL_EDGES),
     ];
     list.innerHTML = names.length ? '' : '<span style="color:var(--dim)">no mesh on this cam</span>';
+    if (names.length) {
+      // [MESH-CTRL-V2] tout on / tout off d'un coup
+      const anyVisible = names.some(n => !hiddenMeshes.has(n));
+      const allBtn = document.createElement('button');
+      allBtn.textContent = anyVisible ? 'tout masquer' : 'tout afficher';
+      allBtn.style.cssText = 'display:block;width:100%;margin-bottom:7px;padding:3px 6px;' +
+        'background:#1c2431;color:var(--fg);border:1px solid #2c3a4f;border-radius:4px;' +
+        'cursor:pointer;font-family:inherit;font-size:11px';
+      allBtn.addEventListener('click', () => {
+        if (anyVisible) names.forEach(n => hiddenMeshes.add(n));
+        else hiddenMeshes.clear();
+        draw(); rebuild(true);
+      });
+      list.appendChild(allBtn);
+    }
     for (const n of names) {
-      const row = document.createElement('label');
-      row.style.cssText = 'display:flex;align-items:center;gap:7px;margin-bottom:4px;cursor:pointer';
+      const row = document.createElement('div');
+      row.style.cssText = 'display:flex;align-items:center;gap:6px;margin-bottom:4px';
       const cb = document.createElement('input');
       cb.type = 'checkbox';
       cb.checked = !hiddenMeshes.has(n);
       cb.style.accentColor = 'var(--green)';
+      cb.style.cursor = 'pointer';
       cb.addEventListener('change', () => {
         cb.checked ? hiddenMeshes.delete(n) : hiddenMeshes.add(n);
-        draw();
+        draw(); rebuild(true);
       });
       row.appendChild(cb);
-      row.appendChild(document.createTextNode(n));
+      const lbl = document.createElement('span');
+      lbl.textContent = n;
+      lbl.style.cssText = 'flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap';
+      lbl.title = n;
+      row.appendChild(lbl);
+      // verdict humain: le mesh fit-il dans CETTE frame?
+      const v = (meshVerdicts[n] || {}).verdict;
+      const mk = (sym, val, col) => {
+        const b = document.createElement('button');
+        b.textContent = sym;
+        const active = v === val;
+        b.title = val === 'fit' ? 'mesh fit dans cette frame' : 'mesh decale dans cette frame';
+        b.style.cssText = 'padding:1px 6px;border-radius:3px;cursor:pointer;font-size:11px;' +
+          'font-family:inherit;border:1px solid ' + (active ? col : '#2c3a4f') + ';' +
+          'background:' + (active ? col + '33' : 'transparent') + ';color:' + (active ? col : 'var(--dim)');
+        b.addEventListener('click', () => sendVerdict(n, active ? 'clear' : val));
+        return b;
+      };
+      row.appendChild(mk('✓', 'fit', '#4ade80'));
+      row.appendChild(mk('✗', 'off', '#f87171'));
       list.appendChild(row);
     }
   }
