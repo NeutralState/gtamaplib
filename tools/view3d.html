@@ -62,7 +62,7 @@
           border:1px solid var(--border);border-radius:5px;padding:2px 10px;cursor:pointer;
           font:11px var(--mono)">exit (Esc)</button>
   <!-- tag de version: si tu ne vois pas ce numero, tu tournes du vieux code -->
-  <span id="pov-ver" style="color:var(--dim);font-size:9px;margin-left:8px">v3</span>
+  <span id="pov-ver" style="color:var(--dim);font-size:9px;margin-left:8px">v4</span>
 </div>
 <div class="panel" id="legend">
   <span><span class="sw" style="background:#a78bfa"></span>anchor</span>
@@ -114,6 +114,17 @@ function resize() {
   camera.updateProjectionMatrix();
 }
 addEventListener('resize', resize); resize();
+// [POV-V4] garde-taille par frame: en iframe, la transition display:none ->
+// block peut rater l'evenement resize (mesure chez Alexandre: iframe a
+// 1471x78 alors que l'ecran est plein) — on verifie a chaque tick et on
+// s'auto-repare.
+let _lastW = 0, _lastH = 0;
+function sizeGuard() {
+  if (innerWidth !== _lastW || innerHeight !== _lastH) {
+    _lastW = innerWidth; _lastH = innerHeight;
+    resize();
+  }
+}
 
 // [VIEW3D-SIMPLIFY] map toujours visible (pas un filtre); ocean et grid
 // retires — inutiles avec les tuiles satellite (l'eau est dans la map).
@@ -289,7 +300,17 @@ function clearHoverRays() {
 // Base camera derivee des 4 coins de frustum serveur (TL,TR,BR,BL) — les
 // symetries du pinhole rendent ces formules EXACTES: TR-TL ∝ axe droit,
 // BL->TL ∝ axe up, somme des 4 ∝ direction; zero convention ypr en JS.
-const povFrame = document.getElementById('pov-frame');
+const povFrame = document.getElementById('pov-frame');   // (V4: plus utilise pour le rendu, conserve pour compat)
+let povQuad = null;
+scene.add(camera);   // [POV-V4] requis pour que les enfants de la camera rendent
+function killQuad() {
+  if (!povQuad) return;
+  camera.remove(povQuad);
+  povQuad.geometry.dispose();
+  if (povQuad.material.map) povQuad.material.map.dispose();
+  povQuad.material.dispose();
+  povQuad = null;
+}
 const povPanel = document.getElementById('pov');
 const povAlpha = document.getElementById('pov-alpha');
 let povPrev = null;
@@ -319,21 +340,27 @@ function enterPOV(c) {
   window.__povState = { pos: camera.position.toArray(),
                         lookDir: camera.getWorldDirection(new THREE.Vector3()).toArray(),
                         wantDir: dir.toArray(), fov: camera.fov };
+  // [POV-V4] la frame vit DANS la scene: quad texture attache a la camera,
+  // dimensionne exactement au fov -> l'alignement frame/monde est garanti par
+  // construction, immunise contre tout desordre de layout/CSS/resize (le bug
+  // 'iframe 78px' d'Alexandre rendait l'overlay DOM incoherent avec le canvas).
+  killQuad();
+  const D = 120;
+  const qw = 2 * D * Math.tan(hfov / 2);
+  const qh = 2 * D * Math.tan(THREE.MathUtils.degToRad(vfov) / 2);
+  const tex = new THREE.TextureLoader().load('/frame/' + encodeURIComponent(c.name));
+  tex.colorSpace = THREE.SRGBColorSpace;
+  povQuad = new THREE.Mesh(new THREE.PlaneGeometry(qw, qh),
+    new THREE.MeshBasicMaterial({ map: tex, transparent: true,
+      opacity: povAlpha.value / 100, depthTest: false, depthWrite: false }));
+  povQuad.position.set(0, 0, -D);
+  povQuad.renderOrder = 999;
+  camera.add(povQuad);
   controls.enabled = false;
   povPanel.style.display = 'flex';
   document.getElementById('pov-name').textContent = c.name;
   // overlay de la frame reelle: vfov epouse la hauteur ecran par construction
   // -> height 100vh + largeur au ratio angulaire = alignement pixel-a-pixel
-  // largeur en CSS calc: ratio angulaire x 100vh — independant de la
-  // taille de fenetre au moment de l'appel (innerHeight peut etre 0
-  // pendant certains cycles de vie)
-  const ratio = Math.tan(hfov / 2) / Math.tan(THREE.MathUtils.degToRad(vfov) / 2);
-  povFrame.style.width = 'calc(100vh * ' + ratio.toFixed(4) + ')';
-  povFrame.style.height = '100vh';
-  povFrame.style.display = 'block';
-  povFrame.style.opacity = povAlpha.value / 100;
-  povFrame.onerror = () => { povFrame.style.display = 'none'; };
-  povFrame.src = '/frame/' + encodeURIComponent(c.name);
 }
 function exitPOV() {
   if (!povPrev) return;
@@ -345,10 +372,9 @@ function exitPOV() {
   controls.enabled = true;
   povPrev = null;
   povPanel.style.display = 'none';
-  povFrame.style.display = 'none';
-  povFrame.src = '';
+  killQuad();
 }
-povAlpha.addEventListener('input', () => { povFrame.style.opacity = povAlpha.value / 100; });
+povAlpha.addEventListener('input', () => { if (povQuad) povQuad.material.opacity = povAlpha.value / 100; });
 document.getElementById('pov-exit').addEventListener('click', exitPOV);
 addEventListener('keydown', ev => { if (ev.key === 'Escape') exitPOV(); });
 // en iframe, le focus clavier vit chez le parent — on ecoute aussi la-bas
@@ -571,6 +597,7 @@ window.__camScreen = name => {
 };
 
 renderer.setAnimationLoop(() => {
+  sizeGuard();                                  // [POV-V4] auto-reparation de taille
   if (flyAnim) flyAnim();                       // [VIEW3D-SYNC] vol vers la cam
   // en POV la camera est pilotee par nous: controls.update() la re-orienterait
   // vers sa cible a chaque frame (meme controls.enabled=false) -> monde noir
