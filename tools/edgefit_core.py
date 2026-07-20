@@ -110,14 +110,14 @@ def sample(ctx, edges, self_name=None, hulls=None, silhouette=False, collect=Tru
             pts.append(pa + t * s)
             nrms.append(n)
     if not pts:
-        return dict(offsets=np.array([]), n_raw=0, n_sil=0)
+        return dict(offsets=np.array([]), normals=np.array([]), n_raw=0, n_sil=0)
     P = np.array(pts); N = np.array(nrms)
     ok = (P[:, 0] > SEARCH) & (P[:, 0] < ctx.W - SEARCH - 1) & \
          (P[:, 1] > SEARCH) & (P[:, 1] < ctx.H - SEARCH - 1)
     P, N = P[ok], N[ok]
     n_raw = len(P)
     if not n_raw:
-        return dict(offsets=np.array([]), n_raw=0, n_sil=0)
+        return dict(offsets=np.array([]), normals=np.array([]), n_raw=0, n_sil=0)
 
     if silhouette:
         # (refute pour la skyline dense — conserve pour cas isoles)
@@ -139,7 +139,7 @@ def sample(ctx, edges, self_name=None, hulls=None, silhouette=False, collect=Tru
                 inside = _signed_dist_hull(eqs2, P) < -1.0
                 P, N = P[~inside], N[~inside]
     if not len(P):
-        return dict(offsets=np.array([]), n_raw=n_raw, n_sil=0)
+        return dict(offsets=np.array([]), normals=np.array([]), n_raw=n_raw, n_sil=0)
 
     offs_range = np.arange(-SEARCH, SEARCH + 1)
     X = (P[:, 0:1] + N[:, 0:1] * offs_range[None, :]).astype(int)
@@ -160,5 +160,6 @@ def sample(ctx, edges, self_name=None, hulls=None, silhouette=False, collect=Tru
     frac = np.clip(np.nan_to_num(frac), -1, 1)
     off = (k - SEARCH + frac)[valid].astype(float)
     return dict(offsets=off if collect else np.array([]),
+                normals=N[valid] if collect else np.array([]),
                 n_raw=n_raw, n_sil=int(valid.sum()),
                 cost=float(np.sum(np.sqrt(1 + (off / 3.0) ** 2) - 1)))
