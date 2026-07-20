@@ -49,6 +49,18 @@
   </div>
 </div>
 <div class="panel" id="info"></div>
+<!-- [VIEW3D-POV] vue a travers une cam: position/orientation/fov exacts -->
+<img id="pov-frame" style="display:none;position:fixed;top:0;left:50%;transform:translateX(-50%);
+     height:100vh;z-index:5;pointer-events:none;opacity:.5">
+<div class="panel" id="pov" style="display:none;top:12px;left:50%;transform:translateX(-50%);
+     z-index:11;align-items:center;gap:10px">
+  <b id="pov-name" style="color:var(--text)"></b>
+  <label style="margin-left:10px">frame <input id="pov-alpha" type="range" min="0" max="100"
+         value="50" style="width:90px;vertical-align:middle"></label>
+  <button id="pov-exit" style="margin-left:10px;background:var(--surface2);color:var(--text);
+          border:1px solid var(--border);border-radius:5px;padding:2px 10px;cursor:pointer;
+          font:11px var(--mono)">exit (Esc)</button>
+</div>
 <div class="panel" id="legend">
   <span><span class="sw" style="background:#a78bfa"></span>anchor</span>
   <span style="margin-left:10px"><span class="sw" style="background:#4ade80"></span>high</span>
@@ -260,6 +272,74 @@ function clearHoverRays() {
   }
 }
 
+// ── [VIEW3D-POV] entrer dans la vue exacte d'une cam ──
+// Base camera derivee des 4 coins de frustum serveur (TL,TR,BR,BL) — les
+// symetries du pinhole rendent ces formules EXACTES: TR-TL ∝ axe droit,
+// BL->TL ∝ axe up, somme des 4 ∝ direction; zero convention ypr en JS.
+const povFrame = document.getElementById('pov-frame');
+const povPanel = document.getElementById('pov');
+const povAlpha = document.getElementById('pov-alpha');
+let povPrev = null;
+function enterPOV(c) {
+  if (!c.corners) return;
+  const [tl, tr, br, bl] = c.corners.map(d => new THREE.Vector3(...d));
+  const right = new THREE.Vector3().subVectors(tr, tl).normalize();
+  const up = new THREE.Vector3().subVectors(tl, bl).normalize();
+  const dir = new THREE.Vector3().add(tl).add(tr).add(br).add(bl).normalize();
+  const zAxis = new THREE.Vector3().crossVectors(right, up).normalize(); // = -dir
+  const yAxis = new THREE.Vector3().crossVectors(zAxis, right).normalize();
+  const midTop = new THREE.Vector3().addVectors(tl, tr).normalize();
+  const midBot = new THREE.Vector3().addVectors(bl, br).normalize();
+  const vfov = THREE.MathUtils.radToDeg(midTop.angleTo(midBot));
+  const midL = new THREE.Vector3().addVectors(tl, bl).normalize();
+  const midR = new THREE.Vector3().addVectors(tr, br).normalize();
+  const hfov = midL.angleTo(midR);
+  if (!povPrev) povPrev = { pos: camera.position.clone(), quat: camera.quaternion.clone(),
+                            fov: camera.fov, near: camera.near, target: controls.target.clone() };
+  camera.position.set(...c.xyz);
+  const m = new THREE.Matrix4().makeBasis(right, yAxis, zAxis);
+  camera.quaternion.setFromRotationMatrix(m);
+  camera.fov = vfov; camera.near = 0.5;
+  camera.updateProjectionMatrix();
+  controls.enabled = false;
+  povPanel.style.display = 'flex';
+  document.getElementById('pov-name').textContent = c.name;
+  // overlay de la frame reelle: vfov epouse la hauteur ecran par construction
+  // -> height 100vh + largeur au ratio angulaire = alignement pixel-a-pixel
+  // largeur en CSS calc: ratio angulaire x 100vh — independant de la
+  // taille de fenetre au moment de l'appel (innerHeight peut etre 0
+  // pendant certains cycles de vie)
+  const ratio = Math.tan(hfov / 2) / Math.tan(THREE.MathUtils.degToRad(vfov) / 2);
+  povFrame.style.width = 'calc(100vh * ' + ratio.toFixed(4) + ')';
+  povFrame.style.height = '100vh';
+  povFrame.style.display = 'block';
+  povFrame.style.opacity = povAlpha.value / 100;
+  povFrame.onerror = () => { povFrame.style.display = 'none'; };
+  povFrame.src = '/frame/' + encodeURIComponent(c.name);
+}
+function exitPOV() {
+  if (!povPrev) return;
+  camera.position.copy(povPrev.pos);
+  camera.quaternion.copy(povPrev.quat);
+  camera.fov = povPrev.fov; camera.near = povPrev.near;
+  camera.updateProjectionMatrix();
+  controls.target.copy(povPrev.target);
+  controls.enabled = true;
+  povPrev = null;
+  povPanel.style.display = 'none';
+  povFrame.style.display = 'none';
+  povFrame.src = '';
+}
+povAlpha.addEventListener('input', () => { povFrame.style.opacity = povAlpha.value / 100; });
+document.getElementById('pov-exit').addEventListener('click', exitPOV);
+addEventListener('keydown', ev => { if (ev.key === 'Escape') exitPOV(); });
+// hook de test/debug + usage programmatique
+window.__enterPOV = name => {
+  const c = camPickRefs.find(c => c.name === name);
+  if (c) enterPOV(c);
+  return !!c;
+};
+
 // ── hover ──
 const ray = new THREE.Raycaster();
 ray.params.Points.threshold = 30;
@@ -272,14 +352,16 @@ addEventListener('pointerup', ev => {
   if (!downAt) return;
   const moved = Math.hypot(ev.clientX - downAt[0], ev.clientY - downAt[1]);
   downAt = null;
-  if (moved > 5 || window.self === window.top) return;
+  if (moved > 5) return;
   const ndc = new THREE.Vector2(ev.clientX / innerWidth * 2 - 1,
                                 -(ev.clientY / innerHeight) * 2 + 1);
   ray.setFromCamera(ndc, camera);
   const hits = ray.intersectObject(pickPts);
-  if (hits.length) {
-    window.parent.postMessage(
-      { type: 'gtamaplib-open-cam', name: camPickRefs[hits[0].index].name }, '*');
+  if (!hits.length) return;
+  const c = camPickRefs[hits[0].index];
+  if (ev.shiftKey) { enterPOV(c); return; }          // [VIEW3D-POV]
+  if (window.self !== window.top) {
+    window.parent.postMessage({ type: 'gtamaplib-open-cam', name: c.name }, '*');
   }
 });
 
@@ -296,7 +378,8 @@ addEventListener('pointermove', ev => {
     info.innerHTML = `<b>${c.name}</b><br>` +
       `tier ${c.tier || 'unverified'} · ${c.n_pixels} markings` +
       (c.hud_locked ? ' · HUD-locked' : '') +
-      (rms != null ? `<br>RMS <span class="${rms > 10 ? 'rms-bad' : ''}">${rms}&#8242;</span>` : '');
+      (rms != null ? `<br>RMS <span class="${rms > 10 ? 'rms-bad' : ''}">${rms}&#8242;</span>` : '') +
+      (c.corners ? `<br><span style="color:var(--dim)">shift-click: POV</span>` : '');
   } else {
     info.style.display = 'none';
     clearHoverRays();                              // [VIEW3D-RAYS]
