@@ -313,6 +313,10 @@ function enterPOV(c) {
   camera.quaternion.setFromRotationMatrix(m);
   camera.fov = vfov; camera.near = 0.5;
   camera.updateProjectionMatrix();
+  camera.updateMatrixWorld(true);
+  window.__povState = { pos: camera.position.toArray(),
+                        lookDir: camera.getWorldDirection(new THREE.Vector3()).toArray(),
+                        wantDir: dir.toArray(), fov: camera.fov };
   controls.enabled = false;
   povPanel.style.display = 'flex';
   document.getElementById('pov-name').textContent = c.name;
@@ -512,6 +516,45 @@ addEventListener('dblclick', ev => {
   const hit = ray.intersectObject(ground);
   if (hit.length) { controls.target.copy(hit[0].point); }
 });
+
+// helper de test/debug: rend une frame MAINTENANT et echantillonne des pixels
+window.__renderAndSample = (pts) => {
+  renderer.render(scene, camera);
+  const cv = renderer.domElement;
+  const out = document.createElement('canvas');
+  out.width = cv.width; out.height = cv.height;
+  const ctx2 = out.getContext('2d');
+  ctx2.drawImage(cv, 0, 0);
+  const pr = cv.width / innerWidth;
+  return pts.map(([x, y]) => {
+    const d = ctx2.getImageData(Math.round(x * pr) - 4, Math.round(y * pr) - 4, 9, 9).data;
+    let r = 0, g = 0, b = 0, n = 0;
+    for (let i = 0; i < d.length; i += 4) { r += d[i]; g += d[i + 1]; b += d[i + 2]; n++; }
+    return [Math.round(r / n), Math.round(g / n), Math.round(b / n)];
+  });
+};
+
+// helper de test/debug: etat de la scene
+window.__sceneDebug = () => {
+  const mg = layers.meshes.children[0];
+  let bs = null;
+  if (mg) {
+    mg.geometry.computeBoundingSphere();
+    const s = mg.geometry.boundingSphere;
+    bs = { center: s.center.toArray().map(v => +v.toFixed(0)), radius: +s.radius.toFixed(0) };
+  }
+  return { fog: scene.fog ? { near: +scene.fog.near.toFixed(0), far: +scene.fog.far.toFixed(0) } : null,
+           span: +span.toFixed(0), meshesVisible: layers.meshes.visible,
+           nMeshVerts: mg ? mg.geometry.attributes.position.count : 0,
+           camFar: camera.far, camNear: camera.near, bs };
+};
+
+// helper de test/debug: projette un point monde -> pixels ecran
+window.__projectPoint = (x, y, z) => {
+  const v = new THREE.Vector3(x, y, z);
+  v.project(camera);
+  return { x: (v.x + 1) / 2 * innerWidth, y: (1 - v.y) / 2 * innerHeight, behind: v.z > 1 };
+};
 
 // helper de test/debug: etat des rayons de hover
 window.__hoverRaysCount = () => hoverRays ? hoverRays.geometry.attributes.position.count / 2 : 0;
