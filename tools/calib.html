@@ -1372,7 +1372,8 @@ async function init() {
             { type: 'gtamaplib-focus-cam', name: window.currentCam || currentCam }, '*');
         } catch (e) {}
       };
-      if (fr && !fr.src) { fr.src = '/view3d.html'; fr.addEventListener('load', focus, { once: true }); }
+      // cache-bust: l'iframe chargeait une version cachee de view3d.html
+      if (fr && !fr.src) { fr.src = '/view3d.html?v=' + Date.now(); fr.addEventListener('load', focus, { once: true }); }
       else setTimeout(focus, 50);
     }
     viewToggle.querySelectorAll('button[data-view]').forEach(b => {

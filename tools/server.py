@@ -581,6 +581,13 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.send_header('Content-Type', mime)
         self.send_header('Content-Length', len(data))
+        # [NO-CACHE-HTML] le navigateur cachait calib/view3d.html -> les
+        # nouvelles features 'ne marchaient pas du tout' cote Alexandre tant
+        # qu'un hard-refresh n'etait pas fait. Les html/js locaux se
+        # revalident a chaque fois; les assets lourds (png/jpg) restent
+        # cachables.
+        if mime.startswith('text/html') or mime.endswith('javascript'):
+            self.send_header('Cache-Control', 'no-cache')
         self.end_headers()
         self.wfile.write(data)
 
