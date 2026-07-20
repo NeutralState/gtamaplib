@@ -527,7 +527,9 @@ window.__camScreen = name => {
 
 renderer.setAnimationLoop(() => {
   if (flyAnim) flyAnim();                       // [VIEW3D-SYNC] vol vers la cam
-  controls.update();
+  // en POV la camera est pilotee par nous: controls.update() la re-orienterait
+  // vers sa cible a chaque frame (meme controls.enabled=false) -> monde noir
+  if (!povPrev) controls.update();
   renderer.render(scene, camera);
 });
 </script>
