@@ -42,6 +42,20 @@ ant = lms.get(B + ' (A)', {}).get('xyz')
 if ant:
     edges.append([[ant[0], ant[1], z_roof], [ant[0], ant[1], ant[2]]])
 
+# [SPC-V4] fenetres (carte des facades d'Alexandre, 07-20): meneaux verticaux
+# sur les 2 faces vitrees NW->N et SE->S, colonne etroite sur les petites-
+# fenetres NE->E et SW->W, de la ligne b (18.2, structure spc-b-level) au
+# toit. Les 4 autres faces sont pleines — rien.
+Z_B = 18.2
+GLAZED = {(0, 1), (4, 5)}       # NW-N, SE-S
+SMALL = {(2, 3), (6, 7)}        # NE-E, SW-W
+for (i, j), fracs in [(f, [k / 6 for k in range(1, 6)]) for f in GLAZED] + \
+                     [(f, [0.42, 0.58]) for f in SMALL]:
+    a, b2 = roof[i], roof[j]
+    for f in fracs:
+        x = a[0] + f * (b2[0] - a[0]); y = a[1] + f * (b2[1] - a[1])
+        edges.append([[x, y, Z_B], [x, y, z_roof]])
+
 p = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
 bp = json.load(open(p))
 bp[B] = {'color': '#fb923c', 'world_edges': edges}
