@@ -29,32 +29,39 @@ edges = []
 # verticales aux 8 coins
 for i in range(n):
     edges.append([[roof[i][0], roof[i][1], z_ground], list(roof[i])])
-# anneaux: sol, chaque etage, toit
-levels = [z_ground + k * FLOOR_H for k in range(N_FLOORS + 1)]
-for z in levels:
+
+# [SPC-V5] le vrai langage du batiment (photo IRL + carte des facades
+# d'Alexandre): les fenetres sont des BANDEAUX HORIZONTAUX par etage sur les
+# faces vitrees NW->N et SE->S (en retrait des coins — cadres de pierre),
+# une bande etroite sur les faces petites-fenetres NE->E et SW->W, PIERRE
+# NUE partout ailleurs: pas d'anneaux sur les faces pleines ni sous la
+# ligne b (socle station). Anneaux complets seulement au sol, a la ligne b
+# et au toit.
+Z_B = 18.2
+GLAZED = {(0, 1): (0.08, 0.92), (4, 5): (0.08, 0.92)}   # NW-N, SE-S
+SMALL = {(2, 3): (0.42, 0.58), (6, 7): (0.42, 0.58)}    # NE-E, SW-W
+
+def seg(i, j, f0, f1, z):
+    a, b = roof[i], roof[j]
+    return [[a[0] + f0 * (b[0] - a[0]), a[1] + f0 * (b[1] - a[1]), z],
+            [a[0] + f1 * (b[0] - a[0]), a[1] + f1 * (b[1] - a[1]), z]]
+
+for z in (z_ground, Z_B, z_roof):                        # anneaux complets
     r = ring(z)
     for i in range(n):
         edges.append([r[i], r[(i + 1) % n]])
+levels = [z_ground + k * FLOOR_H for k in range(N_FLOORS + 1)]
+for z in levels:                                         # bandeaux fenetres
+    if z <= Z_B + 0.1 or z >= z_roof - 0.1:
+        continue
+    for (i, j), (f0, f1) in list(GLAZED.items()) + list(SMALL.items()):
+        edges.append(seg(i, j, f0, f1, z))
 
 # [SPC-V3] le mat d'antenne (LM (A), triangule 07-20: 3 temoins 3-6') —
 # regle verticale fine du toit a la pointe, visible de partout
 ant = lms.get(B + ' (A)', {}).get('xyz')
 if ant:
     edges.append([[ant[0], ant[1], z_roof], [ant[0], ant[1], ant[2]]])
-
-# [SPC-V4] fenetres (carte des facades d'Alexandre, 07-20): meneaux verticaux
-# sur les 2 faces vitrees NW->N et SE->S, colonne etroite sur les petites-
-# fenetres NE->E et SW->W, de la ligne b (18.2, structure spc-b-level) au
-# toit. Les 4 autres faces sont pleines — rien.
-Z_B = 18.2
-GLAZED = {(0, 1), (4, 5)}       # NW-N, SE-S
-SMALL = {(2, 3), (6, 7)}        # NE-E, SW-W
-for (i, j), fracs in [(f, [k / 6 for k in range(1, 6)]) for f in GLAZED] + \
-                     [(f, [0.42, 0.58]) for f in SMALL]:
-    a, b2 = roof[i], roof[j]
-    for f in fracs:
-        x = a[0] + f * (b2[0] - a[0]); y = a[1] + f * (b2[1] - a[1])
-        edges.append([[x, y, Z_B], [x, y, z_roof]])
 
 p = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
 bp = json.load(open(p))
