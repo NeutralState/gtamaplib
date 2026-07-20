@@ -11045,7 +11045,7 @@
     "error_m": 3.0,
     "source_cameras": [],
     "xyz": [
-      -902.022,
+      -907.75,
       77.837,
       18.2
     ],
@@ -11333,10 +11333,10 @@
   },
   "Stephen P. Clark Government Center (W)": {
     "author": "rlx",
-    "error_m": 10.0,
+    "error_m": 2.5,
     "source_cameras": [],
     "xyz": [
-      -902.022,
+      -907.75,
       77.837,
       155.35
     ],
@@ -11344,7 +11344,7 @@
     "z_constraint": {
       "type": "fixed",
       "value": 155.35,
-      "note": "derive par symetrie centrale du plan-toit (centre=milieu NW-SE) \u2014 a confirmer par temoins nord/est"
+      "note": "x corrige -902.02 -> -907.75 par ray^plan-toit Street (Bikers) (B) (07-20): methode calibree sur les coins multi-temoins (NW dx -0.34, N dx 0.00); y conserve de la symetrie (dimension along-ray non fiable a 1 temoin)"
     }
   },
   "South Hill": {
