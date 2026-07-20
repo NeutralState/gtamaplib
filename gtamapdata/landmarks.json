@@ -11042,14 +11042,19 @@
   },
   "Stephen P. Clark Government Center (BW)": {
     "author": "rlx",
-    "error_m": 6.0,
+    "error_m": 3.0,
     "source_cameras": [],
     "xyz": [
       -902.022,
       77.837,
-      18.21
+      18.2
     ],
-    "zone": null
+    "zone": null,
+    "z_constraint": {
+      "type": "fixed",
+      "value": 18.2,
+      "note": "b-level: ligne basse visible (convention Alexandre 07-20). z=18.2 par ray-x-verticale Metro (NE) (B) (4 aretes, spread 0.22m, quasi-insensible yaw/profondeur, sensibilite pitch ~1.3m/0.1deg) + concorde avec z rlx 18.21. xy = coin de toit respectif (alignement vertical)"
+    }
   },
   "Bank of America Financial Center (Vice City)": {
     "author": "rlx",
@@ -11158,14 +11163,19 @@
   },
   "Stephen P. Clark Government Center (BSW)": {
     "author": "rlx",
-    "error_m": 6.0,
+    "error_m": 3.0,
     "source_cameras": [],
     "xyz": [
       -898.728,
       69.434,
-      18.23
+      18.2
     ],
-    "zone": null
+    "zone": null,
+    "z_constraint": {
+      "type": "fixed",
+      "value": 18.2,
+      "note": "b-level: ligne basse visible (convention Alexandre 07-20). z=18.2 par ray-x-verticale Metro (NE) (B) (4 aretes, spread 0.22m, quasi-insensible yaw/profondeur, sensibilite pitch ~1.3m/0.1deg) + concorde avec z rlx 18.21. xy = coin de toit respectif (alignement vertical)"
+    }
   },
   "Lamp Post Flamingo Park (4)": {
     "author": "rlx",
@@ -17054,5 +17064,35 @@
     "source_cameras": [],
     "error_m": null,
     "zone": "unknown"
+  },
+  "Stephen P. Clark Government Center (BS)": {
+    "xyz": [
+      -893.313,
+      57.935,
+      18.2
+    ],
+    "source_cameras": [],
+    "error_m": 3.0,
+    "zone": "unknown",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 18.2,
+      "note": "b-level: ligne basse visible (convention Alexandre 07-20). z=18.2 par ray-x-verticale Metro (NE) (B) (4 aretes, spread 0.22m, quasi-insensible yaw/profondeur, sensibilite pitch ~1.3m/0.1deg) + concorde avec z rlx 18.21. xy = coin de toit respectif (alignement vertical)"
+    }
+  },
+  "Stephen P. Clark Government Center (BNW)": {
+    "xyz": [
+      -896.714,
+      82.881,
+      18.2
+    ],
+    "source_cameras": [],
+    "error_m": 3.0,
+    "zone": "unknown",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 18.2,
+      "note": "b-level: ligne basse visible (convention Alexandre 07-20). z=18.2 par ray-x-verticale Metro (NE) (B) (4 aretes, spread 0.22m, quasi-insensible yaw/profondeur, sensibilite pitch ~1.3m/0.1deg) + concorde avec z rlx 18.21. xy = coin de toit respectif (alignement vertical)"
+    }
   }
 }

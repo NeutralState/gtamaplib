@@ -112,5 +112,18 @@
    "height_m": 3.75
   },
   "note": "panneau autoroutier rigide 15.17x3.75m (mesure 2026-07-18, diagonales validees). Coins quarantines en attente arbitrage VC08/Squalo/Convertible \u2014 au reveil: fit du plan (point/normal) puis activer le check. La rigidite a deja servi (BL=TL+BR-TR)."
+ },
+ "spc-b-level": {
+  "type": "fixed_z",
+  "z": 18.2,
+  "tol_m": 1.5,
+  "enforce": false,
+  "members": [
+   "Stephen P. Clark Government Center (BW)",
+   "Stephen P. Clark Government Center (BSW)",
+   "Stephen P. Clark Government Center (BNW)",
+   "Stephen P. Clark Government Center (BS)"
+  ],
+  "note": "ligne b (convention Alexandre 07-20): niveau bas visible du batiment. Mesure ray-x-verticale Metro (NE) (B): 4 aretes z 18.15-18.37 (spread 0.22m); concorde avec rlx z=18.21. check-only: l'absolu porte le pitch de Metro (\u00b11.3m/0.1deg) \u2014 a re-voter par toute future cam voyant la ligne b"
  }
 }
