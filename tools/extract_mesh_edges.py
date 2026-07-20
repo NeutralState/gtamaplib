@@ -210,8 +210,19 @@ if hwt_edges:
     }
 
 out_path = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
-with open(out_path, 'w') as f:
+# MERGE, ne jamais ecraser: ce script ne gere que SES buildings — les meshes
+# geres par d'autres generateurs (gen_spc_mesh, gen_vizcayne_mesh, Jason's
+# House...) doivent survivre. + write atomique (doctrine tmp+os.replace).
+try:
+    with open(out_path) as f:
+        existing = json.load(f)
+except Exception:
+    existing = {}
+existing.update(result)
+result = existing
+with open(out_path + '.tmp', 'w') as f:
     json.dump(result, f, indent=2)
+os.replace(out_path + '.tmp', out_path)
 
 print(f'\n✓ Wrote {out_path}')
 print(f'  Buildings: {list(result.keys())}')

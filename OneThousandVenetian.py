@@ -84,6 +84,23 @@ class OneThousandVenetian:
         self.w3 = self._get_lm("1000 Venetian Way (W3)")
         self.w4 = self._get_lm("1000 Venetian Way (W4)")
 
+        # [V6 2026-07-20] niveaux z DERIVES des LMs courants (les constantes
+        # de classe etaient perimees apres retriangulations/BA: W1 9->10.8,
+        # toit 62.75->62.5, penthouse 68.2->68.0). Le mesh suit les LMs.
+        self.Z_GROUND = self.b_nw[2]
+        self.Z_W1 = self.w1[2]
+        self.Z_W2 = self.w2[2]
+        self.Z_W3 = self.w3[2]
+        self.Z_W4 = self.w4[2]
+        self.Z_PE1 = self.pe1[2]
+        self.Z_PE2 = self.pe2[2]
+        self.Z_PE3 = self.pe3[2]
+        if self.t_nw is not None:
+            self.Z_ROOF = self.t_nw[2]
+        self.Z_PHTOP = (self.ph_top_se[2] + self.ph_top_sw[2]) / 2
+        # rythme mesure: paliers W espaces de ~12.15m = 4 etages
+        self.FLOOR_H = (self.Z_W2 - self.Z_W1) / 4.0
+
         self._compute_axes()
         self._compute_inferred_corners()
 
@@ -221,6 +238,17 @@ class OneThousandVenetian:
         self._render_murets_e(cam)
         self._render_penthouse(cam)
 
+    def _ring(self, cam, u0, u1, v0, v1, z):
+        """[V6] anneau horizontal rectangulaire dans le repere (u, v) a la hauteur z."""
+        a = self._from_axes(u0, v0, z)
+        b = self._from_axes(u1, v0, z)
+        c = self._from_axes(u1, v1, z)
+        d = self._from_axes(u0, v1, z)
+        cam.render_line((a, b))
+        cam.render_line((b, c))
+        cam.render_line((c, d))
+        cam.render_line((d, a))
+
     def _render_podium(self, cam):
         cam.render_line((self.b_nw, self.b_ne))
         cam.render_line((self.b_ne, self.b_se))
@@ -251,6 +279,13 @@ class OneThousandVenetian:
         cam.render_line((t_se_base, t_ne_base))
         cam.render_line((t_ne_base, t_nw_base))
         cam.render_line((t_nw_base, t_sw_base))
+
+        # [V6] dalles de balcon: la signature visuelle du batiment — un
+        # anneau complet par etage (FLOOR_H derive des paliers W)
+        z = self.Z_GROUND + self.FLOOR_H
+        while z < self.Z_ROOF - 0.5:
+            self._ring(cam, self.u_west, self.u_east, 0.0, self.depth_tower, z)
+            z += self.FLOOR_H
 
         # Gap between the 2 towers (if we have Center-NE)
         if self.center_ne is not None:
@@ -293,6 +328,15 @@ class OneThousandVenetian:
                 cam.render_line((front_w, front_w_up))
                 cam.render_line((back_w, back_w_up_full))
                 cam.render_line((front_w_up, back_w_up_full))
+
+            # [V6] balcons du bloc sous CE palier: anneaux aux etages
+            # intermediaires entre le palier precedent et celui-ci
+            if i > 0:
+                z_prev = tiers[i - 1][2]
+                zb = z_prev + self.FLOOR_H
+                while zb < z - 0.5:
+                    self._ring(cam, u_west, u_east_palier, 0.0, depth, zb)
+                    zb += self.FLOOR_H
 
     def _render_murets_e(self, cam):
         for muret_xyz, z in [(self.pe1, self.Z_PE1),
