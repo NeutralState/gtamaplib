@@ -661,11 +661,25 @@ window.__sceneDebug = () => {
            camAspect: +camera.aspect.toFixed(3), win: [innerWidth, innerHeight], quad, bs };
 };
 
+// helper de test/debug: ou un pixel de FRAME (u,v de l'image) atterrit a
+// l'ecran via le QUAD — a comparer avec __projectPoint du meme landmark
+window.__quadPointScreen = (fx, fy, fw, fh) => {
+  if (!povQuad) return null;
+  const p = povQuad.geometry.parameters;
+  const local = new THREE.Vector3((fx / fw - 0.5) * p.width,
+                                  (0.5 - fy / fh) * p.height, 0);
+  const world = povQuad.localToWorld(local);
+  const v = world.project(camera);
+  const [W, H] = realSize();
+  return { x: (v.x + 1) / 2 * W, y: (1 - v.y) / 2 * H };
+};
+
 // helper de test/debug: projette un point monde -> pixels ecran
 window.__projectPoint = (x, y, z) => {
   const v = new THREE.Vector3(x, y, z);
   v.project(camera);
-  return { x: (v.x + 1) / 2 * innerWidth, y: (1 - v.y) / 2 * innerHeight, behind: v.z > 1 };
+  const [W, H] = realSize();
+  return { x: (v.x + 1) / 2 * W, y: (1 - v.y) / 2 * H, behind: v.z > 1 };
 };
 
 // helper de test/debug: etat des rayons de hover
