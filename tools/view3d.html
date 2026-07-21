@@ -116,9 +116,14 @@ let renderer;
 try {
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'default' });
 } catch (e) {
-  showErr('WebGL INDISPONIBLE — le processus GPU du navigateur est probablement plante.\n' +
-          'Safari: quitter COMPLETEMENT (Cmd+Q, pas juste fermer la fenetre) puis rouvrir.\n' +
-          'Si ca persiste: tester dans Chrome, ou redemarrer la machine.\n(' + (e.message || e) + ')');
+  showErr('WebGL INDISPONIBLE — Safari a refuse le contexte (limite de contextes/GPU).\n' +
+          'Ferme des onglets lourds (cartes, videos), ou utilise Chrome pour le mode 3D.\n(' + (e.message || e) + ')');
+  const rb = document.createElement('button');
+  rb.textContent = 'reessayer';
+  rb.style.cssText = 'display:block;margin-top:8px;padding:4px 12px;cursor:pointer;' +
+    'background:#450a0a;color:#fecaca;border:1px solid #fecaca;border-radius:5px;font:11px monospace';
+  rb.onclick = () => location.reload();
+  document.getElementById('jserr').appendChild(rb);
   throw e;
 }
 canvas.addEventListener('webglcontextlost', ev => {
