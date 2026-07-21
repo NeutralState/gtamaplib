@@ -16,7 +16,7 @@
           --mid:#9090b0; --mono:'JetBrains Mono',monospace; }
   html, body { margin:0; height:100%; background:var(--bg); overflow:hidden;
                font:11px var(--mono); color:var(--mid); }
-  #c { position:fixed; inset:0; }
+  #c { position:fixed; inset:0; width:100%; height:100%; } /* [POV-V10] SANS width/height CSS, un canvas (element remplace) s affiche a sa taille INTERNE (= 2x viewport avec pixelRatio 2) ancre haut-gauche -> on voyait le quart haut-gauche zoome 2x. LA cause de toute la saga zoom. */
   .panel { position:fixed; z-index:10; background:rgba(19,19,26,.88);
            backdrop-filter:blur(8px); border:1px solid var(--border);
            border-radius:10px; padding:10px 12px; }
@@ -204,7 +204,7 @@ function updatePovDbg() {
     const ti = povQuad && povQuad.material.map && povQuad.material.map.image;
     if (ti) tex = ' · tex ' + ti.width + 'x' + ti.height;
   } catch (e) {}
-  el.textContent = 'v9 · ' + W + 'x' + H + ' · fov ' + camera.fov.toFixed(1) +
+  el.textContent = 'v10 · ' + W + 'x' + H + ' · fov ' + camera.fov.toFixed(1) +
                    ' · asp ' + camera.aspect.toFixed(2) + ' · ' + glv + tex;
 }
 
