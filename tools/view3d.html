@@ -103,7 +103,31 @@ const TIER_COLORS = { anchor: 0xa78bfa, high: 0x4ade80, medium: 0xfbbf24,
                       low: 0xfb923c, unverified: 0x6b7280 };
 const FRUSTUM_LEN = 260;   // metres
 const canvas = document.getElementById('c');
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
+// [POV-V6] Safari limite les contextes WebGL par page et tue les plus vieux
+// (l'erreur d'Alexandre: getShaderPrecisionFormat sur contexte null apres
+// une journee de reloads). On echoue PROPREMENT et on survit a la perte.
+function showErr(msg) {
+  const el = document.getElementById('jserr');
+  el.style.display = 'block';
+  el.textContent = msg;
+}
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'default' });
+} catch (e) {
+  showErr('WebGL indisponible (' + (e.message || e) + ') — trop de contextes ouverts.\n' +
+          'Ferme quelques onglets (ou redemarre le navigateur) puis recharge cette page.');
+  throw e;
+}
+canvas.addEventListener('webglcontextlost', ev => {
+  ev.preventDefault();   // permet la restauration automatique par three.js
+  showErr('Contexte WebGL perdu (trop d\'onglets/contextes) — tentative de recuperation...');
+});
+canvas.addEventListener('webglcontextrestored', () => {
+  const el = document.getElementById('jserr');
+  el.style.display = 'none';
+  resize();
+});
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0a0a0c);
