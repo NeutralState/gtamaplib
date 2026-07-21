@@ -624,9 +624,12 @@ addEventListener('pointerup', ev => {
   const hits = ray.intersectObject(pickPts);
   if (!hits.length) return;
   const c = camPickRefs[hits[0].index];
-  if (ev.shiftKey) { enterPOV(c); return; }          // [VIEW3D-POV]
+  // [POV-HOP] clic sur un frustum = on saute dans la vue de cette cam
+  // (shift-clic identique — conserve par habitude), et la selection de cam
+  // suit dans calib sans changer d'onglet.
+  syncToCam(c.name);
   if (window.self !== window.top) {
-    window.parent.postMessage({ type: 'gtamaplib-open-cam', name: c.name }, '*');
+    window.parent.postMessage({ type: 'gtamaplib-select-cam', name: c.name }, '*');
   }
 });
 
@@ -644,7 +647,7 @@ addEventListener('pointermove', ev => {
       `tier ${c.tier || 'unverified'} · ${c.n_pixels} markings` +
       (c.hud_locked ? ' · HUD-locked' : '') +
       (rms != null ? `<br>RMS <span class="${rms > 10 ? 'rms-bad' : ''}">${rms}&#8242;</span>` : '') +
-      (c.corners ? `<br><span style="color:var(--dim)">shift-click: POV</span>` : '');
+      (c.corners ? `<br><span style="color:var(--dim)">click: jump POV</span>` : '');
   } else {
     info.style.display = 'none';
     clearHoverRays();                              // [VIEW3D-RAYS]

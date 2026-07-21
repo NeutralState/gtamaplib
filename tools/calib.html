@@ -1408,6 +1408,17 @@ async function init() {
 
   // [VIEW3D-OPEN] l'onglet 3D (iframe) demande d'ouvrir une cam: meme
   // chemin que le clic sur un marker de la map 2D.
+  // [POV-HOP] selection de cam depuis la 3D SANS quitter l'onglet 3D
+  window.addEventListener('message', ev => {
+    if (!ev.data || ev.data.type !== 'gtamaplib-select-cam' || !ev.data.name) return;
+    const sel = document.getElementById('cam-sel');
+    if (sel && sel.value !== ev.data.name) {
+      sel.value = ev.data.name;
+      sel.dispatchEvent(new Event('change'));
+      const cs = document.getElementById('cam-search');
+      if (cs) cs.value = ev.data.name;
+    }
+  });
   window.addEventListener('message', ev => {
     if (!ev.data || ev.data.type !== 'gtamaplib-open-cam' || !ev.data.name) return;
     setView('camera');
