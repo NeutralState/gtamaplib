@@ -53,6 +53,7 @@
 <!-- [VIEW3D-POV] vue a travers une cam: position/orientation/fov exacts -->
 <img id="pov-frame" style="display:none;position:fixed;top:0;left:50%;transform:translateX(-50%);
      height:100vh;z-index:5;pointer-events:none;opacity:.5">
+<div id="pov-marks" style="position:fixed;inset:0;z-index:6;pointer-events:none;display:none"></div>
 <div class="panel" id="pov" style="display:none;top:12px;left:50%;transform:translateX(-50%);
      z-index:11;align-items:center;gap:10px">
   <b id="pov-name" style="color:var(--text)"></b>
@@ -435,6 +436,35 @@ function enterPOV(c) {
   povFrame.style.display = 'block';
   povFrame.onerror = () => { povFrame.style.display = 'none'; };
   povFrame.src = '/frame/' + encodeURIComponent(c.name);
+  // [POV-MARKS] auto-preuve d'alignement: croix JAUNES = markings a leur
+  // position dans la frame (via la geometrie CSS de l'img), croix CYAN =
+  // meme landmarks projetes par la camera 3D. Superposees = aligne.
+  const marksDiv = document.getElementById('pov-marks');
+  marksDiv.style.display = 'block';
+  marksDiv.innerHTML = '';
+  fetch('/api/cam_markings?cam=' + encodeURIComponent(c.name))
+    .then(r => r.json()).then(d => {
+      if (!povPrev) return;   // sorti du POV entre-temps
+      // geometrie de l'img calculee (pas mesuree): height=100vh, width=h*ratio, centree
+      const [W, H] = realSize();
+      const iw = H * ratio, ileft = (W - iw) / 2;
+      const W2 = d.size || [3840, 2160];
+      for (const m of d.markings || []) {
+        const fx = ileft + m.px[0] * (iw / W2[0]);
+        const fy = m.px[1] * (H / W2[1]);
+        const v = new THREE.Vector3(...m.xyz).project(camera);
+        const wx = (v.x + 1) / 2 * W, wy = (1 - v.y) / 2 * H;
+        const mk = (x, y, color, sym) => {
+          const el = document.createElement('div');
+          el.textContent = sym;
+          el.style.cssText = 'position:absolute;left:' + (x - 7) + 'px;top:' + (y - 10) +
+            'px;color:' + color + ';font:14px monospace;text-shadow:0 0 3px #000';
+          marksDiv.appendChild(el);
+        };
+        mk(fx, fy, '#facc15', '+');
+        if (v.z < 1) mk(wx, wy, '#67e8f9', 'x');
+      }
+    }).catch(() => {});
   updatePovDbg();
   controls.enabled = false;
   povPanel.style.display = 'flex';
@@ -455,6 +485,8 @@ function exitPOV() {
   killQuad();
   povFrame.style.display = 'none';
   povFrame.src = '';
+  const md2 = document.getElementById('pov-marks');
+  md2.style.display = 'none'; md2.innerHTML = '';
 }
 povAlpha.addEventListener('input', () => { povFrame.style.opacity = povAlpha.value / 100; });
 document.getElementById('pov-exit').addEventListener('click', exitPOV);

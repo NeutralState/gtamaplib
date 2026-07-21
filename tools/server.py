@@ -2051,6 +2051,18 @@ class Handler(BaseHTTPRequestHandler):
                 save_validated(cur)
             self.send_json({'lm': lm_name, 'verdict': (cur.get(lm_name) or {}).get('status')})
 
+        elif path == '/api/cam_markings':
+            # [POV-MARKS] markings d'une cam avec xyz — pour l'auto-preuve
+            # d'alignement du mode POV (croix frame vs croix monde)
+            cam_name = unquote(qs.get('cam', [''])[0])
+            out = []
+            for lm, p in (md.pixels.get(cam_name) or {}).items():
+                xyz = md.landmarks.get(lm)
+                if p is not None and xyz is not None:
+                    out.append({'lm': lm, 'px': list(p), 'xyz': [float(v) for v in xyz]})
+            _size = (md.cameras.get(cam_name) or {}).get('size') or [3840, 2160]
+            self.send_json({'cam': cam_name, 'markings': out, 'size': list(_size)})
+
         elif path == '/api/mesh_verdict':
             # [MESH-VERDICT-V1] l'oeil d'Alexandre comme famille de donnees:
             # verdict fit/off par (cam x building), consomme par blame_matrix/
