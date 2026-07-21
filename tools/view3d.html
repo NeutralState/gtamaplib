@@ -84,6 +84,7 @@ addEventListener('error', e => {
 });
 addEventListener('unhandledrejection', e => {
   const el = document.getElementById('jserr');
+  if (el.style.display === 'block') return;   // un message explique est deja affiche
   el.style.display = 'block';
   el.textContent = 'PROMISE REJECT: ' + (e.reason && e.reason.message || e.reason);
 });
@@ -115,8 +116,9 @@ let renderer;
 try {
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'default' });
 } catch (e) {
-  showErr('WebGL indisponible (' + (e.message || e) + ') — trop de contextes ouverts.\n' +
-          'Ferme quelques onglets (ou redemarre le navigateur) puis recharge cette page.');
+  showErr('WebGL INDISPONIBLE — le processus GPU du navigateur est probablement plante.\n' +
+          'Safari: quitter COMPLETEMENT (Cmd+Q, pas juste fermer la fenetre) puis rouvrir.\n' +
+          'Si ca persiste: tester dans Chrome, ou redemarrer la machine.\n(' + (e.message || e) + ')');
   throw e;
 }
 canvas.addEventListener('webglcontextlost', ev => {
