@@ -108,10 +108,20 @@ controls.panSpeed = 3.0;
 controls.rotateSpeed = 1.0;
 controls.maxPolarAngle = Math.PI * 0.495;   // jamais sous le sol
 
+function realSize() {
+  // [POV-V5] la verite de taille = le canvas mesure. innerWidth/innerHeight
+  // peuvent mentir en iframe (mesure chez Alexandre: 1471x78 avec un ecran
+  // plein) — le rect CSS du canvas, lui, ne ment pas.
+  const r = canvas.getBoundingClientRect();
+  return [Math.max(1, Math.round(r.width)) || innerWidth,
+          Math.max(1, Math.round(r.height)) || innerHeight];
+}
 function resize() {
-  renderer.setSize(innerWidth, innerHeight, false);
-  camera.aspect = innerWidth / innerHeight;
+  const [W, H] = realSize();
+  renderer.setSize(W, H, false);
+  camera.aspect = W / H;
   camera.updateProjectionMatrix();
+  updatePovDbg();
 }
 addEventListener('resize', resize); resize();
 // [POV-V4] garde-taille par frame: en iframe, la transition display:none ->
@@ -120,10 +130,20 @@ addEventListener('resize', resize); resize();
 // s'auto-repare.
 let _lastW = 0, _lastH = 0;
 function sizeGuard() {
-  if (innerWidth !== _lastW || innerHeight !== _lastH) {
-    _lastW = innerWidth; _lastH = innerHeight;
+  const [W, H] = realSize();
+  if (W !== _lastW || H !== _lastH) {
+    _lastW = W; _lastH = H;
     resize();
   }
+}
+// [POV-V5] diagnostic A L'ECRAN: les nombres vitaux dans le panneau POV —
+// visibles dans tout screenshot, plus besoin de console.
+function updatePovDbg() {
+  const el = document.getElementById('pov-ver');
+  if (!el) return;
+  const [W, H] = realSize();
+  el.textContent = 'v5 · ' + W + 'x' + H + ' · fov ' + camera.fov.toFixed(1) +
+                   ' · asp ' + camera.aspect.toFixed(2);
 }
 
 // [VIEW3D-SIMPLIFY] map toujours visible (pas un filtre); ocean et grid
@@ -356,6 +376,7 @@ function enterPOV(c) {
   povQuad.position.set(0, 0, -D);
   povQuad.renderOrder = 999;
   camera.add(povQuad);
+  updatePovDbg();
   controls.enabled = false;
   povPanel.style.display = 'flex';
   document.getElementById('pov-name').textContent = c.name;
@@ -571,10 +592,18 @@ window.__sceneDebug = () => {
     const s = mg.geometry.boundingSphere;
     bs = { center: s.center.toArray().map(v => +v.toFixed(0)), radius: +s.radius.toFixed(0) };
   }
+  let quad = null;
+  if (povQuad) {
+    const p = povQuad.geometry.parameters;
+    quad = { qw: +p.width.toFixed(2), qh: +p.height.toFixed(2),
+             angH: +(2 * Math.atan(p.width / 2 / 120) * 180 / Math.PI).toFixed(2),
+             angV: +(2 * Math.atan(p.height / 2 / 120) * 180 / Math.PI).toFixed(2) };
+  }
   return { fog: scene.fog ? { near: +scene.fog.near.toFixed(0), far: +scene.fog.far.toFixed(0) } : null,
            span: +span.toFixed(0), meshesVisible: layers.meshes.visible,
            nMeshVerts: mg ? mg.geometry.attributes.position.count : 0,
-           camFar: camera.far, camNear: camera.near, bs };
+           camFar: camera.far, camNear: camera.near, camFov: +camera.fov.toFixed(2),
+           camAspect: +camera.aspect.toFixed(3), win: [innerWidth, innerHeight], quad, bs };
 };
 
 // helper de test/debug: projette un point monde -> pixels ecran
