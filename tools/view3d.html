@@ -195,8 +195,16 @@ function updatePovDbg() {
   const el = document.getElementById('pov-ver');
   if (!el) return;
   const [W, H] = realSize();
-  el.textContent = 'v7 · ' + W + 'x' + H + ' · fov ' + camera.fov.toFixed(1) +
-                   ' · asp ' + camera.aspect.toFixed(2);
+  let glv = '?', tex = '';
+  try {
+    const gl = renderer.getContext();
+    glv = /WebGL (\d)/.exec(gl.getParameter(gl.VERSION));
+    glv = glv ? 'GL' + glv[1] : '?';
+    const ti = povQuad && povQuad.material.map && povQuad.material.map.image;
+    if (ti) tex = ' · tex ' + ti.width + 'x' + ti.height;
+  } catch (e) {}
+  el.textContent = 'v8 · ' + W + 'x' + H + ' · fov ' + camera.fov.toFixed(1) +
+                   ' · asp ' + camera.aspect.toFixed(2) + ' · ' + glv + tex;
 }
 
 // [VIEW3D-SIMPLIFY] map toujours visible (pas un filtre); ocean et grid
@@ -423,6 +431,11 @@ function enterPOV(c) {
   const qh = 2 * D * Math.tan(THREE.MathUtils.degToRad(vfov) / 2);
   const tex = new THREE.TextureLoader().load('/frame/' + encodeURIComponent(c.name));
   tex.colorSpace = THREE.SRGBColorSpace;
+  // [POV-V8] PAS de mipmaps: en WebGL1 (fallback GPU) three REDIMENSIONNE les
+  // textures non-POT (3840x2160 -> 2048x2048 = distorsion/zoom). LinearFilter
+  // + generateMipmaps=false interdit tout resize, sur tous les backends.
+  tex.minFilter = THREE.LinearFilter;
+  tex.generateMipmaps = false;
   povQuad = new THREE.Mesh(new THREE.PlaneGeometry(qw, qh),
     new THREE.MeshBasicMaterial({ map: tex, transparent: true,
       opacity: povAlpha.value / 100, depthTest: false, depthWrite: false }));
@@ -659,7 +672,11 @@ window.__sceneDebug = () => {
              angH: +(2 * Math.atan(p.width / 2 / 120) * 180 / Math.PI).toFixed(2),
              angV: +(2 * Math.atan(p.height / 2 / 120) * 180 / Math.PI).toFixed(2) };
   }
-  return { fog: scene.fog ? { near: +scene.fog.near.toFixed(0), far: +scene.fog.far.toFixed(0) } : null,
+  const gl = renderer.getContext();
+  const timg = povQuad && povQuad.material.map && povQuad.material.map.image;
+  return { gl: gl.getParameter(gl.VERSION), maxTex: gl.getParameter(gl.MAX_TEXTURE_SIZE),
+           texImage: timg ? [timg.width, timg.height] : null,
+           fog: scene.fog ? { near: +scene.fog.near.toFixed(0), far: +scene.fog.far.toFixed(0) } : null,
            span: +span.toFixed(0), meshesVisible: layers.meshes.visible,
            nMeshVerts: mg ? mg.geometry.attributes.position.count : 0,
            camFar: camera.far, camNear: camera.near, camFov: +camera.fov.toFixed(2),
