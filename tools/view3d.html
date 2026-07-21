@@ -154,11 +154,14 @@ function realSize() {
   // [POV-V5] la verite de taille = le canvas mesure. innerWidth/innerHeight
   // peuvent mentir en iframe (mesure chez Alexandre: 1471x78 avec un ecran
   // plein) — le rect CSS du canvas, lui, ne ment pas.
-  const r = canvas.getBoundingClientRect();
-  let W = Math.round(r.width), H = Math.round(r.height);
-  // rect nul/minuscule (iframe cachee, transition de layout) -> fallback
-  if (W < 8 || H < 8) { W = innerWidth; H = innerHeight; }
-  if (W < 8 || H < 8) { W = 1280; H = 720; }   // dernier recours: jamais 1x1
+  // [POV-V7] mesure du DOCUMENT, pas du canvas: le canvas est fixed (hors
+  // flux), le document ne peut pas heriter de sa taille -> AUCUNE boucle de
+  // retroaction possible (Chrome d'Alexandre: rect du canvas non contraint
+  // un instant -> taille interne reinjectee -> doublement/frame -> 2^24).
+  let W = Math.round(document.documentElement.clientWidth) || innerWidth;
+  let H = Math.round(document.documentElement.clientHeight) || innerHeight;
+  W = Math.min(W, 8192); H = Math.min(H, 8192);   // garde-fou absolu
+  if (W < 8 || H < 8) { W = 1280; H = 720; }
   return [W, H];
 }
 function resize() {
@@ -187,7 +190,7 @@ function updatePovDbg() {
   const el = document.getElementById('pov-ver');
   if (!el) return;
   const [W, H] = realSize();
-  el.textContent = 'v5 · ' + W + 'x' + H + ' · fov ' + camera.fov.toFixed(1) +
+  el.textContent = 'v7 · ' + W + 'x' + H + ' · fov ' + camera.fov.toFixed(1) +
                    ' · asp ' + camera.aspect.toFixed(2);
 }
 
