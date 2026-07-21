@@ -423,6 +423,13 @@ function enterPOV(c) {
       opacity: povAlpha.value / 100, depthTest: false, depthWrite: false }));
   povQuad.position.set(0, 0, -D);
   povQuad.renderOrder = 999;
+  // liseré: la limite frame/monde visible (le letterbox n'est pas de la casse)
+  const edge = new THREE.LineSegments(
+    new THREE.EdgesGeometry(povQuad.geometry),
+    new THREE.LineBasicMaterial({ color: 0xfacc15, transparent: true,
+                                  opacity: 0.35, depthTest: false }));
+  edge.renderOrder = 1000;
+  povQuad.add(edge);
   camera.add(povQuad);
   updatePovDbg();
   controls.enabled = false;
