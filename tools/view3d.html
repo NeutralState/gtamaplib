@@ -72,6 +72,22 @@
   <span style="margin-left:10px"><span class="sw" style="background:#6b7280"></span>unverified</span>
   <span style="margin-left:14px"><span class="sw" style="background:#60a5fa"></span>z-constrained LM</span>
 </div>
+<!-- [POV-V5] toute erreur JS devient VISIBLE: plus d'ecran noir muet -->
+<div id="jserr" style="display:none;position:fixed;left:12px;bottom:52px;z-index:99;
+     background:#7f1d1dee;color:#fecaca;font:11px monospace;padding:8px 12px;
+     border-radius:8px;max-width:80vw;white-space:pre-wrap"></div>
+<script>
+addEventListener('error', e => {
+  const el = document.getElementById('jserr');
+  el.style.display = 'block';
+  el.textContent = 'JS ERROR: ' + (e.message || e.type) + '\n' + (e.filename || '') + ':' + (e.lineno || '');
+});
+addEventListener('unhandledrejection', e => {
+  const el = document.getElementById('jserr');
+  el.style.display = 'block';
+  el.textContent = 'PROMISE REJECT: ' + (e.reason && e.reason.message || e.reason);
+});
+</script>
 <script type="importmap">
 { "imports": { "three": "/threejs/three.module.min.js" } }
 </script>
@@ -113,8 +129,11 @@ function realSize() {
   // peuvent mentir en iframe (mesure chez Alexandre: 1471x78 avec un ecran
   // plein) — le rect CSS du canvas, lui, ne ment pas.
   const r = canvas.getBoundingClientRect();
-  return [Math.max(1, Math.round(r.width)) || innerWidth,
-          Math.max(1, Math.round(r.height)) || innerHeight];
+  let W = Math.round(r.width), H = Math.round(r.height);
+  // rect nul/minuscule (iframe cachee, transition de layout) -> fallback
+  if (W < 8 || H < 8) { W = innerWidth; H = innerHeight; }
+  if (W < 8 || H < 8) { W = 1280; H = 720; }   // dernier recours: jamais 1x1
+  return [W, H];
 }
 function resize() {
   const [W, H] = realSize();
