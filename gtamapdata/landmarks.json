@@ -12547,10 +12547,18 @@
  },
  "Lake Leonida (Z)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 9.0,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "xyz": [
+   -2303.54,
+   3784.06,
+   5.0
+  ],
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 17.9 m/m de datum",
+  "note": "clic pixel-exact identique a Lake Leonida (X) (bord de frame)"
  },
  "Train Signal (Ambrosia) (5E)": {
   "author": "rlx",
@@ -12728,10 +12736,18 @@
  },
  "Lake Leonida (Y)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 8.9,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "xyz": [
+   -2309.48,
+   3791.43,
+   5.0
+  ],
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 17.8 m/m de datum",
+  "note": "clic pixel-exact identique a Lake Leonida (W) (bord de frame)"
  },
  "STA14": {
   "author": "rlx",
@@ -17216,5 +17232,317 @@
   "error_m": null,
   "zone": null,
   "note": "ex-'Ambrosia Hill' d'Explosion. Resection pose-libre 2026-07-21: PAS la colline du cluster Ambrosia (aucune pose plausible, 37-102' irreductibles). Identite POSITIVE inconnue: le pixel TW etait un dup exact du marquage 'Mount Leonida' de la meme frame, mais cette identification ML (issue de Kalaga, non resolue) est elle-meme non verifiee — pourrait etre n'importe quelle montagne au nord de downtown. Bearing solide depuis la pose resectee: az ~4.5."
+ },
+ "Lake Leonida (A)": {
+  "xyz": [
+   -2595.94,
+   4933.4,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 1.5,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 2.9 m/m de datum"
+ },
+ "Lake Leonida (B)": {
+  "xyz": [
+   -2600.44,
+   4907.56,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 1.6,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 3.2 m/m de datum"
+ },
+ "Lake Leonida (C)": {
+  "xyz": [
+   -2600.32,
+   4826.54,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 2.1,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 4.1 m/m de datum"
+ },
+ "Lake Leonida (D)": {
+  "xyz": [
+   -2608.6,
+   4823.4,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 2.1,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 4.2 m/m de datum"
+ },
+ "Lake Leonida (E)": {
+  "xyz": [
+   -2584.93,
+   4640.93,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 3.2,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 6.4 m/m de datum"
+ },
+ "Lake Leonida (F)": {
+  "xyz": [
+   -2626.65,
+   4578.01,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 3.7,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 7.4 m/m de datum"
+ },
+ "Lake Leonida (G)": {
+  "xyz": [
+   -2601.1,
+   4557.22,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 3.8,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 7.6 m/m de datum"
+ },
+ "Lake Leonida (H)": {
+  "xyz": [
+   -2635.16,
+   4453.92,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 4.5,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 9.0 m/m de datum"
+ },
+ "Lake Leonida (I)": {
+  "xyz": [
+   -2667.03,
+   4379.63,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 5.1,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 10.1 m/m de datum"
+ },
+ "Lake Leonida (J)": {
+  "xyz": [
+   -2674.3,
+   4334.85,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 5.4,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 10.7 m/m de datum"
+ },
+ "Lake Leonida (K)": {
+  "xyz": [
+   -2671.7,
+   4292.62,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 5.6,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 11.3 m/m de datum"
+ },
+ "Lake Leonida (L)": {
+  "xyz": [
+   -2638.43,
+   4232.47,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 6.0,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 11.9 m/m de datum"
+ },
+ "Lake Leonida (M)": {
+  "xyz": [
+   -2633.12,
+   4203.59,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 6.2,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 12.3 m/m de datum"
+ },
+ "Lake Leonida (N)": {
+  "xyz": [
+   -2619.09,
+   4204.79,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 6.1,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 12.3 m/m de datum"
+ },
+ "Lake Leonida (O)": {
+  "xyz": [
+   -2567.07,
+   4124.89,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 6.6,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 13.2 m/m de datum"
+ },
+ "Lake Leonida (P)": {
+  "xyz": [
+   -2585.41,
+   4080.6,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 6.9,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 13.9 m/m de datum"
+ },
+ "Lake Leonida (Q)": {
+  "xyz": [
+   -2531.77,
+   3959.8,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 7.7,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 15.4 m/m de datum"
+ },
+ "Lake Leonida (R)": {
+  "xyz": [
+   -2522.56,
+   4027.28,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 7.3,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 14.5 m/m de datum"
+ },
+ "Lake Leonida (S)": {
+  "xyz": [
+   -2423.73,
+   3901.18,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 8.1,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 16.2 m/m de datum"
+ },
+ "Lake Leonida (T)": {
+  "xyz": [
+   -2380.27,
+   3849.55,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 8.5,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 16.9 m/m de datum"
+ },
+ "Lake Leonida (U)": {
+  "xyz": [
+   -2331.72,
+   3799.18,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 8.8,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 17.6 m/m de datum"
+ },
+ "Lake Leonida (V)": {
+  "xyz": [
+   -2309.59,
+   3775.42,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 9.0,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 18.0 m/m de datum"
+ },
+ "Lake Leonida (W)": {
+  "xyz": [
+   -2309.48,
+   3791.43,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 8.9,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 17.8 m/m de datum"
+ },
+ "Lake Leonida (X)": {
+  "xyz": [
+   -2303.54,
+   3784.06,
+   5.0
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 9.0,
+  "zone": "ambrosia",
+  "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 17.9 m/m de datum"
  }
 }
