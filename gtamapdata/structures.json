@@ -40,7 +40,7 @@
    "Stephen P. Clark Government Center (SW)",
    "Stephen P. Clark Government Center (W)"
   ],
-  "note": "ligne de toit SPC (IRL 510ft=155m, 28 etages x 5.5m); E/N/NE mesures independamment 155.2-155.4 = validation \u2014 check-only pour garder ce juge"
+  "note": "ligne de toit SPC (IRL 510ft=155m, 28 etages x 5.5m); E/N/NE mesures independamment 155.2-155.4 = validation — check-only pour garder ce juge"
  },
  "spc-vertical-edges": {
   "type": "vertical_edge",
@@ -50,7 +50,7 @@
    "Stephen P. Clark Government Center (BW)": "Stephen P. Clark Government Center (W)",
    "Stephen P. Clark Government Center (BSW)": "Stephen P. Clark Government Center (SW)"
   },
-  "note": "points d arete verticale (base visible) \u2014 xy herite du coin de toit, z libre (mesh-as-ruler Metro NE B)"
+  "note": "points d arete verticale (base visible) — xy herite du coin de toit, z libre (mesh-as-ruler Metro NE B)"
  },
  "spc-prism": {
   "type": "mesh_prism",
@@ -111,7 +111,7 @@
    "width_m": 15.17,
    "height_m": 3.75
   },
-  "note": "panneau autoroutier rigide 15.17x3.75m (mesure 2026-07-18, diagonales validees). Coins quarantines en attente arbitrage VC08/Squalo/Convertible \u2014 au reveil: fit du plan (point/normal) puis activer le check. La rigidite a deja servi (BL=TL+BR-TR)."
+  "note": "panneau autoroutier rigide 15.17x3.75m (mesure 2026-07-18, diagonales validees). Coins quarantines en attente arbitrage VC08/Squalo/Convertible — au reveil: fit du plan (point/normal) puis activer le check. La rigidite a deja servi (BL=TL+BR-TR)."
  },
  "spc-b-level": {
   "type": "fixed_z",
@@ -124,6 +124,48 @@
    "Stephen P. Clark Government Center (BNW)",
    "Stephen P. Clark Government Center (BS)"
   ],
-  "note": "ligne b (convention Alexandre 07-20): niveau bas visible du batiment. Mesure ray-x-verticale Metro (NE) (B): 4 aretes z 18.15-18.37 (spread 0.22m); concorde avec rlx z=18.21. check-only: l'absolu porte le pitch de Metro (\u00b11.3m/0.1deg) \u2014 a re-voter par toute future cam voyant la ligne b"
+  "note": "ligne b (convention Alexandre 07-20): niveau bas visible du batiment. Mesure ray-x-verticale Metro (NE) (B): 4 aretes z 18.15-18.37 (spread 0.22m); concorde avec rlx z=18.21. check-only: l'absolu porte le pitch de Metro (±1.3m/0.1deg) — a re-voter par toute future cam voyant la ligne b"
+ },
+ "sonora-silo-cylinder": {
+  "type": "cylinder",
+  "tol_m": 0.5,
+  "enforce": false,
+  "tangents": {
+   "1500 Sonora Ave (Silo) (L)": "L",
+   "1500 Sonora Ave (Silo) (R)": "R"
+  },
+  "z_base": 19.86,
+  "z_top": 56.47,
+  "note": "silo rond (bounty #23, question rlx 07-22): clics L/R = tangentes, pas des points. Fit 4 rayons (Pano+Postcard) rms 0.16m -> largeur 14.2 (point-match gonflait a 15.6). Hauteur rebord-base 36.6 solide (z L/R accord 3cm). Ratio 2.58 (rlx supposait 3.2). check-only; enforce non supporte pour les cylindres (contrainte de rayons).",
+  "axis": {
+   "x": -2750.64,
+   "y": 3667.58,
+   "radius": 7.086
+  },
+  "fit_meta": {
+   "rms_m": 0.161,
+   "n_rays": 4,
+   "date": "2026-07-22"
+  }
+ },
+ "sonora-tank-cylinder": {
+  "type": "cylinder",
+  "tol_m": 0.7,
+  "enforce": false,
+  "tangents": {
+   "1500 Sonora Ave (Tank) (L)": "L",
+   "1500 Sonora Ave (Tank) (R)": "R"
+  },
+  "note": "FIT ECHOUE (rayon absurde 21m, rms 2.9m; modele mixte rms 2.4m) — et c'est le resultat: la zone est une FERME de reservoirs quasi-identiques (Postcard: rebord d'un grand tank 'AJ...'; Fires: longue structure plate au-dessus du lettrage 'ALLIED CRYSTAL CO', peut-etre pas un tank; Panorama de nuit: bande sombre ambigue). Les 3 frames marquent probablement des objets DIFFERENTS -> explique les 29'/34' du solve. A re-identifier tank par tank avant tout usage; les marquages Tank/(L)/(R) sont suspects inter-frames. Le check cylindre reste en place comme detecteur (violations attendues tant que non re-marque).",
+  "axis": {
+   "x": -3009.66,
+   "y": 3543.49,
+   "radius": 21.009
+  },
+  "fit_meta": {
+   "rms_m": 2.866,
+   "n_rays": 6,
+   "date": "2026-07-22"
+  }
  }
 }

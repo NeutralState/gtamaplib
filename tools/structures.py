@@ -140,9 +140,145 @@ def new_violations(landmarks):
     return out
 
 
-if __name__ == '__main__':
+# ── CYLINDER-V1 (2026-07-22, question rlx bounty #23) ───────────────────
+# Les clics d'arete L/R d'un objet rond sont des points de silhouette
+# DEPENDANTS DU POINT DE VUE: ils ne se point-matchent pas entre frames
+# (tank (R): tangentes etalees sur 35m; silo: largeur point-match 15.6 vs
+# 14.2 reelle). Le bon modele: cylindre vertical (centre xy + rayon), chaque
+# clic d'arete = rayon TANGENT au cercle en plan.
+#   type: "cylinder"  {tangents: {lm: "L"|"R"}, axis: {x,y,radius} (fit
+#   gele comme plane), tol_m}
+# Contrainte de RAYONS (il faut cams+pixels) -> check via check_cylinders(),
+# pas snap(); enforce non supporte en V1 (check-only, doctrine STRUCT-V1).
+
+
+def _tangent_rays(s, pixels):
+    """[(cam, lm, o2d, d2d)] pour chaque clic tangent du cylindre."""
+    import numpy as np
     import sys
     sys.path.insert(0, os.path.join(_REPO, 'tools'))
+    import common
+    out = []
+    for lm in (s.get('tangents') or {}):
+        for cn, marks in pixels.items():
+            p = marks.get(lm)
+            if p is None:
+                continue
+            try:
+                cam = common.get_cam(cn)
+            except Exception:
+                continue
+            o = np.asarray(cam.xyz, float)[:2]
+            d = np.asarray(cam.get_pixel_direction(p), float)[:2]
+            n = float(np.hypot(*d))
+            if n > 1e-9:
+                out.append((cn, lm, o, d / n))
+    return out
+
+
+def _ray_dist(cx, cy, o, d):
+    v0, v1 = cx - o[0], cy - o[1]
+    return abs(v0 * d[1] - v1 * d[0])
+
+
+def fit_cylinder(s, pixels):
+    """Fit (cx, cy, r) par moindres carres de tangence sur les rayons L/R.
+    Retourne {'x','y','radius','rms_m','n_rays'} ou None (<3 rayons)."""
+    import numpy as np
+    from scipy.optimize import minimize
+    rays = _tangent_rays(s, pixels)
+    if len(rays) < 3:
+        return None
+    # init: moyenne des intersections 2 a 2 des lignes
+    pts = []
+    for i in range(len(rays)):
+        for j in range(i + 1, len(rays)):
+            (_, _, o1, d1), (_, _, o2, d2) = rays[i], rays[j]
+            det = d1[0] * (-d2[1]) - d1[1] * (-d2[0])
+            if abs(det) < 1e-9:
+                continue
+            t = ((o2[0] - o1[0]) * (-d2[1]) - (o2[1] - o1[1]) * (-d2[0])) / det
+            pts.append(o1 + t * d1)
+    c0 = np.mean(pts, axis=0) if pts else np.mean([o for _, _, o, _ in rays], axis=0)
+
+    def cost(th):
+        return sum((_ray_dist(th[0], th[1], o, d) - th[2]) ** 2
+                   for _, _, o, d in rays)
+
+    best = None
+    for r0 in (2.0, 4.0, 7.0, 12.0):
+        res = minimize(cost, [c0[0], c0[1], r0], method='Nelder-Mead',
+                       options={'xatol': 1e-5, 'fatol': 1e-10, 'maxiter': 40000})
+        if res.x[2] > 0 and (best is None or res.fun < best.fun):
+            best = res
+    if best is None:
+        return None
+    cx, cy, r = best.x
+    rms = (best.fun / len(rays)) ** 0.5
+    return {'x': round(float(cx), 2), 'y': round(float(cy), 2),
+            'radius': round(float(r), 3), 'rms_m': round(float(rms), 3),
+            'n_rays': len(rays)}
+
+
+def check_cylinders(pixels):
+    """Violations de tangence vs l'axe GELE: [(structure, cam, lm, ecart_m,
+    tol_m)]. Meme esprit que check_all mais sur les rayons."""
+    fails = []
+    for name, s in load().items():
+        if s.get('type') != 'cylinder' or not s.get('axis'):
+            continue
+        ax, tol = s['axis'], float(s.get('tol_m', 0.5))
+        for cn, lm, o, d in _tangent_rays(s, pixels):
+            e = abs(_ray_dist(ax['x'], ax['y'], o, d) - ax['radius'])
+            if e > tol:
+                fails.append((name, cn, lm, round(e, 3), tol))
+    return fails
+
+
+
+if __name__ == '__main__':
+    import argparse
+    import sys
+    ap = argparse.ArgumentParser(description='STRUCT: check CI (defaut) / fit-check cylindres')
+    ap.add_argument('--fit', metavar='NAME', help='fit tangence du cylindre NAME')
+    ap.add_argument('--write', action='store_true', help='gele le fit dans structures.json')
+    ap.add_argument('--check-cylinders', action='store_true',
+                    help='check tangence de tous les cylindres')
+    args = ap.parse_args()
+
+    if args.fit or args.check_cylinders:
+        pixels = json.load(open(os.path.join(_REPO, 'gtamapdata', 'pixels.json')))
+        if args.fit:
+            s = load().get(args.fit)
+            if not s or s.get('type') != 'cylinder':
+                raise SystemExit(f'structure cylindre inconnue: {args.fit}')
+            fit = fit_cylinder(s, pixels)
+            if not fit:
+                raise SystemExit('pas assez de rayons tangents (<3)')
+            print(f'{args.fit}: centre ({fit["x"]}, {fit["y"]})  rayon {fit["radius"]}m '
+                  f'-> largeur {2 * fit["radius"]:.2f}m  rms {fit["rms_m"]}m  ({fit["n_rays"]} rayons)')
+            if args.write:
+                import tempfile
+                full = json.load(open(_PATH))
+                full[args.fit]['axis'] = {k: fit[k] for k in ('x', 'y', 'radius')}
+                full[args.fit]['fit_meta'] = {'rms_m': fit['rms_m'], 'n_rays': fit['n_rays'],
+                                              'date': '2026-07-22'}
+                fd, tmp = tempfile.mkstemp(dir=os.path.dirname(_PATH), suffix='.tmp')
+                with os.fdopen(fd, 'w') as f:
+                    json.dump(full, f, indent=1, ensure_ascii=False)
+                os.replace(tmp, _PATH)
+                load(refresh=True)
+                print('axe gele dans structures.json')
+        if args.check_cylinders:
+            v = check_cylinders(pixels)
+            if not v:
+                print('tangence OK sur tous les cylindres')
+            for name, cn, lm, e, tol in v:
+                print(f'VIOLATION {name}: {cn} / {lm}  ecart {e}m (tol {tol})')
+            sys.exit(1 if v else 0)
+        sys.exit(0)
+
+    # defaut: check CI (comportement historique, invariants/CI comptent dessus)
     lms = json.load(open(os.path.join(_REPO, 'gtamapdata', 'landmarks.json')))
     allv = check_all(lms)
     newv = new_violations(lms)
