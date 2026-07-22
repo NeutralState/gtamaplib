@@ -134,9 +134,8 @@
    "1500 Sonora Ave (Silo) (L)": "L",
    "1500 Sonora Ave (Silo) (R)": "R"
   },
-  "z_base": 19.86,
   "z_top": 56.47,
-  "note": "silo rond (bounty #23, question rlx 07-22): clics L/R = tangentes, pas des points. Fit 4 rayons (Pano+Postcard) rms 0.16m -> largeur 14.2 (point-match gonflait a 15.6). Hauteur rebord-base 36.6 solide (z L/R accord 3cm). Ratio 2.58 (rlx supposait 3.2). check-only; enforce non supporte pour les cylindres (contrainte de rayons).",
+  "note": "silo drapeau US (bounty #23). LARGEUR 14.17m solide (fit tangence 4 rayons rms 0.16m; le point-match gonflait a 15.6). HAUTEUR: correction rlx 07-22 — notre 36.6 etait rebord -> plus bas point VISIBLE: la base est occluse dans les 2 frames (Postcard: ligne d'arbres pile au clic B, les rayures continuent derriere; Pano nuit: premier plan sombre). z_top 56.47 fiable (L/R accord 3cm). Vraie hauteur = 56.47 - sol(silo): sol ~11.5 -> 45m ratio 3.18 (le 3.2 de rlx compatible); sol ~5.5 (lac+1) -> 51m ratio 3.6. check-only.",
   "axis": {
    "x": -2750.64,
    "y": 3667.58,
@@ -146,7 +145,8 @@
    "rms_m": 0.161,
    "n_rays": 4,
    "date": "2026-07-22"
-  }
+  },
+  "z_lowest_visible": 19.86
  },
  "sonora-tank-cylinder": {
   "type": "cylinder",
