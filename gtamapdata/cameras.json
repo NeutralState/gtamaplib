@@ -2646,17 +2646,17 @@
   "id": "T1/30",
   "player": null,
   "xyz": [
-   -972.845,
-   932.939,
-   9.19
+   -960.424,
+   805.247,
+   31.078
   ],
   "ypr": [
-   168.4859,
-   -0.524,
-   -0.4233
+   166.4718,
+   -1.8612,
+   -0.1559
   ],
   "fov": [
-   61.4289,
+   67.82,
    null
   ],
   "size": [
@@ -2664,7 +2664,7 @@
    2160
   ],
   "source": "Trailer 1 [1535]",
-  "note": "re-resection complete 2026-07-22: 3 points fixes independants (Flagler via Grassrivers/Skyline; SPC W/NW multi-temoins) + VERTICALITE du mat Tall Billboard (clics T/B Alexandre) + priors (z deck 15+-6, roll~0, fov~59.7). Ancien ypr cale sur Flagler seul -> SPC ratait de 112-122'. Le mat verticalise brise la degenerescence position/fov des fits a 3 points."
+  "note": "re-resection 2026-07-22 V2: 4 points fixes independants (Flagler; SPC W/NW; WDNA FM spot par Alexandre — 3.6km az 154, 30 deg / 5x la distance du paquet SPC: tue le mode profondeur) + verticalite mat Tall Billboard. Historique: ypr cale sur Flagler seul -> SPC 112-122'."
  },
  "Waning Sands (A) (X)": {
   "id": "T1/36",
