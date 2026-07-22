@@ -2923,17 +2923,17 @@
   "id": "T2/58",
   "player": null,
   "xyz": [
-   -1196.88,
-   120.79,
-   42.76
+   -903.47,
+   183.51,
+   8.55
   ],
   "ypr": [
-   326.238,
-   -6.932,
-   0.128
+   14.155,
+   -1.066,
+   0.077
   ],
   "fov": [
-   43.819,
+   42.681,
    null
   ],
   "size": [
@@ -2941,7 +2941,7 @@
    1728
   ],
   "source": "Trailer 2 [3539]",
-  "note": "pose conditionnelle V3 (2026-07-22, apres Interchange V2/WDNA): 3 pairings (billboard T+B via Interchange, Rohde via Metro) + verticalite mat + prior scene T2/58. Interchange desormais surdeterminee (4 points fixes) -> rayons billboard durcis. Devinette d'origine: xyz(-1030,100,20) ypr(0,-4.6,0) fov 40."
+  "note": "pose V4 (2026-07-22): PREMIER POINT FIXE VRAI — Rohde BSW triangule Metro x Jason05 (0.0') + 2 pairings billboard (Interchange V2/WDNA) + verticalite mat + prior scene T2/58 (1-DOF residuel). Yaw 14 = la devinette Rockstar (yaw 0) etait bonne; les yaw 326-349 des fits anterieurs etaient des artefacts de variete (Rohde profondeur libre). Alternative ecartee: closure a 495m/yaw 104 (prior scene la rejette)."
  },
  "Park (Mobile Phone)": {
   "id": "T2/59",

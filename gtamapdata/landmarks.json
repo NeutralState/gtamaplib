@@ -11336,11 +11336,18 @@
   "zone": null
  },
  "Rohde Building (BSW)": {
-  "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "xyz": [
+   -900.52,
+   290.25,
+   16.84
+  ],
+  "source_cameras": [
+   "Metro (NE) (B)",
+   "Jason Duval 05 (Machine Gun)"
+  ],
+  "error_m": 1.33,
+  "zone": "vice_city",
+  "note": "coin b-level de la tour Rohde, triangule 2026-07-22 (spot Jason05 par Alexandre): croisement Metro x Jason05 ecart 2.65m a 85 deg, z 16.8 coherent ligne b (~18 SPC). Aligne verticalement avec 'Rohde Building (SW)' toit dans Jason05 (dx 3px)."
  },
  "American Airlines Hangar": {
   "author": "rlx",
@@ -17544,5 +17551,17 @@
   "error_m": 9.0,
   "zone": "ambrosia",
   "method": "ray x plan d eau z=5.0 (LAKE-V1); sens 17.9 m/m de datum"
+ },
+ "Tall Billboard near Interchange (B)": {
+  "xyz": null,
+  "source_cameras": [],
+  "error_m": null,
+  "zone": "unknown"
+ },
+ "Rhode Building (BSW)": {
+  "xyz": null,
+  "source_cameras": [],
+  "error_m": null,
+  "zone": "unknown"
  }
 }
