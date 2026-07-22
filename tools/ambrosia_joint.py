@@ -1,0 +1,322 @@
+#!/usr/bin/env python3
+"""ambrosia_joint.py — le solve joint du bounty Ambrosia. [AMB-JOINT-V1]
+
+Contexte (fil Discord bounty #23, 14 mois, ~4000 messages): rlx a resolu le
+probleme relatif (cercles de camera autour de la Lollipop, aire des triangles
+d'erreur), puis l'absolu par descente de coordonnees MANUELLE (tables de
+console, une dimension a la fois) — 'least-squares-by-proxy as a long,
+complicated detective story' (ses mots). Ce solveur fait la meme chose en
+vraies moindres carrees jointes.
+
+Design:
+- Parametres libres: les 4 cams Ambrosia x (x, y, z, yaw, pitch, roll, hfov).
+- LMs de ZONE (vus par >=2 cams du cluster): RE-TRIANGULES a chaque eval
+  (ray_ls_point) avec, quand ils existent, les rayons EXTERNES de cams hors
+  cluster a pose fixe (Mount Kalaga pour Daytona/Sebring WT, Keys Airplane
+  pour le Wheelabrator = le monde 'brator' de rlx, Loading Zone pour WT
+  Prison). Residu = angle rayon->point, arcmin, soft-l1.
+- ANCRES SOLIDES (>=2 observateurs externes, jamais re-triangulees):
+  FAA Miami ATCT, MIA North Terminal Tower, SSB (N)/(S) — reprojection pure.
+- Audit anti-circularite fait en amont (lecon Infinity/Peacock).
+
+Diagnostics rlx-corpus (rapportes, pas contraints en V1): hauteur du silo
+(~45-48m attendu), verticalite des paires (B)/(top), z du sol de la zone.
+
+Usage:
+  PYTHONPATH=. python3 tools/ambrosia_joint.py [--rounds 60] [--no-brator]
+  ... --init rlx     # initialise depuis la solution de rlx (2026-07-01)
+  ... --apply        # ecrit les poses optimisees (dry-run par defaut)
+"""
+import argparse
+import json
+import math
+import os
+import sys
+
+THIS = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(THIS)
+sys.path.insert(0, THIS)
+sys.path.insert(0, REPO)
+
+import numpy as np
+import common
+from common import ray_ls_point
+
+AMB = ['Ambrosia 01 (Bikers)', 'Ambrosia 02 (Panorama)',
+       'Ambrosia 04 (Fires)', 'Ambrosia Postcard (X)']
+
+# ancres solides: xyz fixe, jamais re-triangule (>=2 obs externes)
+FIXED_ANCHORS = ['FAA Miami ATCT (MIA)', 'MIA North Terminal Tower',
+                 'Sunshine Skyway Bridge (N)', 'Sunshine Skyway Bridge (S)']
+
+# solution rlx du 2026-07-01 (fil Discord) pour --init rlx
+RLX_POSES = {
+    'Ambrosia 02 (Panorama)':  ((-2465.725, 5095.552, 79.289), (160.149, -4.146, 0.0), 53.506),
+    'Ambrosia 04 (Fires)':     ((-1347.711, 3150.504, 49.382), (100.564, -2.302, 0.0), 53.221),
+    'Ambrosia Postcard (X)':   ((-2712.948, 3814.308, 54.386), (147.179, -1.863, 0.0), 55.409),
+    'Ambrosia 01 (Bikers)':    ((-2748.745, 3684.920, 9.0),    (11.87, 0.17, 0.0),     37.2),
+}
+
+
+def load():
+    px = json.load(open(os.path.join(REPO, 'gtamapdata', 'pixels.json')))
+    lms = json.load(open(os.path.join(REPO, 'gtamapdata', 'landmarks.json')))
+    cams = json.load(open(os.path.join(REPO, 'gtamapdata', 'cameras.json')))
+    return px, lms, cams
+
+
+# 'Sebring Water Tower' = alias de 'Daytona Beach Water Tower' (pixels
+# IDENTIQUES dans toutes les cams — c'est LA Lollipop du bounty, dedoublee
+# dans nos donnees). On n'en garde qu'une dans le solve.
+ALIAS_SKIP = {'Sebring Water Tower', 'Sebring Water Tower (B)'}
+
+
+def collect(px, lms, cams, use_brator=True):
+    """LMs solvables: >=2 rayons au TOTAL (cluster + externes fixes).
+    Un LM a 1 obs cluster + 1 rayon externe est triangulable et contraint la
+    cam du cluster — c'est exactement la contrainte 'brator' de rlx."""
+    amb_obs = {}      # lm -> [(cam, px)]
+    for c in AMB:
+        for lm, p in (px.get(c) or {}).items():
+            if p is None or common.is_excluded_marking(c, lm) or lm in ALIAS_SKIP:
+                continue
+            amb_obs.setdefault(lm, []).append((c, p))
+    anchors = {lm: obs for lm, obs in amb_obs.items()
+               if lm in FIXED_ANCHORS and isinstance(lms.get(lm), dict) and lms[lm].get('xyz')}
+    # rayons externes fixes pour TOUT LM observe par le cluster
+    ext_rays = {}     # lm -> [(origin, dir)]
+    for c, marks in px.items():
+        if c in AMB or c not in cams:
+            continue
+        try:
+            cam = common.get_cam(c)
+            assert cam is not None
+        except Exception:
+            continue
+        for lm in amb_obs:
+            if lm in FIXED_ANCHORS:
+                continue
+            p = marks.get(lm)
+            if p is None or common.is_excluded_marking(c, lm):
+                continue
+            if not use_brator and 'Wheelabrator' in lm:
+                continue
+            try:
+                d = cam.get_pixel_direction(p)
+            except Exception:
+                continue
+            if d is None:
+                continue
+            d = np.asarray(d, float)
+            ext_rays.setdefault(lm, []).append((np.asarray(cam.xyz, float), d / np.linalg.norm(d)))
+    zone = {lm: obs for lm, obs in amb_obs.items()
+            if lm not in FIXED_ANCHORS
+            and len(obs) + len(ext_rays.get(lm, [])) >= 2}
+    return zone, anchors, ext_rays
+
+
+class Solver:
+    def __init__(self, zone, anchors, ext_rays, lms, cams, init='ours'):
+        self.zone, self.anchors, self.ext_rays = zone, anchors, ext_rays
+        self.lms, self.cams_json = lms, cams
+        self.theta = {}
+        for c in AMB:
+            e = cams[c]
+            if init == 'rlx' and c in RLX_POSES:
+                (x, y, z), (yaw, pitch, roll), hfov = RLX_POSES[c]
+            else:
+                x, y, z = e['xyz']; yaw, pitch, roll = e['ypr']
+                hfov = e['fov'][0] if e['fov'] and e['fov'][0] else 55.0
+            self.theta[c] = [x, y, z, yaw, pitch, roll, hfov]
+        self._cache = {}
+        # bornes: xyz ±250m, yaw ±5, pitch ±3, roll ±1.5, hfov ±6
+        self.bounds = {}
+        for c in AMB:
+            x, y, z, yaw, pitch, roll, hfov = self.theta[c]
+            self.bounds[c] = [(x-250, x+250), (y-250, y+250), (max(0.5, z-40), z+40),
+                              (yaw-5, yaw+5), (pitch-3, pitch+3), (roll-1.5, roll+1.5),
+                              (hfov-6, hfov+6)]
+
+    def cam(self, c):
+        th = tuple(self.theta[c])
+        if self._cache.get(c, (None,))[0] != th:
+            x, y, z, yaw, pitch, roll, hfov = th
+            state = {'xyz': [x, y, z], 'ypr': [yaw, pitch, roll], 'fov': [hfov, None]}
+            self._cache[c] = (th, common.get_cam(c, state))
+        return self._cache[c][1]
+
+    def rays_for(self, lm):
+        rays = []
+        for c, p in self.zone[lm]:
+            cam = self.cam(c)
+            try:
+                d = cam.get_pixel_direction(p)
+            except Exception:
+                d = None
+            if d is None:
+                return None
+            d = np.asarray(d, float)
+            rays.append((np.asarray(cam.xyz, float), d / np.linalg.norm(d)))
+        rays += self.ext_rays.get(lm, [])
+        return rays
+
+    def cost(self, collect_detail=False):
+        tot = 0.0
+        detail = {}
+        # 1) zone: re-triangulation + residu angulaire par rayon
+        for lm, obs in self.zone.items():
+            rays = self.rays_for(lm)
+            if rays is None or len(rays) < 2:
+                continue
+            try:
+                P = np.asarray(ray_ls_point(rays), float)
+            except Exception:
+                continue
+            if not np.all(np.isfinite(P)):
+                continue
+            errs = []
+            for o, dvec in rays:
+                v = P - o
+                nv = np.linalg.norm(v)
+                if nv < 1.0:
+                    continue
+                cosang = float(np.clip(np.dot(v / nv, dvec), -1, 1))
+                errs.append(math.degrees(math.acos(cosang)) * 60.0)
+            for e in errs:
+                tot += math.log1p((e / 2.0) ** 2)      # Cauchy: les aberrants saturent
+            if collect_detail:
+                detail[lm] = (P, max(errs) if errs else None)
+        # 2) ancres fixes: reprojection angulaire
+        for lm, obs in self.anchors.items():
+            X = self.lms[lm]['xyz']
+            for c, p in obs:
+                cam = self.cam(c)
+                try:
+                    d = cam.get_pixel_direction(p)
+                except Exception:
+                    continue
+                if d is None:
+                    tot += 30.0
+                    continue
+                d = np.asarray(d, float); d /= np.linalg.norm(d)
+                v = np.asarray(X, float) - np.asarray(cam.xyz, float)
+                v /= np.linalg.norm(v)
+                e = math.degrees(math.acos(float(np.clip(np.dot(v, d), -1, 1)))) * 60.0
+                tot += 3.0 * math.log1p((e / 2.0) ** 2)   # poids ancre
+        return (tot, detail) if collect_detail else tot
+
+    def descend(self, rounds=60, verbose=True):
+        steps0 = [8.0, 8.0, 3.0, 0.3, 0.15, 0.05, 0.4]   # x y z yaw pitch roll hfov
+        steps = {c: list(steps0) for c in AMB}
+        best = self.cost()
+        for r in range(rounds):
+            improved = False
+            for c in AMB:
+                for i in range(7):
+                    s = steps[c][i]
+                    if s <= 0:
+                        continue
+                    for sgn in (1, -1):
+                        old = self.theta[c][i]
+                        cand = old + sgn * s
+                        lo, hi = self.bounds[c][i]
+                        if not (lo <= cand <= hi):
+                            continue
+                        self.theta[c][i] = cand
+                        v = self.cost()
+                        if v < best - 1e-9:
+                            best = v
+                            improved = True
+                        else:
+                            self.theta[c][i] = old
+            if not improved:
+                for c in AMB:
+                    steps[c] = [s / 2 for s in steps[c]]
+                if max(max(steps[c]) for c in AMB) < 1e-3:
+                    break
+            if verbose and (r % 5 == 0 or not improved):
+                print(f'  round {r:3} cost {best:10.3f}' + ('' if improved else '  (halve steps)'))
+        return best
+
+
+def report(sv, lms):
+    cost, detail = sv.cost(collect_detail=True)
+    print(f'\ncost final: {cost:.3f}')
+    print('\nPOSES:')
+    for c in AMB:
+        x, y, z, yaw, pitch, roll, hfov = sv.theta[c]
+        print(f'  {c:26} ({x:9.2f},{y:9.2f},{z:7.2f}) ypr=({yaw:7.2f},{pitch:6.2f},{roll:5.2f}) hfov={hfov:6.2f}')
+    worst = sorted([(e, lm) for lm, (P, e) in detail.items() if e], reverse=True)[:12]
+    print('\npires residus (arcmin, max par LM):')
+    for e, lm in worst:
+        print(f'  {e:8.1f}\'  {lm}')
+    # diagnostics corpus rlx
+    def z_of(lm):
+        d = detail.get(lm)
+        return d[0][2] if d else None
+    silo_top = z_of('1500 Sonora Ave (Silo) (L)') or z_of('1500 Sonora Ave (Silo)')
+    silo_b = z_of('1500 Sonora Ave (Silo) (B)')
+    print('\nDIAGNOSTICS corpus rlx:')
+    if silo_top is not None and silo_b is not None:
+        print(f'  hauteur silo: {silo_top - silo_b:.2f} m (rlx attend ~45-48)')
+    elif silo_top is not None:
+        print(f'  silo top z: {silo_top:.2f} (base non triangulable)')
+    for name in ('Daytona Beach Water Tower', 'Sebring Water Tower', 'US Sugar Mill (Factory)',
+                 'Wheelabrator South Broward (TE)', 'USSM Smokestack (7)'):
+        d = detail.get(name)
+        if d:
+            P = d[0]
+            print(f'  {name:36} -> ({P[0]:9.2f},{P[1]:9.2f},{P[2]:7.2f})  res {d[1]:.1f}\'')
+    return cost
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--rounds', type=int, default=60)
+    ap.add_argument('--init', choices=['ours', 'rlx'], default='ours')
+    ap.add_argument('--no-brator', action='store_true')
+    ap.add_argument('--apply', action='store_true')
+    args = ap.parse_args()
+
+    px, lms, cams = load()
+    zone, anchors, ext_rays = collect(px, lms, cams, use_brator=not args.no_brator)
+    n_obs = sum(len(o) for o in zone.values())
+    n_ext = sum(len(r) for r in ext_rays.values())
+    print(f'zone: {len(zone)} LMs partages ({n_obs} obs cluster, {n_ext} rayons externes fixes)')
+    print(f'ancres fixes: {list(anchors)}')
+    print(f'monde brator: {not args.no_brator}   init: {args.init}')
+
+    sv = Solver(zone, anchors, ext_rays, lms, cams, init=args.init)
+    # quarantaine: LM dont le residu initial explose = appariement suspect
+    # (ex: 'Ambrosia Hill' vue par Explosion n'est PAS la meme colline)
+    _, det0 = sv.cost(collect_detail=True)
+    bad = [lm for lm, (P, e) in det0.items() if e is not None and e > 90.0]
+    if bad:
+        print(f'QUARANTAINE ({len(bad)} LMs, residu initial > 90\'): {bad}')
+        for lm in bad:
+            zone.pop(lm, None)
+        sv = Solver(zone, anchors, ext_rays, lms, cams, init=args.init)
+    print(f'cost initial: {sv.cost():.3f}')
+    sv.descend(rounds=args.rounds)
+    report(sv, lms)
+
+    if args.apply:
+        path = os.path.join(REPO, 'gtamapdata', 'cameras.json')
+        cj = json.load(open(path))
+        for c in AMB:
+            x, y, z, yaw, pitch, roll, hfov = sv.theta[c]
+            cj[c]['xyz'] = [round(x, 3), round(y, 3), round(z, 3)]
+            cj[c]['ypr'] = [round(yaw, 4), round(pitch, 4), round(roll, 4)]
+            cj[c]['fov'] = [round(hfov, 4), None]
+        tmp = path + '.tmp'
+        json.dump(cj, open(tmp, 'w'), indent=2, ensure_ascii=True)
+        os.replace(tmp, path)
+        common.log_event('ambrosia_joint', 'poses_applied',
+                         reason=f'solve joint 4 cams, init={args.init}, brator={not args.no_brator}')
+        print('\nAPPLIED. Retrianguler les LMs de zone ensuite (cycle).')
+    else:
+        print('\nDRY-RUN (--apply pour ecrire).')
+
+
+if __name__ == '__main__':
+    main()
