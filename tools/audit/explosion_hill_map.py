@@ -179,7 +179,7 @@ dg.line([wp[0], wp[-1]], fill=(80, 150, 255, 200), width=7)
 # colline reelle: bande le long des rayons Bikers
 band = ([P(*(o_b + d * 250)[:2]) for d in hill_dirs[:2]]
         + [P(*(o_b + d * 1200)[:2]) for d in hill_dirs[1::-1]])
-df.polygon(band, fill=(249, 140, 55, 88))
+df.polygon(band, fill=(249, 140, 55, 110))
 for d in hill_dirs:
     q = o_b + d * 1200
     dg.line([P(*o_b[:2]), P(*q[:2])], fill=(251, 146, 60, 190), width=5)
@@ -241,24 +241,52 @@ dr.text((ex + math.cos(ma) * (R + 30) - 46, ey + math.sin(ma) * (R + 30) - 40),
 # cams + etiquettes
 bx, by = P(*o_b[:2])
 dr.ellipse([bx - 7, by - 7, bx + 7, by + 7], fill='#fb923c')
-dr.text((bx + 13, by - 10), 'Ambrosia 01 (Bikers)', fill='#fdba74', font=f_s)
+dr.text((bx + 13, by - 30), 'S2/56 · Ambrosia 01 (Bikers)', fill='#fdba74', font=f_s, stroke_width=3, stroke_fill=(9, 13, 20))
+dr.text((bx + 13, by - 2), 'the hill fills ~25° of its frame', fill='#c2703d', font=f_xs)
 hx, hy = P(hill_mid[0], hill_mid[1])
-dr.text((hx - 260, hy - 96), 'AMBROSIA HILL', fill='#fb923c', font=f_h)
-dr.text((hx - 260, hy - 54), 'seen by the solved Bikers cam', fill='#d9834b', font=f_xs)
+# pics stylises sur la bande
+for frac, size in ((0.35, 26), (0.52, 38), (0.7, 24)):
+    pxm = o_b + (hill_dirs[0] * (1 - frac) + hill_dirs[1] * frac) * (250 + 950 * frac)
+    mx, my = P(pxm[0], pxm[1])
+    dr.line([mx - size, my + size * 0.7, mx, my - size * 0.6], fill='#fdba74', width=3)
+    dr.line([mx, my - size * 0.6, mx + size, my + size * 0.7], fill='#fdba74', width=3)
+dr.text((hx - 270, hy - 116), 'AMBROSIA HILL', fill='#fb923c', font=f_h,
+        stroke_width=4, stroke_fill=(9, 13, 20))
+dr.text((hx - 270, hy - 72), 'seen by S2/56 (solved) · claimed by T2/52',
+        fill='#d9834b', font=f_xs, stroke_width=3, stroke_fill=(9, 13, 20))
 
 rx, ry = P(*(o_e + d_ridge * 3350)[:2])
-dr.text((rx + 20, ry - 14), 'marked ridge', fill='#ff8787', font=f_m)
-dr.text((rx + 20, ry + 16), 'toward Mount Leonida', fill='#e07575', font=f_xs)
+dr.text((rx + 20, ry - 14), 'marked ridge', fill='#ff8787', font=f_m, stroke_width=3, stroke_fill=(9, 13, 20))
+dr.text((rx + 20, ry + 16), 'toward Mount Leonida', fill='#e07575', font=f_xs, stroke_width=3, stroke_fill=(9, 13, 20))
+# tag Leonida au bout du rayon
+t_leo = (4550 - o_e[1]) / d_ridge[1]
+lx2, ly2 = P(*(o_e + d_ridge * t_leo)[:2])
+dr.text((lx2 + 24, ly2 - 10), 'MOUNT LEONIDA', fill='#ff9d9d', font=f_m, stroke_width=3, stroke_fill=(9, 13, 20))
+dr.text((lx2 + 24, ly2 + 20), 'different mountain, further north (unsolved)',
+        fill='#c76a6a', font=f_xs, stroke_width=3, stroke_fill=(9, 13, 20))
+
+# Empty Lot (T2/52): revendique la meme colline, intestable
+lot = np.array([-673.25, 938.25])
+lox, loy = P(*lot)
+vh2 = hill_mid[:2] - lot
+vh2 /= np.linalg.norm(vh2)
+dashed((lox, loy), P(*(lot + vh2 * 3200)), '#2dd4bf', 2, dash=12)
+dr.ellipse([lox - 6, loy - 6, lox + 6, loy + 6], fill='#2dd4bf')
+dr.text((lox + 12, loy - 34), 'T2/52 · Empty Lot', fill='#5eead4', font=f_s, stroke_width=3, stroke_fill=(9, 13, 20))
+dr.text((lox + 12, loy - 6), 'plausibly the same hill (subtense fits ~2.7× farther)',
+        fill='#2ea495', font=f_xs)
+dr.text((lox + 12, loy + 20), 'unprovable: its only 2 markings are the hill itself',
+        fill='#26857a', font=f_xs)
 
 gx2, gy2 = P(*ray_end(o_e[:2], yaw_fit + gap, 4250))
 dr.text((gx2 - 60, gy2 + 6), f'yaw needed for the hill ({gap:+.0f}°)',
-        fill='#f87171', font=f_xs)
+        fill='#f87171', font=f_xs, stroke_width=3, stroke_fill=(9, 13, 20))
 dr.text((gx2 - 60, gy2 + 32), 'billboard & Rohde would leave the frame',
-        fill='#b45f5f', font=f_xs)
+        fill='#b45f5f', font=f_xs, stroke_width=3, stroke_fill=(9, 13, 20))
 
 dr.ellipse([ex - 8, ey - 8, ex + 8, ey + 8], fill='#5b9dff')
 dr.ellipse([ex - 13, ey - 13, ex + 13, ey + 13], outline='#5b9dff', width=2)
-dr.text((ex + 20, ey - 4), 'EXPLOSION', fill='#93c5fd', font=f_h)
+dr.text((ex + 20, ey - 4), 'T2/58 · EXPLOSION', fill='#93c5fd', font=f_h, stroke_width=3, stroke_fill=(9, 13, 20))
 dr.text((ex + 20, ey + 36), f'fov {th[6]:.0f}° · 49 m from the hand guess',
         fill='#7da4d8', font=f_xs)
 gxx, gyy = P(*HAND[:2])
@@ -266,21 +294,24 @@ dr.line([gxx - 8, gyy - 8, gxx + 8, gyy + 8], fill='#9aa8ba', width=3)
 dr.line([gxx - 8, gyy + 8, gxx + 8, gyy - 8], fill='#9aa8ba', width=3)
 
 # mini-legende bas-gauche
-lx, ly = 34, H - 168
-dr.rounded_rectangle([lx - 16, ly - 16, lx + 620, ly + 138], radius=14,
+lx, ly = 34, H - 196
+dr.rounded_rectangle([lx - 16, ly - 16, lx + 640, ly + 166], radius=14,
                      fill=(13, 18, 27, 235), outline='#232e3d', width=2)
 sw = 34
 dr.rectangle([lx, ly + 2, lx + sw, ly + 18], fill=(43, 74, 122))
-dr.text((lx + sw + 12, ly - 2), 'what the Explosion frame covers (fit: anchors 0.0′)',
+dr.text((lx + sw + 12, ly - 2), 'what the T2/58 frame covers (fit: anchors 0.0′)',
         fill='#c3d2e6', font=f_xs)
 dr.line([lx, ly + 44, lx + sw, ly + 44], fill='#ff6b6b', width=4)
 dr.text((lx + sw + 12, ly + 32), 'where its marked “hill” actually points',
         fill='#c3d2e6', font=f_xs)
 dr.rectangle([lx, ly + 70, lx + sw, ly + 86], fill=(160, 95, 42))
-dr.text((lx + sw + 12, ly + 66), 'the real Ambrosia Hill — 21° away, outside the frame',
+dr.text((lx + sw + 12, ly + 66), 'the real Ambrosia Hill (S2/56) — 21° away, outside the frame',
         fill='#c3d2e6', font=f_xs)
 dashed((lx, ly + 112), (lx + sw, ly + 112), '#f87171', 3, dash=8)
 dr.text((lx + sw + 12, ly + 100), 'the yaw it would take — impossible without losing the anchors',
+        fill='#c3d2e6', font=f_xs)
+dashed((lx, ly + 140), (lx + sw, ly + 140), '#2dd4bf', 3, dash=8)
+dr.text((lx + sw + 12, ly + 128), 'T2/52: plausibly the same hill, no way to prove it',
         fill='#c3d2e6', font=f_xs)
 
 # echelle + nord
