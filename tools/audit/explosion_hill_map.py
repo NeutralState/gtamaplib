@@ -179,7 +179,7 @@ dg.line([wp[0], wp[-1]], fill=(80, 150, 255, 200), width=7)
 # colline reelle: bande le long des rayons Bikers
 band = ([P(*(o_b + d * 250)[:2]) for d in hill_dirs[:2]]
         + [P(*(o_b + d * 1200)[:2]) for d in hill_dirs[1::-1]])
-df.polygon(band, fill=(249, 140, 55, 110))
+df.polygon(band, fill=(249, 140, 55, 165))
 for d in hill_dirs:
     q = o_b + d * 1200
     dg.line([P(*o_b[:2]), P(*q[:2])], fill=(251, 146, 60, 190), width=5)
@@ -244,12 +244,6 @@ dr.ellipse([bx - 7, by - 7, bx + 7, by + 7], fill='#fb923c')
 dr.text((bx + 13, by - 30), 'S2/56 · Ambrosia 01 (Bikers)', fill='#fdba74', font=f_s, stroke_width=3, stroke_fill=(9, 13, 20))
 dr.text((bx + 13, by - 2), 'the hill fills ~25° of its frame', fill='#c2703d', font=f_xs)
 hx, hy = P(hill_mid[0], hill_mid[1])
-# pics stylises sur la bande
-for frac, size in ((0.35, 26), (0.52, 38), (0.7, 24)):
-    pxm = o_b + (hill_dirs[0] * (1 - frac) + hill_dirs[1] * frac) * (250 + 950 * frac)
-    mx, my = P(pxm[0], pxm[1])
-    dr.line([mx - size, my + size * 0.7, mx, my - size * 0.6], fill='#fdba74', width=3)
-    dr.line([mx, my - size * 0.6, mx + size, my + size * 0.7], fill='#fdba74', width=3)
 dr.text((hx - 270, hy - 116), 'AMBROSIA HILL', fill='#fb923c', font=f_h,
         stroke_width=4, stroke_fill=(9, 13, 20))
 dr.text((hx - 270, hy - 72), 'seen by S2/56 (solved) · claimed by T2/52',
@@ -273,9 +267,9 @@ vh2 /= np.linalg.norm(vh2)
 dashed((lox, loy), P(*(lot + vh2 * 3200)), '#2dd4bf', 2, dash=12)
 dr.ellipse([lox - 6, loy - 6, lox + 6, loy + 6], fill='#2dd4bf')
 dr.text((lox + 12, loy - 34), 'T2/52 · Empty Lot', fill='#5eead4', font=f_s, stroke_width=3, stroke_fill=(9, 13, 20))
-dr.text((lox + 12, loy - 6), 'plausibly the same hill (subtense fits ~2.7× farther)',
+dr.text((lox + 12, loy - 6), 'claims the same hill — untestable',
         fill='#2ea495', font=f_xs)
-dr.text((lox + 12, loy + 20), 'unprovable: its only 2 markings are the hill itself',
+dr.text((lox + 12, loy + 20), 'placeholder pose (yaw 0) · its only 2 markings are the hill',
         fill='#26857a', font=f_xs)
 
 gx2, gy2 = P(*ray_end(o_e[:2], yaw_fit + gap, 4250))
@@ -311,7 +305,7 @@ dashed((lx, ly + 112), (lx + sw, ly + 112), '#f87171', 3, dash=8)
 dr.text((lx + sw + 12, ly + 100), 'the yaw it would take — impossible without losing the anchors',
         fill='#c3d2e6', font=f_xs)
 dashed((lx, ly + 140), (lx + sw, ly + 140), '#2dd4bf', 3, dash=8)
-dr.text((lx + sw + 12, ly + 128), 'T2/52: plausibly the same hill, no way to prove it',
+dr.text((lx + sw + 12, ly + 128), 'T2/52: claims the same hill — placeholder pose, untestable',
         fill='#c3d2e6', font=f_xs)
 
 # echelle + nord
