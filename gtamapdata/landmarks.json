@@ -4706,8 +4706,9 @@
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 0.473,
-    "zone": "ambrosia"
+    "error_m": 110.0,
+    "zone": "ambrosia",
+    "depth_caveat": "profondeur dependante du rayon Mount Kalaga (pose DEVINEE, chiffres ronds, jamais resolue): sans ce rayon la position glisse de 106m le long de la visee Ambrosia (rayons quasi paralleles). error_m honnete en attendant un vrai solve de Kalaga ou un temoin de profondeur"
   },
   "US Sugar Mill (Factory)": {
     "xyz": [
@@ -12925,7 +12926,7 @@
   },
   "Daytona Beach Water Tower": {
     "author": "rlx",
-    "error_m": 0.476,
+    "error_m": 110.0,
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
@@ -12935,7 +12936,8 @@
       2926.476590795214,
       75.11311327579017
     ],
-    "zone": null
+    "zone": null,
+    "depth_caveat": "profondeur dependante du rayon Mount Kalaga (pose DEVINEE, chiffres ronds, jamais resolue): sans ce rayon la position glisse de 106m le long de la visee Ambrosia (rayons quasi paralleles). error_m honnete en attendant un vrai solve de Kalaga ou un temoin de profondeur"
   },
   "Canal B (Ambrosia) (2)": {
     "author": "rlx",

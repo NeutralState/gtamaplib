@@ -71,7 +71,7 @@ def load():
 ALIAS_SKIP = {'Sebring Water Tower', 'Sebring Water Tower (B)'}
 
 
-def collect(px, lms, cams, use_brator=True):
+def collect(px, lms, cams, use_brator=True, no_kalaga=False):
     """LMs solvables: >=2 rayons au TOTAL (cluster + externes fixes).
     Un LM a 1 obs cluster + 1 rayon externe est triangulable et contraint la
     cam du cluster — c'est exactement la contrainte 'brator' de rlx."""
@@ -87,6 +87,8 @@ def collect(px, lms, cams, use_brator=True):
     ext_rays = {}     # lm -> [(origin, dir)]
     for c, marks in px.items():
         if c in AMB or c not in cams:
+            continue
+        if no_kalaga and 'Mount Kalaga' in c:
             continue
         try:
             cam = common.get_cam(c)
@@ -398,12 +400,14 @@ def main():
     ap.add_argument('--init', choices=['ours', 'rlx'], default='ours')
     ap.add_argument('--no-brator', action='store_true')
     ap.add_argument('--corpus', action='store_true', help='contraintes structurelles rlx (V2)')
+    ap.add_argument('--no-kalaga', action='store_true',
+                    help='exclut les rayons de Mount Kalaga (pose devinee, chiffres ronds — jamais resolue)')
     ap.add_argument('--sigma', action='store_true', help='calcule les sensibilites par parametre')
     ap.add_argument('--apply', action='store_true')
     args = ap.parse_args()
 
     px, lms, cams = load()
-    zone, anchors, ext_rays = collect(px, lms, cams, use_brator=not args.no_brator)
+    zone, anchors, ext_rays = collect(px, lms, cams, use_brator=not args.no_brator, no_kalaga=args.no_kalaga)
     n_obs = sum(len(o) for o in zone.values())
     n_ext = sum(len(r) for r in ext_rays.values())
     print(f'zone: {len(zone)} LMs partages ({n_obs} obs cluster, {n_ext} rayons externes fixes)')
