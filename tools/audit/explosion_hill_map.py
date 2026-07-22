@@ -4,10 +4,10 @@ marquee dans Explosion ne PEUT PAS etre la colline d'Ambrosia (Bikers).
 
 1) Fit la pose d'Explosion sur ses 2 marquages incontestes (Tall Billboard
    via Interchange resolu + Rohde via Metro), prior doux vers la pose
-   devinee (elle est bonne a ~300m pres).
+   devinee (elle est bonne a ~50m pres).
 2) Dessine: frustum reel + rayon de la crete marquee vs la position reelle
-   de la colline (rayons Bikers) + frustum fantome (le yaw qu'il faudrait)
-   -> l'ecart angulaire est plus grand que la demi-frame.
+   de la colline (rayons Bikers) + frustum fantome (le yaw qu'il faudrait).
+Style: sans bandeau de texte — glow, grille discrete, mini-legende en bas.
 
 -> tools/generated/ambrosia_bounty/explosion_hill_map.png (postable).
 """
@@ -23,7 +23,7 @@ sys.path.insert(0, REPO)
 os.chdir(REPO)
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from scipy.optimize import minimize
 import common
 
@@ -31,12 +31,11 @@ HAND = np.array([-1030.0, 100.0, 20.0])       # devinette existante
 RIDGE_PX = (310, 290)                          # 'Mount Leonida Ridge (Explosion)'
 ANCHORS = [('Interchange', 'Tall Billboard near Interchange', (225, 55)),
            ('Metro (NE) (B)', 'Rohde Building (BSW)', (3306, 373))]
-HILL = [('Ambrosia Hill (TW)', None), ('Ambrosia Hill (BW)', None),
-        ('Ambrosia Hill (TE)', None), ('Ambrosia Hill (BE)', None)]
+HILL = ['Ambrosia Hill (TW)', 'Ambrosia Hill (BW)',
+        'Ambrosia Hill (TE)', 'Ambrosia Hill (BE)']
 
 px = json.load(open('gtamapdata/pixels.json'))
 
-# rayons partenaires des ancres + rayons colline de Bikers
 rays = []
 for cname, lm, epx in ANCHORS:
     cam = common.get_cam(cname)
@@ -46,7 +45,7 @@ for cname, lm, epx in ANCHORS:
 bik = common.get_cam('Ambrosia 01 (Bikers)')
 o_b = np.asarray(bik.xyz, float)
 hill_dirs = []
-for lm, _ in HILL:
+for lm in HILL:
     d = np.asarray(bik.get_pixel_direction(px['Ambrosia 01 (Bikers)'][lm]), float)
     hill_dirs.append(d / np.linalg.norm(d))
 
@@ -106,159 +105,197 @@ def az_of(v):
     return math.degrees(math.atan2(-v[0], v[1])) % 360
 
 
-# azimuts: rayon de la crete marquee vs colline reelle
 d_ridge = np.asarray(cam_e.get_pixel_direction(RIDGE_PX), float)
+d_ridge /= np.linalg.norm(d_ridge)
 az_ridge = az_of(d_ridge)
 hill_mid = (o_b + hill_dirs[0] * 600 + o_b + hill_dirs[1] * 600) / 2
 az_hill = az_of(hill_mid - o_e)
 gap = (az_hill - az_ridge + 540) % 360 - 180
 yaw_fit = th[3] % 360
 print(f'az crete marquee {az_ridge:.1f}  az colline Bikers {az_hill:.1f}  '
-      f'ECART {gap:+.1f} deg  (demi-frame = {th[6] / 2:.1f} deg)')
+      f'ECART {gap:+.1f} deg')
 
 # ── dessin ──────────────────────────────────────────────────────────────
 XMIN, XMAX, YMIN, YMAX = -3700, 700, -1000, 4800
 S = 0.42
 W, H = int((XMAX - XMIN) * S), int((YMAX - YMIN) * S)
-img = Image.new('RGB', (W, H + 210), '#0b0f14')
-ov = Image.new('RGBA', img.size, (0, 0, 0, 0))
+
+BG = (9, 13, 20)
+img = Image.new('RGB', (W, H), BG)
 dr = ImageDraw.Draw(img)
-do = ImageDraw.Draw(ov)
 
 
 def P(x, y):
-    return ((x - XMIN) * S, 210 + (YMAX - y) * S)
+    return ((x - XMIN) * S, (YMAX - y) * S)
 
 
-def wedge(orig, yaw_c, hfov, L, fill=None, outline=None, width=2, dashed=False):
-    pts = [P(*orig[:2])]
-    for a in np.linspace(yaw_c - hfov / 2, yaw_c + hfov / 2, 24):
-        rad = math.radians(a)
-        pts.append(P(orig[0] - math.sin(rad) * L, orig[1] + math.cos(rad) * L))
-    if fill:
-        do.polygon(pts, fill=fill)
-    if outline:
-        edge = [pts[0], pts[1], pts[0], pts[-1]]
-        if dashed:
-            for a, b in (edge[:2], edge[2:]):
-                n = int(math.hypot(b[0] - a[0], b[1] - a[1]) / 18)
-                for k in range(0, n, 2):
-                    q0 = (a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n)
-                    q1 = (a[0] + (b[0] - a[0]) * (k + 1) / n, a[1] + (b[1] - a[1]) * (k + 1) / n)
-                    dr.line([q0, q1], fill=outline, width=width)
-        else:
-            dr.line(edge[:2], fill=outline, width=width)
-            dr.line(edge[2:], fill=outline, width=width)
+def ray_end(orig, az, L):
+    rad = math.radians(az)
+    return (orig[0] - math.sin(rad) * L, orig[1] + math.cos(rad) * L)
 
 
 try:
     F = lambda s: ImageFont.truetype('/System/Library/Fonts/Helvetica.ttc', s)
-    f_t, f_m, f_s = F(40), F(28), F(22)
+    FB = lambda s: ImageFont.truetype('/System/Library/Fonts/Helvetica.ttc', s, index=1)
+    f_h, f_m, f_s, f_xs = FB(34), F(26), F(22), F(19)
 except Exception:
-    f_t = f_m = f_s = ImageFont.load_default()
+    f_h = f_m = f_s = f_xs = ImageFont.load_default()
 
-# colline reelle: bande le long des rayons Bikers (t 250..1200)
+# grille 1km, tres discrete
+for gx in range(int(XMIN // 1000) * 1000, XMAX + 1, 1000):
+    x0, _ = P(gx, 0)
+    dr.line([x0, 0, x0, H], fill=(24, 32, 44), width=1)
+for gy in range(int(YMIN // 1000) * 1000, YMAX + 1, 1000):
+    _, y0 = P(0, gy)
+    dr.line([0, y0, W, y0], fill=(24, 32, 44), width=1)
+
+# couches
+fills = Image.new('RGBA', img.size, (0, 0, 0, 0))
+glow = Image.new('RGBA', img.size, (0, 0, 0, 0))
+df, dg = ImageDraw.Draw(fills), ImageDraw.Draw(glow)
+
+
+def wedge_pts(orig, yaw_c, hfov, L):
+    pts = [P(*orig[:2])]
+    for a in np.linspace(yaw_c - hfov / 2, yaw_c + hfov / 2, 30):
+        pts.append(P(*ray_end(orig[:2], a, L)))
+    return pts
+
+
+def dashed(a, b, fill, width, dash=16):
+    n = max(int(math.hypot(b[0] - a[0], b[1] - a[1]) / dash), 1)
+    for k in range(0, n, 2):
+        q0 = (a[0] + (b[0] - a[0]) * k / n, a[1] + (b[1] - a[1]) * k / n)
+        q1 = (a[0] + (b[0] - a[0]) * (k + 1) / n, a[1] + (b[1] - a[1]) * (k + 1) / n)
+        dr.line([q0, q1], fill=fill, width=width)
+
+
+# frustum reel (bleu)
+wp = wedge_pts(o_e, yaw_fit, th[6], 4600)
+df.polygon(wp, fill=(56, 120, 220, 34))
+dg.line([wp[0], wp[1]], fill=(80, 150, 255, 200), width=7)
+dg.line([wp[0], wp[-1]], fill=(80, 150, 255, 200), width=7)
+
+# colline reelle: bande le long des rayons Bikers
 band = ([P(*(o_b + d * 250)[:2]) for d in hill_dirs[:2]]
         + [P(*(o_b + d * 1200)[:2]) for d in hill_dirs[1::-1]])
-do.polygon(band, fill=(251, 146, 60, 70))
+df.polygon(band, fill=(249, 140, 55, 88))
 for d in hill_dirs:
     q = o_b + d * 1200
-    dr.line([P(*o_b[:2]), P(*q[:2])], fill='#fb923c', width=2)
-hx, hy = P(hill_mid[0], hill_mid[1])
-dr.text((hx - 240, hy - 70), 'AMBROSIA HILL', fill='#fb923c', font=f_m)
-dr.text((hx - 240, hy - 36), 'as seen by Bikers (fills ~25 deg of its frame)',
-        fill='#fdba74', font=f_s)
-bx, by = P(*o_b[:2])
-dr.ellipse([bx - 7, by - 7, bx + 7, by + 7], fill='#fb923c')
-dr.text((bx + 12, by - 10), 'Ambrosia 01 (Bikers) — solved', fill='#fb923c', font=f_s)
+    dg.line([P(*o_b[:2]), P(*q[:2])], fill=(251, 146, 60, 190), width=5)
 
-# cams partenaires + rayons d'ancrage
-for (cname, lm, _), (o, d, _) , t in zip(ANCHORS, rays, th[7:9]):
+# rayon de la crete marquee (rouge)
+rq = o_e + d_ridge * 5300
+dg.line([P(*o_e[:2]), P(*rq[:2])], fill=(255, 80, 80, 230), width=10)
+
+glow = glow.filter(ImageFilter.GaussianBlur(7))
+img = Image.alpha_composite(img.convert('RGBA'), fills)
+img = Image.alpha_composite(img, glow)
+dr = ImageDraw.Draw(img)
+
+# traits nets par-dessus
+dr.line([wp[0], wp[1]], fill='#5b9dff', width=2)
+dr.line([wp[0], wp[-1]], fill='#5b9dff', width=2)
+for d in hill_dirs:
+    dr.line([P(*o_b[:2]), P(*(o_b + d * 1200)[:2])], fill='#fb923c', width=2)
+dr.line([P(*o_e[:2]), P(*rq[:2])], fill='#ff6b6b', width=4)
+
+# frustum fantome (pointille)
+gw = wedge_pts(o_e, yaw_fit + gap, th[6], 4600)
+dashed(gw[0], gw[1], '#f87171', 2)
+dashed(gw[0], gw[-1], '#f87171', 2)
+
+# rayons d'ancrage + points
+for (cname, lm, _), (o, d, _), t in zip(ANCHORS, rays, th[7:9]):
     q = o + d * t
-    dr.line([P(*o[:2]), P(*q[:2])], fill='#475569', width=2)
+    dashed(P(*o[:2]), P(*q[:2]), '#3f4c60', 2, dash=10)
     cx, cy = P(*o[:2])
-    dr.ellipse([cx - 5, cy - 5, cx + 5, cy + 5], fill='#94a3b8')
-    dr.text((cx + 9, cy - 8), cname, fill='#94a3b8', font=f_s)
+    dr.ellipse([cx - 5, cy - 5, cx + 5, cy + 5], fill='#8fa3bd')
+    dr.text((cx + 10, cy - 26), cname, fill='#8fa3bd', font=f_xs)
     qx, qy = P(*q[:2])
-    dr.ellipse([qx - 6, qy - 6, qx + 6, qy + 6], outline='#4ade80', width=3)
-    dr.text((qx + 10, qy - 8), f"{lm.split('(')[0].strip()} (fit 0.0')",
+    dr.ellipse([qx - 7, qy - 7, qx + 7, qy + 7], outline='#4ade80', width=3)
+    dr.text((qx + 12, qy - 10), f"{lm.split('(')[0].strip()}  0.0′",
             fill='#4ade80', font=f_s)
 
-# Explosion: frustum reel, rayon crete, frustum fantome
+# arc de l'ecart + fleches
 ex, ey = P(*o_e[:2])
-wedge(o_e, yaw_fit, th[6], 4600, fill=(59, 130, 246, 45), outline='#3b82f6')
-rq = o_e + (d_ridge / np.linalg.norm(d_ridge)) * 5200
-dr.line([P(*o_e[:2]), P(*rq[:2])], fill='#ef4444', width=4)
-rx, ry = P(*(o_e + (d_ridge / np.linalg.norm(d_ridge)) * 3400)[:2])
-dr.text((rx + 18, ry - 16), 'marked ridge points HERE', fill='#ef4444', font=f_m)
-dr.text((rx + 18, ry + 18), '(Mount Leonida direction)', fill='#f87171', font=f_s)
-wedge(o_e, yaw_fit + gap, th[6], 4600, outline='#ef4444', width=2, dashed=True)
-grad = math.radians(yaw_fit + gap)
-gx2, gy2 = P(o_e[0] - math.sin(grad) * 4100, o_e[1] + math.cos(grad) * 4100)
-dr.text((gx2 - 480, gy2 - 40), f'frame yawed {gap:+.0f} deg: ridge pixel would hit',
-        fill='#f87171', font=f_s)
-dr.text((gx2 - 480, gy2 - 12), 'the hill - but billboard & Rohde are lost',
-        fill='#f87171', font=f_s)
-dr.ellipse([ex - 8, ey - 8, ex + 8, ey + 8], fill='#3b82f6')
-dr.text((ex + 14, ey + 2), 'Explosion — fitted on billboard+Rohde',
-        fill='#60a5fa', font=f_m)
-dr.text((ex + 14, ey + 34),
-        f'xyz ({th[0]:.0f}, {th[1]:.0f})  yaw {yaw_fit:.1f}  hfov {th[6]:.1f}',
-        fill='#60a5fa', font=f_s)
-gx, gy = P(*HAND[:2])
-dr.line([gx - 8, gy - 8, gx + 8, gy + 8], fill='#94a3b8', width=3)
-dr.line([gx - 8, gy + 8, gx + 8, gy - 8], fill='#94a3b8', width=3)
-dr.text((gx - 330, gy - 10),
-        f'hand guess ({np.linalg.norm(th[:2] - HAND[:2]):.0f} m away)',
-        fill='#94a3b8', font=f_s)
-
-# arc de l'ecart angulaire
-R = 900 * S
+R = 1050 * S
 a1 = math.degrees(math.atan2(*(np.array(P(*rq[:2])) - (ex, ey))[::-1]))
-mid = o_e + (hill_mid - o_e) / np.linalg.norm((hill_mid - o_e)[:2]) * 900
 a2 = math.degrees(math.atan2(*(np.array(P(*hill_mid[:2])) - (ex, ey))[::-1]))
 lo, hi = sorted((a1 % 360, a2 % 360))
 if hi - lo > 180:
     lo, hi = hi, lo + 360
-dr.arc([ex - R, ey - R, ex + R, ey + R], lo, hi, fill='#facc15', width=4)
+dr.arc([ex - R, ey - R, ex + R, ey + R], lo, hi, fill='#fbbf24', width=4)
+for aa, sgn in ((lo, -1), (hi, 1)):
+    rad = math.radians(aa)
+    tip = (ex + math.cos(rad) * R, ey + math.sin(rad) * R)
+    tang = math.radians(aa + sgn * 90)
+    for spread in (-0.35, 0.35):
+        dr.line([tip, (tip[0] + math.cos(tang + spread) * 16,
+                       tip[1] + math.sin(tang + spread) * 16)],
+                fill='#fbbf24', width=4)
 ma = math.radians((lo + hi) / 2)
-dr.text((ex + math.cos(ma) * (R + 26) - 60, ey + math.sin(ma) * (R + 26) - 14),
-        f'{abs(gap):.0f} deg', fill='#facc15', font=f_t)
+dr.text((ex + math.cos(ma) * (R + 30) - 46, ey + math.sin(ma) * (R + 30) - 40),
+        f'{abs(gap):.0f}°', fill='#fbbf24', font=f_h)
 
-img = Image.alpha_composite(img.convert('RGBA'), ov).convert('RGB')
-dr = ImageDraw.Draw(img)
-dr.text((28, 18), 'Explosion frame: the marked ridge cannot be the Ambrosia hill',
-        fill='#e2e8f0', font=f_t)
-dr.text((28, 70),
-        f'Camera resected on its two uncontested markings (billboard 0.0\', Rohde 0.0\') '
-        f'-> lands {np.linalg.norm(th[:2] - HAND[:2]):.0f} m from the hand guess, hfov {th[6]:.1f} (guess 40): the guess was good.',
-        fill='#94a3b8', font=f_s)
-d_c = np.asarray(cam_e.get_pixel_direction((1920, 864)), float)
-d_c /= np.linalg.norm(d_c)
-vh = hill_mid - o_e
-hill_off = math.degrees(math.acos(float(np.clip(d_c @ (vh / np.linalg.norm(vh)), -1, 1))))
-dr.text((28, 100),
-        f'From there the ridge marking points {abs(gap):.0f} deg away from the real hill: '
-        f'the hill sits {hill_off:.0f} deg off-axis, {hill_off - th[6] / 2:.0f} deg beyond the '
-        f'frame edge ({th[6] / 2:.0f} deg).',
-        fill='#94a3b8', font=f_s)
-dr.text((28, 130),
-        f'Dashed red: the yaw the camera would need ({yaw_fit:.0f} -> {(yaw_fit + gap) % 360:.0f}) '
-        f'- it would drag billboard & Rohde {abs(gap):.0f} deg (~{abs(gap) * 3840 / th[6]:.0f} px) off their pixels.',
-        fill='#94a3b8', font=f_s)
-dr.text((28, 160), 'Free-pose test (~1200 starts): no plausible pose reconciles all four markings; 37-102\' irreducible.',
-        fill='#64748b', font=f_s)
+# cams + etiquettes
+bx, by = P(*o_b[:2])
+dr.ellipse([bx - 7, by - 7, bx + 7, by + 7], fill='#fb923c')
+dr.text((bx + 13, by - 10), 'Ambrosia 01 (Bikers)', fill='#fdba74', font=f_s)
+hx, hy = P(hill_mid[0], hill_mid[1])
+dr.text((hx - 260, hy - 96), 'AMBROSIA HILL', fill='#fb923c', font=f_h)
+dr.text((hx - 260, hy - 54), 'seen by the solved Bikers cam', fill='#d9834b', font=f_xs)
+
+rx, ry = P(*(o_e + d_ridge * 3350)[:2])
+dr.text((rx + 20, ry - 14), 'marked ridge', fill='#ff8787', font=f_m)
+dr.text((rx + 20, ry + 16), 'toward Mount Leonida', fill='#e07575', font=f_xs)
+
+gx2, gy2 = P(*ray_end(o_e[:2], yaw_fit + gap, 4250))
+dr.text((gx2 - 60, gy2 + 6), f'yaw needed for the hill ({gap:+.0f}°)',
+        fill='#f87171', font=f_xs)
+dr.text((gx2 - 60, gy2 + 32), 'billboard & Rohde would leave the frame',
+        fill='#b45f5f', font=f_xs)
+
+dr.ellipse([ex - 8, ey - 8, ex + 8, ey + 8], fill='#5b9dff')
+dr.ellipse([ex - 13, ey - 13, ex + 13, ey + 13], outline='#5b9dff', width=2)
+dr.text((ex + 20, ey - 4), 'EXPLOSION', fill='#93c5fd', font=f_h)
+dr.text((ex + 20, ey + 36), f'fov {th[6]:.0f}° · 49 m from the hand guess',
+        fill='#7da4d8', font=f_xs)
+gxx, gyy = P(*HAND[:2])
+dr.line([gxx - 8, gyy - 8, gxx + 8, gyy + 8], fill='#9aa8ba', width=3)
+dr.line([gxx - 8, gyy + 8, gxx + 8, gyy - 8], fill='#9aa8ba', width=3)
+
+# mini-legende bas-gauche
+lx, ly = 34, H - 168
+dr.rounded_rectangle([lx - 16, ly - 16, lx + 620, ly + 138], radius=14,
+                     fill=(13, 18, 27, 235), outline='#232e3d', width=2)
+sw = 34
+dr.rectangle([lx, ly + 2, lx + sw, ly + 18], fill=(43, 74, 122))
+dr.text((lx + sw + 12, ly - 2), 'what the Explosion frame covers (fit: anchors 0.0′)',
+        fill='#c3d2e6', font=f_xs)
+dr.line([lx, ly + 44, lx + sw, ly + 44], fill='#ff6b6b', width=4)
+dr.text((lx + sw + 12, ly + 32), 'where its marked “hill” actually points',
+        fill='#c3d2e6', font=f_xs)
+dr.rectangle([lx, ly + 70, lx + sw, ly + 86], fill=(160, 95, 42))
+dr.text((lx + sw + 12, ly + 66), 'the real Ambrosia Hill — 21° away, outside the frame',
+        fill='#c3d2e6', font=f_xs)
+dashed((lx, ly + 112), (lx + sw, ly + 112), '#f87171', 3, dash=8)
+dr.text((lx + sw + 12, ly + 100), 'the yaw it would take — impossible without losing the anchors',
+        fill='#c3d2e6', font=f_xs)
+
 # echelle + nord
-sx, sy = P(XMAX - 1150, YMIN + 120)
-dr.line([sx, sy, sx + 1000 * S, sy], fill='#e2e8f0', width=4)
-dr.text((sx + 150, sy - 34), '1 km', fill='#e2e8f0', font=f_s)
-nx, ny = P(XMAX - 250, YMIN + 350)
-dr.line([nx, ny, nx, ny - 60], fill='#e2e8f0', width=4)
-dr.polygon([nx - 8, ny - 55, nx + 8, ny - 55, nx, ny - 80], fill='#e2e8f0')
-dr.text((nx - 8, ny + 8), 'N', fill='#e2e8f0', font=f_m)
+sx, sy = W - 520, H - 46
+dr.line([sx, sy, sx + 1000 * S, sy], fill='#c3d2e6', width=4)
+dr.line([sx, sy - 8, sx, sy + 8], fill='#c3d2e6', width=3)
+dr.line([sx + 1000 * S, sy - 8, sx + 1000 * S, sy + 8], fill='#c3d2e6', width=3)
+dr.text((sx + 1000 * S / 2 - 28, sy - 40), '1 km', fill='#c3d2e6', font=f_s)
+nx, ny = W - 70, H - 150
+dr.line([nx, ny, nx, ny - 56], fill='#c3d2e6', width=4)
+dr.polygon([nx - 9, ny - 50, nx + 9, ny - 50, nx, ny - 78], fill='#c3d2e6')
+dr.text((nx - 9, ny + 8), 'N', fill='#c3d2e6', font=f_m)
 
 out = os.path.join(REPO, 'tools', 'generated', 'ambrosia_bounty',
                    'explosion_hill_map.png')
 os.makedirs(os.path.dirname(out), exist_ok=True)
-img.save(out)
+img.convert('RGB').save(out)
 print('->', out)
