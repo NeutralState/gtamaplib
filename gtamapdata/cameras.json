@@ -2923,17 +2923,17 @@
   "id": "T2/58",
   "player": null,
   "xyz": [
-   -1264.99,
-   49.51,
-   34.1
+   -1196.88,
+   120.79,
+   42.76
   ],
   "ypr": [
-   324.842,
-   -7.094,
-   0.13
+   326.238,
+   -6.932,
+   0.128
   ],
   "fov": [
-   43.962,
+   43.819,
    null
   ],
   "size": [
@@ -2941,7 +2941,7 @@
    1728
   ],
   "source": "Trailer 2 [3539]",
-  "note": "pose conditionnelle V2 (2026-07-22, apres re-resolution d'Interchange): 3 pairings (billboard T+B via Interchange re-resolue, Rohde via Metro) + verticalite monde du mat + prior scene T2/58. Clics T/B Alexandre = la variete passe de 5-DOF a ~2 + doctrine roll~0. Ancienne devinette: xyz(-1030,100,20) ypr(0,-4.6,0) fov 40."
+  "note": "pose conditionnelle V3 (2026-07-22, apres Interchange V2/WDNA): 3 pairings (billboard T+B via Interchange, Rohde via Metro) + verticalite mat + prior scene T2/58. Interchange desormais surdeterminee (4 points fixes) -> rayons billboard durcis. Devinette d'origine: xyz(-1030,100,20) ypr(0,-4.6,0) fov 40."
  },
  "Park (Mobile Phone)": {
   "id": "T2/59",
