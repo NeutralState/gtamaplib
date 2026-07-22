@@ -28,7 +28,7 @@ from scipy.optimize import minimize
 import common
 
 HAND = np.array([-1030.0, 100.0, 20.0])       # devinette existante
-RIDGE_PX = (310, 290)                          # 'Mount Leonida Ridge (Explosion)'
+RIDGE_PX = (310, 290)                          # 'Unidentified Ridge (Explosion)'
 ANCHORS = [('Interchange', 'Tall Billboard near Interchange', (225, 55)),
            ('Metro (NE) (B)', 'Rohde Building (BSW)', (3306, 373))]
 HILL = ['Ambrosia Hill (TW)', 'Ambrosia Hill (BW)',
@@ -251,12 +251,12 @@ dr.text((hx - 270, hy - 72), 'seen by S2/56 (solved) · claimed by T2/52',
 
 rx, ry = P(*(o_e + d_ridge * 3350)[:2])
 dr.text((rx + 20, ry - 14), 'marked ridge', fill='#ff8787', font=f_m, stroke_width=3, stroke_fill=(9, 13, 20))
-dr.text((rx + 20, ry + 16), 'toward Mount Leonida', fill='#e07575', font=f_xs, stroke_width=3, stroke_fill=(9, 13, 20))
+dr.text((rx + 20, ry + 16), 'some big mountain up north', fill='#e07575', font=f_xs, stroke_width=3, stroke_fill=(9, 13, 20))
 # tag Leonida au bout du rayon
 t_leo = (4550 - o_e[1]) / d_ridge[1]
 lx2, ly2 = P(*(o_e + d_ridge * t_leo)[:2])
-dr.text((lx2 + 24, ly2 - 10), 'MOUNT LEONIDA', fill='#ff9d9d', font=f_m, stroke_width=3, stroke_fill=(9, 13, 20))
-dr.text((lx2 + 24, ly2 + 20), 'different mountain, further north (unsolved)',
+dr.text((lx2 + 24, ly2 - 10), 'UNIDENTIFIED MOUNTAIN', fill='#ff9d9d', font=f_m, stroke_width=3, stroke_fill=(9, 13, 20))
+dr.text((lx2 + 24, ly2 + 20), 'annotated “Mount Leonida” — unverified, but NOT the hill',
         fill='#c76a6a', font=f_xs, stroke_width=3, stroke_fill=(9, 13, 20))
 
 # Empty Lot (T2/52): revendique la meme colline, intestable
