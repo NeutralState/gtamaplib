@@ -2802,28 +2802,28 @@
   },
   "Billboard with Irregular Shape": {
     "xyz": [
-      -2942.6288143017214,
-      4356.583933645674,
-      51.476483405264986
+      -2943.171,
+      4329.143,
+      46.555
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 01 (Bikers)"
     ],
-    "error_m": 4.513,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "Billboard with Oval Motif #1": {
     "xyz": [
-      -3031.11122800688,
-      4340.768410448492,
-      60.89392184942293
+      -3032.158,
+      4313.442,
+      56.103
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 01 (Bikers)"
     ],
-    "error_m": 1.9,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "Light Pollution (A)": {
@@ -2877,41 +2877,41 @@
   },
   "Water Tower near Prison": {
     "xyz": [
-      -5164.284082237489,
-      1550.6266992458177,
-      97.27515689248057
+      -5157.871,
+      1555.668,
+      94.89
     ],
     "source_cameras": [
       "Loading Zone near Prison (SW)",
       "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 0.196,
+    "error_m": null,
     "zone": "port_gellhorn"
   },
   "Wheelabrator South Broward": {
     "xyz": [
-      -2403.8472063953964,
-      2373.156887554557,
-      96.2953225200508
+      -2401.433,
+      2359.092,
+      100.244
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 4.44,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "Wheelabrator South Broward (W)": {
     "xyz": [
-      -2453.126004111915,
-      2514.021787136541,
-      52.22226566649295
+      -2466.379,
+      2418.778,
+      52.075
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.019,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "102180 Overseas Hwy": {
@@ -4496,15 +4496,15 @@
   },
   "Large Billboard (Ambrosia)": {
     "xyz": [
-      -2908.755002901637,
-      4162.461962397387,
-      35.589588725023745
+      -2909.742,
+      4133.805,
+      30.9
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 01 (Bikers)"
     ],
-    "error_m": 6.517,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "Sunshine Skyway Bridge (N)": {
@@ -4654,16 +4654,16 @@
   },
   "1500 Sonora Ave (Tank)": {
     "xyz": [
-      -2969.9918641940008,
-      3683.840714925309,
-      40.12130062944038
+      -3009.682,
+      3543.693,
+      34.067
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 10.254,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "Easy Hill": {
@@ -4711,99 +4711,99 @@
   },
   "US Sugar Mill (Factory)": {
     "xyz": [
-      -3019.217422465268,
-      3332.4648078286514,
-      102.0947032900674
+      -3064.291,
+      3197.86,
+      94.89
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 3.588,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "USSM Smokestack (4)": {
     "xyz": [
-      -2913.7108970445192,
-      3560.448407738089,
-      98.35634956338727
+      -2948.146,
+      3418.355,
+      93.917
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 6.971,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "USSM Smokestack (5)": {
     "xyz": [
-      -2950.055445403544,
-      3533.8207928164925,
-      80.20275109131583
+      -2986.237,
+      3393.685,
+      74.712
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 8.79,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "USSM Smokestack (6)": {
     "xyz": [
-      -2956.7022201946634,
-      3536.0609964390915,
-      84.64346709497084
+      -2993.194,
+      3396.204,
+      79.269
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 9.01,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "USSM Smokestack (7)": {
     "xyz": [
-      -2983.8701588372655,
-      3536.621342913991,
-      98.07465919586878
+      -3020.759,
+      3398.034,
+      92.996
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 12.398,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "USSM Smokestack (8)": {
     "xyz": [
-      -3035.1170326794077,
-      3608.044530107069,
-      46.89406322948301
+      -3074.842,
+      3471.47,
+      41.717
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 16.82,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "USSM Smokestack (9)": {
     "xyz": [
-      -3041.1107881840776,
-      3610.9892789181295,
-      56.94198929455622
+      -3081.497,
+      3474.282,
+      52.132
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 16.965,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "1500 Sonora Ave (Silo)": {
@@ -4821,67 +4821,67 @@
   },
   "USSM Smokestack (1)": {
     "xyz": [
-      -2741.5334244930386,
-      3671.516099743604,
-      59.59039323149794
+      -2769.985,
+      3491.796,
+      53.327
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 2.578,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "USSM Smokestack (10)": {
     "xyz": [
-      -2952.1125489052256,
-      3753.80490850261,
-      59.54021247821795
+      -2995.839,
+      3604.463,
+      55.479
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 2.635,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "USSM Smokestack (11)": {
     "xyz": [
-      -2954.880754025479,
-      3759.474765264335,
-      49.45736155020987
+      -2998.949,
+      3610.731,
+      44.161
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 1.044,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "USSM Smokestack (2)": {
     "xyz": [
-      -2746.492852517019,
-      3674.3805145114457,
-      49.61140403640975
+      -2772.702,
+      3509.479,
+      42.626
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 4.855,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "USSM Smokestack (3)": {
     "xyz": [
-      -2953.4545762164967,
-      3042.838732029929,
-      41.77664111008865
+      -3008.335,
+      2910.469,
+      32.153
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 1.65,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "1000 Venetian Way (4)": {
@@ -7653,28 +7653,28 @@
   },
   "Billboard with Diversity Motif (E)": {
     "xyz": [
-      -2770.955198495439,
-      3852.787924628506,
-      33.020090024501
+      -2771.906,
+      3819.75,
+      28.633
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 01 (Bikers)"
     ],
-    "error_m": 1.384,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "Billboard with Diversity Motif (W)": {
     "xyz": [
-      -2786.404959408655,
-      3851.4787382305813,
-      33.59458189784569
+      -2787.344,
+      3819.283,
+      29.075
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 01 (Bikers)"
     ],
-    "error_m": 1.138,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "Cardozo South Beach": {
@@ -8013,67 +8013,75 @@
   },
   "1500 Sonora Ave (Silo) (L)": {
     "xyz": [
-      -2744.3436203859414,
-      3706.0505117709404,
-      63.50963428778905
+      -2744.787,
+      3660.69,
+      56.458
     ],
     "source_cameras": [
       "Ambrosia Postcard (X)",
       "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 9.151,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "1500 Sonora Ave (Silo) (N)": {
-    "xyz": null,
+    "xyz": [
+      -2748.696,
+      3677.435,
+      47.77
+    ],
     "source_cameras": [],
-    "error_m": 50.742,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "1500 Sonora Ave (Silo) (R)": {
-    "xyz": null,
+    "xyz": [
+      -2757.327,
+      3670.055,
+      56.492
+    ],
     "source_cameras": [],
-    "error_m": 14.163,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "1500 Sonora Ave (Tank) (L)": {
     "xyz": [
-      -2963.291191939637,
-      3661.160384959949,
-      39.883856385108786
+      -2998.617,
+      3520.268,
+      33.946
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 21.194,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "1500 Sonora Ave (Tank) (R)": {
     "xyz": [
-      -2973.5625799067943,
-      3706.9918294986846,
-      40.627272647578366
+      -3008.014,
+      3567.117,
+      34.596
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 3.947,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "Industrial Building (Ambrosia)": {
     "xyz": [
-      -2743.2696604300195,
-      3553.7974546812893,
-      49.99556800467231
+      -2806.571,
+      3164.008,
+      35.495
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 0.737,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "Sebring Water Tower (B)": {
@@ -8092,42 +8100,42 @@
   },
   "US Sugar Mill (Factory) (R)": {
     "xyz": [
-      -3020.3434000931184,
-      3331.5807133785224,
-      72.73544643528436
+      -3061.661,
+      3198.021,
+      65.473
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 2.75,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "White Silos (W)": {
     "xyz": [
-      -2877.9806315107626,
-      3563.3738128422046,
-      34.73585251560212
+      -2907.032,
+      3426.884,
+      28.083
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 4.273,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "Wheelabrator South Broward (3B)": {
     "xyz": [
-      -2461.283718799655,
-      2507.3219660198365,
-      43.34555388479366
+      -2458.421,
+      2424.256,
+      37.671
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)"
     ],
-    "error_m": 1.708,
+    "error_m": null,
     "zone": "ambrosia"
   },
   "Billboard (South Ambrosia)": {
@@ -11423,7 +11431,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -3747.331,
+      -730.669,
+      123.466
+    ],
     "zone": null
   },
   "Biscayne Island (E)": {
@@ -11849,15 +11861,15 @@
   },
   "Embassy Suites Miami Airport (?)": {
     "author": "rlx",
-    "error_m": 2.324,
+    "error_m": null,
     "source_cameras": [
       "Vice City Postcard",
       "Ambrosia 02 (Panorama)"
     ],
     "xyz": [
-      -1925.9603904357175,
-      18.62610580561569,
-      48.94550497748419
+      -1921.934,
+      22.385,
+      47.407
     ],
     "zone": null
   },
@@ -11886,7 +11898,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2820.988,
+      2872.284,
+      42.705
+    ],
     "zone": null
   },
   "Meditteranea Condo": {
@@ -12504,15 +12520,15 @@
   },
   "Billboard with Diversity Motif (TW)": {
     "author": "rlx",
-    "error_m": 0.673,
+    "error_m": null,
     "source_cameras": [
       "Ambrosia 01 (Bikers)",
       "Ambrosia 02 (Panorama)"
     ],
     "xyz": [
-      -2786.393762547255,
-      3851.445560728187,
-      33.60277546336694
+      -2787.344,
+      3819.283,
+      29.075
     ],
     "zone": null
   },
@@ -12520,7 +12536,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2746.303,
+      3674.132,
+      49.753
+    ],
     "zone": null
   },
   "Canal A (Ambrosia) (2)": {
@@ -12534,7 +12554,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2754.218,
+      3674.772,
+      51.246
+    ],
     "zone": null
   },
   "Path A (Ambrosia) (1)": {
@@ -12576,7 +12600,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2752.126,
+      3671.849,
+      51.188
+    ],
     "zone": null
   },
   "Train Signal (Ambrosia) (1W)": {
@@ -12682,7 +12710,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2809.9,
+      2868.987,
+      42.892
+    ],
     "zone": null
   },
   "Train Signal (Ambrosia) (4W)": {
@@ -12728,7 +12760,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2744.927,
+      3673.479,
+      51.283
+    ],
     "zone": null
   },
   "Path A (Ambrosia) (2)": {
@@ -12802,7 +12838,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2755.752,
+      3672.799,
+      49.692
+    ],
     "zone": null
   },
   "Jason's House (Window 3) (BN)": {
@@ -12862,7 +12902,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2754.359,
+      3674.251,
+      54.642
+    ],
     "zone": null
   },
   "Jason's House (Window 5) (TN)": {
@@ -12911,7 +12955,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2751.942,
+      3663.431,
+      19.862
+    ],
     "zone": null
   },
   "Jason's House (Window 4) (BN)": {
@@ -12966,15 +13014,15 @@
   },
   "Billboard with Oval Motif #1 (TE)": {
     "author": "rlx",
-    "error_m": 0.317,
+    "error_m": null,
     "source_cameras": [
       "Ambrosia 01 (Bikers)",
       "Ambrosia 02 (Panorama)"
     ],
     "xyz": [
-      -3024.5125363777806,
-      4339.071270873736,
-      60.772489006365824
+      -3025.541,
+      4311.728,
+      55.945
     ],
     "zone": null
   },
@@ -12993,14 +13041,22 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2745.959,
+      3662.376,
+      52.981
+    ],
     "zone": null
   },
   "STR04": {
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2748.94,
+      3676.373,
+      47.638
+    ],
     "zone": null
   },
   "Train Signal (Ambrosia) (1E)": {
@@ -13014,7 +13070,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2745.348,
+      3665.268,
+      49.573
+    ],
     "zone": null
   },
   "Ambrosia Main St (Z)": {
@@ -13047,15 +13107,15 @@
   },
   "Billboard with Oval Motif #1 (BE)": {
     "author": "rlx",
-    "error_m": 2.074,
+    "error_m": null,
     "source_cameras": [
       "Ambrosia 01 (Bikers)",
       "Ambrosia 02 (Panorama)"
     ],
     "xyz": [
-      -3024.5133990946315,
-      4339.395678138704,
-      52.45507256361428
+      -3025.605,
+      4311.926,
+      47.868
     ],
     "zone": null
   },
@@ -13113,7 +13173,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2892.574,
+      3416.776,
+      27.804
+    ],
     "zone": null
   },
   "Jason's House (Front Door) (TW)": {
@@ -13213,15 +13277,15 @@
   },
   "White Silos (E) (NE)": {
     "author": "rlx",
-    "error_m": 4.665,
+    "error_m": null,
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
     "xyz": [
-      -2833.124690756741,
-      3580.2110117471134,
-      36.18945458458706
+      -2863.896,
+      3434.107,
+      28.6
     ],
     "zone": null
   },
@@ -13234,15 +13298,15 @@
   },
   "Billboard with Oval Motif #1 (TW)": {
     "author": "rlx",
-    "error_m": 0.069,
+    "error_m": null,
     "source_cameras": [
       "Ambrosia 01 (Bikers)",
       "Ambrosia 02 (Panorama)"
     ],
     "xyz": [
-      -3037.3459210608976,
-      4341.374515380739,
-      60.60245909473084
+      -3038.433,
+      4314.071,
+      55.736
     ],
     "zone": null
   },
@@ -13293,7 +13357,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2897.495,
+      3423.064,
+      27.82
+    ],
     "zone": null
   },
   "Jason's House (Pillar 1) (BNE)": {
@@ -13335,7 +13403,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2747.161,
+      3677.614,
+      51.321
+    ],
     "zone": null
   },
   "Jason's House (Basketball Hoop) (BN)": {
@@ -13349,7 +13421,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2746.628,
+      3672.704,
+      53.129
+    ],
     "zone": null
   },
   "Jason's House (Pillar 9) (BSE)": {
@@ -13368,15 +13444,15 @@
   },
   "Billboard with Oval Motif #1 (BW)": {
     "author": "rlx",
-    "error_m": 6.812,
+    "error_m": null,
     "source_cameras": [
       "Ambrosia 01 (Bikers)",
       "Ambrosia 02 (Panorama)"
     ],
     "xyz": [
-      -3038.0940128899783,
-      4340.312490048654,
-      51.69436213342695
+      -3038.387,
+      4314.028,
+      47.666
     ],
     "zone": null
   },
@@ -13478,15 +13554,15 @@
   },
   "Large Billboard (Ambrosia) (TE)": {
     "author": "rlx",
-    "error_m": 0.514,
+    "error_m": null,
     "source_cameras": [
       "Ambrosia 01 (Bikers)",
       "Ambrosia 02 (Panorama)"
     ],
     "xyz": [
-      -2898.392983696927,
-      4164.8854573558165,
-      35.214503670347376
+      -2899.327,
+      4136.221,
+      30.473
     ],
     "zone": null
   },
@@ -13542,15 +13618,15 @@
   },
   "Billboard with Irregular Shape (C)": {
     "author": "rlx",
-    "error_m": 0.059,
+    "error_m": null,
     "source_cameras": [
       "Ambrosia 01 (Bikers)",
       "Ambrosia 02 (Panorama)"
     ],
     "xyz": [
-      -2942.5636683402154,
-      4356.439736499035,
-      44.84600441462932
+      -2943.107,
+      4329.001,
+      39.917
     ],
     "zone": null
   },
@@ -13558,7 +13634,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2749.55,
+      3675.094,
+      49.757
+    ],
     "zone": null
   },
   "US Sugar Mill (Office) (B)": {
@@ -13604,7 +13684,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2917.526,
+      3427.106,
+      27.756
+    ],
     "zone": null
   },
   "Jason's House (Window 4) (BS)": {
@@ -13618,7 +13702,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2749.784,
+      3674.136,
+      53.11
+    ],
     "zone": null
   },
   "Route 35 (G)": {
@@ -13630,15 +13718,15 @@
   },
   "Billboard with Diversity Motif (TE)": {
     "author": "rlx",
-    "error_m": 0.802,
+    "error_m": null,
     "source_cameras": [
       "Ambrosia 01 (Bikers)",
       "Ambrosia 02 (Panorama)"
     ],
     "xyz": [
-      -2770.8819627958565,
-      3852.4195443117965,
-      32.93476311973858
+      -2771.823,
+      3819.395,
+      28.595
     ],
     "zone": null
   },
@@ -13646,7 +13734,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2753.533,
+      3672.581,
+      53.092
+    ],
     "zone": null
   },
   "Route 35 (I)": {
@@ -13772,14 +13864,22 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2747.058,
+      3668.401,
+      47.422
+    ],
     "zone": null
   },
   "STR05": {
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2752.404,
+      3676.206,
+      47.64
+    ],
     "zone": null
   },
   "Route 35 (Y)": {
@@ -13793,14 +13893,22 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2753.379,
+      3673.165,
+      49.708
+    ],
     "zone": null
   },
   "Dark Billboard (Ambrosia) (TW)": {
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2830.835,
+      2881.134,
+      42.882
+    ],
     "zone": null
   },
   "Jason's House (Pillar 4) (BSW)": {
@@ -13842,7 +13950,11 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
+    "xyz": [
+      -2755.875,
+      3672.352,
+      53.099
+    ],
     "zone": null
   },
   "Jason's House (Pillar 5) (TSW)": {
@@ -15448,41 +15560,41 @@
   },
   "Factory A (Ambrosia) (S)": {
     "xyz": [
-      -2977.3720452022585,
-      3450.2634241512515,
-      46.72308859048312
+      -3017.543,
+      3312.476,
+      39.722
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 2.878,
+    "error_m": null,
     "zone": "rlx_markings_0713"
   },
   "Factory A (Ambrosia) (N)": {
     "xyz": [
-      -2968.54249761641,
-      3482.4652833169794,
-      46.00955396528366
+      -3007.353,
+      3343.884,
+      39.377
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 1.705,
+    "error_m": null,
     "zone": "rlx_markings_0713"
   },
   "Factory D (Ambrosia) (NW)": {
     "xyz": [
-      -3179.073713535113,
-      3586.8918250983743,
-      38.44664586093269
+      -3228.331,
+      3457.991,
+      34.045
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 3.457,
+    "error_m": null,
     "zone": "rlx_markings_0713"
   },
   "Road E (Ambrosia)": {
@@ -16205,29 +16317,29 @@
   },
   "Wheelabrator South Broward (TE)": {
     "xyz": [
-      -2356.311918728157,
-      2439.9717708278595,
-      58.42065220481098
+      -2354.373,
+      2448.019,
+      63.106
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 4.23,
+    "error_m": null,
     "zone": "leonida_keys",
     "author": "rlx"
   },
   "Wheelabrator South Broward (TW)": {
     "xyz": [
-      -2409.7707457543534,
-      2435.11128370787,
-      58.29745218614519
+      -2407.362,
+      2445.518,
+      63.099
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 4.329,
+    "error_m": null,
     "zone": "leonida_keys",
     "author": "rlx"
   },
@@ -16268,27 +16380,35 @@
   },
   "US Sugar Mill (Factory) (A)": {
     "xyz": [
-      -3024.405756740818,
-      3332.1465342137117,
-      101.09467119227651
+      -3058.873,
+      3197.445,
+      96.764
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 3.932,
+    "error_m": null,
     "zone": "ambrosia",
     "author": "rlx"
   },
   "US Sugar Mill (Factory) (AC)": {
-    "xyz": null,
+    "xyz": [
+      -3061.057,
+      3198.178,
+      86.844
+    ],
     "source_cameras": [],
     "error_m": null,
     "zone": "ambrosia",
     "author": "rlx"
   },
   "US Sugar Mill (Factory) (NW)": {
-    "xyz": null,
+    "xyz": [
+      -3066.289,
+      3232.083,
+      65.114
+    ],
     "source_cameras": [],
     "error_m": null,
     "zone": "ambrosia",
@@ -16302,7 +16422,11 @@
     "author": "rlx"
   },
   "US Sugar Mill (Factory) (SE)": {
-    "xyz": null,
+    "xyz": [
+      -3047.729,
+      3185.288,
+      65.122
+    ],
     "source_cameras": [],
     "error_m": null,
     "zone": "ambrosia",
@@ -16324,20 +16448,24 @@
   },
   "Wheelabrator South Broward (R)": {
     "xyz": [
-      -2424.9982350864325,
-      2513.852017962041,
-      52.36357332122279
+      -2421.314,
+      2431.359,
+      46.235
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia 02 (Panorama)"
     ],
-    "error_m": 2.859,
+    "error_m": null,
     "zone": "ambrosia",
     "author": "rlx"
   },
   "Billboard (South Ambrosia) (TE)": {
-    "xyz": null,
+    "xyz": [
+      -2956.747,
+      2524.619,
+      33.766
+    ],
     "source_cameras": [],
     "error_m": null,
     "zone": "ambrosia",
@@ -16366,15 +16494,15 @@
   },
   "Industrial Building 2 (Ambrosia) (TE)": {
     "xyz": [
-      -2740.3920313181206,
-      3373.6738219036342,
-      35.36782036391473
+      -2777.234,
+      3227.098,
+      27.489
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 1.246,
+    "error_m": null,
     "zone": "ambrosia",
     "author": "rlx"
   },
@@ -16408,29 +16536,29 @@
   },
   "US Sugar Mill (Factory) (P2)": {
     "xyz": [
-      -3018.6252603405073,
-      3384.9038262484864,
-      66.0688739760565
+      -3062.354,
+      3249.671,
+      59.155
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 2.197,
+    "error_m": null,
     "zone": "ambrosia",
     "author": "rlx"
   },
   "US Sugar Mill (Factory) (P3)": {
     "xyz": [
-      -3017.7501062602914,
-      3394.882835893707,
-      65.92655069903704
+      -3061.127,
+      3259.487,
+      59.108
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 1.99,
+    "error_m": null,
     "zone": "ambrosia",
     "author": "rlx"
   },
@@ -17094,5 +17222,11 @@
       "value": 18.2,
       "note": "b-level: ligne basse visible (convention Alexandre 07-20). z=18.2 par ray-x-verticale Metro (NE) (B) (4 aretes, spread 0.22m, quasi-insensible yaw/profondeur, sensibilite pitch ~1.3m/0.1deg) + concorde avec z rlx 18.21. xy = coin de toit respectif (alignement vertical)"
     }
+  },
+  "Marina Blue (NW)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown"
   }
 }

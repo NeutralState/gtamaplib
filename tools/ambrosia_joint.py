@@ -116,9 +116,10 @@ def collect(px, lms, cams, use_brator=True):
 
 
 class Solver:
-    def __init__(self, zone, anchors, ext_rays, lms, cams, init='ours'):
+    def __init__(self, zone, anchors, ext_rays, lms, cams, init='ours', use_corpus=False):
         self.zone, self.anchors, self.ext_rays = zone, anchors, ext_rays
         self.lms, self.cams_json = lms, cams
+        self.use_corpus = use_corpus
         self.theta = {}
         for c in AMB:
             e = cams[c]
@@ -129,6 +130,13 @@ class Solver:
                 hfov = e['fov'][0] if e['fov'] and e['fov'][0] else 55.0
             self.theta[c] = [x, y, z, yaw, pitch, roll, hfov]
         self._cache = {}
+        self._single_px = {}
+        for (cn, ln) in [('Ambrosia Postcard (X)', 'Black Bison (1)'),
+                         ('Ambrosia Postcard (X)', 'Black Bison (2)'),
+                         ('Ambrosia Postcard (X)', 'Worker (Ambrosia) (B)'),
+                         ('Ambrosia Postcard (X)', 'Worker (Ambrosia) (T)')]:
+            px_all = json.load(open(os.path.join(REPO, 'gtamapdata', 'pixels.json')))
+            self._single_px[(cn, ln)] = (px_all.get(cn) or {}).get(ln)
         # bornes: xyz ±250m, yaw ±5, pitch ±3, roll ±1.5, hfov ±6
         self.bounds = {}
         for c in AMB:
@@ -160,6 +168,78 @@ class Solver:
         rays += self.ext_rays.get(lm, [])
         return rays
 
+    def _tri(self, lm):
+        """Triangule un LM de zone avec les rayons courants (ou None)."""
+        if lm not in self.zone:
+            return None
+        rays = self.rays_for(lm)
+        if not rays or len(rays) < 2:
+            return None
+        try:
+            P = np.asarray(ray_ls_point(rays), float)
+        except Exception:
+            return None
+        return P if np.all(np.isfinite(P)) else None
+
+    def _pair_depth_point(self, cam_name, lm_a, lm_b, true_len):
+        """[corpus rlx] paire de pixels dans UNE cam + longueur connue ->
+        position 3D du milieu (profondeur = L / separation angulaire)."""
+        cam = self.cam(cam_name)
+        px = json  # placeholder
+        pa = self._single_px.get((cam_name, lm_a))
+        pb = self._single_px.get((cam_name, lm_b))
+        if pa is None or pb is None:
+            return None
+        try:
+            da = np.asarray(cam.get_pixel_direction(pa), float)
+            db = np.asarray(cam.get_pixel_direction(pb), float)
+        except Exception:
+            return None
+        if da is None or db is None:
+            return None
+        da /= np.linalg.norm(da); db /= np.linalg.norm(db)
+        ang = math.acos(float(np.clip(np.dot(da, db), -1, 1)))
+        if ang < 1e-5:
+            return None
+        d = true_len / (2.0 * math.tan(ang / 2.0))
+        mid = np.asarray(cam.xyz, float) + d * (da + db) / np.linalg.norm(da + db)
+        return mid
+
+    def corpus_cost(self, detail=None):
+        """Contraintes du corpus rlx (fil Discord #23, config 2026-07-16):
+        silo_ratio=3.2, bison_length=6.00, worker_height=1.80,
+        bison colle au silo, worker au sol de la zone silo."""
+        t = 0.0
+        # silo: hauteur = ratio 3.2 x largeur (L-R), top a (L), base a (B)
+        L = self._tri('1500 Sonora Ave (Silo) (L)')
+        R = self._tri('1500 Sonora Ave (Silo) (R)')
+        B = self._tri('1500 Sonora Ave (Silo) (B)')
+        if L is not None and R is not None and B is not None:
+            w = float(np.hypot(L[0] - R[0], L[1] - R[1]))
+            h = float((L[2] + R[2]) / 2 - B[2])
+            if w > 1:
+                t += 2.0 * math.log1p(((h / w - 3.2) / 0.3) ** 2)
+                if detail is not None:
+                    detail['_silo_ratio'] = (np.array([w, h, h / w]), None)
+        # bison (Postcard): longueur 6.00 -> profondeur -> le bison est PRES du silo
+        bis = self._pair_depth_point('Ambrosia Postcard (X)',
+                                     'Black Bison (1)', 'Black Bison (2)', 6.00)
+        silo_base = B if B is not None else self._tri('1500 Sonora Ave (Silo) (N)')
+        if bis is not None and silo_base is not None:
+            dxy = float(np.hypot(bis[0] - silo_base[0], bis[1] - silo_base[1]))
+            t += 2.0 * math.log1p((dxy / 25.0) ** 2)      # bison a <~25m du silo
+            if detail is not None:
+                detail['_bison'] = (bis, dxy)
+        # worker (Postcard): hauteur 1.80 -> profondeur -> au sol pres du silo
+        wk = self._pair_depth_point('Ambrosia Postcard (X)',
+                                    'Worker (Ambrosia) (B)', 'Worker (Ambrosia) (T)', 1.80)
+        if wk is not None and silo_base is not None:
+            dxy = float(np.hypot(wk[0] - silo_base[0], wk[1] - silo_base[1]))
+            t += 1.0 * math.log1p((dxy / 60.0) ** 2)
+            if detail is not None:
+                detail['_worker'] = (wk, dxy)
+        return t
+
     def cost(self, collect_detail=False):
         tot = 0.0
         detail = {}
@@ -186,6 +266,9 @@ class Solver:
                 tot += math.log1p((e / 2.0) ** 2)      # Cauchy: les aberrants saturent
             if collect_detail:
                 detail[lm] = (P, max(errs) if errs else None)
+        # 1b) [V2 corpus rlx] contraintes structurelles douces
+        if self.use_corpus:
+            tot += self.corpus_cost(detail if collect_detail else None)
         # 2) ancres fixes: reprojection angulaire
         for lm, obs in self.anchors.items():
             X = self.lms[lm]['xyz']
@@ -239,6 +322,39 @@ class Solver:
         return best
 
 
+def sigmas(sv, dcost=2.0):
+    """Sensibilite par parametre: delta qui augmente le cout de +dcost
+    (profil 1D, les autres parametres figes) — la barre d'erreur honnete
+    du minimum local."""
+    base = sv.cost()
+    names = ['x', 'y', 'z', 'yaw', 'pitch', 'roll', 'hfov']
+    out = {}
+    for c in AMB:
+        row = []
+        for i in range(7):
+            step = [4.0, 4.0, 2.0, 0.15, 0.08, 0.05, 0.2][i]
+            old = sv.theta[c][i]
+            d = step
+            for _ in range(12):
+                sv.theta[c][i] = old + d
+                up = sv.cost() - base
+                sv.theta[c][i] = old
+                if up > dcost * 1.3:
+                    d *= 0.7
+                elif up < dcost * 0.7:
+                    d *= 1.4
+                else:
+                    break
+            row.append(d)
+        out[c] = row
+    print(f'\nSENSIBILITES (+{dcost} de cout):')
+    for c in AMB:
+        r = out[c]
+        print(f'  {c[:26]:26} dx±{r[0]:5.1f} dy±{r[1]:5.1f} dz±{r[2]:5.1f} '
+              f'dyaw±{r[3]:5.2f} dpitch±{r[4]:5.2f} droll±{r[5]:4.2f} dhfov±{r[6]:4.2f}')
+    return out
+
+
 def report(sv, lms):
     cost, detail = sv.cost(collect_detail=True)
     print(f'\ncost final: {cost:.3f}')
@@ -261,6 +377,12 @@ def report(sv, lms):
         print(f'  hauteur silo: {silo_top - silo_b:.2f} m (rlx attend ~45-48)')
     elif silo_top is not None:
         print(f'  silo top z: {silo_top:.2f} (base non triangulable)')
+    for tag, label in (('_silo_ratio', 'silo (w, h, ratio; rlx: ratio 3.2)'),
+                       ('_bison', 'bison 6.00m -> pos + dist au silo'),
+                       ('_worker', 'worker 1.80m -> pos + dist au silo')):
+        dd = detail.get(tag)
+        if dd:
+            print(f'  {label:44} {np.round(dd[0], 2)}  d={dd[1] if dd[1] is not None else "-"}')
     for name in ('Daytona Beach Water Tower', 'Sebring Water Tower', 'US Sugar Mill (Factory)',
                  'Wheelabrator South Broward (TE)', 'USSM Smokestack (7)'):
         d = detail.get(name)
@@ -275,6 +397,8 @@ def main():
     ap.add_argument('--rounds', type=int, default=60)
     ap.add_argument('--init', choices=['ours', 'rlx'], default='ours')
     ap.add_argument('--no-brator', action='store_true')
+    ap.add_argument('--corpus', action='store_true', help='contraintes structurelles rlx (V2)')
+    ap.add_argument('--sigma', action='store_true', help='calcule les sensibilites par parametre')
     ap.add_argument('--apply', action='store_true')
     args = ap.parse_args()
 
@@ -286,7 +410,7 @@ def main():
     print(f'ancres fixes: {list(anchors)}')
     print(f'monde brator: {not args.no_brator}   init: {args.init}')
 
-    sv = Solver(zone, anchors, ext_rays, lms, cams, init=args.init)
+    sv = Solver(zone, anchors, ext_rays, lms, cams, init=args.init, use_corpus=args.corpus)
     # quarantaine: LM dont le residu initial explose = appariement suspect
     # (ex: 'Ambrosia Hill' vue par Explosion n'est PAS la meme colline)
     _, det0 = sv.cost(collect_detail=True)
@@ -295,10 +419,12 @@ def main():
         print(f'QUARANTAINE ({len(bad)} LMs, residu initial > 90\'): {bad}')
         for lm in bad:
             zone.pop(lm, None)
-        sv = Solver(zone, anchors, ext_rays, lms, cams, init=args.init)
+        sv = Solver(zone, anchors, ext_rays, lms, cams, init=args.init, use_corpus=args.corpus)
     print(f'cost initial: {sv.cost():.3f}')
     sv.descend(rounds=args.rounds)
     report(sv, lms)
+    if args.sigma:
+        sigmas(sv)
 
     if args.apply:
         path = os.path.join(REPO, 'gtamapdata', 'cameras.json')
@@ -311,9 +437,26 @@ def main():
         tmp = path + '.tmp'
         json.dump(cj, open(tmp, 'w'), indent=2, ensure_ascii=True)
         os.replace(tmp, path)
+        # LMs de zone: xyz re-triangules par le solve (rayons externes inclus),
+        # ecrits seulement si le residu max est sain (<30')
+        _, det = sv.cost(collect_detail=True)
+        lp = os.path.join(REPO, 'gtamapdata', 'landmarks.json')
+        lj = json.load(open(lp))
+        n_lm = 0
+        for lm, (P, e) in det.items():
+            if lm.startswith('_') or e is None or e > 30.0:
+                continue
+            if lm not in lj or not isinstance(lj[lm], dict):
+                continue
+            lj[lm]['xyz'] = [round(float(v), 3) for v in P]
+            lj[lm]['error_m'] = None
+            n_lm += 1
+        tmp = lp + '.tmp'
+        json.dump(lj, open(tmp, 'w'), indent=2, ensure_ascii=True)
+        os.replace(tmp, lp)
         common.log_event('ambrosia_joint', 'poses_applied',
-                         reason=f'solve joint 4 cams, init={args.init}, brator={not args.no_brator}')
-        print('\nAPPLIED. Retrianguler les LMs de zone ensuite (cycle).')
+                         reason=f'solve joint 4 cams + {n_lm} LMs de zone, init={args.init}, brator={not args.no_brator}')
+        print(f'\nAPPLIED: 4 poses + {n_lm} LMs de zone.')
     else:
         print('\nDRY-RUN (--apply pour ecrire).')
 
