@@ -17231,7 +17231,7 @@
   "source_cameras": [],
   "error_m": null,
   "zone": null,
-  "note": "ex-'Ambrosia Hill' d'Explosion. Resection pose-libre 2026-07-21: PAS la colline du cluster Ambrosia (aucune pose plausible, 37-102' irreductibles). Identite POSITIVE inconnue: le pixel TW etait un dup exact du marquage 'Mount Leonida' de la meme frame, mais cette identification ML (issue de Kalaga, non resolue) est elle-meme non verifiee — pourrait etre n'importe quelle montagne au nord de downtown. Bearing solide depuis la pose resectee: az ~4.5."
+  "note": "ex-'Ambrosia Hill' d'Explosion. Resection pose-libre 2026-07-21: PAS la colline du cluster Ambrosia (aucune pose plausible, 37-102' irreductibles). Identite positive inconnue (le pixel TW etait un dup exact du marquage 'Mount Leonida', identification elle-meme non verifiee). RECHECK MANIFOLD 2026-07-22: avec 2 rayons d'ancrage seulement, la pose d'Explosion est sous-determinee (~5-DOF; seul pitch -7.5..-4.4 est contraint) -> le bearing az~4.5 vers la crete est CONDITIONNEL au prior de scene T2/58 (position ~devinette +-300m); sans prior il balaie 4-122 deg. A durcir via une 3e contrainte (ex: base du mat du Tall Billboard cliquee dans la frame Interchange -> ray x sol -> top du billboard fixe en xyz)."
  },
  "Lake Leonida (A)": {
   "xyz": [
