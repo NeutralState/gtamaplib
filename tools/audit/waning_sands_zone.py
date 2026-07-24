@@ -109,7 +109,7 @@ def on_land(cx, cy):
     # pas d'eau dans un rayon de 120m: au pitch -4.3 / z 32, le bas de la
     # frame montre le sol a ~80m devant et c'est de la TERRE -> la cam
     # n'est pas au ras de l'eau
-    r = int(120 / MPP)
+    r = int(100 / MPP)
     patch = WATER[max(0, iy_ - r):iy_ + r + 1, max(0, ix_ - r):ix_ + r + 1]
     return patch.size > 0 and not patch.any()
 
@@ -180,11 +180,14 @@ for iy, cy0 in enumerate(ys):
                 if okw:
                     good_centers.append(((s - WIN // 2) % N_AZ) * AZ_STEP)
         if good_centers:
-            feas[iy, ix] = True
+            # DECISION Alexandre 07-24: la frame A regarde l'OCEAN/le chenal
+            # (cote est), pas le lac -> seules les fenetres az 0-160 comptent
             gc = np.array(good_centers, float)
-            has_lake = bool(np.any((gc >= 200) & (gc <= 340)))     # regarde O/NO
-            has_chan = bool(np.any((gc <= 100) | (gc >= 345)))     # regarde N/NE/E
-            yawdir[iy, ix] = (1 if has_lake else 0) + (2 if has_chan else 0)
+            ocean = gc[(gc <= 160.0)]
+            if ocean.size:
+                feas[iy, ix] = True
+                a = np.radians(ocean)
+                yawdir[iy, ix] = math.degrees(math.atan2(np.sin(a).mean(), np.cos(a).mean())) % 360.0
 
 print(f'zone possible: {feas.sum()} cellules de {CELL}m ({feas.sum() * CELL * CELL / 1e6:.2f} km2)')
 
@@ -206,16 +209,17 @@ def P(x, y):
     return ((x - XMIN) * S, (YMAX - y) * S)
 
 
-COLS = {1: (34, 197, 94, 115),      # lac seulement
-        2: (249, 115, 22, 115),     # chenal seulement
-        3: (56, 189, 248, 115)}     # les deux possibles
 for iy, cy0 in enumerate(ys):
     for ix, cx0 in enumerate(xs):
         if not feas[iy, ix]:
             continue
         x0, y0 = P(cx0, cy0 + CELL)
         x1, y1 = P(cx0 + CELL, cy0)
-        do.rectangle([x0, y0, x1, y1], fill=COLS.get(int(yawdir[iy, ix]), (200, 200, 200, 110)))
+        do.rectangle([x0, y0, x1, y1], fill=(34, 197, 94, 120))
+        cxm, cym = (x0 + x1) / 2, (y0 + y1) / 2
+        rad = math.radians(yawdir[iy, ix])
+        do.line([cxm, cym, cxm - math.sin(rad) * 16, cym - math.cos(rad) * 16],
+                fill=(15, 23, 42, 235), width=2)
 # contour
 for iy in range(len(ys)):
     for ix in range(len(xs)):
@@ -252,7 +256,7 @@ dr.text((22, 60), 'constraints: 58deg window with no known tower + open water ah
         fill='#0f172a', font=f_xs, stroke_width=3, stroke_fill='#e2e8f0')
 dr.text((22, 86), '(frame bottom shows land ~80m ahead) + not inside any solved camera view (<3km)',
         fill='#0f172a', font=f_xs, stroke_width=3, stroke_fill='#e2e8f0')
-dr.text((22, 112), 'GREEN = can only face the LAKE (W/NW)   ORANGE = can only face N/NE/E   BLUE = both possible',
+dr.text((22, 112), 'DECISION: frame A faces the ocean/channel side (east) - tick = mean allowed yaw at that spot',
         fill='#0f172a', font=f_xs, stroke_width=3, stroke_fill='#e2e8f0')
 
 out = os.path.join(REPO, 'tools', 'generated', 'waning_sands_zone.png')
