@@ -123,9 +123,22 @@ def P(x, y):
     return ((x - XMIN) * S, (YMAX - y) * S)
 
 
+def on_land(cx, cy):
+    ix_ = int((cx - (cxw0 - half0)) / MPP)
+    iy_ = int(((cyw0 + half0) - cy) / MPP)
+    if not (0 <= ix_ < WATER.shape[1] and 0 <= iy_ < WATER.shape[0]):
+        return False
+    # majorite de terre dans un rayon de 40m autour du centre de cellule
+    r = int(40 / MPP)
+    patch = WATER[max(0, iy_ - r):iy_ + r + 1, max(0, ix_ - r):ix_ + r + 1]
+    return patch.size > 0 and patch.mean() < 0.3
+
+
 n_pos = 0
 for cy in range(YMIN + CELL // 2, YMAX, CELL):
     for cx in range(XMIN + CELL // 2, XMAX, CELL):
+        if not on_land(cx, cy):
+            continue
         dx = talls[:, 0] - cx
         dy = talls[:, 1] - cy
         dist = np.hypot(dx, dy)
