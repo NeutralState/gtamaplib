@@ -108,10 +108,8 @@ for iy, cy in enumerate(ys):
         widest = float(gaps.max())
         if widest < HARD_WIN:
             hard[iy, ix] = True
-        if widest < SOFT_WIN:
-            soft[iy, ix] = True
 
-print(f'exclu dur (58): {hard.sum()} cellules | exclu doux (130): {soft.sum()}')
+print(f'exclu (58 deg): {hard.sum()} cellules')
 
 S = 0.16
 W, H = int((XMAX - XMIN) * S), int((YMAX - YMIN) * S)
@@ -135,12 +133,11 @@ ov = Image.new('RGBA', img.size, (0, 0, 0, 0))
 do = ImageDraw.Draw(ov)
 for iy, cy in enumerate(ys):
     for ix, cx in enumerate(xs):
-        if not soft[iy, ix]:
+        if not hard[iy, ix]:
             continue
         x0, y0 = P(cx, cy + CELL)
         x1, y1 = P(cx + CELL, cy)
-        col = (239, 68, 68, 165) if hard[iy, ix] else (249, 140, 55, 110)
-        do.rectangle([x0, y0, x1, y1], fill=col)
+        do.rectangle([x0, y0, x1, y1], fill=(239, 68, 68, 150))
 img = Image.alpha_composite(img.convert('RGBA'), ov)
 dr = ImageDraw.Draw(img)
 
@@ -162,11 +159,11 @@ except Exception:
 
 dr.text((22, 16), 'WHERE WANING SANDS IS NOT', fill='#e2e8f0', font=f_h,
         stroke_width=4, stroke_fill=(9, 13, 20))
-dr.text((22, 56), 'negative-skyline exclusion: frame A spans 58 deg with a clean low horizon (max ~1.5 deg skyline)',
-        fill='#94a3b8', font=f_xs, stroke_width=3, stroke_fill=(9, 13, 20))
-dr.text((22, 82), 'RED: no quiet 58 deg window exists (frame A impossible) - ORANGE: no quiet 130 deg (A+B+C same spot)',
-        fill='#94a3b8', font=f_xs, stroke_width=3, stroke_fill=(9, 13, 20))
-dr.text((22, 108), 'dots: the 220 solved towers (z>60) doing the excluding - yellow X: current placeholder guess',
+dr.text((22, 56), 'frame A shows a clean horizon in a 58 deg view. from anywhere RED, that is impossible:',
+        fill='#c3d2e6', font=f_xs, stroke_width=3, stroke_fill=(9, 13, 20))
+dr.text((22, 82), 'every direction you could point the camera, a known solved tower would stand tall in the frame',
+        fill='#c3d2e6', font=f_xs, stroke_width=3, stroke_fill=(9, 13, 20))
+dr.text((22, 108), 'blue dots: the solved towers - yellow X: current placeholder guess',
         fill='#64748b', font=f_xs, stroke_width=3, stroke_fill=(9, 13, 20))
 
 sx, sy = W - 260, H - 36
