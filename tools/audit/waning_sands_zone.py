@@ -106,9 +106,12 @@ def on_land(cx, cy):
     iy_ = int(((cyw0 + half0) - cy) / MPP)
     if not (0 <= ix_ < WATER.shape[1] and 0 <= iy_ < WATER.shape[0]):
         return False
-    r = int(40 / MPP)
+    # pas d'eau dans un rayon de 120m: au pitch -4.3 / z 32, le bas de la
+    # frame montre le sol a ~80m devant et c'est de la TERRE -> la cam
+    # n'est pas au ras de l'eau
+    r = int(120 / MPP)
     patch = WATER[max(0, iy_ - r):iy_ + r + 1, max(0, ix_ - r):ix_ + r + 1]
-    return patch.size > 0 and patch.mean() < 0.3
+    return patch.size > 0 and not patch.any()
 
 
 # cams de confiance (couche invisibilite mutuelle)
@@ -140,6 +143,7 @@ def seen_by_solved(cx, cy):
 xs = np.arange(XMIN, XMAX, CELL)
 ys = np.arange(YMIN, YMAX, CELL)
 feas = np.zeros((len(ys), len(xs)), bool)
+yawdir = np.full((len(ys), len(xs)), np.nan)   # yaw moyen admissible (centre fenetre)
 for iy, cy0 in enumerate(ys):
     for ix, cx0 in enumerate(xs):
         cx, cy = cx0 + CELL / 2, cy0 + CELL / 2
@@ -158,7 +162,7 @@ for iy, cy0 in enumerate(ys):
         wat = None
         q2 = np.r_[~blocked, ~blocked[:WIN]]
         run = 0
-        found = False
+        good_centers = []
         for s in range(N_AZ + WIN):
             run = run + 1 if q2[s] else 0
             if run >= WIN:
@@ -167,14 +171,20 @@ for iy, cy0 in enumerate(ys):
                 w2 = np.r_[wat, wat[:WIN]]
                 seg = w2[s - WIN + 1:s + 1]
                 rr = 0
+                okw = False
                 for v in seg:
                     rr = rr + 1 if v else 0
                     if rr >= NEED_WATER:
-                        found = True
+                        okw = True
                         break
-                if found:
-                    break
-        feas[iy, ix] = found
+                if okw:
+                    good_centers.append(((s - WIN // 2) % N_AZ) * AZ_STEP)
+        if good_centers:
+            feas[iy, ix] = True
+            gc = np.array(good_centers, float)
+            has_lake = bool(np.any((gc >= 200) & (gc <= 340)))     # regarde O/NO
+            has_chan = bool(np.any((gc <= 100) | (gc >= 345)))     # regarde N/NE/E
+            yawdir[iy, ix] = (1 if has_lake else 0) + (2 if has_chan else 0)
 
 print(f'zone possible: {feas.sum()} cellules de {CELL}m ({feas.sum() * CELL * CELL / 1e6:.2f} km2)')
 
@@ -196,13 +206,16 @@ def P(x, y):
     return ((x - XMIN) * S, (YMAX - y) * S)
 
 
+COLS = {1: (34, 197, 94, 115),      # lac seulement
+        2: (249, 115, 22, 115),     # chenal seulement
+        3: (56, 189, 248, 115)}     # les deux possibles
 for iy, cy0 in enumerate(ys):
     for ix, cx0 in enumerate(xs):
         if not feas[iy, ix]:
             continue
         x0, y0 = P(cx0, cy0 + CELL)
         x1, y1 = P(cx0 + CELL, cy0)
-        do.rectangle([x0, y0, x1, y1], fill=(34, 197, 94, 105))
+        do.rectangle([x0, y0, x1, y1], fill=COLS.get(int(yawdir[iy, ix]), (200, 200, 200, 110)))
 # contour
 for iy in range(len(ys)):
     for ix in range(len(xs)):
@@ -235,9 +248,11 @@ except Exception:
     f_h = f_xs = ImageFont.load_default()
 dr.text((22, 16), 'WANING SANDS (A) - POSSIBLE ZONE', fill='#0f172a', font=f_h,
         stroke_width=4, stroke_fill='#e2e8f0')
-dr.text((22, 60), 'green = every constraint fits: 58deg window with no known tower, open water ahead,',
+dr.text((22, 60), 'constraints: 58deg window with no known tower + open water ahead + on land, 120m+ from water',
         fill='#0f172a', font=f_xs, stroke_width=3, stroke_fill='#e2e8f0')
-dr.text((22, 86), 'on land, and not inside any solved camera view (<3km)',
+dr.text((22, 86), '(frame bottom shows land ~80m ahead) + not inside any solved camera view (<3km)',
+        fill='#0f172a', font=f_xs, stroke_width=3, stroke_fill='#e2e8f0')
+dr.text((22, 112), 'GREEN = can only face the LAKE (W/NW)   ORANGE = can only face N/NE/E   BLUE = both possible',
         fill='#0f172a', font=f_xs, stroke_width=3, stroke_fill='#e2e8f0')
 
 out = os.path.join(REPO, 'tools', 'generated', 'waning_sands_zone.png')
