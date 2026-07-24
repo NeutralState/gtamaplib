@@ -87,6 +87,19 @@ wmap = np.asarray(render_basemap(cxw0, cyw0, half0, wpx), dtype=np.int16)
 WATER = (wmap[:, :, 2] > wmap[:, :, 0] + 18) & (wmap[:, :, 2] > 80)
 
 DS = np.linspace(150, 1400, 14)
+DS_FG = np.linspace(40, 130, 6)
+
+
+def land_ahead(cx, cy, az_deg):
+    rad = math.radians(az_deg)
+    px_ = cx - np.sin(rad) * DS_FG
+    py_ = cy + np.cos(rad) * DS_FG
+    ix_ = ((px_ - (cxw0 - half0)) / MPP).astype(int)
+    iy_ = (((cyw0 + half0) - py_) / MPP).astype(int)
+    ok = (ix_ >= 0) & (ix_ < WATER.shape[1]) & (iy_ >= 0) & (iy_ < WATER.shape[0])
+    if not ok.any():
+        return False
+    return not WATER[iy_[ok], ix_[ok]].any()
 
 
 def water_ok(cx, cy, az_deg):
@@ -106,12 +119,9 @@ def on_land(cx, cy):
     iy_ = int(((cyw0 + half0) - cy) / MPP)
     if not (0 <= ix_ < WATER.shape[1] and 0 <= iy_ < WATER.shape[0]):
         return False
-    # pas d'eau dans un rayon de 120m: au pitch -4.3 / z 32, le bas de la
-    # frame montre le sol a ~80m devant et c'est de la TERRE -> la cam
-    # n'est pas au ras de l'eau
-    r = int(100 / MPP)
+    r = int(40 / MPP)
     patch = WATER[max(0, iy_ - r):iy_ + r + 1, max(0, ix_ - r):ix_ + r + 1]
-    return patch.size > 0 and not patch.any()
+    return patch.size > 0 and patch.mean() < 0.3
 
 
 # cams de confiance (couche invisibilite mutuelle)
@@ -147,6 +157,9 @@ yawdir = np.full((len(ys), len(xs)), np.nan)   # yaw moyen admissible (centre fe
 for iy, cy0 in enumerate(ys):
     for ix, cx0 in enumerate(xs):
         cx, cy = cx0 + CELL / 2, cy0 + CELL / 2
+        # DECISIONS Alexandre 07-24: pas a l'ouest de l'etang, pas au nord
+        if cx < -1400 or cy > 5000:
+            continue
         if not on_land(cx, cy) or seen_by_solved(cx, cy):
             continue
         dx = talls[:, 0] - cx
@@ -178,7 +191,9 @@ for iy, cy0 in enumerate(ys):
                         okw = True
                         break
                 if okw:
-                    good_centers.append(((s - WIN // 2) % N_AZ) * AZ_STEP)
+                    c_az = ((s - WIN // 2) % N_AZ) * AZ_STEP
+                    if land_ahead(cx, cy, c_az):
+                        good_centers.append(c_az)
         if good_centers:
             # DECISION Alexandre 07-24: la frame A regarde l'OCEAN/le chenal
             # (cote est), pas le lac -> seules les fenetres az 0-160 comptent
@@ -252,9 +267,9 @@ except Exception:
     f_h = f_xs = ImageFont.load_default()
 dr.text((22, 16), 'WANING SANDS (A) - POSSIBLE ZONE', fill='#0f172a', font=f_h,
         stroke_width=4, stroke_fill='#e2e8f0')
-dr.text((22, 60), 'constraints: 58deg window with no known tower + open water ahead + on land, 120m+ from water',
+dr.text((22, 60), 'constraints: 58deg window, no known tower + open water ahead + LAND in the first 130m of the view',
         fill='#0f172a', font=f_xs, stroke_width=3, stroke_fill='#e2e8f0')
-dr.text((22, 86), '(frame bottom shows land ~80m ahead) + not inside any solved camera view (<3km)',
+dr.text((22, 86), '+ not inside any solved camera view (<3km) + editorial: not west of the pond, not north',
         fill='#0f172a', font=f_xs, stroke_width=3, stroke_fill='#e2e8f0')
 dr.text((22, 112), 'DECISION: frame A faces the ocean/channel side (east) - tick = mean allowed yaw at that spot',
         fill='#0f172a', font=f_xs, stroke_width=3, stroke_fill='#e2e8f0')
