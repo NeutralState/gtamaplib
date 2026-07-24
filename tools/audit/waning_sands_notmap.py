@@ -34,6 +34,48 @@ os.chdir(REPO)
 import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
+
+TILES_DIR = os.path.join(REPO, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,13')
+
+
+def render_basemap(cx, cy, half_m, out_px):
+    """Composite les tiles de la vraie map (math verbatim de tools/server.py
+    _render_tiles_region: MAP_W 32768, ZERO 16384, m/px = 32/2^z)."""
+    TS = 256
+    ZX = ZY = 16384
+    RANGES = {0: [[0, 0], [2, 2]], 1: [[0, 1], [4, 5]], 2: [[0, 2], [9, 11]],
+              3: [[0, 4], [19, 23]], 4: [[0, 8], [38, 47]],
+              5: [[0, 17], [77, 95]], 6: [[0, 34], [155, 190]]}
+    z = 0
+    while z < 6 and (2.0 * half_m) / (32.0 / (2 ** z)) < out_px:
+        z += 1
+    mppx = 32.0 / (2 ** z)
+    cpx = (ZX + cx) / mppx
+    cpy = (ZY - cy) / mppx
+    hw = half_m / mppx
+    left, top = cpx - hw, cpy - hw
+    tx_min, tx_max = int(left // TS), int((cpx + hw - 1) // TS)
+    ty_min, ty_max = int(top // TS), int((cpy + hw - 1) // TS)
+    [[bx0, by0], [bx1, by1]] = RANGES[z]
+    comp = Image.new('RGB', ((tx_max - tx_min + 1) * TS, (ty_max - ty_min + 1) * TS), (10, 10, 12))
+    for ty in range(ty_min, ty_max + 1):
+        for tx in range(tx_min, tx_max + 1):
+            if tx < bx0 or tx > bx1 or ty < by0 or ty > by1:
+                continue
+            tp = os.path.join(TILES_DIR, str(z), f'{z},{ty},{tx}.jpg')
+            if not os.path.exists(tp):
+                continue
+            try:
+                t = Image.open(tp).convert('RGB')
+            except Exception:
+                continue
+            comp.paste(t, ((tx - tx_min) * TS, (ty - ty_min) * TS))
+    cx0 = int(round(left - tx_min * TS))
+    cy0 = int(round(top - ty_min * TS))
+    side = int(round(2 * hw))
+    crop = comp.crop((cx0, cy0, cx0 + side, cy0 + side))
+    return crop.resize((out_px, out_px), Image.BILINEAR)
+
 Z_CAM = 32.0
 PROM_DEG = 2.0          # proeminence au-dela de laquelle la frame l'aurait montree
 HARD_WIN = 58.0         # hfov frame A
@@ -71,9 +113,17 @@ for iy, cy in enumerate(ys):
 
 print(f'exclu dur (58): {hard.sum()} cellules | exclu doux (130): {soft.sum()}')
 
-S = 0.14
+S = 0.16
 W, H = int((XMAX - XMIN) * S), int((YMAX - YMIN) * S)
-img = Image.new('RGB', (W, H), (9, 13, 20))
+# region carree englobante pour les tiles, puis crop a notre rectangle
+cxw, cyw = (XMIN + XMAX) / 2.0, (YMIN + YMAX) / 2.0
+half = max(XMAX - XMIN, YMAX - YMIN) / 2.0
+side_px = int(2 * half * S)
+base = render_basemap(cxw, cyw, half, side_px)
+ox = int((half - (cxw - XMIN)) * S)
+oy = int((half - (YMAX - cyw)) * S)
+img = base.crop((ox, oy, ox + W, oy + H)).convert('RGB')
+img = Image.eval(img, lambda v: int(v * 0.55))          # assombrir pour lisibilite
 dr = ImageDraw.Draw(img)
 
 
@@ -89,7 +139,7 @@ for iy, cy in enumerate(ys):
             continue
         x0, y0 = P(cx, cy + CELL)
         x1, y1 = P(cx + CELL, cy)
-        col = (239, 68, 68, 150) if hard[iy, ix] else (249, 140, 55, 90)
+        col = (239, 68, 68, 165) if hard[iy, ix] else (249, 140, 55, 110)
         do.rectangle([x0, y0, x1, y1], fill=col)
 img = Image.alpha_composite(img.convert('RGBA'), ov)
 dr = ImageDraw.Draw(img)
