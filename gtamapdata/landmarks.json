@@ -2750,55 +2750,59 @@
  },
  "Ambrosia Main St (A)": {
   "xyz": [
-   -2952.3864,
-   4206.0789,
-   10.8109
+   -2879.41,
+   4420.16,
+   18.87
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)"
   ],
-  "error_m": null,
+  "error_m": 14.6,
   "zone": "ambrosia",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "rayon x plan z=18.87 (GROUND-V1, monde H); rue: cam Bikers z 20.265 - 1.4 m (hauteur cam mesuree par la ligne d horizon); sensibilite 14.6 m/m de datum"
  },
  "Ambrosia Main St (B)": {
   "xyz": [
-   -2940.9495,
-   4168.0103,
-   10.7466
+   -2868.69,
+   4383.63,
+   18.87
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)"
   ],
-  "error_m": null,
+  "error_m": 15.0,
   "zone": "ambrosia",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "rayon x plan z=18.87 (GROUND-V1, monde H); rue: cam Bikers z 20.265 - 1.4 m (hauteur cam mesuree par la ligne d horizon); sensibilite 15.0 m/m de datum"
  },
  "Ambrosia Main St (C)": {
   "xyz": [
-   -2835.0351,
-   3947.4058,
-   10.3282
+   -2770.04,
+   4172.18,
+   18.87
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)"
   ],
-  "error_m": null,
+  "error_m": 17.3,
   "zone": "ambrosia",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "rayon x plan z=18.87 (GROUND-V1, monde H); rue: cam Bikers z 20.265 - 1.4 m (hauteur cam mesuree par la ligne d horizon); sensibilite 17.3 m/m de datum"
  },
  "Ambrosia Main St (D)": {
   "xyz": [
-   -2764.2434,
-   3820.6405,
-   10.0721
+   -2704.27,
+   4050.93,
+   18.87
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)"
   ],
-  "error_m": null,
+  "error_m": 18.7,
   "zone": "ambrosia",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "rayon x plan z=18.87 (GROUND-V1, monde H); rue: cam Bikers z 20.265 - 1.4 m (hauteur cam mesuree par la ligne d horizon); sensibilite 18.7 m/m de datum"
  },
  "Billboard with Irregular Shape": {
   "xyz": [
@@ -2827,38 +2831,20 @@
   "zone": "ambrosia"
  },
  "Light Pollution (A)": {
-  "xyz": [
-   -8495.684322666908,
-   -11152.543139301339,
-   -6.261971971957933
-  ],
-  "source_cameras": [
-   "Ambrosia 02 (Panorama)"
-  ],
+  "xyz": null,
+  "source_cameras": [],
   "error_m": null,
   "zone": "leonida_keys"
  },
  "Light Pollution (B)": {
-  "xyz": [
-   -7770.0084687210365,
-   -7983.013056108336,
-   -4.860657758471947
-  ],
-  "source_cameras": [
-   "Ambrosia 02 (Panorama)"
-  ],
+  "xyz": null,
+  "source_cameras": [],
   "error_m": null,
   "zone": "leonida_keys"
  },
  "Light Pollution (C)": {
-  "xyz": [
-   -9896.018406191368,
-   -10652.44110498813,
-   -4.815610366150803
-  ],
-  "source_cameras": [
-   "Ambrosia 02 (Panorama)"
-  ],
+  "xyz": null,
+  "source_cameras": [],
   "error_m": null,
   "zone": "leonida_keys"
  },
@@ -11277,13 +11263,6 @@
   "xyz": null,
   "zone": null
  },
- "Red Boxville (BNW)": {
-  "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
- },
  "Crandon Park Tennis Center": {
   "author": "rlx",
   "error_m": null,
@@ -11956,13 +11935,6 @@
   "zone": null
  },
  "Tuscan Place Apartments (BSE)": {
-  "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
- },
- "Red Boxville (BNE)": {
   "author": "rlx",
   "error_m": null,
   "source_cameras": [],
@@ -12996,10 +12968,17 @@
  },
  "Ambrosia Main St (V)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 21.5,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "xyz": [
+   -3377.88,
+   4166.39,
+   18.87
+  ],
+  "zone": "ambrosia",
+  "method": "rayon x plan z=18.87 (GROUND-V1, monde H); rue: cam Bikers z 20.265 - 1.4 m (hauteur cam mesuree par la ligne d horizon); sensibilite 21.5 m/m de datum"
  },
  "Miami-Dade County Courthouse": {
   "author": "rlx",
@@ -13083,10 +13062,17 @@
  },
  "Ambrosia Main St (Z)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 14.5,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "xyz": [
+   -2911.94,
+   4447.86,
+   18.87
+  ],
+  "zone": "ambrosia",
+  "method": "rayon x plan z=18.87 (GROUND-V1, monde H); rue: cam Bikers z 20.265 - 1.4 m (hauteur cam mesuree par la ligne d horizon); sensibilite 14.5 m/m de datum"
  },
  "Route 35 (C)": {
   "author": "rlx",
@@ -13494,10 +13480,17 @@
  },
  "Ambrosia Main St (X)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 17.7,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "xyz": [
+   -3135.48,
+   4321.27,
+   18.87
+  ],
+  "zone": "ambrosia",
+  "method": "rayon x plan z=18.87 (GROUND-V1, monde H); rue: cam Bikers z 20.265 - 1.4 m (hauteur cam mesuree par la ligne d horizon); sensibilite 17.7 m/m de datum"
  },
  "Jason's House (Roof) (SW)": {
   "author": "rlx",
@@ -13544,10 +13537,17 @@
  },
  "Ambrosia Main St (W)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 20.5,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "xyz": [
+   -3315.06,
+   4209.03,
+   18.87
+  ],
+  "zone": "ambrosia",
+  "method": "rayon x plan z=18.87 (GROUND-V1, monde H); rue: cam Bikers z 20.265 - 1.4 m (hauteur cam mesuree par la ligne d horizon); sensibilite 20.4 m/m de datum"
  },
  "Jason's House (Pillar 6) (TNE)": {
   "author": "rlx",
@@ -13771,17 +13771,31 @@
  },
  "Ambrosia Main St (Y)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 16.0,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "xyz": [
+   -3018.34,
+   4387.15,
+   18.87
+  ],
+  "zone": "ambrosia",
+  "method": "rayon x plan z=18.87 (GROUND-V1, monde H); rue: cam Bikers z 20.265 - 1.4 m (hauteur cam mesuree par la ligne d horizon); sensibilite 16.0 m/m de datum"
  },
  "Ambrosia Main St (E)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 20.6,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "xyz": [
+   -2598.51,
+   3898.67,
+   18.87
+  ],
+  "zone": "ambrosia",
+  "method": "rayon x plan z=18.87 (GROUND-V1, monde H); rue: cam Bikers z 20.265 - 1.4 m (hauteur cam mesuree par la ligne d horizon); sensibilite 20.6 m/m de datum"
  },
  "Jason's House (Pillar 9) (TSW)": {
   "author": "rlx",
@@ -17577,5 +17591,37 @@
   "error_m": null,
   "zone": "ambrosia",
   "note": "triangule par le solve joint (monde H, 2026-07-25) mais absent du fichier jusqu'ici: Ambrosia 02 (Panorama) + rayon externe ['Vice City Postcard']. Residu max 10.2'."
+ },
+ "Red Boxville (FL)": {
+  "xyz": [
+   -2565.74,
+   5114.5,
+   15.16
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 3.7,
+  "zone": "ambrosia",
+  "aliases": [
+   "Red Boxville (BNE)"
+  ],
+  "method": "rayon x plan z=15.16 (GROUND-V1, monde H); sol du boxville: silo_z 19.655 - 4.5 (delta rlx); sensibilite 3.7 m/m de datum"
+ },
+ "Red Boxville (RL)": {
+  "xyz": [
+   -2571.92,
+   5115.4,
+   15.16
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)"
+  ],
+  "error_m": 3.7,
+  "zone": "ambrosia",
+  "aliases": [
+   "Red Boxville (BNW)"
+  ],
+  "method": "rayon x plan z=15.16 (GROUND-V1, monde H); sol du boxville: silo_z 19.655 - 4.5 (delta rlx); sensibilite 3.7 m/m de datum"
  }
 }
