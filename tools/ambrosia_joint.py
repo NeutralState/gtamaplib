@@ -49,6 +49,20 @@ AMB = ['Ambrosia 01 (Bikers)', 'Ambrosia 02 (Panorama)',
 FIXED_ANCHORS = ['FAA Miami ATCT (MIA)', 'MIA North Terminal Tower',
                  'Sunshine Skyway Bridge (N)', 'Sunshine Skyway Bridge (S)']
 
+# solution H de rlx (2026-07-25, bounty CLOS): candidat gagnant parmi 9,
+# lu sur les barres d'info de ses PNG. A gagne le test de bassin contre
+# notre solution dans NOTRE cout ancre (148.66 vs 156.62) et passe nos
+# ancres absolues (FAA MIA 0.5', MIA N 0.8', SSB N 1.5'; seul SSB S a 17',
+# et c'est le pilier qui depend de Chase 2, cam que rlx lui-meme suspecte).
+# Il satisfait le pont en deplacant Fires de +444 m est et en resserrant
+# son fov a 42.3 — pas en gardant la zone au sud.
+RLX_H_POSES = {
+    'Ambrosia 01 (Bikers)':    ((-2657.000, 4036.000, 20.265), (16.333,   0.300, 0.0), 36.100),
+    'Ambrosia 02 (Panorama)':  ((-2415.000, 5340.000, 89.656), (160.757, -4.022, 0.0), 50.900),
+    'Ambrosia 04 (Fires)':     ((-1015.000, 3232.000, 54.538), (96.915,  -1.710, 0.0), 42.300),
+    'Ambrosia Postcard (X)':   ((-2676.000, 3974.000, 62.322), (148.598, -1.900, 0.0), 52.100),
+}
+
 # solution rlx du 2026-07-01 (fil Discord) pour --init rlx
 RLX_POSES = {
     'Ambrosia 02 (Panorama)':  ((-2465.725, 5095.552, 79.289), (160.149, -4.146, 0.0), 53.506),
@@ -125,7 +139,9 @@ class Solver:
         self.theta = {}
         for c in AMB:
             e = cams[c]
-            if init == 'rlx' and c in RLX_POSES:
+            if init == 'h' and c in RLX_H_POSES:
+                (x, y, z), (yaw, pitch, roll), hfov = RLX_H_POSES[c]
+            elif init == 'rlx' and c in RLX_POSES:
                 (x, y, z), (yaw, pitch, roll), hfov = RLX_POSES[c]
             else:
                 x, y, z = e['xyz']; yaw, pitch, roll = e['ypr']
@@ -397,7 +413,7 @@ def report(sv, lms):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--rounds', type=int, default=60)
-    ap.add_argument('--init', choices=['ours', 'rlx'], default='ours')
+    ap.add_argument('--init', choices=['ours', 'rlx', 'h'], default='ours')
     ap.add_argument('--no-brator', action='store_true')
     ap.add_argument('--corpus', action='store_true', help='contraintes structurelles rlx (V2)')
     ap.add_argument('--no-kalaga', action='store_true',

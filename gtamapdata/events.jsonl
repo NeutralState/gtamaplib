@@ -927,3 +927,5 @@
 {"ts": "2026-07-20T11:16:26", "tool": "triangulate_lm", "action": "retriangulate", "lm": "Stephen P. Clark Government Center (A)", "old_xyz": null, "new_xyz": [-850.2568, 63.6899, 180.1851], "kept": ["Skyline", "Port Vice City (A)", "Shitzu Squalo 01 (Bay)"], "max_res": 6.398}
 {"ts": "2026-07-20T12:53:42", "tool": "b_line_refit", "action": "pose_applied", "reason": "Metro (NE) (B): ypr refit sur la ligne b d Alexandre (4 aretes SPC B*, ancres = verticales des tops + z=18.2), dyaw -0.856 dpitch -0.003; anciens residus -12..-23px -> +/-6px"}
 {"ts": "2026-07-21T20:44:41", "tool": "ambrosia_joint", "action": "poses_applied", "reason": "solve joint 4 cams + 80 LMs de zone, init=rlx, brator=True"}
+{"ts": "2026-07-25T11:39:23", "tool": "ambrosia_joint", "action": "poses_applied", "reason": "solve joint 4 cams + 81 LMs de zone, init=h, brator=True"}
+{"ts": "2026-07-25T11:41:51", "tool": "ambrosia_joint", "action": "poses_applied", "reason": "solve joint 4 cams + 81 LMs de zone, init=ours, brator=True"}

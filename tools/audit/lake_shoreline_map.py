@@ -33,8 +33,8 @@ for L in LETTERS:
 
 pano = np.asarray(cams['Ambrosia 02 (Panorama)']['xyz'])
 
-XMIN, XMAX = -3100, -2100
-YMIN, YMAX = 3550, 5350
+XMIN, XMAX = -3100, -2000
+YMIN, YMAX = 3700, 5600
 S = 1.5
 W, H = int((XMAX - XMIN) * S), int((YMAX - YMIN) * S)
 BG = (9, 13, 20)
@@ -124,8 +124,7 @@ dr.text(P(-2990, 3920)[0:2], 'Main St (old z=10 datum, to re-derive)',
 
 dr.text((28, 20), 'LAKE LEONIDA — west shoreline from S2/57 panorama', fill='#e2e8f0',
         font=f_h, stroke_width=4, stroke_fill=BG)
-dr.text((28, 64), 'ray x water plane z=5.0 (datum: rlx boxville 5.3 / street-at-silo 4.6) · '
-        'whiskers = +-0.5 m datum slide along the view ray',
+dr.text((28, 64), 'ray x water plane z=14.486 (rlx final datum, bounty H) - whiskers = +-0.5 m datum slide along the ray',
         fill='#94a3b8', font=f_xs, stroke_width=3, stroke_fill=BG)
 
 sx, sy = W - 420, H - 46
