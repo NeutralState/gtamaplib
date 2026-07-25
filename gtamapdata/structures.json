@@ -135,18 +135,20 @@
    "1500 Sonora Ave (Silo) (R)": "R"
   },
   "z_top": 56.47,
-  "note": "silo drapeau US (bounty #23). LARGEUR 14.17m solide (fit tangence 4 rayons rms 0.16m; le point-match gonflait a 15.6). HAUTEUR: correction rlx 07-22 — notre 36.6 etait rebord -> plus bas point VISIBLE: la base est occluse dans les 2 frames (Postcard: ligne d'arbres pile au clic B, les rayures continuent derriere; Pano nuit: premier plan sombre). z_top 56.47 fiable (L/R accord 3cm). Vraie hauteur = 56.47 - sol(silo): sol ~11.5 -> 45m ratio 3.18 (le 3.2 de rlx compatible); sol ~5.5 (lac+1) -> 51m ratio 3.6. check-only.",
+  "note": "silo drapeau US. Monde H (rlx, bounty clos 2026-07-25). Fit de tangence 4 rayons (Pano+Postcard) rms 0.22m -> largeur 14.32m; rebord haut = z moyen des clics L/R re-triangules = 64.09, et rlx donne silo_z 19.655 + hauteur 44.3 = 63.95: les deux methodes concordent a 14 cm. z_ground pris de sa solution (notre clic (B) est une ligne d'arbres, la base est occluse). check-only.",
   "axis": {
-   "x": -2750.64,
-   "y": 3667.58,
-   "radius": 7.086
+   "x": -2715.34,
+   "y": 3814.27,
+   "radius": 7.162
   },
   "fit_meta": {
-   "rms_m": 0.161,
+   "rms_m": 0.215,
    "n_rays": 4,
    "date": "2026-07-22"
   },
-  "z_lowest_visible": 19.86
+  "z_lowest_visible": 19.86,
+  "z_ground": 19.655,
+  "mesh_name": "1500 Sonora Ave (Silo)"
  },
  "sonora-tank-cylinder": {
   "type": "cylinder",
@@ -156,14 +158,14 @@
    "1500 Sonora Ave (Tank) (L)": "L",
    "1500 Sonora Ave (Tank) (R)": "R"
   },
-  "note": "FIT ECHOUE (rayon absurde 21m, rms 2.9m; modele mixte rms 2.4m) — et c'est le resultat: la zone est une FERME de reservoirs quasi-identiques (Postcard: rebord d'un grand tank 'AJ...'; Fires: longue structure plate au-dessus du lettrage 'ALLIED CRYSTAL CO', peut-etre pas un tank; Panorama de nuit: bande sombre ambigue). Les 3 frames marquent probablement des objets DIFFERENTS -> explique les 29'/34' du solve. A re-identifier tank par tank avant tout usage; les marquages Tank/(L)/(R) sont suspects inter-frames. Le check cylindre reste en place comme detecteur (violations attendues tant que non re-marque).",
+  "note": "FIT ECHOUE dans tous les mondes (rms 3.1m en H): c'est une FERME de reservoirs quasi-identiques et les 3 frames marquent des objets DIFFERENTS (Postcard: rebord d'un grand tank; Fires: structure plate au-dessus du lettrage 'ALLIED CRYSTAL CO'; Panorama de nuit: bande sombre ambigue). Explique le residu 30' persistant. PAS de mesh genere tant que ce n'est pas re-identifie tank par tank.",
   "axis": {
-   "x": -3009.66,
-   "y": 3543.49,
-   "radius": 21.009
+   "x": -2976.45,
+   "y": 3679.58,
+   "radius": 21.371
   },
   "fit_meta": {
-   "rms_m": 2.866,
+   "rms_m": 3.094,
    "n_rays": 6,
    "date": "2026-07-22"
   }
