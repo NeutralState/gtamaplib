@@ -37,7 +37,7 @@ sys.path.insert(0, THIS)
 sys.path.insert(0, REPO)
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw
 import common
 
 CAM = 'Ambrosia 01 (Bikers)'
@@ -59,42 +59,101 @@ N_RINGS = 8                   # anneaux de niveau du dome
 RATIO = 0.65                  # profondeur du dome = RATIO * demi-largeur
 
 
-def extract_skyline(gray, prior_y, x0, x1, exclude=()):
-    """Bord ciel/colline par colonne: max du gradient vertical descendant
-    (ciel clair au-dessus, colline sombre dessous), dans le corridor.
-    Rejette les aretes DURES (occluders), les deviations locales et les
-    bandes x exclues (occluders connus, ex: billboard clique)."""
+BRIGHT_BELOW = 140.0          # sous le bord colline/brume c'est CLAIR;
+                              # sous un occluder (arbre, poteau, panneau) c'est sombre
+DY_MAX = 8                    # pente max du chemin (px de y par colonne)
+LAMBDA = 0.35                 # penalite de pente (par px^2)
+EVIDENCE = 1.0                # score minimal pour dire 'mesure' (sinon: pont)
+
+
+def extract_skyline(gray, prior_y, x0, x1, exclude=(), anchors=()):
+    """Suivi GLOBAL du bord ciel/colline par programmation dynamique.
+
+    Le bord cherche est DOUX (brume, gradient dans (MIN_EDGE, HARD_EDGE))
+    et CLAIR en-dessous (>BRIGHT_BELOW). Chaque cellule du corridor recoit
+    un score d'arete; le chemin qui maximise (score - LAMBDA*pente^2) sur
+    TOUTE la largeur est optimal au sens global — il enjambe fils, poteaux,
+    arbres et billboard au lieu de glisser sur une bande de brume locale.
+    Les colonnes traversees sans evidence (score < EVIDENCE) sont des
+    PONTS: gardees dans le chemin mais marquees non-mesurees."""
     h, w = gray.shape
     sm = np.zeros_like(gray)
-    # lissage vertical leger (le bord brume est large)
     sm[2:-2] = (gray[:-4] + gray[1:-3] + gray[2:-2] + gray[3:-1] + gray[4:]) / 5.0
-    cols, raw = [], []
-    for x in range(x0, x1, COL_STEP):
-        if any(a <= x <= b for a, b in exclude):
-            continue
-        yc = prior_y(x)
-        a = max(3, int(yc - CORRIDOR))
-        b = min(h - 3, int(yc + CORRIDOR))
-        col = sm[a:b, x]
-        g = col[:-3] - col[3:]            # >0 quand ca s'assombrit vers le bas
-        if not len(g):
-            continue
-        i = int(np.argmax(g))
-        if g[i] < MIN_EDGE or g[i] > HARD_EDGE:
-            continue                       # invisible ou occluder
-        cols.append(x)
-        raw.append(a + i + 1.5)
-    cols = np.array(cols, float)
-    raw = np.array(raw, float)
-    # rejet des deviations vs mediane glissante, puis lissage
-    keep = np.ones(len(cols), bool)
-    for k in range(len(cols)):
-        lo, hi = max(0, k - 8), min(len(cols), k + 9)
-        if abs(raw[k] - np.median(raw[lo:hi])) > DEV_MAX:
-            keep[k] = False
-    cols, ys = cols[keep], raw[keep]
-    smooth = np.array([np.median(ys[max(0, k - 4):k + 5]) for k in range(len(ys))])
-    return cols, smooth
+    grad = np.zeros_like(gray)
+    grad[2:-2] = sm[:-4] - sm[4:]         # >0 quand ca s'assombrit vers le bas
+    # clair en-dessous SOUTENU: moyenne des px 12..45 sous la cellule.
+    # (fenetre profonde: rejette les arbres caches sous un fil)
+    cs = np.cumsum(gray, axis=0)
+    below = np.full_like(gray, 0.0)
+    below[:-46] = (cs[45:-1] - cs[12:-34]) / 33.0
+    # masque FIL: bande fine sombre vs +-14 px (les fils flous ont un
+    # gradient DOUX comme la colline — on les enleve par leur geometrie,
+    # pas par leur durete). Dilate de +-16 px.
+    wire = np.zeros(gray.shape, bool)
+    wire[14:-14] = (sm[14:-14] < sm[:-28] - 5.0) & (sm[14:-14] < sm[28:] - 5.0)
+    wd = np.zeros_like(wire)
+    for dy in range(-10, 11, 2):
+        s0, s1 = max(0, dy), min(h, h + dy)
+        wd[s0:s1] |= wire[max(0, -dy):h - max(0, dy)]
+    wire = wd
+
+    xs_grid = np.arange(x0, x1, COL_STEP)
+    n = len(xs_grid)
+    band = CORRIDOR                        # demi-hauteur du corridor
+    y0 = np.array([int(min(max(prior_y(int(x)) - band, 2), h - 2 * band - 40))
+                   for x in xs_grid])
+    m = 2 * band                           # cellules par colonne
+    # ancres manuelles: y attendu par colonne (interpolation des strokes)
+    anchor_y = np.full(n, np.nan)
+    for poly in anchors:
+        axs = [p[0] for p in poly]
+        ays = [p[1] for p in poly]
+        sel = (xs_grid >= axs[0]) & (xs_grid <= axs[-1])
+        anchor_y[sel] = np.interp(xs_grid[sel], axs, ays)
+    E = np.zeros((n, m))
+    manual = np.zeros(n, bool)
+    for k, x in enumerate(xs_grid):
+        ys_ = y0[k] + np.arange(m)
+        g = grad[ys_, x]
+        b = below[ys_, x]
+        ok = (g > MIN_EDGE) & (g < HARD_EDGE) & (b > BRIGHT_BELOW) & ~wire[ys_, x]
+        if any(a <= x <= bb for a, bb in exclude):
+            ok[:] = False
+        E[k] = np.where(ok, np.minimum(g, HARD_EDGE * 0.75), 0.0)
+        if not np.isnan(anchor_y[k]):
+            manual[k] = True
+            E[k] += 12.0 * np.exp(-0.5 * ((ys_ - anchor_y[k]) / 10.0) ** 2)
+
+    # DP: C[k,j] = max(C[k-1, j+dy] - LAMBDA*(dy - drift)^2) + E[k,j]
+    C = E[0].copy()
+    back = np.zeros((n, m), np.int16)
+    dys = np.arange(-DY_MAX, DY_MAX + 1)
+    for k in range(1, n):
+        drift = y0[k] - y0[k - 1]          # le corridor lui-meme bouge
+        best = np.full(m, -1e18)
+        arg = np.zeros(m, np.int16)
+        for dy in dys:
+            jprev = np.arange(m) + dy - drift
+            valid = (jprev >= 0) & (jprev < m)
+            cand = np.full(m, -1e18)
+            cand[valid] = C[jprev[valid]] - LAMBDA * dy * dy
+            better = cand > best
+            best[better] = cand[better]
+            arg[better] = dy
+        C = best + E[k]
+        back[k] = arg
+    j = int(np.argmax(C))
+    path = np.zeros(n, float)
+    meas = np.zeros(n, bool)
+    for k in range(n - 1, -1, -1):
+        path[k] = y0[k] + j
+        meas[k] = E[k, j] >= EVIDENCE
+        if k:
+            j = j + back[k, j] - (y0[k] - y0[k - 1])
+            j = max(0, min(m - 1, j))
+    # lissage leger (mediane 5) sur le chemin
+    smooth = np.array([np.median(path[max(0, k - 2):k + 3]) for k in range(n)])
+    return xs_grid.astype(float), smooth, meas, manual
 
 
 def solve_depth(cam, px, cams, fov_el):
@@ -133,6 +192,10 @@ def main():
                     help='hfov supposee d Empty Lot (defaut: son etat disque)')
     ap.add_argument('--apply', action='store_true')
     ap.add_argument('--check', action='store_true')
+    ap.add_argument('--mesh', action='store_true',
+                    help='genere aussi le mesh 3D (par defaut: outline 2D seul)')
+    ap.add_argument('--x0', type=int, default=0,
+                    help='debut de l outline (defaut 130: bord du palmier)')
     args = ap.parse_args()
 
     px = json.load(open(os.path.join(REPO, 'gtamapdata', 'pixels.json')))
@@ -142,26 +205,75 @@ def main():
     im = Image.open(os.path.join(REPO, 'frames', f'{CAM}.png')).convert('L')
     gray = np.asarray(im, np.float32)
 
-    # prior: polyline BW -> TW -> TE -> BE
+    # prior: polyline BW -> TW -> TE -> BE, extrapolee en pente des 2 cotes
     P = [marks[c] for c in CLICKS]
     xs = [p[0] for p in P]
     ys = [p[1] for p in P]
-    prior_y = lambda x: float(np.interp(x, xs, ys))
+    # au-dela des clics: PLAT (corrections d'Alexandre: la silhouette reste
+    # ~horizontale derriere le palmier a gauche et a droite de BE)
+    def prior_y(x):
+        return float(np.interp(x, xs, ys))
+
     # occluders connus: le billboard Diversity couvre le corridor TW-TE
     exclude = []
     bb_w = marks.get('Billboard with Diversity Motif (TW)')
     bb_e = marks.get('Billboard with Diversity Motif (TE)')
     if bb_w and bb_e:
         exclude.append((bb_w[0] - 40, bb_e[0] + 70))     # +70: poteau du panneau
-    cols, sky = extract_skyline(gray, prior_y, int(xs[0]), int(xs[-1]),
-                                exclude=exclude)
-    # les 4 clics humains sont des points de confiance: on les insere
-    cols = np.concatenate([cols, [float(x) for x in xs]])
-    sky = np.concatenate([sky, [float(y) for y in ys]])
-    order = np.argsort(cols)
-    cols, sky = cols[order], sky[order]
-    print(f'silhouette: {len(cols)} points entre x={xs[0]} et x={xs[-1]} '
-          f'(extraction + 4 clics; bande billboard exclue {exclude})')
+    # corrections manuelles (strokes d'Alexandre digitalises)
+    corr_path = os.path.join(THIS, 'data', 'hill_outline_corrections.json')
+    anchors = []
+    if os.path.exists(corr_path):
+        anchors = json.load(open(corr_path)).get(CAM, [])
+        print(f'{len(anchors)} strokes de correction charges')
+    W = gray.shape[1]
+    cols, sky, meas, manual = extract_skyline(gray, prior_y, args.x0, W - 4,
+                                              exclude=exclude, anchors=anchors)
+    known = meas | manual
+    if not known.any():
+        print('aucune evidence de silhouette — abandon'); return
+    mi = np.where(known)[0]
+    # ponts de bord limites: 40 colonnes au-dela du premier/dernier connu
+    lo = max(0, mi[0] - 40)
+    hi = min(len(cols), mi[-1] + 41)
+    cols, sky, meas, manual = (cols[lo:hi], sky[lo:hi], meas[lo:hi],
+                               manual[lo:hi])
+    mi = np.where(meas | manual)[0]
+    print(f'silhouette: chemin optimal x {cols[0]:.0f} -> {cols[-1]:.0f} '
+          f'(connu de {cols[mi[0]]:.0f} a {cols[mi[-1]]:.0f}), '
+          f'{int(meas.sum())} colonnes mesurees + {int(manual.sum())} ancrees '
+          f'manuellement / {len(meas)} (bande billboard exclue {exclude})')
+
+    # ── livrable 2D: outline sur la frame + JSON ────────────────────────
+    rgb = Image.open(os.path.join(REPO, 'frames', f'{CAM}.png')).convert('RGB')
+    dr2 = ImageDraw.Draw(rgb)
+    outline = [{'x': int(x), 'y': round(float(y), 1),
+                'source': ('manual' if mn else 'measured' if mm else 'bridge')}
+               for x, y, mm, mn in zip(cols, sky, meas, manual)]
+    for i in range(len(cols) - 1):
+        a = (float(cols[i]), float(sky[i]))
+        b = (float(cols[i + 1]), float(sky[i + 1]))
+        if manual[i] or manual[i + 1]:                # correction: bleu
+            dr2.line([a, b], fill=(59, 130, 246), width=5)
+        elif meas[i] and meas[i + 1]:                 # mesure: vert
+            dr2.line([a, b], fill=(74, 222, 128), width=5)
+        elif (i // 2) % 2 == 0:                       # pont: tirets orange
+            dr2.line([a, b], fill=(251, 146, 60), width=4)
+    for p in P:
+        dr2.ellipse([p[0] - 10, p[1] - 10, p[0] + 10, p[1] + 10],
+                    outline=(248, 113, 113), width=4)
+    out_dir = os.path.join(REPO, 'tools', 'generated', 'ambrosia_bounty')
+    os.makedirs(out_dir, exist_ok=True)
+    png = os.path.join(out_dir, 'hill_outline_bikers.png')
+    rgb.save(png)
+    oj = os.path.join(REPO, 'tools', 'generated', 'ambrosia_hill_outline.json')
+    json.dump({'cam': CAM, 'step': COL_STEP, 'points': outline}, open(oj, 'w'))
+    frac = 100.0 * sum(1 for r in outline if r['source'] != 'bridge') / len(outline)
+    print(f'outline 2D: {len(outline)} echantillons, {frac:.0f}% mesures '
+          f'(le reste interpole: billboard, fils, arbres)')
+    print(f'-> {png}\n-> {oj}')
+    if not args.mesh:
+        return
 
     # rayons + geometrie de la degenerescence
     rays = []
