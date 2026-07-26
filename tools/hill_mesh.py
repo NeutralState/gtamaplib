@@ -316,37 +316,22 @@ def main():
             pts.append(o + t * r)
     pts = np.array(pts)
 
-    # ── dome: anneaux de niveau deduits de la silhouette ────────────────
+    # ── rideau de silhouette (style rlx, mais a la profondeur RESOLUE):
+    #    crete = l'outline 2D valide projete a distance d, nervures
+    #    verticales jusqu'a la plaine, ligne de base ────────────────────
     edges = []
     for i in range(len(pts) - 1):                            # crete reelle
         edges.append([list(pts[i]), list(pts[i + 1])])
     z_top = float(pts[:, 2].max())
-    for k in range(N_RINGS):
-        z = Z_BASE + (z_top - Z_BASE) * (k / N_RINGS) ** 0.8
-        above = pts[:, 2] >= z
-        if above.sum() < 2:
-            continue
-        idx = np.where(above)[0]
-        A, B = pts[idx[0]], pts[idx[-1]]                     # bord du span
-        M = 0.5 * (A + B)
-        u = (B - A)[:2]
-        nu = float(np.linalg.norm(u))
-        half = 0.5 * nu
-        if half < 20:
-            continue
-        u = u / nu
-        v = np.array([-u[1], u[0]])                          # perpendiculaire
-        ring = []
-        for a in np.linspace(0, 2 * math.pi, 33):
-            p = M[:2] + half * math.cos(a) * u + RATIO * half * math.sin(a) * v
-            ring.append([float(p[0]), float(p[1]), float(z)])
-        for i in range(len(ring) - 1):
-            edges.append([ring[i], ring[i + 1]])
+    RIB = 10                                                 # une nervure sur 10
+    for i in range(0, len(pts), RIB):
+        edges.append([list(pts[i]), [pts[i][0], pts[i][1], Z_BASE]])
+    base = [[p[0], p[1], Z_BASE] for p in pts]
+    for i in range(0, len(base) - RIB, RIB):
+        edges.append([base[i], base[i + RIB]])
     out = {MESH_NAME: {'color': COLOR, 'world_edges': edges}}
     print(f'{MESH_NAME}: {len(edges)} aretes, crete z {pts[:, 2].min():.0f}-'
-          f'{z_top:.0f} m, {N_RINGS} anneaux de niveau, footprint '
-          f'{2 * 0.5 * np.linalg.norm((pts[-1] - pts[0])[:2]):.0f} x '
-          f'{2 * RATIO * 0.5 * np.linalg.norm((pts[-1] - pts[0])[:2]):.0f} m')
+          f'{z_top:.0f} m, largeur {np.linalg.norm((pts[-1] - pts[0])[:2]):.0f} m')
 
     if args.check:
         worst = 0.0
