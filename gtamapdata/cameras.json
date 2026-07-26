@@ -3569,24 +3569,25 @@
   "id": "S2/66",
   "player": null,
   "xyz": [
-   -1750.0006640780805,
-   6250.000375753115,
-   200.0006600791914
+   -2750.0,
+   5250.0,
+   150.0
   ],
   "ypr": [
-   118.68956872532787,
-   6.841746240148253,
-   -5.791161878738773e-06
+   112.0,
+   11.0,
+   1.0
   ],
   "fov": [
-   59.964157023931264,
-   null
+   85.0,
+   54.536
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 1 \u2014 Mount Kalaga National Park 02 [1]"
+  "source": "Screenshot 1 \u2014 Mount Kalaga National Park 02 [1]",
+  "note": "pose rlx (post Discord 2026-07-26, hand-tuned chiffres ronds), remplace son ancien candidat -1750/6250. VALIDEE par nous a ~15-20 px sur le cluster Starlet Motel / Port Gellhorn (nos triangulations les plus precises, jamais vues par lui) et a 60 px sur Daytona Beach Water Tower \u2014 compatible avec l identification water tower du clic (171,1598) qu il avait renomme 3400 Transmitter Rd sous sa pose intermediaire. Granularite ~1 deg: PAS un temoin de solve; ne pas injecter ses rayons en triangulation."
  },
  "Mount Kalaga National Park 04 (Mountain Pass) (X)": {
   "id": "S2/68",

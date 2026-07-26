@@ -12908,7 +12908,7 @@
    74.647
   ],
   "zone": "ambrosia",
-  "depth_caveat": "profondeur dependante du rayon Mount Kalaga (pose DEVINEE, chiffres ronds, jamais resolue): sans ce rayon la position glisse de 106m le long de la visee Ambrosia (rayons quasi paralleles). error_m honnete en attendant un vrai solve de Kalaga ou un temoin de profondeur",
+  "depth_caveat": "profondeur: le solve 3-cams (Panorama/Fires/Postcard) est auto-coherent a ~2m perp. Le rayon Kalaga sous la pose rlx du 2026-07-26 tombe a 60px/20m perp \u2014 il CONFIRME l identification (la silhouette a tete renflee est visible au clic) mais sa pose hand-tuned (~1 deg) est trop grossiere pour re-trianguler avec. Le jour ou Kalaga est resolue par resection (les ancres Starlet sont cliquables), ce rayon devient le temoin de profondeur definitif.",
   "aliases": [
    "Sebring Water Tower"
   ]
