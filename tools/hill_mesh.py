@@ -1,30 +1,28 @@
 #!/usr/bin/env python3
-"""hill_mesh.py — Ambrosia Hill en 3D, depuis sa silhouette. [HILL-3D-V1]
+"""hill_mesh.py — Ambrosia Hill en 3D, depuis sa silhouette. [HILL-3D-V2]
 
-Meme idee que les eventails de rlx (silhouette de Bikers extrudee a
-plusieurs profondeurs), mais en mieux sur trois points:
+UN SEUL hill, profondeur RESOLUE (plus d'hypotheses en eventail):
 
-  1. SILHOUETTE VRAIE: extraite de la frame au subpixel (gradient de
-     luminance dans un corridor autour des clics BW/TW/TE/BE), robuste aux
-     occluders (billboard, palmiers, poteaux = gradients durs rejetes;
-     l'arete colline/ciel est DOUCE a cause de la brume). ~600 points au
-     lieu de 4.
-  2. PROFONDEURS PHYSIQUES, pas arbitraires: la degenerescence mono-cam est
-     z_crete = z_cam + d*tan(elev). On ne peut pas la lever, mais on peut
-     la GRADUER avec les seules altitudes absolues de collines du monde:
-     Mount Waffles 197 m, Mount Mountain 241 m (tous deux triangules).
-     Argument massif: le clic BW (elev +5.10 deg) au bord gauche du cadre
-     prolonge presque exactement le sommet de Mount Mountain (5.7 deg a
-     2216 m, bearing 323 = 3.5 deg hors-cadre): la silhouette COULE dans
-     le massif de Mount Mountain -> l'hypothese continue est d ~ 2.2 km.
-  3. CHAQUE HYPOTHESE EST NOMMEE par ce qu'elle implique: Waffles-class
-     (197 m), Mountain-class (241 m), massif continu (~350 m), et
-     Kalaga-class a la distance ou rlx place la cam helico (5988 m ->
-     ~900 m, du Chiliad). Un seul clic de cette crete depuis une 2e cam
-     posee effondre d — le jour ou on l'a, ce fichier se re-genere.
+  1. SILHOUETTE VRAIE: extraite de la frame Bikers au subpixel (gradient
+     de luminance dans un corridor autour des clics BW/TW/TE/BE), robuste
+     aux occluders (billboard exclu via ses propres clics; aretes dures
+     rejetees — le bord colline/ciel est DOUX a cause de la brume).
+  2. PROFONDEUR PAR STEREO ANGULAIRE avec Empty Lot near Metro Station:
+     les deux cams cliquent TW et TE. La corde TW-TE a une longueur fixe;
+     elle sous-tend 6.5 deg depuis Bikers et ~2.5 deg depuis Empty Lot ->
+     une seule profondeur satisfait les deux. d ~ 2236 m (fov EL 50),
+     crete ~362 m — a 20 m de l'argument independant de continuite du
+     massif Mt Mountain (le clic BW a +5.10 deg prolonge le sommet de
+     Mt Mountain, 5.7 deg a 3.5 deg hors-cadre gauche), et sur le label
+     AMBROSIA HILL de la map communautaire. ATTENTION: sensible a la fov
+     d'Empty Lot (defaut 50, non resolue): 45 -> 1902 m, 55 -> 2614 m.
+     La pose complete d'Empty Lot ou de la cam helico Kalaga raffinera.
+  3. VRAI DOME, pas un rideau: anneaux de niveau (iso-z) deduits de la
+     silhouette (la largeur du crest au-dessus de chaque z donne le grand
+     axe de l'anneau), crete 3D reelle par-dessus.
 
-Usage: PYTHONPATH=. python3 tools/hill_mesh.py [--depths 1157,2216,5988]
-       [--apply] [--check]  (--check: reprojette la crete dans Bikers)
+Usage: PYTHONPATH=. python3 tools/hill_mesh.py [--depth D] [--el-fov F]
+       [--apply] [--check]
 """
 import argparse
 import json
@@ -54,12 +52,11 @@ MIN_EDGE = 1.2                # gradient en-deca = pas de bord trouvable
 DEV_MAX = 28.0                # ecart max a la mediane locale (px)
 COL_STEP = 4                  # une colonne sur 4
 
-# (etiquette, profondeur m, couleur) — profondeurs par defaut, cf. --depths
-HYPS = [
-    ('Waffles-class 197m',  1157, '#fbbf24'),
-    ('massif Mt Mountain',  2216, '#4ade80'),
-    ('Kalaga-class (rlx)',  5988, '#a78bfa'),
-]
+EL_CAM = 'Empty Lot near Metro Station'
+MESH_NAME = 'Ambrosia Hill'
+COLOR = '#4ade80'
+N_RINGS = 8                   # anneaux de niveau du dome
+RATIO = 0.65                  # profondeur du dome = RATIO * demi-largeur
 
 
 def extract_skyline(gray, prior_y, x0, x1, exclude=()):
@@ -100,10 +97,40 @@ def extract_skyline(gray, prior_y, x0, x1, exclude=()):
     return cols, smooth
 
 
+def solve_depth(cam, px, cams, fov_el):
+    """Profondeur t (le long des rayons de Bikers) telle que la corde
+    TW-TE sous-tende, vue d'Empty Lot, l'angle mesure dans sa frame."""
+    o = np.asarray(cam.xyz, float)
+    marks = px[CAM]
+    rw = np.asarray(cam.get_pixel_direction(marks['Ambrosia Hill (TW)']), float)
+    re = np.asarray(cam.get_pixel_direction(marks['Ambrosia Hill (TE)']), float)
+    rw, re = rw / np.linalg.norm(rw), re / np.linalg.norm(re)
+    E = np.asarray(cams[EL_CAM]['xyz'], float)
+    pel = px[EL_CAM]
+    dx_px = abs(pel['Ambrosia Hill (TE)'][0] - pel['Ambrosia Hill (TW)'][0])
+    ang_e = math.radians(dx_px * fov_el / 3840.0)
+
+    def ang(t):
+        va, vb = o + t * rw - E, o + t * re - E
+        c = float(np.dot(va, vb) / np.linalg.norm(va) / np.linalg.norm(vb))
+        return math.acos(max(-1.0, min(1.0, c)))
+
+    lo, hi = 200.0, 50000.0
+    for _ in range(90):
+        mid = 0.5 * (lo + hi)
+        if ang(mid) < ang_e:            # l'angle vu d'EL croit avec t
+            lo = mid
+        else:
+            hi = mid
+    return 0.5 * (lo + hi), math.degrees(ang_e)
+
+
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--depths', default=None,
-                    help='profondeurs m, separees par des virgules')
+    ap.add_argument('--depth', type=float, default=None,
+                    help='forcer la profondeur (m, xy) au lieu du solve Empty Lot')
+    ap.add_argument('--el-fov', type=float, default=None,
+                    help='hfov supposee d Empty Lot (defaut: son etat disque)')
     ap.add_argument('--apply', action='store_true')
     ap.add_argument('--check', action='store_true')
     args = ap.parse_args()
@@ -149,65 +176,80 @@ def main():
     print(f'degenerescence mono-cam: z_crete = {o[2]:.1f} + d * tan(elev) '
           f'= {o[2]:.1f} + {math.tan(math.radians(elev.max())):.4f} * d\n')
 
-    hyps = HYPS
-    if args.depths:
-        hyps = [(f'd={v}m', float(v), c) for v, (_, _, c) in
-                zip(args.depths.split(','), HYPS + HYPS)]
-
-    # table des hypotheses
-    print(f'{"hypothese":24s} {"d (m)":>7s} {"z crete (m)":>12s}  lecture')
-    for lab, d, _ in hyps:
-        zc = o[2] + d * math.tan(math.radians(float(elev.max())))
-        note = ('~ Mount Waffles (197, triangule)' if abs(zc - 197) < 40 else
-                '~ Mount Mountain (241, triangule)' if abs(zc - 241) < 40 else
-                'continuite du massif Mt Mountain' if 300 < zc < 420 else
-                'Chiliad-class, massif Kalaga' if zc > 700 else '')
-        print(f'{lab:24s} {d:7.0f} {zc:12.1f}  {note}')
-
-    out = {}
-    for lab, d, col in hyps:
-        # plan vertical perpendiculaire au bearing moyen, a distance d
+    # ── profondeur: stereo angulaire Bikers x Empty Lot ─────────────────
+    cams = json.load(open(os.path.join(REPO, 'gtamapdata', 'cameras.json')))
+    fov_el = args.el_fov or cams[EL_CAM]['fov'][0]
+    if args.depth:
+        d = float(args.depth)
+        print(f'profondeur FORCEE: d_xy = {d:.0f} m')
+    else:
+        t_sol, ang_e = solve_depth(cam, px, cams, fov_el)
         b0 = math.radians(float(np.median(bear)))
-        n = np.array([math.sin(b0), math.cos(b0)])          # normale horizontale
-        pts = []
-        for r in rays:
-            t = d / (r[0] * n[0] + r[1] * n[1])
-            if t <= 0:
-                continue
+        d = t_sol * math.cos(math.radians(float(np.mean(elev))))
+        print(f'stereo angulaire: corde TW-TE = 6.5 deg (Bikers) / '
+              f'{ang_e:.2f} deg (Empty Lot, fov {fov_el:.0f} px->deg)')
+        print(f'  -> d_xy = {d:.0f} m  (sensibilite: fov EL 45 -> 1902, '
+              f'55 -> 2614; la pose complete d Empty Lot raffinera)')
+    zc = o[2] + d * math.tan(math.radians(float(elev.max())))
+    print(f'  -> z crete max = {zc:.0f} m  '
+          f'(Mt Waffles 197, Mt Mountain 241, tous deux triangules)\n')
+
+    # ── crete 3D sur le plan vertical a distance d ──────────────────────
+    b0 = math.radians(float(np.median(bear)))
+    n = np.array([math.sin(b0), math.cos(b0)])
+    pts = []
+    for r in rays:
+        t = d / (r[0] * n[0] + r[1] * n[1])
+        if t > 0:
             pts.append(o + t * r)
-        pts = np.array(pts)
-        edges = []
-        for i in range(len(pts) - 1):                        # crete
-            edges.append([list(pts[i]), list(pts[i + 1])])
-        for i in range(0, len(pts), 6):                      # nervures
-            edges.append([list(pts[i]), [pts[i][0], pts[i][1], Z_BASE]])
-        base = [[p[0], p[1], Z_BASE] for p in pts]
-        for i in range(0, len(base) - 6, 6):                 # ligne de base
-            edges.append([base[i], base[i + 6]])
-        name = f'Ambrosia Hill [{lab}]'
-        out[name] = {'color': col, 'world_edges': edges}
-        print(f'  {name}: {len(edges)} aretes, crete z '
-              f'{pts[:, 2].min():.0f}-{pts[:, 2].max():.0f} m')
+    pts = np.array(pts)
+
+    # ── dome: anneaux de niveau deduits de la silhouette ────────────────
+    edges = []
+    for i in range(len(pts) - 1):                            # crete reelle
+        edges.append([list(pts[i]), list(pts[i + 1])])
+    z_top = float(pts[:, 2].max())
+    for k in range(N_RINGS):
+        z = Z_BASE + (z_top - Z_BASE) * (k / N_RINGS) ** 0.8
+        above = pts[:, 2] >= z
+        if above.sum() < 2:
+            continue
+        idx = np.where(above)[0]
+        A, B = pts[idx[0]], pts[idx[-1]]                     # bord du span
+        M = 0.5 * (A + B)
+        u = (B - A)[:2]
+        nu = float(np.linalg.norm(u))
+        half = 0.5 * nu
+        if half < 20:
+            continue
+        u = u / nu
+        v = np.array([-u[1], u[0]])                          # perpendiculaire
+        ring = []
+        for a in np.linspace(0, 2 * math.pi, 33):
+            p = M[:2] + half * math.cos(a) * u + RATIO * half * math.sin(a) * v
+            ring.append([float(p[0]), float(p[1]), float(z)])
+        for i in range(len(ring) - 1):
+            edges.append([ring[i], ring[i + 1]])
+    out = {MESH_NAME: {'color': COLOR, 'world_edges': edges}}
+    print(f'{MESH_NAME}: {len(edges)} aretes, crete z {pts[:, 2].min():.0f}-'
+          f'{z_top:.0f} m, {N_RINGS} anneaux de niveau, footprint '
+          f'{2 * 0.5 * np.linalg.norm((pts[-1] - pts[0])[:2]):.0f} x '
+          f'{2 * RATIO * 0.5 * np.linalg.norm((pts[-1] - pts[0])[:2]):.0f} m')
 
     if args.check:
-        # la crete re-projetee doit epouser la silhouette extraite (par
-        # construction) — verifie l'aller-retour projection
         worst = 0.0
-        lab, d, _ = hyps[0]
-        b0 = math.radians(float(np.median(bear)))
-        n = np.array([math.sin(b0), math.cos(b0)])
         for (x, y, r) in zip(cols, sky, rays):
             t = d / (r[0] * n[0] + r[1] * n[1])
             pr = cam.get_pixel([float(v) for v in (o + t * r)])
             if pr is not None:
                 worst = max(worst, math.hypot(pr[0] - x, pr[1] - y))
-        print(f'\ncheck aller-retour ({lab}): pire ecart {worst:.2f} px')
+        print(f'check aller-retour crete -> Bikers: pire ecart {worst:.2f} px')
 
     if not args.apply:
         print('\nDRY-RUN (--apply pour ecrire dans building_meshes_procedural.json).')
         return
     mesh = json.load(open(MESH_PATH)) if os.path.exists(MESH_PATH) else {}
-    stale = [k for k in mesh if k.startswith('Ambrosia Hill [')]
+    stale = [k for k in mesh if k.startswith('Ambrosia Hill')]
     for k in stale:
         mesh.pop(k)                       # re-generation: on remplace les notres
     mesh.update(out)
