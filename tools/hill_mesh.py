@@ -193,6 +193,8 @@ def main():
     ap.add_argument('--apply', action='store_true')
     ap.add_argument('--check', action='store_true')
     ap.add_argument('--mesh', action='store_true',
+                    help='genere le mesh 3D')
+    ap.add_argument('--slope', type=float, default=None,
                     help='genere aussi le mesh 3D (par defaut: outline 2D seul)')
     ap.add_argument('--x0', type=int, default=0,
                     help='debut de l outline (defaut 130: bord du palmier)')
@@ -316,22 +318,63 @@ def main():
             pts.append(o + t * r)
     pts = np.array(pts)
 
-    # ── rideau de silhouette (style rlx, mais a la profondeur RESOLUE):
-    #    crete = l'outline 2D valide projete a distance d, nervures
-    #    verticales jusqu'a la plaine, ligne de base ────────────────────
+    z_top = float(pts[:, 2].max())
     edges = []
     for i in range(len(pts) - 1):                            # crete reelle
         edges.append([list(pts[i]), list(pts[i + 1])])
-    z_top = float(pts[:, 2].max())
-    RIB = 10                                                 # une nervure sur 10
-    for i in range(0, len(pts), RIB):
-        edges.append([list(pts[i]), [pts[i][0], pts[i][1], Z_BASE]])
-    base = [[p[0], p[1], Z_BASE] for p in pts]
-    for i in range(0, len(base) - RIB, RIB):
-        edges.append([base[i], base[i + RIB]])
+    if args.slope:
+        # ── volume a pente declaree: chaque point de crete descend
+        #    perpendiculairement a la ride, des deux cotes, a --slope deg
+        #    jusqu'a la plaine; contours iso-z + lignes de pied ─────────
+        run = 1.0 / math.tan(math.radians(args.slope))       # m xy par m z
+        # tangente locale de la ride (lissee), normale horizontale
+        tang = np.zeros((len(pts), 2))
+        tang[1:-1] = pts[2:, :2] - pts[:-2, :2]
+        tang[0], tang[-1] = tang[1], tang[-2]
+        tang /= np.linalg.norm(tang, axis=1)[:, None] + 1e-9
+        nrm = np.stack([-tang[:, 1], tang[:, 0]], axis=1)
+        RIB = 12
+        levels = [Z_BASE + (z_top - Z_BASE) * f for f in (0.0, 0.33, 0.66)]
+        for s in (+1.0, -1.0):
+            for z in levels:
+                poly = []
+                for i in range(len(pts)):
+                    h = pts[i, 2] - z
+                    if h <= 0:
+                        if len(poly) > 1:
+                            for j in range(len(poly) - 1):
+                                edges.append([poly[j], poly[j + 1]])
+                        poly = []
+                        continue
+                    q = pts[i, :2] + s * nrm[i] * h * run
+                    poly.append([float(q[0]), float(q[1]), float(z)])
+                if len(poly) > 1:
+                    for j in range(len(poly) - 1):
+                        edges.append([poly[j], poly[j + 1]])
+            for i in range(0, len(pts), RIB):                # lignes de pente
+                h = pts[i, 2] - Z_BASE
+                q = pts[i, :2] + s * nrm[i] * h * run
+                edges.append([list(pts[i]), [float(q[0]), float(q[1]), Z_BASE]])
+        for i in (0, len(pts) - 1):                          # fermeture des bouts
+            h = pts[i, 2] - Z_BASE
+            t = tang[i] * (1 if i else -1)
+            q = pts[i, :2] + t * h * run
+            edges.append([list(pts[i]), [float(q[0]), float(q[1]), Z_BASE]])
+        foot = 2 * (z_top - Z_BASE) * run
+        print(f'{MESH_NAME}: pente {args.slope:.0f} deg, pied {foot:.0f} m au '
+              f'plus large, {len(edges)} aretes, crete z {pts[:, 2].min():.0f}-'
+              f'{z_top:.0f} m')
+    else:
+        # rideau historique: nervures verticales + ligne de base
+        RIB = 10
+        for i in range(0, len(pts), RIB):
+            edges.append([list(pts[i]), [pts[i][0], pts[i][1], Z_BASE]])
+        base = [[p[0], p[1], Z_BASE] for p in pts]
+        for i in range(0, len(base) - RIB, RIB):
+            edges.append([base[i], base[i + RIB]])
+        print(f'{MESH_NAME}: {len(edges)} aretes, crete z {pts[:, 2].min():.0f}-'
+              f'{z_top:.0f} m, largeur {np.linalg.norm((pts[-1] - pts[0])[:2]):.0f} m')
     out = {MESH_NAME: {'color': COLOR, 'world_edges': edges}}
-    print(f'{MESH_NAME}: {len(edges)} aretes, crete z {pts[:, 2].min():.0f}-'
-          f'{z_top:.0f} m, largeur {np.linalg.norm((pts[-1] - pts[0])[:2]):.0f} m')
 
     if args.check:
         worst = 0.0
