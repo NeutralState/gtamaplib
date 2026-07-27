@@ -51,25 +51,31 @@ EL = 'Empty Lot near Metro Station'
 MESH_PATH = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
 Z_BASE = 18.87
 
-# bande du dome dans la frame EL (bornee par le poteau a droite du dome et
-# le portique a gauche); les 2 clics TW/TE servent de prior
-EL_X0, EL_X1 = 2900, 3232
+# bande du dome dans la frame EL; le flanc droit continue jusqu'a ~3300
+# (stroke de correction d'Alexandre, 2026-07-26); clics TW/TE en prior
+EL_X0, EL_X1 = 2900, 3300
 
 
 def el_outline(el_state):
-    """Silhouette du dome dans Empty Lot (DP de hill_mesh, priors = clics)."""
+    """Silhouette du dome dans Empty Lot (DP de hill_mesh, priors = clics,
+    ancres = strokes d'Alexandre dans hill_outline_corrections.json)."""
     px = json.load(open(os.path.join(REPO, 'gtamapdata', 'pixels.json')))
     marks = px[EL]
     im = Image.open(os.path.join(REPO, 'frames', f'{EL}.png')).convert('L')
     gray = np.asarray(im, np.float32)
     tw, te = marks['Ambrosia Hill (TW)'], marks['Ambrosia Hill (TE)']
     xs = [EL_X0, tw[0], te[0], EL_X1]
-    ys = [tw[1] + 24, tw[1], te[1], te[1] + 24]     # flancs redescendent
+    ys = [tw[1] + 24, tw[1], te[1], te[1] + 36]     # flancs redescendent
     prior = lambda x: float(np.interp(x, xs, ys))
+    anchors = []
+    corr = os.path.join(THIS, 'data', 'hill_outline_corrections.json')
+    if os.path.exists(corr):
+        anchors = json.load(open(corr)).get(EL, [])
     # bokeh: bord tres doux -> seuils adoucis
     hm.MIN_EDGE, hm.HARD_EDGE, hm.CORRIDOR = 0.5, 40.0, 70
-    cols, sky, meas, manual = hm.extract_skyline(gray, prior, EL_X0, EL_X1)
-    return cols, sky, meas
+    cols, sky, meas, manual = hm.extract_skyline(gray, prior, EL_X0, EL_X1,
+                                                 anchors=anchors)
+    return cols, sky, meas | manual
 
 
 def main():
