@@ -148,10 +148,14 @@ def main():
         sil_e = lambda x: float(np.interp(x, cols_e, sky_e))
         c_el = common.get_cam(EL, el_state)
 
-        ridge = []
-        for x, y in bik_out[::2]:
+        # profondeur stereo la ou EL voit la crete; ailleurs la crete
+        # COMPLETE de l'outline Bikers est gardee, profondeur prolongee
+        # par tenue de bord (np.interp) — on ne coupe pas la montagne.
+        rays, sol_i, sol_t = [], [], []
+        for i, (x, y) in enumerate(bik_out[::2]):
             r = np.asarray(cam_b.get_pixel_direction((float(x), float(y))), float)
-            r /= np.linalg.norm(r)
+            rays.append(r / np.linalg.norm(r))
+        for i, r in enumerate(rays):
 
             def miss(t):
                 pr = c_el.get_pixel([float(v) for v in (o_b + t * r)])
@@ -180,14 +184,27 @@ def main():
                     lo = mid
                 else:
                     hi = mid
-            t = 0.5 * (lo + hi)
-            ridge.append(o_b + t * r)
-        return np.array(ridge), el_state, (cols_e, sky_e, meas_e), t_chord
+            sol_i.append(i)
+            sol_t.append(0.5 * (lo + hi))
+        if not sol_i:
+            return np.zeros((0, 3)), el_state, (cols_e, sky_e, meas_e), t_chord, 0
+        # lissage des t resolus puis interpolation/tenue de bord partout;
+        # lissage LARGE ensuite: le raccord bord/stereo et les flancs
+        # arrondis (correspondance approximative) ne meritent pas des
+        # virages a 300 m — le terrain est continu.
+        sol_t = np.array([np.median(sol_t[max(0, k - 3):k + 4])
+                          for k in range(len(sol_t))])
+        all_t = np.interp(np.arange(len(rays)), sol_i, sol_t)
+        for w in (15, 9):
+            all_t = np.array([np.mean(all_t[max(0, k - w // 2):k + w // 2 + 1])
+                              for k in range(len(all_t))])
+        ridge = np.array([o_b + t * r for t, r in zip(all_t, rays)])
+        return ridge, el_state, (cols_e, sky_e, meas_e), t_chord, len(sol_i)
 
     if args.fov_sweep:
         print(f'{"fov EL":>7s} {"d corde":>8s} {"z max":>7s} {"d min-max ride":>16s} {"n pts":>6s}')
         for fov in range(40, 61, 2):
-            ridge, st, _, tc = solve(float(fov))
+            ridge, st, _, tc, nsol = solve(float(fov))
             if not len(ridge):
                 print(f'{fov:7.0f}  (pas de solution)')
                 continue
@@ -196,10 +213,11 @@ def main():
                   f'{d.min():7.0f}-{d.max():.0f} {len(ridge):6d}')
         return
 
-    ridge, el_state, (cols_e, sky_e, meas_e), t_chord = solve(fov_el)
+    ridge, el_state, (cols_e, sky_e, meas_e), t_chord, nsol = solve(fov_el)
     d = np.hypot(ridge[:, 0] - o_b[0], ridge[:, 1] - o_b[1])
     print(f'fov EL {fov_el}: pose EL yaw {el_state["ypr"][0]:.2f} pitch {el_state["ypr"][1]:.2f}')
-    print(f'crete stereo: {len(ridge)} points, profondeur {d.min():.0f} -> {d.max():.0f} m '
+    print(f'crete COMPLETE: {len(ridge)} points dont {nsol} resolus en stereo '
+          f'(le reste: profondeur tenue de bord), profondeur {d.min():.0f} -> {d.max():.0f} m '
           f'(corde: {t_chord:.0f}), z {ridge[:, 2].min():.0f} -> {ridge[:, 2].max():.0f} m')
 
     # overlay EL: silhouette extraite + crete reprojetee
