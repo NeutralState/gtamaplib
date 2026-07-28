@@ -37,6 +37,7 @@ sys.path.insert(0, THIS)
 sys.path.insert(0, REPO)
 
 import numpy as np
+from PIL import Image
 import common
 
 CAM = 'Mount Kalaga National Park 04 (Mountain Pass) (X)'
@@ -169,32 +170,60 @@ def main():
     e_t = []
     up = math.radians(args.slope_up)
 
-    def sweep(rim, env, stop_at_env, u_max):
+    # luminance de la frame: la surface visible s'arrete ou commence le
+    # CIEL / fond clair (on ne depasse pas les arbres) et au rebord exact
+    frame_L = np.asarray(Image.open(os.path.join(
+        REPO, 'frames', f'{CAM}.png')).convert('L'), np.float32)
+    fh, fw = frame_L.shape
+    def lum(px, py):
+        x0, x1 = max(0, int(px) - 3), min(fw, int(px) + 4)
+        y0, y1 = max(0, int(py) - 3), min(fh, int(py) + 4)
+        return float(frame_L[y0:y1, x0:x1].mean())
+    SKY = 178.0
+
+    def sweep(rim, env, stop_at_env, u_max, dens=2):
         """Generatrices a --slope-up depuis le rim, a l'oppose de la route.
-        stop_at_env: s'arrete a l'enveloppe hachuree; sinon au BORD du cadre
-        (demande d'Alexandre: 'continue jusqu'au edge de la photo')."""
+        Terminaison: rebord EXACT du cadre (bissection) ou ligne des arbres
+        (la projection atteint une zone claire = ciel/fond) ou enveloppe."""
         env_y = (lambda x: float(np.interp(x, env['x'], env['y']))) if env else None
+        def point(R, nh, u):
+            return np.array([R[0] + u * nh[0] * math.cos(up),
+                             R[1] + u * nh[1] * math.cos(up),
+                             R[2] + u * math.sin(up)])
+        def ok(R, nh, u):
+            pr = cam.get_pixel([float(v) for v in point(R, nh, u)])
+            if pr is None or pr[0] < 1 or pr[0] > cam.w - 1 or pr[1] < 1:
+                return False
+            if lum(pr[0], pr[1]) > SKY:
+                return False               # on ne depasse pas les arbres
+            if stop_at_env and env_y is not None and env['x'][0] <= pr[0] <= env['x'][-1] \
+                    and pr[1] <= env_y(pr[0]):
+                return False
+            return True
         gp = []
-        for i in range(0, len(rim), 4):
+        for i in range(0, len(rim), dens):
             R = rim[i]
             j = int(np.argmin(np.linalg.norm(road_xy - R[:2], axis=1)))
             nh = R[:2] - road_xy[j]
             nh /= (np.linalg.norm(nh) + 1e-9)
-            gen = None
-            for u in np.arange(8, u_max, 8):
-                Q = np.array([R[0] + u * nh[0] * math.cos(up),
-                              R[1] + u * nh[1] * math.cos(up),
-                              R[2] + u * math.sin(up)])
-                pr = cam.get_pixel([float(v) for v in Q])
-                if pr is None or pr[0] < 4 or pr[0] > cam.w - 4 or pr[1] < 4:
+            u_ok = None
+            for u in np.arange(6, u_max, 6):
+                if ok(R, nh, u):
+                    u_ok = u
+                else:
+                    if u_ok is None:
+                        break
+                    lo, hi = u_ok, u
+                    for _ in range(12):    # bissection: touche le rebord
+                        mid = 0.5 * (lo + hi)
+                        if ok(R, nh, mid):
+                            lo = mid
+                        else:
+                            hi = mid
+                    u_ok = lo
                     break
-                if stop_at_env and env_y is not None and env['x'][0] <= pr[0] <= env['x'][-1] \
-                        and pr[1] <= env_y(pr[0]):
-                    gen = Q
-                    break
-                gen = Q
-            if gen is not None:
-                gp.append((R, gen))
+            if u_ok is not None and u_ok > 8:
+                gp.append((R, point(R, nh, u_ok)))
         return gp
 
     def emit(gp):
