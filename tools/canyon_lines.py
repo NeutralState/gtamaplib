@@ -56,7 +56,7 @@ EVIDENCE = 2.0
 STEP = 4
 
 
-def snap(gray, rg, prior_pts, kind):
+def snap(gray, rg, prior_pts, kind, corridor=CORRIDOR):
     """DP dans un corridor autour du prior. Score selon le type de ligne:
     rims = gradient lumi + transition R-G (roche rouge dessous);
     road = bande CLAIRE (asphalte) -> crete de luminance;
@@ -68,8 +68,8 @@ def snap(gray, rg, prior_pts, kind):
     h, w = gray.shape
     grid = np.arange(x0, x1, STEP)
     n = len(grid)
-    m = 2 * CORRIDOR
-    y0 = np.array([int(min(max(prior(int(x)) - CORRIDOR, 2), h - m - 8))
+    m = 2 * corridor
+    y0 = np.array([int(min(max(prior(int(x)) - corridor, 2), h - m - 8))
                    for x in grid])
     E = np.zeros((n, m))
     gy = np.zeros_like(gray)
@@ -114,6 +114,29 @@ def snap(gray, rg, prior_pts, kind):
     return grid.astype(float), sm, meas
 
 
+"""Points de controle par CLICS (la maniere precise, demandee par Alexandre):
+dans la calib UI, cliquer des points nommes selon la convention
+
+    Canyon Rim R (01), Canyon Rim R (02), ...   (numerotes dans l'ordre)
+    Canyon Rim L (01), ...
+    Canyon Road (01), ...
+    Canyon Bridge (01), (02)                     (les 2 bouts du tablier)
+
+Des qu'une ligne a >= 2 clics, ils REMPLACENT le prior digitalise: la ligne
+est l'interpolation exacte entre les clics + micro-snap +-8 px seulement."""
+CLICK_PREFIX = {
+    'rim_right': 'Canyon Rim R (',
+    'rim_left': 'Canyon Rim L (',
+    'road_center': 'Canyon Road (',
+    'bridge_deck': 'Canyon Bridge (',
+}
+
+
+def click_points(marks, prefix):
+    pts = sorted((k, v) for k, v in marks.items() if k.startswith(prefix))
+    return [list(v) for _, v in pts]
+
+
 def main():
     im = Image.open(os.path.join(REPO, 'frames', f'{CAM}.png')).convert('RGB')
     a = np.asarray(im, np.float32)
@@ -122,20 +145,26 @@ def main():
 
     corr_path = os.path.join(THIS, 'data', 'canyon_corrections.json')
     corr = json.load(open(corr_path)).get(CAM, {}) if os.path.exists(corr_path) else {}
+    px_all = json.load(open(os.path.join(REPO, 'gtamapdata', 'pixels.json')))
+    marks = px_all.get(CAM, {})
 
     dr = ImageDraw.Draw(im)
     F = ImageFont.truetype('/System/Library/Fonts/Helvetica.ttc', 30)
     out = {}
     for name, prior in PRIORS.items():
-        pts = corr.get(name, prior)           # les strokes d'Alexandre priment
+        clicks = click_points(marks, CLICK_PREFIX[name])
+        pts = clicks if len(clicks) >= 2 else corr.get(name, prior)
+        src = 'CLICS' if len(clicks) >= 2 else 'prior'
+        cw = 8 if len(clicks) >= 2 else CORRIDOR
         if name == 'road_center':
             # la route est quasi VERTICALE dans l'image (S-curve): on la
             # suit en x(y) sur l'image transposee
-            pts_t = [[p[1], p[0]] for p in reversed(pts)]
-            cols, ys, meas = snap(gray.T, rg.T, pts_t, name)
+            pts_s = sorted(pts, key=lambda q: q[1])
+            pts_t = [[q[1], q[0]] for q in pts_s]
+            cols, ys, meas = snap(gray.T, rg.T, pts_t, name, corridor=cw)
             cols, ys = ys, cols               # re-swap -> (x, y)
         else:
-            cols, ys, meas = snap(gray, rg, pts, name)
+            cols, ys, meas = snap(gray, rg, pts, name, corridor=cw)
         col = COLORS[name]
         for i in range(len(cols) - 1):
             if meas[i] and meas[i + 1]:
@@ -146,7 +175,7 @@ def main():
                 stroke_width=3, stroke_fill=(0, 0, 0))
         out[name] = {'x': cols.tolist(), 'y': ys.tolist(),
                      'measured': meas.tolist()}
-        print(f'{name:12s}: {int(np.sum(meas))}/{len(meas)} colonnes avec evidence')
+        print(f'{name:12s} [{src}]: {int(np.sum(meas))}/{len(meas)} colonnes avec evidence')
     od = os.path.join(REPO, 'tools', 'generated')
     json.dump(out, open(os.path.join(od, 'canyon_lines.json'), 'w'))
     png = os.path.join(od, 'ambrosia_bounty', 'canyon_lines_kalaga04.png')
