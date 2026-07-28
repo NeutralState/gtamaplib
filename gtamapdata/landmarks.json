@@ -11425,11 +11425,18 @@
   "zone": null
  },
  "Unknown Mast (1)": {
-  "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "xyz": [
+   -4611.2,
+   1211.9,
+   78.4
+  ],
+  "source_cameras": [
+   "Port Vice City (A)",
+   "Port Vice City (B)"
+  ],
+  "error_m": 4.0,
+  "zone": "unknown",
+  "method": "triangulation 2 rayons (perp 2.3 m), faite pour la resection Kalaga 04"
  },
  "MIA North Terminal (B)": {
   "author": "rlx",
@@ -16353,11 +16360,18 @@
   "author": "rlx"
  },
  "Billboard near Intersection (TN)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "xyz": [
+   -5274.0,
+   3371.8,
+   104.0
+  ],
+  "source_cameras": [
+   "Ambrosia 04 (Fires)",
+   "Port Gellhorn 01 (Starlet Motel)"
+  ],
+  "error_m": 15.0,
   "zone": "port_gellhorn",
-  "author": "rlx"
+  "method": "triangulation 2 rayons (perp 10 m chacun \u2014 angles rasants), faite pour la resection Kalaga 04"
  },
  "Radio Tower near Intersection 2": {
   "xyz": null,

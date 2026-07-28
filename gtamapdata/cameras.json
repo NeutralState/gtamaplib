@@ -3593,17 +3593,17 @@
   "id": "S2/68",
   "player": null,
   "xyz": [
-   -4750.0,
-   6000.0,
-   120.0
+   -5509.4,
+   5568.8,
+   160.3
   ],
   "ypr": [
-   156.447,
-   -13.566,
-   0.0
+   174.385,
+   -13.504,
+   2.547
   ],
   "fov": [
-   60.0,
+   54.12,
    null
   ],
   "size": [
@@ -3611,7 +3611,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Mount Kalaga National Park 04 [1]",
-  "note": "pose rlx upstream b4b1b1a (2026-07-28) \u2014 il triangule maintenant Quarry via Diner (SE) (A) x cette cam (d=5.947). Remplace notre etat precedent [-4749.96216201173, 5999.977635989342, 120.00807468394875]/[159.346, -10.845, 0.0]/fov 48.801095."
+  "note": "pose RESECTION-V1 (2026-07-28): resolue sur 4 points independants (Billboard near Intersection (TN) triangule Fires x PG01, Unknown Mast (1) triangule PVC A x B, Quarry, Billboard Delights) + 4 contraintes epipolaires (Blob x heli, Crazy Hill x PVC A, BB Intersection BC x PG01, BB Starlet B x Motel). rms 31.4 arcmin vs 221.6 sous la pose rlx (-4750/6000/120 ypr 156.45/-13.57/0 fov 60, gardee ici en ref). CAVEATS: 8 contraintes / 7 params, a peine surdetermine; Quarry et possiblement Delights ont ete triangules par rlx VIA cette cam (circularite partielle vers sa pose); residus 24-42 arcmin uniformes = pose encore molle. Se raffine avec chaque nouveau clic d objet positionne dans cette frame."
  },
  "Vice City Postcard": {
   "id": "S2/71",
