@@ -158,7 +158,7 @@ def main():
         clicks = click_points(marks, CLICK_PREFIX[name])
         pts = clicks if len(clicks) >= 2 else corr.get(name, prior)
         src = 'CLICS' if len(clicks) >= 2 else 'prior'
-        cw = 8 if len(clicks) >= 2 else (25 if name in corr else CORRIDOR)
+        cw = 8 if len(clicks) >= 2 else (12 if name in corr else CORRIDOR)
         if name == 'road_center':
             # la route est quasi VERTICALE dans l'image (S-curve): on la
             # suit en x(y) sur l'image transposee
