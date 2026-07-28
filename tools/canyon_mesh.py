@@ -115,8 +115,13 @@ def main():
     n_road = np.stack([-t_road[:, 1], t_road[:, 0]], axis=1)
 
     walls = {}
-    for name, side in [('rim_right', -1.0), ('rim_left', +1.0),
-                       ('rim_left_pinnacle', +1.0), ('rim_left_top', +1.0)]:
+    rim_names = ['rim_right', 'rim_left', 'rim_left_pinnacle', 'rim_left_top']
+    # terrain_near_right exclu: versant du PREMIER PLAN (la colline de la
+    # cam), aucune route sous lui dans l'image -> l'echafaudage par colonne
+    # le placerait sous terre. Il attendra son propre ancrage.
+    terr_names = [k for k in lines if (k.startswith('terrain_') or k == 'ridge_back')
+                  and k != 'terrain_near_right']
+    for name in rim_names + terr_names:
         if name not in lines:
             continue
         wx, wy = lines[name]['x'], lines[name]['y']
@@ -137,35 +142,44 @@ def main():
         print(f'{name:18s}: {len(pts)} pts, z {walls[name][:,2].min():.0f}-'
               f'{walls[name][:,2].max():.0f}, hauteur/route mediane {np.median(rel):.0f} m')
 
-    # ── meshs ───────────────────────────────────────────────────────────
+    # ── meshs (route et pont RETIRES a la demande d'Alexandre — la route
+    #    reste l'echafaudage de profondeur interne) ─────────────────────
     out = {}
     def poly_edges(pts, step=1):
         return [[list(map(float, pts[i])), list(map(float, pts[i + step]))]
                 for i in range(0, len(pts) - step, step)]
-    road_o = road[np.argsort(np.hypot(*(road[:, :2] - o[:2]).T))]
-    e_road = poly_edges(road_o)
-    for side in (-1.0, +1.0):                       # bords de chaussee (+-6 m)
-        edge = road_o[:, :2] + side * 6.0 * np.stack([-np.gradient(road_o[:, :2], axis=0)[:, 1],
-                                                      np.gradient(road_o[:, :2], axis=0)[:, 0]], axis=1) / \
-               (np.linalg.norm(np.gradient(road_o[:, :2], axis=0), axis=1)[:, None] + 1e-9)
-        ep = np.column_stack([edge, road_o[:, 2]])
-        e_road += poly_edges(ep, step=2)
-    out['Canyon Road (Kalaga Pass)'] = {'color': '#7dd3fc', 'world_edges': e_road}
-
-    e_br = poly_edges(deck)
-    for f in (0.25, 0.75):                          # piles
-        i = int(f * (len(deck) - 1))
-        base = A + B * float(np.hypot(*(deck[i, :2] - o[:2])))
-        e_br.append([list(map(float, deck[i])), [float(deck[i][0]), float(deck[i][1]), float(base)]])
-    out['Canyon Bridge (Kalaga Pass)'] = {'color': '#a78bfa', 'world_edges': e_br}
 
     e_w = []
-    for name, pts in walls.items():
+    for name in rim_names:
+        if name not in walls:
+            continue
+        pts = walls[name]
         e_w += poly_edges(pts)
         for i in range(0, len(pts), 6):             # nervures vers la route
             base = A + B * float(np.hypot(*(pts[i, :2] - o[:2])))
             e_w.append([list(map(float, pts[i])), [float(pts[i][0]), float(pts[i][1]), float(base)]])
     out['Canyon Walls (Kalaga Pass)'] = {'color': '#fb923c', 'world_edges': e_w}
+
+    # terrain au-dessus des rims (enveloppes des hachures) + ridge_back:
+    # polylines 3D + nervures vers le rim le plus proche
+    # association explicite terrain -> rim (le 'plus proche' traversait le
+    # canyon); ridge_back et la bench restent des polylines libres
+    ASSOC = {'terrain_left': 'rim_left', 'terrain_mid': 'rim_left_top',
+             'terrain_right_top': 'rim_right'}
+    e_t = []
+    for name in terr_names:
+        if name not in walls:
+            continue
+        pts = walls[name]
+        e_t += poly_edges(pts)
+        rim_n = ASSOC.get(name)
+        if rim_n and rim_n in walls:
+            rim = walls[rim_n]
+            for i in range(0, len(pts), 4):
+                j = int(np.argmin(np.linalg.norm(rim - pts[i], axis=1)))
+                if np.linalg.norm(rim[j] - pts[i]) < 130:
+                    e_t.append([list(map(float, pts[i])), list(map(float, rim[j]))])
+    out['Canyon Terrain (Kalaga Pass)'] = {'color': '#4ade80', 'world_edges': e_t}
 
     if not args.apply:
         print('\nDRY-RUN (--apply pour ecrire).')
