@@ -42,12 +42,14 @@ PRIORS = {
                   [2620, 355], [2760, 396], [3072, 340], [3400, 300],
                   [3839, 264]],
     'rim_left': [[336, 1128], [560, 1060], [792, 996], [1032, 948],
-                 [1248, 720], [1344, 684], [1536, 720]],
+                 [1190, 900]],
+    'rim_left_top': [[1171, 758], [1306, 649], [1430, 605]],
     'road_center': [[1680, 2136], [1830, 1900], [2050, 1650], [2140, 1450],
                     [2090, 1250], [1990, 1080], [1900, 980], [1830, 890]],
     'bridge_deck': [[1572, 715], [1890, 722], [2208, 732]],
 }
 COLORS = {'rim_right': (248, 113, 113), 'rim_left': (251, 146, 60),
+          'rim_left_top': (251, 146, 60),
           'road_center': (125, 211, 252), 'bridge_deck': (167, 139, 250)}
 CORRIDOR = 60
 DY_MAX = 6
@@ -127,6 +129,7 @@ est l'interpolation exacte entre les clics + micro-snap +-8 px seulement."""
 CLICK_PREFIX = {
     'rim_right': 'Canyon Rim R (',
     'rim_left': 'Canyon Rim L (',
+    'rim_left_top': 'Canyon Rim LT (',
     'road_center': 'Canyon Road (',
     'bridge_deck': 'Canyon Bridge (',
 }
@@ -155,7 +158,7 @@ def main():
         clicks = click_points(marks, CLICK_PREFIX[name])
         pts = clicks if len(clicks) >= 2 else corr.get(name, prior)
         src = 'CLICS' if len(clicks) >= 2 else 'prior'
-        cw = 8 if len(clicks) >= 2 else CORRIDOR
+        cw = 8 if len(clicks) >= 2 else (25 if name in corr else CORRIDOR)
         if name == 'road_center':
             # la route est quasi VERTICALE dans l'image (S-curve): on la
             # suit en x(y) sur l'image transposee
