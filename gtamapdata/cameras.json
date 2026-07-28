@@ -2929,8 +2929,8 @@
    8.55
   ],
   "ypr": [
-   2.09,
-   -3.556,
+   0.16,
+   -3.94,
    0.077
   ],
   "fov": [
@@ -2942,7 +2942,7 @@
    1728
   ],
   "source": "Trailer 2 [3539]",
-  "note": "pose V5b (2026-07-27): ALIGNEE SUR AMBROSIA MOUNTAIN (demande d Alexandre). Le verrou yaw de V4 (Rohde BSW triangule via un clic Jason05 incertain) est RETIRE \u2014 le yaw redevient prior-driven et la crete du modele Ambrosia Hill projetee epouse la silhouette de montagne visible dans la frame (pic sur le clic Ambrosia Mountain, ex-Unidentified Ridge). yaw 14.155->4.585 (la devinette Rockstar yaw 0 redevient voisine), pitch -1.066->-3.266. Mount Leonida reste un sommet distinct AU-DESSUS de la crete projetee (plus lointain, non identifie). Caveats V4 conserves: variete ~5-DOF, bearing conditionnel au modele de la colline (d=2246, fov EL 50). V5b: raffinee par fit courbe-a-courbe sur la silhouette highlightee par Alexandre (trait rouge digitalise, calibration sur les clics Mount Leonida / Ambrosia Mountain): ecart moyen 6.1 px sur toute la crete. yaw 4.585->3.195, pitch -3.266->-3.586. V5c: position ajustee par Alexandre a (-1036.5, 183.5) (lecture UI), re-fit courbe complet: ecart 6.0 px."
+  "note": "pose V5d (2026-07-27): le segment de crete designe par Alexandre (fleches: indices 475-678, la ride EST du massif, du point -3241/6209/348 au point -2944/6303/266) amene sur la silhouette visible (ancres = extremites du trait rouge). yaw 0.160 \u2014 la devinette Rockstar (yaw 0) etait quasi exacte. pitch -3.94. Historique: V4 yaw 14.15 (verrou Rohde, retire), V5b/c ~2-3 (pic sur clic). Le clic Mount Leonida est SUPPRIME (Alexandre: pas de Mount Leonida ici, tout est Ambrosia Hill). Conditionnel au modele de colline (d=2246, fov EL 50)."
  },
  "Park (Mobile Phone)": {
   "id": "T2/59",
