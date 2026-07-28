@@ -154,11 +154,31 @@ def main():
     dr = ImageDraw.Draw(im)
     F = ImageFont.truetype('/System/Library/Fonts/Helvetica.ttc', 30)
     out = {}
-    for name, prior in PRIORS.items():
-        clicks = click_points(marks, CLICK_PREFIX[name])
-        pts = clicks if len(clicks) >= 2 else corr.get(name, prior)
-        src = 'CLICS' if len(clicks) >= 2 else 'prior'
-        cw = 8 if len(clicks) >= 2 else (12 if name in corr else CORRIDOR)
+    names = list(PRIORS) + [k for k in corr if k not in PRIORS]
+    for name in names:
+        prior = PRIORS.get(name, corr.get(name))
+        clicks = click_points(marks, CLICK_PREFIX.get(name, f'ZZZ {name} ('))
+        if len(clicks) >= 2:
+            pts, src, cw = clicks, 'CLICS', 8
+        elif name in corr:
+            # trace d'Alexandre: dessine EXACTEMENT, zero snap
+            pts = corr[name]
+            import numpy as _np
+            seg = _np.array(pts, float)
+            t = _np.concatenate([[0], _np.cumsum(_np.linalg.norm(_np.diff(seg,axis=0),axis=1))])
+            u = _np.linspace(0, t[-1], max(30, int(t[-1] / 6)))
+            cols = _np.interp(u, t, seg[:, 0]); ys = _np.interp(u, t, seg[:, 1])
+            meas = _np.ones(len(cols), bool)
+            col = COLORS.get(name, (251, 146, 60))
+            for i in range(len(cols) - 1):
+                dr.line([(cols[i], ys[i]), (cols[i + 1], ys[i + 1])], fill=col, width=5)
+            dr.text((float(cols[0]) + 6, float(ys[0]) - 40), name, fill=col, font=F,
+                    stroke_width=3, stroke_fill=(0, 0, 0))
+            out[name] = {'x': cols.tolist(), 'y': ys.tolist(), 'measured': meas.tolist()}
+            print(f'{name:16s} [TRACE exacte]: {len(cols)} pts')
+            continue
+        else:
+            pts, src, cw = prior, 'prior', CORRIDOR
         if name == 'road_center':
             # la route est quasi VERTICALE dans l'image (S-curve): on la
             # suit en x(y) sur l'image transposee
