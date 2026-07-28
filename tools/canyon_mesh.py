@@ -168,46 +168,61 @@ def main():
     #    la route, etendues jusqu'a l'enveloppe hachuree dans l'IMAGE ────
     e_t = []
     up = math.radians(args.slope_up)
-    env = lines.get('terrain_left')
-    if env and 'rim_left' in walls:
-        env_y = lambda x: float(np.interp(x, env['x'], env['y']))
-        env_x0, env_x1 = env['x'][0], env['x'][-1]
-        rim = walls['rim_left']
-        gen_pts = []
+
+    def sweep(rim, env, stop_at_env, u_max):
+        """Generatrices a --slope-up depuis le rim, a l'oppose de la route.
+        stop_at_env: s'arrete a l'enveloppe hachuree; sinon au BORD du cadre
+        (demande d'Alexandre: 'continue jusqu'au edge de la photo')."""
+        env_y = (lambda x: float(np.interp(x, env['x'], env['y']))) if env else None
+        gp = []
         for i in range(0, len(rim), 4):
             R = rim[i]
             j = int(np.argmin(np.linalg.norm(road_xy - R[:2], axis=1)))
             nh = R[:2] - road_xy[j]
             nh /= (np.linalg.norm(nh) + 1e-9)
             gen = None
-            for u in np.arange(8, 500, 8):
+            for u in np.arange(8, u_max, 8):
                 Q = np.array([R[0] + u * nh[0] * math.cos(up),
                               R[1] + u * nh[1] * math.cos(up),
                               R[2] + u * math.sin(up)])
                 pr = cam.get_pixel([float(v) for v in Q])
-                if pr is None:
+                if pr is None or pr[0] < 4 or pr[0] > cam.w - 4 or pr[1] < 4:
                     break
-                if pr[0] < env_x0 - 60 or pr[0] > env_x1 + 60 or pr[0] < 0 or pr[0] > cam.w:
-                    break
-                if pr[1] <= env_y(min(max(pr[0], env_x0), env_x1)):
+                if stop_at_env and env_y is not None and env['x'][0] <= pr[0] <= env['x'][-1] \
+                        and pr[1] <= env_y(pr[0]):
                     gen = Q
                     break
                 gen = Q
             if gen is not None:
-                gen_pts.append((R, gen))
-        for R, Q in gen_pts:                        # generatrices
+                gp.append((R, gen))
+        return gp
+
+    def emit(gp):
+        for R, Q in gp:
             e_t.append([list(map(float, R)), list(map(float, Q))])
-        for k in range(len(gen_pts) - 1):           # ligne d'arete haute
-            e_t.append([list(map(float, gen_pts[k][1])), list(map(float, gen_pts[k + 1][1]))])
-        for f in (0.33, 0.66):                      # iso-lignes intermediaires
-            for k in range(len(gen_pts) - 1):
-                a = gen_pts[k][0] + f * (gen_pts[k][1] - gen_pts[k][0])
-                b = gen_pts[k + 1][0] + f * (gen_pts[k + 1][1] - gen_pts[k + 1][0])
+        for k in range(len(gp) - 1):
+            e_t.append([list(map(float, gp[k][1])), list(map(float, gp[k + 1][1]))])
+        for f in (0.33, 0.66):
+            for k in range(len(gp) - 1):
+                a = gp[k][0] + f * (gp[k][1] - gp[k][0])
+                b = gp[k + 1][0] + f * (gp[k + 1][1] - gp[k + 1][0])
                 e_t.append([list(map(float, a)), list(map(float, b))])
-        ext = [float(np.linalg.norm(Q[:2] - R[:2])) for R, Q in gen_pts]
-        zt = [float(Q[2]) for _, Q in gen_pts]
-        print(f'pente gauche: {len(gen_pts)} generatrices a {args.slope_up:.0f} deg, '
-              f'extension {np.median(ext):.0f} m (max {max(ext):.0f}), sommet z max {max(zt):.0f}')
+
+    if 'rim_left' in walls:
+        # section principale: jusqu'au BORD de la photo
+        gp = sweep(walls['rim_left'], lines.get('terrain_left'), False, 900)
+        emit(gp)
+        ext = [float(np.linalg.norm(Q[:2] - R[:2])) for R, Q in gp]
+        print(f'pente gauche (au bord du cadre): {len(gp)} generatrices, '
+              f'extension mediane {np.median(ext):.0f} m (max {max(ext):.0f})')
+    if 'rim_left_top' in walls:
+        # bout le plus eloigne: la section du fond pres du pont
+        gp = sweep(walls['rim_left_top'], lines.get('terrain_mid'), True, 320)
+        emit(gp)
+        if gp:
+            ext = [float(np.linalg.norm(Q[:2] - R[:2])) for R, Q in gp]
+            print(f'pente gauche FOND (rim_left_top): {len(gp)} generatrices, '
+                  f'extension mediane {np.median(ext):.0f} m')
     out['Canyon Terrain (Kalaga Pass)'] = {'color': '#4ade80', 'world_edges': e_t}
 
     if not args.apply:
