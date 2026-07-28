@@ -2929,8 +2929,8 @@
    8.55
   ],
   "ypr": [
-   14.155,
-   -1.066,
+   4.585,
+   -3.266,
    0.077
   ],
   "fov": [
@@ -2942,7 +2942,7 @@
    1728
   ],
   "source": "Trailer 2 [3539]",
-  "note": "pose V4 (2026-07-22): PREMIER POINT FIXE VRAI \u2014 Rohde BSW triangule Metro x Jason05 (0.0') + 2 pairings billboard (Interchange V2/WDNA) + verticalite mat + prior scene T2/58 (1-DOF residuel). Yaw 14 = la devinette Rockstar (yaw 0) etait bonne; les yaw 326-349 des fits anterieurs etaient des artefacts de variete (Rohde profondeur libre). Alternative ecartee: closure a 495m/yaw 104 (prior scene la rejette)."
+  "note": "pose V5 (2026-07-27): ALIGNEE SUR AMBROSIA MOUNTAIN (demande d Alexandre). Le verrou yaw de V4 (Rohde BSW triangule via un clic Jason05 incertain) est RETIRE \u2014 le yaw redevient prior-driven et la crete du modele Ambrosia Hill projetee epouse la silhouette de montagne visible dans la frame (pic sur le clic Ambrosia Mountain, ex-Unidentified Ridge). yaw 14.155->4.585 (la devinette Rockstar yaw 0 redevient voisine), pitch -1.066->-3.266. Mount Leonida reste un sommet distinct AU-DESSUS de la crete projetee (plus lointain, non identifie). Caveats V4 conserves: variete ~5-DOF, bearing conditionnel au modele de la colline (d=2246, fov EL 50)."
  },
  "Park (Mobile Phone)": {
   "id": "T2/59",

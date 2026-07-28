@@ -11315,18 +11315,9 @@
   "zone": null
  },
  "Rohde Building (BSW)": {
-  "xyz": [
-   -900.52,
-   290.25,
-   16.84
-  ],
-  "source_cameras": [
-   "Metro (NE) (B)",
-   "Jason Duval 05 (Machine Gun)"
-  ],
-  "error_m": 1.33,
+  "source_cameras": [],
   "zone": "vice_city",
-  "note": "coin b-level de la tour Rohde, triangule 2026-07-22 (spot Jason05 par Alexandre): croisement Metro x Jason05 ecart 2.65m a 85 deg, z 16.8 coherent ligne b (~18 SPC). Aligne verticalement avec 'Rohde Building (SW)' toit dans Jason05 (dx 3px)."
+  "note": "de-triangule 2026-07-27: le clic Jason 05 etait incertain (Alexandre) et verrouillait le yaw d Explosion a 14 \u2014 retire, landmark sans position (1 seul temoin restant: Metro (NE) (B))"
  },
  "American Airlines Hangar": {
   "author": "rlx",
@@ -17247,13 +17238,6 @@
   "error_m": null,
   "zone": "unknown"
  },
- "Unidentified Ridge (Explosion)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": null,
-  "note": "ex-'Ambrosia Hill' d'Explosion. Resection pose-libre 2026-07-21: PAS la colline du cluster Ambrosia (aucune pose plausible, 37-102' irreductibles). Identite positive inconnue (le pixel TW etait un dup exact du marquage 'Mount Leonida', identification elle-meme non verifiee). RECHECK MANIFOLD 2026-07-22: avec 2 rayons d'ancrage seulement, la pose d'Explosion est sous-determinee (~5-DOF; seul pitch -7.5..-4.4 est contraint) -> le bearing az~4.5 vers la crete est CONDITIONNEL au prior de scene T2/58 (position ~devinette +-300m); sans prior il balaie 4-122 deg. A durcir via une 3e contrainte (ex: base du mat du Tall Billboard cliquee dans la frame Interchange -> ray x sol -> top du billboard fixe en xyz)."
- },
  "Lake Leonida (A)": {
   "xyz": [
    -2548.08,
@@ -17623,5 +17607,16 @@
    "Red Boxville (BNW)"
   ],
   "method": "rayon x plan z=15.16 (GROUND-V1, monde H); sol du boxville: silo_z 19.655 - 4.5 (delta rlx); sensibilite 3.7 m/m de datum"
+ },
+ "Ambrosia Mountain": {
+  "xyz": [
+   -3395.0,
+   6161.0,
+   376.0
+  ],
+  "source_cameras": [],
+  "error_m": 300.0,
+  "zone": "ambrosia",
+  "method": "pic du modele Ambrosia Hill (outline Bikers valide, d=2246 par corde x Empty Lot); PAS une triangulation \u2014 position modele, erreur dominee par la fov EL non resolue (fourchette d 1902-2614). Le clic Explosion s aligne dessus sous la pose V5."
  }
 }
