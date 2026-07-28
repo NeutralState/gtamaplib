@@ -3569,48 +3569,49 @@
   "id": "S2/66",
   "player": null,
   "xyz": [
-   -2750.0,
-   5250.0,
-   150.0
+   -2190.0,
+   6320.0,
+   187.885
   ],
   "ypr": [
-   112.0,
-   11.0,
-   1.0
+   115.557,
+   10.2,
+   0.0
   ],
   "fov": [
-   85.0,
-   54.536
+   79.8,
+   50.377
   ],
   "size": [
    3840,
    2160
   ],
   "source": "Screenshot 1 \u2014 Mount Kalaga National Park 02 [1]",
-  "note": "pose rlx (post Discord 2026-07-26, hand-tuned chiffres ronds), remplace son ancien candidat -1750/6250. VALIDEE par nous a ~15-20 px sur le cluster Starlet Motel / Port Gellhorn (nos triangulations les plus precises, jamais vues par lui) et a 60 px sur Daytona Beach Water Tower \u2014 compatible avec l identification water tower du clic (171,1598) qu il avait renomme 3400 Transmitter Rd sous sa pose intermediaire. Granularite ~1 deg: PAS un temoin de solve; ne pas injecter ses rayons en triangulation."
+  "note": "pose rlx upstream b4b1b1a (2026-07-28), decimales non-rondes = probablement solvee de son cote. VALIDEE par nous: Daytona/Sebring WT reprojette a 15 px du clic (171,1598) \u2014 chronologie 371 px (active d hier) -> 60 px (post Discord) -> 15 px: sa pose a converge vers notre triangulation independante (Fires+Postcard), l identification water tower est confirmee, le renommage 3400 Transmitter Rd etait un artefact des poses intermediaires. La crete de notre modele Ambrosia Hill est entierement dans le cadre sous cette pose."
  },
  "Mount Kalaga National Park 04 (Mountain Pass) (X)": {
   "id": "S2/68",
   "player": null,
   "xyz": [
-   -4749.96216201173,
-   5999.977635989342,
-   120.00807468394875
+   -4750.0,
+   6000.0,
+   120.0
   ],
   "ypr": [
-   159.346226,
-   -10.845225,
+   156.447,
+   -13.566,
    0.0
   ],
   "fov": [
-   48.801095,
+   60.0,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 1 \u2014 Mount Kalaga National Park 04 [1]"
+  "source": "Screenshot 1 \u2014 Mount Kalaga National Park 04 [1]",
+  "note": "pose rlx upstream b4b1b1a (2026-07-28) \u2014 il triangule maintenant Quarry via Diner (SE) (A) x cette cam (d=5.947). Remplace notre etat precedent [-4749.96216201173, 5999.977635989342, 120.00807468394875]/[159.346, -10.845, 0.0]/fov 48.801095."
  },
  "Vice City Postcard": {
   "id": "S2/71",
