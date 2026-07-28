@@ -57,6 +57,8 @@ def main():
     ap.add_argument('--z1', type=float, default=55.0)
     ap.add_argument('--clear', type=float, default=6.5)
     ap.add_argument('--width', type=float, default=14.0)
+    ap.add_argument('--slope-up', type=float, default=20.0,
+                    help='pente max du terrain derriere le rim (deg)')
     ap.add_argument('--apply', action='store_true')
     args = ap.parse_args()
 
@@ -160,25 +162,52 @@ def main():
             e_w.append([list(map(float, pts[i])), [float(pts[i][0]), float(pts[i][1]), float(base)]])
     out['Canyon Walls (Kalaga Pass)'] = {'color': '#fb923c', 'world_edges': e_w}
 
-    # terrain au-dessus des rims (enveloppes des hachures) + ridge_back:
-    # polylines 3D + nervures vers le rim le plus proche
-    # association explicite terrain -> rim (le 'plus proche' traversait le
-    # canyon); ridge_back et la bench restent des polylines libres
-    ASSOC = {'terrain_left': 'rim_left', 'terrain_mid': 'rim_left_top',
-             'terrain_right_top': 'rim_right'}
+    # ── COTE GAUCHE d'abord (doctrine Alexandre): derriere le rim, le
+    #    terrain S'ELOIGNE en montant doucement (--slope-up, defaut 20 deg)
+    #    — surface balayee: generatrices depuis le rim, direction opposee a
+    #    la route, etendues jusqu'a l'enveloppe hachuree dans l'IMAGE ────
     e_t = []
-    for name in terr_names:
-        if name not in walls:
-            continue
-        pts = walls[name]
-        e_t += poly_edges(pts)
-        rim_n = ASSOC.get(name)
-        if rim_n and rim_n in walls:
-            rim = walls[rim_n]
-            for i in range(0, len(pts), 4):
-                j = int(np.argmin(np.linalg.norm(rim - pts[i], axis=1)))
-                if np.linalg.norm(rim[j] - pts[i]) < 130:
-                    e_t.append([list(map(float, pts[i])), list(map(float, rim[j]))])
+    up = math.radians(args.slope_up)
+    env = lines.get('terrain_left')
+    if env and 'rim_left' in walls:
+        env_y = lambda x: float(np.interp(x, env['x'], env['y']))
+        env_x0, env_x1 = env['x'][0], env['x'][-1]
+        rim = walls['rim_left']
+        gen_pts = []
+        for i in range(0, len(rim), 4):
+            R = rim[i]
+            j = int(np.argmin(np.linalg.norm(road_xy - R[:2], axis=1)))
+            nh = R[:2] - road_xy[j]
+            nh /= (np.linalg.norm(nh) + 1e-9)
+            gen = None
+            for u in np.arange(8, 500, 8):
+                Q = np.array([R[0] + u * nh[0] * math.cos(up),
+                              R[1] + u * nh[1] * math.cos(up),
+                              R[2] + u * math.sin(up)])
+                pr = cam.get_pixel([float(v) for v in Q])
+                if pr is None:
+                    break
+                if pr[0] < env_x0 - 60 or pr[0] > env_x1 + 60 or pr[0] < 0 or pr[0] > cam.w:
+                    break
+                if pr[1] <= env_y(min(max(pr[0], env_x0), env_x1)):
+                    gen = Q
+                    break
+                gen = Q
+            if gen is not None:
+                gen_pts.append((R, gen))
+        for R, Q in gen_pts:                        # generatrices
+            e_t.append([list(map(float, R)), list(map(float, Q))])
+        for k in range(len(gen_pts) - 1):           # ligne d'arete haute
+            e_t.append([list(map(float, gen_pts[k][1])), list(map(float, gen_pts[k + 1][1]))])
+        for f in (0.33, 0.66):                      # iso-lignes intermediaires
+            for k in range(len(gen_pts) - 1):
+                a = gen_pts[k][0] + f * (gen_pts[k][1] - gen_pts[k][0])
+                b = gen_pts[k + 1][0] + f * (gen_pts[k + 1][1] - gen_pts[k + 1][0])
+                e_t.append([list(map(float, a)), list(map(float, b))])
+        ext = [float(np.linalg.norm(Q[:2] - R[:2])) for R, Q in gen_pts]
+        zt = [float(Q[2]) for _, Q in gen_pts]
+        print(f'pente gauche: {len(gen_pts)} generatrices a {args.slope_up:.0f} deg, '
+              f'extension {np.median(ext):.0f} m (max {max(ext):.0f}), sommet z max {max(zt):.0f}')
     out['Canyon Terrain (Kalaga Pass)'] = {'color': '#4ade80', 'world_edges': e_t}
 
     if not args.apply:
