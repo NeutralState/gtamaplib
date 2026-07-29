@@ -156,47 +156,77 @@ def main():
 
     e_w = []
     gl = lines.get('ground_left')
-    gl_y = (lambda x: float(np.interp(x, gl['x'][::-1], gl['y'][::-1]))
-            if gl and gl['x'][0] > gl['x'][-1] else
-            (lambda x: float(np.interp(x, gl['x'], gl['y'])))) if gl else None
     FACE = math.radians(65.0)               # elevation de la face (Alexandre v8)
-    for name in rim_names:
+
+    # rim 2D combine (pour savoir quand la face atteint le haut dans l'image)
+    rim2d = []
+    for nm in ('rim_left', 'rim_left_pinnacle', 'rim_left_top'):
+        if nm in lines:
+            rim2d += list(zip(lines[nm]['x'], lines[nm]['y']))
+    rim2d.sort()
+    r2x = np.array([p_[0] for p_ in rim2d])
+    r2y = np.array([p_[1] for p_ in rim2d])
+    def rim_y_at(x):
+        if x < r2x[0] or x > r2x[-1]:
+            return None
+        return float(np.interp(x, r2x, r2y))
+
+    new_rim = []                            # rim 3D deduit (profondeur du SOL)
+    if gl is not None:
+        # CONSTRUCTION INVERSEE (fix v9, 'tu traites aucunement la profondeur'):
+        # 1. le PIED = rayon de la ligne de sol d'Alexandre x plancher du
+        #    canyon (z = A + B*d_xy) — profondeur bien conditionnee par point;
+        # 2. la FACE monte a 65 deg depuis le pied, en s'eloignant de la
+        #    route, jusqu'a rejoindre la ligne de rim dans l'IMAGE;
+        # 3. le rim 3D est DEDUIT — plus d'echafaudage par colonne.
+        feet = []
+        for gx, gy in zip(gl['x'], gl['y']):
+            ray = np.asarray(cam.get_pixel_direction((float(gx), float(gy))), float)
+            ray /= np.linalg.norm(ray)
+            hx = float(np.hypot(ray[0], ray[1]))
+            t = (A - o[2]) / (ray[2] - B * hx)
+            if t <= 0:
+                continue
+            feet.append(o + t * ray)
+        for k in range(len(feet) - 1):       # ligne de pied 3D
+            e_w.append([list(map(float, feet[k])), list(map(float, feet[k + 1]))])
+        for k in range(0, len(feet), 2):
+            F_ = feet[k]
+            j = int(np.argmin(np.linalg.norm(road_xy - F_[:2], axis=1)))
+            nh = F_[:2] - road_xy[j]
+            nh = nh / (np.linalg.norm(nh) + 1e-9)
+            top, matched = None, False
+            for u in np.arange(4, 240, 4):   # borne: ~220 m de face max
+                Q = np.array([F_[0] + u * nh[0] * math.cos(FACE),
+                              F_[1] + u * nh[1] * math.cos(FACE),
+                              F_[2] + u * math.sin(FACE)])
+                pr = cam.get_pixel([float(v) for v in Q])
+                if pr is None:
+                    break
+                ry_ = rim_y_at(pr[0])
+                if ry_ is not None and pr[1] <= ry_ + 3:
+                    top, matched = Q, True
+                    break
+                top = Q
+            if matched:                       # seulement les faces qui
+                e_w.append([list(map(float, F_)), list(map(float, top))])
+                new_rim.append(top)           # rejoignent la ligne de rim
+        for k in range(len(new_rim) - 1):    # rim 3D deduit
+            e_w.append([list(map(float, new_rim[k])), list(map(float, new_rim[k + 1]))])
+        zs = [p_[2] for p_ in new_rim]
+        dd = [float(np.hypot(*(p_[:2] - o[:2]))) for p_ in new_rim]
+        print(f'paroi gauche v9: {len(feet)} pieds ancres au plancher, rim deduit '
+              f'z {min(zs):.0f}-{max(zs):.0f}, profondeur {min(dd):.0f}-{max(dd):.0f} m')
+        walls['rim_left_v9'] = np.array(new_rim)
+    # cote droit: inchange (rideau scaffold en attendant sa ligne de sol)
+    for name in ['rim_right']:
         if name not in walls:
             continue
         pts = walls[name]
         e_w += poly_edges(pts)
-        left_side = name.startswith('rim_left')
-        toward_cam = (name == 'rim_left_top')   # derriere le pont: face vers la cam
-        for i in range(0, len(pts), 5):
-            R = pts[i]
-            base = A + B * float(np.hypot(*(R[:2] - o[:2])))
-            if left_side and gl is not None:
-                if toward_cam:
-                    nh = o[:2] - R[:2]
-                else:
-                    j = int(np.argmin(np.linalg.norm(road_xy - R[:2], axis=1)))
-                    nh = road_xy[j] - R[:2]
-                nh = nh / (np.linalg.norm(nh) + 1e-9)
-                foot = None
-                for u in np.arange(4, 500, 4):
-                    Q = np.array([R[0] + u * nh[0] * math.cos(FACE),
-                                  R[1] + u * nh[1] * math.cos(FACE),
-                                  R[2] - u * math.sin(FACE)])
-                    pr = cam.get_pixel([float(v) for v in Q])
-                    if pr is None:
-                        break
-                    gx = min(max(pr[0], min(gl['x'])), max(gl['x']))
-                    if pr[1] >= float(np.interp(gx, sorted(gl['x']), [y for _, y in sorted(zip(gl['x'], gl['y']))])) - 4:
-                        foot = Q
-                        break
-                    if Q[2] <= base:
-                        foot = Q
-                        break
-                    foot = Q
-                if foot is not None:
-                    e_w.append([list(map(float, R)), list(map(float, foot))])
-            else:
-                e_w.append([list(map(float, R)), [float(R[0]), float(R[1]), float(base)]])
+        for i in range(0, len(pts), 6):
+            base = A + B * float(np.hypot(*(pts[i, :2] - o[:2])))
+            e_w.append([list(map(float, pts[i])), [float(pts[i][0]), float(pts[i][1]), float(base)]])
     out['Canyon Walls (Kalaga Pass)'] = {'color': '#fb923c', 'world_edges': e_w}
 
     # ── COTE GAUCHE d'abord (doctrine Alexandre): derriere le rim, le
@@ -273,11 +303,12 @@ def main():
                 b = gp[k + 1][0] + f * (gp[k + 1][1] - gp[k + 1][0])
                 e_t.append([list(map(float, a)), list(map(float, b))])
 
-    if 'rim_left' in walls:
+    rim_src = walls.get('rim_left_v9', walls.get('rim_left'))
+    if rim_src is not None and len(rim_src):
         # section principale: pente 12 deg (Alexandre v8), arretee a SA
-        # ligne 'jusqu'ou le sol va' (terrain_left = enveloppe verte)
+        # ligne 'jusqu'ou le sol va', DEPUIS le rim v9 (profondeur du sol)
         up = math.radians(min(args.slope_up, 12.0))
-        gp = sweep(walls['rim_left'], lines.get('terrain_left'), True, 900)
+        gp = sweep(np.array(rim_src), lines.get('terrain_left'), True, 900)
         up = math.radians(args.slope_up)
         emit(gp)
         ext = [float(np.linalg.norm(Q[:2] - R[:2])) for R, Q in gp]
