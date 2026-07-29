@@ -53,6 +53,12 @@ def main():
     ap.add_argument('--region', default=None, help='x0,y0,x1,y1 pour la surface')
     ap.add_argument('--step', type=int, default=48)
     ap.add_argument('--mesh-out', default=None)
+    ap.add_argument('--z-max', type=float, default=5000.0,
+                    help='coupure ciel/fond: cellules plus loin exclues de la surface')
+    ap.add_argument('--pseudo-road', action='store_true',
+                    help='ajoute des pseudo-ancres sur la route du canyon '
+                         '(profondeurs du profil DECLARE z0/z1 de canyon_mesh — '
+                         'calibration partiellement assumee, pas 100 pct mesuree)')
     args = ap.parse_args()
 
     px = json.load(open(os.path.join(REPO, 'gtamapdata', 'pixels.json')))
@@ -77,6 +83,24 @@ def main():
         d_net = float(np.median(disp[max(0, y - 3):y + 4, max(0, x - 3):x + 4]))
         anchors.append((lm, x, y, zdepth, d_net))
     print(f'{len(anchors)} ancres triangulees dans la frame')
+    if args.pseudo_road:
+        cl = json.load(open(os.path.join(REPO, 'tools', 'generated', 'canyon_lines.json')))
+        rx, ry = cl['road_center']['x'], cl['road_center']['y']
+        z0, z1 = 30.0, 55.0
+        i_bot, i_top = int(np.argmax(ry)), int(np.argmin(ry))
+        def dxy(i, zz):
+            d = np.asarray(cam.get_pixel_direction((float(rx[i]), float(ry[i]))), float)
+            d /= np.linalg.norm(d)
+            t = (zz - o[2]) / d[2]
+            return t
+        t0, t1 = dxy(i_bot, z0), dxy(i_top, z1)
+        for f in (0.0, 0.25, 0.5, 0.75, 1.0):
+            i = int(i_bot + f * (i_top - i_bot))
+            t = t0 + f * (t1 - t0)
+            x, y = int(rx[i]), int(ry[i])
+            d_net = float(np.median(disp[max(0, y - 3):y + 4, max(0, x - 3):x + 4]))
+            anchors.append((f'[route declaree {f:.2f}]', x, y, float(t), d_net))
+        print(f'+5 pseudo-ancres route (profil DECLARE z {z0}->{z1})')
     if len(anchors) < 3:
         print('pas assez d ancres pour calibrer'); return
 
@@ -119,6 +143,9 @@ def main():
     lo, hi = np.percentile(z, 2), np.percentile(z, 90)
     t = np.clip((z - lo) / (hi - lo + 1e-6), 0, 1)
     vis = np.stack([255 * (1 - t), 120 + 60 * t, 255 * t], axis=2).astype(np.uint8)
+    sky = z > args.z_max
+    base = np.asarray(img, np.uint8)
+    vis[sky] = base[sky]                       # le ciel n'est pas teinte
     vim = Image.blend(img, Image.fromarray(vis), 0.55)
     dr = ImageDraw.Draw(vim)
     for i in keep:
@@ -134,9 +161,14 @@ def main():
         x0, y0, x1, y1 = map(int, args.region.split(','))
         edges = []
         grid = {}
+        gray = np.asarray(img.convert('L'), np.float32)
         for gy in range(y0, y1, args.step):
             for gx in range(x0, x1, args.step):
                 zm = float(np.median(z[gy:gy + 7, gx:gx + 7]))
+                if zm > args.z_max:
+                    continue                     # ciel / fond trop lointain
+                if float(gray[gy:gy + 7, gx:gx + 7].mean()) > 205 and zm > 1500:
+                    continue                     # ciel clair residuel
                 d = np.asarray(cam.get_pixel_direction((float(gx), float(gy))), float)
                 d /= np.linalg.norm(d)
                 grid[(gx, gy)] = o + zm * d
