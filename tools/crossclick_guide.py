@@ -81,8 +81,9 @@ def main():
     dr.text((24, 16), f'GUIDES EPIPOLAIRES — clics de {args.src} projetes ici: '
             f'cliquer le meme point physique SUR sa ligne (meme nom de landmark)',
             fill=(240, 244, 250), font=F, stroke_width=4, stroke_fill=(0, 0, 0))
+    tag = args.marks.split(',')[0].strip().replace(' ', '').replace('(', '')
     out = os.path.join(REPO, 'tools', 'generated',
-                       f'xclick_{args.dst.replace("/", "_")}.png')
+                       f'xclick_{tag}_dans_{args.dst.replace("/", "_")}.png')
     im.save(out)
     print(f'{drawn} guides -> {out}')
 
