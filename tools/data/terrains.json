@@ -1,0 +1,18 @@
+{
+ "_comment": "Registre declaratif des terrains 3D. Chaque entree = un terrain de l'UI, avec son moteur (tool), ses parametres valides par Alexandre, et ses dependances. `terrain.py --all` regenere tout; --only <nom> pour un seul. Les 2D (lignes/outlines) vivent dans leurs fichiers de corrections respectifs et sont la SOURCE — corriger le 2D puis relancer terrain.py suffit.",
+ "Ambrosia Hill": {
+  "engine": "hill_mesh.py",
+  "args": ["--mesh", "--slope", "30", "--depth", "2062", "--apply"],
+  "lines_source": "tools/generated/ambrosia_hill_outline.json + tools/data/hill_outline_corrections.json",
+  "depth_provenance": "MESURE multi-vues 2026-07-29 (Mount Ambrosia (3) heli x Bikers gap 27 m; (X) Hedge x heli gap 6 m) -> d 2062",
+  "params_provenance": "pente 30 deg validee par Alexandre (HILL-SLOPE-V1)"
+ },
+ "Canyon (Kalaga Pass)": {
+  "engine": "canyon_mesh.py",
+  "pre": {"engine": "canyon_lines.py", "args": []},
+  "args": ["--apply"],
+  "lines_source": "tools/data/canyon_corrections.json (traces pixel-exact d'Alexandre)",
+  "depth_provenance": "ECHAFAUDAGE DECLARE (z0 30, z1 55) — passera en mesure quand le pont sera triangule (guides xclick_Canyon_dans_heli en attente de clics)",
+  "params_provenance": "slope-up 20 deg (Alexandre), terminaisons rebord+arbres (V3c)"
+ }
+}

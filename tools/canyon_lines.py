@@ -70,6 +70,8 @@ def snap(gray, rg, prior_pts, kind, corridor=CORRIDOR):
     h, w = gray.shape
     grid = np.arange(x0, x1, STEP)
     n = len(grid)
+    if n < 2:
+        return np.array([]), np.array([]), np.array([], bool)
     m = 2 * corridor
     y0 = np.array([int(min(max(prior(int(x)) - corridor, 2), h - m - 8))
                    for x in grid])
@@ -136,8 +138,8 @@ CLICK_PREFIX = {
 
 
 def click_points(marks, prefix):
-    pts = sorted((k, v) for k, v in marks.items() if k.startswith(prefix))
-    return [list(v) for _, v in pts]
+    pts = [list(v) for k, v in marks.items() if k.startswith(prefix)]
+    return sorted(pts, key=lambda q: q[0])      # ordre GEOMETRIQUE (x), pas alphabetique
 
 
 def main():
