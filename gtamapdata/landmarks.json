@@ -621,11 +621,19 @@
   }
  },
  "Bay (BBB)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "xyz": [
+   -6196.84,
+   4505.57,
+   15.93
+  ],
+  "source_cameras": [
+   "Diner (SW)",
+   "Diner (W) (B)"
+  ],
+  "error_m": 2.0,
   "zone": "port_gellhorn",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 14.2 deg"
  },
  "Bay (CC)": {
   "xyz": [
@@ -5889,10 +5897,18 @@
   "zone": "vice_city"
  },
  "Flamingo South Beach (TSW)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "vice_city"
+  "xyz": [
+   1057.73,
+   960.54,
+   109.78
+  ],
+  "source_cameras": [
+   "Sidewalk (Jason) (E)",
+   "Venetian Islands"
+  ],
+  "error_m": 7.5,
+  "zone": "vice_city",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 7.5 m, angle max 3.7 deg"
  },
  "Green Diamond": {
   "xyz": [
@@ -6078,10 +6094,18 @@
   "zone": "grassrivers"
  },
  "Lamp Post (SW)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "grassrivers"
+  "xyz": [
+   -1744.06,
+   -3023.89,
+   55.72
+  ],
+  "source_cameras": [
+   "Grassrivers 02 (Watson Bay)",
+   "Prison"
+  ],
+  "error_m": 2.0,
+  "zone": "grassrivers",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.4 m, angle max 14.8 deg"
  },
  "Latitude on the River (S) (NW)": {
   "xyz": [
@@ -6777,14 +6801,16 @@
   "zone": "vice_city"
  },
  "Port (F)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "source_cameras": [
+   "Vice Beach (B)",
+   "Vice City 08 (Ferris Wheel)"
+  ],
   "zone": "vice_city",
   "z_constraint": {
    "type": "fixed",
    "value": 0.0
-  }
+  },
+  "method": "ANCHOR-HARVEST-V1 RETIRE: rayons rasants sur plan z=0 (spread ~0.5-1 km) ou residu source aberrant \u2014 intriangulable en l etat"
  },
  "Port (G)": {
   "xyz": [
@@ -9034,10 +9060,22 @@
   "zone": "vice_city"
  },
  "Continuum on South Beach (S)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": 3.871,
-  "zone": "vice_city"
+  "xyz": [
+   2002.57,
+   -293.82,
+   155.98
+  ],
+  "source_cameras": [
+   "Amphitheater",
+   "Grassrivers 02 (Watson Bay)",
+   "Leonida Keys 01 (Airplane) (X)",
+   "Leonida Keys Postcard (X)",
+   "Rooftop Party",
+   "Sidewalk (Jason) (E)"
+  ],
+  "error_m": 39.8,
+  "zone": "vice_city",
+  "method": "ANCHOR-HARVEST-V1: triangulation 6 cams, perp med 39.8 m, angle max 85.4 deg"
  },
  "Flamingo South Beach (NWNE)": {
   "xyz": [
@@ -9067,10 +9105,18 @@
   "zone": "vice_city"
  },
  "W South Beach (SE)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": 2.048,
-  "zone": "vice_city"
+  "xyz": [
+   1989.17,
+   1569.9,
+   76.74
+  ],
+  "source_cameras": [
+   "Sidewalk (Jason) (E)",
+   "Venetian Islands"
+  ],
+  "error_m": 2.0,
+  "zone": "vice_city",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.7 m, angle max 5.6 deg"
  },
  "Waffles Ridge (C)": {
   "xyz": [
@@ -9166,24 +9212,28 @@
   "zone": "unknown"
  },
  "Bay (AAAA)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "source_cameras": [
+   "Diner (SW)",
+   "Diner (W) (B)"
+  ],
   "zone": "port_gellhorn",
   "z_constraint": {
    "type": "fixed",
    "value": 0.0
-  }
+  },
+  "method": "ANCHOR-HARVEST-V1 RETIRE: rayons rasants sur plan z=0 (spread ~0.5-1 km) ou residu source aberrant \u2014 intriangulable en l etat"
  },
  "Bay (BBBB)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "source_cameras": [
+   "Diner (SW)",
+   "Diner (W) (B)"
+  ],
   "zone": "port_gellhorn",
   "z_constraint": {
    "type": "fixed",
    "value": 0.0
-  }
+  },
+  "method": "ANCHOR-HARVEST-V1 RETIRE: rayons rasants sur plan z=0 (spread ~0.5-1 km) ou residu source aberrant \u2014 intriangulable en l etat"
  },
  "Bay (CCCC)": {
   "xyz": [
@@ -10590,10 +10640,19 @@
   "zone": "unknown"
  },
  "The Floridian (SW)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "unknown"
+  "xyz": [
+   1420.67,
+   309.62,
+   95.46
+  ],
+  "source_cameras": [
+   "Amphitheater",
+   "Jason Duval 05 (Machine Gun)",
+   "Sidewalk (Jason) (E)"
+  ],
+  "error_m": 17.7,
+  "zone": "unknown",
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 17.7 m, angle max 40.9 deg"
  },
  "Grove at Grand Bay (S)": {
   "xyz": null,
@@ -10721,17 +10780,33 @@
  },
  "Starlet Motel Sign (A)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 9.8,
+  "source_cameras": [
+   "Port Gellhorn 01 (Starlet Motel)",
+   "Starlet Motel"
+  ],
+  "xyz": [
+   -5315.73,
+   3490.48,
+   87.98
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 9.8 m, angle max 39.6 deg"
  },
  "Jason's House (S)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2351.68,
+   -5535.86,
+   11.08
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 8.8 deg"
  },
  "50 Biscayne Blvd": {
   "author": "rlx",
@@ -10751,17 +10826,37 @@
  },
  "Jason's Boat Ramp": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House with Boat (X)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2341.93,
+   -5508.0,
+   2.19
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 11.4 deg"
  },
  "Brickell Arch (E)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 8.9,
+  "source_cameras": [
+   "Raul Bautista 03 (Motorboat)",
+   "Vice Beach (A)",
+   "Vice Beach (B)",
+   "Port Vice City (A)",
+   "Port Vice City (B)",
+   "Ultimate Edition 02 (Green Sports Car)"
+  ],
+  "xyz": [
+   -734.62,
+   -1121.2,
+   173.96
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 6 cams, perp med 8.9 m, angle max 85.4 deg"
  },
  "One Broadway": {
   "author": "rlx",
@@ -10786,10 +10881,18 @@
  },
  "Jason's House (VNE)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.69,
+   -5512.55,
+   6.24
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 5.2 deg"
  },
  "Southeast Financial Center (A)": {
   "author": "rlx",
@@ -10814,17 +10917,33 @@
  },
  "Jason's House (VSE)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2345.51,
+   -5538.37,
+   7.45
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 12.5 deg"
  },
  "Jason's House (VSW)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2357.72,
+   -5538.88,
+   7.37
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 7.9 deg"
  },
  "Pin (??)": {
   "author": "rlx",
@@ -10849,10 +10968,18 @@
  },
  "Jason's House (SW)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2356.35,
+   -5536.16,
+   9.66
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 7.8 deg"
  },
  "295 NW 26th St (SE)": {
   "author": "rlx",
@@ -10883,17 +11010,33 @@
  },
  "Jason's House (SE)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2347.02,
+   -5535.56,
+   9.82
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 10.4 deg"
  },
  "Jason's House (NE)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.31,
+   -5521.68,
+   9.69
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 6.8 deg"
  },
  "MIA Terminal J (S)": {
   "author": "rlx",
@@ -10946,10 +11089,18 @@
  },
  "Jet Skis in Miami": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 4.3,
+  "source_cameras": [
+   "Port",
+   "Port Vice City (B)"
+  ],
+  "xyz": [
+   1383.27,
+   -154.72,
+   22.95
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 4.3 m, angle max 46.7 deg"
  },
  "Broken Keys Bridge (4B)": {
   "author": "rlx",
@@ -11002,10 +11153,18 @@
  },
  "Tall Billboard near Interchange": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 15.0,
+  "source_cameras": [
+   "Explosion",
+   "Interchange"
+  ],
+  "xyz": [
+   -1124.27,
+   440.32,
+   47.69
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 15.0 m, angle max 44.3 deg"
  },
  "Stephen P. Clark Government Center (BW)": {
   "author": "rlx",
@@ -11025,10 +11184,19 @@
  },
  "Bank of America Financial Center (Vice City)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 14.4,
+  "source_cameras": [
+   "Airport (X)",
+   "Port Vice City (A)",
+   "Port Vice City (B)"
+  ],
+  "xyz": [
+   -341.97,
+   -138.1,
+   95.08
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 14.4 m, angle max 2.8 deg"
  },
  "Broken Keys Bridge (7B)": {
   "author": "rlx",
@@ -11167,10 +11335,18 @@
  },
  "South Florida Concrete Block (N)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "Vice Beach (B)",
+   "Vice City Postcard"
+  ],
+  "xyz": [
+   -5017.05,
+   -1001.95,
+   79.2
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.5 m, angle max 12.1 deg"
  },
  "Lake near VCIA (A)": {
   "author": "rlx",
@@ -11223,10 +11399,20 @@
  },
  "Seybold Pointe (SE)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 11.5,
+  "source_cameras": [
+   "Airport (X)",
+   "Leonida Keys 01 (Airplane) (X)",
+   "Metro (SE) (B)",
+   "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)"
+  ],
+  "xyz": [
+   -1363.64,
+   -526.33,
+   48.15
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 4 cams, perp med 11.5 m, angle max 84.5 deg"
  },
  "Small Keys Bridge (SB)": {
   "author": "rlx",
@@ -11279,10 +11465,18 @@
  },
  "Island H (E)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 4.4,
+  "source_cameras": [
+   "Key Lento",
+   "Leonida Keys Postcard (X)"
+  ],
+  "xyz": [
+   -2087.69,
+   -6297.34,
+   -11.04
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 4.4 m, angle max 55.8 deg"
  },
  "Broken Keys Bridge (2B)": {
   "author": "rlx",
@@ -11315,9 +11509,19 @@
   "zone": null
  },
  "Rohde Building (BSW)": {
-  "source_cameras": [],
+  "source_cameras": [
+   "Explosion",
+   "Metro (NE) (B)"
+  ],
   "zone": "vice_city",
-  "note": "de-triangule 2026-07-27: le clic Jason 05 etait incertain (Alexandre) et verrouillait le yaw d Explosion a 14 \u2014 retire, landmark sans position (1 seul temoin restant: Metro (NE) (B))"
+  "note": "de-triangule 2026-07-27: le clic Jason 05 etait incertain (Alexandre) et verrouillait le yaw d Explosion a 14 \u2014 retire, landmark sans position (1 seul temoin restant: Metro (NE) (B))",
+  "xyz": [
+   -1041.84,
+   162.68,
+   12.3
+  ],
+  "error_m": 4.4,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 4.4 m, angle max 32.8 deg"
  },
  "American Airlines Hangar": {
   "author": "rlx",
@@ -11482,10 +11686,19 @@
  },
  "Squalo Billboard (TS)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 6.0,
+  "source_cameras": [
+   "Key Lento",
+   "Leonida Keys Postcard (X)",
+   "Leonida Keys 02 (Sidewalk)"
+  ],
+  "xyz": [
+   -3016.83,
+   -6472.7,
+   22.69
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 6.0 m, angle max 25.6 deg"
  },
  "Met 1 Condominium (SW)": {
   "author": "rlx",
@@ -11769,10 +11982,18 @@
  },
  "Cardozo South Beach (O2)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "Dominion Hotel",
+   "Vice Beach (B)"
+  ],
+  "xyz": [
+   2015.32,
+   913.63,
+   8.27
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.4 m, angle max 19.7 deg"
  },
  "701 Brickell Ave (NE)": {
   "author": "rlx",
@@ -11941,10 +12162,18 @@
  },
  "South Florida Concrete Block (S)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "Vice Beach (B)",
+   "Vice City Postcard"
+  ],
+  "xyz": [
+   -4981.47,
+   -1038.21,
+   79.35
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.3 m, angle max 12.2 deg"
  },
  "Rickenbacker Causeway Bridge (B3)": {
   "author": "rlx",
@@ -11990,10 +12219,19 @@
  },
  "Squalo Billboard (TN)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 8.6,
+  "source_cameras": [
+   "Key Lento",
+   "Leonida Keys Postcard (X)",
+   "Leonida Keys 02 (Sidewalk)"
+  ],
+  "xyz": [
+   -3034.32,
+   -6467.91,
+   24.24
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 8.6 m, angle max 24.3 deg"
  },
  "Unknown Mast (2)": {
   "author": "rlx",
@@ -12081,10 +12319,18 @@
  },
  "Shore Park Hotel (N)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "Ocean Drive (NW)",
+   "Park"
+  ],
+  "xyz": [
+   1936.32,
+   555.54,
+   7.31
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 11.9 deg"
  },
  "Red Boxville (TNW)": {
   "author": "rlx",
@@ -12109,10 +12355,18 @@
  },
  "4th St Lifeguard Tower": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 12.9,
+  "source_cameras": [
+   "Beach",
+   "Vice City 05 (Vice Beach)"
+  ],
+  "xyz": [
+   2087.06,
+   786.64,
+   29.12
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 12.9 m, angle max 62.3 deg"
  },
  "MIA Terminal J Tower (S)": {
   "author": "rlx",
@@ -12123,10 +12377,18 @@
  },
  "RC Cola Plant (W)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "Auto Shop (NE)",
+   "Little Haiti"
+  ],
+  "xyz": [
+   -1236.42,
+   1222.51,
+   6.56
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.0 m, angle max 86.7 deg"
  },
  "Continuum on South Beach (N)": {
   "author": "rlx",
@@ -12172,10 +12434,18 @@
  },
  "Murano Grande (R3)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "Port",
+   "Port Vice City (B)"
+  ],
+  "xyz": [
+   1488.71,
+   -90.72,
+   94.07
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 71.4 deg"
  },
  "KC02": {
   "author": "rlx",
@@ -12344,10 +12614,18 @@
  },
  "104000 Overseas Hwy": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 12.0,
+  "source_cameras": [
+   "Leonida Keys Postcard (X)",
+   "Crest Kayak"
+  ],
+  "xyz": [
+   -2712.04,
+   -5841.3,
+   28.48
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 12.0 m, angle max 18.5 deg"
  },
  "Vice River (A)": {
   "author": "rlx",
@@ -12400,10 +12678,20 @@
  },
  "Seven Mile Bridge (C)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 8.9,
+  "source_cameras": [
+   "Keys",
+   "Leonida Keys 01 (Airplane) (X)",
+   "Leonida Keys 05 (Boats)",
+   "Crest Kayak"
+  ],
+  "xyz": [
+   -3816.64,
+   -7020.48,
+   23.2
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 4 cams, perp med 8.9 m, angle max 46.0 deg"
  },
  "Vice River (D)": {
   "author": "rlx",
@@ -12414,10 +12702,18 @@
  },
  "Jason's House (Pillar 8) (TSW)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2355.93,
+   -5538.54,
+   5.98
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 8.5 deg"
  },
  "STR06": {
   "author": "rlx",
@@ -12446,10 +12742,18 @@
  },
  "Jason's House (Pillar 8) (TNE)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2334.31,
+   -5549.29,
+   4.3
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.9 m, angle max 14.6 deg"
  },
  "Canal B (Ambrosia) (1)": {
   "author": "rlx",
@@ -12546,17 +12850,33 @@
  },
  "Jason's House (Pillar 7) (TSW)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2347.49,
+   -5538.3,
+   5.99
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 11.7 deg"
  },
  "Jason's House (Window 3) (TS)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2347.1,
+   -5533.98,
+   8.85
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 10.0 deg"
  },
  "STA16": {
   "author": "rlx",
@@ -12771,10 +13091,18 @@
  },
  "Jason's House (Window 3) (TN)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.94,
+   -5533.1,
+   8.8
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 9.8 deg"
  },
  "Road C (Ambrosia) (2)": {
   "author": "rlx",
@@ -12817,10 +13145,18 @@
  },
  "Jason's House (Window 3) (BN)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.95,
+   -5533.08,
+   7.37
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 9.9 deg"
  },
  "Route 35 (F)": {
   "author": "rlx",
@@ -12881,10 +13217,18 @@
  },
  "Jason's House (Window 5) (TN)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.67,
+   -5524.58,
+   8.76
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 7.4 deg"
  },
  "Route 35 (H)": {
   "author": "rlx",
@@ -12938,10 +13282,18 @@
  },
  "Jason's House (Window 4) (BN)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.8,
+   -5528.86,
+   7.35
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 8.6 deg"
  },
  "Car A (Ambrosia) (1)": {
   "author": "rlx",
@@ -12959,10 +13311,18 @@
  },
  "Jason's House (Basketball Hoop) (BS)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.57,
+   -5526.69,
+   4.96
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 7.9 deg"
  },
  "Ambrosia Main St (V)": {
   "author": "rlx",
@@ -13123,10 +13483,18 @@
  },
  "Jason's House (Pillar 8) (TSE)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2355.91,
+   -5538.43,
+   5.98
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 8.5 deg"
  },
  "Jason's House (Front Stairs) (MTSE)": {
   "author": "rlx",
@@ -13212,10 +13580,18 @@
  },
  "Jason's House (Basketball Hoop) (TN)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.52,
+   -5524.81,
+   6.09
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 7.5 deg"
  },
  "Train Signal (Ambrosia) (4E)": {
   "author": "rlx",
@@ -13226,10 +13602,18 @@
  },
  "Jason's House (Pillar 6) (TSW)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2345.66,
+   -5538.33,
+   5.98
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 12.6 deg"
  },
  "Road A (Ambrosia) (2)": {
   "author": "rlx",
@@ -13240,10 +13624,18 @@
  },
  "Jason's House (Window 4) (TN)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.93,
+   -5528.61,
+   8.82
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 8.4 deg"
  },
  "Large Billboard (Ambrosia) (TW)": {
   "author": "rlx",
@@ -13400,10 +13792,18 @@
  },
  "Jason's House (Basketball Hoop) (BN)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.55,
+   -5524.73,
+   4.97
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 7.4 deg"
  },
  "STA09": {
   "author": "rlx",
@@ -13425,10 +13825,18 @@
  },
  "Jason's House (Pillar 7) (TSE)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2347.28,
+   -5538.32,
+   5.99
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 11.8 deg"
  },
  "Billboard with Oval Motif #1 (BW)": {
   "author": "rlx",
@@ -13457,17 +13865,33 @@
  },
  "Jason's House (Window 4) (TS)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.93,
+   -5529.71,
+   8.81
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 8.7 deg"
  },
  "Jason's House (Window 5) (BS)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.68,
+   -5526.51,
+   7.34
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 7.9 deg"
  },
  "Train Signal (Ambrosia) (3W)": {
   "author": "rlx",
@@ -13528,10 +13952,18 @@
  },
  "Jason's House (Window 5) (BN)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.64,
+   -5524.67,
+   7.35
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 7.5 deg"
  },
  "Ambrosia Main St (W)": {
   "author": "rlx",
@@ -13549,10 +13981,18 @@
  },
  "Jason's House (Pillar 6) (TNE)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2345.5,
+   -5538.09,
+   5.98
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 12.6 deg"
  },
  "Large Billboard (Ambrosia) (TE)": {
   "author": "rlx",
@@ -13595,10 +14035,18 @@
  },
  "Jason's House (Pillar 6) (TSE)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2345.47,
+   -5538.31,
+   5.98
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 12.7 deg"
  },
  "Path C (Ambrosia) (1)": {
   "author": "rlx",
@@ -13659,10 +14107,18 @@
  },
  "Jason's House (Pillar 9) (TSE)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2357.22,
+   -5538.63,
+   5.96
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 8.1 deg"
  },
  "Jason's House (Front Stairs) (MTNW)": {
   "author": "rlx",
@@ -13695,10 +14151,18 @@
  },
  "Jason's House (Window 4) (BS)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.86,
+   -5529.82,
+   7.35
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 8.8 deg"
  },
  "STA10": {
   "author": "rlx",
@@ -13797,10 +14261,18 @@
  },
  "Jason's House (Pillar 9) (TSW)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2357.34,
+   -5538.68,
+   5.96
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 8.1 deg"
  },
  "Jason's House (Main) (BNE)": {
   "author": "rlx",
@@ -13829,10 +14301,18 @@
  },
  "Jason's House (Basketball Hoop) (TS)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
-  "zone": null
+  "error_m": 2.0,
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "xyz": [
+   -2346.64,
+   -5526.57,
+   6.1
+  ],
+  "zone": null,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 7.9 deg"
  },
  "Route 35 (D)": {
   "author": "rlx",
@@ -14014,10 +14494,19 @@
   "zone": "unknown"
  },
  "Infinity at Brickell (SE)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "unknown"
+  "xyz": [
+   -1178.14,
+   -1426.93,
+   169.48
+  ],
+  "source_cameras": [
+   "Highway (Peacock Bay) (A)",
+   "Highway (Peacock Bay) (B)",
+   "Motorboats (A)"
+  ],
+  "error_m": 8.5,
+  "zone": "unknown",
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 8.5 m, angle max 59.9 deg"
  },
  "Infinity at Brickell (A)": {
   "xyz": null,
@@ -14046,10 +14535,18 @@
   "zone": "unknown"
  },
  "Skyviews Miami Observation Wheel Center (E)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "unknown"
+  "xyz": [
+   1.81,
+   137.18,
+   38.38
+  ],
+  "source_cameras": [
+   "Port Vice City (A)",
+   "Port Vice City (B)"
+  ],
+  "error_m": 2.0,
+  "zone": "unknown",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.6 m, angle max 2.9 deg"
  },
  "Skyviews Miami Observation Wheel Center (W)": {
   "xyz": null,
@@ -14307,11 +14804,19 @@
   "author": "rlx"
  },
  "Jason's House (Pillar 5) (BSE)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "xyz": [
+   -2355.54,
+   -5529.16,
+   1.89
+  ],
+  "source_cameras": [
+   "House with Boat (X)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "error_m": 2.0,
   "zone": "leonida_keys",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 6.2 deg"
  },
  "Jason's House (Pillar 5) (BSW)": {
   "xyz": null,
@@ -14328,11 +14833,19 @@
   "author": "rlx"
  },
  "Jason's House (Roof) (BSE)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "xyz": [
+   -2346.99,
+   -5535.6,
+   9.42
+  ],
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "error_m": 2.0,
   "zone": "leonida_keys",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 10.5 deg"
  },
  "Ambrosia Hill (TW)": {
   "xyz": null,
@@ -14414,10 +14927,20 @@
   "zone": "vice_city"
  },
  "Marquis Miami (NE)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "unknown"
+  "xyz": [
+   -450.94,
+   570.08,
+   176.8
+  ],
+  "source_cameras": [
+   "Skyline",
+   "Vice City 03 (Basketball)",
+   "Port Vice City (A)",
+   "Port Vice City (B)"
+  ],
+  "error_m": 3.1,
+  "zone": "unknown",
+  "method": "ANCHOR-HARVEST-V1: triangulation 4 cams, perp med 3.1 m, angle max 54.5 deg"
  },
  "Marquis Miami (NW)": {
   "xyz": null,
@@ -14426,10 +14949,18 @@
   "zone": "unknown"
  },
  "Container Crane (6)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "unknown"
+  "xyz": [
+   1455.41,
+   -423.86,
+   82.2
+  ],
+  "source_cameras": [
+   "Amphitheater",
+   "Vintage Vice City Pack 02 (Port)"
+  ],
+  "error_m": 6.1,
+  "zone": "unknown",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 6.1 m, angle max 62.3 deg"
  },
  "Three Tequesta Point (SE)": {
   "xyz": [
@@ -14537,10 +15068,18 @@
   "zone": "rlx_markings_0713"
  },
  "Signature Hangar 2 (BNW)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2506.55,
+   -64.12,
+   3.2
+  ],
+  "source_cameras": [
+   "Airport (X)",
+   "Hangar (A)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 14.0 deg"
  },
  "Helipad 1 (N1)": {
   "xyz": null,
@@ -14555,28 +15094,60 @@
   "zone": "rlx_markings_0713"
  },
  "Signature Hangar 2 (DTN)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2511.37,
+   -78.91,
+   7.12
+  ],
+  "source_cameras": [
+   "Airport (X)",
+   "Hangar (A)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 13.6 deg"
  },
  "Signature Hangar 2 (DBN)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2510.73,
+   -78.95,
+   3.25
+  ],
+  "source_cameras": [
+   "Airport (X)",
+   "Hangar (A)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 13.5 deg"
  },
  "Signature Hangar 2 (DTS)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2514.6,
+   -84.72,
+   7.13
+  ],
+  "source_cameras": [
+   "Airport (X)",
+   "Hangar (A)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 13.4 deg"
  },
  "Signature Hangar 2 (DBS)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2513.37,
+   -84.43,
+   3.31
+  ],
+  "source_cameras": [
+   "Airport (X)",
+   "Hangar (A)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 13.3 deg"
  },
  "Helipad 1 (NE)": {
   "xyz": null,
@@ -14591,28 +15162,60 @@
   "zone": "rlx_markings_0713"
  },
  "Signature Hangar 2 (STW)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2524.02,
+   -101.36,
+   10.94
+  ],
+  "source_cameras": [
+   "Airport (X)",
+   "Hangar (A)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 12.0 deg"
  },
  "Signature Hangar 2 (SBW)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2524.17,
+   -101.33,
+   9.29
+  ],
+  "source_cameras": [
+   "Airport (X)",
+   "Hangar (A)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 12.1 deg"
  },
  "Signature Hangar 2 (STE)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2519.53,
+   -102.69,
+   10.9
+  ],
+  "source_cameras": [
+   "Airport (X)",
+   "Hangar (A)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 10.8 deg"
  },
  "Signature Hangar 2 (SBE)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2519.46,
+   -102.69,
+   9.27
+  ],
+  "source_cameras": [
+   "Airport (X)",
+   "Hangar (A)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 10.9 deg"
  },
  "Helipad 1 (SE)": {
   "xyz": null,
@@ -14777,10 +15380,18 @@
   "zone": "rlx_markings_0713"
  },
  "Met 1 Condominium": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -528.95,
+   -538.5,
+   194.68
+  ],
+  "source_cameras": [
+   "Grassrivers 02 (Watson Bay)",
+   "Prison"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.9 m, angle max 7.3 deg"
  },
  "Mast (Prison)": {
   "xyz": null,
@@ -15102,10 +15713,18 @@
   "zone": "rlx_markings_0713"
  },
  "Old Bahia Honda Bridge (Barrier) (SE)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -5562.97,
+   -7298.94,
+   28.71
+  ],
+  "source_cameras": [
+   "Grassrivers Postcard (X)",
+   "Keys"
+  ],
+  "error_m": 22.8,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 22.8 m, angle max 71.4 deg"
  },
  "Blimp Key (C)": {
   "xyz": null,
@@ -15241,28 +15860,60 @@
   "zone": "rlx_markings_0713"
  },
  "Jason's House (Pillar 11) (TSW)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2357.34,
+   -5538.68,
+   5.96
+  ],
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 8.1 deg"
  },
  "Jason's House (Pillar 11) (TSE)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2357.25,
+   -5538.62,
+   5.96
+  ],
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 8.1 deg"
  },
  "Jason's House (Pillar 10) (TSW)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2355.95,
+   -5538.52,
+   5.98
+  ],
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 8.5 deg"
  },
  "Jason's House (Pillar 10) (TSE)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2355.88,
+   -5538.44,
+   5.98
+  ],
+  "source_cameras": [
+   "House (Keys)",
+   "Jason's Safehouse Vehicles (X)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 8.5 deg"
  },
  "One Broadway (SW)": {
   "xyz": [
@@ -15302,16 +15953,32 @@
   "zone": "rlx_markings_0713"
  },
  "105 Front St (S)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2842.3,
+   -6438.44,
+   25.0
+  ],
+  "source_cameras": [
+   "Leonida Keys Postcard (X)",
+   "Jason Duval 03 (Boat)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.8 m, angle max 63.2 deg"
  },
  "Roof (Key Lento)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2877.12,
+   -6672.43,
+   -3.5
+  ],
+  "source_cameras": [
+   "Leonida Keys Postcard (X)",
+   "Jason Duval 03 (Boat)"
+  ],
+  "error_m": 7.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 7.0 m, angle max 66.3 deg"
  },
  "Small Radio Tower (Key Lento) (C)": {
   "xyz": null,
@@ -15401,16 +16068,32 @@
   "zone": "rlx_markings_0713"
  },
  "Long Island (S)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2831.65,
+   -5498.6,
+   0.46
+  ],
+  "source_cameras": [
+   "Leonida Keys 01 (Airplane) (X)",
+   "Leonida Keys Postcard (X)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.6 m, angle max 3.9 deg"
  },
  "Anchor island (S)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2538.02,
+   -5134.47,
+   0.73
+  ],
+  "source_cameras": [
+   "Leonida Keys 01 (Airplane) (X)",
+   "Leonida Keys Postcard (X)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.8 m, angle max 2.9 deg"
  },
  "Old Seven Mile Bridge (F)": {
   "xyz": null,
@@ -15419,10 +16102,18 @@
   "zone": "rlx_markings_0713"
  },
  "Key Lento (Z)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -2673.35,
+   -5884.1,
+   0.21
+  ],
+  "source_cameras": [
+   "Leonida Keys 01 (Airplane) (X)",
+   "Leonida Keys Postcard (X)"
+  ],
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 8.1 deg"
  },
  "Old Seven Mile Bridge (E)": {
   "xyz": null,
@@ -15984,10 +16675,18 @@
   "zone": "rlx_markings_0713"
  },
  "One Broadway (E)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
+  "xyz": [
+   -1030.62,
+   -1309.45,
+   149.82
+  ],
+  "source_cameras": [
+   "Highway (Peacock Bay) (B)",
+   "'95 Grotti Cheetah 04 (Garage)"
+  ],
+  "error_m": 2.3,
+  "zone": "rlx_markings_0713",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.3 m, angle max 48.9 deg"
  },
  "Jason's House (Pillar 11) (BSW)": {
   "xyz": [
@@ -16157,18 +16856,28 @@
   "author": "rlx"
  },
  "Billboard near Starlet Motel (B)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "source_cameras": [
+   "Motel",
+   "Mount Kalaga National Park 04 (Mountain Pass) (X)"
+  ],
   "zone": null,
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1 RETIRE: rayons rasants sur plan z=0 (spread ~0.5-1 km) ou residu source aberrant \u2014 intriangulable en l etat"
  },
  "Starlet Motel (P)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "xyz": [
+   -5354.65,
+   3532.34,
+   71.07
+  ],
+  "source_cameras": [
+   "Motel",
+   "Starlet Motel"
+  ],
+  "error_m": 2.0,
   "zone": null,
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.4 m, angle max 27.1 deg"
  },
  "Starlet Motel (RS)": {
   "xyz": null,
@@ -16178,11 +16887,13 @@
   "author": "rlx"
  },
  "Billboard near Intersection (BN)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "source_cameras": [
+   "Pool",
+   "Port Gellhorn 01 (Starlet Motel)"
+  ],
   "zone": "port_gellhorn",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1 RETIRE: point derriere la cam ['Pool', 'Port Gellhorn 01 (Starlet Motel)'] (triangulation degeneree)"
  },
  "Radio Tower near Intersection 1 (C)": {
   "xyz": null,
@@ -16206,18 +16917,34 @@
   "author": "rlx"
  },
  "Starlet Motel Pool (A)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "xyz": [
+   -5322.91,
+   3473.28,
+   64.9
+  ],
+  "source_cameras": [
+   "Pool",
+   "Port Gellhorn 01 (Starlet Motel)"
+  ],
+  "error_m": 2.0,
   "zone": "port_gellhorn",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.5 m, angle max 53.2 deg"
  },
  "Starlet Motel Pool (B)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "xyz": [
+   -5321.97,
+   3472.44,
+   64.84
+  ],
+  "source_cameras": [
+   "Pool",
+   "Port Gellhorn 01 (Starlet Motel)"
+  ],
+  "error_m": 2.0,
   "zone": "port_gellhorn",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.4 m, angle max 50.6 deg"
  },
  "Starlet Motel Pool (C)": {
   "xyz": null,
@@ -16297,11 +17024,13 @@
   "author": "rlx"
  },
  "Building near Pool (E)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "source_cameras": [
+   "Port Gellhorn 01 (Starlet Motel)",
+   "Starlet Motel"
+  ],
   "zone": null,
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1 RETIRE: point derriere la cam ['Starlet Motel'] (triangulation degeneree)"
  },
  "Building near Pool (S)": {
   "xyz": null,
@@ -16311,18 +17040,34 @@
   "author": "rlx"
  },
  "Starlet Motel Sign (B)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "xyz": [
+   -5315.78,
+   3488.36,
+   86.49
+  ],
+  "source_cameras": [
+   "Port Gellhorn 01 (Starlet Motel)",
+   "Starlet Motel"
+  ],
+  "error_m": 9.5,
   "zone": null,
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 9.5 m, angle max 37.8 deg"
  },
  "Starlet Motel Sign (C)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "xyz": [
+   -5317.3,
+   3479.58,
+   81.48
+  ],
+  "source_cameras": [
+   "Port Gellhorn 01 (Starlet Motel)",
+   "Starlet Motel"
+  ],
+  "error_m": 8.7,
   "zone": null,
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 8.7 m, angle max 30.9 deg"
  },
  "Wheelabrator South Broward (SE)": {
   "xyz": null,
@@ -16703,10 +17448,19 @@
   "zone": "unknown"
  },
  "Icon at Brickell South Tower": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "unknown"
+  "xyz": [
+   -543.68,
+   -891.46,
+   175.13
+  ],
+  "source_cameras": [
+   "Vice City Sign",
+   "Port Vice City (A)",
+   "Port Vice City (B)"
+  ],
+  "error_m": 17.7,
+  "zone": "unknown",
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 17.7 m, angle max 29.0 deg"
  },
  "Vice City Sign (C1)": {
   "xyz": [
@@ -17047,10 +17801,18 @@
   "zone": "vice_city"
  },
  "Vice City Sign (V1)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "vice_city"
+  "xyz": [
+   -3332.78,
+   -531.43,
+   31.9
+  ],
+  "source_cameras": [
+   "Vice City 01 (Vice City Sign)",
+   "Vice City Sign"
+  ],
+  "error_m": 12.8,
+  "zone": "vice_city",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 12.8 m, angle max 10.7 deg | projete sur vice-city-sign-plane (ecart initial 3.8 m)"
  },
  "Vice City Sign (V2)": {
   "xyz": [
@@ -17247,10 +18009,18 @@
   }
  },
  "Marina Blue (NW)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "unknown"
+  "xyz": [
+   -473.35,
+   414.4,
+   168.96
+  ],
+  "source_cameras": [
+   "Jason Duval 05 (Machine Gun)",
+   "Skyline"
+  ],
+  "error_m": 2.0,
+  "zone": "unknown",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.2 m, angle max 69.2 deg"
  },
  "Lake Leonida (A)": {
   "xyz": [
@@ -17565,10 +18335,18 @@
   "method": "ray x plan d eau z=14.486 (LAKE-V1); sens 18.5 m/m de datum"
  },
  "Tall Billboard near Interchange (B)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "unknown"
+  "xyz": [
+   -1124.27,
+   438.1,
+   41.24
+  ],
+  "source_cameras": [
+   "Explosion",
+   "Interchange"
+  ],
+  "error_m": 13.7,
+  "zone": "unknown",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 13.7 m, angle max 43.8 deg"
  },
  "Rhode Building (BSW)": {
   "xyz": null,
@@ -17660,5 +18438,398 @@
   "error_m": 10.0,
   "zone": "ambrosia",
   "method": "triangulation Hedge (Mount Ambrosia (X)) x heli (Mount Ambrosia (3)-ray), gap 6.0 m \u2014 crete OUEST du massif (hors cadre Bikers), z 160"
+ },
+ "Blob": {
+  "xyz": [
+   -5328.67,
+   4278.18,
+   133.1
+  ],
+  "source_cameras": [
+   "Mount Kalaga National Park 02 (Helicopter) (X)",
+   "Mount Kalaga National Park 04 (Mountain Pass) (X)"
+  ],
+  "error_m": 5.8,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 5.8 m, angle max 64.9 deg"
+ },
+ "Cardozo South Beach (D)": {
+  "xyz": [
+   2015.15,
+   907.29,
+   7.52
+  ],
+  "source_cameras": [
+   "Dominion Hotel",
+   "Vice Beach (A)",
+   "Vice Beach (B)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 1.0 m, angle max 19.5 deg"
+ },
+ "Container Crane (7)": {
+  "xyz": [
+   1304.09,
+   -340.93,
+   75.31
+  ],
+  "source_cameras": [
+   "Amphitheater",
+   "Port Vice City (B)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.4 m, angle max 45.0 deg"
+ },
+ "Container Crane (8)": {
+  "xyz": [
+   1186.99,
+   -286.89,
+   74.1
+  ],
+  "source_cameras": [
+   "Amphitheater",
+   "Port Vice City (A)",
+   "Port Vice City (B)"
+  ],
+  "error_m": 2.4,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 2.4 m, angle max 34.0 deg"
+ },
+ "Crazy Hill": {
+  "xyz": [
+   -5045.2,
+   2456.15,
+   82.83
+  ],
+  "source_cameras": [
+   "Mount Kalaga National Park 04 (Mountain Pass) (X)",
+   "Port Vice City (A)"
+  ],
+  "error_m": 4.2,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 4.2 m, angle max 59.4 deg"
+ },
+ "Flagler on the River (SE)": {
+  "xyz": [
+   -1112.32,
+   -358.84,
+   138.29
+  ],
+  "source_cameras": [
+   "Highway (Peacock Bay) (A)",
+   "Vice Beach (B)"
+  ],
+  "error_m": 4.6,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 4.6 m, angle max 56.7 deg"
+ },
+ "Grove at Grand Bay (NE)": {
+  "xyz": [
+   -1192.04,
+   -2050.27,
+   89.31
+  ],
+  "source_cameras": [
+   "Highway (Peacock Bay) (A)",
+   "Tennis Stadium (4K)"
+  ],
+  "error_m": 11.7,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 11.7 m, angle max 31.7 deg"
+ },
+ "Highway Sign (S)": {
+  "xyz": [
+   -113.55,
+   550.19,
+   36.93
+  ],
+  "source_cameras": [
+   "Convertible",
+   "Vice City 08 (Ferris Wheel)"
+  ],
+  "error_m": 3.3,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 3.3 m, angle max 56.1 deg"
+ },
+ "House #1 (Waning Sands)": {
+  "xyz": [
+   -984.1,
+   4003.55,
+   31.81
+  ],
+  "source_cameras": [
+   "Waning Sands (A) (X)",
+   "Waning Sands (B)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.2 m, angle max 19.3 deg"
+ },
+ "House #2 (Waning Sands)": {
+  "xyz": [
+   -920.73,
+   4060.49,
+   28.02
+  ],
+  "source_cameras": [
+   "Waning Sands (B)",
+   "Waning Sands (C)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.8 m, angle max 6.0 deg"
+ },
+ "KC03": {
+  "xyz": [
+   -262.77,
+   520.69,
+   27.2
+  ],
+  "source_cameras": [
+   "Convertible",
+   "Vice City 08 (Ferris Wheel)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.9 m, angle max 66.8 deg"
+ },
+ "KC04": {
+  "xyz": [
+   -263.19,
+   521.02,
+   22.55
+  ],
+  "source_cameras": [
+   "Convertible",
+   "Vice City 08 (Ferris Wheel)"
+  ],
+  "error_m": 2.5,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.5 m, angle max 66.9 deg"
+ },
+ "KC06": {
+  "xyz": [
+   -248.83,
+   510.32,
+   25.49
+  ],
+  "source_cameras": [
+   "Convertible",
+   "Vice City 08 (Ferris Wheel)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.0 m, angle max 69.5 deg"
+ },
+ "KC09": {
+  "xyz": [
+   -270.3,
+   524.5,
+   37.26
+  ],
+  "source_cameras": [
+   "Convertible",
+   "Vice City 08 (Ferris Wheel)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.1 m, angle max 65.8 deg"
+ },
+ "KC10": {
+  "xyz": [
+   -271.74,
+   525.13,
+   34.83
+  ],
+  "source_cameras": [
+   "Convertible",
+   "Vice City 08 (Ferris Wheel)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.2 m, angle max 65.7 deg"
+ },
+ "KC11": {
+  "xyz": [
+   -277.52,
+   527.28,
+   24.9
+  ],
+  "source_cameras": [
+   "Convertible",
+   "Vice City 08 (Ferris Wheel)"
+  ],
+  "error_m": 2.1,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.1 m, angle max 65.6 deg"
+ },
+ "Mount Waffles (W)": {
+  "xyz": [
+   -5275.5,
+   5917.76,
+   172.02
+  ],
+  "source_cameras": [
+   "Diner (N)",
+   "Gas Station (Jason)"
+  ],
+  "error_m": 14.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 14.0 m, angle max 14.8 deg"
+ },
+ "Mount Waffles (W2)": {
+  "xyz": [
+   -5347.13,
+   5666.43,
+   168.92
+  ],
+  "source_cameras": [
+   "Diner (NE)",
+   "Gas Station (Lucia)"
+  ],
+  "error_m": 9.7,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 9.7 m, angle max 17.8 deg"
+ },
+ "New Bahia Honda Bridge (E)": {
+  "xyz": [
+   -5273.64,
+   -7200.71,
+   38.92
+  ],
+  "source_cameras": [
+   "Key Lento",
+   "Keys"
+  ],
+  "error_m": 23.3,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 23.3 m, angle max 35.9 deg"
+ },
+ "New Bahia Honda Bridge (W)": {
+  "xyz": [
+   -5896.41,
+   -6975.89,
+   17.88
+  ],
+  "source_cameras": [
+   "Key Lento",
+   "Keys"
+  ],
+  "error_m": 4.5,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 4.5 m, angle max 23.0 deg"
+ },
+ "One Broadway (NW)": {
+  "xyz": [
+   -1057.99,
+   -1251.31,
+   140.12
+  ],
+  "source_cameras": [
+   "Metro (SE) (C)",
+   "Vice City 01 (Vice City Sign)"
+  ],
+  "error_m": 2.3,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.3 m, angle max 44.3 deg"
+ },
+ "Radio Tower (Key Lento)": {
+  "xyz": [
+   -1357.85,
+   -4730.1,
+   22.34
+  ],
+  "source_cameras": [
+   "Key Lento",
+   "Leonida Keys Postcard (X)"
+  ],
+  "error_m": 13.5,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 13.5 m, angle max 12.7 deg"
+ },
+ "Tall Billboard (Port VC)": {
+  "xyz": [
+   780.55,
+   -799.65,
+   59.18
+  ],
+  "source_cameras": [
+   "Vice City 08 (Ferris Wheel)",
+   "Port Vice City (A)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.3 m, angle max 82.0 deg"
+ },
+ "Tall Yellow Sign": {
+  "xyz": [
+   -6304.43,
+   3835.8,
+   36.68
+  ],
+  "source_cameras": [
+   "Gas Station (Lucia)",
+   "U-Turn (NE)"
+  ],
+  "error_m": 8.3,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 8.3 m, angle max 4.8 deg"
+ },
+ "Ten Museum Park (NE)": {
+  "xyz": [
+   -437.61,
+   493.3,
+   134.79
+  ],
+  "source_cameras": [
+   "Port Vice City (A)",
+   "Port Vice City (B)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 2.8 deg"
+ },
+ "Ten Museum Park (SW)": {
+  "xyz": [
+   -506.57,
+   467.95,
+   137.28
+  ],
+  "source_cameras": [
+   "Jason Duval 05 (Machine Gun)",
+   "Port Vice City (A)",
+   "Port Vice City (B)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 1.5 m, angle max 14.8 deg"
+ },
+ "Unknown Building near VCIA (N)": {
+  "xyz": [
+   -5017.05,
+   -1001.95,
+   79.2
+  ],
+  "source_cameras": [
+   "Vice Beach (B)",
+   "Vice City Postcard"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.5 m, angle max 12.1 deg"
+ },
+ "Unknown Building near VCIA (S)": {
+  "xyz": [
+   -4981.47,
+   -1038.21,
+   79.35
+  ],
+  "source_cameras": [
+   "Vice Beach (B)",
+   "Vice City Postcard"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.3 m, angle max 12.2 deg"
+ },
+ "WTP (E)": {
+  "xyz": [
+   788.81,
+   -1289.76,
+   30.11
+  ],
+  "source_cameras": [
+   "Leonida Keys Postcard (X)",
+   "Vice City 08 (Ferris Wheel)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.1 m, angle max 71.3 deg"
+ },
+ "WTP (W)": {
+  "xyz": [
+   766.48,
+   -1293.26,
+   30.42
+  ],
+  "source_cameras": [
+   "Leonida Keys Postcard (X)",
+   "Vice City 08 (Ferris Wheel)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.2 m, angle max 70.8 deg"
  }
 }

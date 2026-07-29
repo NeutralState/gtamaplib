@@ -1,0 +1,142 @@
+#!/usr/bin/env python3
+"""anchor_harvest.py — la moisson d'ancres. [ANCHOR-HARVEST-V1]
+
+Doctrine 'map la plus precise ever': les ancres (points triangules 2+ cams)
+sont la seule monnaie de precision. Cet outil ramasse TOUS les landmarks
+observes par >= 2 cams posees et jamais triangules, et les triangule avec
+des gates de qualite:
+
+  * angle minimal entre rayons  >= --min-angle (defaut 2.5 deg — en dessous
+    la profondeur est molle)
+  * residu perpendiculaire max  <= max(15 m, 1.2% de la distance)
+  * resultat dans les bornes monde (|xy| < 17 km, -100 < z < 1200)
+
+Ecrit xyz + source_cameras + error_m (mediane des perps) + method.
+Ne touche JAMAIS un landmark qui a deja un xyz. Dry-run par defaut.
+
+Usage: PYTHONPATH=. python3 tools/anchor_harvest.py [--apply] [--min-angle 2.5]
+"""
+import argparse
+import collections
+import json
+import math
+import os
+import sys
+import tempfile
+
+THIS = os.path.dirname(os.path.abspath(__file__))
+REPO = os.path.dirname(THIS)
+sys.path.insert(0, THIS)
+sys.path.insert(0, REPO)
+
+import numpy as np
+import common
+from common import ray_ls_point
+
+
+def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--apply', action='store_true')
+    ap.add_argument('--min-angle', type=float, default=2.5)
+    args = ap.parse_args()
+
+    px = json.load(open(os.path.join(REPO, 'gtamapdata', 'pixels.json')))
+    lms = json.load(open(os.path.join(REPO, 'gtamapdata', 'landmarks.json')))
+    cams = json.load(open(os.path.join(REPO, 'gtamapdata', 'cameras.json')))
+
+    def posed(c):
+        e = cams.get(c, {})
+        return bool(e.get('xyz') and e.get('ypr') and any(e['ypr'])
+                    and e.get('fov') and (e['fov'][0] or e['fov'][1]))
+
+    obs = collections.defaultdict(list)
+    for c, marks in px.items():
+        if not posed(c):
+            continue
+        for lm, p in marks.items():
+            if p is None or common.is_excluded_marking(c, lm):
+                continue
+            obs[lm].append((c, p))
+
+    # CIRCULAIRES interdits: la pose d'Empty Lot a ete FITTEE pour projeter
+    # ces clics sur le modele de colline -> les 'trianguler' Bikers x EL
+    # fabriquerait de fausses ancres a l'echelle de l'ancien modele.
+    BLACKLIST = {'Ambrosia Hill (TW)', 'Ambrosia Hill (TE)'}
+    accepted, rejected = [], []
+    for lm, wits in sorted(obs.items()):
+        if lm in BLACKLIST:
+            rejected.append((lm, 'circulaire (pose EL fittee sur ce clic)'))
+            continue
+        e = lms.get(lm)
+        if isinstance(e, dict) and e.get('xyz'):
+            continue
+        if len(wits) < 2:
+            continue
+        rays = []
+        for c, p in wits:
+            cam = common.get_cam(c)          # gotcha #5: re-applique chaque fois
+            d = np.asarray(cam.get_pixel_direction(p), float)
+            rays.append((c, np.asarray(cam.xyz, float), d / np.linalg.norm(d)))
+        # angle max entre paires
+        amax = 0.0
+        for i in range(len(rays)):
+            for j in range(i + 1, len(rays)):
+                cth = abs(float(np.dot(rays[i][2], rays[j][2])))
+                amax = max(amax, math.degrees(math.acos(min(1.0, cth))))
+        if amax < args.min_angle:
+            rejected.append((lm, f'angle {amax:.1f} deg'))
+            continue
+        try:
+            P = np.asarray(ray_ls_point([(o, d) for _, o, d in rays]), float)
+        except Exception as ex:
+            rejected.append((lm, f'solve: {ex}'))
+            continue
+        if not np.all(np.isfinite(P)) or abs(P[0]) > 17000 or abs(P[1]) > 17000 \
+                or not (-100 < P[2] < 1200):
+            rejected.append((lm, f'hors bornes {np.round(P, 0)}'))
+            continue
+        perps, dists = [], []
+        for _, o, d in rays:
+            v = P - o
+            perps.append(float(np.linalg.norm(v - np.dot(v, d) * d)))
+            dists.append(float(np.linalg.norm(v)))
+        perp_med = float(np.median(perps))
+        if perp_med > max(15.0, 0.012 * float(np.median(dists))):
+            rejected.append((lm, f'perp {perp_med:.1f} m @ {np.median(dists):.0f} m'))
+            continue
+        accepted.append((lm, P, [c for c, _, _ in rays], perp_med, amax,
+                         float(np.median(dists))))
+
+    print(f'{len(accepted)} ACCEPTES / {len(rejected)} rejetes\n')
+    for lm, P, cs, perp, ang, dist in accepted:
+        print(f'  {lm[:42]:42s} ({P[0]:8.1f},{P[1]:8.1f},{P[2]:7.1f}) '
+              f'perp {perp:5.1f} m  angle {ang:5.1f}  {len(cs)} cams')
+    print('\nrejets (raison):')
+    for lm, why in rejected[:25]:
+        print(f'  {lm[:42]:42s} {why}')
+    if len(rejected) > 25:
+        print(f'  ... +{len(rejected) - 25}')
+
+    if not args.apply:
+        print('\nDRY-RUN (--apply pour ecrire).')
+        return
+    for lm, P, cs, perp, ang, dist in accepted:
+        e = lms.get(lm) if isinstance(lms.get(lm), dict) else {}
+        e.update({
+            'xyz': [round(float(v), 2) for v in P],
+            'source_cameras': cs,
+            'error_m': round(max(2.0, perp), 1),
+            'method': f'ANCHOR-HARVEST-V1: triangulation {len(cs)} cams, '
+                      f'perp med {perp:.1f} m, angle max {ang:.1f} deg',
+        })
+        lms[lm] = e
+    path = os.path.join(REPO, 'gtamapdata', 'landmarks.json')
+    fd, tmp = tempfile.mkstemp(dir=os.path.dirname(path), suffix='.tmp')
+    with os.fdopen(fd, 'w') as f:
+        json.dump(lms, f, indent=1, ensure_ascii=True)
+    os.replace(tmp, path)
+    print(f'\nAPPLIED: {len(accepted)} nouvelles ancres.')
+
+
+if __name__ == '__main__':
+    main()
