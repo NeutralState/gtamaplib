@@ -60,6 +60,8 @@ def main():
     ap.add_argument('--width', type=float, default=14.0)
     ap.add_argument('--slope-up', type=float, default=20.0,
                     help='pente max du terrain derriere le rim (deg)')
+    ap.add_argument('--bench-slope', type=float, default=12.0,
+                    help='pente du flanc doux du ridge droit (deg, descend vers la route)')
     ap.add_argument('--apply', action='store_true')
     args = ap.parse_args()
 
@@ -252,6 +254,64 @@ def main():
             ext = [float(np.linalg.norm(Q[:2] - R[:2])) for R, Q in gp]
             print(f'pente gauche FOND (rim_left_top): {len(gp)} generatrices, '
                   f'extension mediane {np.median(ext):.0f} m')
+    # ── COTE DROIT (meme modele que le gauche valide): haut du ridge a
+    #    --slope-up derriere le rim; et la section 'moins abrupte' = flanc
+    #    qui DESCEND vers la route a --bench-slope, stoppe par la luminance
+    #    (le sable clair du bord de route) ────────────────────────────────
+    if 'rim_right' in walls:
+        gp = sweep(walls['rim_right'], lines.get('terrain_right_top'), False, 900)
+        emit(gp)
+        if gp:
+            ext = [float(np.linalg.norm(Q[:2] - R[:2])) for R, Q in gp]
+            print(f'pente droite HAUT: {len(gp)} generatrices, extension mediane '
+                  f'{np.median(ext):.0f} m (max {max(ext):.0f})')
+        # bench: generatrices vers la ROUTE, inclinees vers le bas
+        bs = math.radians(args.bench_slope)
+        rim = walls['rim_right']
+        gp2 = []
+        for i2 in range(0, len(rim), 2):
+            R = rim[i2]
+            # flanc COTE CAMERA (les hachures 'moins abrupte' d'Alexandre
+            # sont sur le versant qui nous fait face, pas sur la face canyon)
+            nh = o[:2] - R[:2]
+            nh /= (np.linalg.norm(nh) + 1e-9)
+            u_ok = None
+            def okb(u):
+                Q = np.array([R[0] + u * nh[0] * math.cos(bs),
+                              R[1] + u * nh[1] * math.cos(bs),
+                              R[2] - u * math.sin(bs)])
+                pr = cam.get_pixel([float(v) for v in Q])
+                if pr is None or pr[0] < 1 or pr[0] > cam.w - 1 or pr[1] > cam.h - 2:
+                    return None
+                if pr[1] > 1780:
+                    return None                    # borne basse de la zone hachuree bench
+                if lum(pr[0], pr[1]) > SKY:
+                    return None
+                if float(np.min(np.linalg.norm(road_xy - Q[:2], axis=1))) < args.width:
+                    return None                    # jamais sur la chaussee
+                return Q
+            lastQ = None
+            for u in np.arange(6, 420, 6):
+                Q = okb(u)
+                if Q is not None:
+                    u_ok, lastQ = u, Q
+                elif u_ok is not None:
+                    lo, hi = u_ok, u
+                    for _ in range(10):
+                        mid = 0.5 * (lo + hi)
+                        Qm = okb(mid)
+                        if Qm is not None:
+                            lo, lastQ = mid, Qm
+                        else:
+                            hi = mid
+                    break
+            if lastQ is not None and u_ok and u_ok > 8:
+                gp2.append((R, lastQ))
+        emit(gp2)
+        if gp2:
+            ext = [float(np.linalg.norm(Q[:2] - R[:2])) for R, Q in gp2]
+            print(f'bench droite ({args.bench_slope:.0f} deg vers la route): '
+                  f'{len(gp2)} generatrices, extension mediane {np.median(ext):.0f} m')
     out['Canyon Terrain (Kalaga Pass)'] = {'color': '#4ade80', 'world_edges': e_t}
 
     if not args.apply:
