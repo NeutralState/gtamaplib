@@ -163,9 +163,18 @@ def main():
     for nm in ('rim_left', 'rim_left_pinnacle', 'rim_left_top'):
         if nm in lines:
             rim2d += list(zip(lines[nm]['x'], lines[nm]['y']))
-    rim2d.sort()
-    r2x = np.array([p_[0] for p_ in rim2d])
-    r2y = np.array([p_[1] for p_ in rim2d])
+    # enveloppe SUPERIEURE par colonne (le rim est une silhouette: a chaque x
+    # c'est le point le plus haut). Un tri brut melangeait le pinacle (x quasi
+    # constant, y 676..906) et produisait une diagonale artificielle vers la
+    # section du pont — c'est le 'ca part en haut pour aucune raison'.
+    top_by_col = {}
+    for xx, yy in rim2d:
+        k_ = int(round(xx / 8.0))
+        if k_ not in top_by_col or yy < top_by_col[k_][1]:
+            top_by_col[k_] = (xx, yy)
+    env_pts = sorted(top_by_col.values())
+    r2x = np.array([p_[0] for p_ in env_pts])
+    r2y = np.array([p_[1] for p_ in env_pts])
     def rim_y_at(x):
         if x < r2x[0] or x > r2x[-1]:
             return None
@@ -190,6 +199,7 @@ def main():
             feet.append(o + t * ray)
         for k in range(len(feet) - 1):       # ligne de pied 3D
             e_w.append([list(map(float, feet[k])), list(map(float, feet[k + 1]))])
+        climb = []
         for k in range(0, len(feet), 2):
             F_ = feet[k]
             j = int(np.argmin(np.linalg.norm(road_xy - F_[:2], axis=1)))
@@ -208,9 +218,20 @@ def main():
                     top, matched = Q, True
                     break
                 top = Q
-            if matched:                       # seulement les faces qui
-                e_w.append([list(map(float, F_)), list(map(float, top))])
-                new_rim.append(top)           # rejoignent la ligne de rim
+            climb.append((k, F_, nh, u if matched else None))
+        # CONTINUITE: longueur de face interpolee la ou le rayon n'a jamais
+        # croise la ligne de rim (bouts du mur) — plus de zone coupee
+        idx = [i_ for i_, (_, _, _, u_) in enumerate(climb) if u_ is not None]
+        if idx:
+            uu = np.array([climb[i_][3] for i_ in idx], float)
+            allu = np.interp(np.arange(len(climb)), idx, uu)
+            for i_, (k_, F_, nh_, u_) in enumerate(climb):
+                U = u_ if u_ is not None else float(allu[i_])
+                T = np.array([F_[0] + U * nh_[0] * math.cos(FACE),
+                              F_[1] + U * nh_[1] * math.cos(FACE),
+                              F_[2] + U * math.sin(FACE)])
+                e_w.append([list(map(float, F_)), list(map(float, T))])
+                new_rim.append(T)
         for k in range(len(new_rim) - 1):    # rim 3D deduit
             e_w.append([list(map(float, new_rim[k])), list(map(float, new_rim[k + 1]))])
         zs = [p_[2] for p_ in new_rim]
@@ -289,16 +310,45 @@ def main():
                     u_ok = lo
                     break
             if u_ok is not None and u_ok > 8:
-                gp.append((R, point(R, nh, u_ok)))
-        return gp
+                gp.append((R, nh, u_ok))
+        # CONTINUITE (retour d'Alexandre: 'ca part en haut pour aucune
+        # raison'): la longueur des generatrices est lissee (mediane 7)
+        # — le terrain ne saute pas d'une colonne a l'autre
+        if len(gp) > 7:
+            us = np.array([g[2] for g in gp], float)
+            sm = np.array([np.median(us[max(0, i - 3):i + 4]) for i in range(len(us))])
+            gp = [(R_, nh_, float(sm[i])) for i, (R_, nh_, _) in enumerate(gp)]
+        # rejet des generatrices DEGENEREES en projection (direction quasi
+        # dans l'axe de vue -> une ligne qui file a travers l'image)
+        out_ = []
+        for R_, nh_, u_ in gp:
+            Q_ = point(R_, nh_, u_)
+            if cam.get_pixel([float(v) for v in Q_]) is None:
+                continue
+            g_ = Q_ - R_
+            n_ = float(np.linalg.norm(g_))
+            v_ = R_ - o
+            nv_ = float(np.linalg.norm(v_))
+            if n_ > 1e-6 and nv_ > 1e-6:
+                cosang = abs(float(np.dot(g_ / n_, v_ / nv_)))
+                if cosang > 0.985:            # a moins de 10 deg de l'axe de
+                    continue                  # vue: degeneree en projection
+            out_.append((R_, Q_))
+        return out_
 
-    def emit(gp):
+    def emit(gp, max_link=120.0):
+        # max_link: pas de segment de liaison entre deux generatrices
+        # eloignees (sinon des lignes traversent la scene)
         for R, Q in gp:
             e_t.append([list(map(float, R)), list(map(float, Q))])
         for k in range(len(gp) - 1):
+            if np.linalg.norm(gp[k + 1][1] - gp[k][1]) > max_link:
+                continue
             e_t.append([list(map(float, gp[k][1])), list(map(float, gp[k + 1][1]))])
         for f in (0.33, 0.66):
             for k in range(len(gp) - 1):
+                if np.linalg.norm(gp[k + 1][1] - gp[k][1]) > max_link:
+                    continue
                 a = gp[k][0] + f * (gp[k][1] - gp[k][0])
                 b = gp[k + 1][0] + f * (gp[k + 1][1] - gp[k + 1][0])
                 e_t.append([list(map(float, a)), list(map(float, b))])
