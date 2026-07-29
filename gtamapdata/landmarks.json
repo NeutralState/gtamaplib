@@ -17622,7 +17622,7 @@
   ],
   "method": "rayon x plan z=15.16 (GROUND-V1, monde H); sol du boxville: silo_z 19.655 - 4.5 (delta rlx); sensibilite 3.7 m/m de datum"
  },
- "Ambrosia Mountain": {
+ "Mount Ambrosia (F)": {
   "xyz": [
    -3093.7,
    6255.5,
@@ -17631,6 +17631,34 @@
   "source_cameras": [],
   "error_m": 300.0,
   "zone": "ambrosia",
-  "method": "pic du modele Ambrosia Hill (outline Bikers valide, d=2246 par corde x Empty Lot); PAS une triangulation \u2014 position modele, erreur dominee par la fov EL non resolue (fourchette d 1902-2614). Le clic Explosion s aligne dessus sous la pose V5b."
+  "method": "pic du modele Ambrosia Hill (outline Bikers valide, d=2246 par corde x Empty Lot); PAS une triangulation \u2014 position modele, erreur dominee par la fov EL non resolue (fourchette d 1902-2614). Le clic Explosion s aligne dessus sous la pose V5b. [renomme Mount Ambrosia (F), nomenclature rlx]"
+ },
+ "Mount Ambrosia (3)": {
+  "xyz": [
+   -2788.1,
+   6131.9,
+   195.1
+  ],
+  "source_cameras": [
+   "Mount Kalaga National Park 02 (Helicopter) (X)",
+   "Ambrosia 01 (Bikers)"
+  ],
+  "error_m": 30.0,
+  "zone": "ambrosia",
+  "method": "triangulation heli (clic Mount Ambrosia (3), pose rlx b4b1b1a) x Bikers (Mount Ambrosia (H)), gap 26.8 m \u2014 PREMIER point de crete du massif mesure multi-vues"
+ },
+ "Mount Ambrosia (X)": {
+  "xyz": [
+   -4599.0,
+   5568.0,
+   160.0
+  ],
+  "source_cameras": [
+   "Hedge (B) (X)",
+   "Mount Kalaga National Park 02 (Helicopter) (X)"
+  ],
+  "error_m": 10.0,
+  "zone": "ambrosia",
+  "method": "triangulation Hedge (Mount Ambrosia (X)) x heli (Mount Ambrosia (3)-ray), gap 6.0 m \u2014 crete OUEST du massif (hors cadre Bikers), z 160"
  }
 }

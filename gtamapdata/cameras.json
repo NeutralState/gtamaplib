@@ -2918,7 +2918,7 @@
    1728
   ],
   "source": "Trailer 2",
-  "note": "pose HILL-FIT-V1 (2026-07-26): yaw/pitch resolus en projetant les extremites 3D de la crete Ambrosia Hill (TW/TE a d=2246 m, stereo angulaire Bikers x cette cam) sur ses 2 seuls clics; residu 5.3 px. xyz estime carte, fov 50 par defaut, roll 0 \u2014 NE PAS utiliser comme temoin de solve; a re-resoudre si d autres marks arrivent."
+  "note": "pose HILL-FIT-V1 (2026-07-26): yaw/pitch resolus en projetant les extremites 3D de la crete Ambrosia Hill (TW/TE a d=2246 m, stereo angulaire Bikers x cette cam) sur ses 2 seuls clics; residu 5.3 px. xyz estime carte, fov 50 par defaut, roll 0 \u2014 NE PAS utiliser comme temoin de solve; a re-resoudre si d autres marks arrivent. MESURE 2026-07-29: la triangulation multi-vues du massif (heli x Bikers, gap 27 m) donne d~2100 au bout est -> echelle du modele s~0.92 -> fov EL implicite ~47 (vs 50 par defaut)."
  },
  "Explosion": {
   "id": "T2/58",
