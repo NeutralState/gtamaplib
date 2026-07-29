@@ -155,14 +155,48 @@ def main():
                 for i in range(0, len(pts) - step, step)]
 
     e_w = []
+    gl = lines.get('ground_left')
+    gl_y = (lambda x: float(np.interp(x, gl['x'][::-1], gl['y'][::-1]))
+            if gl and gl['x'][0] > gl['x'][-1] else
+            (lambda x: float(np.interp(x, gl['x'], gl['y'])))) if gl else None
+    FACE = math.radians(65.0)               # elevation de la face (Alexandre v8)
     for name in rim_names:
         if name not in walls:
             continue
         pts = walls[name]
         e_w += poly_edges(pts)
-        for i in range(0, len(pts), 6):             # nervures vers la route
-            base = A + B * float(np.hypot(*(pts[i, :2] - o[:2])))
-            e_w.append([list(map(float, pts[i])), [float(pts[i][0]), float(pts[i][1]), float(base)]])
+        left_side = name.startswith('rim_left')
+        toward_cam = (name == 'rim_left_top')   # derriere le pont: face vers la cam
+        for i in range(0, len(pts), 5):
+            R = pts[i]
+            base = A + B * float(np.hypot(*(R[:2] - o[:2])))
+            if left_side and gl is not None:
+                if toward_cam:
+                    nh = o[:2] - R[:2]
+                else:
+                    j = int(np.argmin(np.linalg.norm(road_xy - R[:2], axis=1)))
+                    nh = road_xy[j] - R[:2]
+                nh = nh / (np.linalg.norm(nh) + 1e-9)
+                foot = None
+                for u in np.arange(4, 500, 4):
+                    Q = np.array([R[0] + u * nh[0] * math.cos(FACE),
+                                  R[1] + u * nh[1] * math.cos(FACE),
+                                  R[2] - u * math.sin(FACE)])
+                    pr = cam.get_pixel([float(v) for v in Q])
+                    if pr is None:
+                        break
+                    gx = min(max(pr[0], min(gl['x'])), max(gl['x']))
+                    if pr[1] >= float(np.interp(gx, sorted(gl['x']), [y for _, y in sorted(zip(gl['x'], gl['y']))])) - 4:
+                        foot = Q
+                        break
+                    if Q[2] <= base:
+                        foot = Q
+                        break
+                    foot = Q
+                if foot is not None:
+                    e_w.append([list(map(float, R)), list(map(float, foot))])
+            else:
+                e_w.append([list(map(float, R)), [float(R[0]), float(R[1]), float(base)]])
     out['Canyon Walls (Kalaga Pass)'] = {'color': '#fb923c', 'world_edges': e_w}
 
     # ── COTE GAUCHE d'abord (doctrine Alexandre): derriere le rim, le
@@ -240,8 +274,11 @@ def main():
                 e_t.append([list(map(float, a)), list(map(float, b))])
 
     if 'rim_left' in walls:
-        # section principale: jusqu'au BORD de la photo
-        gp = sweep(walls['rim_left'], lines.get('terrain_left'), False, 900)
+        # section principale: pente 12 deg (Alexandre v8), arretee a SA
+        # ligne 'jusqu'ou le sol va' (terrain_left = enveloppe verte)
+        up = math.radians(min(args.slope_up, 12.0))
+        gp = sweep(walls['rim_left'], lines.get('terrain_left'), True, 900)
+        up = math.radians(args.slope_up)
         emit(gp)
         ext = [float(np.linalg.norm(Q[:2] - R[:2])) for R, Q in gp]
         print(f'pente gauche (au bord du cadre): {len(gp)} generatrices, '
