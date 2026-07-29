@@ -25,7 +25,7 @@ sys.path.insert(0, REPO)
 import numpy as np
 import common
 
-MESH_PATH = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
+MESH_PATH = os.path.join(REPO, 'tools', 'data', 'rlx_mountains_meshes.json')  # PAS l'UI (Alexandre: garder pour comparer, ne pas montrer)
 BASE = 20.0
 COLOR = '#94a3b8'
 
