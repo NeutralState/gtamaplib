@@ -31,6 +31,7 @@ sys.path.insert(0, REPO)
 
 import numpy as np
 import common
+import gtamapdata as md
 from common import ray_ls_point
 
 
@@ -86,11 +87,35 @@ def main():
         if amax < args.min_angle:
             rejected.append((lm, f'angle {amax:.1f} deg'))
             continue
-        try:
-            P = np.asarray(ray_ls_point([(o, d) for _, o, d in rays]), float)
-        except Exception as ex:
-            rejected.append((lm, f'solve: {ex}'))
-            continue
+        # Z-CONSTRAINT (invariant CI): un landmark contraint en altitude
+        # (plan d'eau, sol) ne se triangule pas librement — on intersecte
+        # chaque rayon avec SON plan et on moyenne.
+        zc = (md.landmarks_meta.get(lm) or {}).get('z_constraint')
+        if isinstance(zc, dict) and zc.get('type') == 'fixed':
+            zval = float(zc.get('value', 0.0))
+            pts = []
+            for _, o, d in rays:
+                if abs(d[2]) < 1e-6:
+                    continue
+                t = (zval - o[2]) / d[2]
+                if t > 0:
+                    pts.append(o + t * d)
+            if len(pts) < 2:
+                rejected.append((lm, f'z_constraint {zval}: rayons inexploitables'))
+                continue
+            spread = float(np.linalg.norm(np.asarray(pts[0])[:2] - np.asarray(pts[-1])[:2]))
+            if spread > 60.0:
+                rejected.append((lm, f'z_constraint {zval}: rayons rasants '
+                                     f'(ecart {spread:.0f} m)'))
+                continue
+            P = np.mean(pts, axis=0)
+            P[2] = zval
+        else:
+            try:
+                P = np.asarray(ray_ls_point([(o, d) for _, o, d in rays]), float)
+            except Exception as ex:
+                rejected.append((lm, f'solve: {ex}'))
+                continue
         if not np.all(np.isfinite(P)) or abs(P[0]) > 17000 or abs(P[1]) > 17000 \
                 or not (-100 < P[2] < 1200):
             rejected.append((lm, f'hors bornes {np.round(P, 0)}'))

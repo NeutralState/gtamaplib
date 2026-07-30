@@ -6811,7 +6811,7 @@
    "type": "fixed",
    "value": 0.0
   },
-  "method": "ANCHOR-HARVEST-V1 RETIRE: rayons rasants sur plan z=0 (spread ~0.5-1 km) ou residu source aberrant \u2014 intriangulable en l etat"
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 4.7 m, angle max 81.5 deg"
  },
  "Port (G)": {
   "xyz": [
@@ -9223,7 +9223,7 @@
    "type": "fixed",
    "value": 0.0
   },
-  "method": "ANCHOR-HARVEST-V1 RETIRE: rayons rasants sur plan z=0 (spread ~0.5-1 km) ou residu source aberrant \u2014 intriangulable en l etat"
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 15.8 deg"
  },
  "Bay (BBBB)": {
   "source_cameras": [
@@ -9235,7 +9235,7 @@
    "type": "fixed",
    "value": 0.0
   },
-  "method": "ANCHOR-HARVEST-V1 RETIRE: rayons rasants sur plan z=0 (spread ~0.5-1 km) ou residu source aberrant \u2014 intriangulable en l etat"
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 14.2 deg"
  },
  "Bay (CCCC)": {
   "xyz": [
@@ -16864,7 +16864,13 @@
   ],
   "zone": null,
   "author": "rlx",
-  "method": "ANCHOR-HARVEST-V1 RETIRE: rayons rasants sur plan z=0 (spread ~0.5-1 km) ou residu source aberrant \u2014 intriangulable en l etat"
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 7.2 m, angle max 47.7 deg",
+  "xyz": [
+   -5239.1,
+   3557.01,
+   57.29
+  ],
+  "error_m": 7.2
  },
  "Starlet Motel (P)": {
   "xyz": [
@@ -16895,7 +16901,13 @@
   ],
   "zone": "port_gellhorn",
   "author": "rlx",
-  "method": "ANCHOR-HARVEST-V1 RETIRE: point derriere la cam ['Pool', 'Port Gellhorn 01 (Starlet Motel)'] (triangulation degeneree)"
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 5.3 m, angle max 6.1 deg",
+  "xyz": [
+   -5338.48,
+   3596.42,
+   57.68
+  ],
+  "error_m": 5.3
  },
  "Radio Tower near Intersection 1 (C)": {
   "xyz": null,
@@ -16905,18 +16917,34 @@
   "author": "rlx"
  },
  "Starlet Motel Parassol 1": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "xyz": [
+   -5324.96,
+   3466.05,
+   68.85
+  ],
+  "source_cameras": [
+   "Pool",
+   "Port Gellhorn 01 (Starlet Motel)"
+  ],
+  "error_m": 2.0,
   "zone": "port_gellhorn",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.3 m, angle max 14.6 deg"
  },
  "Starlet Motel Parassol 2": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "xyz": [
+   -5310.13,
+   3455.4,
+   68.87
+  ],
+  "source_cameras": [
+   "Pool",
+   "Port Gellhorn 01 (Starlet Motel)"
+  ],
+  "error_m": 2.0,
   "zone": "port_gellhorn",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.3 m, angle max 28.9 deg"
  },
  "Starlet Motel Pool (A)": {
   "xyz": [
@@ -17033,7 +17061,13 @@
   ],
   "zone": null,
   "author": "rlx",
-  "method": "ANCHOR-HARVEST-V1 RETIRE: point derriere la cam ['Starlet Motel'] (triangulation degeneree)"
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.9 m, angle max 7.0 deg",
+  "xyz": [
+   -5326.38,
+   3520.28,
+   70.34
+  ],
+  "error_m": 2.0
  },
  "Building near Pool (S)": {
   "xyz": null,
@@ -17257,11 +17291,20 @@
   "author": "rlx"
  },
  "Industrial Building 1 (Ambrosia)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "xyz": [
+   -2771.45,
+   3308.26,
+   43.08
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)"
+  ],
+  "error_m": 2.0,
   "zone": "ambrosia",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 0.4 m, angle max 84.0 deg"
  },
  "Industrial Building 2 (Ambrosia) (TE)": {
   "xyz": [
@@ -17341,11 +17384,19 @@
   "author": "rlx"
  },
  "Billboard (South Ambrosia) (TW)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
+  "xyz": [
+   -2931.06,
+   2677.15,
+   40.47
+  ],
+  "source_cameras": [
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)"
+  ],
+  "error_m": 2.0,
   "zone": "ambrosia",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.7 m, angle max 62.7 deg"
  },
  "Guard Booth (Ambrosia) (E)": {
   "xyz": null,
@@ -18834,5 +18885,354 @@
   ],
   "error_m": 2.0,
   "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.2 m, angle max 70.8 deg"
+ },
+ "1500 Sonora Ave (Tank) (A)": {
+  "xyz": [
+   -2976.4,
+   3679.68,
+   40.86
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)"
+  ],
+  "error_m": 3.1,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 3.1 m, angle max 83.8 deg"
+ },
+ "1500 Sonora Ave (Tank) (A) (L)": {
+  "xyz": [
+   -2965.5,
+   3655.79,
+   40.73
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 0.4 m, angle max 83.8 deg"
+ },
+ "1500 Sonora Ave (Tank) (A) (R)": {
+  "xyz": [
+   -2986.97,
+   3703.2,
+   40.98
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)"
+  ],
+  "error_m": 6.4,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 6.4 m, angle max 83.7 deg"
+ },
+ "3001 Gordon Hwy (Water Tower)": {
+  "xyz": [
+   -5130.88,
+   1567.93,
+   91.54
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Loading Zone near Prison (SW)",
+   "Mount Kalaga National Park 04 (Mountain Pass) (X)"
+  ],
+  "error_m": 4.7,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 4.7 m, angle max 51.1 deg"
+ },
+ "3400 Transmitter Rd": {
+  "xyz": [
+   -3934.51,
+   3012.57,
+   68.39
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)",
+   "Mount Kalaga National Park 02 (Helicopter) (X)"
+  ],
+  "error_m": 5.6,
+  "method": "ANCHOR-HARVEST-V1: triangulation 4 cams, perp med 5.6 m, angle max 57.9 deg"
+ },
+ "3400 Transmitter Rd (B)": {
+  "xyz": [
+   -3935.7,
+   3011.73,
+   56.62
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)"
+  ],
+  "error_m": 2.7,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 2.7 m, angle max 52.5 deg"
+ },
+ "Ambrosia Canal (A)": {
+  "xyz": [
+   -2838.94,
+   4916.23,
+   20.24
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Mount Kalaga National Park 02 (Helicopter) (X)"
+  ],
+  "error_m": 2.4,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.4 m, angle max 19.9 deg"
+ },
+ "BB Hill": {
+  "xyz": [
+   -3753.74,
+   3811.27,
+   67.1
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)",
+   "Mount Kalaga National Park 02 (Helicopter) (X)"
+  ],
+  "error_m": 7.6,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 7.6 m, angle max 69.7 deg"
+ },
+ "Building near Pool (N)": {
+  "xyz": [
+   -5330.08,
+   3486.23,
+   68.35
+  ],
+  "source_cameras": [
+   "Motel",
+   "Port Gellhorn 01 (Starlet Motel)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.6 m, angle max 80.9 deg"
+ },
+ "Conveyor near Pile (T)": {
+  "xyz": [
+   -3370.1,
+   3463.8,
+   22.12
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia Postcard (X)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.6 m, angle max 27.0 deg"
+ },
+ "Interstate Hill": {
+  "xyz": [
+   -5598.6,
+   3137.66,
+   108.49
+  ],
+  "source_cameras": [
+   "Ambrosia 04 (Fires)",
+   "Mount Kalaga National Park 02 (Helicopter) (X)"
+  ],
+  "error_m": 2.6,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.6 m, angle max 41.8 deg"
+ },
+ "Lamppost near Starlet Motel": {
+  "xyz": [
+   -5329.75,
+   3487.42,
+   74.79
+  ],
+  "source_cameras": [
+   "Motel",
+   "Port Gellhorn 01 (Starlet Motel)",
+   "Starlet Motel"
+  ],
+  "error_m": 3.9,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 3.9 m, angle max 86.0 deg"
+ },
+ "Starlet Hill": {
+  "xyz": [
+   -5432.99,
+   3466.12,
+   112.21
+  ],
+  "source_cameras": [
+   "Ambrosia 04 (Fires)",
+   "Mount Kalaga National Park 02 (Helicopter) (X)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.8 m, angle max 44.3 deg"
+ },
+ "Starlet Motel (P1N)": {
+  "xyz": [
+   -5331.94,
+   3504.85,
+   67.39
+  ],
+  "source_cameras": [
+   "Motel",
+   "Port Gellhorn 01 (Starlet Motel)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.2 m, angle max 44.1 deg"
+ },
+ "Starlet Motel (RE)": {
+  "xyz": [
+   -5330.31,
+   3503.45,
+   67.54
+  ],
+  "source_cameras": [
+   "Motel",
+   "Port Gellhorn 01 (Starlet Motel)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.2 m, angle max 50.2 deg"
+ },
+ "Starlet Motel (SRN)": {
+  "xyz": [
+   -5326.91,
+   3473.83,
+   68.74
+  ],
+  "source_cameras": [
+   "Pool",
+   "Port Gellhorn 01 (Starlet Motel)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.1 m, angle max 5.8 deg"
+ },
+ "Starlet Motel Sign (BNE)": {
+  "xyz": [
+   -5324.34,
+   3520.62,
+   66.63
+  ],
+  "source_cameras": [
+   "Port Gellhorn 01 (Starlet Motel)",
+   "Starlet Motel"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.6 m, angle max 16.2 deg"
+ },
+ "Starlet Motel Sign (BSW)": {
+  "xyz": [
+   -5321.86,
+   3496.78,
+   64.38
+  ],
+  "source_cameras": [
+   "Motel",
+   "Port Gellhorn 01 (Starlet Motel)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.7 m, angle max 77.8 deg"
+ },
+ "Tall Palm A": {
+  "xyz": [
+   -4260.92,
+   -7405.76,
+   25.16
+  ],
+  "source_cameras": [
+   "Key Lento",
+   "Leonida Keys 01 (Airplane) (X)"
+  ],
+  "error_m": 3.1,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 3.1 m, angle max 18.4 deg"
+ },
+ "Tree near Port Gellhorn": {
+  "xyz": [
+   -5385.49,
+   3730.66,
+   116.16
+  ],
+  "source_cameras": [
+   "Ambrosia 04 (Fires)",
+   "Mount Kalaga National Park 02 (Helicopter) (X)",
+   "Mount Kalaga National Park 04 (Mountain Pass) (X)"
+  ],
+  "error_m": 34.8,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 34.8 m, angle max 80.3 deg"
+ },
+ "Trees near Wheelabrator": {
+  "xyz": [
+   -2284.63,
+   2596.7,
+   40.4
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.3 m, angle max 66.4 deg"
+ },
+ "Unknown Building (North Port Gellhorn) (T)": {
+  "xyz": [
+   -7456.38,
+   4833.16,
+   29.3
+  ],
+  "source_cameras": [
+   "Diner (W) (B)",
+   "Port Gellhorn Postcard (X)"
+  ],
+  "error_m": 6.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 6.0 m, angle max 38.9 deg"
+ },
+ "Warehouse 4 (Ambrosia) (C)": {
+  "xyz": [
+   -2997.18,
+   3177.47,
+   33.92
+  ],
+  "source_cameras": [
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.3 m, angle max 66.2 deg"
+ },
+ "Warehouse 4 (Ambrosia) (T)": {
+  "xyz": [
+   -3004.52,
+   3124.77,
+   35.56
+  ],
+  "source_cameras": [
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.0 m, angle max 65.5 deg"
+ },
+ "Wheelabrator South Broward (5B)": {
+  "xyz": [
+   -2431.05,
+   2502.34,
+   43.71
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.8 m, angle max 62.7 deg"
+ },
+ "Wheelabrator South Broward (NW)": {
+  "xyz": [
+   -2440.31,
+   2500.16,
+   54.08
+  ],
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)",
+   "Leonida Keys 01 (Airplane) (X)"
+  ],
+  "error_m": 9.2,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 9.2 m, angle max 62.7 deg"
  }
 }
