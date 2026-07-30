@@ -47,8 +47,12 @@ PRIORS = {
     'road_center': [[1680, 2136], [1830, 1900], [2050, 1650], [2140, 1450],
                     [2090, 1250], [1990, 1080], [1900, 980], [1830, 890]],
     'bridge_deck': [[1572, 715], [1890, 722], [2208, 732]],
+    # prolongement de la crete droite du PONT jusqu'au debut du trace
+    # d'Alexandre (x 2492): detecte par DP (transition roche/vegetation)
+    'rim_right_bridge': [[2140, 760], [2260, 664], [2380, 560], [2492, 462]],
 }
-COLORS = {'rim_right': (248, 113, 113), 'rim_left': (251, 146, 60),
+COLORS = {'rim_right': (248, 113, 113), 'rim_right_bridge': (248, 113, 113),
+          'rim_left': (251, 146, 60),
           'rim_left_top': (251, 146, 60),
           'road_center': (125, 211, 252), 'bridge_deck': (167, 139, 250)}
 CORRIDOR = 60
@@ -130,6 +134,7 @@ Des qu'une ligne a >= 2 clics, ils REMPLACENT le prior digitalise: la ligne
 est l'interpolation exacte entre les clics + micro-snap +-8 px seulement."""
 CLICK_PREFIX = {
     'rim_right': 'Canyon Rim R (',
+    'rim_right_bridge': 'Canyon Rim RB (',
     'rim_left': 'Canyon Rim L (',
     'rim_left_top': 'Canyon Rim LT (',
     'road_center': 'Canyon Road (',

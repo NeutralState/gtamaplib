@@ -195,7 +195,11 @@ def main():
     #                abrupte' qu'il a hachuree = le pied de la paroi)
     # plateau droit= terrain_right_top -> rim_right
     if 'rim_right' in lines:
-        rrx, rry = line_y(lines['rim_right'])
+        _rr = list(zip(lines['rim_right']['x'], lines['rim_right']['y']))
+        if 'rim_right_bridge' in lines:      # crete prolongee vers le pont
+            _rr += list(zip(lines['rim_right_bridge']['x'], lines['rim_right_bridge']['y']))
+        _rr.sort()
+        rrx = np.array([q[0] for q in _rr]); rry = np.array([q[1] for q in _rr])
         bench = lines.get('terrain_right_bench')
         rtop = lines.get('terrain_right_top')
         bx_, by_ = line_y(bench) if bench else (None, None)
@@ -203,13 +207,26 @@ def main():
         RX0 = int(rrx.min())
         RX1 = int(rrx.max())
         if bench is not None:
-            RX0 = max(RX0, int(bx_.min())); RX1 = min(RX1, int(bx_.max()))
+            RX1 = min(RX1, int(bx_.max()))
+            # sous le segment du pont (x < debut de la bench), la limite
+            # BASSE est la route: on interpole entre le bout de la route et
+            # le debut de la zone hachuree d'Alexandre
+            rdx, rdy = line_y(lines['road_center'])
+            x_road, y_road = float(rdx.max()), float(np.interp(rdx.max(), rdx, rdy))
+            x_b0, y_b0 = float(bx_.min()), float(np.interp(bx_.min(), bx_, by_))
+            def base_y(xx):
+                if xx >= x_b0:
+                    return float(np.interp(xx, bx_, by_))
+                f = (xx - x_road) / max(1e-6, x_b0 - x_road)
+                return y_road + f * (y_b0 - y_road)
+        else:
+            base_y = None
         regions['face_droite'] = []
         regions['plateau_droit'] = []
         for px_ in range(RX0, RX1, args.step):
             y_r = float(np.interp(px_, rrx, rry))
-            if bench is not None:
-                y_b = float(np.interp(px_, bx_, by_))
+            if base_y is not None:
+                y_b = base_y(px_)
                 for py_ in range(int(y_r) + 6, int(y_b) - 6, args.step):
                     regions['face_droite'].append((px_, py_))
             if rtop is not None and tx_.min() <= px_ <= tx_.max():
