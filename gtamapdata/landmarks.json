@@ -4666,10 +4666,20 @@
   "zone": "ambrosia"
  },
  "Easy Hill": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "port_gellhorn"
+  "xyz": [
+   -5939.28,
+   4038.28,
+   84.68
+  ],
+  "source_cameras": [
+   "Ambrosia 04 (Fires)",
+   "Diner (SE) (A)",
+   "Diner (SE) (B)",
+   "Mount Kalaga National Park 02 (Helicopter) (X)"
+  ],
+  "error_m": 33.7,
+  "zone": "port_gellhorn",
+  "method": "ANCHOR-HARVEST-V1 [mountain]: triangulation 4 cams, perp med 33.7 m (1.38 pct), angle max 89.8 deg"
  },
  "Radio Tower (Ambrosia)": {
   "xyz": [
@@ -19261,5 +19271,19 @@
    "Pool"
   ],
   "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
+ },
+ "Mount Ambrosia (D)": {
+  "xyz": [
+   -3523.59,
+   6628.36,
+   394.25
+  ],
+  "source_cameras": [
+   "Ambrosia 01 (Bikers)",
+   "Explosion",
+   "Empty Lot near Metro Station"
+  ],
+  "error_m": 79.5,
+  "method": "ANCHOR-HARVEST-V1 [mountain]: triangulation 3 cams, perp med 79.5 m (1.25 pct), angle max 6.9 deg"
  }
 }

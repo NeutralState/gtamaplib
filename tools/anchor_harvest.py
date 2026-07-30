@@ -39,6 +39,12 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--apply', action='store_true')
     ap.add_argument('--min-angle', type=float, default=2.5)
+    ap.add_argument('--profile', choices=['default', 'mountain'], default='default',
+                    help="mountain: cible les massifs — parallaxe MINIMALE plus "
+                         "exigeante (5 deg, sinon la profondeur est molle a 3 km) "
+                         "mais tolerance perpendiculaire plus large (2 pct), "
+                         "parce qu'un clic sur une crete floue est ambigu de "
+                         "quelques dizaines de metres, pas de quelques metres")
     args = ap.parse_args()
 
     px = json.load(open(os.path.join(REPO, 'gtamapdata', 'pixels.json')))
@@ -63,6 +69,12 @@ def main():
     # ces clics sur le modele de colline -> les 'trianguler' Bikers x EL
     # fabriquerait de fausses ancres a l'echelle de l'ancien modele.
     BLACKLIST = {'Ambrosia Hill (TW)', 'Ambrosia Hill (TE)'}
+    MTN = ('mount', 'hill', 'ridge', 'pass', 'massif')
+    def is_mtn(name):
+        low = name.lower()
+        return any(k in low for k in MTN) and 'bridge' not in low
+    min_angle = 5.0 if args.profile == 'mountain' else args.min_angle
+    perp_frac = 0.020 if args.profile == 'mountain' else 0.012
     accepted, rejected = [], []
     for lm, wits in sorted(obs.items()):
         if lm in BLACKLIST:
@@ -84,7 +96,9 @@ def main():
             for j in range(i + 1, len(rays)):
                 cth = abs(float(np.dot(rays[i][2], rays[j][2])))
                 amax = max(amax, math.degrees(math.acos(min(1.0, cth))))
-        if amax < args.min_angle:
+        if args.profile == 'mountain' and not is_mtn(lm):
+            continue
+        if amax < min_angle:
             rejected.append((lm, f'angle {amax:.1f} deg'))
             continue
         # Z-CONSTRAINT (invariant CI): un landmark contraint en altitude
@@ -126,7 +140,7 @@ def main():
             perps.append(float(np.linalg.norm(v - np.dot(v, d) * d)))
             dists.append(float(np.linalg.norm(v)))
         perp_med = float(np.median(perps))
-        if perp_med > max(15.0, 0.012 * float(np.median(dists))):
+        if perp_med > max(15.0, perp_frac * float(np.median(dists))):
             rejected.append((lm, f'perp {perp_med:.1f} m @ {np.median(dists):.0f} m'))
             continue
         accepted.append((lm, P, [c for c, _, _ in rays], perp_med, amax,
@@ -151,8 +165,9 @@ def main():
             'xyz': [round(float(v), 2) for v in P],
             'source_cameras': cs,
             'error_m': round(max(2.0, perp), 1),
-            'method': f'ANCHOR-HARVEST-V1: triangulation {len(cs)} cams, '
-                      f'perp med {perp:.1f} m, angle max {ang:.1f} deg',
+            'method': f'ANCHOR-HARVEST-V1 [{args.profile}]: triangulation {len(cs)} cams, '
+                      f'perp med {perp:.1f} m ({100 * perp / max(1, dist):.2f} pct), '
+                      f'angle max {ang:.1f} deg',
         })
         lms[lm] = e
     path = os.path.join(REPO, 'gtamapdata', 'landmarks.json')
