@@ -3532,17 +3532,18 @@
  },
  "Pin B01L": {
   "xyz": [
-   -3304.752316911764,
-   -6495.176114944007,
-   2.469061156779497
+   -3304.58,
+   -6495.05,
+   2.31
   ],
   "source_cameras": [
    "Leonida Keys 01 (Airplane) (X)",
    "Leonida Keys 05 (Boats)",
    "Leonida Keys Postcard (X)"
   ],
-  "error_m": 0.613,
-  "zone": "leonida_keys"
+  "error_m": 2.0,
+  "zone": "leonida_keys",
+  "method": " | re-triangule apres MARK-ARB-V1 (1.0 m, perp 0.1 m) | clic rlx REJETE: violait la structure old-bridge-pins (1.32 m > tol 1.2), notre clic restaure"
  },
  "Pin B01R": {
   "xyz": [
@@ -3573,17 +3574,18 @@
  },
  "Pin B02R": {
   "xyz": [
-   -3267.0961784335223,
-   -6442.506973698782,
-   3.17738777934436
+   -3265.79,
+   -6441.53,
+   2.53
   ],
   "source_cameras": [
    "Leonida Keys 01 (Airplane) (X)",
    "Leonida Keys 05 (Boats)",
    "Leonida Keys Postcard (X)"
   ],
-  "error_m": 1.97,
-  "zone": "leonida_keys"
+  "error_m": 2.0,
+  "zone": "leonida_keys",
+  "method": " | re-triangule apres MARK-ARB-V1 (1.8 m, perp 0.3 m)"
  },
  "Pin B03L": {
   "xyz": [
@@ -4867,17 +4869,18 @@
  },
  "1000 Venetian Way (4)": {
   "xyz": [
-   293.08345435479447,
-   1130.8581400184964,
-   54.12807066846648
+   298.3,
+   1132.2,
+   54.14
   ],
   "source_cameras": [
    "Skyline",
    "Venetian Islands",
    "Vice City Postcard"
   ],
-  "error_m": 7.718,
-  "zone": "vice_city"
+  "error_m": 2.0,
+  "zone": "vice_city",
+  "method": " | re-triangule apres MARK-ARB-V1 (5.4 m, perp 0.6 m)"
  },
  "1000 Venetian Way (SE)": {
   "xyz": [
@@ -5885,16 +5888,17 @@
  },
  "Flamingo South Beach (SRSW)": {
   "xyz": [
-   1275.0057995351367,
-   806.5441666113787,
-   59.15491864723904
+   1292.23,
+   802.79,
+   59.16
   ],
   "source_cameras": [
    "Venetian Islands",
    "Vice Beach (A)"
   ],
-  "error_m": 0.883,
-  "zone": "vice_city"
+  "error_m": 2.0,
+  "zone": "vice_city",
+  "method": " | re-triangule apres MARK-ARB-V1 (17.6 m, perp 0.2 m)"
  },
  "Flamingo South Beach (TSW)": {
   "xyz": [
@@ -7325,9 +7329,9 @@
  },
  "Three Tequesta Point": {
   "xyz": [
-   -3.612798530057674,
-   -946.6328551718377,
-   206.65838582336045
+   -4.38,
+   -948.84,
+   206.01
   ],
   "source_cameras": [
    "Leonida Keys 01 (Airplane) (X)",
@@ -7339,8 +7343,9 @@
    "Vice City Postcard",
    "Port Vice City (B)"
   ],
-  "error_m": 5.442,
-  "zone": "vice_city"
+  "error_m": 2.0,
+  "zone": "vice_city",
+  "method": " | re-triangule apres MARK-ARB-V1 (2.4 m, perp 1.9 m)"
  },
  "Train Signal (S) (E)": {
   "xyz": [
@@ -7372,17 +7377,18 @@
  },
  "Tr\u00e9sor Tower": {
   "xyz": [
-   1859.3021790664516,
-   1942.3606679353143,
-   122.51428814554106
+   1856.2,
+   1943.01,
+   120.61
   ],
   "source_cameras": [
    "Beach",
    "Jet Ski",
    "Venetian Islands"
   ],
-  "error_m": 10.233,
-  "zone": "vice_city"
+  "error_m": 2.3,
+  "zone": "vice_city",
+  "method": " | re-triangule apres MARK-ARB-V1 (3.7 m, perp 2.3 m)"
  },
  "Turkey Point Nuclear Power Station (1)": {
   "xyz": [
@@ -11467,18 +11473,18 @@
  },
  "Island H (E)": {
   "author": "rlx",
-  "error_m": 4.4,
+  "error_m": 2.0,
   "source_cameras": [
    "Key Lento",
    "Leonida Keys Postcard (X)"
   ],
   "xyz": [
-   -2087.69,
-   -6297.34,
-   -11.04
+   -2044.17,
+   -6175.26,
+   -4.56
   ],
   "zone": null,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 4.4 m, angle max 55.8 deg"
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 4.4 m, angle max 55.8 deg | re-triangule apres MARK-ARB-V1 (129.8 m, perp 1.3 m)"
  },
  "Broken Keys Bridge (2B)": {
   "author": "rlx",
@@ -12750,12 +12756,12 @@
    "Jason's Safehouse Vehicles (X)"
   ],
   "xyz": [
-   -2334.31,
-   -5549.29,
-   4.3
+   -2345.5,
+   -5538.09,
+   5.98
   ],
   "zone": null,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.9 m, angle max 14.6 deg"
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.9 m, angle max 14.6 deg | re-triangule apres MARK-ARB-V1 (15.9 m, perp 0.1 m)"
  },
  "Canal B (Ambrosia) (1)": {
   "author": "rlx",
@@ -16581,16 +16587,17 @@
  },
  "SFUWO School": {
   "xyz": [
-   -5080.3866434489855,
-   -5963.776530287844,
-   29.167207563759074
+   -4979.31,
+   -5939.19,
+   28.44
   ],
   "source_cameras": [
    "Key Lento",
    "Grassrivers Postcard (X)"
   ],
-  "error_m": 4.3,
-  "zone": "rlx_markings_0713"
+  "error_m": 2.0,
+  "zone": "rlx_markings_0713",
+  "method": " | re-triangule apres MARK-ARB-V1 (104.0 m, perp 0.1 m)"
  },
  "Trees C (Grassrivers) (3)": {
   "xyz": null,
@@ -16948,9 +16955,9 @@
  },
  "Starlet Motel Pool (A)": {
   "xyz": [
-   -5323.2,
-   3473.37,
-   65.84
+   -5323.21,
+   3473.64,
+   65.85
   ],
   "source_cameras": [
    "Pool",
@@ -16959,13 +16966,13 @@
   "error_m": 2.0,
   "zone": "port_gellhorn",
   "author": "rlx",
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.5 m, angle max 53.2 deg | RE-TRIANGULE 2026-07-30 apres import des poses rlx PGH (deplacement 1.0 m, perp 0.0 m)"
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.5 m, angle max 53.2 deg | RE-TRIANGULE 2026-07-30 apres import des poses rlx PGH (deplacement 1.0 m, perp 0.0 m) | re-triangule apres MARK-ARB-V1 (0.3 m, perp 0.0 m)"
  },
  "Starlet Motel Pool (B)": {
   "xyz": [
-   -5322.69,
-   3472.93,
-   65.82
+   -5322.68,
+   3473.06,
+   65.86
   ],
   "source_cameras": [
    "Pool",
@@ -16974,7 +16981,7 @@
   "error_m": 2.0,
   "zone": "port_gellhorn",
   "author": "rlx",
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.4 m, angle max 50.6 deg | RE-TRIANGULE 2026-07-30 apres import des poses rlx PGH (deplacement 1.3 m, perp 0.1 m)"
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.4 m, angle max 50.6 deg | RE-TRIANGULE 2026-07-30 apres import des poses rlx PGH (deplacement 1.3 m, perp 0.1 m) | re-triangule apres MARK-ARB-V1 (0.1 m, perp 0.0 m)"
  },
  "Starlet Motel Pool (C)": {
   "xyz": null,
