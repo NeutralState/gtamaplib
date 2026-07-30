@@ -56,6 +56,103 @@ def massif_of(name):
     return base
 
 
+def rlx_curtain(only, A, max_rms=80.0):
+    """La crete de rlx comme BASE de profondeur, RECALEE sur nos ancres.
+
+    Ce que son mesh apporte et qu'un plan ne peut pas: le TRACE AU SOL de la
+    crete — courbe, pas droit. Ce qu'il n'apporte pas: l'echelle. Ses
+    distances sont declarees a l'oeil depuis UNE camera (chiffres ronds:
+    4400, 4450, 4300...), donc son erreur est RADIALE depuis ce point. On
+    ajuste donc une similitude a 3 parametres — facteur radial k autour de
+    SA camera + translation — sur nos ancres triangulees.
+
+    Mesure de confiance: le rms final. Si nos ancres ne se posent pas sur sa
+    polyligne apres recalage, sa crete n'est pas la meme chose que la notre
+    (points d'identites differentes) et on REFUSE sa base au lieu de la
+    subir — c'est le cas de Mount Waffles, ou nos "Waffles Ridge (C)" et
+    "(TW)" sont a z 81 quand le sommet est a z 197.
+    """
+    rp = os.path.join(THIS, 'data', 'rlx_mountains_meshes.json')
+    if not os.path.exists(rp):
+        return None
+    R = json.load(open(rp))
+    key = next((k for k in R if k.replace('[rlx] ', '') == only), None)
+    if key is None:
+        print(f'  base rlx: aucun mesh pour "{only}"')
+        return None
+    ent = R[key]
+    C = np.array(ent.get('crest') or [], float)
+    if len(C) < 2:
+        return None
+    O = np.array(ent.get('camera_xy') or C[:, :2].mean(axis=0), float)
+
+    def place(par):
+        k, tx, ty = par
+        P = C.copy()
+        P[:, :2] = O + k * (C[:, :2] - O) + np.array([tx, ty])
+        return P
+
+    def cost(par):
+        P = place(par)
+        return sum(min(seg_dist(p, P[i, :2], P[i + 1, :2])
+                       for i in range(len(P) - 1)) ** 2 for p in A[:, :2])
+
+    par = np.array([1.0, 0.0, 0.0])
+    step = np.array([0.10, 200.0, 200.0])
+    while step[1] > 0.5:
+        best, moved = cost(par), False
+        for i in range(3):
+            for sg in (1, -1):
+                q = par.copy()
+                q[i] += sg * step[i]
+                if q[0] < 0.5 or q[0] > 2.0:
+                    continue
+                v = cost(q)
+                if v < best - 1e-6:
+                    best, par, moved = v, q, True
+        if not moved:
+            step = step * 0.5
+    rms = math.sqrt(cost(par) / len(A))
+    r0 = math.sqrt(cost(np.array([1.0, 0.0, 0.0])) / len(A))
+    verdict = 'ACCEPTEE' if rms <= max_rms else 'REFUSEE'
+    print(f'  base rlx "{key}" ({len(C)} pts, cam {ent.get("camera")}): '
+          f'echelle x{par[0]:.3f}, translation {math.hypot(par[1], par[2]):.0f} m '
+          f'-> rms sur nos {len(A)} ancres {r0:.0f} -> {rms:.0f} m  [{verdict}]')
+    if rms > max_rms:
+        print('    (ses points de crete ne sont pas les notres — on retombe '
+              'sur nos seules ancres)')
+        return None
+    return place(par)
+
+
+def seg_dist(p, a, b):
+    ab = b - a
+    L = float(ab @ ab)
+    u = 0.0 if L < 1e-9 else max(0.0, min(1.0, float((p - a) @ ab) / L))
+    return float(np.linalg.norm(p - (a + u * ab)))
+
+
+def curtain_hit(o, d, poly):
+    """Intersection du rayon avec le RIDEAU vertical porte par la polyligne.
+    Les segments d'extremite sont prolonges a l'infini (la crete continue
+    au-dela de ce que rlx a modelise)."""
+    best = None
+    for i in range(len(poly) - 1):
+        a, b = poly[i, :2], poly[i + 1, :2]
+        e = b - a
+        den = d[0] * (-e[1]) + d[1] * e[0]
+        if abs(den) < 1e-9:
+            continue
+        w = a - o[:2]
+        t = (w[0] * (-e[1]) + w[1] * e[0]) / den
+        u = (d[0] * w[1] - d[1] * w[0]) / den
+        lo = -6.0 if i == 0 else 0.0
+        hi = 7.0 if i == len(poly) - 2 else 1.0
+        if t > 1.0 and lo <= u <= hi and (best is None or t < best):
+            best = t
+    return None if best is None else o + best * d
+
+
 def densify(args):
     """Crete dense: silhouette DP dans la frame, profondeur = intersection
     du rayon avec le PLAN ajuste sur les points triangules du massif."""
@@ -87,18 +184,21 @@ def densify(args):
             n = None
     else:
         n = None
-    if n is None:
-        # PLAN VERTICAL passant par les ancres: la normale est horizontale,
-        # perpendiculaire a la direction de la crete. Hypothese honnete pour
-        # une crete vue de loin, et elle ne demande que 2 points.
+    curtain = rlx_curtain(args.only, A) if args.base_rlx else None
+    if curtain is not None:
+        n, kind, rms = None, 'RIDEAU rlx recale sur nos ancres', float('nan')
+    elif n is None:
+        # PLAN VERTICAL: la normale est horizontale, perpendiculaire a la
+        # direction de la crete (SVD sur nos seules ancres).
         u_, s_, vt2 = np.linalg.svd(A[:, :2] - ctr[:2])
         ax = vt2[0]
         n = np.array([-ax[1], ax[0], 0.0])
         n /= np.linalg.norm(n)
         rms = float(np.sqrt(np.mean(((A - ctr) @ n) ** 2)))
         kind = 'plan VERTICAL (hypothese crete)'
-    print(f'silhouette {args.silhouette}: {len(anc)} ancres "{fam}", {kind}, '
-          f'normale ({n[0]:+.2f},{n[1]:+.2f},{n[2]:+.2f}), rms {rms:.1f} m')
+    nd = '' if n is None else (f', normale ({n[0]:+.2f},{n[1]:+.2f},{n[2]:+.2f}), '
+                               f'rms {rms:.1f} m')
+    print(f'silhouette {args.silhouette}: {len(anc)} ancres "{fam}", {kind}{nd}')
     if args.xrange:
         x0, x1 = [int(v) for v in args.xrange.split(',')]
     else:
@@ -126,11 +226,32 @@ def densify(args):
     if len(crest) < 20:
         print('silhouette: pas assez de colonnes'); return None
     ys2 = np.array([c[1] for c in crest], float)
+    # OCCLUDERS: un poteau, un panneau ou un arbre devant la crete fait
+    # decrocher UNE poignee de colonnes de plusieurs dizaines de pixels,
+    # alors qu'une crete reelle varie doucement. On rejette donc les
+    # colonnes qui s'ecartent trop d'une mediane glissante LARGE et on
+    # interpole a travers — un lissage seul ne fait qu'etaler l'encoche.
+    for _ in range(3):
+        base = np.array([np.median(ys2[max(0, i - 12):i + 13])
+                         for i in range(len(ys2))])
+        r = ys2 - base
+        bad = np.abs(r) > max(6.0, 2.5 * float(np.median(np.abs(r)) + 1e-6))
+        if not bad.any() or bad.all():
+            break
+        idx = np.arange(len(ys2))
+        ys2 = np.interp(idx, idx[~bad], ys2[~bad])
+    n_bad = 0 if 'bad' not in dir() else int(bad.sum())
     ys2 = np.array([np.median(ys2[max(0, i - 3):i + 4]) for i in range(len(ys2))])
+    print(f'  silhouette: {len(ys2)} colonnes, {n_bad} rejetees (occluders)')
     P = []
     for (x, _), y in zip(crest, ys2):
         d = np.asarray(cam.get_pixel_direction((float(x), float(y))), float)
         d /= np.linalg.norm(d)
+        if curtain is not None:
+            q = curtain_hit(o, d, curtain)
+            if q is not None:
+                P.append(q)
+            continue
         den = float(np.dot(d, n))
         if abs(den) < 1e-6:
             continue
@@ -165,6 +286,11 @@ def main():
     ap.add_argument('--xrange', help='x0,x1 dans la frame (defaut: emprise des marks)')
     ap.add_argument('--family', help='prefixe des ancres (defaut: le massif); '
                                      "ex 'Waffles' regroupe Mount Waffles ET Waffles Ridge")
+    ap.add_argument('--base-rlx', action='store_true',
+                    help="prend l'ORIENTATION de crete du mesh de rlx comme base "
+                         "(tools/data/rlx_mountains_meshes.json) — sa geometrie sert "
+                         "de point de depart, la POSITION reste la notre (ancres "
+                         "triangulees) et la FORME reste la notre (silhouette)")
     ap.add_argument('--apply', action='store_true')
     args = ap.parse_args()
 
