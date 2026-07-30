@@ -1,5 +1,5 @@
 {
- "_comment": "Poses alternatives conservees pour revert (tools/pose_revert.py). Chaque entree garde sa provenance et la RAISON de sa mise de cote.",
+ "_comment": "Poses alternatives conservees pour revert (tools/pose_revert.py). Chaque entree garde sa provenance et la RAISON de sa mise de cote. 2026-07-30: poses upstream ee83436 conservees pour les cams Kalaga/Port Gellhorn \u2014 NON importees, faute de temoin independant pour arbitrer (voir note).",
  "Mount Kalaga National Park 04 (Mountain Pass) (X)": {
   "RESECTION-V1": {
    "xyz": [
@@ -39,6 +39,151 @@
    "date": "2026-07-29 (upstream b4b1b1a)",
    "methode": "hand-tuned par rlx",
    "statut": "ACTIVE \u2014 seule pose coherente avec le trace US-50 de la carte (124-496 m, rapport 4.00)"
+  },
+  "rlx-upstream-ee83436": {
+   "xyz": [
+    -4500.0,
+    6000.0,
+    120.0
+   ],
+   "ypr": [
+    146.984,
+    -16.216,
+    0.0
+   ],
+   "fov": [
+    70.0,
+    null
+   ],
+   "date": "2026-07-30 (upstream ee83436)",
+   "methode": "hand-tuned par rlx",
+   "statut": "REJETEE pour Mountain Pass: echoue le test carte (corr +0.07 contre +0.70 pour sa pose precedente)"
+  }
+ },
+ "Port Gellhorn 01 (Starlet Motel)": {
+  "rlx-upstream-ee83436": {
+   "xyz": [
+    -5326.3,
+    3539.4,
+    69.8
+   ],
+   "ypr": [
+    175.018,
+    3.3,
+    0.0
+   ],
+   "fov": [
+    43.0,
+    24.987
+   ],
+   "date": "2026-07-30 (upstream ee83436)",
+   "methode": "hand-tuned par rlx",
+   "statut": "non importee: 0 temoin independant chez nous pour arbitrer (zone PGH circulaire)"
+  }
+ },
+ "Port Gellhorn 04 (Delights) (X)": {
+  "rlx-upstream-ee83436": {
+   "xyz": [
+    -6340.0,
+    3699.0,
+    7.228
+   ],
+   "ypr": [
+    73.392,
+    -21.6,
+    0.0
+   ],
+   "fov": [
+    81.9,
+    52.035
+   ],
+   "date": "2026-07-30 (upstream ee83436)",
+   "methode": "hand-tuned par rlx",
+   "statut": "non importee: 0 temoin independant chez nous pour arbitrer (zone PGH circulaire)"
+  }
+ },
+ "Port Gellhorn Postcard (X)": {
+  "rlx-upstream-ee83436": {
+   "xyz": [
+    -6550.0,
+    3608.0,
+    31.297
+   ],
+   "ypr": [
+    51.974,
+    -3.2,
+    0.0
+   ],
+   "fov": [
+    71.0,
+    50.865
+   ],
+   "date": "2026-07-30 (upstream ee83436)",
+   "methode": "hand-tuned par rlx",
+   "statut": "non importee: 0 temoin independant chez nous pour arbitrer (zone PGH circulaire)"
+  }
+ },
+ "Starlet Motel": {
+  "rlx-upstream-ee83436": {
+   "xyz": [
+    -5333.0,
+    3455.0,
+    66.8
+   ],
+   "ypr": [
+    10.0,
+    7.5,
+    0.0
+   ],
+   "fov": [
+    52.0,
+    null
+   ],
+   "date": "2026-07-30 (upstream ee83436)",
+   "methode": "hand-tuned par rlx",
+   "statut": "non importee: 0 temoin independant chez nous pour arbitrer (zone PGH circulaire)"
+  }
+ },
+ "Motel": {
+  "rlx-upstream-ee83436": {
+   "xyz": [
+    -5359.9,
+    3484.0,
+    66.5
+   ],
+   "ypr": [
+    313.0,
+    15.0,
+    0.0
+   ],
+   "fov": [
+    null,
+    49.6
+   ],
+   "date": "2026-07-30 (upstream ee83436)",
+   "methode": "hand-tuned par rlx",
+   "statut": "non importee: 0 temoin independant chez nous pour arbitrer (zone PGH circulaire)"
+  }
+ },
+ "Pool": {
+  "rlx-upstream-ee83436": {
+   "xyz": [
+    -5327.3,
+    3475.4,
+    67.9
+   ],
+   "ypr": [
+    215.0,
+    -10.0,
+    0.0
+   ],
+   "fov": [
+    null,
+    49.6
+   ],
+   "date": "2026-07-30 (upstream ee83436)",
+   "methode": "hand-tuned par rlx",
+   "statut": "non importee: 0 temoin independant chez nous pour arbitrer (zone PGH circulaire)"
   }
  }
 }
