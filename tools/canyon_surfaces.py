@@ -43,7 +43,8 @@ spec.loader.exec_module(dt)
 
 CAM = 'Mount Kalaga National Park 04 (Mountain Pass) (X)'
 MESH_PATH = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
-COLORS = {'face': '#fb923c', 'plateau': '#4ade80'}
+COLORS = {'face': '#fb923c', 'plateau': '#4ade80',
+          'face_droite': '#f87171', 'plateau_droit': '#22d3ee'}
 
 
 def line_y(l):
@@ -189,6 +190,34 @@ def main():
         for py_ in range(int(y_e) + 6, int(y_r) - 6, args.step):
             regions['plateau'].append((px_, py_))
 
+    # ── COTE DROIT: memes bornes, ses lignes de droite ──────────────────
+    # face droite  = rim_right -> terrain_right_bench (la section 'moins
+    #                abrupte' qu'il a hachuree = le pied de la paroi)
+    # plateau droit= terrain_right_top -> rim_right
+    if 'rim_right' in lines:
+        rrx, rry = line_y(lines['rim_right'])
+        bench = lines.get('terrain_right_bench')
+        rtop = lines.get('terrain_right_top')
+        bx_, by_ = line_y(bench) if bench else (None, None)
+        tx_, ty_ = line_y(rtop) if rtop else (None, None)
+        RX0 = int(rrx.min())
+        RX1 = int(rrx.max())
+        if bench is not None:
+            RX0 = max(RX0, int(bx_.min())); RX1 = min(RX1, int(bx_.max()))
+        regions['face_droite'] = []
+        regions['plateau_droit'] = []
+        for px_ in range(RX0, RX1, args.step):
+            y_r = float(np.interp(px_, rrx, rry))
+            if bench is not None:
+                y_b = float(np.interp(px_, bx_, by_))
+                for py_ in range(int(y_r) + 6, int(y_b) - 6, args.step):
+                    regions['face_droite'].append((px_, py_))
+            if rtop is not None and tx_.min() <= px_ <= tx_.max():
+                y_t = float(np.interp(px_, tx_, ty_))
+                for py_ in range(int(y_t) + 6, int(y_r) - 6, args.step):
+                    regions['plateau_droit'].append((px_, py_))
+        print(f'cote droit: bande x {RX0} -> {RX1}')
+
     # ── controle independant par NORMALES (Metric3D V2) ─────────────────
     NRM = None
     if args.normals:
@@ -285,7 +314,7 @@ def main():
                 if nb in grid:
                     edges.append([list(map(float, Pt)), list(map(float, grid[nb]))])
         if edges:
-            out[f'Canyon {name.capitalize()} (Kalaga Pass)'] = {
+            out[f'Canyon {name.replace("_", " ").title()} (Kalaga Pass)'] = {
                 'color': COLORS[name], 'world_edges': edges}
             zs = [p[2] for p in grid.values()]
             print(f'          -> {len(edges)} aretes, z {min(zs):.0f}-{max(zs):.0f} m')
