@@ -1,28 +1,28 @@
 #!/usr/bin/env python3
-"""canyon_mesh.py — le canyon de Mountain Pass en 3D. [CANYON-3D-V1]
+"""canyon_mesh.py — la paroi du canyon, modele SIMPLE et honnete. [CANYON-3D-V8]
 
-Doctrine colline: les DONNEES sont les lignes 2D validees d'Alexandre
-(canyon_lines.json, traces pixel-exact) + la pose resolue de la cam
-(RESECTION-V1); les HYPOTHESES sont des parametres declares:
+Lecon des versions 1-7 (jetees): en vue unique, tout ce qu'on construit le
+long des rayons retombe sur la photo par CONSTRUCTION — la verification en
+projection etait tautologique, et la 3D reelle etait un tas de rubans
+replies. Ici on ne garde que ce qui a une profondeur CONTRAINTE:
 
-  --z0     z de la route au bas du cadre (defaut 30)
-  --z1     z de la route sous le pont    (defaut 55 — la route monte vers
-           le col en s'eloignant)
-  --clear  clairance route -> tablier    (defaut 6.5)
-  --width  demi-largeur du canyon au sol (defaut 14: bord de route)
+  1. PLANCHER  z = A + B * d_xy, cale sur le profil de route declare
+     (--z0 au bas du cadre, --z1 sous le pont). Seule hypothese restante.
+  2. PIED      la ligne de sol tracee par Alexandre (ground_left) coupee
+     avec ce plancher: intersection rayon x plan, bien conditionnee,
+     profondeur exacte par point.
+  3. HAUT      hauteur au-dessus du pied, LISSEE fortement le long de la
+     paroi (fenetre --smooth). La ligne de crete de l'image ne sert qu'a
+     donner l'echelle de hauteur — on ne la matche PAS point par point
+     (c'est ce matching qui laissait la profondeur zigzaguer et repliait
+     le mur).
 
-Geometrie:
-  * ROUTE: chaque pixel de road_center est un rayon; profil z lineaire en
-    distance horizontale cale sur (z0 au 1er rayon du bas, z1 au rayon
-    sous le pont) -> intersection fermee par rayon.
-  * PONT: tablier horizontal a z1+clear; extremites = rayons du deck x ce
-    plan; piles verticales jusqu'a la route.
-  * PAROIS: hypothese murs VERTICAUX — chaque point de rim est le point de
-    son rayon qui minimise la distance horizontale a la ligne de bord de
-    route (offset +-width). Nervures bord->rim.
+Rien d'autre n'est emis: pas de nappes de plateau, pas de cote droit tant
+qu'il n'a pas sa ligne de sol. Auto-controle imprime: profondeur, hauteur,
+et repliement (le pied doit avancer de facon monotone).
 
-Sanity imprimees: portee du pont, hauteurs de parois, pente de la route.
-Usage: PYTHONPATH=. python3 tools/canyon_mesh.py [--apply] [params]
+Usage: PYTHONPATH=. python3 tools/canyon_mesh.py [--apply]
+       [--z0 30 --z1 55 --face 65 --smooth 25]
 """
 import argparse
 import json
@@ -37,31 +37,33 @@ sys.path.insert(0, THIS)
 sys.path.insert(0, REPO)
 
 import numpy as np
-from PIL import Image
 import common
 
 CAM = 'Mount Kalaga National Park 04 (Mountain Pass) (X)'
 MESH_PATH = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
+MESH_NAME = 'Canyon Wall (Kalaga Pass)'
+COLOR = '#fb923c'
 
 
-def rays_of(cam, xs, ys):
-    out = []
-    for x, y in zip(xs, ys):
-        d = np.asarray(cam.get_pixel_direction((float(x), float(y))), float)
-        out.append(d / np.linalg.norm(d))
-    return np.array(out)
+def smooth(a, w):
+    """Moyenne glissante, bords tenus."""
+    if len(a) < 3 or w < 3:
+        return np.asarray(a, float)
+    k = np.ones(w) / w
+    s = np.convolve(np.asarray(a, float), k, mode='same')
+    h = w // 2
+    s[:h] = np.mean(a[:h + 1])
+    s[-h:] = np.mean(a[-(h + 1):])
+    return s
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--z0', type=float, default=30.0)
-    ap.add_argument('--z1', type=float, default=55.0)
-    ap.add_argument('--clear', type=float, default=6.5)
-    ap.add_argument('--width', type=float, default=14.0)
-    ap.add_argument('--slope-up', type=float, default=20.0,
-                    help='pente max du terrain derriere le rim (deg)')
-    ap.add_argument('--bench-slope', type=float, default=12.0,
-                    help='pente du flanc doux du ridge droit (deg, descend vers la route)')
+    ap.add_argument('--z0', type=float, default=30.0, help='z route, bas du cadre')
+    ap.add_argument('--z1', type=float, default=55.0, help='z route, sous le pont')
+    ap.add_argument('--face', type=float, default=65.0, help='elevation de la face (deg)')
+    ap.add_argument('--smooth', type=int, default=25, help='lissage de la hauteur')
+    ap.add_argument('--ribs', type=int, default=8, help='une nervure sur N')
     ap.add_argument('--apply', action='store_true')
     args = ap.parse_args()
 
@@ -69,368 +71,115 @@ def main():
     cam = common.get_cam(CAM)
     o = np.asarray(cam.xyz, float)
 
-    # ── route: profil z lineaire en distance horizontale ────────────────
+    def ray(x, y):
+        d = np.asarray(cam.get_pixel_direction((float(x), float(y))), float)
+        return d / np.linalg.norm(d)
+
+    # ── 1. plancher: z = A + B * d_xy (profil de route declare) ─────────
     rx, ry = lines['road_center']['x'], lines['road_center']['y']
-    rr = rays_of(cam, rx, ry)
-    # rayon du bas du cadre = plus grand y ; rayon sous le pont = plus petit y
-    i_bot = int(np.argmax(ry))
-    i_top = int(np.argmin(ry))
-    def dxy_at_z(ray, z):
-        t = (z - o[2]) / ray[2]
-        return t * float(np.hypot(ray[0], ray[1])), t
-    d0, _ = dxy_at_z(rr[i_bot], args.z0)
-    d1, _ = dxy_at_z(rr[i_top], args.z1)
+    i_bot, i_top = int(np.argmax(ry)), int(np.argmin(ry))
+    r0, r1 = ray(rx[i_bot], ry[i_bot]), ray(rx[i_top], ry[i_top])
+    d0 = (args.z0 - o[2]) / r0[2] * float(np.hypot(r0[0], r0[1]))
+    d1 = (args.z1 - o[2]) / r1[2] * float(np.hypot(r1[0], r1[1]))
     B = (args.z1 - args.z0) / (d1 - d0)
     A = args.z0 - B * d0
     road = []
-    for ray in rr:
-        hx = float(np.hypot(ray[0], ray[1]))
-        t = (A - o[2]) / (ray[2] - B * hx)
-        if t <= 0:
-            continue
-        road.append(o + t * ray)
-    road = np.array(road)
-    order = np.argsort(-np.array(ry)[:len(road)])   # du bas (proche) au pont
-    grade = 100 * B
-    print(f'route: {len(road)} pts, d {d0:.0f} -> {d1:.0f} m, z {args.z0} -> {args.z1}, '
-          f'pente {grade:.1f}%')
+    for x, y in zip(rx, ry):
+        r = ray(x, y)
+        t = (A - o[2]) / (r[2] - B * float(np.hypot(r[0], r[1])))
+        if t > 0:
+            road.append(o + t * r)
+    road_xy = np.array(road)[:, :2]
+    print(f'plancher: z = {A:.1f} + {B:.4f} * d_xy  (route {args.z0} -> {args.z1} m, '
+          f'pente {100 * B:.1f}%)')
 
-    # ── pont: tablier a la PROFONDEUR de la route (la clairance est une
-    #    SORTIE, pas une hypothese — c'est un pont de gorge) ─────────────
-    bx, by = lines['bridge_deck']['x'], lines['bridge_deck']['y']
-    br = rays_of(cam, bx, by)
-    road_under = road[int(np.argmin(np.hypot(*(road[:, :2] - o[:2]).T) * 0 + np.array(ry)[:len(road)]))]
-    vhat = np.asarray(cam.get_pixel_direction((cam.w / 2, cam.h / 2)), float)
-    vhat /= np.linalg.norm(vhat)
-    depth_under = float(np.dot(road_under - o, vhat))
-    deck = []
-    for ray in br:
-        t = depth_under / float(np.dot(ray, vhat))
-        deck.append(o + t * ray)
-    deck = np.array(deck)
-    span = float(np.linalg.norm(deck[-1] - deck[0]))
-    z_deck = float(np.median(deck[:, 2]))
-    print(f'pont: profondeur {depth_under:.0f} m, tablier z {z_deck:.1f} '
-          f'(clairance {z_deck - args.z1:.0f} m au-dessus de la route), portee {span:.0f} m')
-
-    # ── parois: murs verticaux au-dessus du bord de route ───────────────
-    road_xy = road[:, :2]
-    t_road = np.gradient(road_xy, axis=0)
-    t_road /= (np.linalg.norm(t_road, axis=1)[:, None] + 1e-9)
-    n_road = np.stack([-t_road[:, 1], t_road[:, 0]], axis=1)
-
-    walls = {}
-    rim_names = ['rim_right', 'rim_left', 'rim_left_pinnacle', 'rim_left_top']
-    # terrain_near_right exclu: versant du PREMIER PLAN (la colline de la
-    # cam), aucune route sous lui dans l'image -> l'echafaudage par colonne
-    # le placerait sous terre. Il attendra son propre ancrage.
-    terr_names = [k for k in lines if (k.startswith('terrain_') or k == 'ridge_back')
-                  and k != 'terrain_near_right']
-    for name in rim_names + terr_names:
-        if name not in lines:
-            continue
-        wx, wy = lines[name]['x'], lines[name]['y']
-        wr = rays_of(cam, wx, wy)
-        # correspondance par COLONNE d'image: le haut du mur est au-dessus
-        # du point de route qui passe sous lui dans la frame
-        rx_arr = np.array(rx, float)
-        road_depth = np.dot(road - o[None, :], vhat)
-        pts = []
-        for (x, ray) in zip(wx, wr):
-            j = int(np.argmin(np.abs(rx_arr[:len(road)] - float(x))))
-            t = float(road_depth[j]) / float(np.dot(ray, vhat))
-            if t <= 0:
-                continue
-            pts.append(o + t * ray)
-        walls[name] = np.array(pts)
-        rel = walls[name][:, 2] - A - B * np.hypot(*(walls[name][:, :2] - o[:2]).T)
-        print(f'{name:18s}: {len(pts)} pts, z {walls[name][:,2].min():.0f}-'
-              f'{walls[name][:,2].max():.0f}, hauteur/route mediane {np.median(rel):.0f} m')
-
-    # ── meshs (route et pont RETIRES a la demande d'Alexandre — la route
-    #    reste l'echafaudage de profondeur interne) ─────────────────────
-    out = {}
-    def poly_edges(pts, step=1):
-        return [[list(map(float, pts[i])), list(map(float, pts[i + step]))]
-                for i in range(0, len(pts) - step, step)]
-
-    e_w = []
+    # ── 2. pied: la ligne de sol d'Alexandre x le plancher ──────────────
     gl = lines.get('ground_left')
-    FACE = math.radians(65.0)               # elevation de la face (Alexandre v8)
+    if not gl:
+        print('pas de ground_left: rien a construire.')
+        return
+    feet = []
+    for gx, gy in zip(gl['x'], gl['y']):
+        r = ray(gx, gy)
+        t = (A - o[2]) / (r[2] - B * float(np.hypot(r[0], r[1])))
+        if t > 0:
+            feet.append(o + t * r)
+    feet = np.array(feet)
+    dfeet = np.hypot(feet[:, 0] - o[0], feet[:, 1] - o[1])
+    print(f'pied: {len(feet)} points, profondeur {dfeet.min():.0f} -> {dfeet.max():.0f} m')
 
-    # rim 2D combine (pour savoir quand la face atteint le haut dans l'image)
+    # ── 3. haut: hauteur LISSEE au-dessus du pied ───────────────────────
+    # la ligne de crete donne l'ECHELLE de hauteur (pas un matching point
+    # par point): pour chaque pied on mesure la montee qui atteindrait la
+    # crete dans l'image, puis on lisse fortement.
     rim2d = []
     for nm in ('rim_left', 'rim_left_pinnacle', 'rim_left_top'):
         if nm in lines:
             rim2d += list(zip(lines[nm]['x'], lines[nm]['y']))
-    # enveloppe SUPERIEURE par colonne (le rim est une silhouette: a chaque x
-    # c'est le point le plus haut). Un tri brut melangeait le pinacle (x quasi
-    # constant, y 676..906) et produisait une diagonale artificielle vers la
-    # section du pont — c'est le 'ca part en haut pour aucune raison'.
     top_by_col = {}
-    for xx, yy in rim2d:
-        k_ = int(round(xx / 8.0))
-        if k_ not in top_by_col or yy < top_by_col[k_][1]:
-            top_by_col[k_] = (xx, yy)
-    env_pts = sorted(top_by_col.values())
-    r2x = np.array([p_[0] for p_ in env_pts])
-    r2y = np.array([p_[1] for p_ in env_pts])
-    def rim_y_at(x):
-        if x < r2x[0] or x > r2x[-1]:
-            return None
-        return float(np.interp(x, r2x, r2y))
+    for xx, yy in rim2d:                       # enveloppe superieure
+        k = int(round(xx / 8.0))
+        if k not in top_by_col or yy < top_by_col[k][1]:
+            top_by_col[k] = (xx, yy)
+    env = sorted(top_by_col.values())
+    ex = np.array([p[0] for p in env])
+    ey = np.array([p[1] for p in env])
 
-    new_rim = []                            # rim 3D deduit (profondeur du SOL)
-    if gl is not None:
-        # CONSTRUCTION INVERSEE (fix v9, 'tu traites aucunement la profondeur'):
-        # 1. le PIED = rayon de la ligne de sol d'Alexandre x plancher du
-        #    canyon (z = A + B*d_xy) — profondeur bien conditionnee par point;
-        # 2. la FACE monte a 65 deg depuis le pied, en s'eloignant de la
-        #    route, jusqu'a rejoindre la ligne de rim dans l'IMAGE;
-        # 3. le rim 3D est DEDUIT — plus d'echafaudage par colonne.
-        feet = []
-        for gx, gy in zip(gl['x'], gl['y']):
-            ray = np.asarray(cam.get_pixel_direction((float(gx), float(gy))), float)
-            ray /= np.linalg.norm(ray)
-            hx = float(np.hypot(ray[0], ray[1]))
-            t = (A - o[2]) / (ray[2] - B * hx)
-            if t <= 0:
-                continue
-            feet.append(o + t * ray)
-        for k in range(len(feet) - 1):       # ligne de pied 3D
-            e_w.append([list(map(float, feet[k])), list(map(float, feet[k + 1]))])
-        climb = []
-        for k in range(0, len(feet), 2):
-            F_ = feet[k]
-            j = int(np.argmin(np.linalg.norm(road_xy - F_[:2], axis=1)))
-            nh = F_[:2] - road_xy[j]
-            nh = nh / (np.linalg.norm(nh) + 1e-9)
-            top, matched = None, False
-            for u in np.arange(4, 240, 4):   # borne: ~220 m de face max
-                Q = np.array([F_[0] + u * nh[0] * math.cos(FACE),
-                              F_[1] + u * nh[1] * math.cos(FACE),
-                              F_[2] + u * math.sin(FACE)])
-                pr = cam.get_pixel([float(v) for v in Q])
-                if pr is None:
-                    break
-                ry_ = rim_y_at(pr[0])
-                if ry_ is not None and pr[1] <= ry_ + 3:
-                    top, matched = Q, True
-                    break
-                top = Q
-            climb.append((k, F_, nh, u if matched else None))
-        # CONTINUITE: longueur de face interpolee la ou le rayon n'a jamais
-        # croise la ligne de rim (bouts du mur) — plus de zone coupee
-        idx = [i_ for i_, (_, _, _, u_) in enumerate(climb) if u_ is not None]
-        if idx:
-            uu = np.array([climb[i_][3] for i_ in idx], float)
-            allu = np.interp(np.arange(len(climb)), idx, uu)
-            for i_, (k_, F_, nh_, u_) in enumerate(climb):
-                U = u_ if u_ is not None else float(allu[i_])
-                T = np.array([F_[0] + U * nh_[0] * math.cos(FACE),
-                              F_[1] + U * nh_[1] * math.cos(FACE),
-                              F_[2] + U * math.sin(FACE)])
-                e_w.append([list(map(float, F_)), list(map(float, T))])
-                new_rim.append(T)
-        for k in range(len(new_rim) - 1):    # rim 3D deduit
-            e_w.append([list(map(float, new_rim[k])), list(map(float, new_rim[k + 1]))])
-        zs = [p_[2] for p_ in new_rim]
-        dd = [float(np.hypot(*(p_[:2] - o[:2]))) for p_ in new_rim]
-        print(f'paroi gauche v9: {len(feet)} pieds ancres au plancher, rim deduit '
-              f'z {min(zs):.0f}-{max(zs):.0f}, profondeur {min(dd):.0f}-{max(dd):.0f} m')
-        walls['rim_left_v9'] = np.array(new_rim)
-    # cote droit: inchange (rideau scaffold en attendant sa ligne de sol)
-    for name in ['rim_right']:
-        if name not in walls:
-            continue
-        pts = walls[name]
-        e_w += poly_edges(pts)
-        for i in range(0, len(pts), 6):
-            base = A + B * float(np.hypot(*(pts[i, :2] - o[:2])))
-            e_w.append([list(map(float, pts[i])), [float(pts[i][0]), float(pts[i][1]), float(base)]])
-    out['Canyon Walls (Kalaga Pass)'] = {'color': '#fb923c', 'world_edges': e_w}
+    FACE = math.radians(args.face)
+    # direction horizontale de la face: a l'oppose de la route, lissee
+    nh = feet[:, :2] - road_xy[np.argmin(
+        np.linalg.norm(road_xy[None, :, :] - feet[:, None, :2], axis=2), axis=1)]
+    nh /= (np.linalg.norm(nh, axis=1)[:, None] + 1e-9)
+    nh = np.stack([smooth(nh[:, 0], args.smooth), smooth(nh[:, 1], args.smooth)], axis=1)
+    nh /= (np.linalg.norm(nh, axis=1)[:, None] + 1e-9)
 
-    # ── COTE GAUCHE d'abord (doctrine Alexandre): derriere le rim, le
-    #    terrain S'ELOIGNE en montant doucement (--slope-up, defaut 20 deg)
-    #    — surface balayee: generatrices depuis le rim, direction opposee a
-    #    la route, etendues jusqu'a l'enveloppe hachuree dans l'IMAGE ────
-    e_t = []
-    up = math.radians(args.slope_up)
+    raw_u = np.zeros(len(feet))
+    for i, F in enumerate(feet):
+        u_hit = np.nan
+        for u in np.arange(4, 260, 4):
+            Q = np.array([F[0] + u * nh[i, 0] * math.cos(FACE),
+                          F[1] + u * nh[i, 1] * math.cos(FACE),
+                          F[2] + u * math.sin(FACE)])
+            pr = cam.get_pixel([float(v) for v in Q])
+            if pr is None:
+                break
+            if ex[0] <= pr[0] <= ex[-1] and pr[1] <= float(np.interp(pr[0], ex, ey)):
+                u_hit = u
+                break
+        raw_u[i] = u_hit
+    ok = ~np.isnan(raw_u)
+    if ok.sum() < 5:
+        print('pas assez de mesures de hauteur.')
+        return
+    u = np.interp(np.arange(len(feet)), np.where(ok)[0], raw_u[ok])
+    u = smooth(u, args.smooth)                 # LISSAGE FORT: pas de zigzag
+    tops = np.stack([feet[:, 0] + u * nh[:, 0] * math.cos(FACE),
+                     feet[:, 1] + u * nh[:, 1] * math.cos(FACE),
+                     feet[:, 2] + u * math.sin(FACE)], axis=1)
+    print(f'haut: montee {u.min():.0f} -> {u.max():.0f} m le long de la face, '
+          f'z {tops[:, 2].min():.0f} -> {tops[:, 2].max():.0f} m '
+          f'({int(ok.sum())}/{len(feet)} mesures, reste interpole)')
 
-    # luminance de la frame: la surface visible s'arrete ou commence le
-    # CIEL / fond clair (on ne depasse pas les arbres) et au rebord exact
-    frame_L = np.asarray(Image.open(os.path.join(
-        REPO, 'frames', f'{CAM}.png')).convert('L'), np.float32)
-    fh, fw = frame_L.shape
-    def lum(px, py):
-        x0, x1 = max(0, int(px) - 3), min(fw, int(px) + 4)
-        y0, y1 = max(0, int(py) - 3), min(fh, int(py) + 4)
-        return float(frame_L[y0:y1, x0:x1].mean())
-    SKY = 178.0
+    # ── auto-controle: repliement du pied et du haut ────────────────────
+    for nom, P in (('pied', feet), ('haut', tops)):
+        seg = np.diff(P[:, :2], axis=0)
+        n = np.linalg.norm(seg, axis=1)
+        good = n > 1e-6
+        cs = np.sum(seg[good][:-1] * seg[good][1:], axis=1) / (
+            n[good][:-1] * n[good][1:] + 1e-9)
+        back = int((cs < 0).sum())
+        print(f'  {nom}: {back} retournements sur {len(cs)} segments '
+              f'({100 * back / max(1, len(cs)):.1f}%)')
 
-    def sweep(rim, env, stop_at_env, u_max, dens=2):
-        """Generatrices a --slope-up depuis le rim, a l'oppose de la route.
-        Terminaison: rebord EXACT du cadre (bissection) ou ligne des arbres
-        (la projection atteint une zone claire = ciel/fond) ou enveloppe."""
-        env_y = (lambda x: float(np.interp(x, env['x'], env['y']))) if env else None
-        def point(R, nh, u):
-            return np.array([R[0] + u * nh[0] * math.cos(up),
-                             R[1] + u * nh[1] * math.cos(up),
-                             R[2] + u * math.sin(up)])
-        def ok(R, nh, u):
-            pr = cam.get_pixel([float(v) for v in point(R, nh, u)])
-            if pr is None or pr[0] < 1 or pr[0] > cam.w - 1 or pr[1] < 1:
-                return False
-            if lum(pr[0], pr[1]) > SKY:
-                return False               # on ne depasse pas les arbres
-            if stop_at_env and env_y is not None and env['x'][0] <= pr[0] <= env['x'][-1] \
-                    and pr[1] <= env_y(pr[0]):
-                return False
-            return True
-        gp = []
-        for i in range(0, len(rim), dens):
-            R = rim[i]
-            j = int(np.argmin(np.linalg.norm(road_xy - R[:2], axis=1)))
-            nh = R[:2] - road_xy[j]
-            nh /= (np.linalg.norm(nh) + 1e-9)
-            u_ok = None
-            for u in np.arange(6, u_max, 6):
-                if ok(R, nh, u):
-                    u_ok = u
-                else:
-                    if u_ok is None:
-                        break
-                    lo, hi = u_ok, u
-                    for _ in range(12):    # bissection: touche le rebord
-                        mid = 0.5 * (lo + hi)
-                        if ok(R, nh, mid):
-                            lo = mid
-                        else:
-                            hi = mid
-                    u_ok = lo
-                    break
-            if u_ok is not None and u_ok > 8:
-                gp.append((R, nh, u_ok))
-        # CONTINUITE (retour d'Alexandre: 'ca part en haut pour aucune
-        # raison'): la longueur des generatrices est lissee (mediane 7)
-        # — le terrain ne saute pas d'une colonne a l'autre
-        if len(gp) > 7:
-            us = np.array([g[2] for g in gp], float)
-            sm = np.array([np.median(us[max(0, i - 3):i + 4]) for i in range(len(us))])
-            gp = [(R_, nh_, float(sm[i])) for i, (R_, nh_, _) in enumerate(gp)]
-        # rejet des generatrices DEGENEREES en projection (direction quasi
-        # dans l'axe de vue -> une ligne qui file a travers l'image)
-        out_ = []
-        for R_, nh_, u_ in gp:
-            Q_ = point(R_, nh_, u_)
-            if cam.get_pixel([float(v) for v in Q_]) is None:
-                continue
-            g_ = Q_ - R_
-            n_ = float(np.linalg.norm(g_))
-            v_ = R_ - o
-            nv_ = float(np.linalg.norm(v_))
-            if n_ > 1e-6 and nv_ > 1e-6:
-                cosang = abs(float(np.dot(g_ / n_, v_ / nv_)))
-                if cosang > 0.985:            # a moins de 10 deg de l'axe de
-                    continue                  # vue: degeneree en projection
-            out_.append((R_, Q_))
-        return out_
-
-    def emit(gp, max_link=120.0):
-        # max_link: pas de segment de liaison entre deux generatrices
-        # eloignees (sinon des lignes traversent la scene)
-        for R, Q in gp:
-            e_t.append([list(map(float, R)), list(map(float, Q))])
-        for k in range(len(gp) - 1):
-            if np.linalg.norm(gp[k + 1][1] - gp[k][1]) > max_link:
-                continue
-            e_t.append([list(map(float, gp[k][1])), list(map(float, gp[k + 1][1]))])
-        for f in (0.33, 0.66):
-            for k in range(len(gp) - 1):
-                if np.linalg.norm(gp[k + 1][1] - gp[k][1]) > max_link:
-                    continue
-                a = gp[k][0] + f * (gp[k][1] - gp[k][0])
-                b = gp[k + 1][0] + f * (gp[k + 1][1] - gp[k + 1][0])
-                e_t.append([list(map(float, a)), list(map(float, b))])
-
-    rim_src = walls.get('rim_left_v9', walls.get('rim_left'))
-    if rim_src is not None and len(rim_src):
-        # section principale: pente 12 deg (Alexandre v8), arretee a SA
-        # ligne 'jusqu'ou le sol va', DEPUIS le rim v9 (profondeur du sol)
-        up = math.radians(min(args.slope_up, 12.0))
-        gp = sweep(np.array(rim_src), lines.get('terrain_left'), True, 900)
-        up = math.radians(args.slope_up)
-        emit(gp)
-        ext = [float(np.linalg.norm(Q[:2] - R[:2])) for R, Q in gp]
-        print(f'pente gauche (au bord du cadre): {len(gp)} generatrices, '
-              f'extension mediane {np.median(ext):.0f} m (max {max(ext):.0f})')
-    if 'rim_left_top' in walls:
-        # bout le plus eloigne: la section du fond pres du pont
-        gp = sweep(walls['rim_left_top'], lines.get('terrain_mid'), True, 320)
-        emit(gp)
-        if gp:
-            ext = [float(np.linalg.norm(Q[:2] - R[:2])) for R, Q in gp]
-            print(f'pente gauche FOND (rim_left_top): {len(gp)} generatrices, '
-                  f'extension mediane {np.median(ext):.0f} m')
-    # ── COTE DROIT (meme modele que le gauche valide): haut du ridge a
-    #    --slope-up derriere le rim; et la section 'moins abrupte' = flanc
-    #    qui DESCEND vers la route a --bench-slope, stoppe par la luminance
-    #    (le sable clair du bord de route) ────────────────────────────────
-    if 'rim_right' in walls:
-        gp = sweep(walls['rim_right'], lines.get('terrain_right_top'), False, 900)
-        emit(gp)
-        if gp:
-            ext = [float(np.linalg.norm(Q[:2] - R[:2])) for R, Q in gp]
-            print(f'pente droite HAUT: {len(gp)} generatrices, extension mediane '
-                  f'{np.median(ext):.0f} m (max {max(ext):.0f})')
-        # bench: generatrices vers la ROUTE, inclinees vers le bas
-        bs = math.radians(args.bench_slope)
-        rim = walls['rim_right']
-        gp2 = []
-        for i2 in range(0, len(rim), 2):
-            R = rim[i2]
-            # flanc COTE CAMERA (les hachures 'moins abrupte' d'Alexandre
-            # sont sur le versant qui nous fait face, pas sur la face canyon)
-            nh = o[:2] - R[:2]
-            nh /= (np.linalg.norm(nh) + 1e-9)
-            u_ok = None
-            def okb(u):
-                Q = np.array([R[0] + u * nh[0] * math.cos(bs),
-                              R[1] + u * nh[1] * math.cos(bs),
-                              R[2] - u * math.sin(bs)])
-                pr = cam.get_pixel([float(v) for v in Q])
-                if pr is None or pr[0] < 1 or pr[0] > cam.w - 1 or pr[1] > cam.h - 2:
-                    return None
-                if pr[1] > 1780:
-                    return None                    # borne basse de la zone hachuree bench
-                if lum(pr[0], pr[1]) > SKY:
-                    return None
-                if float(np.min(np.linalg.norm(road_xy - Q[:2], axis=1))) < args.width:
-                    return None                    # jamais sur la chaussee
-                return Q
-            lastQ = None
-            for u in np.arange(6, 420, 6):
-                Q = okb(u)
-                if Q is not None:
-                    u_ok, lastQ = u, Q
-                elif u_ok is not None:
-                    lo, hi = u_ok, u
-                    for _ in range(10):
-                        mid = 0.5 * (lo + hi)
-                        Qm = okb(mid)
-                        if Qm is not None:
-                            lo, lastQ = mid, Qm
-                        else:
-                            hi = mid
-                    break
-            if lastQ is not None and u_ok and u_ok > 8:
-                gp2.append((R, lastQ))
-        emit(gp2)
-        if gp2:
-            ext = [float(np.linalg.norm(Q[:2] - R[:2])) for R, Q in gp2]
-            print(f'bench droite ({args.bench_slope:.0f} deg vers la route): '
-                  f'{len(gp2)} generatrices, extension mediane {np.median(ext):.0f} m')
-    out['Canyon Terrain (Kalaga Pass)'] = {'color': '#4ade80', 'world_edges': e_t}
+    # ── mesh: pied + haut + nervures ────────────────────────────────────
+    edges = []
+    for i in range(len(feet) - 1):
+        edges.append([list(map(float, feet[i])), list(map(float, feet[i + 1]))])
+        edges.append([list(map(float, tops[i])), list(map(float, tops[i + 1]))])
+    for i in range(0, len(feet), args.ribs):
+        edges.append([list(map(float, feet[i])), list(map(float, tops[i]))])
+    out = {MESH_NAME: {'color': COLOR, 'world_edges': edges}}
+    print(f'{MESH_NAME}: {len(edges)} aretes')
 
     if not args.apply:
         print('\nDRY-RUN (--apply pour ecrire).')
@@ -443,7 +192,7 @@ def main():
     with os.fdopen(fd, 'w') as f:
         json.dump(mesh, f, indent=1, ensure_ascii=True)
     os.replace(tmp, MESH_PATH)
-    print(f'\nAPPLIED: {list(out)}')
+    print(f'APPLIED: {MESH_NAME}')
 
 
 if __name__ == '__main__':
