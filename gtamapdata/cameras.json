@@ -549,7 +549,8 @@
    1080
   ],
   "source": "2021-12-14 19-52-44 [?]",
-  "constraint_class": "C_pos_fov_only"
+  "constraint_class": "C_pos_fov_only",
+  "note": "pose LEAK (immobile par invariant CI) \u2014 la valeur hand-tuned de rlx upstream ee83436 a ete REJETEE: une pose issue du leak est exacte et ne se remplace pas par un reglage a l oeil. Archivee dans pose_alternatives.json."
  },
  "Pawn Shop (W)": {
   "id": "L1/10",
@@ -1996,7 +1997,8 @@
    1080
   ],
   "source": "2022-09-06 17-13-34 [?]",
-  "constraint_class": "C_pos_fov_only"
+  "constraint_class": "C_pos_fov_only",
+  "note": "pose LEAK (immobile par invariant CI) \u2014 la valeur hand-tuned de rlx upstream ee83436 a ete REJETEE: une pose issue du leak est exacte et ne se remplace pas par un reglage a l oeil. Archivee dans pose_alternatives.json."
  },
  "Tennis Stadium (4K)": {
   "id": "L1/44",
@@ -3408,47 +3410,49 @@
   "id": "S2/51",
   "player": null,
   "xyz": [
-   -5334.262417912644,
-   3575.248202666363,
-   67.73443379514198
+   -5326.3,
+   3539.4,
+   69.8
   ],
   "ypr": [
-   177.15802559153752,
-   6.111317617138239,
-   -2.7205171607882902e-08
+   175.018,
+   3.3,
+   0.0
   ],
   "fov": [
-   50.09609023140903,
-   null
+   43.0,
+   24.987
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 1 \u2014 Port Gellhorn 01 [1]"
+  "source": "Screenshot 1 \u2014 Port Gellhorn 01 [1]",
+  "note": "pose rlx upstream ee83436 importee 2026-07-30 apres ARBITRAGE INDEPENDANT (la zone PGH etait circulaire: 0 temoin propre). Les cams-pont Chase (2) (A) (ancree Sunshine Skyway) et Ambrosia 04 (Fires) donnent des rayons independants: sur Juice Fruit Sign (B) 0.44 m contre 1.20 m pour notre pose, sur Billboard near Intersection (TN) 2.08 m contre 19.92 m, sur Billboard near Starlet Motel (B) 4.58 m contre 14.44 m. Notre pose precedente: [-5334.262417912644, 3575.248202666363, 67.73443379514198] / [177.158, 6.111, -0.0] / fov 50.09609023140903"
  },
  "Port Gellhorn 04 (Delights) (X)": {
   "id": "S2/54",
   "player": null,
   "xyz": [
-   -6321.002971014369,
-   3692.155573923758,
-   6.163994559175823
+   -6340.0,
+   3699.0,
+   7.228
   ],
   "ypr": [
-   73.20351038320119,
-   -21.47530574800413,
-   0.9096955469345892
+   73.392,
+   -21.6,
+   0.0
   ],
   "fov": [
-   81.26208903419699,
-   null
+   81.9,
+   52.035
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 1 \u2014 Port Gellhorn 04 [1]"
+  "source": "Screenshot 1 \u2014 Port Gellhorn 04 [1]",
+  "note": "pose rlx upstream ee83436 importee 2026-07-30 apres ARBITRAGE INDEPENDANT (la zone PGH etait circulaire: 0 temoin propre). Les cams-pont Chase (2) (A) (ancree Sunshine Skyway) et Ambrosia 04 (Fires) donnent des rayons independants: sur Juice Fruit Sign (B) 0.44 m contre 1.20 m pour notre pose, sur Billboard near Intersection (TN) 2.08 m contre 19.92 m, sur Billboard near Starlet Motel (B) 4.58 m contre 14.44 m. Notre pose precedente: [-6321.002971014369, 3692.155573923758, 6.163994559175823] / [73.204, -21.475, 0.91] / fov 81.26208903419699"
  },
  "Port Gellhorn 05 (Fire)": {
   "id": "S2/55",
@@ -3663,24 +3667,25 @@
   "id": "S2/73",
   "player": null,
   "xyz": [
-   -6548.103621383383,
-   3601.3868741244787,
-   32.557937804019744
+   -6550.0,
+   3608.0,
+   31.297
   ],
   "ypr": [
-   51.90462796162174,
-   -3.1945561163786445,
-   1.003049639324042
+   51.974,
+   -3.2,
+   0.0
   ],
   "fov": [
-   70.82430045994978,
-   null
+   71.0,
+   50.865
   ],
   "size": [
    3240,
    2160
   ],
-  "source": "Screenshot 1 \u2014 Port Gellhorn Postcard [1]"
+  "source": "Screenshot 1 \u2014 Port Gellhorn Postcard [1]",
+  "note": "pose rlx upstream ee83436 importee 2026-07-30 apres ARBITRAGE INDEPENDANT (la zone PGH etait circulaire: 0 temoin propre). Les cams-pont Chase (2) (A) (ancree Sunshine Skyway) et Ambrosia 04 (Fires) donnent des rayons independants: sur Juice Fruit Sign (B) 0.44 m contre 1.20 m pour notre pose, sur Billboard near Intersection (TN) 2.08 m contre 19.92 m, sur Billboard near Starlet Motel (B) 4.58 m contre 14.44 m. Notre pose precedente: [-6548.103621383383, 3601.3868741244787, 32.557937804019744] / [51.905, -3.195, 1.003] / fov 70.82430045994978"
  },
  "Ambrosia Postcard (X)": {
   "id": "S2/74",
@@ -4658,24 +4663,25 @@
   "id": "T2/54",
   "player": null,
   "xyz": [
-   -5320.0,
-   3440.0,
-   67.0
+   -5333.0,
+   3455.0,
+   66.8
   ],
   "ypr": [
-   0.0,
-   8.0,
+   10.0,
+   7.5,
    0.0
   ],
   "fov": [
-   55.0,
+   52.0,
    null
   ],
   "size": [
    3840,
    1728
   ],
-  "source": "Trailer 2 [4322]"
+  "source": "Trailer 2 [4322]",
+  "note": "pose rlx upstream ee83436 importee 2026-07-30 apres ARBITRAGE INDEPENDANT (la zone PGH etait circulaire: 0 temoin propre). Les cams-pont Chase (2) (A) (ancree Sunshine Skyway) et Ambrosia 04 (Fires) donnent des rayons independants: sur Juice Fruit Sign (B) 0.44 m contre 1.20 m pour notre pose, sur Billboard near Intersection (TN) 2.08 m contre 19.92 m, sur Billboard near Starlet Motel (B) 4.58 m contre 14.44 m. Notre pose precedente: [-5320.0, 3440.0, 67.0] / [0.0, 8.0, 0.0] / fov 55.0"
  },
  "Stock 305 Clothing Store 01 (Van)": {
   "id": "S3/31",
