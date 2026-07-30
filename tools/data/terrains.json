@@ -22,10 +22,11 @@
   },
   "args": [
    "--local",
+   "--normals",
    "--apply"
   ],
   "lines_source": "tools/data/canyon_corrections.json (traces pixel-exact d'Alexandre)",
-  "depth_provenance": "MESUREE par reseau (Depth Anything V2) calibre sur 667 ancres = sa ligne de sol x plancher; erreur relative mediane 4.0 pct. Le plancher lui-meme (z0 30, z1 55) reste declare -> passera en mesure avec la triangulation du pont.",
-  "params_provenance": "aucune pente declaree: face 31.0 deg / azimut 298 (rms 3.0 m), plateau 27.6 deg / azimut 296 (rms 4.6 m) \u2014 MESURES, imprimes a chaque run"
+  "depth_provenance": "MESUREE par reseau (Depth Anything V2) calibre sur 667 ancres = sa ligne de sol x plancher; erreur relative mediane 4.0 pct. Le plancher lui-meme (z0 30, z1 55) reste declare -> passera en mesure avec la triangulation du pont. LIMITE MESUREE: aucun reseau ne tient au-dela de ~700 m (test hors-calibration sur 6 landmarks triangules: Depth Anything small 67 pct, large 68 pct, Metric3D 74 pct d'erreur \u2014 tous saturent). Le canyon (258-685 m) est DANS la zone valide; tout le reste de la frame exige une 2e vue.",
+  "params_provenance": "aucune pente declaree. MESURES croisees par 2 instruments: plan sur profondeur (face 31.0 deg rms 3.0 m / plateau 27.6 deg rms 4.6 m) et normales Metric3D V2 (face 40.1 deg dispersion 24 / plateau 45.4 deg dispersion 38). Ecart face 9 deg = l'incertitude honnete; plateau dispersion 38 deg = ce n'est pas un plan."
  }
 }

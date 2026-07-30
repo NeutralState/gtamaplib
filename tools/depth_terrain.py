@@ -30,7 +30,11 @@ import numpy as np
 from PIL import Image
 import common
 
-MODEL = os.path.join(THIS, 'models', 'depth_anything_v2_vits.onnx')
+MODELS = {
+    'small': os.path.join(THIS, 'models', 'depth_anything_v2_vits.onnx'),
+    'large': os.path.join(THIS, 'models', 'depth_anything_v2_vitl.onnx'),
+}
+MODEL = MODELS['small']          # defaut; canyon_surfaces peut le changer
 NET_W = 700          # largeur d'inference (multiple de 14 apres resize)
 
 

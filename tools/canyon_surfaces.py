@@ -83,6 +83,13 @@ def main():
                          'd un plan global par region — garde le relief mesure')
     ap.add_argument('--smooth-px', type=int, default=61,
                     help='lissage de la carte de profondeur (px), mode --local')
+    ap.add_argument('--model', default='small', choices=['small', 'large'],
+                    help='taille du reseau de profondeur (large = ViT-L, 1.3 Go)')
+    ap.add_argument('--net-w', type=int, default=700,
+                    help='largeur d inference du reseau (plus grand = plus fin)')
+    ap.add_argument('--normals', action='store_true',
+                    help='controle independant: orientation de chaque surface '
+                         'mesuree par les NORMALES de Metric3D V2 (sans echelle)')
     ap.add_argument('--apply', action='store_true')
     args = ap.parse_args()
 
@@ -115,6 +122,9 @@ def main():
           f'profondeur {min(a[2] for a in anchors):.0f}-{max(a[2] for a in anchors):.0f} m')
 
     # ── profondeur dense + calibration metrique ─────────────────────────
+    dt.MODEL = dt.MODELS[args.model]
+    dt.NET_W = args.net_w
+    print(f'reseau: {args.model} @ {args.net_w} px')
     disp = dt.infer_disparity(img)
     dv = np.array([float(np.median(disp[max(0, int(y) - 3):int(y) + 4,
                                         max(0, int(x) - 3):int(x) + 4]))
@@ -179,6 +189,57 @@ def main():
         for py_ in range(int(y_e) + 6, int(y_r) - 6, args.step):
             regions['plateau'].append((px_, py_))
 
+    # ── controle independant par NORMALES (Metric3D V2) ─────────────────
+    NRM = None
+    if args.normals:
+        import onnxruntime as ort
+        mp = os.path.join(THIS, 'models', 'metric3d_vitl.onnx')
+        if not os.path.exists(mp):
+            print('normales: modele Metric3D absent, saute')
+        else:
+            w_ = args.net_w - args.net_w % 14
+            h_ = int(round(img.size[1] * w_ / img.size[0] / 14)) * 14
+            aa = np.asarray(img.resize((w_, h_), Image.BICUBIC), np.float32)
+            aa = (aa / 255.0 - [0.485, 0.456, 0.406]) / [0.229, 0.224, 0.225]
+            sess = ort.InferenceSession(mp, providers=['CPUExecutionProvider'])
+            _, nor, cf = sess.run(None, {'pixel_values':
+                                         aa.transpose(2, 0, 1)[None].astype(np.float32)})
+            NRM = (nor[0], cf[0])
+            print(f'normales Metric3D: {nor[0].shape[1]}x{nor[0].shape[2]}')
+
+    def measure_normal(pxs):
+        nor, cf = NRM
+        _, Hn, Wn = nor.shape
+        sx, sy = img.size[0] / Wn, img.size[1] / Hn
+        c0 = np.asarray(cam.get_pixel_direction((cam.w / 2, cam.h / 2)), float)
+        c0 /= np.linalg.norm(c0)
+        rgt = (np.asarray(cam.get_pixel_direction((cam.w / 2 + 400, cam.h / 2)), float)
+               - np.asarray(cam.get_pixel_direction((cam.w / 2 - 400, cam.h / 2)), float))
+        rgt /= np.linalg.norm(rgt)
+        dwn = (np.asarray(cam.get_pixel_direction((cam.w / 2, cam.h / 2 + 400)), float)
+               - np.asarray(cam.get_pixel_direction((cam.w / 2, cam.h / 2 - 400)), float))
+        dwn /= np.linalg.norm(dwn)
+        N, C = [], []
+        for x, y in pxs:
+            xi, yi = int(x / sx), int(y / sy)
+            if not (0 <= xi < Wn and 0 <= yi < Hn):
+                continue
+            n_ = nor[:, yi, xi]
+            nw = n_[0] * rgt + n_[1] * dwn + n_[2] * c0
+            nw /= (np.linalg.norm(nw) + 1e-9)
+            if nw[2] < 0:
+                nw = -nw
+            N.append(nw); C.append(cf[yi, xi])
+        if len(N) < 20:
+            return None
+        N = np.array(N); C = np.array(C)
+        m = (N * (C / C.sum())[:, None]).sum(axis=0)
+        m /= np.linalg.norm(m)
+        slope = math.degrees(math.acos(min(1.0, abs(m[2]))))
+        az = math.degrees(math.atan2(m[0], m[1])) % 360     # montee
+        disp_ = math.degrees(float(np.mean(np.arccos(np.clip(N @ m, -1, 1)))))
+        return slope, az, disp_
+
     out = {}
     for name, pxs in regions.items():
         if len(pxs) < 40:
@@ -192,8 +253,15 @@ def main():
             P.append(o + zm * ray(x, y))
         P = np.array(P)
         c, rms, slope, az, kp = fit_plane(P)
-        print(f'{name:8s}: {len(P)} points, PLAN fitte  pente {slope:5.1f} deg  '
-              f'azimut de montee {az:5.0f}  rms {rms:5.1f} m  ({int(kp.sum())} inliers)')
+        az_up = (az + 180.0) % 360           # convention: azimut de MONTEE
+        print(f'{name:8s}: {len(P)} points, PLAN(profondeur)  pente {slope:5.1f} deg  '
+              f'montee {az_up:5.0f}  rms {rms:5.1f} m  ({int(kp.sum())} inliers)')
+        if NRM is not None:
+            mn = measure_normal(pxs)
+            if mn:
+                print(f'          NORMALES(Metric3D)  pente {mn[0]:5.1f} deg  '
+                      f'montee {mn[1]:5.0f}  dispersion {mn[2]:4.1f} deg '
+                      f'-> ecart de pente {abs(mn[0] - slope):4.1f} deg')
         # mesh: la surface fittee, echantillonnee sur les memes pixels
         grid = {}
         for x, y in pxs:
