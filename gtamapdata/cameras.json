@@ -3410,17 +3410,17 @@
   "id": "S2/51",
   "player": null,
   "xyz": [
-   -5326.3,
-   3539.4,
-   69.8
+   -5329.3,
+   3566.119,
+   68.112
   ],
   "ypr": [
-   175.018,
-   3.3,
-   0.0
+   174.299,
+   4.3,
+   3.734
   ],
   "fov": [
-   43.0,
+   47.312,
    24.987
   ],
   "size": [
@@ -3428,20 +3428,20 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Port Gellhorn 01 [1]",
-  "note": "pose rlx upstream ee83436 importee 2026-07-30 apres ARBITRAGE INDEPENDANT (la zone PGH etait circulaire: 0 temoin propre). Les cams-pont Chase (2) (A) (ancree Sunshine Skyway) et Ambrosia 04 (Fires) donnent des rayons independants: sur Juice Fruit Sign (B) 0.44 m contre 1.20 m pour notre pose, sur Billboard near Intersection (TN) 2.08 m contre 19.92 m, sur Billboard near Starlet Motel (B) 4.58 m contre 14.44 m. Notre pose precedente: [-5334.262417912644, 3575.248202666363, 67.73443379514198] / [177.158, 6.111, -0.0] / fov 50.09609023140903"
+  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m."
  },
  "Port Gellhorn 04 (Delights) (X)": {
   "id": "S2/54",
   "player": null,
   "xyz": [
-   -6340.0,
-   3699.0,
-   7.228
+   -6340.75,
+   3698.906,
+   7.087
   ],
   "ypr": [
-   73.392,
+   73.298,
    -21.6,
-   0.0
+   -0.016
   ],
   "fov": [
    81.9,
@@ -3452,7 +3452,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Port Gellhorn 04 [1]",
-  "note": "pose rlx upstream ee83436 importee 2026-07-30 apres ARBITRAGE INDEPENDANT (la zone PGH etait circulaire: 0 temoin propre). Les cams-pont Chase (2) (A) (ancree Sunshine Skyway) et Ambrosia 04 (Fires) donnent des rayons independants: sur Juice Fruit Sign (B) 0.44 m contre 1.20 m pour notre pose, sur Billboard near Intersection (TN) 2.08 m contre 19.92 m, sur Billboard near Starlet Motel (B) 4.58 m contre 14.44 m. Notre pose precedente: [-6321.002971014369, 3692.155573923758, 6.163994559175823] / [73.204, -21.475, 0.91] / fov 81.26208903419699"
+  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m."
  },
  "Port Gellhorn 05 (Fire)": {
   "id": "S2/55",
@@ -3673,11 +3673,11 @@
   ],
   "ypr": [
    51.974,
-   -3.2,
-   0.0
+   -3.231,
+   0.157
   ],
   "fov": [
-   71.0,
+   71.531,
    50.865
   ],
   "size": [
@@ -3685,7 +3685,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Port Gellhorn Postcard [1]",
-  "note": "pose rlx upstream ee83436 importee 2026-07-30 apres ARBITRAGE INDEPENDANT (la zone PGH etait circulaire: 0 temoin propre). Les cams-pont Chase (2) (A) (ancree Sunshine Skyway) et Ambrosia 04 (Fires) donnent des rayons independants: sur Juice Fruit Sign (B) 0.44 m contre 1.20 m pour notre pose, sur Billboard near Intersection (TN) 2.08 m contre 19.92 m, sur Billboard near Starlet Motel (B) 4.58 m contre 14.44 m. Notre pose precedente: [-6548.103621383383, 3601.3868741244787, 32.557937804019744] / [51.905, -3.195, 1.003] / fov 70.82430045994978"
+  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m."
  },
  "Ambrosia Postcard (X)": {
   "id": "S2/74",
@@ -4663,17 +4663,17 @@
   "id": "T2/54",
   "player": null,
   "xyz": [
-   -5333.0,
-   3455.0,
+   -5330.188,
+   3448.062,
    66.8
   ],
   "ypr": [
-   10.0,
+   10.031,
    7.5,
-   0.0
+   0.547
   ],
   "fov": [
-   52.0,
+   53.593,
    null
   ],
   "size": [
@@ -4681,7 +4681,7 @@
    1728
   ],
   "source": "Trailer 2 [4322]",
-  "note": "pose rlx upstream ee83436 importee 2026-07-30 apres ARBITRAGE INDEPENDANT (la zone PGH etait circulaire: 0 temoin propre). Les cams-pont Chase (2) (A) (ancree Sunshine Skyway) et Ambrosia 04 (Fires) donnent des rayons independants: sur Juice Fruit Sign (B) 0.44 m contre 1.20 m pour notre pose, sur Billboard near Intersection (TN) 2.08 m contre 19.92 m, sur Billboard near Starlet Motel (B) 4.58 m contre 14.44 m. Notre pose precedente: [-5320.0, 3440.0, 67.0] / [0.0, 8.0, 0.0] / fov 55.0"
+  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m."
  },
  "Stock 305 Clothing Store 01 (Van)": {
   "id": "S3/31",

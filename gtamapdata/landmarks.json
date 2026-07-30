@@ -2744,17 +2744,19 @@
  },
  "Sunshine Skyway Bridge (S)": {
   "xyz": [
-   -6687.80861847838,
-   4315.905804807355,
-   115.91180128493147
+   -6693.67,
+   4343.96,
+   117.56
   ],
   "source_cameras": [
+   "Chase (2) (A)",
    "Ambrosia 04 (Fires)",
    "Chase (2) (B)"
   ],
   "error_m": 2.05,
   "zone": "port_gellhorn",
-  "notes": "[SUNSHINE-SKYWAY-RIGID-V2] xyz=st south-pylon-top z=119.352 from SunshineSkywayBridge rigid model; identical to rlx 73bbf43. Far LM (~2.5km from 04), residual at resolution limit. | source A->B: A is a chase frame, SSB at 1km exceeds A angular precision (~0.8deg). Marking kept on A as observation but excluded from A pose fit."
+  "notes": "[SUNSHINE-SKYWAY-RIGID-V2] xyz=st south-pylon-top z=119.352 from SunshineSkywayBridge rigid model; identical to rlx 73bbf43. Far LM (~2.5km from 04), residual at resolution limit. | source A->B: A is a chase frame, SSB at 1km exceeds A angular precision (~0.8deg). Marking kept on A as observation but excluded from A pose fit.",
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (3 cams, leak figees)"
  },
  "Ambrosia Main St (A)": {
   "xyz": [
@@ -4505,18 +4507,19 @@
  },
  "Sunshine Skyway Bridge (N)": {
   "xyz": [
-   -6759.269165716807,
-   4566.867816254298,
-   119.99155085771392
+   -6759.2,
+   4566.77,
+   118.63
   ],
   "source_cameras": [
-   "Diner (W) (A)",
-   "Diner (W) (B)",
-   "Diner (SW)"
+   "Chase (2) (A)",
+   "Ambrosia 04 (Fires)",
+   "Chase (2) (B)"
   ],
   "error_m": 0.012,
   "zone": "port_gellhorn",
-  "notes": "[SUNSHINE-SKYWAY-RIGID-V1] xyz from SunshineSkywayBridge rigid model (was drift 3.37m)"
+  "notes": "[SUNSHINE-SKYWAY-RIGID-V1] xyz from SunshineSkywayBridge rigid model (was drift 3.37m)",
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (3 cams, leak figees)"
  },
  "180 Pompano Dr": {
   "xyz": [
@@ -5984,56 +5987,60 @@
  },
  "Juice Fruit Sign": {
   "xyz": [
-   -6579.9787789161355,
-   3661.413070764404,
-   16.897695988881694
-  ],
-  "source_cameras": [
-   "Chase (2) (A)",
-   "Port Gellhorn Postcard (X)"
-  ],
-  "error_m": 0.006,
-  "zone": "port_gellhorn"
- },
- "Juice Fruit Sign (B)": {
-  "xyz": [
-   -6580.96,
-   3666.26,
-   13.27
+   -6581.28,
+   3667.75,
+   16.03
   ],
   "source_cameras": [
    "Port Gellhorn Postcard (X)",
+   "Chase (2) (A)"
+  ],
+  "error_m": 0.006,
+  "zone": "port_gellhorn",
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
+ },
+ "Juice Fruit Sign (B)": {
+  "xyz": [
+   -6580.94,
+   3666.65,
+   12.96
+  ],
+  "source_cameras": [
+   "Port Gellhorn Postcard (X)",
+   "Chase (2) (A)",
    "Port Gellhorn 04 (Delights) (X)"
   ],
   "error_m": 2.0,
   "zone": "port_gellhorn",
-  "method": " | RE-TRIANGULE 2026-07-30 apres import des poses rlx PGH (deplacement 6.0 m, perp 0.0 m)"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (3 cams, leak figees)"
  },
  "Juice Fruit Sign (E)": {
   "xyz": [
-   -6577.618121626087,
-   3661.3518900538334,
-   13.616928736567818
+   -6578.9,
+   3667.73,
+   12.77
   ],
   "source_cameras": [
-   "Chase (2) (A)",
-   "Port Gellhorn Postcard (X)"
+   "Port Gellhorn Postcard (X)",
+   "Chase (2) (A)"
   ],
   "error_m": 0.298,
-  "zone": "port_gellhorn"
+  "zone": "port_gellhorn",
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Juice Fruit Sign (W)": {
   "xyz": [
-   -6581.787562021589,
-   3659.4609638101947,
-   13.763539526339597
+   -6583.11,
+   3665.96,
+   12.79
   ],
   "source_cameras": [
-   "Chase (2) (A)",
-   "Port Gellhorn Postcard (X)"
+   "Port Gellhorn Postcard (X)",
+   "Chase (2) (A)"
   ],
   "error_m": 0.694,
-  "zone": "port_gellhorn"
+  "zone": "port_gellhorn",
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Kaseya Center (SE)": {
   "xyz": [
@@ -6296,17 +6303,18 @@
  },
  "New Foundation Church": {
   "xyz": [
-   -6410.0,
-   3030.0,
-   27.0
+   -6643.09,
+   3859.86,
+   24.77
   ],
   "source_cameras": [
+   "Port Gellhorn Postcard (X)",
    "Chase (2) (A)",
-   "Chase (2) (B)",
-   "(legacy: Port Gellhorn Postcard)"
+   "Chase (2) (B)"
   ],
   "error_m": null,
-  "zone": "port_gellhorn"
+  "zone": "port_gellhorn",
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (3 cams, leak figees)"
  },
  "New Wave Condominiums": {
   "xyz": [
@@ -7349,31 +7357,31 @@
  },
  "Train Signal (S) (E)": {
   "xyz": [
-   -6621.953781610815,
-   3683.3441401235646,
-   19.053443922161346
+   -6621.44,
+   3687.6,
+   18.33
   ],
   "source_cameras": [
-   "Port Gellhorn 04 (Delights) (X)",
    "Port Gellhorn Postcard (X)",
-   "(legacy: Port Gellhorn Postcard)"
+   "Port Gellhorn 04 (Delights) (X)"
   ],
   "error_m": null,
-  "zone": "port_gellhorn"
+  "zone": "port_gellhorn",
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Train Signal (S) (W)": {
   "xyz": [
-   -6623.750649715318,
-   3682.179250671605,
-   19.126453174265478
+   -6623.23,
+   3686.48,
+   18.38
   ],
   "source_cameras": [
-   "Port Gellhorn 04 (Delights) (X)",
    "Port Gellhorn Postcard (X)",
-   "(legacy: Port Gellhorn Postcard)"
+   "Port Gellhorn 04 (Delights) (X)"
   ],
   "error_m": null,
-  "zone": "port_gellhorn"
+  "zone": "port_gellhorn",
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Tr\u00e9sor Tower": {
   "xyz": [
@@ -7615,17 +7623,17 @@
  },
  "Water Tower (West Port Gellhorn) (C)": {
   "xyz": [
-   -6656.068607232421,
-   3647.8068411648374,
-   28.164030948368666
+   -6656.6,
+   3653.23,
+   26.43
   ],
   "source_cameras": [
-   "Port Gellhorn 04 (Delights) (X)",
    "Port Gellhorn Postcard (X)",
-   "(legacy: Port Gellhorn Postcard)"
+   "Port Gellhorn 04 (Delights) (X)"
   ],
   "error_m": null,
-  "zone": "port_gellhorn"
+  "zone": "port_gellhorn",
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Wells Fargo Center (N)": {
   "xyz": [
@@ -8748,9 +8756,9 @@
  },
  "Red-Yellow Umbrella (2)": {
   "xyz": [
-   -5310.88,
-   3459.56,
-   68.44
+   -5303.84,
+   3447.72,
+   69.82
   ],
   "source_cameras": [
    "Pool",
@@ -8758,7 +8766,7 @@
   ],
   "error_m": 2.0,
   "zone": "port_gellhorn",
-  "method": " | RE-TRIANGULE 2026-07-30 apres import des poses rlx PGH (deplacement 27.4 m, perp 0.2 m)"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Portofino Tower (S)": {
   "xyz": [
@@ -8963,17 +8971,17 @@
  },
  "Radio Tower #1 (Port Gellhorn)": {
   "xyz": [
-   -6499.668228582591,
-   3478.9221161262135,
-   50.84832542043046
+   -6500.77,
+   3488.41,
+   52.74
   ],
   "source_cameras": [
-   "U-Turn (NW)",
    "Chase (2) (A)",
    "Chase (2) (B)"
   ],
   "error_m": 47.85,
-  "zone": "port_gellhorn"
+  "zone": "port_gellhorn",
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Sombrero Key Light (B)": {
   "xyz": [
@@ -10790,16 +10798,16 @@
   "author": "rlx",
   "error_m": 3.2,
   "source_cameras": [
-   "Port Gellhorn 01 (Starlet Motel)",
-   "Starlet Motel"
+   "Starlet Motel",
+   "Port Gellhorn 01 (Starlet Motel)"
   ],
   "xyz": [
-   -5327.29,
-   3499.76,
-   79.1
+   -5326.42,
+   3506.21,
+   83.87
   ],
   "zone": null,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 9.8 m, angle max 39.6 deg | RE-TRIANGULE 2026-07-30 apres import des poses rlx PGH (deplacement 17.3 m, perp 3.2 m)"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Jason's House (S)": {
   "author": "rlx",
@@ -16881,18 +16889,18 @@
  },
  "Starlet Motel (P)": {
   "xyz": [
-   -5358.02,
-   3499.47,
-   68.61
+   -5358.69,
+   3497.28,
+   68.82
   ],
   "source_cameras": [
-   "Motel",
-   "Starlet Motel"
+   "Starlet Motel",
+   "Motel"
   ],
   "error_m": 2.0,
   "zone": null,
   "author": "rlx",
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.4 m, angle max 27.1 deg | RE-TRIANGULE 2026-07-30 apres import des poses rlx PGH (deplacement 33.1 m, perp 0.0 m)"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Starlet Motel (RS)": {
   "xyz": null,
@@ -16903,16 +16911,16 @@
  },
  "Billboard near Intersection (BN)": {
   "source_cameras": [
-   "Pool",
-   "Port Gellhorn 01 (Starlet Motel)"
+   "Port Gellhorn 01 (Starlet Motel)",
+   "Pool"
   ],
   "zone": "port_gellhorn",
   "author": "rlx",
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 5.3 m, angle max 6.1 deg",
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)",
   "xyz": [
-   -5338.48,
-   3596.42,
-   57.68
+   -5342.39,
+   3621.12,
+   53.27
   ],
   "error_m": 5.3
  },
@@ -16925,24 +16933,24 @@
  },
  "Starlet Motel Parassol 1": {
   "xyz": [
-   -5324.96,
-   3466.05,
-   68.85
+   -5327.74,
+   3476.56,
+   68.01
   ],
   "source_cameras": [
-   "Pool",
-   "Port Gellhorn 01 (Starlet Motel)"
+   "Port Gellhorn 01 (Starlet Motel)",
+   "Pool"
   ],
   "error_m": 2.0,
   "zone": "port_gellhorn",
   "author": "rlx",
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.3 m, angle max 14.6 deg"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Starlet Motel Parassol 2": {
   "xyz": [
-   -5310.13,
-   3455.4,
-   68.87
+   -5303.83,
+   3447.71,
+   69.75
   ],
   "source_cameras": [
    "Pool",
@@ -16951,13 +16959,13 @@
   "error_m": 2.0,
   "zone": "port_gellhorn",
   "author": "rlx",
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.3 m, angle max 28.9 deg"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Starlet Motel Pool (A)": {
   "xyz": [
-   -5323.21,
-   3473.64,
-   65.85
+   -5323.57,
+   3473.61,
+   64.87
   ],
   "source_cameras": [
    "Pool",
@@ -16966,13 +16974,13 @@
   "error_m": 2.0,
   "zone": "port_gellhorn",
   "author": "rlx",
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.5 m, angle max 53.2 deg | RE-TRIANGULE 2026-07-30 apres import des poses rlx PGH (deplacement 1.0 m, perp 0.0 m) | re-triangule apres MARK-ARB-V1 (0.3 m, perp 0.0 m)"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Starlet Motel Pool (B)": {
   "xyz": [
-   -5322.68,
-   3473.06,
-   65.86
+   -5322.84,
+   3472.94,
+   64.88
   ],
   "source_cameras": [
    "Pool",
@@ -16981,7 +16989,7 @@
   "error_m": 2.0,
   "zone": "port_gellhorn",
   "author": "rlx",
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.4 m, angle max 50.6 deg | RE-TRIANGULE 2026-07-30 apres import des poses rlx PGH (deplacement 1.3 m, perp 0.1 m) | re-triangule apres MARK-ARB-V1 (0.1 m, perp 0.0 m)"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Starlet Motel Pool (C)": {
   "xyz": null,
@@ -16992,9 +17000,9 @@
  },
  "Starlet Motel Pool (D)": {
   "xyz": [
-   -5310.87,
-   3463.23,
-   65.59
+   -5303.75,
+   3454.17,
+   65.05
   ],
   "source_cameras": [
    "Pool",
@@ -17003,7 +17011,7 @@
   "error_m": 2.0,
   "zone": "port_gellhorn",
   "author": "rlx",
-  "method": " | RE-TRIANGULE 2026-07-30 apres import des poses rlx PGH (deplacement 21.1 m, perp 0.1 m)"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Blimp (F)": {
   "xyz": [
@@ -17063,16 +17071,16 @@
  },
  "Building near Pool (E)": {
   "source_cameras": [
-   "Port Gellhorn 01 (Starlet Motel)",
-   "Starlet Motel"
+   "Starlet Motel",
+   "Port Gellhorn 01 (Starlet Motel)"
   ],
   "zone": null,
   "author": "rlx",
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.9 m, angle max 7.0 deg",
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)",
   "xyz": [
-   -5326.38,
-   3520.28,
-   70.34
+   -5327.49,
+   3473.99,
+   68.38
   ],
   "error_m": 2.0
  },
@@ -17085,33 +17093,33 @@
  },
  "Starlet Motel Sign (B)": {
   "xyz": [
-   -5327.24,
-   3500.18,
-   78.33
+   -5326.32,
+   3505.95,
+   82.69
   ],
   "source_cameras": [
-   "Port Gellhorn 01 (Starlet Motel)",
-   "Starlet Motel"
+   "Starlet Motel",
+   "Port Gellhorn 01 (Starlet Motel)"
   ],
   "error_m": 3.2,
   "zone": null,
   "author": "rlx",
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 9.5 m, angle max 37.8 deg | RE-TRIANGULE 2026-07-30 apres import des poses rlx PGH (deplacement 18.4 m, perp 3.2 m)"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Starlet Motel Sign (C)": {
   "xyz": [
-   -5327.72,
-   3501.51,
-   75.77
+   -5326.94,
+   3504.71,
+   78.71
   ],
   "source_cameras": [
-   "Port Gellhorn 01 (Starlet Motel)",
-   "Starlet Motel"
+   "Starlet Motel",
+   "Port Gellhorn 01 (Starlet Motel)"
   ],
   "error_m": 3.2,
   "zone": null,
   "author": "rlx",
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 8.7 m, angle max 30.9 deg | RE-TRIANGULE 2026-07-30 apres import des poses rlx PGH (deplacement 24.9 m, perp 3.2 m)"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Wheelabrator South Broward (SE)": {
   "xyz": null,
@@ -17150,9 +17158,9 @@
  },
  "Billboard near Intersection (TN)": {
   "xyz": [
-   -5274.0,
-   3371.8,
-   104.0
+   -5287.64,
+   3371.39,
+   101.29
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
@@ -17160,7 +17168,7 @@
   ],
   "error_m": 15.0,
   "zone": "port_gellhorn",
-  "method": "triangulation 2 rayons (perp 10 m chacun \u2014 angles rasants), faite pour la resection Kalaga 04"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Radio Tower near Intersection 2": {
   "xyz": null,
@@ -19007,16 +19015,16 @@
  },
  "Building near Pool (N)": {
   "xyz": [
-   -5330.08,
-   3486.23,
-   68.35
+   -5335.46,
+   3485.77,
+   67.74
   ],
   "source_cameras": [
-   "Motel",
-   "Port Gellhorn 01 (Starlet Motel)"
+   "Port Gellhorn 01 (Starlet Motel)",
+   "Motel"
   ],
   "error_m": 2.0,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.6 m, angle max 80.9 deg"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Conveyor near Pile (T)": {
   "xyz": [
@@ -19046,17 +19054,17 @@
  },
  "Lamppost near Starlet Motel": {
   "xyz": [
-   -5329.75,
-   3487.42,
-   74.79
+   -5329.54,
+   3487.66,
+   76.22
   ],
   "source_cameras": [
-   "Motel",
+   "Starlet Motel",
    "Port Gellhorn 01 (Starlet Motel)",
-   "Starlet Motel"
+   "Motel"
   ],
   "error_m": 3.9,
-  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 3.9 m, angle max 86.0 deg"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (3 cams, leak figees)"
  },
  "Starlet Hill": {
   "xyz": [
@@ -19073,68 +19081,68 @@
  },
  "Starlet Motel (P1N)": {
   "xyz": [
-   -5331.94,
-   3504.85,
-   67.39
+   -5341.04,
+   3498.17,
+   66.27
   ],
   "source_cameras": [
-   "Motel",
-   "Port Gellhorn 01 (Starlet Motel)"
+   "Port Gellhorn 01 (Starlet Motel)",
+   "Motel"
   ],
   "error_m": 2.0,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.2 m, angle max 44.1 deg"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Starlet Motel (RE)": {
   "xyz": [
-   -5330.31,
-   3503.45,
-   67.54
+   -5337.21,
+   3498.96,
+   66.64
   ],
   "source_cameras": [
-   "Motel",
-   "Port Gellhorn 01 (Starlet Motel)"
+   "Port Gellhorn 01 (Starlet Motel)",
+   "Motel"
   ],
   "error_m": 2.0,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.2 m, angle max 50.2 deg"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Starlet Motel (SRN)": {
   "xyz": [
-   -5326.91,
-   3473.83,
-   68.74
+   -5328.57,
+   3459.94,
+   69.2
   ],
   "source_cameras": [
    "Pool",
    "Port Gellhorn 01 (Starlet Motel)"
   ],
   "error_m": 2.0,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.1 m, angle max 5.8 deg"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Starlet Motel Sign (BNE)": {
   "xyz": [
-   -5324.34,
-   3520.62,
-   66.63
+   -5321.33,
+   3516.39,
+   64.53
   ],
   "source_cameras": [
-   "Port Gellhorn 01 (Starlet Motel)",
-   "Starlet Motel"
-  ],
-  "error_m": 2.0,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.6 m, angle max 16.2 deg"
- },
- "Starlet Motel Sign (BSW)": {
-  "xyz": [
-   -5321.86,
-   3496.78,
-   64.38
-  ],
-  "source_cameras": [
-   "Motel",
+   "Starlet Motel",
    "Port Gellhorn 01 (Starlet Motel)"
   ],
   "error_m": 2.0,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.7 m, angle max 77.8 deg"
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
+ },
+ "Starlet Motel Sign (BSW)": {
+  "xyz": [
+   -5320.53,
+   3497.42,
+   62.85
+  ],
+  "source_cameras": [
+   "Port Gellhorn 01 (Starlet Motel)",
+   "Motel"
+  ],
+  "error_m": 2.0,
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
  "Tall Palm A": {
   "xyz": [
@@ -19241,5 +19249,17 @@
   ],
   "error_m": 9.2,
   "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 9.2 m, angle max 62.7 deg"
+ },
+ "Billboard near Intersection (BC)": {
+  "xyz": [
+   -5346.63,
+   3630.47,
+   52.1
+  ],
+  "source_cameras": [
+   "Port Gellhorn 01 (Starlet Motel)",
+   "Pool"
+  ],
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  }
 }
