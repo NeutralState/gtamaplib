@@ -1,0 +1,44 @@
+{
+ "_comment": "Poses alternatives conservees pour revert (tools/pose_revert.py). Chaque entree garde sa provenance et la RAISON de sa mise de cote.",
+ "Mount Kalaga National Park 04 (Mountain Pass) (X)": {
+  "RESECTION-V1": {
+   "xyz": [
+    -5509.4,
+    5568.8,
+    160.3
+   ],
+   "ypr": [
+    174.385,
+    -13.504,
+    2.547
+   ],
+   "fov": [
+    54.12,
+    null
+   ],
+   "date": "2026-07-28",
+   "methode": "resection sur 4 points independants (Billboard near Intersection (TN), Unknown Mast (1), Quarry, Billboard Delights) + 4 contraintes epipolaires, rms 31 arcmin",
+   "raison_mise_de_cote": "refutee par tools/map_crosscheck.py 2026-07-29: place la route a distance quasi constante (248-260 m, rapport 1.05) = mur perpendiculaire impossible. MAIS c'est la pose sur laquelle Alexandre a juge les modeles jusqu'ici, gardee pour revert.",
+   "statut": "la meilleure jusqu au 2026-07-29 selon Alexandre"
+  },
+  "rlx-upstream": {
+   "xyz": [
+    -4750.0,
+    6000.0,
+    120.0
+   ],
+   "ypr": [
+    156.447,
+    -13.566,
+    0.0
+   ],
+   "fov": [
+    60.0,
+    null
+   ],
+   "date": "2026-07-29 (upstream b4b1b1a)",
+   "methode": "hand-tuned par rlx",
+   "statut": "ACTIVE \u2014 seule pose coherente avec le trace US-50 de la carte (124-496 m, rapport 4.00)"
+  }
+ }
+}

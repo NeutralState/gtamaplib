@@ -23,10 +23,14 @@
   "args": [
    "--local",
    "--normals",
+   "--z0",
+   "30",
+   "--z1",
+   "55",
    "--apply"
   ],
   "lines_source": "tools/data/canyon_corrections.json (traces pixel-exact d'Alexandre)",
-  "depth_provenance": "MESUREE par reseau (Depth Anything V2) calibre sur 667 ancres = sa ligne de sol x plancher; erreur relative mediane 4.0 pct. Le plancher lui-meme (z0 30, z1 55) reste declare -> passera en mesure avec la triangulation du pont. LIMITE MESUREE: aucun reseau ne tient au-dela de ~700 m (test hors-calibration sur 6 landmarks triangules: Depth Anything small 67 pct, large 68 pct, Metric3D 74 pct d'erreur \u2014 tous saturent). Le canyon (258-685 m) est DANS la zone valide; tout le reste de la frame exige une 2e vue.",
-  "params_provenance": "aucune pente declaree. MESURES croisees par 2 instruments: plan sur profondeur (face 31.0 deg rms 3.0 m / plateau 27.6 deg rms 4.6 m) et normales Metric3D V2 (face 40.1 deg dispersion 24 / plateau 45.4 deg dispersion 38). Ecart face 9 deg = l'incertitude honnete; plateau dispersion 38 deg = ce n'est pas un plan."
+  "depth_provenance": "Reconstruit 2026-07-29 sur la pose rlx (notre RESECTION-V1 REFUTEE par tools/map_crosscheck.py). Profondeur des surfaces MESUREE par reseau calibre sur 667 ancres (erreur relative mediane 3.6 pct); la carte communautaire borne independamment la chaussee a 125-494 m (notre modele: 184-430 m, coherent). Le profil z de la chaussee (30 -> 55) reste DECLARE: la pose rlx est hand-tunee a chiffres ronds, trop grossiere pour en deriver une altitude fiable (tentative: rms 42 m, pente -29 pct, rejetee).",
+  "params_provenance": "aucune pente declaree: face 32.0 deg rms 1.8 m / plateau 28.6 deg rms 3.0 m (profondeur), controle par normales Metric3D. Les rms se sont AMELIORES avec la bonne pose (3.0 -> 1.8 m sur la face)."
  }
 }
