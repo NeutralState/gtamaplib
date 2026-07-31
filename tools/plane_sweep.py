@@ -161,6 +161,34 @@ def homography(ref, tgt, depth, corners):
     return cv2.getPerspectiveTransform(np.float32(src), np.float32(dst))
 
 
+POP8 = np.array([bin(i).count('1') for i in range(256)], np.uint8)
+
+
+def census(img, r=2):
+    """Transformee census: chaque pixel devient le motif binaire des
+    comparaisons avec ses voisins. Ce qui est encode n'est pas l'intensite
+    mais son ORDRE local — donc c'est invariant a tout changement monotone
+    d'exposition, de gamma ou de lumiere. C'est exactement le probleme ici:
+    nos deux frames n'ont ni la meme heure ni la meme meteo."""
+    h, w = img.shape
+    pad = np.pad(img, r, mode='edge')
+    out = np.zeros((h, w), np.uint32)
+    bit = 0
+    for dy in range(-r, r + 1):
+        for dx in range(-r, r + 1):
+            if dy == 0 and dx == 0:
+                continue
+            nb = pad[r + dy:r + dy + h, r + dx:r + dx + w]
+            out |= ((nb > img).astype(np.uint32) << bit)
+            bit += 1
+    return out
+
+
+def hamming(a, b):
+    x = np.bitwise_xor(a, b).view(np.uint8).reshape(a.shape + (4,))
+    return POP8[x].sum(axis=2).astype(np.float32)
+
+
 def ncc_maps(A, B, win):
     """NCC locale entre deux images de meme taille, fenetre carree `win`.
     Filtres box => O(1) par pixel, quelle que soit la fenetre."""
@@ -184,6 +212,13 @@ def main():
     ap.add_argument('--far', type=float, default=4500.0)
     ap.add_argument('--steps', type=int, default=256)
     ap.add_argument('--win', type=int, default=15)
+    ap.add_argument('--antialias', action='store_true',
+                    help="floute la cible a l'echelle du plan avant de la "
+                         "deformer (indispensable des que les deux vues "
+                         "n'ont pas la meme resolution au sol)")
+    ap.add_argument('--census', action='store_true',
+                    help='apparie sur la transformee census (invariante a '
+                         "l'eclairage) plutot que sur la NCC d'intensite")
     ap.add_argument('--sgm', type=float, default=0.35,
                     help="penalite d'agregation semi-globale (0 = desactivee)")
     ap.add_argument('--min-ncc', type=float, default=0.55)
@@ -203,10 +238,12 @@ def main():
     R = common.get_cam(args.ref)
     targets = [t.strip() for t in args.target.split(';') if t.strip()]
     A = gray(args.ref)
+    Acen = census(A)
     x0, y0, x1, y1 = ([int(v) for v in args.roi.split(',')] if args.roi
                       else [0, 0, int(R.w), int(R.h)])
     corners = [(x0, y0), (x1, y0), (x1, y1), (x0, y1)]
     Aroi = np.ascontiguousarray(A[y0:y1, x0:x1])
+    AcenRoi = np.ascontiguousarray(Acen[y0:y1, x0:x1])
     h, w = Aroi.shape
     o = np.asarray(R.xyz, float)
     print(f'reference {args.ref} ({R.w:.0f}x{R.h:.0f}, hfov {R.hfov:.1f}), ROI {w}x{h}')
@@ -229,20 +266,54 @@ def main():
     for tn in targets:
         Tc = common.get_cam(tn)
         B = gray(tn)
+        Bcen = census(B).astype(np.float32) if args.census else None
         used = 0
         for di, d in enumerate(depths):
             H = homography(R, Tc, float(d), corners)
             if H is None:
                 continue
             Tr = np.array([[1, 0, x0], [0, 1, y0], [0, 0, 1]], np.float64)
-            warp = cv2.warpPerspective(B, H @ Tr, (w, h),
+            Hroi = H @ Tr
+            # ANTI-ALIASING: l'homographie corrige la geometrie mais pas
+            # l'ECHANTILLONNAGE. Quand la cible a une resolution au sol plus
+            # fine que la reference (ici 0.64 contre 1.36 m/px, soit 2.1x),
+            # un pixel de reference couvre deux pixels de cible: la lire au
+            # plus proche voisin, c'est de l'aliasing, et l'aliasing detruit
+            # la correlation — c'est exactement ce qui faisait preferer un
+            # mauvais plan. On floute donc la cible a l'echelle du plan
+            # avant de la deformer. Le facteur local vient du jacobien de
+            # l'homographie au centre du ROI.
+            src = B
+            if args.antialias:
+                cx, cy = w / 2.0, h / 2.0
+                J = np.zeros((2, 2))
+                for k, (dx, dy) in enumerate(((1.0, 0.0), (0.0, 1.0))):
+                    p0 = Hroi @ np.array([cx, cy, 1.0])
+                    p1 = Hroi @ np.array([cx + dx, cy + dy, 1.0])
+                    J[:, k] = p1[:2] / p1[2] - p0[:2] / p0[2]
+                sc = math.sqrt(abs(float(np.linalg.det(J))) + 1e-9)
+                if sc > 1.2:
+                    sg = 0.5 * sc
+                    src = cv2.GaussianBlur(B, (0, 0), sg)
+            warp = cv2.warpPerspective(src, Hroi, (w, h),
                                        flags=cv2.INTER_LINEAR | cv2.WARP_INVERSE_MAP,
                                        borderValue=np.nan)
             ok = np.isfinite(warp)
             if ok.mean() < 0.15:
                 continue
-            n = ncc_maps(Aroi, np.where(ok, warp, 0.0).astype(np.float32), args.win)
-            cost[:, :, di] += np.where(ok, 1.0 - n, 0.0)      # cout = 1 - NCC
+            if args.census:
+                # le motif census est binaire: on le transporte au PLUS
+                # PROCHE VOISIN, interpoler des bits n'aurait aucun sens
+                wc = cv2.warpPerspective(Bcen, Hroi, (w, h),
+                                         flags=cv2.INTER_NEAREST | cv2.WARP_INVERSE_MAP,
+                                         borderValue=0)
+                ham = hamming(AcenRoi, wc.astype(np.uint32))
+                # moyenne sur la fenetre, puis normalisation en [0,1]
+                c = cv2.boxFilter(ham, -1, (args.win, args.win), normalize=True) / 24.0
+            else:
+                n = ncc_maps(Aroi, np.where(ok, warp, 0.0).astype(np.float32), args.win)
+                c = 1.0 - n
+            cost[:, :, di] += np.where(ok, c, 0.0)
             seen[:, :, di] += ok
             used += 1
         print(f'  {tn[:34]:34s} {used}/{args.steps} plans exploitables')
@@ -300,7 +371,8 @@ def main():
         m2[ii, jj, np.clip(bi + k, 0, args.steps - 1)] = 9.9
     second = m2.min(axis=2)
     ratio = best_cost / np.maximum(second, 1e-6)
-    keep = valid.any(axis=2) & (best_cost < 1.0 - args.min_ncc) & (ratio < 0.92)
+    thr = 0.46 if args.census else 1.0 - args.min_ncc
+    keep = valid.any(axis=2) & (best_cost < thr) & (ratio < 0.92)
     print(f'\npixels retenus: {int(keep.sum())} / {h * w} '
           f'({100.0 * keep.mean():.1f} pct)  [NCC > {args.min_ncc}, '
           f'ratio au second minimum < 0.92]')
@@ -359,19 +431,41 @@ def main():
     pxs = json.load(open(os.path.join(REPO, 'gtamapdata', 'pixels.json')))
     marks = pxs.get(args.ref) or {}
     print('\nvalidation sur nos ancres (elles n ont PAS servi a reconstruire):')
-    got = 0
+    print('  On compare la profondeur reconstruite AU PIXEL DE L ANCRE a sa')
+    print('  distance vraie — c est la mesure directe, pas un plus-proche-voisin.')
+    print(f'  {"landmark":32s} {"vraie":>8s} {"stereo":>8s} {"ecart":>9s}')
+    errs, got = [], 0
     for lm, p in marks.items():
         e = lms.get(lm)
-        if not (massif_of(lm) and isinstance(e, dict) and e.get('xyz')):
+        # TOUS les landmarks triangules du ROI, pas seulement le relief:
+        # un chateau d'eau ou un poteau est une verite terrain aussi valable
+        # et il y en a beaucoup plus.
+        if not (isinstance(e, dict) and e.get('xyz')):
             continue
-        if not (x0 <= p[0] < x1 and y0 <= p[1] < y1):
+        u, v = int(round(p[0])) - x0, int(round(p[1])) - y0
+        if not (0 <= u < w and 0 <= v < h):
             continue
-        Q = np.asarray(e['xyz'], float)
-        dist = float(np.linalg.norm(P - Q, axis=1).min())
-        print(f'  {lm[:34]:34s} ancre z {Q[2]:6.1f}  -> point le plus proche '
-              f'du nuage a {dist:6.1f} m')
         got += 1
-    if not got:
+        Q = np.asarray(e['xyz'], float)
+        dq = np.asarray(R.get_pixel_direction((float(p[0]), float(p[1]))), float)
+        dq /= np.linalg.norm(dq)
+        true_along = float((Q - o) @ f)          # profondeur le long de l axe
+        # fenetre 7x7 autour du pixel: un clic est a quelques px pres
+        sub = bestd[max(0, v - 3):v + 4, max(0, u - 3):u + 4]
+        sk = keep[max(0, v - 3):v + 4, max(0, u - 3):u + 4]
+        if not sk.any():
+            print(f'  {lm[:32]:32s} {true_along:7.0f}m {"—":>8s}   '
+                  f'(aucun appariement fiable a ce pixel)')
+            continue
+        got_d = float(np.median(sub[sk]))
+        err = got_d - true_along
+        errs.append(abs(err) / max(1.0, true_along))
+        print(f'  {lm[:32]:32s} {true_along:7.0f}m {got_d:7.0f}m {err:+8.0f}m '
+              f'({100 * abs(err) / max(1, true_along):.1f} pct)')
+    if errs:
+        print(f'\n  ecart median {100 * float(np.median(errs)):.1f} pct '
+              f'sur {len(errs)} ancres')
+    elif not got:
         print('  (aucune ancre du massif dans le ROI)')
 
     if not args.apply:
