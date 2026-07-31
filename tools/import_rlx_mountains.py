@@ -32,13 +32,6 @@ COLOR = '#94a3b8'
 # (nom, cam, [(px, py, distance_m)...], slope, side_slope)
 # distances = les chiffres DECLARES de rlx (5016dd2)
 MOUNTAINS = [
-    # ajoutes par rlx apres 5016dd2 — ils couvrent DEUX massifs pour lesquels
-    # nous n'avions qu'un seul point positionne (Interstate Hill, Starlet Hill)
-    ('Easy Hill', 'Ambrosia 04 (Fires)',
-     [(3218.0, 905.0, 4800), (3336.0, 886.0, 4700), (3462.0, 911.5, 4800)], 15, 15),
-    ('Gellhorn Hills', 'Ambrosia 04 (Fires)',
-     [(1941.5, 876.0, 4400), (2242.5, 895.5, 4450), (2421.0, 870.0, 4400),
-      (2589.5, 895.5, 4350), (2792.0, 866.5, 4300), (3136.5, 876.0, 4200)], 30, 60),
     ('Mount Ambrosia', 'Ambrosia 01 (Bikers)',
      [(23.5, 533, 3200), (325, 560, 3000), (794.5, 345, 2800), (1219, 201, 2600),
       (1913, 267, 2500), (2345, 415.5, 2400), (2865, 580, 2400), (3099, 580, 2500)],
@@ -88,17 +81,8 @@ def build(name, cam_name, pts, slope, side_slope):
         edges.append([list(T), F])
     zs = [t[2] for t in tops]
     print(f'[rlx] {name:20s}: {len(tops)} pts de crete, z {min(zs):.0f}-{max(zs):.0f}')
-    # on garde la CRETE a part et la CAM source: ses distances sont declarees
-    # a l'oeil depuis cette cam, donc l'erreur qu'on lui mesure est radiale
-    # depuis ce point — c'est ce qui permet de corriger son echelle au lieu
-    # de simplement le translater
-    return {'color': COLOR,
-            'camera': cam_name,
-            'camera_xy': [float(o[0]), float(o[1])],
-            'crest': [list(map(float, t)) for t in tops],
-            'declared_m': [float(d) for _, _, d in pts],
-            'world_edges': [[list(map(float, a)), list(map(float, b))]
-                            for a, b in edges]}
+    return {'color': COLOR, 'world_edges': [[list(map(float, a)), list(map(float, b))]
+                                            for a, b in edges]}
 
 
 def main():
