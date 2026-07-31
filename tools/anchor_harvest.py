@@ -75,6 +75,19 @@ def main():
         return any(k in low for k in MTN) and 'bridge' not in low
     min_angle = 5.0 if args.profile == 'mountain' else args.min_angle
     perp_frac = 0.020 if args.profile == 'mountain' else 0.012
+    # PLANCHER selon la TAILLE de l'objet, pas seulement selon la distance.
+    # Le plancher unique de 15 m laissait passer des aberrations sur de
+    # petits objets: 'Tall Billboard near Interchange' triangule avec 14 m
+    # de residu perpendiculaire — pour un panneau qui mesure quelques
+    # metres, ca veut dire que les deux rayons ne visent pas le meme point.
+    # Un massif, lui, a le droit a ses dizaines de metres: on ne clique pas
+    # une crete brumeuse au metre pres.
+    SMALL = ('billboard', 'sign', 'pole', 'pylon', 'antenna', 'window',
+             'door', 'parassol', 'tank', 'silo')
+    def floor_m(name):
+        if args.profile == 'mountain' or is_mtn(name):
+            return 15.0
+        return 4.0 if any(k in name.lower() for k in SMALL) else 15.0
     accepted, rejected = [], []
     for lm, wits in sorted(obs.items()):
         if lm in BLACKLIST:
@@ -140,7 +153,7 @@ def main():
             perps.append(float(np.linalg.norm(v - np.dot(v, d) * d)))
             dists.append(float(np.linalg.norm(v)))
         perp_med = float(np.median(perps))
-        if perp_med > max(15.0, perp_frac * float(np.median(dists))):
+        if perp_med > max(floor_m(lm), perp_frac * float(np.median(dists))):
             rejected.append((lm, f'perp {perp_med:.1f} m @ {np.median(dists):.0f} m'))
             continue
         accepted.append((lm, P, [c for c, _, _ in rays], perp_med, amax,

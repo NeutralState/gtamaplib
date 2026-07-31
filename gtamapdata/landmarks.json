@@ -19285,5 +19285,120 @@
   ],
   "error_m": 79.5,
   "method": "ANCHOR-HARVEST-V1 [mountain]: triangulation 3 cams, perp med 79.5 m (1.25 pct), angle max 6.9 deg"
- }
+ },
+ "123 NE 36th St": {
+  "xyz": [
+   32.8,
+   2228.16,
+   65.83
+  ],
+  "source_cameras": [
+   "Gas Station (Chase) (SE)",
+   "Glitch (A)",
+   "Highway (N)",
+   "Highway (NE)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1 [default]: triangulation 4 cams, perp med 0.2 m (0.02 pct), angle max 82.8 deg"
+ },
+ "123 NE 36th St (NW)": {
+  "xyz": [
+   16.47,
+   2264.93,
+   49.88
+  ],
+  "source_cameras": [
+   "Highway (NE)",
+   "Tennis Court (NE)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1 [default]: triangulation 2 cams, perp med 0.2 m (0.02 pct), angle max 26.5 deg"
+ },
+ "123 NE 36th St (SE)": {
+  "xyz": [
+   44.15,
+   2188.73,
+   48.99
+  ],
+  "source_cameras": [
+   "Highway (NE)",
+   "Tennis Court (NE)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1 [default]: triangulation 2 cams, perp med 0.2 m (0.02 pct), angle max 29.6 deg"
+ },
+ "123 NE 36th St (SW)": {
+  "xyz": [
+   16.67,
+   2195.58,
+   49.59
+  ],
+  "source_cameras": [
+   "Glitch (A)",
+   "Highway (NE)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1 [default]: triangulation 2 cams, perp med 0.3 m (0.02 pct), angle max 73.3 deg"
+ },
+ "Blue Billboard (Key Lento) (BN)": {
+  "xyz": [
+   -3440.13,
+   -6766.98,
+   18.16
+  ],
+  "source_cameras": [
+   "Leonida Keys 01 (Airplane) (X)",
+   "Leonida Keys 05 (Boats)",
+   "Ocean near Keys (N)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1 [default]: triangulation 3 cams, perp med 0.6 m (0.11 pct), angle max 49.0 deg"
+ },
+ "Blue Billboard (Key Lento) (BS)": {
+  "xyz": [
+   -3432.24,
+   -6777.14,
+   18.29
+  ],
+  "source_cameras": [
+   "Leonida Keys 01 (Airplane) (X)",
+   "Leonida Keys 05 (Boats)",
+   "Ocean near Keys (N)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1 [default]: triangulation 3 cams, perp med 0.5 m (0.09 pct), angle max 48.5 deg"
+ },
+ "Blue Billboard (Key Lento) (TN)": {
+  "xyz": [
+   -3440.15,
+   -6767.0,
+   23.55
+  ],
+  "source_cameras": [
+   "Leonida Keys 01 (Airplane) (X)",
+   "Leonida Keys 05 (Boats)",
+   "Ocean near Keys (N)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1 [default]: triangulation 3 cams, perp med 0.6 m (0.10 pct), angle max 49.1 deg"
+ },
+ "Blue Billboard (Key Lento) (TS)": {
+  "xyz": [
+   -3432.32,
+   -6777.25,
+   23.62
+  ],
+  "source_cameras": [
+   "Leonida Keys 01 (Airplane) (X)",
+   "Leonida Keys 05 (Boats)",
+   "Ocean near Keys (N)"
+  ],
+  "error_m": 2.0,
+  "method": "ANCHOR-HARVEST-V1 [default]: triangulation 3 cams, perp med 0.3 m (0.06 pct), angle max 48.6 deg"
+ },
+ "Squalo Billboard (BN)": {},
+ "Squalo Billboard (BS)": {},
+ "Tall Billboard near Interchange (BN)": {},
+ "Tall Billboard near Interchange (BS)": {},
+ "Tall Billboard near Interchange (TN)": {}
 }
