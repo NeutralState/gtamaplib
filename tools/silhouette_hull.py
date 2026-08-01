@@ -55,6 +55,36 @@ import numpy as np
 from PIL import Image
 
 MESH_PATH = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
+TRACES = os.path.join(THIS, 'data', 'silhouettes.json')
+
+
+def traced():
+    """Silhouettes tracees a la main (tools/silhouette_tracer.html).
+
+    Elles remplacent avantageusement le masque de ciel automatique pour DEUX
+    raisons, et pas une seule: le contour est exact, et surtout il DESIGNE le
+    massif sans ambiguite. C'est cette seconde propriete qui manquait — la
+    moitie des echecs de la journee venait de clics qui, sous le meme nom,
+    ne visaient pas le meme objet."""
+    return json.load(open(TRACES)) if os.path.exists(TRACES) else {}
+
+
+def poly_top(pts, W):
+    """Bord SUPERIEUR d'un contour trace, echantillonne par colonne: pour
+    chaque x, le plus petit y du polygone. Hors de son etendue: nan, donc
+    aucune contrainte — un tracé ne dit rien de ce qu'il ne couvre pas."""
+    P = np.asarray(pts, float)
+    out = np.full(W, np.nan)
+    for i in range(len(P)):
+        a, b = P[i], P[(i + 1) % len(P)]
+        if abs(b[0] - a[0]) < 1e-9:
+            continue
+        x0, x1 = (a, b) if a[0] < b[0] else (b, a)
+        for x in range(max(0, int(math.ceil(x0[0]))), min(W, int(x1[0]) + 1)):
+            t = (x - x0[0]) / (x1[0] - x0[0])
+            y = x0[1] + t * (x1[1] - x0[1])
+            out[x] = y if math.isnan(out[x]) else min(out[x], y)
+    return out
 
 
 def posed(e):
@@ -153,6 +183,10 @@ def main():
     print(f'crete {args.cam}: {int(known.sum())} colonnes mesurees '
           f'({len(anchors)} corrections a la main)')
 
+    TR = traced()
+    mine = (TR.get(args.cam) or {}).get(args.massif)
+    if mine:
+        print(f'  tracé a la main present pour cette vue: {len(mine["points"])} points')
     wl = ([w.strip() for w in args.witnesses.split(';')] if args.witnesses
           else [c for c, e in cams.items()
                 if c != args.cam and posed(e)
@@ -169,10 +203,15 @@ def main():
     for w in wl:
         if np.linalg.norm(np.asarray(cams[w]['xyz'], float) - o) > args.max_base:
             continue
-        prof = sky_line(w)
+        c2 = common.get_cam(w)
+        tw = (TR.get(w) or {}).get(args.massif)
+        if tw:
+            # un contour trace prime sur le masque automatique
+            prof = poly_top(tw['points'], int(c2.w))
+        else:
+            prof = sky_line(w)
         if prof is None or np.isnan(prof).all():
             continue
-        c2 = common.get_cam(w)
         if not any(c2.get_pixel([float(v) for v in P_]) is not None for P_ in probes):
             continue
         wit.append((w, c2, prof))
