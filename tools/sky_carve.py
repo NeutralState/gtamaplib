@@ -96,13 +96,20 @@ def skyline_profile(cam_name, step=3):
     import common
     p = os.path.join(REPO, 'frames', f'{cam_name}.png')
     if not os.path.exists(p):
-        return None, 0
+        return None, 0, 0.0, 0.0, 0.0
     a = np.asarray(Image.open(p).convert('RGB'), np.int16)
     blue = a[:, :, 2] - a[:, :, 0]
     bright = a.mean(axis=2)
     sky = (blue > 6) | (bright > 205)
     H, W = sky.shape
     cam = common.get_cam(cam_name)
+    # AZIMUT RELATIF AU CAP. Le champ de vue d'une camera est un arc
+    # CONTINU; en azimut absolu il peut chevaucher 0/360 et se retrouver
+    # coupe en deux morceaux aux extremites du tableau. On travaille donc
+    # en ecart au cap, ou l'arc est d'un seul tenant — c'est ce qui permet
+    # de combler tous les trous internes sans jamais deborder hors champ.
+    d0 = np.asarray(cam.get_pixel_direction((cam.w / 2.0, cam.h / 2.0)), float)
+    yaw0 = math.degrees(math.atan2(d0[0], d0[1]))
     prof = np.full(NBINS, np.nan)
     n = 0
     for x in range(0, W, step):
@@ -126,8 +133,11 @@ def skyline_profile(cam_name, step=3):
         horiz = math.hypot(d[0], d[1])
         if horiz < 1e-6:
             continue
-        az = math.degrees(math.atan2(d[0], d[1])) % 360.0
-        b = int(az / 360.0 * NBINS) % NBINS
+        az = math.degrees(math.atan2(d[0], d[1]))
+        rel = (az - yaw0 + 180.0) % 360.0 - 180.0     # dans [-180, 180)
+        b = int((rel + 180.0) / 360.0 * NBINS)
+        if not (0 <= b < NBINS):
+            continue
         t = d[2] / horiz
         # On ne voit PAS de ciel loin sous l'horizon. Une colonne dont le
         # "dernier pixel de ciel" pointe a -70 degres n'est pas une ligne
@@ -148,16 +158,31 @@ def skyline_profile(cam_name, step=3):
     # contraindre une camera dans des directions qu'elle ne regarde pas —
     # c'est ce qui laissait des cams a 7 km tailler un massif hors de leur
     # champ.
+    # COMBLEMENT INTEGRAL DE L'ARC OBSERVE. Entre le premier et le dernier
+    # azimut vus, la camera regarde partout: on interpole donc tous les
+    # trous internes. Hors de l'arc, rien — c'est la que se jouait le bug
+    # des cameras qui contraignaient des directions qu'elles ne voient pas.
     known = np.where(~np.isnan(prof))[0]
     if len(known) >= 2:
-        for k in range(len(known) - 1):
-            i0, i1 = known[k], known[k + 1]
-            if 1 < i1 - i0 <= 8:
-                prof[i0:i1 + 1] = np.linspace(prof[i0], prof[i1], i1 - i0 + 1)
+        lo_i, hi_i = int(known.min()), int(known.max())
+        prof[lo_i:hi_i + 1] = np.interp(np.arange(lo_i, hi_i + 1), known, prof[known])
+        # LISSAGE. La frontiere ciel/terrain saute de plusieurs pixels d'une
+        # colonne a l'autre (arbres, poteaux, aretes de toits). Chaque saut
+        # devient une TRAINEE RADIALE dans le champ de hauteur, parce que la
+        # borne s'applique jusqu'a la portee maximale: 20 px de saut valent
+        # 50 m a 5 km. On prend donc le MAXIMUM local puis une moyenne — le
+        # maximum d'abord parce que la borne doit rester conservatrice: un
+        # arbre fait monter la ligne et ne doit pas etre lisse vers le bas.
+        w = 9
+        pad = np.pad(prof[lo_i:hi_i + 1], w, mode='edge')
+        mx = np.array([pad[i:i + 2 * w + 1].max() for i in range(hi_i - lo_i + 1)])
+        ker = np.ones(w) / w
+        prof[lo_i:hi_i + 1] = np.convolve(np.pad(mx, w // 2, mode='edge'),
+                                          ker, mode='valid')[:hi_i - lo_i + 1]
     fin = prof[~np.isnan(prof)]
     lo = math.degrees(math.atan(fin.min())) if len(fin) else 0.0
     hi = math.degrees(math.atan(fin.max())) if len(fin) else 0.0
-    return prof, n, lo, hi
+    return prof, n, lo, hi, yaw0
 
 
 def main():
@@ -202,6 +227,7 @@ def main():
           f'ligne de ciel')
     used = 0
     rejected = []
+    yaw = {}
     for cn in sorted(cand):
         e = cams[cn]
         o = np.asarray(e['xyz'], float)
@@ -209,13 +235,15 @@ def main():
         D = np.hypot(dx, dy)
         if D.min() > args.max_dist:
             continue
-        prof, ncol, lo, hi = skyline_profile(cn)
+        prof, ncol, lo, hi, yaw0 = skyline_profile(cn)
+        yaw[cn] = yaw0
         if prof is None or ncol < 30:
             if prof is not None and ncol:
                 rejected.append((cn, lo, hi, ncol))
             continue
-        AZ = (np.degrees(np.arctan2(dx, dy)) % 360.0)
-        B = (AZ / 360.0 * NBINS).astype(np.int32) % NBINS
+        AZ = np.degrees(np.arctan2(dx, dy))
+        REL = (AZ - yaw[cn] + 180.0) % 360.0 - 180.0
+        B = np.clip(((REL + 180.0) / 360.0 * NBINS).astype(np.int32), 0, NBINS - 1)
         T = prof[B]
         ok = ~np.isnan(T)
         # la borne n'a de sens qu'a distance raisonnable: tres pres de la
