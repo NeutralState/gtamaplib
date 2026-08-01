@@ -70,13 +70,24 @@ def traced():
 
 
 def poly_top(pts, W):
-    """Bord SUPERIEUR d'un contour trace, echantillonne par colonne: pour
-    chaque x, le plus petit y du polygone. Hors de son etendue: nan, donc
-    aucune contrainte — un tracé ne dit rien de ce qu'il ne couvre pas."""
+    """Ligne tracee a la main, echantillonnee par colonne.
+
+    On ne demande QUE le haut de la silhouette, pas un contour ferme: le pied
+    d'un massif n'est presque jamais visible (ville, arbres, avant-plan) et le
+    tracer reviendrait a inventer une donnee. Le haut suffit, puisque la
+    contrainte utilisee est "au-dessus de cette ligne = ciel, donc pas de
+    terrain".
+
+    Consequence pour qui trace: sous un obstacle, il faut passer AU-DESSUS de
+    lui. Plus la ligne est basse, plus de points sont declares dans le ciel,
+    donc plus on interdit du terrain qui existe peut-etre. Trop haut ne peut
+    que relacher la borne — l'erreur va dans le bon sens.
+
+    Hors de l'etendue du trace: nan, donc aucune contrainte."""
     P = np.asarray(pts, float)
     out = np.full(W, np.nan)
-    for i in range(len(P)):
-        a, b = P[i], P[(i + 1) % len(P)]
+    for i in range(len(P) - 1):          # polyligne ouverte, pas un polygone
+        a, b = P[i], P[i + 1]
         if abs(b[0] - a[0]) < 1e-9:
             continue
         x0, x1 = (a, b) if a[0] < b[0] else (b, a)
