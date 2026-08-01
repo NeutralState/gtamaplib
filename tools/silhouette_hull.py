@@ -84,9 +84,10 @@ def poly_top(pts, W):
     que relacher la borne — l'erreur va dans le bon sens.
 
     Hors de l'etendue du trace: nan, donc aucune contrainte."""
-    P = np.asarray(pts, float)
+    strokes = pts if (pts and isinstance(pts[0][0], (list, tuple))) else [pts]
     out = np.full(W, np.nan)
-    for i in range(len(P) - 1):          # polyligne ouverte, pas un polygone
+    for P in [np.asarray(s_, float) for s_ in strokes if len(s_) >= 2]:
+      for i in range(len(P) - 1):        # polylignes ouvertes, pas un polygone
         a, b = P[i], P[i + 1]
         if abs(b[0] - a[0]) < 1e-9:
             continue
@@ -218,7 +219,7 @@ def main():
         tw = (TR.get(w) or {}).get(args.massif)
         if tw:
             # un contour trace prime sur le masque automatique
-            prof = poly_top(tw['points'], int(c2.w))
+            prof = poly_top(tw.get('strokes') or tw.get('points'), int(c2.w))
         else:
             prof = sky_line(w)
         if prof is None or np.isnan(prof).all():
