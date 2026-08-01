@@ -1,6 +1,6 @@
 {
  "_comment": "Registre declaratif des terrains 3D. Chaque entree = un terrain de l'UI, avec son moteur (tool), ses parametres valides par Alexandre, et ses dependances. `terrain.py --all` regenere tout; --only <nom> pour un seul. Les 2D (lignes/outlines) vivent dans leurs fichiers de corrections respectifs et sont la SOURCE \u2014 corriger le 2D puis relancer terrain.py suffit.",
- "Ambrosia Hill": {
+ "Mount Ambrosia": {
   "engine": "hill_mesh.py",
   "args": [
    "--mesh",

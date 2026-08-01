@@ -65,10 +65,14 @@ def main():
                 continue
             obs[lm].append((c, p))
 
-    # CIRCULAIRES interdits: la pose d'Empty Lot a ete FITTEE pour projeter
-    # ces clics sur le modele de colline -> les 'trianguler' Bikers x EL
-    # fabriquerait de fausses ancres a l'echelle de l'ancien modele.
-    BLACKLIST = {'Ambrosia Hill (TW)', 'Ambrosia Hill (TE)'}
+    # CIRCULARITE: la pose d'Empty Lot a ete FITTEE sur ses deux seuls clics
+    # du massif, donc ces clics-la ne peuvent pas servir de temoin. Ce n'est
+    # plus une liste noire de NOMS (le massif s'appelle desormais Mount
+    # Ambrosia, et un blacklist global tuerait Mount Ambrosia (D) qui est
+    # triangule sur 3 cameras) mais une exclusion par CAMERA, dans
+    # gtamapdata/excluded_markings.json — is_excluded_marking la lit deja
+    # plus haut dans la collecte.
+    BLACKLIST = set()
     MTN = ('mount', 'hill', 'ridge', 'pass', 'massif')
     def is_mtn(name):
         low = name.lower()

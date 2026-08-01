@@ -432,7 +432,7 @@ def main():
 
     sv = Solver(zone, anchors, ext_rays, lms, cams, init=args.init, use_corpus=args.corpus)
     # quarantaine: LM dont le residu initial explose = appariement suspect
-    # (ex: 'Ambrosia Hill' vue par Explosion n'est PAS la meme colline)
+    # (ex: 'Mount Ambrosia' vue par Explosion n'est PAS la meme colline)
     _, det0 = sv.cost(collect_detail=True)
     bad = [lm for lm, (P, e) in det0.items() if e is not None and e > 90.0]
     if bad:

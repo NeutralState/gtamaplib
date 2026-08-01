@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""hill_mesh.py — Ambrosia Hill en 3D, depuis sa silhouette. [HILL-3D-V2]
+"""hill_mesh.py — Mount Ambrosia en 3D, depuis sa silhouette. [HILL-3D-V2]
 
 UN SEUL hill, profondeur RESOLUE (plus d'hypotheses en eventail):
 
@@ -43,8 +43,8 @@ import common
 CAM = 'Ambrosia 01 (Bikers)'
 MESH_PATH = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
 
-CLICKS = ['Ambrosia Hill (BW)', 'Ambrosia Hill (TW)',
-          'Ambrosia Hill (TE)', 'Ambrosia Hill (BE)']
+CLICKS = ['Mount Ambrosia (B)', 'Mount Ambrosia (D)',
+          'Mount Ambrosia (E)', 'Mount Ambrosia (G)']
 Z_BASE = 18.87                # plaine d'Ambrosia (datum Main St, GROUND-V1)
 CORRIDOR = 90                 # demi-fenetre de recherche autour du prior (px)
 HARD_EDGE = 26.0              # gradient au-dela = occluder (arete dure), rejet
@@ -53,7 +53,7 @@ DEV_MAX = 28.0                # ecart max a la mediane locale (px)
 COL_STEP = 4                  # une colonne sur 4
 
 EL_CAM = 'Empty Lot near Metro Station'
-MESH_NAME = 'Ambrosia Hill'
+MESH_NAME = 'Mount Ambrosia'
 COLOR = '#4ade80'
 N_RINGS = 8                   # anneaux de niveau du dome
 RATIO = 0.65                  # profondeur du dome = RATIO * demi-largeur
@@ -161,12 +161,12 @@ def solve_depth(cam, px, cams, fov_el):
     TW-TE sous-tende, vue d'Empty Lot, l'angle mesure dans sa frame."""
     o = np.asarray(cam.xyz, float)
     marks = px[CAM]
-    rw = np.asarray(cam.get_pixel_direction(marks['Ambrosia Hill (TW)']), float)
-    re = np.asarray(cam.get_pixel_direction(marks['Ambrosia Hill (TE)']), float)
+    rw = np.asarray(cam.get_pixel_direction(marks['Mount Ambrosia (D)']), float)
+    re = np.asarray(cam.get_pixel_direction(marks['Mount Ambrosia (E)']), float)
     rw, re = rw / np.linalg.norm(rw), re / np.linalg.norm(re)
     E = np.asarray(cams[EL_CAM]['xyz'], float)
     pel = px[EL_CAM]
-    dx_px = abs(pel['Ambrosia Hill (TE)'][0] - pel['Ambrosia Hill (TW)'][0])
+    dx_px = abs(pel['Mount Ambrosia (E)'][0] - pel['Mount Ambrosia (D)'][0])
     ang_e = math.radians(dx_px * fov_el / 3840.0)
 
     def ang(t):
@@ -389,7 +389,7 @@ def main():
         print('\nDRY-RUN (--apply pour ecrire dans building_meshes_procedural.json).')
         return
     mesh = json.load(open(MESH_PATH)) if os.path.exists(MESH_PATH) else {}
-    stale = [k for k in mesh if k.startswith('Ambrosia Hill')]
+    stale = [k for k in mesh if k.startswith('Mount Ambrosia')]
     for k in stale:
         mesh.pop(k)                       # re-generation: on remplace les notres
     mesh.update(out)

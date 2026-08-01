@@ -14873,20 +14873,6 @@
   "author": "rlx",
   "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.0 m, angle max 10.5 deg"
  },
- "Ambrosia Hill (TW)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "ambrosia",
-  "author": "rlx"
- },
- "Ambrosia Hill (TE)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "ambrosia",
-  "author": "rlx"
- },
  "Grassrivers River Mouth (W)": {
   "xyz": [
    -3098.212732820015,
@@ -15967,12 +15953,6 @@
   "zone": "rlx_markings_0713"
  },
  "Pin A11R": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "rlx_markings_0713"
- },
- "Ambrosia Hill (BW)": {
   "xyz": null,
   "source_cameras": [],
   "error_m": null,
@@ -18488,7 +18468,7 @@
   "source_cameras": [],
   "error_m": 300.0,
   "zone": "ambrosia",
-  "method": "pic du modele Ambrosia Hill (outline Bikers valide, d=2246 par corde x Empty Lot); PAS une triangulation \u2014 position modele, erreur dominee par la fov EL non resolue (fourchette d 1902-2614). Le clic Explosion s aligne dessus sous la pose V5b. [renomme Mount Ambrosia (F), nomenclature rlx]"
+  "method": "pic du modele Mount Ambrosia (outline Bikers valide, d=2246 par corde x Empty Lot); PAS une triangulation \u2014 position modele, erreur dominee par la fov EL non resolue (fourchette d 1902-2614). Le clic Explosion s aligne dessus sous la pose V5b. [renomme Mount Ambrosia (F), nomenclature rlx]"
  },
  "Mount Ambrosia (3)": {
   "xyz": [

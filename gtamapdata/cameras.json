@@ -2920,7 +2920,7 @@
    1728
   ],
   "source": "Trailer 2",
-  "note": "pose HILL-FIT-V1 (2026-07-26): yaw/pitch resolus en projetant les extremites 3D de la crete Ambrosia Hill (TW/TE a d=2246 m, stereo angulaire Bikers x cette cam) sur ses 2 seuls clics; residu 5.3 px. xyz estime carte, fov 50 par defaut, roll 0 \u2014 NE PAS utiliser comme temoin de solve; a re-resoudre si d autres marks arrivent. MESURE 2026-07-29: la triangulation multi-vues du massif (heli x Bikers, gap 27 m) donne d~2100 au bout est -> echelle du modele s~0.92 -> fov EL implicite ~47 (vs 50 par defaut)."
+  "note": "pose HILL-FIT-V1 (2026-07-26): yaw/pitch resolus en projetant les extremites 3D de la crete Mount Ambrosia (TW/TE a d=2246 m, stereo angulaire Bikers x cette cam) sur ses 2 seuls clics; residu 5.3 px. xyz estime carte, fov 50 par defaut, roll 0 \u2014 NE PAS utiliser comme temoin de solve; a re-resoudre si d autres marks arrivent. MESURE 2026-07-29: la triangulation multi-vues du massif (heli x Bikers, gap 27 m) donne d~2100 au bout est -> echelle du modele s~0.92 -> fov EL implicite ~47 (vs 50 par defaut)."
  },
  "Explosion": {
   "id": "T2/58",
@@ -2944,7 +2944,7 @@
    1728
   ],
   "source": "Trailer 2 [3539]",
-  "note": "pose V5d (2026-07-27): le segment de crete designe par Alexandre (fleches: indices 475-678, la ride EST du massif, du point -3241/6209/348 au point -2944/6303/266) amene sur la silhouette visible (ancres = extremites du trait rouge). yaw 0.160 \u2014 la devinette Rockstar (yaw 0) etait quasi exacte. pitch -3.94. Historique: V4 yaw 14.15 (verrou Rohde, retire), V5b/c ~2-3 (pic sur clic). Le clic Mount Leonida est SUPPRIME (Alexandre: pas de Mount Leonida ici, tout est Ambrosia Hill). Conditionnel au modele de colline (d=2246, fov EL 50). V5e: +0.5 yaw (Alexandre: tasser a droite, la partie droite coupait trop) -> yaw 0.660."
+  "note": "pose V5d (2026-07-27): le segment de crete designe par Alexandre (fleches: indices 475-678, la ride EST du massif, du point -3241/6209/348 au point -2944/6303/266) amene sur la silhouette visible (ancres = extremites du trait rouge). yaw 0.160 \u2014 la devinette Rockstar (yaw 0) etait quasi exacte. pitch -3.94. Historique: V4 yaw 14.15 (verrou Rohde, retire), V5b/c ~2-3 (pic sur clic). Le clic Mount Leonida est SUPPRIME (Alexandre: pas de Mount Leonida ici, tout est Mount Ambrosia). Conditionnel au modele de colline (d=2246, fov EL 50). V5e: +0.5 yaw (Alexandre: tasser a droite, la partie droite coupait trop) -> yaw 0.660."
  },
  "Park (Mobile Phone)": {
   "id": "T2/59",
@@ -3591,7 +3591,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Mount Kalaga National Park 02 [1]",
-  "note": "pose rlx upstream b4b1b1a (2026-07-28), decimales non-rondes = probablement solvee de son cote. VALIDEE par nous: Daytona/Sebring WT reprojette a 15 px du clic (171,1598) \u2014 chronologie 371 px (active d hier) -> 60 px (post Discord) -> 15 px: sa pose a converge vers notre triangulation independante (Fires+Postcard), l identification water tower est confirmee, le renommage 3400 Transmitter Rd etait un artefact des poses intermediaires. La crete de notre modele Ambrosia Hill est entierement dans le cadre sous cette pose."
+  "note": "pose rlx upstream b4b1b1a (2026-07-28), decimales non-rondes = probablement solvee de son cote. VALIDEE par nous: Daytona/Sebring WT reprojette a 15 px du clic (171,1598) \u2014 chronologie 371 px (active d hier) -> 60 px (post Discord) -> 15 px: sa pose a converge vers notre triangulation independante (Fires+Postcard), l identification water tower est confirmee, le renommage 3400 Transmitter Rd etait un artefact des poses intermediaires. La crete de notre modele Mount Ambrosia est entierement dans le cadre sous cette pose."
  },
  "Mount Kalaga National Park 04 (Mountain Pass) (X)": {
   "id": "S2/68",

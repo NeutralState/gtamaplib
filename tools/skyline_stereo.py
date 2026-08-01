@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """skyline_stereo.py — la profondeur de la crete MESUREE par un temoin. [SKYSTEREO-V1]
 
-Ce que ca remplace. Le mesh d'Ambrosia Hill actuellement dans l'UI garde la
+Ce que ca remplace. Le mesh d'Mount Ambrosia actuellement dans l'UI garde la
 silhouette validee a la main par Alexandre, mais sa PROFONDEUR est une
 hypothese: un volume a pente 30 degres pose derriere le trace. La silhouette
 est mesuree, le relief derriere ne l'est pas.
@@ -51,8 +51,8 @@ from PIL import Image
 
 MESH_PATH = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
 CAM = 'Ambrosia 01 (Bikers)'
-CLICKS = ['Ambrosia Hill (BW)', 'Ambrosia Hill (TW)',
-          'Ambrosia Hill (TE)', 'Ambrosia Hill (BE)']
+CLICKS = ['Mount Ambrosia (B)', 'Mount Ambrosia (D)',
+          'Mount Ambrosia (E)', 'Mount Ambrosia (G)']
 
 
 def skyline_A(x0=130):
@@ -251,7 +251,7 @@ def main():
              for k in range(len(QQ) - 1)
              if np.linalg.norm(QQ[k + 1] - QQ[k]) < 250.0]
     mesh = json.load(open(MESH_PATH)) if os.path.exists(MESH_PATH) else {}
-    mesh['Ambrosia Hill (crete mesuree)'] = {'color': '#38bdf8',
+    mesh['Mount Ambrosia (crete mesuree)'] = {'color': '#38bdf8',
                                              'world_edges': edges}
     fd, tmp = tempfile.mkstemp(dir=os.path.dirname(MESH_PATH), suffix='.tmp')
     with os.fdopen(fd, 'w') as f:

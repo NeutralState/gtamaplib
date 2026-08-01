@@ -7,7 +7,7 @@ Lit tools/data/terrains.json (registre declaratif: moteur + parametres
 valides + provenance de chaque hypothese) et regenere les meshs de l'UI.
 
     PYTHONPATH=. python3 tools/terrain.py --all
-    PYTHONPATH=. python3 tools/terrain.py --only 'Ambrosia Hill'
+    PYTHONPATH=. python3 tools/terrain.py --only 'Mount Ambrosia'
     PYTHONPATH=. python3 tools/terrain.py --list
 
 Le pipeline terrain complet (cf. tools/TERRAIN_PIPELINE.md):

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""hill_stereo.py — la crete d'Ambrosia Hill par stereo de silhouettes. [HILL-STEREO-V1]
+"""hill_stereo.py — la crete d'Mount Ambrosia par stereo de silhouettes. [HILL-STEREO-V1]
 
 Upgrade du rideau plat (HILL-3D-V3): au lieu d'UNE profondeur pour toute la
 crete (la corde TW-TE), on resout la profondeur PAR POINT en croisant les
@@ -63,7 +63,7 @@ def el_outline(el_state):
     marks = px[EL]
     im = Image.open(os.path.join(REPO, 'frames', f'{EL}.png')).convert('L')
     gray = np.asarray(im, np.float32)
-    tw, te = marks['Ambrosia Hill (TW)'], marks['Ambrosia Hill (TE)']
+    tw, te = marks['Mount Ambrosia (D)'], marks['Mount Ambrosia (E)']
     xs = [EL_X0, tw[0], te[0], EL_X1]
     ys = [tw[1] + 24, tw[1], te[1], te[1] + 36]     # flancs redescendent
     prior = lambda x: float(np.interp(x, xs, ys))
@@ -102,8 +102,8 @@ def main():
         yaw/pitch d'EL sur la corde TW-TE a la profondeur de cette fov."""
         t_chord, _ = hm.solve_depth(cam_b, px, cams, fov)
         marks_b = px[BIK]
-        rw = np.asarray(cam_b.get_pixel_direction(marks_b['Ambrosia Hill (TW)']), float)
-        re = np.asarray(cam_b.get_pixel_direction(marks_b['Ambrosia Hill (TE)']), float)
+        rw = np.asarray(cam_b.get_pixel_direction(marks_b['Mount Ambrosia (D)']), float)
+        re = np.asarray(cam_b.get_pixel_direction(marks_b['Mount Ambrosia (E)']), float)
         rw, re = rw / np.linalg.norm(rw), re / np.linalg.norm(re)
         P_tw, P_te = o_b + t_chord * rw, o_b + t_chord * re
         # yaw/pitch EL par grille fine (roll 0)
@@ -116,7 +116,7 @@ def main():
                 c = common.get_cam(EL, st)
                 e = 0.0
                 ok = True
-                for lm, P in [('Ambrosia Hill (TW)', P_tw), ('Ambrosia Hill (TE)', P_te)]:
+                for lm, P in [('Mount Ambrosia (D)', P_tw), ('Mount Ambrosia (E)', P_te)]:
                     pr = c.get_pixel([float(v) for v in P])
                     if pr is None:
                         ok = False
@@ -132,7 +132,7 @@ def main():
                     c = common.get_cam(EL, st)
                     e = 0.0
                     ok = True
-                    for lm, P in [('Ambrosia Hill (TW)', P_tw), ('Ambrosia Hill (TE)', P_te)]:
+                    for lm, P in [('Mount Ambrosia (D)', P_tw), ('Mount Ambrosia (E)', P_te)]:
                         pr = c.get_pixel([float(v) for v in P])
                         if pr is None:
                             ok = False
@@ -256,14 +256,14 @@ def main():
         print('DRY-RUN (--apply pour ecrire).')
         return
     mesh = json.load(open(MESH_PATH)) if os.path.exists(MESH_PATH) else {}
-    for k in [k for k in mesh if k.startswith('Ambrosia Hill')]:
+    for k in [k for k in mesh if k.startswith('Mount Ambrosia')]:
         mesh.pop(k)
-    mesh['Ambrosia Hill'] = {'color': '#4ade80', 'world_edges': edges}
+    mesh['Mount Ambrosia'] = {'color': '#4ade80', 'world_edges': edges}
     fd, tmp = tempfile.mkstemp(dir=os.path.dirname(MESH_PATH), suffix='.tmp')
     with os.fdopen(fd, 'w') as f:
         json.dump(mesh, f, indent=1, ensure_ascii=True)
     os.replace(tmp, MESH_PATH)
-    print('APPLIED: Ambrosia Hill (crete stereo courbe)')
+    print('APPLIED: Mount Ambrosia (crete stereo courbe)')
 
 
 if __name__ == '__main__':
