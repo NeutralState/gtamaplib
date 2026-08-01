@@ -84,10 +84,20 @@ def main():
     # une crete brumeuse au metre pres.
     SMALL = ('billboard', 'sign', 'pole', 'pylon', 'antenna', 'window',
              'door', 'parassol', 'tank', 'silo')
-    def floor_m(name):
+    def gate_for(name, dist):
+        """Tolerance perpendiculaire admise pour CE landmark a CETTE distance.
+
+        Le terme dominant est la fraction de distance, pas le plancher: a
+        1500 m, 1.2 pct vaut deja 18 m et le plancher ne sert a rien. C'est
+        donc la FRACTION qu'il faut resserrer sur les petits objets. Un
+        panneau publicitaire a des coins nets: deux clics dessus doivent se
+        croiser a 0.4 pct de la distance, pas 1.2. Une crete brumeuse, elle,
+        garde sa tolerance large — l'ambiguite y est reelle."""
         if args.profile == 'mountain' or is_mtn(name):
-            return 15.0
-        return 4.0 if any(k in name.lower() for k in SMALL) else 15.0
+            return max(15.0, perp_frac * dist)
+        if any(k in name.lower() for k in SMALL):
+            return max(4.0, 0.004 * dist)
+        return max(15.0, perp_frac * dist)
     accepted, rejected = [], []
     for lm, wits in sorted(obs.items()):
         if lm in BLACKLIST:
@@ -153,7 +163,7 @@ def main():
             perps.append(float(np.linalg.norm(v - np.dot(v, d) * d)))
             dists.append(float(np.linalg.norm(v)))
         perp_med = float(np.median(perps))
-        if perp_med > max(floor_m(lm), perp_frac * float(np.median(dists))):
+        if perp_med > gate_for(lm, float(np.median(dists))):
             rejected.append((lm, f'perp {perp_med:.1f} m @ {np.median(dists):.0f} m'))
             continue
         accepted.append((lm, P, [c for c, _, _ in rays], perp_med, amax,
