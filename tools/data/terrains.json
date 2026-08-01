@@ -58,25 +58,7 @@
    }
   },
   "regle": "landmarks.json ne contient que des MESURES. Les estimations vivent ici et dans le mesh, jamais dans landmarks.json \u2014 sinon un outil en aval les reprend pour de la verite terrain, ce qui est exactement ce qui vient d arriver.",
-  "estimation": {
-   "tool": "relief_estimate.py [RELIEF-EST-V1]",
-   "camera": "Ambrosia 01 (Bikers)",
-   "points": 242,
-   "distance_m": [
-    1320,
-    1965
-   ],
-   "z_m": [
-    197,
-    197
-   ],
-   "sources": [
-    "silhouette mesuree (camera calibree + corrections main)",
-    "plan au sol: paliers de la carte communautaire",
-    "altitude des paliers: ancres de relief d AUTRES massifs"
-   ],
-   "nature": "ESTIMATION \u2014 ne jamais reinjecter dans landmarks.json"
-  }
+  "carte_communautaire": "NE PAS UTILISER COMME SOURCE dans cette zone (Alexandre, 2026-07-31): \"pour cette zone fit toi 0 a la map c est plus bon du tout je fais tout ca pour remap justement\". La carte y est perimee \u2014 c est precisement ce que le projet est en train de refaire. Elle ne peut donc etre ni un plan au sol, ni un temoin, ni une cote d altitude ici. RELIEF-EST-V1 s appuyait dessus: son resultat pour ce massif est nul et non avenu."
  },
  "Canyon (Kalaga Pass)": {
   "engine": "canyon_surfaces.py",
