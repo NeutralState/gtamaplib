@@ -64,6 +64,15 @@ def massif_of(name):
     return name.split(' (')[0]
 
 
+def _target_dist(lms, names, o):
+    """Distance typique de l'objet, prise sur ceux de ses landmarks qui sont
+    positionnes; a defaut une valeur prudente (loin = test plus severe)."""
+    d = [float(np.linalg.norm(np.asarray(lms[n]['xyz'], float) - o))
+         for n in names
+         if isinstance(lms.get(n), dict) and lms[n].get('xyz')]
+    return float(np.median(d)) if d else 3000.0
+
+
 def posed(e):
     return bool(e.get('xyz') and e.get('ypr') and any(e['ypr'])
                 and e.get('fov') and (e['fov'][0] or e['fov'][1]))
@@ -101,6 +110,9 @@ def dist_to_polyline(q, L):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--massif', help='auditer un seul massif')
+    ap.add_argument('--min-par', type=float, default=1.0,
+                    help='parallaxe minimale (deg) sous laquelle le test '
+                         'epipolaire degenere et ne conclut rien')
     ap.add_argument('--warn-px', type=float, default=25.0,
                     help='ecart epipolaire au-dela duquel on signale')
     args = ap.parse_args()
@@ -108,6 +120,7 @@ def main():
     import common
     px = json.load(open(os.path.join(REPO, 'gtamapdata', 'pixels.json')))
     cams = json.load(open(os.path.join(REPO, 'gtamapdata', 'cameras.json')))
+    lms = json.load(open(os.path.join(REPO, 'gtamapdata', 'landmarks.json')))
 
     def frame_ok(c):
         return c in cams and posed(cams[c])
@@ -154,6 +167,26 @@ def main():
                 cA, vA = obs[i]
                 cB, vB = obs[j]
                 camA, camB = common.get_cam(cA), common.get_cam(cB)
+                # CONDITIONNEMENT. Le test epipolaire suppose que les deux
+                # cameras voient l'objet sous des angles differents. Si la
+                # base est courte devant la distance, la ligne epipolaire
+                # degenere en un point et l'ecart mesure n'a plus aucun
+                # sens. Cas reel: Hedge (B) et Hedge (C) sont a 0.4 m l'une
+                # de l'autre et regardent Mount Mountain a 7 km — parallaxe
+                # 0.00 deg. La V1 en tirait un verdict "CLIC INCOMPATIBLE"
+                # sur 152 px: un faux positif pur.
+                oa = np.asarray(camA.xyz, float)
+                ob = np.asarray(camB.xyz, float)
+                base = float(np.linalg.norm(oa - ob))
+                dist = float(np.median([np.linalg.norm(oa - ob)] ) )
+                par = math.degrees(math.atan2(base, max(1.0, _target_dist(
+                    lms, [lm for lm, _ in vA] + [lm for lm, _ in vB], oa))))
+                if par < args.min_par:
+                    print(f'   {cA[:26]:26s} x {cB[:26]:26s}')
+                    print(f'      base {base:.1f} m -> parallaxe {par:.2f} deg '
+                          f'< {args.min_par} : TEST DEGENERE, aucun verdict')
+                    verdicts.append(('degenere', m, cA, cB, float('nan'), float('nan')))
+                    continue
                 ctl, nctl = control(cA, cB, camA, camB)
                 # 1) memes landmarks vus des deux cotes
                 same = [lm for lm, _ in vA if any(lm == l2 for l2, _ in vB)]
@@ -214,7 +247,9 @@ def main():
     weak = [v for v in verdicts if v[0].startswith('non refute')]
     print(f'RESUME: {len(verdicts)} paires auditees — {len(bad)} REFUTEES, '
           f'{len(dub)} douteuses, {len(pose)} imputables aux poses, '
-          f'{len(weak)} non refutees mais sans nom commun (test faible)')
+          f'{len(weak)} non refutees mais sans nom commun (test faible), '
+          f'{len([v for v in verdicts if v[0] == "degenere"])} degenerees '
+          f'(base trop courte, aucun verdict possible)')
     for v, m, cA, cB, cv, ctl in bad:
         print(f'   {m[:20]:20s} {cA[:24]:24s} x {cB[:24]:24s}  {v}')
     print('\nRAPPEL: passer ce test ne prouve rien. La contrainte epipolaire '
