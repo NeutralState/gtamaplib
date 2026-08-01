@@ -18460,43 +18460,13 @@
   "method": "rayon x plan z=15.16 (GROUND-V1, monde H); sol du boxville: silo_z 19.655 - 4.5 (delta rlx); sensibilite 3.7 m/m de datum"
  },
  "Mount Ambrosia (F)": {
-  "xyz": [
-   -3093.7,
-   6255.5,
-   298.0
-  ],
-  "source_cameras": [],
-  "error_m": 300.0,
-  "zone": "ambrosia",
-  "method": "pic du modele Mount Ambrosia (outline Bikers valide, d=2246 par corde x Empty Lot); PAS une triangulation \u2014 position modele, erreur dominee par la fov EL non resolue (fourchette d 1902-2614). Le clic Explosion s aligne dessus sous la pose V5b. [renomme Mount Ambrosia (F), nomenclature rlx]"
+  "zone": "ambrosia"
  },
  "Mount Ambrosia (3)": {
-  "xyz": [
-   -2788.1,
-   6131.9,
-   195.1
-  ],
-  "source_cameras": [
-   "Mount Kalaga National Park 02 (Helicopter) (X)",
-   "Ambrosia 01 (Bikers)"
-  ],
-  "error_m": 30.0,
-  "zone": "ambrosia",
-  "method": "triangulation heli (clic Mount Ambrosia (3), pose rlx b4b1b1a) x Bikers (Mount Ambrosia (H)), gap 26.8 m \u2014 PREMIER point de crete du massif mesure multi-vues"
+  "zone": "ambrosia"
  },
  "Mount Ambrosia (X)": {
-  "xyz": [
-   -4599.0,
-   5568.0,
-   160.0
-  ],
-  "source_cameras": [
-   "Hedge (B) (X)",
-   "Mount Kalaga National Park 02 (Helicopter) (X)"
-  ],
-  "error_m": 10.0,
-  "zone": "ambrosia",
-  "method": "triangulation Hedge (Mount Ambrosia (X)) x heli (Mount Ambrosia (3)-ray), gap 6.0 m \u2014 crete OUEST du massif (hors cadre Bikers), z 160"
+  "zone": "ambrosia"
  },
  "Blob": {
   "xyz": [
@@ -19252,20 +19222,7 @@
   ],
   "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
- "Mount Ambrosia (D)": {
-  "xyz": [
-   -3523.59,
-   6628.36,
-   394.25
-  ],
-  "source_cameras": [
-   "Ambrosia 01 (Bikers)",
-   "Explosion",
-   "Empty Lot near Metro Station"
-  ],
-  "error_m": 79.5,
-  "method": "ANCHOR-HARVEST-V1 [mountain]: triangulation 3 cams, perp med 79.5 m (1.25 pct), angle max 6.9 deg"
- },
+ "Mount Ambrosia (D)": {},
  "123 NE 36th St": {
   "xyz": [
    32.8,

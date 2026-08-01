@@ -12,7 +12,71 @@
   ],
   "lines_source": "tools/generated/ambrosia_hill_outline.json + tools/data/hill_outline_corrections.json",
   "depth_provenance": "MESURE multi-vues 2026-07-29 (Mount Ambrosia (3) heli x Bikers gap 27 m; (X) Hedge x heli gap 6 m) -> d 2062",
-  "params_provenance": "pente 30 deg validee par Alexandre (HILL-SLOPE-V1)"
+  "params_provenance": "pente 30 deg validee par Alexandre (HILL-SLOPE-V1)",
+  "statut": "NON MESURE",
+  "pourquoi": "aucune ancre du massif ne provient de deux clics independants sur le meme point; audit epipolaire EPI-AUDIT-V1 du 2026-07-31",
+  "positions_retirees_de_landmarks": {
+   "Mount Ambrosia (3)": {
+    "xyz": [
+     -2788.1,
+     6131.9,
+     195.1
+    ],
+    "ancien_error_m": 30.0,
+    "ancienne_method": "triangulation heli (clic Mount Ambrosia (3), pose rlx b4b1b1a) x Bikers (Mount Ambrosia (H)), gap 26.8 m \u2014 PREMIER point de crete du massif mesure multi-vues",
+    "retire_parce_que": "plus aucun clic (xyz orphelin apres le nettoyage Ambrosia Hill)"
+   },
+   "Mount Ambrosia (D)": {
+    "xyz": [
+     -3523.59,
+     6628.36,
+     394.25
+    ],
+    "ancien_error_m": 79.5,
+    "ancienne_method": "ANCHOR-HARVEST-V1 [mountain]: triangulation 3 cams, perp med 79.5 m (1.25 pct), angle max 6.9 deg",
+    "retire_parce_que": "2 clics restants incompatibles: 332 px d ecart epipolaire a 5.30 deg de parallaxe"
+   },
+   "Mount Ambrosia (F)": {
+    "xyz": [
+     -3093.7,
+     6255.5,
+     298.0
+    ],
+    "ancien_error_m": 300.0,
+    "ancienne_method": "pic du modele Mount Ambrosia (outline Bikers valide, d=2246 par corde x Empty Lot); PAS une triangulation \u2014 position modele, erreur dominee par la fov EL non resolue (fourchette d 1902-2614). Le clic Explosion s aligne dessus sous la pose V5b. [renomme Mount Ambrosia (F), nomenclature rlx]",
+    "retire_parce_que": "\"pic du modele\", jamais une triangulation (error_m 300)"
+   },
+   "Mount Ambrosia (X)": {
+    "xyz": [
+     -4599.0,
+     5568.0,
+     160.0
+    ],
+    "ancien_error_m": 10.0,
+    "ancienne_method": "triangulation Hedge (Mount Ambrosia (X)) x heli (Mount Ambrosia (3)-ray), gap 6.0 m \u2014 crete OUEST du massif (hors cadre Bikers), z 160",
+    "retire_parce_que": "croisee a la main avec le clic d un AUTRE landmark, 1 seul clic propre"
+   }
+  },
+  "regle": "landmarks.json ne contient que des MESURES. Les estimations vivent ici et dans le mesh, jamais dans landmarks.json \u2014 sinon un outil en aval les reprend pour de la verite terrain, ce qui est exactement ce qui vient d arriver.",
+  "estimation": {
+   "tool": "relief_estimate.py [RELIEF-EST-V1]",
+   "camera": "Ambrosia 01 (Bikers)",
+   "points": 242,
+   "distance_m": [
+    1320,
+    1965
+   ],
+   "z_m": [
+    197,
+    197
+   ],
+   "sources": [
+    "silhouette mesuree (camera calibree + corrections main)",
+    "plan au sol: paliers de la carte communautaire",
+    "altitude des paliers: ancres de relief d AUTRES massifs"
+   ],
+   "nature": "ESTIMATION \u2014 ne jamais reinjecter dans landmarks.json"
+  }
  },
  "Canyon (Kalaga Pass)": {
   "engine": "canyon_surfaces.py",
