@@ -58,6 +58,29 @@ MESH_PATH = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
 TRACES = os.path.join(THIS, 'data', 'silhouettes.json')
 
 
+def cam_profile(TR, cam_name, W):
+    """Frontiere ciel/terrain d'une camera TEMOIN, tous massifs confondus.
+
+    Alexandre a trace, sur plusieurs frames, TOUTES les silhouettes visibles
+    et pas seulement celle du massif cible ("je suis un peu con j'avais pas
+    vu au debut que ca ciblait juste un truc"). Ce n'est pas du travail
+    perdu, c'est mieux: pour la contrainte utilisee ici, ce qui compte est
+    "ou commence le ciel dans cette colonne", pas a quel massif la crete
+    appartient. On fusionne donc tous ses traits de cette frame en prenant,
+    par colonne, le plus HAUT (y minimal) — la crete la plus elevee est
+    celle qui delimite le ciel.
+
+    L'etiquette de massif ne sert que pour la vue de REFERENCE, dont on
+    reconstruit la crete.
+    """
+    prof = np.full(W, np.nan)
+    for m, e in (TR.get(cam_name) or {}).items():
+        q = poly_top(e.get('strokes') or e.get('points'), W)
+        prof = np.where(np.isnan(prof), q, np.where(np.isnan(q), prof,
+                                                    np.minimum(prof, q)))
+    return prof
+
+
 def traced():
     """Silhouettes tracees a la main (tools/silhouette_tracer.html).
 
@@ -165,6 +188,8 @@ def main():
     cam = common.get_cam(args.cam)
     o = np.asarray(cam.xyz, float)
 
+    TR = traced()
+    mine = (TR.get(args.cam) or {}).get(args.massif)
     marks = px[args.cam]
     P = [(k, marks[k]) for k in marks
          if k.startswith(args.massif) and marks[k] is not None]
@@ -186,19 +211,28 @@ def main():
     be = marks.get('Billboard with Diversity Motif (TE)')
     if bw and be:
         exclude.append((bw[0] - 40, be[0] + 70))
-    cols, sky, meas, manual = extract_skyline(gray, prior_y, 130, gray.shape[1] - 4,
-                                              exclude=exclude, anchors=anchors)
-    known = meas | manual
-    mi = np.where(known)[0]
-    cols, sky, known = (cols[mi[0]:mi[-1] + 1], sky[mi[0]:mi[-1] + 1],
-                        known[mi[0]:mi[-1] + 1])
-    print(f'crete {args.cam}: {int(known.sum())} colonnes mesurees '
-          f'({len(anchors)} corrections a la main)')
-
-    TR = traced()
-    mine = (TR.get(args.cam) or {}).get(args.massif)
     if mine:
-        print(f'  tracé a la main present pour cette vue: {len(mine["points"])} points')
+        # LA CRETE DE REFERENCE VIENT DU TRACE. Plus d'extraction automatique
+        # a valider: le trait est la mesure, et il designe le massif sans
+        # ambiguite — c'est ce qui manquait a tout le reste.
+        prof_ref = poly_top(mine.get('strokes') or mine.get('points'),
+                            int(cam.w))
+        idx = np.where(~np.isnan(prof_ref))[0]
+        cols = idx.astype(float)
+        sky = prof_ref[idx]
+        known = np.ones(len(idx), bool)
+        print(f'crete {args.cam}: {len(idx)} colonnes TRACEES a la main')
+    else:
+        cols, sky, meas, manual = extract_skyline(gray, prior_y, 130,
+                                                  gray.shape[1] - 4,
+                                                  exclude=exclude, anchors=anchors)
+        known = meas | manual
+        mi = np.where(known)[0]
+        cols, sky, known = (cols[mi[0]:mi[-1] + 1], sky[mi[0]:mi[-1] + 1],
+                            known[mi[0]:mi[-1] + 1])
+        print(f'crete {args.cam}: {int(known.sum())} colonnes extraites '
+              f'automatiquement ({len(anchors)} corrections)')
+
     wl = ([w.strip() for w in args.witnesses.split(';')] if args.witnesses
           else [c for c, e in cams.items()
                 if c != args.cam and posed(e)
@@ -211,15 +245,16 @@ def main():
                                              float(sky[len(sky) // 2]))), float)
     d0 /= np.linalg.norm(d0)
     probes = [o + t * d0 for t in (500.0, 1500.0, 3000.0, 5000.0)]
-    wit = []
+    wit, traced_wit = [], []
     for w in wl:
         if np.linalg.norm(np.asarray(cams[w]['xyz'], float) - o) > args.max_base:
             continue
         c2 = common.get_cam(w)
-        tw = (TR.get(w) or {}).get(args.massif)
-        if tw:
-            # un contour trace prime sur le masque automatique
-            prof = poly_top(tw.get('strokes') or tw.get('points'), int(c2.w))
+        if TR.get(w):
+            # les traits a la main priment sur le masque automatique, et on
+            # prend TOUS les massifs traces dans cette frame
+            prof = cam_profile(TR, w, int(c2.w))
+            traced_wit.append(w)
         else:
             prof = sky_line(w)
         if prof is None or np.isnan(prof).all():
@@ -227,7 +262,12 @@ def main():
         if not any(c2.get_pixel([float(v) for v in P_]) is not None for P_ in probes):
             continue
         wit.append((w, c2, prof))
-    print(f'{len(wit)} temoins avec une ligne de ciel lisible\n')
+    print(f'{len(wit)} temoins retenus, dont {len(traced_wit)} avec silhouettes '
+          f'TRACEES A LA MAIN:')
+    for w in traced_wit:
+        ms = list((TR.get(w) or {}).keys())
+        print(f'      {w[:40]:40s} {", ".join(ms)}')
+    print()
 
     res, binder = [], {}
     for x, y, k in zip(cols, sky, known):
@@ -294,12 +334,21 @@ def main():
     if not args.apply:
         print('\nDRY-RUN (--apply pour ecrire).')
         return
+    # ON N'ECRIT QUE LES COLONNES REELLEMENT BORNEES. Inclure celles qu'aucun
+    # temoin ne contredit revient a dessiner le massif a sa position la plus
+    # LOINTAINE possible (le plafond de recherche), ce qui donnerait un mesh
+    # a 9 km et 1364 m d'altitude — une figure qui a l'air d'une mesure et
+    # n'en est pas une.
     pts = []
-    for x, y, t, _ in res:
+    for x, y, t, who in res:
+        if who is None:
+            continue
         d = np.asarray(cam.get_pixel_direction((x, y)), float)
         d /= np.linalg.norm(d)
         pts.append(o + t * d)
     pts = np.array(pts)
+    print(f'  mesh: {len(pts)} colonnes bornees ecrites '
+          f'({sum(1 for r in res if r[3] is None)} non bornees ignorees)')
     edges = [[list(map(float, pts[i])), list(map(float, pts[i + 1]))]
              for i in range(len(pts) - 1)
              if np.linalg.norm(pts[i + 1] - pts[i]) < 400.0]
