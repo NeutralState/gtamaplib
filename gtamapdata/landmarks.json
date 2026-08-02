@@ -4667,9 +4667,9 @@
  },
  "Easy Hill": {
   "xyz": [
-   -5939.28,
-   4038.28,
-   84.68
+   -5864.62,
+   3953.44,
+   97.38
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
@@ -4677,9 +4677,9 @@
    "Diner (SE) (B)",
    "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
-  "error_m": 33.7,
+  "error_m": 45.6,
   "zone": "port_gellhorn",
-  "method": "ANCHOR-HARVEST-V1 [mountain]: triangulation 4 cams, perp med 33.7 m (1.38 pct), angle max 89.8 deg"
+  "method": "retriangulation apres adoption de la pose rlx Kalaga 02 (4 cams, perp 45.6 m)"
  },
  "Radio Tower (Ambrosia)": {
   "xyz": [
@@ -18422,16 +18422,16 @@
  },
  "Blob": {
   "xyz": [
-   -5328.67,
-   4278.18,
-   133.1
+   -4962.26,
+   4447.3,
+   134.38
   ],
   "source_cameras": [
    "Mount Kalaga National Park 02 (Helicopter) (X)",
    "Mount Kalaga National Park 04 (Mountain Pass) (X)"
   ],
-  "error_m": 5.8,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 5.8 m, angle max 64.9 deg"
+  "error_m": 33.7,
+  "method": "retriangulation apres adoption de la pose rlx Kalaga 02 (2 cams, perp 33.7 m)"
  },
  "Cardozo South Beach (D)": {
   "xyz": [
@@ -18871,9 +18871,9 @@
  },
  "3400 Transmitter Rd": {
   "xyz": [
-   -3934.51,
-   3012.57,
-   68.39
+   -3970.46,
+   3000.53,
+   74.71
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
@@ -18881,8 +18881,8 @@
    "Ambrosia Postcard (X)",
    "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
-  "error_m": 5.6,
-  "method": "ANCHOR-HARVEST-V1: triangulation 4 cams, perp med 5.6 m, angle max 57.9 deg"
+  "error_m": 17.8,
+  "method": "retriangulation apres adoption de la pose rlx Kalaga 02 (4 cams, perp 17.8 m)"
  },
  "3400 Transmitter Rd (B)": {
   "xyz": [
@@ -18900,30 +18900,30 @@
  },
  "Ambrosia Canal (A)": {
   "xyz": [
-   -2838.94,
-   4916.23,
-   20.24
+   -2885.27,
+   4869.4,
+   11.65
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
-  "error_m": 2.4,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.4 m, angle max 19.9 deg"
+  "error_m": 3.6,
+  "method": "retriangulation apres adoption de la pose rlx Kalaga 02 (2 cams, perp 3.6 m)"
  },
  "BB Hill": {
   "xyz": [
-   -3753.74,
-   3811.27,
-   67.1
+   -3788.73,
+   3813.06,
+   74.64
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
-  "error_m": 7.6,
-  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 7.6 m, angle max 69.7 deg"
+  "error_m": 30.6,
+  "method": "retriangulation apres adoption de la pose rlx Kalaga 02 (3 cams, perp 30.6 m)"
  },
  "Building near Pool (N)": {
   "xyz": [
@@ -18953,16 +18953,16 @@
  },
  "Interstate Hill": {
   "xyz": [
-   -5598.6,
-   3137.66,
-   108.49
+   -5525.52,
+   3138.74,
+   124.16
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
-  "error_m": 2.6,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.6 m, angle max 41.8 deg"
+  "error_m": 14.0,
+  "method": "retriangulation apres adoption de la pose rlx Kalaga 02 (2 cams, perp 14.0 m)"
  },
  "Lamppost near Starlet Motel": {
   "xyz": [
@@ -18980,16 +18980,16 @@
  },
  "Starlet Hill": {
   "xyz": [
-   -5432.99,
-   3466.12,
-   112.21
+   -5363.49,
+   3462.13,
+   127.03
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
-  "error_m": 2.0,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.8 m, angle max 44.3 deg"
+  "error_m": 16.5,
+  "method": "retriangulation apres adoption de la pose rlx Kalaga 02 (2 cams, perp 16.5 m)"
  },
  "Starlet Motel (P1N)": {
   "xyz": [
@@ -19071,17 +19071,17 @@
  },
  "Tree near Port Gellhorn": {
   "xyz": [
-   -5385.49,
-   3730.66,
-   116.16
+   -5364.23,
+   3714.85,
+   125.43
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Mount Kalaga National Park 02 (Helicopter) (X)",
    "Mount Kalaga National Park 04 (Mountain Pass) (X)"
   ],
-  "error_m": 34.8,
-  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 34.8 m, angle max 80.3 deg"
+  "error_m": 59.4,
+  "method": "retriangulation apres adoption de la pose rlx Kalaga 02 (3 cams, perp 59.4 m)"
  },
  "Trees near Wheelabrator": {},
  "Unknown Building (North Port Gellhorn) (T)": {
