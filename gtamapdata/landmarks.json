@@ -16572,15 +16572,9 @@
   "zone": "rlx_markings_0713"
  },
  "Trees C (Grassrivers) (1)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713"
  },
  "Trees C (Grassrivers) (2)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713"
  },
  "SFUWO School": {
@@ -16598,69 +16592,36 @@
   "method": " | re-triangule apres MARK-ARB-V1 (104.0 m, perp 0.1 m)"
  },
  "Trees C (Grassrivers) (3)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713"
  },
  "Trees B (Grassrivers) (1)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713"
  },
  "Trees B (Grassrivers) (2)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713"
  },
  "Trees B (Grassrivers) (3)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713"
  },
  "Trees D (Grassrivers) (1)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713"
  },
  "Trees D (Grassrivers) (2)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713"
  },
  "Trees D (Grassrivers) (3)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713"
  },
  "Trees D (Grassrivers) (4)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713"
  },
  "Trees D (Grassrivers) (5)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713"
  },
  "Trees D (Grassrivers) (6)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713"
  },
  "Trees E (Grassrivers) (1)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713"
  },
  "Trees E (Grassrivers) (2)": {
@@ -17467,23 +17428,14 @@
   "author": "rlx"
  },
  "Trees A (Grassrivers) (1)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713",
   "author": "rlx"
  },
  "Trees B (Grassrivers) (1B)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713",
   "author": "rlx"
  },
  "Trees G (Grassrivers) (1)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
   "zone": "rlx_markings_0713",
   "author": "rlx"
  },
@@ -19131,19 +19083,7 @@
   "error_m": 34.8,
   "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 34.8 m, angle max 80.3 deg"
  },
- "Trees near Wheelabrator": {
-  "xyz": [
-   -2284.63,
-   2596.7,
-   40.4
-  ],
-  "source_cameras": [
-   "Ambrosia 02 (Panorama)",
-   "Ambrosia 04 (Fires)"
-  ],
-  "error_m": 2.0,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.3 m, angle max 66.4 deg"
- },
+ "Trees near Wheelabrator": {},
  "Unknown Building (North Port Gellhorn) (T)": {
   "xyz": [
    -7456.38,
@@ -19337,5 +19277,7 @@
  "Squalo Billboard (BS)": {},
  "Tall Billboard near Interchange (BN)": {},
  "Tall Billboard near Interchange (BS)": {},
- "Tall Billboard near Interchange (TN)": {}
+ "Tall Billboard near Interchange (TN)": {},
+ "Billboard near Starlet Motel (BC)": {},
+ "White Billboard (Hamlet) (BW)": {}
 }

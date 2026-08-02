@@ -58,6 +58,26 @@
    "date": "2026-07-30 (upstream ee83436)",
    "methode": "hand-tuned par rlx",
    "statut": "REJETEE pour Mountain Pass: echoue le test carte (corr +0.07 contre +0.70 pour sa pose precedente)"
+  },
+  "notre-pose-avant-54e49fe": {
+   "xyz": [
+    -4750.0,
+    6000.0,
+    120.0
+   ],
+   "ypr": [
+    156.447,
+    -13.566,
+    0.0
+   ],
+   "fov": [
+    60.0,
+    null
+   ],
+   "date": "2026-08-02",
+   "methode": "pose rlx (upstream b4b1b1a) RESTAUREE 2026-07-29 apres refutation de notre RESECTION-V1 par le test carte (tools/map_crosscheck.py): en castant les rayons de la ligne de route sur le TRACE US-50 de la",
+   "raison_mise_de_cote": "remplacee par la pose upstream de rlx (54e49fe) sur demande d Alexandre. Mesure FAVORABLE: 289.4 -> 218.0 arcmin sur les 3 landmarks independants (Billboard BC 289->218, TN 127->37; seul Unknown Mast (1) se degrade 393->623).",
+   "statut": "revert immediat via tools/pose_revert.py si besoin"
   }
  },
  "Port Gellhorn 01 (Starlet Motel)": {
@@ -184,6 +204,28 @@
    "date": "2026-07-30 (upstream ee83436)",
    "methode": "hand-tuned par rlx",
    "statut": "non importee: 0 temoin independant chez nous pour arbitrer (zone PGH circulaire)"
+  }
+ },
+ "Mount Kalaga National Park 02 (Helicopter) (X)": {
+  "notre-pose-avant-54e49fe": {
+   "xyz": [
+    -2190.0,
+    6320.0,
+    187.885
+   ],
+   "ypr": [
+    115.557,
+    10.2,
+    0.0
+   ],
+   "fov": [
+    79.8,
+    50.377
+   ],
+   "date": "2026-08-02",
+   "methode": "pose rlx upstream b4b1b1a (2026-07-28), decimales non-rondes = probablement solvee de son cote. VALIDEE par nous: Daytona/Sebring WT reprojette a 15 px du clic (171,1598) \u2014 chronologie 371 px (active ",
+   "raison_mise_de_cote": "remplacee par la pose upstream de rlx (54e49fe) sur demande d Alexandre. Mesure DEFAVORABLE: sur les 3 landmarks positionnes sans cette cam, notre pose donne 21.3 arcmin contre 56.5 pour la sienne (Daytona WT 21.3->60.1, 3400 Transmitter Rd (B) 25.0->56.5, Starlet Motel (RE) 6.5->44.5). Ses chiffres sont RONDS = estimation a la main du 2026-08-02; la precedente etait solvee.",
+   "statut": "revert immediat via tools/pose_revert.py si besoin"
   }
  }
 }

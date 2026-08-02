@@ -3591,7 +3591,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Mount Kalaga National Park 02 [1]",
-  "note": "pose rlx upstream b4b1b1a (2026-07-28), decimales non-rondes = probablement solvee de son cote. VALIDEE par nous: Daytona/Sebring WT reprojette a 15 px du clic (171,1598) \u2014 chronologie 371 px (active d hier) -> 60 px (post Discord) -> 15 px: sa pose a converge vers notre triangulation independante (Fires+Postcard), l identification water tower est confirmee, le renommage 3400 Transmitter Rd etait un artefact des poses intermediaires. La crete de notre modele Mount Ambrosia est entierement dans le cadre sous cette pose."
+  "note": "pose rlx upstream 54e49fe (2026-08-02), adoptee sur demande. Mesure DEFAVORABLE: sur les 3 landmarks positionnes sans cette cam, notre pose donne 21.3 arcmin contre 56.5 pour la sienne (Daytona WT 21.3->60.1, 3400 Transmitter Rd (B) 25.0->56.5, Starlet Motel (RE) 6.5->44.5). Ses chiffres sont RONDS = estimation a la main du 2026-08-02; la precedente etait solvee."
  },
  "Mount Kalaga National Park 04 (Mountain Pass) (X)": {
   "id": "S2/68",
@@ -3615,7 +3615,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Mount Kalaga National Park 04 [1]",
-  "note": "pose rlx (upstream b4b1b1a) RESTAUREE 2026-07-29 apres refutation de notre RESECTION-V1 par le test carte (tools/map_crosscheck.py): en castant les rayons de la ligne de route sur le TRACE US-50 de la carte communautaire, notre pose donnait une route a distance quasi CONSTANTE (248-260 m, rapport 1.05) = un mur perpendiculaire a la vue, physiquement impossible pour une route qui fuit dans l image; la pose rlx donne 128-492 m (rapport 3.84, correlation +0.68 avec l eloignement dans l image). Notre resection refutee etait [-5509.4, 5568.8, 160.3] / [174.385, -13.504, 2.547] / fov 54.12 (rms 31 arcmin, 8 contraintes pour 7 params, circularite partielle: Quarry avait ete triangule par rlx VIA cette cam). RAPPEL: la carte est une observation communautaire, pas une verite \u2014 mais un rapport 1.05 vs 3.84 tranche sans ambiguite."
+  "note": "pose rlx upstream 54e49fe (2026-08-02), adoptee sur demande. Mesure FAVORABLE: 289.4 -> 218.0 arcmin sur les 3 landmarks independants (Billboard BC 289->218, TN 127->37; seul Unknown Mast (1) se degrade 393->623)."
  },
  "Vice City Postcard": {
   "id": "S2/71",
@@ -4820,5 +4820,245 @@
    1080
   ],
   "source": "Highway (Panorama) [L2/1, rlx placeholder \u2014 date inconnue]"
+ },
+ "Loading Zone near Prison (S)": {
+  "id": "L1/26",
+  "player": null,
+  "xyz": [
+   -4725.5,
+   1854.8,
+   12.1
+  ],
+  "ypr": [
+   141.227,
+   -4.216,
+   0.0
+  ],
+  "fov": [
+   null,
+   49.6
+  ],
+  "size": [
+   1920,
+   1020
+  ],
+  "source": "2022-05-25 13-29-33 [598]",
+  "note": "importee de rlx upstream 54e49fe (2026-08-02): absente de notre jeu, pose la sienne."
+ },
+ "Handshake": {
+  "id": "T1/15",
+  "player": null,
+  "xyz": [
+   -800.0,
+   1535.0,
+   5.0
+  ],
+  "ypr": [
+   235.0,
+   1.0,
+   0.0
+  ],
+  "fov": [
+   45.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 1 [925]",
+  "note": "importee de rlx upstream 54e49fe (2026-08-02): absente de notre jeu, pose la sienne."
+ },
+ "High Rollerz": {
+  "id": "T1/42",
+  "player": null,
+  "xyz": [
+   -900.0,
+   1725.0,
+   6.0
+  ],
+  "ypr": [
+   45.0,
+   -1.5,
+   0.0
+  ],
+  "fov": [
+   45.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 1 [?]",
+  "note": "importee de rlx upstream 54e49fe (2026-08-02): absente de notre jeu, pose la sienne."
+ },
+ "Balcony (Keys)": {
+  "id": "T2/7",
+  "player": null,
+  "xyz": [
+   -2351.0,
+   -5538.0,
+   8.0
+  ],
+  "ypr": [
+   263.0,
+   -11.0,
+   0.0
+  ],
+  "fov": [
+   60.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [615]",
+  "note": "importee de rlx upstream 54e49fe (2026-08-02): absente de notre jeu, pose la sienne."
+ },
+ "Door (Keys)": {
+  "id": "T2/8",
+  "player": null,
+  "xyz": [
+   -2351.0,
+   -5537.0,
+   8.0
+  ],
+  "ypr": [
+   10.0,
+   -6.6,
+   0.0
+  ],
+  "fov": [
+   70.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [796]",
+  "note": "importee de rlx upstream 54e49fe (2026-08-02): absente de notre jeu, pose la sienne."
+ },
+ "Ocean View Hotel": {
+  "id": "T2/65",
+  "player": null,
+  "xyz": [
+   1965.0,
+   615.0,
+   3.0
+  ],
+  "ypr": [
+   25.0,
+   11.0,
+   0.0
+  ],
+  "fov": [
+   45.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [3803]",
+  "note": "importee de rlx upstream 54e49fe (2026-08-02): absente de notre jeu, pose la sienne."
+ },
+ "Vice City 04 (Gang Members)": {
+  "id": "S2/40",
+  "player": null,
+  "xyz": [
+   -1268.0,
+   1214.0,
+   5.0
+  ],
+  "ypr": [
+   300.0,
+   8.0,
+   -7.0
+  ],
+  "fov": [
+   45.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Vice City 04 [1]",
+  "note": "importee de rlx upstream 54e49fe (2026-08-02): absente de notre jeu, pose la sienne."
+ },
+ "Grassrivers 04 (Police Chase)": {
+  "id": "S2/64",
+  "player": null,
+  "xyz": [
+   -3769.0,
+   -4028.0,
+   3.136
+  ],
+  "ypr": [
+   152.318,
+   -5.8,
+   0.0
+  ],
+  "fov": [
+   50.6,
+   29.78
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Grassrivers 04 [1]",
+  "note": "importee de rlx upstream 54e49fe (2026-08-02): absente de notre jeu, pose la sienne."
+ },
+ "Raul Bautista (Animation)": {
+  "id": "S2/85",
+  "player": null,
+  "xyz": [
+   -900.0,
+   -1230.0,
+   6.0
+  ],
+  "ypr": [
+   325.0,
+   -4.0,
+   -6.0
+  ],
+  "fov": [
+   25.0,
+   null
+  ],
+  "size": [
+   2160,
+   2160
+  ],
+  "source": "Raul Bautista (Animation) [29]",
+  "note": "importee de rlx upstream 54e49fe (2026-08-02): absente de notre jeu, pose la sienne."
+ },
+ "Sara's Unisex Salon 01 (Exterior)": {
+  "id": "S3/24",
+  "player": null,
+  "xyz": [
+   -2564.0,
+   -3410.0,
+   9.5
+  ],
+  "ypr": [
+   210.0,
+   1.0,
+   2.0
+  ],
+  "fov": [
+   45.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Sara's Unisex Salon 01 [1]",
+  "note": "importee de rlx upstream 54e49fe (2026-08-02): absente de notre jeu, pose la sienne."
  }
 }
