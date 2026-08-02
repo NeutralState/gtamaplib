@@ -32,6 +32,11 @@ COLOR = '#94a3b8'
 # (nom, cam, [(px, py, distance_m)...], slope, side_slope)
 # distances = les chiffres DECLARES de rlx (5016dd2)
 MOUNTAINS = [
+    # ses chiffres COURANTS (upstream 54e49fe): il a resserre les distances
+    # depuis notre precedente lecture (4400/4450/4400/4350/4300/4200)
+    ('Gellhorn Hills', 'Ambrosia 04 (Fires)',
+     [(1941.5, 876.0, 4250), (2235.0, 895.0, 4150), (2421.5, 873.0, 4150),
+      (2598.0, 898.0, 4200), (2902.0, 869.5, 4250), (3137.0, 878.0, 4250)], 30, 60),
     ('Mount Ambrosia', 'Ambrosia 01 (Bikers)',
      [(23.5, 533, 3200), (325, 560, 3000), (794.5, 345, 2800), (1219, 201, 2600),
       (1913, 267, 2500), (2345, 415.5, 2400), (2865, 580, 2400), (3099, 580, 2500)],
@@ -50,8 +55,41 @@ MOUNTAINS = [
 ]
 
 
+def rlx_pose(cam_name):
+    """La pose de rlx pour cette camera, lue dans son depot.
+
+    Ses distances de crete sont DECLAREES depuis SA camera. Les rejouer avec
+    la notre place la crete ailleurs des que les deux poses divergent — et
+    c'est le cas ici: notre Ambrosia 04 (Fires) est a 371 m de la sienne, ce
+    qui faisait sortir un facteur de recalage de x1.72 sur Gellhorn Hills.
+    """
+    import re
+    import subprocess
+    src = subprocess.run(['git', 'show', 'upstream/main:gtamapdata.py'],
+                         cwd=REPO, capture_output=True, text=True).stdout
+    pat = re.compile(r'^\s{4}"\[[^\]]+\] ' + re.escape(cam_name) +
+                     r'":\s*\((?:None|\([^)]*\)),\s*\(([^)]*)\),\s*\(([^)]*)\),'
+                     r'\s*\(([^)]*)\),\s*\(([^)]*)\)', re.M)
+    m = pat.search(src)
+    if not m:
+        return None
+    return {'xyz': [float(v) for v in m.group(1).split(',')],
+            'ypr': [float(v) for v in m.group(2).split(',')],
+            'fov': [None if v.strip() == 'None' else float(v)
+                    for v in m.group(3).split(',')],
+            'size': [int(float(v)) for v in m.group(4).split(',')]}
+
+
 def build(name, cam_name, pts, slope, side_slope):
-    cam = common.get_cam(cam_name)
+    st = rlx_pose(cam_name)
+    cam = common.get_cam(cam_name, st) if st else common.get_cam(cam_name)
+    if st:
+        import numpy as _np
+        d = float(_np.linalg.norm(_np.asarray(st['xyz']) -
+                                  _np.asarray(common.get_cam(cam_name).xyz)))
+        if d > 5:
+            print(f'      (sa pose de {cam_name[:26]} est a {d:.0f} m de la '
+                  f'notre — on utilise LA SIENNE, ses distances y sont declarees)')
     o = np.asarray(cam.xyz, float)
     tops = []
     for x, y, dist in pts:

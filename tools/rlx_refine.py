@@ -140,11 +140,11 @@ def main():
             prof[cn] = (c, pr)
     print(f'{len(prof)} vues tracees utilisables comme limite de ciel\n')
 
-    def violations(V, massif):
+    def violations(V, massif, allow_unlabelled=()):
         """Sommets qui passent au-dessus d'un trait, et de combien."""
         out = []
         for cn, (c, pr) in prof.items():
-            if massif not in (TR.get(cn) or {}):
+            if massif not in (TR.get(cn) or {}) and cn not in allow_unlabelled:
                 continue          # cette vue ne trace pas ce massif
             for P in V:
                 q = c.get_pixel([float(v) for v in P])
@@ -170,18 +170,27 @@ def main():
             print(f'{name}: camera source inconnue, ignore')
             continue
         views = [c for c in prof if name in (TR.get(c) or {})]
+        if not views and cn in prof:
+            # PAS DE TRACE A SON NOM, mais sa camera source est tracee. La
+            # limite du ciel est la meme ligne quel que soit le nom qu'on
+            # donne a la crete: on accepte, en restreignant plus bas a
+            # l'etendue en x de sa propre crete.
+            views = [cn]
+            print(f'{name}: aucun trace a son nom, mais {cn[:30]} est tracee '
+                  f'— on utilise sa ligne de ciel')
         if not views:
             print(f'{name}: aucune de nos vues tracees ne le couvre, ignore')
             continue
         cam = common.get_cam(cn)
         o = np.asarray(cam.xyz, float)
         V0 = np.array([p for a, b in ent['world_edges'] for p in (a, b)], float)
-        n0 = len(violations(V0, name))
+        AU = tuple(views) if not any(name in (TR.get(v) or {}) for v in views) else ()
+        n0 = len(violations(V0, name, AU))
         best = None
         for k in np.arange(0.30, 3.01, 0.01):
             V = V0.copy()
             V[:, :2] = o[:2] + k * (V0[:, :2] - o[:2])
-            nv = len(violations(V, name))
+            nv = len(violations(V, name, AU))
             if nv <= args.tol / 100.0 * len(V0):
                 best = (float(k), nv)   # le PLUS PETIT k qui passe
                 break
@@ -228,8 +237,28 @@ def main():
                 cand = [(v, q) for v, q in cand if q is not None
                         and not np.isnan(q).all()]
                 if not cand:
-                    print('   detail impossible: ce massif n a pas de trace '
-                          'propre dans ces vues')
+                    # PAS DE TRACE A SON NOM, mais la limite du ciel est la
+                    # meme ligne quel que soit le nom qu'on lui donne. Si la
+                    # camera source du massif est tracee, on prend son profil
+                    # fusionne, restreint a l'etendue en x de la crete de rlx.
+                    if cn in prof:
+                        q = cam_profile(TR, cn, int(prof[cn][0].w)).copy()
+                        xs = [p_[0] for _, _, p_ in
+                              [(0, 0, pp) for pp in
+                               [pt for n2, c2, pts2, _, _ in MOUNTAINS
+                                if n2 == name for pt in pts2]]]
+                        if xs:
+                            lo_x, hi_x = int(min(xs)) - 60, int(max(xs)) + 60
+                            q[:max(0, lo_x)] = np.nan
+                            q[min(len(q), hi_x):] = np.nan
+                        if not np.isnan(q).all():
+                            cand = [(cn, q)]
+                            print(f'   pas de trace au nom "{name}": on prend '
+                                  f'le profil trace de {cn[:28]} sur x '
+                                  f'{lo_x}-{hi_x}')
+                if not cand:
+                    print('   detail impossible: aucun trace ne couvre '
+                          'ce massif')
                     out[label] = {'color': '#a78bfa', 'world_edges': edges}
                     print()
                     continue
