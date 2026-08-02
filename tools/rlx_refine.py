@@ -112,8 +112,6 @@ def main():
     ap.add_argument('--detail', action='store_true',
                     help='densifier sa crete avec nos silhouettes tracees')
     ap.add_argument('--base', type=float, default=20.0)
-    ap.add_argument('--skirt', type=float, default=200.0,
-                    help='longueur max du flanc, en metres au sol')
     ap.add_argument('--tol', type=float, default=1.0,
                     help='pourcentage de sommets tolere au-dessus des traces')
     ap.add_argument('--apply', action='store_true')
@@ -265,18 +263,13 @@ def main():
                     step = max(1, len(P) // 40)
                     for i in range(0, len(P), step):
                         T = P[i]
-                        # FACE VISIBLE UNIQUEMENT. Le flanc ARRIERE n'est
-                        # observe par personne: c'est de l'invention, et
-                        # c'est lui qui remplissait l'espace entre les
-                        # massifs au point de masquer le canyon. On ne
-                        # descend que du cote de la camera qui a vu la crete.
-                        v2 = vo[:2] - T[:2]
-                        v2 /= (np.linalg.norm(v2) + 1e-9)
-                        run = max(0.0, T[2] - args.base) / max(0.2, tn)
-                        run = min(run, args.skirt)
-                        de.append([list(map(float, T)),
-                                   [float(T[0] + v2[0] * run),
-                                    float(T[1] + v2[1] * run), args.base]])
+                        for sg in (1.0, -1.0):
+                            v2 = (vo[:2] - T[:2]) * sg
+                            v2 /= (np.linalg.norm(v2) + 1e-9)
+                            run = max(0.0, T[2] - args.base) / max(0.2, tn)
+                            de.append([list(map(float, T)),
+                                       [float(T[0] + v2[0] * run),
+                                        float(T[1] + v2[1] * run), args.base]])
                     print(f'   detail: crete densifiee a {len(P)} points '
                           f'depuis "{best_v[:30]}" (au lieu de {len(crest)}), '
                           f'{len(de)} aretes')
