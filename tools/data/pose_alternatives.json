@@ -246,25 +246,6 @@
    "methode": "pose rlx upstream b4b1b1a (2026-07-28), decimales non-rondes = probablement solvee de son cote. VALIDEE par nous: Daytona/Sebring WT reprojette a 15 px du clic (171,1598) \u2014 chronologie 371 px (active ",
    "raison_mise_de_cote": "remplacee par la pose upstream de rlx (54e49fe) sur demande d Alexandre. Mesure DEFAVORABLE: sur les 3 landmarks positionnes sans cette cam, notre pose donne 21.3 arcmin contre 56.5 pour la sienne (Daytona WT 21.3->60.1, 3400 Transmitter Rd (B) 25.0->56.5, Starlet Motel (RE) 6.5->44.5). Ses chiffres sont RONDS = estimation a la main du 2026-08-02; la precedente etait solvee.",
    "statut": "revert immediat via tools/pose_revert.py si besoin"
-  },
-  "notre-pose-2026-08-02": {
-   "xyz": [
-    -2190.0,
-    6320.0,
-    187.885
-   ],
-   "ypr": [
-    115.557,
-    10.2,
-    0.0
-   ],
-   "fov": [
-    79.8,
-    50.377
-   ],
-   "date": "2026-08-02",
-   "methode": "pose rlx upstream 54e49fe (2026-08-02), adoptee sur demande. Mesure DEFAVORABLE: sur les 3 landmarks positionnes sans cette cam, notre pose donne 21.3 arcmin contre 56.5 pour la si",
-   "raison_mise_de_cote": "remplacee par la pose de rlx: avec la notre, Mount Ambrosia n est pas cache par Mount Leonida dans la frame helico, ce qu Alexandre constate au rendu. Notre test d occlusion automatique est trop faible pour trancher (2 a 4 colonnes communes, meshs trop clairsemes)."
   }
  }
 }

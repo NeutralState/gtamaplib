@@ -3573,25 +3573,25 @@
   "id": "S2/66",
   "player": null,
   "xyz": [
-   -2000.0,
-   6750.0,
-   200.0
+   -2190.0,
+   6320.0,
+   187.885
   ],
   "ypr": [
-   122.1,
-   7.9,
+   115.557,
+   10.2,
    0.0
   ],
   "fov": [
-   65.0,
-   null
+   79.8,
+   50.377
   ],
   "size": [
    3840,
    2160
   ],
   "source": "Screenshot 1 \u2014 Mount Kalaga National Park 02 [1]",
-  "note": "pose rlx upstream 54e49fe (2026-08-02). Adoptee sur constat visuel d Alexandre: sinon Mount Ambrosia n est pas cache par Mount Leonida dans cette frame."
+  "note": "pose rlx upstream 54e49fe (2026-08-02), adoptee sur demande. Mesure DEFAVORABLE: sur les 3 landmarks positionnes sans cette cam, notre pose donne 21.3 arcmin contre 56.5 pour la sienne (Daytona WT 21.3->60.1, 3400 Transmitter Rd (B) 25.0->56.5, Starlet Motel (RE) 6.5->44.5). Ses chiffres sont RONDS = estimation a la main du 2026-08-02; la precedente etait solvee."
  },
  "Mount Kalaga National Park 04 (Mountain Pass) (X)": {
   "id": "S2/68",
