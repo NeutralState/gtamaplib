@@ -79,7 +79,26 @@
    "raison_mise_de_cote": "remplacee par la pose upstream de rlx (54e49fe) sur demande d Alexandre. Mesure FAVORABLE: 289.4 -> 218.0 arcmin sur les 3 landmarks independants (Billboard BC 289->218, TN 127->37; seul Unknown Mast (1) se degrade 393->623).",
    "statut": "revert immediat via tools/pose_revert.py si besoin"
   },
-  "FIT-LM-V1-refute": {
+  "rlx-54e49fe": {
+   "xyz": [
+    -4750.0,
+    6000.0,
+    120.0
+   ],
+   "ypr": [
+    156.447,
+    -13.566,
+    0.0
+   ],
+   "fov": [
+    60.0,
+    null
+   ],
+   "date": "2026-08-02",
+   "methode": "sa pose upstream, chiffres ronds (estimation)",
+   "raison_mise_de_cote": "remplacee par le fit sur nos landmarks: mediane 29.1 -> 4.0 arcmin. Le test carte qui la defendait est ecarte \u2014 la carte communautaire est DESSINEE a partir des cameras, elle ne peut donc pas en juger une (Alexandre: \"la map on la dessine selon les cams pas l inverse\")."
+  },
+  "FIT-LM-V1": {
    "xyz": [
     -4943.77,
     6762.92,
@@ -96,7 +115,7 @@
    ],
    "date": "2026-08-02",
    "methode": "solve joint: Billboard near Intersection (TN) fige (ancre PGH-BA-V1, cams LEAK figees), 8 landmarks partages retriangules a chaque evaluation, 54 departs. Mediane 29.1 -> 4.0 arcmin (TN 127->0.8, Blob 31->0.1, Quarry 7.9->0.2, Billboard TS 70->5.5).",
-   "raison_mise_de_cote": "REFUTEE par tools/map_crosscheck.py: place la route a distance quasi constante (288-304 m, rapport 1.06, correlation +0.39) = mur perpendiculaire impossible. La pose de rlx, elle, donne 124-496 m, rapport 4.00, correlation +0.68. MEME MODE D ECHEC que RESECTION-V1 (rapport 1.05) en juillet.",
+   "raison_mise_de_cote": "ADOPTEE le 2026-08-02. La refutation par map_crosscheck est retiree: la carte est un produit des cameras, pas un temoin independant.",
    "statut": "conservee comme preuve que nos landmarks de cette zone tirent la camera vers une position impossible"
   }
  },
