@@ -336,10 +336,16 @@ document.getElementById('load').onclick = () => {
   inp.click();
 };
 function ingest(txt) {
+  // FORMAT A TRAITS. Cette fonction etait restee a l'ancien format
+  // {points, closed}: les traces charges arrivaient donc sans `strokes`,
+  // nPts plantait des le premier rendu de la liste, load() n'etait jamais
+  // atteint et l'ecran restait noir. L'ancien format reste accepte.
   const d = JSON.parse(txt);
-  for (const f in d) for (const m in d[f])
-    store[f + ' ' + m] = { frame: f, massif: m, points: d[f][m].points,
-                                closed: !!d[f][m].closed };
+  for (const f in d) for (const m in d[f]) {
+    const e = d[f][m];
+    const st = e.strokes || (e.points && e.points.length ? [e.points] : [[]]);
+    store[f + ' ' + m] = { frame: f, massif: m, strokes: st };
+  }
   renderList(); draw();
 }
 const dz = document.getElementById('drop');
