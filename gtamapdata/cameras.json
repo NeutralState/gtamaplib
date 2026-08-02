@@ -3597,17 +3597,17 @@
   "id": "S2/68",
   "player": null,
   "xyz": [
-   -4943.77,
-   6762.92,
-   216.465
+   -4750.0,
+   6000.0,
+   120.0
   ],
   "ypr": [
-   162.421,
+   156.447,
    -13.566,
-   2.686
+   0.0
   ],
   "fov": [
-   52.82,
+   60.0,
    null
   ],
   "size": [
@@ -3615,7 +3615,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Mount Kalaga National Park 04 [1]",
-  "note": "pose FIT-LM-V1 (2026-08-02): solve joint sur nos landmarks, Billboard near Intersection (TN) fige (ancre PGH-BA-V1, cams LEAK figees), 8 landmarks partages retriangules a chaque evaluation. Mediane 29.1 -> 4.0 arcmin. Ecartes du solve: Billboard near Intersection (BC) et Unknown Mast (1), incoherents (BC reste a 124 quand TN, sur le meme panneau, tombe a 1.4)."
+  "note": "pose rlx upstream 54e49fe (2026-08-02), adoptee sur demande. Mesure FAVORABLE: 289.4 -> 218.0 arcmin sur les 3 landmarks independants (Billboard BC 289->218, TN 127->37; seul Unknown Mast (1) se degrade 393->623)."
  },
  "Vice City Postcard": {
   "id": "S2/71",

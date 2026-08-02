@@ -8968,17 +8968,16 @@
  },
  "Quarry": {
   "xyz": [
-   -6074.35,
-   4369.86,
-   24.44
+   -5850.886726798211,
+   4109.935625225333,
+   43.74805848965973
   ],
   "source_cameras": [
    "Diner (SE) (A)",
    "Mount Kalaga National Park 04 (Mountain Pass) (X)"
   ],
-  "error_m": 2.0,
-  "zone": "port_gellhorn",
-  "method": "retriangulation apres FIT-LM-V1 de Mount Kalaga National Park 04 (Mountain Pass) (X) (2 cams, perp 0.1 m, angle 66.3 deg)"
+  "error_m": null,
+  "zone": "port_gellhorn"
  },
  "Radio Tower #1 (Port Gellhorn)": {
   "xyz": [
@@ -16831,13 +16830,13 @@
   ],
   "zone": null,
   "author": "rlx",
-  "method": "retriangulation apres FIT-LM-V1 de Mount Kalaga National Park 04 (Mountain Pass) (X) (2 cams, perp 2.3 m, angle 51.7 deg)",
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 7.2 m, angle max 47.7 deg",
   "xyz": [
-   -5372.67,
-   3475.54,
-   71.93
+   -5239.1,
+   3557.01,
+   57.29
   ],
-  "error_m": 2.3
+  "error_m": 7.2
  },
  "Starlet Motel (P)": {
   "xyz": [
@@ -18423,16 +18422,16 @@
  },
  "Blob": {
   "xyz": [
-   -5123.35,
-   4411.6,
-   142.23
+   -5328.67,
+   4278.18,
+   133.1
   ],
   "source_cameras": [
    "Mount Kalaga National Park 02 (Helicopter) (X)",
    "Mount Kalaga National Park 04 (Mountain Pass) (X)"
   ],
-  "error_m": 2.0,
-  "method": "retriangulation apres FIT-LM-V1 de Mount Kalaga National Park 04 (Mountain Pass) (X) (2 cams, perp 0.1 m, angle 52.6 deg)"
+  "error_m": 5.8,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 5.8 m, angle max 64.9 deg"
  },
  "Cardozo South Beach (D)": {
   "xyz": [
@@ -18477,16 +18476,16 @@
  },
  "Crazy Hill": {
   "xyz": [
-   -5230.0,
-   2531.31,
-   85.23
+   -5045.2,
+   2456.15,
+   82.83
   ],
   "source_cameras": [
    "Mount Kalaga National Park 04 (Mountain Pass) (X)",
    "Port Vice City (A)"
   ],
-  "error_m": 6.6,
-  "method": "retriangulation apres FIT-LM-V1 de Mount Kalaga National Park 04 (Mountain Pass) (X) (2 cams, perp 6.6 m, angle 71.7 deg)"
+  "error_m": 4.2,
+  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 4.2 m, angle max 59.4 deg"
  },
  "Flagler on the River (SE)": {
   "xyz": [
@@ -18858,15 +18857,16 @@
  },
  "3001 Gordon Hwy (Water Tower)": {
   "xyz": [
-   -5111.136709587487,
-   1587.3046697264863,
-   87.02856161012014
+   -5130.88,
+   1567.93,
+   91.54
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
-   "Loading Zone near Prison (SW)"
+   "Loading Zone near Prison (SW)",
+   "Mount Kalaga National Park 04 (Mountain Pass) (X)"
   ],
-  "error_m": 4.107,
+  "error_m": 4.7,
   "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 4.7 m, angle max 51.1 deg"
  },
  "3400 Transmitter Rd": {
@@ -19071,17 +19071,17 @@
  },
  "Tree near Port Gellhorn": {
   "xyz": [
-   -5513.25,
-   3704.29,
-   119.95
+   -5385.49,
+   3730.66,
+   116.16
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Mount Kalaga National Park 02 (Helicopter) (X)",
    "Mount Kalaga National Park 04 (Mountain Pass) (X)"
   ],
-  "error_m": 79.7,
-  "method": "retriangulation apres FIT-LM-V1 de Mount Kalaga National Park 04 (Mountain Pass) (X) (3 cams, perp 79.7 m, angle 84.8 deg)"
+  "error_m": 34.8,
+  "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 34.8 m, angle max 80.3 deg"
  },
  "Trees near Wheelabrator": {},
  "Unknown Building (North Port Gellhorn) (T)": {
