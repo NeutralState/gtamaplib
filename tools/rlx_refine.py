@@ -34,6 +34,13 @@ dessous, c'est-a-dire la plus proche que nos traces autorisent.
 CE QUI RESTE DE LUI: la forme, l'orientation, le trace au sol. CE QU'ON
 CORRIGE: l'echelle radiale, et rien d'autre.
 
+--detail: LA DENSIFICATION. Sa crete tient en 3 a 7 points; nos traces en
+ont des centaines. On garde donc SA polyligne de crete comme surface de
+profondeur — un rideau vertical — et on y projette NOS colonnes tracees:
+chaque rayon de silhouette, tire depuis la vue la mieux tracee, rencontre ce
+rideau en un point 3D. La profondeur vient de lui, la forme vient de nous.
+Puis les flancs descendent a sa pente jusqu'a sa base.
+
 Mount Ambrosia est exclu par defaut — notre modele y est prefere.
 
 Usage:
@@ -53,6 +60,46 @@ sys.path.insert(0, REPO)
 
 import numpy as np
 
+
+def crest_of(name, MOUNTAINS, cam):
+    """La crete de rlx, reconstruite depuis ses chiffres declares plutot que
+    devinee depuis son mesh: pixel + distance horizontale, exactement comme
+    il la definit."""
+    for n, cn, pts, slope, side in MOUNTAINS:
+        if n != name:
+            continue
+        o = np.asarray(cam.xyz, float)
+        out = []
+        for x, y, dist in pts:
+            d = np.asarray(cam.get_pixel_direction((float(x), float(y))), float)
+            d /= np.linalg.norm(d)
+            t = dist / max(1e-9, float(np.hypot(d[0], d[1])))
+            out.append(o + t * d)
+        return np.array(out), float(slope), float(side)
+    return None, 30.0, 60.0
+
+
+def curtain_hit(o, d, poly):
+    """Rencontre du rayon avec le RIDEAU vertical porte par la polyligne de
+    crete. Les segments d'extremite sont prolonges: la crete continue au-dela
+    des quelques points qu'il a poses."""
+    best = None
+    for i in range(len(poly) - 1):
+        a, b = poly[i, :2], poly[i + 1, :2]
+        e = b - a
+        den = d[0] * (-e[1]) + d[1] * e[0]
+        if abs(den) < 1e-9:
+            continue
+        w = a - o[:2]
+        t = (w[0] * (-e[1]) + w[1] * e[0]) / den
+        u = (d[0] * w[1] - d[1] * w[0]) / den
+        lo = -8.0 if i == 0 else 0.0
+        hi = 9.0 if i == len(poly) - 2 else 1.0
+        if t > 1.0 and lo <= u <= hi and (best is None or t < best):
+            best = t
+    return None if best is None else o + best * d
+
+
 MESH_PATH = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
 RLX_PATH = os.path.join(THIS, 'data', 'rlx_mountains_meshes.json')
 SKIP = ('Mount Ambrosia',)          # notre modele est prefere
@@ -62,13 +109,16 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--only')
     ap.add_argument('--include-ambrosia', action='store_true')
+    ap.add_argument('--detail', action='store_true',
+                    help='densifier sa crete avec nos silhouettes tracees')
+    ap.add_argument('--base', type=float, default=20.0)
     ap.add_argument('--tol', type=float, default=1.0,
                     help='pourcentage de sommets tolere au-dessus des traces')
     ap.add_argument('--apply', action='store_true')
     args = ap.parse_args()
 
     import common
-    from silhouette_hull import traced, cam_profile
+    from silhouette_hull import traced, cam_profile, poly_top
     from silhouette_volume import is_skyline
     from import_rlx_mountains import MOUNTAINS
     src = {n: c for n, c, _, _, _ in MOUNTAINS}
@@ -153,7 +203,79 @@ def main():
         V[:, :2] = o[:2] + k * (V0[:, :2] - o[:2])
         edges = [[list(map(float, V[2 * i])), list(map(float, V[2 * i + 1]))]
                  for i in range(len(ent['world_edges']))]
-        out[f'{name} (rlx recale)'] = {'color': '#a78bfa', 'world_edges': edges}
+        label = f'{name} (rlx recale)'
+
+        if args.detail:
+            crest, slope, side = crest_of(name, MOUNTAINS, cam)
+            if crest is None or len(crest) < 2:
+                print('   detail impossible: crete de rlx introuvable')
+            else:
+                crest = crest.copy()
+                crest[:, :2] = o[:2] + k * (crest[:, :2] - o[:2])
+                # LA FORME VIENT DU TRACE DE CE MASSIF, pas du profil
+                # fusionne de la frame. Choisir la vue au nombre total de
+                # colonnes tous massifs confondus faisait densifier les trois
+                # massifs depuis Diner (N), y compris Waffles Ridge qui n'y a
+                # que 5 points traces — la forme venait alors des cretes
+                # voisines.
+                def own(v):
+                    e = (TR.get(v) or {}).get(name)
+                    if not e:
+                        return None
+                    return poly_top(e.get('strokes') or e.get('points'),
+                                    int(prof[v][0].w))
+                cand = [(v, own(v)) for v in views]
+                cand = [(v, q) for v, q in cand if q is not None
+                        and not np.isnan(q).all()]
+                if not cand:
+                    print('   detail impossible: ce massif n a pas de trace '
+                          'propre dans ces vues')
+                    out[label] = {'color': '#a78bfa', 'world_edges': edges}
+                    print()
+                    continue
+                best_v, vp = max(cand, key=lambda r: int(np.sum(~np.isnan(r[1]))))
+                vc = prof[best_v][0]
+                vo = np.asarray(vc.xyz, float)
+                cols = np.where(~np.isnan(vp))[0]
+                P = []
+                for u in cols:
+                    dd = np.asarray(vc.get_pixel_direction(
+                        (float(u), float(vp[u]))), float)
+                    nn = np.linalg.norm(dd)
+                    if nn < 1e-9:
+                        continue
+                    q = curtain_hit(vo, dd / nn, crest)
+                    if q is not None:
+                        P.append(q)
+                if len(P) < 10:
+                    print('   detail impossible: aucun rayon ne rencontre '
+                          'sa crete')
+                else:
+                    P = np.array(P)
+                    de = []
+                    for i in range(len(P) - 1):
+                        if np.linalg.norm(P[i + 1] - P[i]) < 300:
+                            de.append([list(map(float, P[i])),
+                                       list(map(float, P[i + 1]))])
+                    tn = math.tan(math.radians(slope))
+                    # une ligne de pente toutes les ~25 colonnes: assez pour
+                    # lire le volume, pas au point de masquer la frame
+                    step = max(1, len(P) // 40)
+                    for i in range(0, len(P), step):
+                        T = P[i]
+                        for sg in (1.0, -1.0):
+                            v2 = (vo[:2] - T[:2]) * sg
+                            v2 /= (np.linalg.norm(v2) + 1e-9)
+                            run = max(0.0, T[2] - args.base) / max(0.2, tn)
+                            de.append([list(map(float, T)),
+                                       [float(T[0] + v2[0] * run),
+                                        float(T[1] + v2[1] * run), args.base]])
+                    print(f'   detail: crete densifiee a {len(P)} points '
+                          f'depuis "{best_v[:30]}" (au lieu de {len(crest)}), '
+                          f'{len(de)} aretes')
+                    edges = de
+                    label = f'{name} (rlx recale + detail)'
+        out[label] = {'color': '#a78bfa', 'world_edges': edges}
         print()
 
     if not out:
