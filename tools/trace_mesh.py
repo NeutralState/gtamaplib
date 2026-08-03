@@ -156,14 +156,21 @@ def build_mesh(cam, crest, slope_every=6, contour_step=25.0):
             sweep = 2 * d1                      # avant -> ext -> arriere
             feet = []
             run = max(0.0, (T[2] - BASE)) / sl
-            for t in np.linspace(0.0, 1.0, 7):
+            for t in np.linspace(0.0, 1.0, 13):
                 a = a_f + t * sweep
                 F = np.array([T[0] + math.cos(a) * run,
                               T[1] + math.sin(a) * run, BASE])
                 edges.append([list(map(float, T)), list(map(float, F))])
                 feet.append(F)
-            for a, b in zip(feet[:-1], feet[1:]):   # l arc au pied, referme
-                edges.append([list(map(float, a)), list(map(float, b))])
+            # arcs de niveau SUR l eventail (pas seulement au pied): l arc a
+            # z fixe traverse tous les rayons — meme densite que le corps
+            for zc in np.arange(BASE, T[2], contour_step):
+                if T[2] - BASE < 1e-6:
+                    break
+                tt = (T[2] - zc) / (T[2] - BASE)
+                ring = [T + tt * (F - T) for F in feet]
+                for a, b in zip(ring[:-1], ring[1:]):
+                    edges.append([list(map(float, a)), list(map(float, b))])
 
     # courbes de niveau: relier les pieds de pente de meme cote a z fixe
     for zc in np.arange(BASE + contour_step,
@@ -296,7 +303,12 @@ def main():
                        slope_every=args.slope_every, contour_step=args.contour_step)
     mesh = json.load(open(MESH_PATH))
     old = f'{M} (rlx)'
-    color = mesh.get(old, {}).get('color', '#22d3ee')
+    # la couleur du mesh EXISTANT d abord: a la re-application, le (rlx) a
+    # deja ete remplace et le repli sur le defaut peignait tout en cyan —
+    # Mountain, Waffles et Ridge ont fini indiscernables ("mount mountain
+    # est rendu ou?")
+    color = (mesh.get(M, {}).get('color')
+             or mesh.get(old, {}).get('color', '#22d3ee'))
     if old in mesh:
         del mesh[old]
         print(f'\n"{old}" retire (remplace par le mesh dense, meme couleur)')
