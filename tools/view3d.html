@@ -51,14 +51,20 @@
 </div>
 <div class="panel" id="info"></div>
 <!-- [VIEW3D-POV] vue a travers une cam: position/orientation/fov exacts -->
-<img id="pov-frame" style="display:none;position:fixed;top:0;left:50%;transform:translateX(-50%);
-     height:100vh;z-index:5;pointer-events:none;opacity:.5">
+<!-- [POV-ZOOM-V1] centre en X ET en Y: a zoom 1 la frame fait 100vh et top:50%
+     translateY(-50%) est identique a top:0 ; des qu'elle rapetisse il faut
+     qu'elle reste centree sur l'axe optique, sinon elle glisse vers le haut. -->
+<img id="pov-frame" style="display:none;position:fixed;top:50%;left:50%;
+     transform:translate(-50%,-50%);height:100vh;z-index:5;pointer-events:none;opacity:.5">
 <div id="pov-marks" style="position:fixed;inset:0;z-index:6;pointer-events:none;display:none"></div>
 <div class="panel" id="pov" style="display:none;top:12px;left:50%;transform:translateX(-50%);
      z-index:11;align-items:center;gap:10px">
   <b id="pov-name" style="color:var(--text)"></b>
   <label style="margin-left:10px">frame <input id="pov-alpha" type="range" min="0" max="100"
          value="50" style="width:90px;vertical-align:middle"></label>
+  <label style="margin-left:10px" title="molette: elargit le champ sans bouger la cam — la frame rapetisse d'autant et reste alignee">recul <input id="pov-zoom" type="range" min="100" max="600"
+         value="100" style="width:110px;vertical-align:middle"></label>
+  <span id="pov-zoomv" style="color:var(--dim);font-size:10px">x1.0</span>
   <button id="pov-exit" style="margin-left:10px;background:var(--surface2);color:var(--text);
           border:1px solid var(--border);border-radius:5px;padding:2px 10px;cursor:pointer;
           font:11px var(--mono)">exit (Esc)</button>
@@ -406,6 +412,70 @@ function killQuad() {
 const povPanel = document.getElementById('pov');
 const povAlpha = document.getElementById('pov-alpha');
 let povPrev = null;
+
+// ── [POV-ZOOM-V1] reculer SANS quitter la cam ──
+// Alexandre: "zoom out sans qu'on sorte de la cam, mais que l'image rapetisse
+// pour voir plus de map". Reculer physiquement la camera changerait la
+// parallaxe et desalignerait la frame du monde: la seule transformation qui
+// preserve l'alignement depuis un point de vue fixe est d'ELARGIR le champ.
+// On pose tan(F/2) = zoom * tan(vfov0/2), et la frame occupe alors exactement
+// 1/zoom de la hauteur d'ecran — exact, pas approche.
+let povBase = null;          // {vfov0, ratio, marks}
+let povZoom = 1;
+const povZoomEl = document.getElementById('pov-zoom');
+const povZoomV = document.getElementById('pov-zoomv');
+
+function povMaxZoom() {
+  // on borne le ZOOM, pas le fov: un fov ecrete casserait la relation
+  // ci-dessus et l'image glisserait sans que rien ne le signale.
+  const v0 = THREE.MathUtils.degToRad(povBase.vfov0);
+  return Math.min(6, Math.tan(THREE.MathUtils.degToRad(82.5)) / Math.tan(v0 / 2));
+}
+function renderPovMarks() {
+  const div = document.getElementById('pov-marks');
+  if (!povPrev || !povBase || !povBase.marks) return;
+  const d = povBase.marks;
+  div.innerHTML = '';
+  const [W, H] = realSize();
+  const ih = H / povZoom, iw = ih * povBase.ratio;
+  const ileft = (W - iw) / 2, itop = (H - ih) / 2;   // centree en X ET en Y
+  const W2 = d.size || [3840, 2160];
+  for (const m of d.markings || []) {
+    const fx = ileft + m.px[0] * (iw / W2[0]);
+    const fy = itop + m.px[1] * (ih / W2[1]);
+    const v = new THREE.Vector3(...m.xyz).project(camera);
+    const wx = (v.x + 1) / 2 * W, wy = (1 - v.y) / 2 * H;
+    const mk = (x, y, color, sym) => {
+      const el = document.createElement('div');
+      el.textContent = sym;
+      el.style.cssText = 'position:absolute;left:' + (x - 7) + 'px;top:' + (y - 10) +
+        'px;color:' + color + ';font:14px monospace;text-shadow:0 0 3px #000';
+      div.appendChild(el);
+    };
+    mk(fx, fy, '#facc15', '+');
+    if (v.z < 1) mk(wx, wy, '#67e8f9', 'x');
+  }
+}
+function setPovZoom(z) {
+  if (!povBase) return;
+  povZoom = Math.max(1, Math.min(povMaxZoom(), z));
+  const v0 = THREE.MathUtils.degToRad(povBase.vfov0);
+  camera.fov = THREE.MathUtils.radToDeg(2 * Math.atan(povZoom * Math.tan(v0 / 2)));
+  camera.updateProjectionMatrix();
+  const h = (100 / povZoom).toFixed(4);
+  povFrame.style.height = h + 'vh';
+  povFrame.style.width = 'calc(' + h + 'vh * ' + povBase.ratio.toFixed(4) + ')';
+  povZoomV.textContent = 'x' + povZoom.toFixed(1);
+  if (document.activeElement !== povZoomEl) povZoomEl.value = Math.round(povZoom * 100);
+  renderPovMarks();
+  updatePovDbg();
+}
+povZoomEl.addEventListener('input', () => setPovZoom(+povZoomEl.value / 100));
+addEventListener('wheel', ev => {
+  if (!povPrev || !povBase) return;   // hors POV, la molette reste a OrbitControls
+  ev.preventDefault();
+  setPovZoom(povZoom * Math.exp(ev.deltaY * 0.0012));
+}, { passive: false });
 function enterPOV(c) {
   if (!c.corners) return;
   flyAnim = null;                                 // [VIEW3D-SYNC-V2] stop tout vol en cours
@@ -439,8 +509,9 @@ function enterPOV(c) {
   // centree. Prouve pixel-perfect a l'ere V3 (0.1-2.3px sur 3 cams).
   killQuad();
   const ratio = Math.tan(hfov / 2) / Math.tan(THREE.MathUtils.degToRad(vfov) / 2);
-  povFrame.style.width = 'calc(100vh * ' + ratio.toFixed(4) + ')';
-  povFrame.style.height = '100vh';
+  povBase = { vfov0: vfov, ratio: ratio, marks: null };
+  povZoom = 1;
+  setPovZoom(1);                       // pose fov, taille de la frame et l'affichage
   povFrame.style.outline = '1px solid rgba(250,204,21,.35)';
   povFrame.style.opacity = povAlpha.value / 100;
   povFrame.style.display = 'block';
@@ -454,26 +525,9 @@ function enterPOV(c) {
   marksDiv.innerHTML = '';
   fetch('/api/cam_markings?cam=' + encodeURIComponent(c.name))
     .then(r => r.json()).then(d => {
-      if (!povPrev) return;   // sorti du POV entre-temps
-      // geometrie de l'img calculee (pas mesuree): height=100vh, width=h*ratio, centree
-      const [W, H] = realSize();
-      const iw = H * ratio, ileft = (W - iw) / 2;
-      const W2 = d.size || [3840, 2160];
-      for (const m of d.markings || []) {
-        const fx = ileft + m.px[0] * (iw / W2[0]);
-        const fy = m.px[1] * (H / W2[1]);
-        const v = new THREE.Vector3(...m.xyz).project(camera);
-        const wx = (v.x + 1) / 2 * W, wy = (1 - v.y) / 2 * H;
-        const mk = (x, y, color, sym) => {
-          const el = document.createElement('div');
-          el.textContent = sym;
-          el.style.cssText = 'position:absolute;left:' + (x - 7) + 'px;top:' + (y - 10) +
-            'px;color:' + color + ';font:14px monospace;text-shadow:0 0 3px #000';
-          marksDiv.appendChild(el);
-        };
-        mk(fx, fy, '#facc15', '+');
-        if (v.z < 1) mk(wx, wy, '#67e8f9', 'x');
-      }
+      if (!povPrev || !povBase) return;   // sorti du POV entre-temps
+      povBase.marks = d;                  // gardees: a redessiner a chaque cran de zoom
+      renderPovMarks();
     }).catch(() => {});
   updatePovDbg();
   controls.enabled = false;
@@ -491,6 +545,8 @@ function exitPOV() {
   controls.target.copy(povPrev.target);
   controls.enabled = true;
   povPrev = null;
+  povBase = null; povZoom = 1;
+  povZoomEl.value = 100; povZoomV.textContent = 'x1.0';
   povPanel.style.display = 'none';
   killQuad();
   povFrame.style.display = 'none';
