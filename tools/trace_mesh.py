@@ -135,6 +135,36 @@ def build_mesh(cam, crest, slope_every=6, contour_step=25.0):
                 F = np.array([T[0] + v[0] * run, T[1] + v[1] * run, BASE])
                 edges.append([list(map(float, T)), list(map(float, F))])
                 slope_lines.append((T, F, sgn))
+    # flancs: fermer les EXTREMITES de chaque crete par un eventail de pentes
+    # (Alexandre: "faudrait fermer les cotes pour pas laisser ouvert meme si
+    # c'est speculatif"). SPECULATIF ET ASSUME: aucune camera ne mesure ces
+    # flancs — on prolonge simplement la pente de 30 deg en eventail entre la
+    # direction avant et la direction arriere, en passant par le prolongement
+    # de la crete. C'est une fermeture visuelle, pas une donnee.
+    for seg in crest:
+        if len(seg) < 2:
+            continue
+        for T, nb in ((seg[0], seg[1]), (seg[-1], seg[-2])):
+            ext = (T[:2] - nb[:2])
+            ext /= (np.linalg.norm(ext) + 1e-9)
+            fwd = (o[:2] - T[:2])
+            fwd /= (np.linalg.norm(fwd) + 1e-9)
+            a_f = math.atan2(fwd[1], fwd[0])
+            a_e = math.atan2(ext[1], ext[0])
+            # balayage avant -> arriere par le cote du prolongement de crete
+            d1 = (a_e - a_f + math.pi) % (2 * math.pi) - math.pi
+            sweep = 2 * d1                      # avant -> ext -> arriere
+            feet = []
+            run = max(0.0, (T[2] - BASE)) / sl
+            for t in np.linspace(0.0, 1.0, 7):
+                a = a_f + t * sweep
+                F = np.array([T[0] + math.cos(a) * run,
+                              T[1] + math.sin(a) * run, BASE])
+                edges.append([list(map(float, T)), list(map(float, F))])
+                feet.append(F)
+            for a, b in zip(feet[:-1], feet[1:]):   # l arc au pied, referme
+                edges.append([list(map(float, a)), list(map(float, b))])
+
     # courbes de niveau: relier les pieds de pente de meme cote a z fixe
     for zc in np.arange(BASE + contour_step,
                         max(s[0][2] for s in slope_lines), contour_step):
