@@ -114,8 +114,11 @@ def build_crest(cam, strokes, az_p, d_p, k=1.0):
     return crest
 
 
-def build_mesh(cam, crest):
-    """Crete + pentes + courbes de niveau, dans le style du massif Ambrosia."""
+def build_mesh(cam, crest, slope_every=6, contour_step=25.0):
+    """Crete + pentes + courbes de niveau, dans le style du massif Ambrosia.
+
+    slope_every / contour_step reglent la DENSITE du rendu, pas la geometrie:
+    la crete et les pentes restent les memes, on en dessine plus ou moins."""
     o = np.asarray(cam.xyz, float)
     edges = []
     sl = math.tan(math.radians(SLOPE))
@@ -123,7 +126,7 @@ def build_mesh(cam, crest):
     for seg in crest:
         for a, b in zip(seg[:-1], seg[1:]):
             edges.append([list(map(float, a)), list(map(float, b))])
-        for i in range(0, len(seg), 6):
+        for i in range(0, len(seg), slope_every):
             T = seg[i]
             for sgn in (+1.0, -1.0):
                 v = (o[:2] - T[:2]) * sgn
@@ -133,7 +136,8 @@ def build_mesh(cam, crest):
                 edges.append([list(map(float, T)), list(map(float, F))])
                 slope_lines.append((T, F, sgn))
     # courbes de niveau: relier les pieds de pente de meme cote a z fixe
-    for zc in np.arange(BASE + 25, max(s[0][2] for s in slope_lines), 25):
+    for zc in np.arange(BASE + contour_step,
+                        max(s[0][2] for s in slope_lines), contour_step):
         for sgn in (+1.0, -1.0):
             ring = []
             for T, F, s in slope_lines:
@@ -184,6 +188,10 @@ def main():
     ap.add_argument('--k', type=float, default=1.0,
                     help='echelle appliquee aux distances rlx (1.0 = telles '
                          'quelles; utiliser l optimum du --sweep)')
+    ap.add_argument('--slope-every', type=int, default=6,
+                    help='une ligne de pente tous les N points de crete')
+    ap.add_argument('--contour-step', type=float, default=25.0,
+                    help='courbes de niveau tous les N metres')
     ap.add_argument('--apply', action='store_true')
     args = ap.parse_args()
 
@@ -254,7 +262,8 @@ def main():
     if not args.apply:
         print('\nDRY-RUN (--apply pour ecrire).')
         return
-    edges = build_mesh(common.get_cam(R), crest)
+    edges = build_mesh(common.get_cam(R), crest,
+                       slope_every=args.slope_every, contour_step=args.contour_step)
     mesh = json.load(open(MESH_PATH))
     old = f'{M} (rlx)'
     color = mesh.get(old, {}).get('color', '#22d3ee')
