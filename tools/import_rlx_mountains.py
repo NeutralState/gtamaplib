@@ -80,16 +80,21 @@ def rlx_pose(cam_name):
             'size': [int(float(v)) for v in m.group(4).split(',')]}
 
 
-def build(name, cam_name, pts, slope, side_slope):
-    st = rlx_pose(cam_name)
-    cam = common.get_cam(cam_name, st) if st else common.get_cam(cam_name)
-    if st:
-        import numpy as _np
-        d = float(_np.linalg.norm(_np.asarray(st['xyz']) -
-                                  _np.asarray(common.get_cam(cam_name).xyz)))
+def build(name, cam_name, pts, slope, side_slope, use_rlx_pose=True):
+    st = rlx_pose(cam_name) if use_rlx_pose else None
+    # GOTCHA #5 — ml.get_camera() rend TOUJOURS la meme instance. L'ancienne
+    # version appelait get_cam(cam_name) sans etat juste pour ANNONCER l'ecart
+    # de pose: cet appel de diagnostic remettait l'instance sur notre pose,
+    # et le o = cam.xyz suivant lisait la notre. Les 7 montagnes ont ete
+    # construites avec NOS poses alors que le message disait l'inverse. On
+    # lit donc l'ecart dans le JSON, sans jamais toucher a l'instance.
+    ours = json.load(open(os.path.join(REPO, 'gtamapdata', 'cameras.json'))).get(cam_name)
+    if st and ours:
+        d = float(np.linalg.norm(np.asarray(st['xyz']) - np.asarray(ours['xyz'])))
         if d > 5:
-            print(f'      (sa pose de {cam_name[:26]} est a {d:.0f} m de la '
-                  f'notre — on utilise LA SIENNE, ses distances y sont declarees)')
+            print(f'      (sa pose de {cam_name[:26]} est a {d:.0f} m de la notre '
+                  f'— on utilise LA SIENNE, ses distances y sont declarees)')
+    cam = common.get_cam(cam_name, st) if st else common.get_cam(cam_name)
     o = np.asarray(cam.xyz, float)
     tops = []
     for x, y, dist in pts:
