@@ -11294,6 +11294,14 @@
   ],
   "zone": null
  },
+ "Round Water Tower (B)": {
+  "author": "rlx",
+  "error_m": null,
+  "source_cameras": [],
+  "xyz": null,
+  "zone": "ambrosia",
+  "note": "objet distinct vu depuis Ambrosia 02 (Panorama), separe de 'Round Water Tower' le 2026-08-03. Les trois clics d'origine sont geometriquement incompatibles: aucune position ne descend sous 29.65 arcmin sur les trois (mediane reseau 6.4). Le Panorama est la mieux validee des trois cams (0.15 px median sur 38 temoins externes) et son clic tombe sur un objet net, tandis que la position de 'Round Water Tower' s'y projette dans de la brume plate (ecart-type dans les 7 pct les plus bas de la ligne d'horizon). NON TRIANGULE: un seul rayon. Second temoin cherche sans succes, les 3 meilleurs candidats (Hangar (A) et (B) a 720 m, Truck (2), Convertible) sont tous occultes."
+ },
  "Lake near VCIA (B)": {
   "author": "rlx",
   "error_m": null,
