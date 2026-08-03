@@ -295,17 +295,27 @@ layers.lms.add(new THREE.Points(lmGeoZc, new THREE.PointsMaterial({
   map: dotTex, size: 10, color: 0x60a5fa, transparent: true, opacity: 0.95,
   alphaTest: 0.05, depthWrite: false, sizeAttenuation: true })));
 
-// ── meshes proceduraux: wireframe cyan ──
-const meshVerts = [];
-for (const edges of Object.values(data.meshes || {})) {
-  const list = edges.world_edges || edges;
-  for (const e of list) meshVerts.push(...e[0], ...e[1]);
+// ── meshes proceduraux: chaque mesh garde SA couleur ──
+// Le rendu etait en cyan uni: en 3D on ne distinguait plus un massif d'un
+// autre ni d'un building. La couleur est celle du mesh (meme champ que la
+// vue camera), portee par sommet pour rester sur une seule passe de dessin.
+const MESH_FALLBACK = 0x67e8f9;
+const meshVerts = [], meshCols = [];
+const _c = new THREE.Color();
+for (const m of Object.values(data.meshes || {})) {
+  const list = m.world_edges || m;
+  _c.set(m.color || MESH_FALLBACK);   // .set() fait deja le passage sRGB
+  for (const e of list) {
+    meshVerts.push(...e[0], ...e[1]);
+    for (let k = 0; k < 2; k++) meshCols.push(_c.r, _c.g, _c.b);
+  }
 }
 if (meshVerts.length) {
   const mg = new THREE.BufferGeometry();
   mg.setAttribute('position', new THREE.Float32BufferAttribute(meshVerts, 3));
-  layers.meshes.add(new THREE.LineSegments(mg,
-    new THREE.LineBasicMaterial({ color: 0x67e8f9, transparent: true, opacity: 0.8 })));
+  mg.setAttribute('color', new THREE.Float32BufferAttribute(meshCols, 3));
+  layers.meshes.add(new THREE.LineSegments(mg, new THREE.LineBasicMaterial({
+    vertexColors: true, transparent: true, opacity: 0.9 })));
 }
 
 // ── ocean z=0 + grille ──
