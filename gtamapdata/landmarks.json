@@ -11282,25 +11282,18 @@
  },
  "Round Water Tower": {
   "author": "rlx",
-  "error_m": 2.209,
+  "error_m": 4.282,
   "source_cameras": [
-   "Vice City Postcard",
-   "Port Vice City (A)"
+   "Ambrosia 02 (Panorama)",
+   "Vice City Postcard"
   ],
   "xyz": [
-   -2160.8015230841406,
-   518.9732260892318,
-   69.33809508925816
+   -2235.740564575172,
+   479.5905523043354,
+   75.01310316926667
   ],
-  "zone": null
- },
- "Round Water Tower (B)": {
-  "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
-  "xyz": null,
   "zone": "ambrosia",
-  "note": "objet distinct vu depuis Ambrosia 02 (Panorama), separe de 'Round Water Tower' le 2026-08-03. Les trois clics d'origine sont geometriquement incompatibles: aucune position ne descend sous 29.65 arcmin sur les trois (mediane reseau 6.4). Le Panorama est la mieux validee des trois cams (0.15 px median sur 38 temoins externes) et son clic tombe sur un objet net, tandis que la position de 'Round Water Tower' s'y projette dans de la brume plate (ecart-type dans les 7 pct les plus bas de la ligne d'horizon). NON TRIANGULE: un seul rayon. Second temoin cherche sans succes, les 3 meilleurs candidats (Hangar (A) et (B) a 720 m, Truck (2), Convertible) sont tous occultes."
+  "note": "retriangule le 2026-08-03 sur Panorama x Vice City Postcard (parallaxe 64.1 deg, gap 4.28 m), +81 m par rapport a la valeur precedente. Le clic de Port Vice City (A) est EXCLU: les trois clics etaient geometriquement incompatibles (aucune position sous 29.65 arcmin sur les trois, mediane reseau 6.4). L'ancienne position venait de VCP x PVC(A) et son gap de 0.23 m ne valait rien: le rayon de VCP fait 0.3 deg avec l'axe du desaccord, il ne contraint pas la profondeur et ne peut donc pas etre en desaccord le long de cet axe. Depuis le Panorama (0.15 px median sur 38 temoins externes, la mieux validee des trois) l'ancienne position tombait sur de la brume plate alors que son clic vise un objet net. Valeur a 4.9 m de celle de rlx."
  },
  "Lake near VCIA (B)": {
   "author": "rlx",
