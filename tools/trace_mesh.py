@@ -117,12 +117,17 @@ def build_crest(cam, strokes, az_p, d_p, k=1.0):
     return crest
 
 
-def build_mesh(cam, crest, slope_every=6, contour_step=25.0, slope=SLOPE):
+def build_mesh(cam, crest, slope_every=6, contour_step=25.0, slope=SLOPE,
+               side_slope=60.0):
     """Crete + pentes + courbes de niveau, dans le style du massif Ambrosia.
 
     slope_every / contour_step reglent la DENSITE du rendu, pas la geometrie:
     la crete et les pentes restent les memes, on en dessine plus ou moins.
-    slope: rlx declare 15 deg pour Easy Hill (colline douce), 30 ailleurs."""
+    slope: rlx declare 15 deg pour Easy Hill (colline douce), 30 ailleurs.
+    side_slope: la pente des FERMETURES d'extremite. 60 deg par defaut, comme
+    la classe Mountain de rlx — un flanc a 30 deg courait h/tan(30) = 1.7x la
+    hauteur et gonflait l'emprise en dome (Alexandre: "pas des domes comme ca,
+    ca boost le footprint pour rien"). A 60 deg le rayon est divise par 3."""
     o = np.asarray(cam.xyz, float)
     edges = []
     sl = math.tan(math.radians(slope))
@@ -159,8 +164,8 @@ def build_mesh(cam, crest, slope_every=6, contour_step=25.0, slope=SLOPE):
             d1 = (a_e - a_f + math.pi) % (2 * math.pi) - math.pi
             sweep = 2 * d1                      # avant -> ext -> arriere
             feet = []
-            run = max(0.0, (T[2] - BASE)) / sl
-            for t in np.linspace(0.0, 1.0, 13):
+            run = max(0.0, (T[2] - BASE)) / math.tan(math.radians(side_slope))
+            for t in np.linspace(0.0, 1.0, 9):
                 a = a_f + t * sweep
                 F = np.array([T[0] + math.cos(a) * run,
                               T[1] + math.sin(a) * run, BASE])
