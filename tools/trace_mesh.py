@@ -59,6 +59,9 @@ RLX_CRESTS = {
         [(1214, 489, 2900), (1255, 486, 2900), (1320, 485, 2900)]),
     'Mount Mountain': ('Diner (N)',
         [(1478.5, 66.5, 1900), (1543, 52.5, 2000), (1603, 69, 2100)]),
+    # ses chiffres upstream (EH, gtamaplib.py:3773) — slope 15, la colline douce
+    'Easy Hill': ('Ambrosia 04 (Fires)',
+        [(3218.0, 905.0, 4450), (3336, 886, 4500), (3462.0, 911.5, 4600)]),
 }
 
 
@@ -114,14 +117,15 @@ def build_crest(cam, strokes, az_p, d_p, k=1.0):
     return crest
 
 
-def build_mesh(cam, crest, slope_every=6, contour_step=25.0):
+def build_mesh(cam, crest, slope_every=6, contour_step=25.0, slope=SLOPE):
     """Crete + pentes + courbes de niveau, dans le style du massif Ambrosia.
 
     slope_every / contour_step reglent la DENSITE du rendu, pas la geometrie:
-    la crete et les pentes restent les memes, on en dessine plus ou moins."""
+    la crete et les pentes restent les memes, on en dessine plus ou moins.
+    slope: rlx declare 15 deg pour Easy Hill (colline douce), 30 ailleurs."""
     o = np.asarray(cam.xyz, float)
     edges = []
-    sl = math.tan(math.radians(SLOPE))
+    sl = math.tan(math.radians(slope))
     slope_lines = []
     for seg in crest:
         for a, b in zip(seg[:-1], seg[1:]):
@@ -229,6 +233,8 @@ def main():
                     help='une ligne de pente tous les N points de crete')
     ap.add_argument('--contour-step', type=float, default=25.0,
                     help='courbes de niveau tous les N metres')
+    ap.add_argument('--slope', type=float, default=30.0,
+                    help='pente des flancs en degres (rlx: 15 pour Easy Hill)')
     ap.add_argument('--apply', action='store_true')
     args = ap.parse_args()
 
@@ -299,8 +305,8 @@ def main():
     if not args.apply:
         print('\nDRY-RUN (--apply pour ecrire).')
         return
-    edges = build_mesh(common.get_cam(R), crest,
-                       slope_every=args.slope_every, contour_step=args.contour_step)
+    edges = build_mesh(common.get_cam(R), crest, slope_every=args.slope_every,
+                       contour_step=args.contour_step, slope=args.slope)
     mesh = json.load(open(MESH_PATH))
     old = f'{M} (rlx)'
     # la couleur du mesh EXISTANT d abord: a la re-application, le (rlx) a
