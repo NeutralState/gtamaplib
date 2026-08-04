@@ -117,22 +117,44 @@ def build_crest(cam, strokes, az_p, d_p, k=1.0):
     return crest
 
 
-def build_mesh(cam, crest, slope_every=6, contour_step=25.0, slope=SLOPE,
-               side_slope=60.0):
+def build_mesh(cam, crest, slope_every=6, contour_step=25.0, slope=SLOPE):
     """Crete + pentes + courbes de niveau, dans le style du massif Ambrosia.
 
     slope_every / contour_step reglent la DENSITE du rendu, pas la geometrie:
     la crete et les pentes restent les memes, on en dessine plus ou moins.
     slope: rlx declare 15 deg pour Easy Hill (colline douce), 30 ailleurs.
-    side_slope: la pente des FERMETURES d'extremite. 60 deg par defaut, comme
-    la classe Mountain de rlx — un flanc a 30 deg courait h/tan(30) = 1.7x la
-    hauteur et gonflait l'emprise en dome (Alexandre: "pas des domes comme ca,
-    ca boost le footprint pour rien"). A 60 deg le rayon est divise par 3."""
+    Extremites: PAS d'eventail (les fermetures radiales faisaient des domes,
+    puis des bouts "weird" — Alexandre: "fait juste que ca finisse
+    naturellement"). Chaque crete est prolongee par une QUEUE le long de son
+    propre axe, z descendant a la pente du corps jusqu'a la base: la crete
+    meurt dans le sol, et pentes + courbes de niveau la suivent d'elles-memes
+    puisque la queue fait partie de la crete."""
     o = np.asarray(cam.xyz, float)
     edges = []
     sl = math.tan(math.radians(slope))
-    slope_lines = []
+    tailed = []
     for seg in crest:
+        seg = np.asarray(seg, float)
+        if len(seg) >= 2:
+            parts = [seg]
+            for T, nb, front in ((seg[0], seg[1], True), (seg[-1], seg[-2], False)):
+                ext = T[:2] - nb[:2]
+                n = np.linalg.norm(ext)
+                h = max(0.0, T[2] - BASE)
+                if n < 1e-9 or h < 1e-6:
+                    continue
+                ext /= n
+                run = h / sl
+                nstep = max(3, int(run / 30.0))
+                fr = np.linspace(0.0, 1.0, nstep + 1)[1:]
+                tail = np.stack([T[0] + ext[0] * run * fr,
+                                 T[1] + ext[1] * run * fr,
+                                 T[2] - h * fr], axis=1)
+                parts.insert(0, tail[::-1]) if front else parts.append(tail)
+            seg = np.vstack(parts)
+        tailed.append(seg)
+    slope_lines = []
+    for seg in tailed:
         for a, b in zip(seg[:-1], seg[1:]):
             edges.append([list(map(float, a)), list(map(float, b))])
         for i in range(0, len(seg), slope_every):
@@ -144,43 +166,6 @@ def build_mesh(cam, crest, slope_every=6, contour_step=25.0, slope=SLOPE,
                 F = np.array([T[0] + v[0] * run, T[1] + v[1] * run, BASE])
                 edges.append([list(map(float, T)), list(map(float, F))])
                 slope_lines.append((T, F, sgn))
-    # flancs: fermer les EXTREMITES de chaque crete par un eventail de pentes
-    # (Alexandre: "faudrait fermer les cotes pour pas laisser ouvert meme si
-    # c'est speculatif"). SPECULATIF ET ASSUME: aucune camera ne mesure ces
-    # flancs — on prolonge simplement la pente de 30 deg en eventail entre la
-    # direction avant et la direction arriere, en passant par le prolongement
-    # de la crete. C'est une fermeture visuelle, pas une donnee.
-    for seg in crest:
-        if len(seg) < 2:
-            continue
-        for T, nb in ((seg[0], seg[1]), (seg[-1], seg[-2])):
-            ext = (T[:2] - nb[:2])
-            ext /= (np.linalg.norm(ext) + 1e-9)
-            fwd = (o[:2] - T[:2])
-            fwd /= (np.linalg.norm(fwd) + 1e-9)
-            a_f = math.atan2(fwd[1], fwd[0])
-            a_e = math.atan2(ext[1], ext[0])
-            # balayage avant -> arriere par le cote du prolongement de crete
-            d1 = (a_e - a_f + math.pi) % (2 * math.pi) - math.pi
-            sweep = 2 * d1                      # avant -> ext -> arriere
-            feet = []
-            run = max(0.0, (T[2] - BASE)) / math.tan(math.radians(side_slope))
-            for t in np.linspace(0.0, 1.0, 9):
-                a = a_f + t * sweep
-                F = np.array([T[0] + math.cos(a) * run,
-                              T[1] + math.sin(a) * run, BASE])
-                edges.append([list(map(float, T)), list(map(float, F))])
-                feet.append(F)
-            # arcs de niveau SUR l eventail (pas seulement au pied): l arc a
-            # z fixe traverse tous les rayons — meme densite que le corps
-            for zc in np.arange(BASE, T[2], contour_step):
-                if T[2] - BASE < 1e-6:
-                    break
-                tt = (T[2] - zc) / (T[2] - BASE)
-                ring = [T + tt * (F - T) for F in feet]
-                for a, b in zip(ring[:-1], ring[1:]):
-                    edges.append([list(map(float, a)), list(map(float, b))])
-
     # courbes de niveau: relier les pieds de pente de meme cote a z fixe
     for zc in np.arange(BASE + contour_step,
                         max(s[0][2] for s in slope_lines), contour_step):
