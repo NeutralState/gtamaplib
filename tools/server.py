@@ -21,9 +21,9 @@ FRAMES_DIR = os.path.join(GTAMAP_DIR, "frames")
 TOOL_DIR = os.path.dirname(os.path.abspath(__file__))
 REPO_ROOT = os.path.dirname(TOOL_DIR)
 # [TILES-V1] gtadb.org tile checkout (sparse, vendored, gitignored).
-# Tiles are 256x256 JPGs at /vendor/gtadb.org/maps/tiles/6/yanis,13/{z}/{z},{y},{x}.jpg
+# Tiles are 256x256 JPGs at /vendor/gtadb.org/maps/tiles/6/yanis,14/{z}/{z},{y},{x}.jpg
 # 7 zoom levels (0-6). Served via /tiles/{z}/{filename} route.
-TILES_DIR = os.path.join(REPO_ROOT, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,13')
+TILES_DIR = os.path.join(REPO_ROOT, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,14')
 
 sys.path.insert(0, GTAMAP_DIR)
 import gtamaplib as ml
@@ -102,7 +102,7 @@ def _minimap_cache_path(cam_name):
 
 def _render_tiles_region(cx, cy, half_m, out_px=1500):
     # [EXPORT-TILES-V13, 2026-07-10] Rend une region monde carree (centre
-    # cx,cy, demi-cote half_m) en compositant les tiles yanis,13 (V13) —
+    # cx,cy, demi-cote half_m) en compositant les tiles yanis,14 (V14) —
     # meme math que _render_minimap_for_cam (MAP_W=32768, ZERO=16384,
     # m/px = 32/2^z). Remplace le crop ml.get_map('yanis') (V12 monolithique)
     # dans l'export. Tiles manquants/hors-carte = fond sombre, pas d'erreur.
@@ -152,7 +152,7 @@ def _render_tiles_region(cx, cy, half_m, out_px=1500):
 
 def _render_minimap_for_cam(cam_name):
     # [MINIMAP-TILES-V1] Render a minimap PNG by compositing rlx tiles
-    # (vendor/gtadb.org/maps/tiles/6/yanis,13/). Replaces the previous
+    # (vendor/gtadb.org/maps/tiles/6/yanis,14/). Replaces the previous
     # yanis.jpg-based crop. Same signature, same output path — client
     # code is unaffected.
     #
@@ -643,7 +643,7 @@ class Handler(BaseHTTPRequestHandler):
         # [YANIS-CLEANUP-V2] /yanis.jpg endpoint removed
 
         elif path.startswith('/tiles/'):
-            # [TILES-V1] Serve tile JPGs from vendor/gtadb.org/maps/tiles/6/yanis,13/
+            # [TILES-V1] Serve tile JPGs from vendor/gtadb.org/maps/tiles/6/yanis,14/
             # URL pattern: /tiles/{z}/{z},{y},{x}.jpg  (z=0..6)
             # Strict validation: only digits + commas + .jpg, no path traversal.
             tile_rel = path[len('/tiles/'):]  # e.g. "3/3,10,0.jpg"

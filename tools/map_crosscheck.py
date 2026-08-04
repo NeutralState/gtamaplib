@@ -36,7 +36,7 @@ import numpy as np
 from PIL import Image
 import common
 
-TILES = os.path.join(REPO, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,13', '5')
+TILES = os.path.join(REPO, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,14', '5')
 TILE = 256
 
 

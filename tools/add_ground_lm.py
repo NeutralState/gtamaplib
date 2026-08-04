@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-# add_ground_lm.py -- cree un LM map-ancre (verite yanis,13). MAP-TRUTH-V1.
+# add_ground_lm.py -- cree un LM map-ancre (verite yanis,14). MAP-TRUTH-V1.
 # Usage: python3 tools/add_ground_lm.py "Nom (Zone) (A)" X Y [Z] [--zone nom]
 # X/Y = coords monde lues au hover de la vue Map. Z defaut 0.5 (sol).
 # Ensuite: marque-le dans les cams (verdict toast actif des le 1er marking).
@@ -20,7 +20,7 @@ if a.name in lms and (lms[a.name] or {}).get("xyz"):
 lms[a.name] = {"xyz": [a.x, a.y, a.z], "source_cameras": [],
                "error_m": None, "zone": a.zone, "map_anchored": True,
                "z_constraint": {"type": "fixed", "value": a.z},
-               "notes": "map-evidence yanis,13 (MAP-TRUTH-V1)"}
+               "notes": "map-evidence yanis,14 (MAP-TRUTH-V1)"}
 with open(p, "w") as f:
     json.dump(lms, f, indent=2, ensure_ascii=True); f.write("\n")
 log_event("map_truth", "ground_lm_created", lm=a.name,

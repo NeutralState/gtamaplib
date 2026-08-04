@@ -35,7 +35,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 
 
-TILES_DIR = os.path.join(REPO, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,13')
+TILES_DIR = os.path.join(REPO, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,14')
 
 
 def render_basemap(cx, cy, half_m, out_px):

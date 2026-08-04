@@ -2,7 +2,7 @@
 """
 map_validate.py — Map-proof at scale: generate a contact sheet of map crops
 (one per landmark, crosshair at current xyz) for rapid visual validation
-against the yanis V13 map, and import the verdicts.
+against the yanis V14 map, and import the verdicts.
 
 Motivation: la "preuve map" (Amphitheater, CC9, Stephen P. Clark...) etait
 artisanale — un LM a la fois, verdict nulle part dans les donnees. Cet outil
@@ -29,7 +29,7 @@ Semantique solveurs (bundle_adjust_weighted --cleanup):
   validated -> FROZEN (xyz constant, rays gardes comme ancres)
   rejected  -> EXCLU du bundle (xyz connu-faux; a retrianguler/investiguer)
 
-Tiles: vendor/gtadb.org/maps/tiles/6/yanis,13/ si present (machine locale),
+Tiles: vendor/gtadb.org/maps/tiles/6/yanis,14/ si present (machine locale),
 sinon telechargement gtadb.org avec cache tools/generated/tile_cache/.
 Geo: MAP_W=32768, zero=(16384,16384), z=6 -> 0.5 m/px (verbatim rlx map.js).
 """
@@ -48,9 +48,9 @@ sys.path.insert(0, os.path.join(REPO, 'tools'))
 LANDMARKS_JSON = os.path.join(REPO, 'gtamapdata', 'landmarks.json')
 TIERS_JSON = os.path.join(REPO, 'tools', 'generated', 'confidence_tiers.json')
 VALIDATED_JSON = os.path.join(REPO, 'gtamapdata', 'map_validated.json')
-TILES_DIR_LOCAL = os.path.join(REPO, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,13')
+TILES_DIR_LOCAL = os.path.join(REPO, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,14')
 TILE_CACHE = os.path.join(REPO, 'tools', 'generated', 'tile_cache')
-TILE_URL = 'https://gtadb.org/maps/tiles/6/yanis,13/{z}/{z},{y},{x}.jpg'
+TILE_URL = 'https://gtadb.org/maps/tiles/6/yanis,14/{z}/{z},{y},{x}.jpg'
 OUT_HTML = os.path.join(REPO, 'tools', 'generated', 'map_validate_sheet.html')
 
 Z = 6
@@ -69,7 +69,7 @@ def load_validated():
 
 
 def save_validated(d):
-    out = {'_comment': ('Verdicts de preuve map (yanis V13) par LM. validated = '
+    out = {'_comment': ('Verdicts de preuve map (yanis V14) par LM. validated = '
                         'xyz confirme sur la map -> FROZEN dans les solveurs. '
                         'rejected = xyz contredit par la map -> exclu du bundle, '
                         'a retrianguler. Genere/importe par tools/map_validate.py.')}

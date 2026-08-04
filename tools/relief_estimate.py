@@ -60,7 +60,7 @@ sys.path.insert(0, REPO)
 import numpy as np
 from PIL import Image
 
-TILES = os.path.join(REPO, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,13', '5')
+TILES = os.path.join(REPO, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,14', '5')
 TILE = 256
 MESH_PATH = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
 REG_PATH = os.path.join(THIS, 'data', 'terrains.json')
