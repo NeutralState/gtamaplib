@@ -136,6 +136,10 @@ def build_mesh(cam, crest, slope_every=6, contour_step=25.0, slope=SLOPE):
     for seg in crest:
         seg = np.asarray(seg, float)
         if len(seg) >= 2:
+            # la queue au MEME pas spatial que le corps, sinon les fins sont
+            # moins densifiees que le reste (Alexandre)
+            body_step = float(np.median(np.linalg.norm(np.diff(seg[:, :2], axis=0), axis=1)))
+            body_step = max(3.0, body_step)
             parts = [seg]
             for T, nb, front in ((seg[0], seg[1], True), (seg[-1], seg[-2], False)):
                 ext = T[:2] - nb[:2]
@@ -145,7 +149,7 @@ def build_mesh(cam, crest, slope_every=6, contour_step=25.0, slope=SLOPE):
                     continue
                 ext /= n
                 run = h / sl
-                nstep = max(3, int(run / 30.0))
+                nstep = max(3, int(run / body_step))
                 fr = np.linspace(0.0, 1.0, nstep + 1)[1:]
                 tail = np.stack([T[0] + ext[0] * run * fr,
                                  T[1] + ext[1] * run * fr,
