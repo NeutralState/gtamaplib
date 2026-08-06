@@ -188,23 +188,37 @@ def build_mesh(cam, crest, slope_every=6, contour_step=25.0, slope=SLOPE):
 
 def witness_residuals(crest, witness_cams, TR):
     """LE JUGE: la crete reprojetee dans chaque vue temoin, contre le trait.
-    Retourne {cam: (n, mediane signee, mediane abs, pct violation)}."""
+    Retourne {cam: (n, mediane signee, mediane abs, pct violation)}.
+
+    RASTERISE par colonne (b2aedd8): l'ancienne version projetait les POINTS
+    de crete — echantillonnes tous les N metres, ils laissaient des colonnes
+    vides que rien ne couvrait, et sur BB Hill le juge sortait 60 px la ou la
+    crete reprojetait a 0.00. On interpole desormais le long de la polyligne
+    en pas d'environ 2 px d'image: chaque colonne du trait rencontre la crete.
+    """
     import common
     from silhouette_hull import cam_profile
-    P = np.vstack(crest)
     out = {}
     for cn in witness_cams:
         cam = common.get_cam(cn)          # gotcha #5: re-set avant CHAQUE usage
         prof = cam_profile(TR, cn, int(cam.w))
-        dv = []
-        for p in P:
-            q = cam.get_pixel([float(x) for x in p])
-            if q is None:
-                continue
-            u = int(round(q[0]))
-            if not (0 <= u < len(prof)) or math.isnan(prof[u]):
-                continue
-            dv.append(q[1] - prof[u])     # >0: sous le trait; <0: dans le ciel
+        cols = {}
+        for seg in crest:
+            for a, b in zip(seg[:-1], seg[1:]):
+                qa = cam.get_pixel([float(x) for x in a])
+                qb = cam.get_pixel([float(x) for x in b])
+                if qa is None or qb is None:
+                    continue
+                n = max(2, int(abs(qb[0] - qa[0]) / 2) + 1)
+                for t in np.linspace(0.0, 1.0, n):
+                    p = [a[i] + t * (b[i] - a[i]) for i in range(3)]
+                    q = cam.get_pixel(p)
+                    if q is None:
+                        continue
+                    u = int(round(q[0]))
+                    if 0 <= u < len(prof):
+                        cols[u] = min(cols.get(u, 1e9), q[1])
+        dv = [v - prof[u] for u, v in cols.items() if not math.isnan(prof[u])]
         if len(dv) < 10:
             out[cn] = None
             continue
