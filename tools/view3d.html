@@ -359,7 +359,7 @@ for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) {
     gctx.drawImage(img, (tx - tx0) * TSIZE, (ty - ty0) * TSIZE);
     gtex.needsUpdate = true;
   };
-  img.src = `/tiles/${TZ}/${TZ},${ty},${tx}.jpg`;
+  img.src = `/tiles/${TZ}/${TZ},${ty},${tx}.jpg?v=14`;  // versionne: cache agressif + URLs stables = patchwork V13/V14 sinon
 }
 
 
