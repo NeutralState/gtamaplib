@@ -19,6 +19,36 @@ ORDER = ['NW', 'N', 'NE', 'E', 'SE', 'S', 'SW', 'W']
 lms = json.load(open(os.path.join(REPO, 'gtamapdata', 'landmarks.json')))
 roof = [lms[f'{B} ({c})']['xyz'] for c in ORDER]
 z_roof = sum(p[2] for p in roof) / len(roof)
+
+# [SPC-V6] SYMETRISATION du plan (Alexandre: "les coins sont pas symetriques
+# comme le vrai building"). Le vrai SPC est un rectangle a chanfreins EGAUX;
+# nos 8 coins triangules independamment donnaient un octogone bancal. On
+# ajuste le gabarit ideal (centre, orientation, L, W, chanfrein — 6 params)
+# aux 8 coins mesures en moindres carres et on construit sur le gabarit.
+# Ecarts mesures -> symetrique: mediane 2.8 m, max 5.5 m (coin SW) — sous
+# les ~3 px a 1 km, l'alignement dans les frames tient.
+import math
+import numpy as np
+from scipy.optimize import least_squares
+P2 = np.array([p[:2] for p in roof])
+def _model(p):
+    cx, cy, th, L, W, c = p
+    ct, st = math.cos(th), math.sin(th)
+    loc = [(-(L - c), W), ((L - c), W), (L, W - c), (L, -(W - c)),
+           ((L - c), -W), (-(L - c), -W), (-L, -(W - c)), (-L, W - c)]
+    return np.array([[cx + x * ct - y * st, cy + x * st + y * ct] for x, y in loc])
+c0 = P2.mean(0)
+best = None
+for th0 in np.arange(0, math.pi / 2, 0.15):
+    for rot in range(8):
+        Pr = np.roll(P2, rot, axis=0)
+        r = least_squares(lambda p, Pr=Pr: (_model(p) - Pr).ravel(),
+                          [c0[0], c0[1], th0, 30, 14, 6], method='lm')
+        if best is None or r.cost < best[0]:
+            best = (r.cost, r.x, rot)
+_, psym, rot = best
+M = np.roll(_model(psym), -rot, axis=0)      # remis dans l'ordre ORDER
+roof = [[float(M[i][0]), float(M[i][1]), z_roof] for i in range(len(roof))]
 z_ground = z_roof - N_FLOORS * FLOOR_H
 n = len(roof)
 
