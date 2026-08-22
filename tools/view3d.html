@@ -46,6 +46,8 @@
     <span class="lchip on" id="ly-cams">cams</span>
     <span class="lchip on" id="ly-lms">landmarks</span>
     <span class="lchip on" id="ly-meshes">meshes</span>
+    <span class="lchip on" id="ly-terrain" title="Terrain reel (height map L16 du leak, z=706.07v-301.01)">terrain</span>
+    <span class="lchip" id="ly-leakmap" title="Fond de carte: full map leak (composite sur yanis)">leak map</span>
     <span class="lchip" id="btn-shot" title="PNG de la vue + frame en medaillon">&#8681; shot</span>
   </div>
 </div>
@@ -121,7 +123,8 @@ function showErr(msg) {
 }
 let renderer;
 try {
-  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'default' });
+  renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'default',
+    logarithmicDepthBuffer: true });  // [HEIGHTMAP-V1] 20 km de scene: sans ca, z-fighting terrain/tiles
 } catch (e) {
   showErr('WebGL INDISPONIBLE — Safari a refuse le contexte (limite de contextes/GPU).\n' +
           'Ferme des onglets lourds (cartes, videos), ou utilise Chrome pour le mode 3D.\n(' + (e.message || e) + ')');
@@ -217,13 +220,17 @@ function updatePovDbg() {
 // [VIEW3D-SIMPLIFY] map toujours visible (pas un filtre); ocean et grid
 // retires — inutiles avec les tuiles satellite (l'eau est dans la map).
 const layers = { cams: new THREE.Group(), lms: new THREE.Group(),
-                 meshes: new THREE.Group(), ground: new THREE.Group() };
+                 meshes: new THREE.Group(), ground: new THREE.Group(),
+                 terrain: new THREE.Group() };
 Object.values(layers).forEach(g => scene.add(g));
-for (const k of ['cams', 'lms', 'meshes']) {
+for (const k of ['cams', 'lms', 'meshes', 'terrain']) {
   const chip = document.getElementById('ly-' + k);
   chip.addEventListener('click', () => {
     const on = chip.classList.toggle('on');
     layers[k].visible = on;
+    // [HEIGHTMAP-V1] le relief REMPLACE le sol plat: les deux ensemble se
+    // z-fightent sur toutes les zones basses (le sol tiles est a z=0).
+    if (k === 'terrain') layers.ground.visible = !on;
   });
 }
 
@@ -238,6 +245,72 @@ addEventListener('message', ev => {
 });
 
 const data = await (await fetch('/api/scene3d')).json();
+
+// ── [HEIGHTMAP-V1] terrain reel: grille metrique depuis la height map leak ──
+(async () => {
+  try {
+    // src=hd: grille 6 m enrichie par la clean map (affichage seulement,
+    // detail borne +/-5 m la ou il correle avec le vrai relief); le serveur
+    // retombe sur le DDS bicubique si la couche HD n'est pas generee.
+    // step=8: ~6M sommets, mesure 61 fps a step=10 sur cette machine.
+    const t = await (await fetch('/api/terrain3d?src=hd&step=6')).json();
+    if (t.error) { console.warn('terrain3d:', t.error); return; }
+    const raw = Uint8Array.from(atob(t.z_b64), ch => ch.charCodeAt(0));
+    const Z = new Float32Array(raw.buffer);
+    const { nx, ny, x0, y0, step } = t;
+    const pos = new Float32Array(nx * ny * 3);
+    const col = new Float32Array(nx * ny * 3);
+    // rampe hypsometrique: fond marin -> sable -> vert -> brun -> blanc
+    function ramp(z) {
+      if (z <= 0)  { const f = Math.max(0, 1 + z / 130); return [0.10*f+0.02, 0.22*f+0.04, 0.35*f+0.08]; }
+      if (z < 3)   return [0.80, 0.74, 0.55];
+      if (z < 60)  { const f = (z - 3) / 57;  return [0.24 - 0.06*f, 0.42 - 0.10*f, 0.20 - 0.04*f]; }
+      if (z < 250) { const f = (z - 60) / 190; return [0.18 + 0.28*f, 0.32 + 0.08*f, 0.16 + 0.08*f]; }
+      const f = Math.min(1, (z - 250) / 300);  return [0.46 + 0.5*f, 0.40 + 0.55*f, 0.24 + 0.7*f];
+    }
+    for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+      const k = j * nx + i, z = Z[k];
+      pos[3*k]   = x0 + i * step;
+      pos[3*k+1] = y0 + j * step;
+      pos[3*k+2] = z;
+      const c = ramp(z);
+      col[3*k] = c[0]; col[3*k+1] = c[1]; col[3*k+2] = c[2];
+    }
+    const idx = new Uint32Array((nx - 1) * (ny - 1) * 6);
+    let p = 0;
+    for (let j = 0; j < ny - 1; j++) for (let i = 0; i < nx - 1; i++) {
+      const a = j * nx + i, b = a + 1, c = a + nx, d = c + 1;
+      idx[p++] = a; idx[p++] = b; idx[p++] = c;
+      idx[p++] = b; idx[p++] = d; idx[p++] = c;
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+    g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+    g.setIndex(new THREE.BufferAttribute(idx, 1));
+    g.computeVertexNormals();
+    const mat = new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide });
+    layers.terrain.add(new THREE.Mesh(g, mat));
+    // plan de mer translucide a z=0
+    const seaG = new THREE.PlaneGeometry((nx-1)*step, (ny-1)*step);
+    seaG.translate(x0 + (nx-1)*step/2, y0 + (ny-1)*step/2, 0);
+    const sea = new THREE.Mesh(seaG, new THREE.MeshBasicMaterial({
+      color: 0x1a4a6e, transparent: true, opacity: 0.55, depthWrite: false }));
+    sea.renderOrder = 2;                 // toujours apres le relief
+    sea.name = 'terrain-sea';
+    layers.terrain.add(sea);
+    window.__terrain = { mesh: layers.terrain.children[0], sea, layers, THREE, camera };  // debug hook
+    // [COORDREAD-3D] grille exposee pour le readout curseur (voir plus bas)
+    window.__hgrid = { Z, nx, ny, x0, y0, step };
+    layers.ground.visible = false;       // le relief remplace le sol plat au chargement
+    // lumiere pour le Lambert (la scene n'en avait pas forcement)
+    if (!scene.getObjectByName('terrain-sun')) {
+      const sun = new THREE.DirectionalLight(0xffffff, 0.9);
+      sun.position.set(-8000, -6000, 12000); sun.name = 'terrain-sun';
+      scene.add(sun, new THREE.AmbientLight(0xffffff, 0.45));
+    }
+    console.log('[HEIGHTMAP-V1] terrain', nx, 'x', ny, '@', step, 'm');
+  } catch (e) { console.warn('terrain3d:', e); }
+})();
 
 // ── frustums: un LineSegments par tier (perf: 174 cams en 5 draws) ──
 const byTier = {};
@@ -353,14 +426,121 @@ const ground = new THREE.Mesh(
   new THREE.MeshBasicMaterial({ map: gtex, color: 0xb8bcc6 }));  // legerement assombri: les frustums restent les heros
 ground.position.set(groundCx, groundCy, -0.8);
 layers.ground.add(ground);
-for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) {
-  const img = new Image();
-  img.onload = () => {
-    gctx.drawImage(img, (tx - tx0) * TSIZE, (ty - ty0) * TSIZE);
-    gtex.needsUpdate = true;
-  };
-  img.src = `/tiles/${TZ}/${TZ},${ty},${tx}.jpg?v=14`;  // versionne: cache agressif + URLs stables = patchwork V13/V14 sinon
+// [LEAK-TILES-3D] meme bascule que calib (localStorage partage 'ui.tileSrc');
+// la pyramide leak,1 v3 est un composite leak-sur-yanis a bords adoucis.
+function loadGroundTiles() {
+  const leakOn = localStorage.getItem('ui.tileSrc') === 'leak';
+  const src = leakOn ? '&src=leak&v=leak3' : '';
+  for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) {
+    const img = new Image();
+    img.onload = () => {
+      gctx.drawImage(img, (tx - tx0) * TSIZE, (ty - ty0) * TSIZE);
+      gtex.needsUpdate = true;
+    };
+    img.src = `/tiles/${TZ}/${TZ},${ty},${tx}.jpg?v=14${src}`;  // versionne: cache agressif + URLs stables = patchwork V13/V14 sinon
+  }
 }
+loadGroundTiles();
+{
+  const chip = document.getElementById('ly-leakmap');
+  if (localStorage.getItem('ui.tileSrc') === 'leak') chip.classList.add('on');
+  chip.addEventListener('click', () => {
+    const on = chip.classList.toggle('on');
+    localStorage.setItem('ui.tileSrc', on ? 'leak' : 'yanis');
+    loadGroundTiles();
+  });
+}
+
+// ── [POSE-COPY] pose camera live (bas-gauche): vole jusqu'a repliquer une
+// vue, clique le badge -> JSON {"xyz","ypr"} dans le presse-papier, colle-le
+// dans le chat et la resection part de la. yaw/pitch dans la convention
+// cameras.json (yaw anti-horaire depuis +y, pitch + = vers le haut).
+(() => {
+  const el = document.createElement('div');
+  el.style.cssText = 'position:fixed;left:10px;bottom:34px;z-index:30;' +
+    'background:rgba(10,10,13,.72);border:1px solid #2c2c33;border-radius:8px;' +
+    'padding:5px 11px;font:11px ui-monospace,monospace;color:#facc15;' +
+    'cursor:pointer;white-space:nowrap;user-select:none';
+  el.title = 'clic: copier la pose (JSON) pour la donner a Claude';
+  document.body.appendChild(el);
+  const dirV = new THREE.Vector3();
+  function pose() {
+    camera.getWorldDirection(dirV);
+    const yaw = ((-Math.atan2(dirV.x, dirV.y) * 180 / Math.PI) % 360 + 360) % 360;
+    const pitch = Math.asin(Math.max(-1, Math.min(1, dirV.z))) * 180 / Math.PI;
+    return { xyz: [ +camera.position.x.toFixed(1), +camera.position.y.toFixed(1),
+                    +camera.position.z.toFixed(1) ],
+             ypr: [ +yaw.toFixed(2), +pitch.toFixed(2), 0 ] };
+  }
+  setInterval(() => {
+    const p = pose();
+    el.textContent = `CAM ${p.xyz.join(', ')}  yaw ${p.ypr[0]}  pitch ${p.ypr[1]}  (clic = copier)`;
+  }, 250);
+  el.addEventListener('click', () => {
+    const txt = JSON.stringify(pose());
+    (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject())
+      .then(() => { el.style.color = '#4ade80'; setTimeout(() => el.style.color = '#facc15', 700); })
+      .catch(() => { prompt('copie manuelle:', txt); });
+  });
+})();
+
+// ── [COORDREAD-3D] X/Y/Z monde sous le curseur (meme readout que la Map) ──
+// Raymarch curseur->grille de hauteur (25 m puis bisection): pas de raycast
+// sur les 245k triangles du mesh, ~1200 lookups max par mouvement.
+(() => {
+  const el = document.createElement('div');
+  el.style.cssText = 'position:fixed;right:10px;bottom:10px;z-index:30;' +
+    'background:rgba(10,10,13,.72);border:1px solid #2c2c33;border-radius:8px;' +
+    'padding:5px 11px;font:11px ui-monospace,monospace;color:#4ade80;' +
+    'pointer-events:none;white-space:nowrap;opacity:0;transition:opacity .12s';
+  el.textContent = 'X —  Y —  Z —';
+  document.body.appendChild(el);
+  function gz(x, y) {
+    const g = window.__hgrid;
+    if (!g) return null;
+    const fi = (x - g.x0) / g.step, fj = (y - g.y0) / g.step;
+    if (fi < 0 || fj < 0 || fi >= g.nx - 1 || fj >= g.ny - 1) return null;
+    const i = Math.floor(fi), j = Math.floor(fj), u = fi - i, v = fj - j;
+    const k = j * g.nx + i;
+    return g.Z[k]*(1-u)*(1-v) + g.Z[k+1]*u*(1-v) + g.Z[k+g.nx]*(1-u)*v + g.Z[k+g.nx+1]*u*v;
+  }
+  const rc = new THREE.Raycaster();
+  let last = 0;
+  renderer.domElement.addEventListener('pointermove', ev => {
+    const now = performance.now();
+    if (now - last < 50) return;         // throttle 20 Hz
+    last = now;
+    if (!window.__hgrid) return;
+    const r = renderer.domElement.getBoundingClientRect();
+    rc.setFromCamera({ x: (ev.clientX - r.left) / r.width * 2 - 1,
+                       y: -((ev.clientY - r.top) / r.height) * 2 + 1 }, camera);
+    const o = rc.ray.origin, d = rc.ray.direction;
+    let t0 = 0, hit = null;
+    let f0 = o.z - (gz(o.x, o.y) ?? -301);
+    for (let t = 25; t < 30000; t += 25) {
+      const x = o.x + d.x*t, y = o.y + d.y*t, z = o.z + d.z*t;
+      const g = gz(x, y);
+      const f = z - (g ?? -301);
+      if (f0 > 0 && f <= 0) {            // traversee: bisection
+        let a = t0, b = t;
+        for (let k = 0; k < 14; k++) {
+          const m = (a + b) / 2;
+          const gm = gz(o.x + d.x*m, o.y + d.y*m) ?? -301;
+          ((o.z + d.z*m) - gm > 0) ? a = m : b = m;
+        }
+        hit = (a + b) / 2;
+        break;
+      }
+      f0 = f; t0 = t;
+    }
+    if (hit === null) { el.style.opacity = 0; return; }
+    const hx = o.x + d.x*hit, hy = o.y + d.y*hit;
+    const g = gz(hx, hy);
+    el.textContent = `X ${hx.toFixed(1)}   Y ${hy.toFixed(1)}   Z ${(g === null || g < -300.5) ? '—' : g.toFixed(1)}`;
+    el.style.opacity = 1;
+  });
+  renderer.domElement.addEventListener('pointerleave', () => { el.style.opacity = 0; });
+})();
 
 
 camera.position.set(ctr.x + span * 0.30, ctr.y - span * 0.40, span * 0.28);
@@ -499,6 +679,8 @@ function enterPOV(c) {
   camera.fov = vfov; camera.near = 0.5;
   camera.updateProjectionMatrix();
   camera.updateMatrixWorld(true);
+  // [POV-TERRAIN-V2] le terrain RESTE visible en POV (c'est le check de pose:
+  // silhouettes du relief vs frame); il suit simplement l'etat du chip.
   window.__povState = { pos: camera.position.toArray(),
                         lookDir: camera.getWorldDirection(new THREE.Vector3()).toArray(),
                         wantDir: dir.toArray(), fov: camera.fov };

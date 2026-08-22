@@ -22,7 +22,7 @@
 .ls-header #cam-search{font-family:var(--mono);font-size:11px;background:var(--surface2);border:1px solid var(--border);color:var(--text);padding:6px 9px;border-radius:5px;width:100%}
 .ls-header #cam-search:focus{outline:none;border-color:var(--green)}
 .ls-filter-chips{display:flex;flex-wrap:wrap;gap:4px}
-.ls-list{flex:1;overflow-y:auto;background:var(--surface)}
+.ls-list{flex:1;overflow-y:auto;background:var(--surface);overscroll-behavior:contain}
 .ls-list::-webkit-scrollbar{width:3px}
 .ls-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
 /* The .cam-dropdown rule below was originally absolute-positioned + hidden
@@ -286,7 +286,11 @@ body:not(.view-map) .sidebar .statusbar.map-only{display:none}
 /* Phase 8.1.1: fix mapData.cams → mapData.cameras */
 /* // Phase 6.3: visual polish — fix ray colors + reduce noise */
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:var(--sans);background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);height:100vh;display:flex;flex-direction:column;overflow:hidden;overscroll-behavior:none}
+/* [OVERSCROLL-FIX] rebond elastique macOS: un drift horizontal du trackpad en
+   scrollant la liste des cams faisait glisser toute la page (compositeur,
+   invisible au JS) puis rebondir. overscroll-behavior:none le desactive. */
+html{overscroll-behavior:none;overflow:hidden}
 
 header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(--surface);border-bottom:1px solid var(--border);flex-shrink:0}
 .logo{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--green)}
@@ -430,9 +434,21 @@ body.dual-cam #dual-toggle{background:var(--blue);color:#000;border-color:var(--
 /* [MAP-RSB-COLLAPSE] en vue Map, la sidebar droite est repliable pour
    donner toute la place a la map */
 body.view-map.rsb-collapsed .sidebar{width:0;border-left:none}
+/* [FOCUS-V1] le repli droit vaut pour TOUTES les vues, pas seulement la Map:
+   en vue Camera, la frame est ce qu'on regarde, les panneaux sont des tiroirs */
+body.rsb-collapsed .sidebar{width:0;border-left:none}
 #rsb-toggle{display:none;position:fixed;right:290px;top:50%;transform:translateY(-50%);z-index:40;width:18px;height:54px;align-items:center;justify-content:center;background:var(--surface2);border:1px solid var(--border);border-right:none;border-radius:8px 0 0 8px;color:var(--dim);cursor:pointer;font:12px var(--mono);transition:right .18s ease-out,color .12s;user-select:none}
 #rsb-toggle:hover{color:var(--text)}
 body.view-map #rsb-toggle{display:flex}
+#rsb-toggle{display:flex}            /* [FOCUS-V1] poignee visible partout */
+/* [FOCUS-V1] poignee de reouverture de la sidebar gauche quand elle est repliee */
+#lsb-toggle{display:none;position:fixed;left:0;top:50%;transform:translateY(-50%);
+  z-index:40;width:18px;height:54px;align-items:center;justify-content:center;
+  background:var(--surface2);border:1px solid var(--border);border-left:none;
+  border-radius:0 8px 8px 0;color:var(--dim);cursor:pointer;font:12px var(--mono);
+  user-select:none}
+#lsb-toggle:hover{color:var(--text)}
+body.lsb-collapsed #lsb-toggle{display:flex}
 body.rsb-collapsed #rsb-toggle{right:0}
 .sb-sec{padding:11px 13px;border-bottom:1px solid var(--border)}
 .sb-title{font-family:var(--mono);font-size:9px;font-weight:700;color:var(--dim);letter-spacing:.12em;text-transform:uppercase;margin-bottom:9px}
@@ -780,9 +796,10 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
     <div class="map-svg-wrap" id="map-svg-wrap"></div>
     <div class="map-loading" id="map-loading">Loading yanis map…</div>
     <!-- [COORDREAD-V1] live cursor world coordinates -->
-    <div class="map-coordread" id="map-coordread">X —  Y —</div>
+    <div class="map-coordread" id="map-coordread">X —  Y —  Z —</div>
   </div>
   <div id="rsb-toggle" title="Collapse panel">&#9656;</div>
+  <div id="lsb-toggle" title="Show camera list (Tab)">&#9656;</div>
   <div class="sidebar">
     <!-- Phase 7a.2: Generate Map button removed (replaced by Map view) -->
     <div class="sb-sec">
@@ -1244,6 +1261,11 @@ async function init() {
     camSel.value = name;
     camSearch.value = name;
     camSel.dispatchEvent(new Event('change'));
+    // [SEARCH-FOCUS-FIX] re-focus la recherche apres selection: sinon la
+    // frappe suivante part dans les raccourcis globaux ('d' = dual -> ecran
+    // coupe en deux, 'm' = map, 'v' = verts, 'o' = overlays).
+    camSearch.focus();
+    camSearch.select();
   });
   // Burger toggle for the left sidebar (session-only, no localStorage)
   const leftSidebar = document.getElementById('left-sidebar');
@@ -1532,8 +1554,20 @@ async function init() {
   window.tilesPending = new Map();
   let tilesCanvas = null, tilesCtx = null;
 
-  function tilesUrl(z, x, y)   { return `/tiles/${z}/${z},${y},${x}.jpg?v=14`; }
-  function tilesKey(z, x, y)   { return `${z}/${y}/${x}`; }
+  // [LEAK-TILES-V1] bascule de fond de carte: yanis V14 <-> full map leak
+  // (georef: zero (9996,9504), 1 px = 1 m, ±20 m — temporaire, a retirer
+  // quand yanis integre le leak). Persistant via localStorage 'ui.tileSrc'.
+  window._tileSrc = localStorage.getItem('ui.tileSrc') || 'yanis';
+  window._setTileSrc = s => { window._tileSrc = s; localStorage.setItem('ui.tileSrc', s); };
+  function tilesUrl(z, x, y)   {
+    // [LEAK-TILES-V1] v=leak2: cache-buster bumpe au passage a la map clean
+    // (memes URLs qu'avant -> les navigateurs resservaient les vieilles tiles)
+    const src = window._tileSrc === 'leak' ? '&src=leak&v=leak3' : '';  // leak3 = composite yanis+feather
+    return `/tiles/${z}/${z},${y},${x}.jpg?v=14${src}`;
+  }
+  // [LEAK-TILES-V1] la source fait partie de la cle: sans ca, basculer
+  // yanis<->leak reutilisait les images de l'autre source deja chargees.
+  function tilesKey(z, x, y)   { return `${window._tileSrc}/${z}/${y}/${x}`; }
   function tilesGet(z, x, y) {
     const k = tilesKey(z, x, y);
     if (window.tilesCache.has(k)) return window.tilesCache.get(k);
@@ -1644,6 +1678,31 @@ async function init() {
     // [TILES-V1-CANVAS] Tiles are now the default — no toggle button.
     // Activate immediately and re-render whenever map data is ready.
     document.body.classList.add('tiles-on');
+    // [LEAK-TILES-V2] bascule YANIS/LEAK: coin haut-droit sous le readout
+    // X/Y/Z, meme famille visuelle — plus de collision avec le nom de cam et
+    // les chips de filtres a gauche.
+    (() => {
+      const b = document.createElement('div');
+      const label = () => 'map: ' + (window._tileSrc === 'leak' ? 'leak' : 'yanis') + ' ⇄';
+      b.id = 'tile-src-btn';
+      b.textContent = label();
+      b.title = 'Basculer le fond de carte (leak full map / yanis V14)';
+      b.style.cssText = 'display:none;position:fixed;right:10px;top:40px;z-index:31;'
+        + 'padding:4px 11px;background:rgba(10,10,13,.72);backdrop-filter:blur(6px);'
+        + 'border:1px solid #2c2c33;border-radius:8px;color:#4ade80;cursor:pointer;'
+        + 'font:11px ui-monospace,monospace;letter-spacing:.03em;user-select:none';
+      b.addEventListener('click', () => {
+        window._setTileSrc(window._tileSrc === 'leak' ? 'yanis' : 'leak');
+        b.textContent = label();
+        window.tilesCache.clear(); window.tilesPending.clear();   // purge: URLs changent
+        window.tilesRender();
+      });
+      document.body.appendChild(b);
+      // visible seulement en vue Map
+      new MutationObserver(() => {
+        b.style.display = document.body.classList.contains('view-map') ? 'block' : 'none';
+      }).observe(document.body, {attributes: true, attributeFilter: ['class']});
+    })();
     if (window.mapTx) window.tilesRender();
     window.addEventListener('resize', () => {
       if (document.body.classList.contains('tiles-on')) window.tilesRender();
@@ -1710,10 +1769,32 @@ async function init() {
     window.mapTx = { scale: ns, tx: ntx, ty: nty };
     applyMapTx();
   }, { passive: false });
-  // [COORDREAD-V1] live cursor world X/Y readout in map view.
+  // [COORDREAD-V3] live cursor world X/Y readout in map view, + Z height map
+  // (grille /api/terrain3d chargee une fois, echantillonnee en local).
   (() => {
     const readEl = document.getElementById('map-coordread');
     if (!readEl) return;
+    let hg = null, hgLoading = false;
+    function loadGrid() {
+      if (hg || hgLoading) return;
+      hgLoading = true;
+      fetch('/api/terrain3d?step=40').then(r => r.json()).then(t => {
+        if (t.error) return;
+        const raw = Uint8Array.from(atob(t.z_b64), ch => ch.charCodeAt(0));
+        hg = { Z: new Float32Array(raw.buffer), nx: t.nx, ny: t.ny,
+               x0: t.x0, y0: t.y0, step: t.step };
+      }).catch(() => {});
+    }
+    window.groundZ = (wx, wy) => {       // null hors emprise / hors donnees
+      if (!hg) { loadGrid(); return null; }
+      const fi = (wx - hg.x0) / hg.step, fj = (wy - hg.y0) / hg.step;
+      if (fi < 0 || fj < 0 || fi >= hg.nx - 1 || fj >= hg.ny - 1) return null;
+      const i = Math.floor(fi), j = Math.floor(fj), u = fi - i, v = fj - j;
+      const k = j * hg.nx + i;
+      const z = hg.Z[k] * (1-u) * (1-v) + hg.Z[k+1] * u * (1-v)
+              + hg.Z[k+hg.nx] * (1-u) * v + hg.Z[k+hg.nx+1] * u * v;
+      return z < -300.5 ? null : z;      // -301.01 = v=0, fond de capture
+    };
     mapView.addEventListener('mousemove', e => {
       if (window.currentView !== 'map' || !window.mapImg || !window.mapTx || !window.svgToWorld) {
         readEl.classList.remove('show'); return;
@@ -1724,7 +1805,8 @@ async function init() {
       const svgX = (e.clientX - rect.left - tx) / scale;
       const svgY = (e.clientY - rect.top  - ty) / scale;
       const [wx, wy] = window.svgToWorld(svgX, svgY);
-      readEl.textContent = `X ${wx.toFixed(1)}   Y ${wy.toFixed(1)}`;
+      const z = window.groundZ(wx, wy);
+      readEl.textContent = `X ${wx.toFixed(1)}   Y ${wy.toFixed(1)}   Z ${z === null ? '—' : z.toFixed(1)}`;
       readEl.classList.add('show');
     });
     mapView.addEventListener('mouseleave', () => readEl.classList.remove('show'));
@@ -3509,12 +3591,21 @@ const BUILDING_WIREFRAMES = [
 // [MESH-FRONTEND-V2] Fetch pre-projected pixel edges for current cam.
 // Stored in BUILDING_PROCEDURAL_PIXEL_EDGES; drawBuildingWireframes uses it.
 let BUILDING_PROCEDURAL_PIXEL_EDGES = {};  // {bldName: {color, pixel_edges: [[[x,y],[x,y]], ...]}}
+let _procMeshReq = 0;  // [MESH-STALE-FIX] jeton anti-reponses croisees
 async function loadProceduralMeshes() {
-  if (!currentCam) { BUILDING_PROCEDURAL_PIXEL_EDGES = {}; return; }
+  // [MESH-STALE-FIX] au switch de cam: vider IMMEDIATEMENT les aretes de
+  // l'ancienne cam (avant, un fetch lent/rate laissait l'ancien mesh dessine
+  // sur la nouvelle frame jusqu'au reload de la page).
+  const req = ++_procMeshReq;
+  BUILDING_PROCEDURAL_PIXEL_EDGES = {};
+  if (typeof draw === 'function') draw();
+  if (!currentCam) return;
   try {
-    const r = await fetch('/api/building_meshes_procedural?cam=' + encodeURIComponent(currentCam));
-    if (!r.ok) return;
+    const r = await fetch('/api/building_meshes_procedural?cam=' + encodeURIComponent(currentCam), {cache: 'no-store'});
+    if (req !== _procMeshReq) return;   // reponse obsolete (switch rapide)
+    if (!r.ok) { console.warn('[MESH-STALE-FIX] fetch', r.status, 'pour', currentCam); return; }
     const d = await r.json();
+    if (req !== _procMeshReq) return;
     BUILDING_PROCEDURAL_PIXEL_EDGES = d.meshes || {};
     if (typeof draw === 'function') draw();
   } catch (e) {
@@ -7082,6 +7173,105 @@ window.addEventListener('load', () => {
     return p;
   };
   console.log('[VERDICT-V1] toast actif');
+})();
+</script>
+
+<script>
+// ══ [FOCUS-V1] Les panneaux sont des tiroirs, pas des colonnes ═════════════
+// Mesure avant: sidebar gauche 260px + panneau droit 290px = 43% de la largeur,
+// et la frame — seule surface de travail — n'occupait que 32.5% de l'ecran.
+// Replies, la meme frame passe a 100%: 3x plus de pixels pour cliquer juste.
+(() => {
+  const LS_L = 'ui.lsbCollapsed', LS_R = 'ui.rsbCollapsed';
+  const left = document.getElementById('left-sidebar');
+  const rsbToggle = document.getElementById('rsb-toggle');
+  const lsbToggle = document.getElementById('lsb-toggle');
+  if (!left) return;
+
+  const isLeft  = () => left.classList.contains('collapsed');
+  const isRight = () => document.body.classList.contains('rsb-collapsed');
+
+  function refit() {
+    // La transition CSS dure .18s. Un SEUL recadrage a 200ms attrapait la
+    // largeur EN COURS d'animation: mesure faite, l'overlay restait fige a
+    // 990px alors que le conteneur etait deja a 1280 — les panneaux
+    // disparaissaient mais l'image ne remplissait pas l'espace libere.
+    // On recadre donc a plusieurs instants, dont un bien apres la fin de la
+    // transition. resizeOverlay()+draw() sont idempotents: cout nul.
+    [60, 200, 320, 520].forEach(ms => setTimeout(() => {
+      window.dispatchEvent(new Event('resize'));
+      if (typeof window.resizeOverlay === 'function') window.resizeOverlay();
+      if (typeof draw === 'function') draw();
+    }, ms));
+  }
+
+  function setLeft(collapsed, persist = true) {
+    left.classList.toggle('collapsed', collapsed);
+    document.body.classList.toggle('lsb-collapsed', collapsed);
+    if (persist) localStorage.setItem(LS_L, collapsed ? '1' : '0');
+    refit();
+  }
+  function setRight(collapsed, persist = true) {
+    document.body.classList.toggle('rsb-collapsed', collapsed);
+    if (rsbToggle) {
+      rsbToggle.innerHTML = collapsed ? '&#9666;' : '&#9656;';
+      rsbToggle.title = collapsed ? 'Expand panel' : 'Collapse panel';
+    }
+    if (persist) localStorage.setItem(LS_R, collapsed ? '1' : '0');
+    refit();
+  }
+  window._setPanels = (l, r) => { setLeft(l); setRight(r); };
+
+  // Etat restaure au chargement
+  if (localStorage.getItem(LS_L) === '1') setLeft(true, false);
+  if (localStorage.getItem(LS_R) === '1') setRight(true, false);
+
+  // Repli AUTO de la liste des cams au premier chargement de cam de la session:
+  // c'est un selecteur (2 secondes d'usage) qui volait 260px en permanence.
+  // On ne le fait qu'une fois, et jamais si l'utilisateur a deja exprime un choix.
+  let autoDone = localStorage.getItem(LS_L) !== null;
+  const camSel = document.getElementById('cam-sel');
+  if (camSel) camSel.addEventListener('change', () => {
+    if (autoDone || !camSel.value) return;
+    autoDone = true;
+    setLeft(true, false);      // pas persiste: c'est une suggestion, pas un reglage
+  });
+
+  // Les boutons existants (burger + poignee droite) restent maitres, on se
+  // contente de synchroniser l'etat body + localStorage apres leur clic.
+  const burger = document.getElementById('cam-toggle-btn');
+  if (burger) burger.addEventListener('click', () => {
+    autoDone = true;
+    setTimeout(() => {
+      document.body.classList.toggle('lsb-collapsed', isLeft());
+      localStorage.setItem(LS_L, isLeft() ? '1' : '0');
+      refit();
+    }, 0);
+  });
+  if (rsbToggle) rsbToggle.addEventListener('click', () => {
+    setTimeout(() => localStorage.setItem(LS_R, isRight() ? '1' : '0'), 0);
+  });
+  if (lsbToggle) lsbToggle.addEventListener('click', () => { autoDone = true; setLeft(false); });
+
+  // Tab = mode focus: si un panneau est ouvert, on ferme tout; sinon on rouvre.
+  document.addEventListener('keydown', e => {
+    if (e.key !== 'Tab' || e.metaKey || e.ctrlKey || e.altKey) return;
+    const t = e.target.tagName;
+    // La barre de recherche garde le focus apres un clic sur une cam
+    // ([SEARCH-FOCUS-FIX]): sans cette exception, Tab y serait mort — le cas
+    // le plus frequent. On la quitte et on bascule quand meme.
+    if (e.target.id === 'cam-search') {
+      e.target.blur();
+    } else if (t === 'INPUT' || t === 'TEXTAREA' || t === 'SELECT' || e.target.isContentEditable) {
+      return;
+    }
+    e.preventDefault();
+    autoDone = true;
+    const anyOpen = !isLeft() || !isRight();
+    setLeft(anyOpen); setRight(anyOpen);
+  });
+
+  console.log('[FOCUS-V1] panneaux en tiroirs — Tab bascule le mode focus');
 })();
 </script>
 </body>

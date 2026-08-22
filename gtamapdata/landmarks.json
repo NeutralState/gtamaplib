@@ -1755,15 +1755,15 @@
  },
  "Pylon (3)": {
   "xyz": [
-   -6406.979635066909,
-   3797.804443932664,
-   59.97772418224699
+   -6406.926,
+   3797.799,
+   60.183
   ],
   "source_cameras": [
    "Car Wash",
    "Gas Station (Lucia)"
   ],
-  "error_m": 1.923,
+  "error_m": 0.378,
   "zone": "port_gellhorn"
  },
  "Red Bird Caf\u00e9 (NW)": {
@@ -1852,20 +1852,7 @@
   "zone": "port_gellhorn",
   "author": "rlx"
  },
- "Sunshine Skyway Bridge (NNR)": {
-  "xyz": [
-   -6790.733,
-   4693.227,
-   30.96
-  ],
-  "source_cameras": [
-   "Diner (W) (A)"
-  ],
-  "error_m": null,
-  "zone": "port_gellhorn",
-  "author": "rlx"
- },
- "Sunshine Skyway Bridge (NR)": {
+ "Sunshine Skyway Bridge (SR)": {
   "xyz": [
    -6753.926,
    4566.237,
@@ -1879,16 +1866,15 @@
   "zone": "port_gellhorn",
   "author": "rlx"
  },
- "Sunshine Skyway Bridge (SR)": {
-  "xyz": null,
-  "source_cameras": [],
-  "error_m": null,
-  "zone": "port_gellhorn",
-  "author": "rlx"
- },
  "Sunshine Skyway Bridge (SSR)": {
-  "xyz": null,
-  "source_cameras": [],
+  "xyz": [
+   -6790.733,
+   4693.227,
+   30.96
+  ],
+  "source_cameras": [
+   "Diner (W) (A)"
+  ],
   "error_m": null,
   "zone": "port_gellhorn",
   "author": "rlx"
@@ -2744,19 +2730,14 @@
  },
  "Sunshine Skyway Bridge (S)": {
   "xyz": [
-   -6693.67,
-   4343.96,
-   117.56
+   -6736.9,
+   4558.6,
+   118.4
   ],
-  "source_cameras": [
-   "Chase (2) (A)",
-   "Ambrosia 04 (Fires)",
-   "Chase (2) (B)"
-  ],
-  "error_m": 2.05,
+  "error_m": null,
+  "source_cameras": [],
   "zone": "port_gellhorn",
-  "notes": "[SUNSHINE-SKYWAY-RIGID-V2] xyz=st south-pylon-top z=119.352 from SunshineSkywayBridge rigid model; identical to rlx 73bbf43. Far LM (~2.5km from 04), residual at resolution limit. | source A->B: A is a chase frame, SSB at 1km exceeds A angular precision (~0.8deg). Marking kept on A as observation but excluded from A pose fit.",
-  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (3 cams, leak figees)"
+  "note": "position posee sur la leak map (releve Alexandre 2026-08-22), non triangulee"
  },
  "Ambrosia Main St (A)": {
   "xyz": [
@@ -2899,15 +2880,15 @@
  },
  "Wheelabrator South Broward (W)": {
   "xyz": [
-   -2452.342,
-   2491.636,
-   54.901
+   -2448.955,
+   2509.114,
+   56.424
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Leonida Keys 01 (Airplane) (X)"
   ],
-  "error_m": null,
+  "error_m": 2.521,
   "zone": "ambrosia"
  },
  "102180 Overseas Hwy": {
@@ -4505,22 +4486,6 @@
   "error_m": null,
   "zone": "ambrosia"
  },
- "Sunshine Skyway Bridge (N)": {
-  "xyz": [
-   -6759.2,
-   4566.77,
-   118.63
-  ],
-  "source_cameras": [
-   "Chase (2) (A)",
-   "Ambrosia 04 (Fires)",
-   "Chase (2) (B)"
-  ],
-  "error_m": 0.012,
-  "zone": "port_gellhorn",
-  "notes": "[SUNSHINE-SKYWAY-RIGID-V1] xyz from SunshineSkywayBridge rigid model (was drift 3.37m)",
-  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (3 cams, leak figees)"
- },
  "180 Pompano Dr": {
   "xyz": [
    -1778.4270965585001,
@@ -4653,23 +4618,23 @@
  },
  "1500 Sonora Ave (Tank)": {
   "xyz": [
-   -3009.682,
-   3543.693,
-   34.067
+   -2977.157,
+   3678.591,
+   40.77
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 2.539,
   "zone": "ambrosia"
  },
  "Easy Hill": {
   "xyz": [
-   -5939.28,
-   4038.28,
-   84.68
+   -5942.418,
+   4061.712,
+   79.75
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
@@ -4677,7 +4642,7 @@
    "Diner (SE) (B)",
    "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
-  "error_m": 33.7,
+  "error_m": 23.454,
   "zone": "port_gellhorn",
   "method": "ANCHOR-HARVEST-V1 [mountain]: triangulation 4 cams, perp med 33.7 m (1.38 pct), angle max 89.8 deg"
  },
@@ -4707,99 +4672,99 @@
  },
  "US Sugar Mill (Factory)": {
   "xyz": [
-   -3030.373,
-   3326.605,
-   100.831
+   -3030.111,
+   3327.071,
+   100.65
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 0.999,
   "zone": "ambrosia"
  },
  "USSM Smokestack (4)": {
   "xyz": [
-   -2915.223,
-   3552.115,
-   100.909
+   -2915.897,
+   3550.48,
+   100.956
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 0.591,
   "zone": "ambrosia"
  },
  "USSM Smokestack (5)": {
   "xyz": [
-   -2953.6,
-   3525.497,
-   81.473
+   -2953.932,
+   3524.749,
+   81.448
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 0.384,
   "zone": "ambrosia"
  },
  "USSM Smokestack (6)": {
   "xyz": [
-   -2960.561,
-   3527.951,
-   86.021
+   -2960.864,
+   3527.286,
+   85.984
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 0.16,
   "zone": "ambrosia"
  },
  "USSM Smokestack (7)": {
   "xyz": [
-   -2988.163,
-   3529.229,
-   99.661
+   -2988.301,
+   3528.951,
+   99.579
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 0.574,
   "zone": "ambrosia"
  },
  "USSM Smokestack (8)": {
   "xyz": [
-   -3042.505,
-   3602.726,
-   48.415
+   -3042.266,
+   3603.115,
+   48.217
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 0.59,
   "zone": "ambrosia"
  },
  "USSM Smokestack (9)": {
   "xyz": [
-   -3049.182,
-   3605.449,
-   58.807
+   -3048.901,
+   3605.907,
+   58.601
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 0.094,
   "zone": "ambrosia"
  },
  "1500 Sonora Ave (Silo)": {
@@ -4869,15 +4834,15 @@
  },
  "USSM Smokestack (3)": {
   "xyz": [
-   -2973.343,
-   3042.384,
-   38.823
+   -2973.584,
+   3041.662,
+   38.666
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 1.101,
   "zone": "ambrosia"
  },
  "1000 Venetian Way (4)": {
@@ -6011,16 +5976,15 @@
  },
  "Juice Fruit Sign (B)": {
   "xyz": [
-   -6580.94,
-   3666.65,
-   12.96
+   -6580.909,
+   3666.633,
+   13.019
   ],
   "source_cameras": [
    "Port Gellhorn Postcard (X)",
-   "Chase (2) (A)",
    "Port Gellhorn 04 (Delights) (X)"
   ],
-  "error_m": 2.0,
+  "error_m": 0.058,
   "zone": "port_gellhorn",
   "method": "PGH-BA-V1: solve joint zone Port Gellhorn (3 cams, leak figees)"
  },
@@ -8070,29 +8034,30 @@
  },
  "1500 Sonora Ave (Tank) (L)": {
   "xyz": [
-   -2965.503,
-   3655.792,
-   40.731
+   -2966.195,
+   3654.574,
+   40.66
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 0.46,
   "zone": "ambrosia"
  },
  "1500 Sonora Ave (Tank) (R)": {
   "xyz": [
-   -2974.277,
-   3704.093,
-   41.429
+   -2987.461,
+   3702.105,
+   41.021
   ],
   "source_cameras": [
+   "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 5.754,
   "zone": "ambrosia"
  },
  "Industrial Building (Ambrosia)": {
@@ -8110,16 +8075,16 @@
  },
  "US Sugar Mill (Factory) (R)": {
   "xyz": [
-   -3027.933,
-   3326.633,
-   71.79
+   -3027.739,
+   3327.105,
+   71.641
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 1.506,
   "zone": "ambrosia"
  },
  "White Silos (W)": {
@@ -8137,28 +8102,28 @@
  },
  "Wheelabrator South Broward (3B)": {
   "xyz": [
-   -2431.054,
-   2502.342,
-   43.711
+   -2430.964,
+   2519.161,
+   45.529
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)"
   ],
-  "error_m": null,
+  "error_m": 0.77,
   "zone": "ambrosia"
  },
  "Billboard (South Ambrosia)": {
   "xyz": [
-   -2833.131242377244,
-   3065.897580916887,
-   50.40306238028459
+   -2852.647,
+   3054.404,
+   45.019
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 23.306,
+  "error_m": 3.481,
   "zone": "ambrosia"
  },
  "House C (E)": {
@@ -12751,16 +12716,16 @@
  },
  "Daytona Beach Water Tower (B)": {
   "author": "rlx",
-  "error_m": null,
+  "error_m": 0.795,
   "source_cameras": [
+   "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
-   "Ambrosia Postcard (X)",
-   "Ambrosia 02 (Panorama)"
+   "Ambrosia Postcard (X)"
   ],
   "xyz": [
-   -3935.698,
-   3011.732,
-   56.644
+   -3941.328,
+   3005.303,
+   54.622
   ],
   "zone": "ambrosia",
   "aliases": [
@@ -13017,12 +12982,16 @@
  },
  "Dark Billboard (Ambrosia) (TE)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
+  "error_m": 0.934,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)"
+  ],
   "xyz": [
-   -2778.449,
-   2990.451,
-   49.328
+   -2778.283,
+   2991.764,
+   49.679
   ],
   "zone": null
  },
@@ -13266,15 +13235,17 @@
  },
  "Daytona Beach Water Tower": {
   "author": "rlx",
-  "error_m": null,
+  "error_m": 6.269,
   "source_cameras": [
+   "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
-   "Ambrosia Postcard (X)"
+   "Ambrosia Postcard (X)",
+   "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
   "xyz": [
-   -3929.815,
-   3012.91,
-   74.647
+   -3939.456,
+   3006.23,
+   67.599
   ],
   "zone": "ambrosia",
   "depth_caveat": "profondeur: le solve 3-cams (Panorama/Fires/Postcard) est auto-coherent a ~2m perp. Le rayon Kalaga sous la pose rlx du 2026-07-26 tombe a 60px/20m perp \u2014 il CONFIRME l identification (la silhouette a tete renflee est visible au clic) mais sa pose hand-tuned (~1 deg) est trop grossiere pour re-trianguler avec. Le jour ou Kalaga est resolue par resection (les ancres Starlet sont cliquables), ce rayon devient le temoin de profondeur definitif.",
@@ -13684,15 +13655,16 @@
  },
  "White Silos (E) (NE)": {
   "author": "rlx",
-  "error_m": null,
+  "error_m": 0.491,
   "source_cameras": [
+   "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
   "xyz": [
-   -2830.267,
-   3570.967,
-   35.318
+   -2831.296,
+   3567.64,
+   35.498
   ],
   "zone": null
  },
@@ -14425,12 +14397,16 @@
  },
  "Dark Billboard (Ambrosia) (TW)": {
   "author": "rlx",
-  "error_m": null,
-  "source_cameras": [],
+  "error_m": 0.649,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)"
+  ],
   "xyz": [
-   -2799.216,
-   3003.835,
-   49.325
+   -2799.071,
+   3004.846,
+   49.629
   ],
   "zone": null
  },
@@ -16274,41 +16250,42 @@
  },
  "Factory A (Ambrosia) (S)": {
   "xyz": [
-   -2985.192,
-   3441.746,
-   46.398
+   -2985.13,
+   3441.854,
+   46.264
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 0.016,
   "zone": "rlx_markings_0713"
  },
  "Factory A (Ambrosia) (N)": {
   "xyz": [
-   -2975.13,
-   3473.848,
-   46.066
+   -2975.204,
+   3473.729,
+   45.963
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 0.195,
   "zone": "rlx_markings_0713"
  },
  "Factory D (Ambrosia) (NW)": {
   "xyz": [
-   -3194.995,
-   3584.835,
-   40.962
+   -3186.973,
+   3587.88,
+   40.385
   ],
   "source_cameras": [
+   "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 1.784,
   "zone": "rlx_markings_0713"
  },
  "Road E (Ambrosia)": {
@@ -17152,37 +17129,46 @@
  },
  "US Sugar Mill (Factory) (A)": {
   "xyz": [
-   -3025.247,
-   3326.158,
-   102.866
+   -3027.28,
+   3327.189,
+   102.342
   ],
   "source_cameras": [
+   "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
-   "Ambrosia 02 (Panorama)"
+   "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 3.805,
   "zone": "ambrosia",
   "author": "rlx"
  },
  "US Sugar Mill (Factory) (AC)": {
   "xyz": [
-   -3027.349,
-   3326.834,
-   92.95
+   -3027.161,
+   3327.281,
+   92.824
   ],
-  "source_cameras": [],
-  "error_m": null,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)"
+  ],
+  "error_m": 2.217,
   "zone": "ambrosia",
   "author": "rlx"
  },
  "US Sugar Mill (Factory) (NW)": {
   "xyz": [
-   -3032.772,
-   3360.632,
-   71.472
+   -3032.533,
+   3361.185,
+   71.312
   ],
-  "source_cameras": [],
-  "error_m": null,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)"
+  ],
+  "error_m": 2.01,
   "zone": "ambrosia",
   "author": "rlx"
  },
@@ -17195,12 +17181,16 @@
  },
  "US Sugar Mill (Factory) (SE)": {
   "xyz": [
-   -3014.122,
-   3313.842,
-   71.456
+   -3013.972,
+   3314.221,
+   71.332
   ],
-  "source_cameras": [],
-  "error_m": null,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)"
+  ],
+  "error_m": 1.37,
   "zone": "ambrosia",
   "author": "rlx"
  },
@@ -17220,26 +17210,29 @@
  },
  "Wheelabrator South Broward (R)": {
   "xyz": [
-   -2393.371,
-   2501.804,
-   52.477
+   -2393.515,
+   2521.027,
+   54.308
   ],
   "source_cameras": [
-   "Ambrosia 04 (Fires)",
-   "Ambrosia 02 (Panorama)"
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)"
   ],
-  "error_m": null,
+  "error_m": 0.715,
   "zone": "ambrosia",
   "author": "rlx"
  },
  "Billboard (South Ambrosia) (TE)": {
   "xyz": [
-   -2920.478,
-   2671.167,
-   40.328
+   -2921.191,
+   2667.314,
+   40.279
   ],
-  "source_cameras": [],
-  "error_m": null,
+  "source_cameras": [
+   "Ambrosia 04 (Fires)",
+   "Ambrosia Postcard (X)"
+  ],
+  "error_m": 1.701,
   "zone": "ambrosia",
   "author": "rlx"
  },
@@ -17259,31 +17252,31 @@
  },
  "Industrial Building 1 (Ambrosia)": {
   "xyz": [
-   -2771.45,
-   3308.26,
-   43.08
+   -2771.597,
+   3307.36,
+   43.45
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 2.0,
+  "error_m": 0.995,
   "zone": "ambrosia",
   "author": "rlx",
   "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 0.4 m, angle max 84.0 deg"
  },
  "Industrial Building 2 (Ambrosia) (TE)": {
   "xyz": [
-   -2744.304,
-   3355.013,
-   33.695
+   -2744.515,
+   3353.33,
+   34.374
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 2.158,
   "zone": "ambrosia",
   "author": "rlx"
  },
@@ -17317,29 +17310,29 @@
  },
  "US Sugar Mill (Factory) (P2)": {
   "xyz": [
-   -3028.986,
-   3378.245,
-   65.628
+   -3028.648,
+   3378.81,
+   65.384
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 0.161,
   "zone": "ambrosia",
   "author": "rlx"
  },
  "US Sugar Mill (Factory) (P3)": {
   "xyz": [
-   -3027.863,
-   3388.087,
-   65.596
+   -3027.523,
+   3388.648,
+   65.355
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": null,
+  "error_m": 0.146,
   "zone": "ambrosia",
   "author": "rlx"
  },
@@ -17352,15 +17345,15 @@
  },
  "Billboard (South Ambrosia) (TW)": {
   "xyz": [
-   -2931.06,
-   2677.15,
-   40.47
+   -2931.849,
+   2673.075,
+   40.382
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 2.0,
+  "error_m": 1.765,
   "zone": "ambrosia",
   "author": "rlx",
   "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.7 m, angle max 62.7 deg"
@@ -18816,44 +18809,44 @@
  },
  "1500 Sonora Ave (Tank) (A)": {
   "xyz": [
-   -2976.4,
-   3679.68,
-   40.86
+   -2977.074,
+   3678.517,
+   40.77
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 3.1,
+  "error_m": 2.629,
   "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 3.1 m, angle max 83.8 deg"
  },
  "1500 Sonora Ave (Tank) (A) (L)": {
   "xyz": [
-   -2965.5,
-   3655.79,
-   40.73
+   -2966.195,
+   3654.574,
+   40.66
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 2.0,
+  "error_m": 0.46,
   "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 0.4 m, angle max 83.8 deg"
  },
  "1500 Sonora Ave (Tank) (A) (R)": {
   "xyz": [
-   -2986.97,
-   3703.2,
-   40.98
+   -2987.612,
+   3702.099,
+   40.874
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 6.4,
+  "error_m": 5.819,
   "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 6.4 m, angle max 83.7 deg"
  },
  "3001 Gordon Hwy (Water Tower)": {
@@ -18872,9 +18865,9 @@
  },
  "3400 Transmitter Rd": {
   "xyz": [
-   -3934.51,
-   3012.57,
-   68.39
+   -3938.901,
+   3006.543,
+   66.985
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
@@ -18882,21 +18875,22 @@
    "Ambrosia Postcard (X)",
    "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
-  "error_m": 5.6,
+  "error_m": 7.22,
   "method": "ANCHOR-HARVEST-V1: triangulation 4 cams, perp med 5.6 m, angle max 57.9 deg"
  },
  "3400 Transmitter Rd (B)": {
   "xyz": [
-   -3935.7,
-   3011.73,
-   56.62
+   -3940.662,
+   3005.958,
+   49.462
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
-   "Ambrosia Postcard (X)"
+   "Ambrosia Postcard (X)",
+   "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
-  "error_m": 2.7,
+  "error_m": 7.74,
   "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 2.7 m, angle max 52.5 deg"
  },
  "Ambrosia Canal (A)": {
@@ -18914,16 +18908,16 @@
  },
  "BB Hill": {
   "xyz": [
-   -3753.74,
-   3811.27,
-   67.1
+   -3746.041,
+   3825.083,
+   64.533
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
-  "error_m": 7.6,
+  "error_m": 7.194,
   "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 7.6 m, angle max 69.7 deg"
  },
  "Building near Pool (N)": {
@@ -18954,15 +18948,15 @@
  },
  "Interstate Hill": {
   "xyz": [
-   -5598.6,
-   3137.66,
-   108.49
+   -5601.09,
+   3135.627,
+   102.072
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
-  "error_m": 2.6,
+  "error_m": 3.789,
   "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.6 m, angle max 41.8 deg"
  },
  "Lamppost near Starlet Motel": {
@@ -18981,15 +18975,15 @@
  },
  "Starlet Hill": {
   "xyz": [
-   -5432.99,
-   3466.12,
-   112.21
+   -5415.449,
+   3481.782,
+   106.371
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
-  "error_m": 2.0,
+  "error_m": 7.062,
   "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.8 m, angle max 44.3 deg"
  },
  "Starlet Motel (P1N)": {
@@ -19072,19 +19066,29 @@
  },
  "Tree near Port Gellhorn": {
   "xyz": [
-   -5385.49,
-   3730.66,
-   116.16
+   -5457.101,
+   3609.966,
+   122.344
   ],
   "source_cameras": [
-   "Ambrosia 04 (Fires)",
    "Mount Kalaga National Park 02 (Helicopter) (X)",
    "Mount Kalaga National Park 04 (Mountain Pass) (X)"
   ],
-  "error_m": 34.8,
+  "error_m": 0.899,
   "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 34.8 m, angle max 80.3 deg"
  },
- "Trees near Wheelabrator": {},
+ "Trees near Wheelabrator": {
+  "xyz": [
+   -2285.798,
+   2620.827,
+   42.893
+  ],
+  "error_m": 1.742,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)"
+  ]
+ },
  "Unknown Building (North Port Gellhorn) (T)": {
   "xyz": [
    -7456.38,
@@ -19100,55 +19104,55 @@
  },
  "Warehouse 4 (Ambrosia) (C)": {
   "xyz": [
-   -2997.18,
-   3177.47,
-   33.92
+   -2997.208,
+   3177.425,
+   33.698
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 2.0,
+  "error_m": 1.123,
   "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.3 m, angle max 66.2 deg"
  },
  "Warehouse 4 (Ambrosia) (T)": {
   "xyz": [
-   -3004.52,
-   3124.77,
-   35.56
+   -3004.666,
+   3124.41,
+   35.298
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 2.0,
+  "error_m": 0.784,
   "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.0 m, angle max 65.5 deg"
  },
  "Wheelabrator South Broward (5B)": {
   "xyz": [
-   -2431.05,
-   2502.34,
-   43.71
+   -2430.964,
+   2519.161,
+   45.529
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)"
   ],
-  "error_m": 2.0,
+  "error_m": 0.77,
   "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.8 m, angle max 62.7 deg"
  },
  "Wheelabrator South Broward (NW)": {
   "xyz": [
-   -2440.31,
-   2500.16,
-   54.08
+   -2438.679,
+   2517.081,
+   55.196
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Leonida Keys 01 (Airplane) (X)"
   ],
-  "error_m": 9.2,
+  "error_m": 6.513,
   "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 9.2 m, angle max 62.7 deg"
  },
  "Billboard near Intersection (BC)": {
@@ -19280,5 +19284,45 @@
  "Tall Billboard near Interchange (BS)": {},
  "Tall Billboard near Interchange (TN)": {},
  "Billboard near Starlet Motel (BC)": {},
- "White Billboard (Hamlet) (BW)": {}
+ "White Billboard (Hamlet) (BW)": {},
+ "Mount Sinai (SE)": {
+  "xyz": [
+   1124.82,
+   2102.66,
+   53.42
+  ],
+  "source_cameras": [
+   "Jet Ski",
+   "Glitch (C)"
+  ],
+  "error_m": 0.96,
+  "zone": "unknown"
+ },
+ "Sunshine Skyway Bridge (faux S)": {
+  "xyz": [
+   -6693.67,
+   4343.96,
+   117.56
+  ],
+  "source_cameras": [
+   "Chase (2) (A)",
+   "Ambrosia 04 (Fires)",
+   "Chase (2) (B)"
+  ],
+  "error_m": 2.05,
+  "zone": "port_gellhorn",
+  "notes": "[SUNSHINE-SKYWAY-RIGID-V2] xyz=st south-pylon-top z=119.352 from SunshineSkywayBridge rigid model; identical to rlx 73bbf43. Far LM (~2.5km from 04), residual at resolution limit. | source A->B: A is a chase frame, SSB at 1km exceeds A angular precision (~0.8deg). Marking kept on A as observation but excluded from A pose fit.",
+  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (3 cams, leak figees)"
+ },
+ "Sunshine Skyway Bridge (N)": {
+  "xyz": [
+   -6802.43,
+   4781.41,
+   119.47
+  ],
+  "error_m": null,
+  "source_cameras": [],
+  "zone": "port_gellhorn",
+  "note": "deduit: S + vecteur de l'ancienne paire (232.3 m, az 343.6) \u2014 a valider"
+ }
 }

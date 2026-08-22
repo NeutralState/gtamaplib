@@ -660,7 +660,16 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_response(404)
                 self.end_headers()
                 return
-            tile_path = os.path.join(TILES_DIR, z_dir, f'{z_in},{y},{x}.jpg')
+            # [LEAK-TILES-V1] source alternative: ?src=leak sert la pyramide
+            # generee depuis la full map leak (a retirer quand yanis integre).
+            _src = qs.get('src', [''])[0]
+            _dir = TILES_DIR
+            if _src == 'leak':
+                _dir = os.path.join(os.path.dirname(TILES_DIR), 'leak,1')
+            tile_path = os.path.join(_dir, z_dir, f'{z_in},{y},{x}.jpg')
+            if not os.path.exists(tile_path) and _src == 'leak':
+                # au-dela du z max du leak (ou hors emprise): retomber sur yanis
+                tile_path = os.path.join(TILES_DIR, z_dir, f'{z_in},{y},{x}.jpg')
             if not os.path.exists(tile_path):
                 self.send_response(404)
                 self.end_headers()
@@ -840,6 +849,91 @@ class Handler(BaseHTTPRequestHandler):
             })
 
         # ── end SVG Map Refactor (Phase 1) ─────────────────────────
+
+        elif path == '/api/terrain3d':
+            # [HEIGHTMAP-V2] grille de terrain metrique depuis la CAPTURE GPU
+            # D'ORIGINE (DDS L16 UNORM 1536x1748, bounty #145) — le tif float32
+            # de jaxrud etait passe par un decodage sRGB parasite (v_tif =
+            # srgb_to_linear(v_L16)) qui gonflait les sommets (+267 m au pic).
+            # Calibration directe sur la source: z = 706.07*v - 301.01, fit
+            # robuste 73/82 players HUD, mediane 0.18 m (pic Ambrosia 402+/-3 m,
+            # confirme le ~405 communautaire). Transform monde->px: rlx seul.
+            import base64
+            import numpy as _np
+            try:
+                step = float(qs.get('step', ['40'])[0])
+                # [TERRAIN-HD-GUIDED] src=hd: grille 6 m enrichie par la clean
+                # map leak (tools/make_terrain_hd.py) — AFFICHAGE SEULEMENT.
+                if qs.get('src', [''])[0] == 'hd':
+                    _hd_npy = os.path.join(GTAMAP_DIR, 'gtamapdata', 'heightmap', 'terrain_hd_f32.npy')
+                    _hd_meta = os.path.join(GTAMAP_DIR, 'gtamapdata', 'heightmap', 'terrain_hd_meta.json')
+                    if os.path.exists(_hd_npy) and os.path.exists(_hd_meta):
+                        if not hasattr(self.server, '_hd_cache'):
+                            import json as _json2
+                            self.server._hd_cache = (_np.load(_hd_npy), _json2.load(open(_hd_meta)))
+                        _A, _m = self.server._hd_cache
+                        _st = max(1, int(round(step / _m['step'])))
+                        # crop a la zone utile: le cadre DDS est aux 2/3 de
+                        # l'ocean v=0 — inutile d'envoyer ces sommets.
+                        _cx0, _cx1, _cy0, _cy1 = -9000.0, 5100.0, -5600.0, 7450.0
+                        _i0 = max(0, int((_cx0 - _m['x0']) / _m['step']))
+                        _i1 = min(_m['nx'], int((_cx1 - _m['x0']) / _m['step']))
+                        _j0 = max(0, int((_cy0 - _m['y0']) / _m['step']))
+                        _j1 = min(_m['ny'], int((_cy1 - _m['y0']) / _m['step']))
+                        _Z = _A[_j0:_j1:_st, _i0:_i1:_st].astype(_np.float32)
+                        self.send_json({
+                            'x0': _m['x0'] + _i0 * _m['step'],
+                            'y0': _m['y0'] + _j0 * _m['step'],
+                            'step': _m['step'] * _st,
+                            'nx': _Z.shape[1], 'ny': _Z.shape[0],
+                            'sea_level': 0.0, 'hd': True,
+                            'z_b64': base64.b64encode(_Z.tobytes()).decode('ascii'),
+                        })
+                        return
+                    # pas encore genere: retomber sur le DDS standard
+                _dds = open(os.path.join(GTAMAP_DIR, 'gtamapdata', 'heightmap', 'GTA6HeightMap_L16.dds'), 'rb').read()
+                _W, _H = 1536, 1748
+                T = (_np.frombuffer(_dds[128:128 + _W * _H * 2], dtype='<u2')
+                     .reshape(_H, _W).astype(_np.float32) / 65535.0)
+                SC_, ZX_, ZY_ = 0.083188297, 1108.532, 938.091
+                x0, x1 = (0 - ZX_) / SC_, (1536 - ZX_) / SC_
+                y1_, y0_ = ZY_ / SC_, (ZY_ - 1748) / SC_
+                xs = _np.arange(x0, x1, step, dtype=_np.float64)
+                ys = _np.arange(y0_, y1_, step, dtype=_np.float64)
+                U = ZX_ + xs * SC_
+                Vp = ZY_ - ys * SC_
+                iu = _np.clip(U, 1, T.shape[1] - 2.001)
+                iv = _np.clip(Vp, 1, T.shape[0] - 2.001)
+                iu0 = iu.astype(int); iv0 = iv.astype(int)
+                fu = (iu - iu0)[None, :]; fv = (iv - iv0)[:, None]
+                # [TERRAIN-BICUBIC] Catmull-Rom separable: le bilineaire
+                # facette les cretes des qu'on affiche sous le pas natif
+                # (12.8 m/px) — le cubique garde les silhouettes lisses sans
+                # inventer de relief.
+                def _cr_w(t):
+                    return (-0.5*t**3 + t**2 - 0.5*t,
+                            1.5*t**3 - 2.5*t**2 + 1.0,
+                            -1.5*t**3 + 2.0*t**2 + 0.5*t,
+                            0.5*t**3 - 0.5*t**2)
+                wu = _cr_w(fu); wv = _cr_w(fv)
+                Vg = _np.zeros((len(Vp), len(U)), dtype=_np.float64)
+                for b in range(4):
+                    row = _np.zeros_like(Vg)
+                    rr = _np.clip(iv0 + b - 1, 0, T.shape[0] - 1)
+                    for a in range(4):
+                        cc = _np.clip(iu0 + a - 1, 0, T.shape[1] - 1)
+                        row += wu[a] * T[rr][:, cc]
+                    Vg += wv[b] * row
+                Z = (706.07 * Vg - 301.01).astype(_np.float32)
+                self.send_json({
+                    'x0': float(xs[0]), 'y0': float(ys[0]), 'step': step,
+                    'nx': len(xs), 'ny': len(ys),
+                    'sea_level': 0.0,
+                    'z_b64': base64.b64encode(Z.tobytes()).decode('ascii'),
+                })
+            except Exception as e:
+                self.send_json({'error': f'terrain3d failed: {e}'}, 500)
+            return
 
         elif path == '/api/building_meshes_procedural':
             # [MESH-FRONTEND-V2] Project procedural mesh edges to pixel space for a given cam.

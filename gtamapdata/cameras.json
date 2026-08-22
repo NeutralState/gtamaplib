@@ -959,7 +959,7 @@
   "ypr": [
    28.3,
    -14.622,
-   0.0
+   0.001
   ],
   "fov": [
    null,
@@ -969,7 +969,7 @@
    1920,
    1080
   ],
-  "source": "2022-04-12 10-28-55 [?]",
+  "source": "2022-04-12 10-28-55 [3718]",
   "constraint_class": "C_pos_fov_only"
  },
  "Boat (Jason)": {
@@ -2672,8 +2672,8 @@
   "id": "T1/36",
   "player": null,
   "xyz": [
-   -1000.0,
-   4000.0,
+   -535.4,
+   4116.6,
    32.0
   ],
   "ypr": [
@@ -2695,8 +2695,8 @@
   "id": "T1/36",
   "player": null,
   "xyz": [
-   -985.0,
-   4003.0,
+   -520.4,
+   4119.6,
    32.0
   ],
   "ypr": [
@@ -2718,8 +2718,8 @@
   "id": "T1/36",
   "player": null,
   "xyz": [
-   -970.0,
-   4006.0,
+   -505.4,
+   4122.6,
    32.0
   ],
   "ypr": [
@@ -3111,14 +3111,14 @@
   "id": "T2/77",
   "player": null,
   "xyz": [
-   -6478.0235083021735,
-   3283.164126126726,
-   3.267514358505338
+   -6479.096,
+   3283.282,
+   5.261
   ],
   "ypr": [
-   351.0611770294977,
-   2.598979690211766,
-   0.5196218350846832
+   350.925,
+   2.073,
+   1.062
   ],
   "fov": [
    49.56127093194254,
@@ -3134,14 +3134,14 @@
   "id": "T2/77",
   "player": null,
   "xyz": [
-   -6473.317338686199,
-   3247.035697512906,
-   4.624609953034992
+   -6473.301,
+   3246.989,
+   4.685
   ],
   "ypr": [
-   354.6943382612637,
-   1.2980704153228553,
-   -0.01921949235059116
+   354.711,
+   1.255,
+   -0.035
   ],
   "fov": [
    48.449850998977766,
@@ -3481,24 +3481,25 @@
   "id": "S2/56",
   "player": null,
   "xyz": [
-   -2659.0,
-   4038.0,
-   20.265
+   -2665.655,
+   4063.937,
+   25.6
   ],
   "ypr": [
-   14.7767,
-   0.3469,
-   -0.2985
+   14.968,
+   -0.214,
+   0.0
   ],
   "fov": [
-   35.95,
+   37.133,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 1 \u2014 Ambrosia 01 [1]"
+  "source": "Screenshot 1 \u2014 Ambrosia 01 [1]",
+  "note": "pose HORIZON-V1: 13 ancres + silhouette height map (8 clics de crete), z verrouille sol height map."
  },
  "Ambrosia 02 (Panorama)": {
   "id": "S2/57",
@@ -3527,24 +3528,25 @@
   "id": "S2/59",
   "player": null,
   "xyz": [
-   -986.0,
-   3238.25,
-   55.382
+   -1164.591,
+   3236.594,
+   59.106
   ],
   "ypr": [
-   96.9994,
-   -1.71,
-   0.0453
+   97.658,
+   -2.006,
+   0.0
   ],
   "fov": [
-   42.175,
+   46.092,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 1 \u2014 Ambrosia 04 [1]"
+  "source": "Screenshot 1 \u2014 Ambrosia 04 [1]",
+  "note": "pose HORIZON-V1: 50 ancres + silhouette height map (108 clics de crete), z libre."
  },
  "Grassrivers 02 (Watson Bay)": {
   "id": "S2/62",
@@ -3597,13 +3599,13 @@
   "id": "S2/68",
   "player": null,
   "xyz": [
-   -4750.0,
-   6000.0,
-   120.0
+   -4885.1,
+   5444.3,
+   125.8
   ],
   "ypr": [
-   156.447,
-   -13.566,
+   147.3,
+   -5.8,
    0.0
   ],
   "fov": [
@@ -3615,7 +3617,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Mount Kalaga National Park 04 [1]",
-  "note": "pose rlx upstream 54e49fe (2026-08-02), adoptee sur demande. Mesure FAVORABLE: 289.4 -> 218.0 arcmin sur les 3 landmarks independants (Billboard BC 289->218, TN 127->37; seul Unknown Mast (1) se degrade 393->623)."
+  "note": "depart: pose repliquee a l oeil par Alexandre dans view3d (badge POSE-COPY), 2026-08-21"
  },
  "Vice City Postcard": {
   "id": "S2/71",
@@ -5060,5 +5062,117 @@
   ],
   "source": "Sara's Unisex Salon 01 [1]",
   "note": "importee de rlx upstream 54e49fe (2026-08-02): absente de notre jeu, pose la sienne."
+ },
+ "Glitch (B)": {
+  "id": "L1/15",
+  "player": [
+   1410.7,
+   1371.6,
+   2.9
+  ],
+  "xyz": [
+   1412.0,
+   1377.6,
+   -45.4
+  ],
+  "ypr": [
+   28.3,
+   -11.55,
+   0.0
+  ],
+  "fov": [
+   null,
+   49.6
+  ],
+  "size": [
+   1920,
+   1080
+  ],
+  "source": "2022-04-12 10-28-55 [3720]",
+  "constraint_class": "C_pos_fov_only"
+ },
+ "Glitch (C)": {
+  "id": "L1/15",
+  "player": [
+   1410.7,
+   1371.6,
+   2.9
+  ],
+  "xyz": [
+   1412.7,
+   1373.7,
+   -22.3
+  ],
+  "ypr": [
+   28.3,
+   -8.239,
+   0.0
+  ],
+  "fov": [
+   null,
+   49.6
+  ],
+  "size": [
+   1920,
+   1080
+  ],
+  "source": "2022-04-12 10-28-55 [3726]",
+  "constraint_class": "C_pos_fov_only"
+ },
+ "Glitch (D)": {
+  "id": "L1/15",
+  "player": [
+   1410.7,
+   1371.6,
+   2.9
+  ],
+  "xyz": [
+   1412.8,
+   1371.2,
+   -7.3
+  ],
+  "ypr": [
+   28.3,
+   -14.622,
+   0.0
+  ],
+  "fov": [
+   null,
+   49.6
+  ],
+  "size": [
+   1920,
+   1080
+  ],
+  "source": "2022-04-12 10-28-55 [3731]",
+  "constraint_class": "C_pos_fov_only"
+ },
+ "Glitch (E)": {
+  "id": "L1/15",
+  "player": [
+   1410.7,
+   1371.6,
+   2.9
+  ],
+  "xyz": [
+   1412.5,
+   1370.0,
+   0.7
+  ],
+  "ypr": [
+   28.3,
+   -14.622,
+   0.0
+  ],
+  "fov": [
+   null,
+   49.6
+  ],
+  "size": [
+   1920,
+   1080
+  ],
+  "source": "2022-04-12 10-28-55 [3734]",
+  "constraint_class": "C_pos_fov_only"
  }
 }

@@ -150,11 +150,18 @@ class Resection:
         return out
 
     def descend(self, t, rounds=120):
+        # [RESECT-V3-LOCKZ] z verrouille (ex: sol height map + hauteur d'yeux):
+        # on retire z des parametres libres au lieu de le laisser compenser
+        # une erreur de focale — c'est l'echange classique des ancres plates.
+        if getattr(self, 'lock_z', None) is not None:
+            t[2] = self.lock_z
         best = self.cost(t)
         step = list(STEP)
         for _ in range(rounds):
             moved = False
             for i in range(7):
+                if i == 2 and getattr(self, 'lock_z', None) is not None:
+                    continue
                 for s in (step[i], -step[i]):
                     old = t[i]
                     t[i] = old + s
@@ -199,6 +206,10 @@ def main():
                          'de PGH-BA-V1 — sur une scene rapprochee l arcmin '
                          'ecrase tout (1 m a 3 m de distance = 1200 arcmin) '
                          'et classe une pose correcte comme catastrophique.')
+    ap.add_argument('--lock-z', type=float, default=None,
+                    help='verrouille l altitude de la camera (metres monde), '
+                         'ex: sol height map + hauteur de camera. z sort des '
+                         'parametres libres du solve.')
     ap.add_argument('--apply', action='store_true')
     args = ap.parse_args()
 
@@ -228,6 +239,10 @@ def main():
         t = [c[0], c[1], max(20.0, c[2] + 30.0), 0.0, 0.0, 0.0, 60.0]
         print('depart: barycentre des ancres, orientation nulle '
               '(donner --init accelere et fiabilise)')
+    if args.lock_z is not None:
+        R.lock_z = args.lock_z
+        t[2] = args.lock_z
+        print(f'z VERROUILLE a {args.lock_z:.1f} m')
 
     amax, dmin, dmax = spread(R.fit + R.hold, np.asarray(t[:3], float))
     print(f'repartition des ancres: etendue angulaire {amax:.1f} deg, '

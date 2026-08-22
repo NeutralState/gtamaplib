@@ -1305,8 +1305,8 @@
    792.0
   ],
   "BB Hill": [
-   3533.0,
-   831.5
+   3542.1,
+   840.4
   ],
   "Ambrosia Canal (A)": [
    3840.0,
@@ -1585,14 +1585,6 @@
   "Route 10 (W)": [
    507,
    974
-  ],
-  "Sunshine Skyway Bridge (N)": [
-   3729,
-   874
-  ],
-  "Sunshine Skyway Bridge (S)": [
-   3535,
-   875
   ],
   "Tree near Port Gellhorn": [
    3137,
@@ -2013,6 +2005,14 @@
   "1500 Sonora Ave (Tank) (A) (R)": [
    3750.5,
    969.0
+  ],
+  "Sunshine Skyway Bridge (S)": [
+   3729,
+   874
+  ],
+  "Sunshine Skyway Bridge (faux S)": [
+   3535,
+   875
   ]
  },
  "Ambrosia Postcard (X)": {
@@ -2854,14 +2854,6 @@
    788,
    39
   ],
-  "Sunshine Skyway Bridge (S)": [
-   373,
-   597
-  ],
-  "Sunshine Skyway Bridge (N)": [
-   302,
-   676
-  ],
   "New Foundation Church": [
    -2.0,
    928.0
@@ -2881,6 +2873,14 @@
   "Oval Yellow Sign": [
    3787.5,
    458.5
+  ],
+  "Sunshine Skyway Bridge (S)": [
+   302,
+   676
+  ],
+  "Sunshine Skyway Bridge (faux S)": [
+   373,
+   597
   ]
  },
  "Chase (2) (B)": {
@@ -2899,14 +2899,6 @@
   "Radio Tower #2 (Port Gellhorn)": [
    3201,
    87
-  ],
-  "Sunshine Skyway Bridge (N)": [
-   574,
-   578
-  ],
-  "Sunshine Skyway Bridge (S)": [
-   646,
-   506.5
   ],
   "Wildfire Scooters (NW)": [
    1961,
@@ -2927,6 +2919,14 @@
   "New Foundation Church": [
    302.0,
    810.0
+  ],
+  "Sunshine Skyway Bridge (S)": [
+   574,
+   578
+  ],
+  "Sunshine Skyway Bridge (faux S)": [
+   646,
+   506.5
   ]
  },
  "Convertible": {
@@ -3334,10 +3334,6 @@
    1594,
    460
   ],
-  "Sunshine Skyway Bridge (N)": [
-   1678.5,
-   204
-  ],
   "Water Tower (North Port Gellhorn)": [
    1867.5,
    191
@@ -3349,6 +3345,10 @@
   "Bay (BBBB)": [
    1594,
    460
+  ],
+  "Sunshine Skyway Bridge (S)": [
+   1678.5,
+   204
   ]
  },
  "Diner (W) (A)": {
@@ -3396,18 +3396,6 @@
    216,
    306
   ],
-  "Sunshine Skyway Bridge (N)": [
-   269,
-   112
-  ],
-  "Sunshine Skyway Bridge (NNR)": [
-   557,
-   330
-  ],
-  "Sunshine Skyway Bridge (NR)": [
-   287.5,
-   318
-  ],
   "Waffles Sign (TR)": [
    1542,
    399.5
@@ -3415,6 +3403,18 @@
   "Water Tower (North Port Gellhorn)": [
    467,
    134
+  ],
+  "Sunshine Skyway Bridge (S)": [
+   269,
+   112
+  ],
+  "Sunshine Skyway Bridge (SR)": [
+   287.5,
+   318
+  ],
+  "Sunshine Skyway Bridge (SSR)": [
+   557,
+   330
   ]
  },
  "Diner (W) (B)": {
@@ -3462,18 +3462,6 @@
    534.5,
    340.5
   ],
-  "Sunshine Skyway Bridge (N)": [
-   549,
-   155
-  ],
-  "Sunshine Skyway Bridge (NB)": [
-   561,
-   398
-  ],
-  "Sunshine Skyway Bridge (NR)": [
-   559,
-   343
-  ],
   "Waffles Sign (TR)": [
    1743,
    414.5
@@ -3517,6 +3505,18 @@
   "Unknown Building (North Port Gellhorn) (T)": [
    732.0,
    360.5
+  ],
+  "Sunshine Skyway Bridge (S)": [
+   549,
+   155
+  ],
+  "Sunshine Skyway Bridge (SR)": [
+   559,
+   343
+  ],
+  "Sunshine Skyway Bridge (SB)": [
+   561,
+   398
   ]
  },
  "Dominion Hotel": {
@@ -3973,10 +3973,6 @@
   "Unknown Structure": [
    40.1,
    224
-  ],
-  "US Sugar Mill (Factory)": [
-   90.0,
-   216.0
   ],
   "Lake Leonida (SW)": [
    164.0,
@@ -5193,6 +5189,10 @@
   "1111 Lincoln Rd (NW)": [
    3500.0,
    689.0
+  ],
+  "Mount Sinai (SE)": [
+   1213.0,
+   783.9
   ]
  },
  "Key Lento": {
@@ -8131,8 +8131,8 @@
    861.1
   ],
   "Stephen P. Clark Government Center (SE)": [
-   2952.4,
-   861.3
+   2960.0,
+   861.4
   ]
  },
  "Mount Kalaga National Park 02 (Helicopter) (X)": {
@@ -15527,6 +15527,50 @@
   "Unknown Mast (Grassrivers)": [
    3706.0,
    624.0
+  ]
+ },
+ "Glitch (B)": {
+  "123 NE 36th St": [
+   257.5,
+   201.8
+  ],
+  "123 NE 36th St (SW)": [
+   222.3,
+   214.0
+  ],
+  "Lake (W)": [
+   849.1,
+   260.7
+  ],
+  "Lake (E)": [
+   891.3,
+   260.2
+  ],
+  "Golf Course (E)": [
+   993.7,
+   261.4
+  ],
+  "East Coast (D)": [
+   1386.8,
+   288.6
+  ],
+  "East Coast (C)": [
+   1318.0,
+   288.2
+  ]
+ },
+ "Glitch (C)": {
+  "123 NE 36th St": [
+   271.5,
+   295.6
+  ],
+  "123 NE 36th St (SW)": [
+   239.8,
+   307.2
+  ],
+  "Mount Sinai (SE)": [
+   1101.2,
+   253.3
   ]
  }
 }

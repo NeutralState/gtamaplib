@@ -1,0 +1,42 @@
+{
+  "version": "HEIGHTMAP-V2 (2026-08-21)",
+  "source_of_truth": {
+    "file": "gtamapdata/heightmap/GTA6HeightMap_L16.dds",
+    "what": "capture GPU d'origine (bounty #145, fichier Discord 1-87fe8ca440a686e1.dds)",
+    "format": "DDS LUMINANCE 16-bit UNORM, 1536x1748 — format sans variante sRGB, donc lineaire par definition",
+    "payload": "header 128 octets puis u16 little-endian row-major; v = u16/65535"
+  },
+  "deprecated_sources": {
+    "GTA6HeightMap_f32.tif": "tif de jaxrud = srgb_to_linear(v_L16) — decodage sRGB PARASITE introduit par son outil d'export (texture traitee comme de la couleur). Toute calibration sur ce fichier (ex: z=800v-120) est fausse en altitude: pic Ambrosia 669 m au lieu de 402 m. Garde uniquement comme trace.",
+    "png_palette_originaux": "1-47d4f4ac60a16f53.png etc.: memes valeurs que le DDS mais 8-bit et palette a indices brouilles — decoder via la palette (grise, r=g=b), jamais convert('L')."
+  },
+  "georef_world_to_px": {
+    "note": "le DDS est exactement la frame originale 1536x1748 georeferencee par rlx — aucune chaine de recalage supplementaire",
+    "px_per_m": 0.083188297,
+    "zero_px": [1108.532, 938.091],
+    "formula": "u = 1108.532 + x*0.083188297 ; v_row = 938.091 - y*0.083188297"
+  },
+  "value_to_meters": {
+    "formula": "z = 706.07*v - 301.01",
+    "fit": "robuste (rejet iteratif 3 sigma) sur les players HUD des leak cams, 73/82 gardes",
+    "median_abs_residual_m": 0.18,
+    "rms_m": 0.35,
+    "rejected": "cams Highway (+9..14 m: joueur sur le viaduc, pas le terrain), Ocean/Boat (sur l'eau), Tennis Stadium/Metro (structures)",
+    "sea_level_v": 0.4263,
+    "checkpoints": {
+      "Diner (HUD 14.5)": {"v": 0.4472, "z_pred": 14.7},
+      "Car Wash (HUD 20.5)": {"v": 0.4558, "z_pred": 20.8},
+      "Motel/Starlet (HUD 66.8)": {"v": 0.5208, "z_pred": 66.7},
+      "pic Mount Ambrosia (-3434, 6367)": {"v": 0.9958, "z_pred": 402.1, "uncert_2sigma_m": 3.0, "note": "confirme le ~405 m communautaire"},
+      "fond oceanique est": {"v": 0.0518, "z_pred": -264.4}
+    }
+  },
+  "history": [
+    "V1 (deprecated): z = 800*v_tif - 120 sur le tif jaxrud, mediane 0.99 m sur les players — excellent en plaine mais le gamma sRGB du tif courbait l'echelle au-dessus de ~70 m; les 'constantes moteur rondes' 800/-120 etaient une coincidence du gamma. Refute par le header DDS (L16 UNORM lineaire) + fit direct meilleur (0.18 m vs 0.99 m).",
+    "Lecon: valider le FORMAT de la source (header) avant de calibrer dessus; un fit local excellent ne valide pas l'extrapolation."
+  ],
+  "warnings": [
+    "extrapolation au-dela de v~0.53 (z>70 m) appuyee sur aucune verite terrain HUD — incertitude ~+/-3 m a 2 sigma au pic par la stat du fit, davantage si la reponse du capteur n'est pas parfaitement lineaire",
+    "hors emprise de la frame (nord de y~11277): pas de donnees"
+  ]
+}

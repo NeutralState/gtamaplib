@@ -4,8 +4,20 @@
   {
    "name": "gtamaplib-static",
    "runtimeExecutable": "/usr/local/bin/python3",
-   "runtimeArgs": ["-m", "http.server", "8731"],
+   "runtimeArgs": [
+    "-m",
+    "http.server",
+    "8731"
+   ],
    "port": 8731
+  },
+  {
+   "name": "tracer-server",
+   "runtimeExecutable": "/usr/local/bin/python3",
+   "runtimeArgs": [
+    "tools/server.py"
+   ],
+   "port": 8765
   }
  ]
 }

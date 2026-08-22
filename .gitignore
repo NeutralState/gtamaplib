@@ -47,3 +47,15 @@ tools/*.pre-*
 inspect_cam.py
 cleanup_repo_0706.py
 tools/models/
+
+# outil externe pose dans le depot (export Discord) — ne pas versionner
+DiscordChatExporter/
+
+# height map leak: binaires derives du dump (jamais versionnes) — seule la
+# calibration documentee (heightmap_calib.json) est trackee
+gtamapdata/heightmap/*.dds
+gtamapdata/heightmap/*.tif
+gtamapdata/heightmap/*.npy
+triangulate/
+CLAUDE_CONTEXT.md
+patch_sigma_pool.py
