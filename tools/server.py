@@ -1632,10 +1632,14 @@ class Handler(BaseHTTPRequestHandler):
             yp=cam.ypr if (hasattr(cam,'ypr') and cam.ypr is not None) else [0,0,0]
             tcol=TIER_COL.get(cam_tier,(160,160,180))
             WHITE=(214,214,228)
+            # [POSE-VERIFIED-V1] badge vert prioritaire sur le tier
+            _pv = (md.cameras.get(cam_name) or {}).get('pose_verified')
+            _conf_seg = (("✓ "+_pv.split(' ')[0]+"    ", (74,222,128)) if _pv
+                         else (cam_tier.upper()+" confidence    ", tcol))
             segs=[("XYZ (%.0f, %.0f, %.1f)   "%(cam.xyz[0],cam.xyz[1],cam.xyz[2]), WHITE),
                   ("YPR (%.1f, %.1f, %.1f)   "%(yp[0],yp[1],yp[2]), WHITE),
                   ("FOV (%.1f, %.1f)    "%(cam.fov[0],cam.fov[1]), WHITE),
-                  (cam_tier.upper()+" confidence    ", tcol),
+                  _conf_seg,
                   ("RMS %.1f'    "%med, WHITE),
                   (cam_name, tcol)]
             total_w=sum(fbar.getbbox(t)[2] for t,_ in segs)
@@ -1764,9 +1768,12 @@ class Handler(BaseHTTPRequestHandler):
             dvals=sorted(x[3] for x in lms if x[3] is not None)
             med=dvals[len(dvals)//2] if dvals else 0.0
             WHITE=(214,214,228)
+            _pv = (md.cameras.get(cam_name) or {}).get('pose_verified')   # [POSE-VERIFIED-V1]
+            _conf_seg = (("✓ "+_pv.split(' ')[0]+"   ", (74,222,128)) if _pv
+                         else (cam_tier.upper()+" confidence   ", tcol))
             segs=[("XYZ (%.0f, %.0f, %.1f)   "%(cam.xyz[0],cam.xyz[1],cam.xyz[2]),WHITE),
                   ("YPR (%.1f, %.1f, %.1f)   "%(yp[0],yp[1],yp[2]),WHITE),
-                  (cam_tier.upper()+" confidence   ",tcol),
+                  _conf_seg,
                   ("RMS %.1f'   "%med,WHITE),(cam_name,tcol)]
             tot=sum(fbar.getbbox(t)[2] for t,_ in segs); sp=int(OUT*0.016)
             bw=tot+sp*2; bh=max(int(OUT*0.022),22); by=OUT-bh-int(OUT*0.016)

@@ -37,6 +37,8 @@ cameras = {
         "fov": tuple(data["fov"]) if data["fov"] else None,
         "size": tuple(data["size"]) if data["size"] else None,
         "source": data["source"],
+        # [POSE-VERIFIED-V1] statut SOLVED/VERIFIED (double instrument)
+        "pose_verified": data.get("pose_verified"),
     }
     for name, data in _cameras_raw.items()
 }
