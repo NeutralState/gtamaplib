@@ -2,6 +2,10 @@
 
 # gtamaplib
 
+> **Setup note:** leak-derived binaries (height map, map tiles, frames) are
+> not versioned. See [docs/EXTERNAL_DATA.md](docs/EXTERNAL_DATA.md) for what
+> to download and where to put it.
+
 **gtamaplib** is a mapping and 3D triangulation library for GTA-like worlds – specifically for [Grand Theft Auto VI](https://www.rockstargames.com/VI/), scheduled for release in 2026.
 
 "Mapping GTA" is a popular activity that begins years before the release of the game.[^1] One goal is to create a maximally accurate map of the game world, based on the geography shown in promotional screenshots and trailers. **gtamaplib** was developed to facilitate this process, and functions as a companion project to the [GTA Landmarks Map](https://github.com/rolux/gtadb.org).
