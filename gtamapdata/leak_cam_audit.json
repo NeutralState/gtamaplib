@@ -704,63 +704,6 @@
   "hud_fov_v": 49.6,
   "hud_fov_h": 78.803
  },
- "Glitch (B)": {
-  "constraint_class": "C_pos_fov_only",
-  "has_debug_hud": true,
-  "has_dir": false,
-  "hud_P_xyz": [
-   1410.7,
-   1371.6,
-   2.9
-  ],
-  "hud_C_xyz": [
-   1412.0,
-   1377.6,
-   -45.4
-  ],
-  "hud_fov": 49.6,
-  "player_visible": false,
-  "suspicious_z": true,
-  "notes": "GameTests spr_sb_08 Sit_Chair_Smoke, remontee sous-map 2022-04-12 10-28-55 (sequence complete extraite 2026-08-13; lettres reassignees aux 4 frames conservees, anciennes B/C/D = frames 0035/0038/0052 non enregistrees). xyz+fov strap, ypr a resoudre."
- },
- "Glitch (C)": {
-  "constraint_class": "C_pos_fov_only",
-  "has_debug_hud": true,
-  "has_dir": false,
-  "hud_P_xyz": [
-   1410.7,
-   1371.6,
-   2.9
-  ],
-  "hud_C_xyz": [
-   1412.7,
-   1373.7,
-   -22.3
-  ],
-  "hud_fov": 49.6,
-  "player_visible": false,
-  "suspicious_z": true,
-  "notes": "GameTests spr_sb_08 Sit_Chair_Smoke, remontee sous-map 2022-04-12 10-28-55 (sequence complete extraite 2026-08-13; lettres reassignees aux 4 frames conservees, anciennes B/C/D = frames 0035/0038/0052 non enregistrees). xyz+fov strap, ypr a resoudre."
- },
- "Glitch (D)": {
-  "constraint_class": "C_pos_fov_only",
-  "has_debug_hud": true,
-  "has_dir": false,
-  "hud_P_xyz": [
-   1410.7,
-   1371.6,
-   2.9
-  ],
-  "hud_C_xyz": [
-   1412.8,
-   1371.2,
-   -7.3
-  ],
-  "hud_fov": 49.6,
-  "player_visible": false,
-  "suspicious_z": true,
-  "notes": "GameTests spr_sb_08 Sit_Chair_Smoke, remontee sous-map 2022-04-12 10-28-55 (sequence complete extraite 2026-08-13; lettres reassignees aux 4 frames conservees, anciennes B/C/D = frames 0035/0038/0052 non enregistrees). xyz+fov strap, ypr a resoudre."
- },
  "Hangar (A)": {
   "constraint_class": "A_full_hud",
   "has_debug_hud": true,
@@ -2220,23 +2163,6 @@
  "Highway (Panorama) (W)": {
   "constraint_class": "X_invalid_ground_truth",
   "notes": "Frame leak L2/1 (soeur de la (S) au warp confirme). Classe X preventive le 2026-07-18 en attente du test de format (4-5 markings repartis) / du de-warp. Aucune prise en compte pipeline."
- },
- "Glitch (E)": {
-  "constraint_class": "C_pos_fov_only",
-  "has_debug_hud": true,
-  "hud_P_xyz": [
-   1410.7,
-   1371.6,
-   2.9
-  ],
-  "hud_C_xyz": [
-   1412.5,
-   1370.0,
-   0.7
-  ],
-  "hud_fov": 49.6,
-  "suspicious_z": false,
-  "notes": "GameTests spr_sb_08 Sit_Chair_Smoke, remontee sous-map 2022-04-12 10-28-55 (sequence complete extraite 2026-08-13; lettres reassignees aux 4 frames conservees, anciennes B/C/D = frames 0035/0038/0052 non enregistrees). xyz+fov strap, ypr a resoudre."
  },
  "Ambrosia 04 (Fires)": {
   "notes": "POSE EN RECALIBRATION (2026-08-21): position corrigee ~(-1598.4, 3222.3) (prior leak map, pas exact), ancienne (-986, 3238) etait glissee ~612 m LE LONG de l'axe de visee (piege ancres colineaires). ypr refit provisoire (95.29,-1.75,0.05) sur ancres CONTAMINEES (0 ancre independante de Fires dans la zone). TOUT le reseau Ambrosia est co-dependant: re-trianguler les ancres SANS Fires (Bikers/Panorama/Chase), puis resection complete xyz+ypr avec prior. Fits de relief utilisant Fires (BB Hill perpendiculaire, Gellhorn z-fit, Easy Hill 3-vues) a revalider ensuite."
