@@ -2280,24 +2280,25 @@
   "id": "T1/10",
   "player": null,
   "xyz": [
-   2199.754822443084,
-   -392.04754119990804,
-   -0.002799939771696918
+   2198.114,
+   -385.798,
+   3.8
   ],
   "ypr": [
-   13.878120324966794,
-   -0.5197568366420021,
-   0.14766892437210075
+   13.878,
+   -0.66,
+   0.212
   ],
   "fov": [
-   34.69248240995869,
+   34.872,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Trailer 1 [653]"
+  "source": "Trailer 1 [653]",
+  "note": "pose RESECT-V2: resection sur 17 ancres, juge 7 ancres laissees dehors 10.2 -> 6.2 arcmin (2.81 m)."
  },
  "Motorboats (A)": {
   "id": "T1/11",
@@ -2604,22 +2605,23 @@
   "xyz": [
    -747.2002942350366,
    2819.599596413431,
-   1.999856398542834
+   9.94
   ],
   "ypr": [
-   217.7061682594385,
-   5.907976070569812,
-   2.9996894990029834e-12
+   217.706,
+   5.444,
+   -0.062
   ],
   "fov": [
-   60.156694951864054,
+   60.188,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Trailer 1 [1498]"
+  "source": "Trailer 1 [1498]",
+  "note": "z ancre au sol height map (8.2+1.7, etait 2.0) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.46 deg (dz +7.9 m a d~980 m) | orientation refittee sur markings (xyz fige), mediane 1' -> 0'"
  },
  "Gas Station (Chase) (S)": {
   "id": "T1/29",
@@ -2627,22 +2629,23 @@
   "xyz": [
    -747.2,
    2819.6,
-   2.0
+   9.94
   ],
   "ypr": [
-   202.289659,
-   6.187007,
-   -0.84
+   202.29,
+   5.951,
+   -0.867
   ],
   "fov": [
-   61.641864,
+   61.657,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Trailer 1 [1529]"
+  "source": "Trailer 1 [1529]",
+  "note": "z ancre au sol height map (8.2+1.7, etait 2.0) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +7.9 m a d~1929 m) | orientation refittee sur markings (xyz fige), mediane 0' -> 0'"
  },
  "Interchange": {
   "id": "T1/30",
@@ -2789,22 +2792,23 @@
   "xyz": [
    -6369.997519619309,
    3875.026124150041,
-   14.707906995815343
+   19.36
   ],
   "ypr": [
-   260.0289629166463,
-   1.4183211277197643,
-   -3.108956375361747e-17
+   260.029,
+   0.34,
+   -0.203
   ],
   "fov": [
-   60.012894463924326,
+   60.06,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Trailer 1 [2308]"
+  "source": "Trailer 1 [2308]",
+  "note": "z ancre au sol height map (17.7+1.7, etait 14.7) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.08 deg (dz +4.7 m a d~248 m) | orientation refittee sur markings (xyz fige), mediane 5' -> 0'"
  },
  "Key Lento": {
   "id": "T2/1",
@@ -3090,22 +3094,23 @@
   "xyz": [
    -6296.314794811396,
    3951.1524241409966,
-   5.517437646371513
+   20.69
   ],
   "ypr": [
-   111.4058836801525,
-   7.94314886467767,
-   -1.9822626538934658e-10
+   112.937,
+   -3.439,
+   9.25
   ],
   "fov": [
-   69.87072361737582,
+   73.121,
    null
   ],
   "size": [
    3840,
    1728
   ],
-  "source": "Trailer 2 [4448]"
+  "source": "Trailer 2 [4448]",
+  "note": "z ancre au sol height map (19.0+1.7, etait 5.5) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -6.88 deg (dz +15.2 m a d~126 m) | orientation refittee sur markings (xyz fige), mediane 360' -> 0'"
  },
  "Chase (2) (A)": {
   "id": "T2/77",
@@ -3274,22 +3279,23 @@
   "xyz": [
    2174.8444232684187,
    749.7882419412823,
-   0.5653674135700955
+   5.24
   ],
   "ypr": [
-   45.93046365806618,
-   9.727825940044486,
-   2.3332493255448925e-06
+   46.126,
+   9.086,
+   1.109
   ],
   "fov": [
-   59.84973685906165,
+   60.373,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 1 \u2014 Vice City 05 [1]"
+  "source": "Screenshot 1 \u2014 Vice City 05 [1]",
+  "note": "z ancre au sol height map (3.5+1.7, etait 0.6) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.53 deg (dz +4.6 m a d~174 m) | orientation refittee sur markings (xyz fige), mediane 57' -> 0'"
  },
  "Vice City 06 (Ocean Drive)": {
   "id": "S2/42",
@@ -3436,12 +3442,12 @@
   "xyz": [
    -6340.75,
    3698.906,
-   7.087
+   12.98
   ],
   "ypr": [
    73.298,
-   -21.6,
-   -0.016
+   -22.795,
+   -0.047
   ],
   "fov": [
    81.9,
@@ -3452,7 +3458,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Port Gellhorn 04 [1]",
-  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m."
+  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m. | z ancre au sol height map (11.3+1.7, etait 7.1) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.19 deg (dz +5.9 m a d~282 m) | orientation refittee sur markings (xyz fige), mediane 5' -> 4'"
  },
  "Port Gellhorn 05 (Fire)": {
   "id": "S2/55",
@@ -4128,22 +4134,23 @@
   "xyz": [
    -823.4668094101253,
    1599.284013379892,
-   -0.059606664707337595
+   6.47
   ],
   "ypr": [
-   152.1566,
-   0.0304,
-   0.0439
+   152.157,
+   -0.215,
+   -0.026
   ],
   "fov": [
-   59.70732946804084,
+   59.668,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Trailer 1 [?]"
+  "source": "Trailer 1 [?]",
+  "note": "z ancre au sol height map (4.8+1.7, etait -0.1) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +6.6 m a d~1537 m) | orientation refittee sur markings (xyz fige), mediane 3' -> 2'"
  },
  "Intersection (Bikers)": {
   "id": "T1/41",
@@ -4197,22 +4204,23 @@
   "xyz": [
    -2645.8177515419115,
    -2919.5504904269133,
-   9.660161772146898
+   13.88
   ],
   "ypr": [
-   9.945125208821612,
-   21.41859841478193,
-   2.0078406520481445e-05
+   11.945,
+   16.67,
+   -2.121
   ],
   "fov": [
-   47.945974417623724,
+   50.344,
    null
   ],
   "size": [
    3840,
    1728
   ],
-  "source": "Trailer 2 [1496]"
+  "source": "Trailer 2 [1496]",
+  "note": "z ancre au sol height map (12.2+1.7, etait 9.7) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -4.75 deg (dz +4.2 m a d~50 m) | orientation refittee sur markings (xyz fige), mediane 101' -> 0'"
  },
  "Pier (Sea)": {
   "id": "T2/29",
@@ -4412,24 +4420,25 @@
   "id": "S2/37",
   "player": null,
   "xyz": [
-   -3634.018525740395,
-   -421.3943030063715,
-   -14.356420752542297
+   -3703.472,
+   -395.769,
+   10.7
   ],
   "ypr": [
-   215.50140101920633,
-   22.898632131695358,
-   0.23023268849904882
+   230.708,
+   11.821,
+   -2.856
   ],
   "fov": [
-   77.84311564066222,
+   46.3,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 1 \u2014 Vice City 01 [1]"
+  "source": "Screenshot 1 \u2014 Vice City 01 [1]",
+  "note": "pose RESECT-V2: resection sur 27 ancres, juge 12 ancres laissees dehors 351.7 -> 33.0 arcmin (2.67 m)."
  },
  "Vice City Sign": {
   "id": "T1/21",
@@ -4714,22 +4723,23 @@
   "xyz": [
    -500.0,
    -1750.0,
-   1.0
+   6.94
   ],
   "ypr": [
-   20.0,
-   10.0,
-   0.0
+   25.0,
+   5.85,
+   13.504
   ],
   "fov": [
-   30.0,
+   35.906,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 2 \u2014 Ultimate Edition 02 [1]"
+  "source": "Screenshot 2 \u2014 Ultimate Edition 02 [1]",
+  "note": "z ancre au sol height map (5.2+1.7, etait 1.0) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.49 deg (dz +5.9 m a d~700 m) | orientation refittee sur markings (xyz fige), mediane 327' -> 104'"
  },
  "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)": {
   "id": "S3/63",
@@ -4760,22 +4770,23 @@
   "xyz": [
    905.7,
    -1179.1,
-   1.5
+   4.32
   ],
   "ypr": [
-   343.2,
-   3.7,
-   -0.8
+   343.497,
+   3.394,
+   0.075
   ],
   "fov": [
-   39.7,
+   40.309,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 2 \u2014 Vintage Vice City Pack 02 [1]"
+  "source": "Screenshot 2 \u2014 Vintage Vice City Pack 02 [1]",
+  "note": "z ancre au sol height map (2.6+1.7, etait 1.5) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +2.8 m a d~686 m) | orientation refittee sur markings (xyz fige), mediane 16' -> 3'"
  },
  "Highway (Panorama) (S)": {
   "id": "L2/1",

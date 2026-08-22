@@ -59,33 +59,33 @@
   },
   "1500 Ocean Dr": {
     "xyz": [
-      2092.3000908596446,
-      980.1340834519405,
-      63.36292402302688
+      2092.4706007551567,
+      980.1157501173636,
+      63.3196822266417
     ],
     "source_cameras": [
-      "Park",
+      "Beach",
+      "Rooftop Party",
+      "Venetian Islands",
       "Vice Beach (A)",
       "Vice Beach (B)",
-      "Beach",
-      "Venetian Islands",
-      "Rooftop Party"
+      "Park"
     ],
-    "error_m": 4.645,
+    "error_m": 4.175,
     "zone": "vice_city"
   },
   "1500 Ocean Dr (S) (SE)": {
     "xyz": [
-      2026.8447260721266,
-      964.3731552062704,
-      61.87925394804265
+      2026.7145316024066,
+      964.2557935532952,
+      61.936664977343085
     ],
     "source_cameras": [
-      "Park",
+      "Beach",
       "Vice Beach (B)",
-      "Beach"
+      "Park"
     ],
-    "error_m": 1.838,
+    "error_m": 1.631,
     "zone": "vice_city"
   },
   "1703 E 5th St (Shack) (SE)": {
@@ -1142,9 +1142,9 @@
   },
   "Four Seasons Hotel Miami (BW)": {
     "xyz": [
-      -850.6583756125501,
-      -1279.0084660959244,
-      262.4917129667318
+      -847.3000825558164,
+      -1276.584672001814,
+      261.76373980614926
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -1155,7 +1155,7 @@
       "Port Vice City (B)",
       "Ocean near Keys (N)"
     ],
-    "error_m": 5.054,
+    "error_m": 5.209,
     "zone": "vice_city",
     "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
   },
@@ -1181,17 +1181,18 @@
   },
   "Four Seasons Hotel Miami (NW)": {
     "xyz": [
-      -848.0708479100995,
-      -1254.8580674044126,
-      258.16104385536886
+      -847.9399996385685,
+      -1255.8292832243733,
+      257.77802657785514
     ],
     "source_cameras": [
       "Prison",
+      "Skyline",
       "Vice Beach (A)",
       "Vice City Postcard",
-      "Port Vice City (B)"
+      "Port Vice City (A)"
     ],
-    "error_m": 1.962,
+    "error_m": 5.585,
     "zone": "vice_city",
     "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
   },
@@ -1288,31 +1289,31 @@
   },
   "Hotel Breakwater": {
     "xyz": [
-      1949.1353488208522,
-      564.9792699029098,
-      26.041543129701452
+      1949.026999843963,
+      565.2153536364457,
+      26.158938851808422
     ],
     "source_cameras": [
-      "Park",
+      "Beach",
       "Vice Beach (A)",
-      "Beach"
+      "Park"
     ],
-    "error_m": 2.014,
+    "error_m": 4.106,
     "zone": "vice_city"
   },
   "Jenny Hostel (NE)": {
     "xyz": [
-      1905.865582900615,
-      610.7317108282513,
-      32.50735007253286
+      1905.842456508527,
+      610.7787754191087,
+      32.51913123111275
     ],
     "source_cameras": [
-      "Park",
+      "Beach",
       "Vice Beach (A)",
       "Vice Beach (B)",
-      "Beach"
+      "Park"
     ],
-    "error_m": 2.053,
+    "error_m": 4.958,
     "zone": "vice_city"
   },
   "King Slayer Charters (NE)": {
@@ -4883,15 +4884,15 @@
   },
   "12th St Lifeguard Tower": {
     "xyz": [
-      2216.3905440936805,
-      1026.2812764870202,
-      7.111545396263672
+      2216.624419370229,
+      1026.4434428364402,
+      7.177741399611968
     ],
     "source_cameras": [
-      "Vice Beach (A)",
-      "Beach"
+      "Beach",
+      "Vice Beach (A)"
     ],
-    "error_m": 0.502,
+    "error_m": 0.891,
     "zone": "vice_city"
   },
   "1500 Ocean Dr (S) (NW)": {
@@ -4978,17 +4979,17 @@
   },
   "Akoya Condominium": {
     "xyz": [
-      1492.0508136860344,
-      2631.2023253746625,
-      146.60075094857888
+      1492.1468831520879,
+      2631.279088304682,
+      146.17311363420174
     ],
     "source_cameras": [
       "Highway (NE)",
       "Beach",
-      "Venetian Islands",
-      "Jet Ski"
+      "Jet Ski",
+      "Venetian Islands"
     ],
-    "error_m": 2.187,
+    "error_m": 3.533,
     "zone": "vice_city"
   },
   "Asia Brickell Key": {
@@ -5010,15 +5011,15 @@
   },
   "Bank of America Financial Center": {
     "xyz": [
-      1718.4014961252935,
-      1375.4611265989881,
-      85.0589740343984
+      1718.3301330298204,
+      1375.4614352988142,
+      84.8555133329009
     ],
     "source_cameras": [
       "Beach",
       "Venetian Islands"
     ],
-    "error_m": 0.275,
+    "error_m": 0.047,
     "zone": "vice_city"
   },
   "Bay (A)": {
@@ -5885,16 +5886,16 @@
   },
   "Green Diamond": {
     "xyz": [
-      1797.99582659065,
-      2122.8041014984256,
-      146.00026770519835
+      1797.8938937637997,
+      2122.7605399527374,
+      146.32386412787622
     ],
     "source_cameras": [
       "Beach",
-      "Venetian Islands",
-      "Jet Ski"
+      "Jet Ski",
+      "Venetian Islands"
     ],
-    "error_m": 4.633,
+    "error_m": 5.44,
     "zone": "vice_city"
   },
   "Hotel Victor (SW)": {
@@ -5939,16 +5940,16 @@
   },
   "Jade Ocean Condos (SW)": {
     "xyz": [
-      1625.984505449621,
-      2485.1070579921025,
-      204.26401603834566
+      1625.8029522386623,
+      2485.0641956129602,
+      204.1376464531033
     ],
     "source_cameras": [
       "Beach",
-      "Venetian Islands",
-      "Jet Ski"
+      "Jet Ski",
+      "Venetian Islands"
     ],
-    "error_m": 3.54,
+    "error_m": 4.241,
     "zone": "vice_city"
   },
   "Juice Fruit Sign": {
@@ -6112,16 +6113,17 @@
   },
   "Loews Miami Beach": {
     "xyz": [
-      1959.4130653002287,
-      1145.8309251734229,
-      86.58120579764747
+      1960.4477972913137,
+      1145.7654850585886,
+      86.5116587822977
     ],
     "source_cameras": [
-      "Vice Beach (A)",
+      "Beach",
+      "Rooftop Party",
       "Venetian Islands",
-      "Rooftop Party"
+      "Vice Beach (A)"
     ],
-    "error_m": 1.504,
+    "error_m": 8.578,
     "zone": "vice_city"
   },
   "Loft Downtown II": {
@@ -7092,30 +7094,31 @@
   },
   "Royal Palm South Beach (N) (S)": {
     "xyz": [
-      2030.3392351108548,
-      1041.8252774393068,
-      67.60216417151938
+      2030.2153083209382,
+      1041.7738218177174,
+      67.60388509460451
     ],
     "source_cameras": [
-      "Vice Beach (B)",
       "Beach",
-      "Venetian Islands"
+      "Venetian Islands",
+      "Vice Beach (A)",
+      "Vice Beach (B)"
     ],
-    "error_m": 1.197,
+    "error_m": 1.092,
     "zone": "vice_city"
   },
   "Royal Palm South Beach (S)": {
     "xyz": [
-      2007.4455679600187,
-      1024.5039085633173,
-      66.68479041568193
+      2007.6585273339945,
+      1024.511336714495,
+      66.64650149124941
     ],
     "source_cameras": [
-      "Vice Beach (B)",
       "Beach",
-      "Rooftop Party"
+      "Rooftop Party",
+      "Vice Beach (B)"
     ],
-    "error_m": 4.51,
+    "error_m": 2.46,
     "zone": "vice_city"
   },
   "Ship (A)": {
@@ -7275,15 +7278,15 @@
   },
   "The Tides South Beach": {
     "xyz": [
-      1993.193269654469,
-      891.8409682450273,
-      54.425040909044455
+      1992.8930555594889,
+      891.8369638203037,
+      54.46725176281484
     ],
     "source_cameras": [
       "Beach",
       "Vice Beach (A)"
     ],
-    "error_m": 1.236,
+    "error_m": 2.72,
     "zone": "vice_city"
   },
   "The Waverly South Beach (SE)": {
@@ -7350,16 +7353,16 @@
   },
   "Tr\u00e9sor Tower": {
     "xyz": [
-      1856.2,
-      1943.01,
-      120.61
+      1857.0847838693608,
+      1943.302739963361,
+      119.57763237922714
     ],
     "source_cameras": [
       "Beach",
       "Jet Ski",
       "Venetian Islands"
     ],
-    "error_m": 2.3,
+    "error_m": 3.889,
     "zone": "vice_city",
     "method": " | re-triangule apres MARK-ARB-V1 (3.7 m, perp 2.3 m)"
   },
@@ -8346,16 +8349,16 @@
   },
   "The Ritz-Carlton Bal Harbour": {
     "xyz": [
-      1405.0875048704993,
-      2786.19258497956,
-      104.75485611841758
+      1405.4216879464548,
+      2786.873769713775,
+      103.50697857031196
     ],
     "source_cameras": [
       "Highway (NE)",
       "Beach",
       "Jet Ski"
     ],
-    "error_m": 1.086,
+    "error_m": 1.811,
     "zone": "vice_city"
   },
   "252 N Tyndall Pkwy (NE)": {
@@ -8854,16 +8857,16 @@
   },
   "Bank of America Financial Center (SW)": {
     "xyz": [
-      1692.5215655897682,
-      1356.68255067653,
-      66.65064355270604
+      1692.3846555255561,
+      1356.6718789325264,
+      66.52712205863529
     ],
     "source_cameras": [
       "Beach",
       "Venetian Islands",
       "Sidewalk (Jason) (E)"
     ],
-    "error_m": 1.442,
+    "error_m": 1.683,
     "zone": "vice_city"
   },
   "Four Seasons Hotel Miami (40NE)": {
@@ -10417,17 +10420,16 @@
   },
   "Infinity at Brickell (SW)": {
     "xyz": [
-      -1215.5013832201344,
-      -1440.3095181313681,
-      177.29814529127154
+      -1215.934517930076,
+      -1440.1199268510409,
+      176.92538392280778
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
       "Motorboats (A)",
       "Prison",
       "Metro (SE) (A) (4K)"
     ],
-    "error_m": 7.848,
+    "error_m": 5.293,
     "zone": "unknown",
     "notes": "Manual triangulation: Peacock Bay A + Metro SE C, parallax 140deg, ray gap 4.7m, 34m from generic Infinity (SW corner of tower). Metro SE C used despite unverified tier (pose validated reproj ~10px)."
   },
@@ -12335,15 +12337,15 @@
   },
   "4th St Lifeguard Tower": {
     "author": "rlx",
-    "error_m": 12.9,
+    "error_m": 84.728,
     "source_cameras": [
       "Beach",
       "Vice City 05 (Vice Beach)"
     ],
     "xyz": [
-      2087.06,
-      786.64,
-      29.12
+      2093.9525711619085,
+      786.5150968108494,
+      44.52295711287127
     ],
     "zone": null,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 12.9 m, angle max 62.3 deg"
