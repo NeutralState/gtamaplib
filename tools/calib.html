@@ -441,6 +441,8 @@ body.rsb-collapsed .sidebar{width:0;border-left:none}
 #rsb-toggle:hover{color:var(--text)}
 body.view-map #rsb-toggle{display:flex}
 #rsb-toggle{display:flex}            /* [FOCUS-V1] poignee visible partout */
+/* [VIEW3D-CLEAN] en mode 3D, aucune poignee de sidebar: l'iframe occupe tout */
+body.view-view3d #rsb-toggle, body.view-view3d #lsb-toggle{display:none !important}
 /* [FOCUS-V1] poignee de reouverture de la sidebar gauche quand elle est repliee */
 #lsb-toggle{display:none;position:fixed;left:0;top:50%;transform:translateY(-50%);
   z-index:40;width:18px;height:54px;align-items:center;justify-content:center;
@@ -2773,6 +2775,13 @@ async function init() {
     if (cam.n_independent != null) bits.push(`${cam.n_independent} indep`);
     if (cam.source) bits.push(cam.source);
     mapTipMeta.textContent = bits.join(' · ');
+    // [POSE-VERIFIED-V1] badge vert ✓ SOLVED/VERIFIED
+    if (cam.pose_verified) {
+      const b = document.createElement('div');
+      b.style.cssText = 'color:#4ade80;font-size:9px;margin-top:2px';
+      b.textContent = '✓ ' + cam.pose_verified.split(' — ')[0];
+      mapTipMeta.appendChild(b);
+    }
     mapTip.style.display = 'block';
     mapTip.style.left = (e.clientX + 14) + 'px';
     mapTip.style.top = (e.clientY - 10) + 'px';

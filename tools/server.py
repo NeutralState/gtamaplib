@@ -706,6 +706,7 @@ class Handler(BaseHTTPRequestHandler):
                     entry = {
                         'name': name, 'xyz': cd['xyz'],
                         'tier': (_ct.get(name) or {}).get('tier'),
+                        'pose_verified': cd.get('pose_verified'),          # [POSE-VERIFIED-V1]
                         'rms_arcmin': (lambda r: round(r, 2) if r is not None else None)(_cam_rms(name)),
                         'hud_locked': bool(_itt(name, cameras=md.cameras)),
                         'n_pixels': len([p for p in md.pixels.get(name, {}).values() if p is not None]),
@@ -808,6 +809,7 @@ class Handler(BaseHTTPRequestHandler):
                     'n_pixels': len(cam_pixels),
                     'n_independent': n_indep,
                     'tier': _cam_tier.get(name),                       # [MAP-DESIGN-V1]
+                    'pose_verified': cam.get('pose_verified'),         # [POSE-VERIFIED-V1]
                     'rms_arcmin': (lambda _r: round(_r, 2) if _r is not None else None)(_cam_rms(name)),
                     'hud_locked': bool(_itt(name, cameras=md.cameras)),
                 })

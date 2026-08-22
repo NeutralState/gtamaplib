@@ -899,6 +899,7 @@ addEventListener('pointermove', ev => {
       `tier ${c.tier || 'unverified'} · ${c.n_pixels} markings` +
       (c.hud_locked ? ' · HUD-locked' : '') +
       (rms != null ? `<br>RMS <span class="${rms > 10 ? 'rms-bad' : ''}">${rms}&#8242;</span>` : '') +
+      (c.pose_verified ? `<br><span style="color:#4ade80">&#10003; ${c.pose_verified.split(' — ')[0]}</span>` : '') +
       (c.corners ? `<br><span style="color:var(--dim)">click: jump POV</span>` : '');
   } else {
     info.style.display = 'none';
