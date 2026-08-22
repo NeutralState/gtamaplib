@@ -111,8 +111,11 @@ class Fit:
         return n
 
     def state(self, t):
+        # keep_fov: fov d'origine (verite console pour les cams HUD) — le
+        # fit n'a pas le droit d'y toucher (invariant LEAK du healthcheck).
+        fov = getattr(self, 'keep_fov', None) or [t[6], None]
         return {'xyz': list(t[:3]), 'ypr': list(t[3:6]),
-                'fov': [t[6], None], 'size': self.size}
+                'fov': list(fov), 'size': self.size}
 
     def anchor_res(self, t):
         c = common.get_cam(self.cam, self.state(t))
@@ -163,10 +166,12 @@ class Fit:
         return ca + self.w_sil * cs
 
     def descend(self, t):
-        STEP = [20.0, 20.0, 0.0 if self.lock_z is not None else 8.0,
+        _fix_xy = 0.0 if getattr(self, 'lock_xy', False) else 20.0
+        STEP = [_fix_xy, _fix_xy,
+                0.0 if self.lock_z is not None else 8.0,
                 2.0, 1.5,
                 0.0 if getattr(self, 'lock_roll', None) is not None else 1.0,
-                2.0]
+                0.0 if getattr(self, 'keep_fov', None) else 2.0]
         if self.lock_z is not None:
             t[2] = self.lock_z
         if getattr(self, 'lock_roll', None) is not None:
@@ -215,6 +220,12 @@ def main():
                          'stroke irreconciliable (mal etiquete, ou crete '
                          'interieure et non skyline)')
     ap.add_argument('--lock-z', type=float, default=None)
+    ap.add_argument('--keep-fov', action='store_true',
+                    help='conserve le fov stocke tel quel (verite console '
+                         'des cams HUD) — invariant LEAK du healthcheck')
+    ap.add_argument('--lock-xy', action='store_true',
+                    help='fige x,y (cam HUD-locked: la position est verite, '
+                         'seule l orientation/fov se rejuge)')
     ap.add_argument('--lock-roll', type=float, default=None,
                     help='verrouille le roll (deg). Une cam vehicule/tripod '
                          'n a pas 5 deg de roll: laisse libre, ce parametre '
@@ -234,6 +245,9 @@ def main():
 
     F = Fit(args.cam, args.crest, args.lock_z, args.w_sil)
     F.lock_roll = args.lock_roll
+    F.lock_xy = args.lock_xy
+    if args.keep_fov:
+        F.keep_fov = list(F.cams[args.cam]['fov'])
     F.debug = args.debug
     if args.traces:
         nt = F.load_traces()
@@ -286,7 +300,8 @@ def main():
         return
     e['xyz'] = [round(v, 3) for v in t[:3]]
     e['ypr'] = [round(v, 3) for v in t[3:6]]
-    e['fov'] = [round(t[6], 3), None]
+    if not args.keep_fov:
+        e['fov'] = [round(t[6], 3), None]
     e['note'] = (f'pose HORIZON-V1: {len(F.anchors)} ancres + silhouette '
                  f'height map ({len(F.crest)} clics de crete), '
                  f'z {"verrouille sol height map" if args.lock_z is not None else "libre"}.')
