@@ -644,6 +644,7 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
   <button class="rays-toggle" id="dual-toggle" title="Compare two cams side-by-side (D)">Dual</button>
   <!-- [MULTICAM-STEP23] Toggle ghost LM projections in dual mode -->
   <button class="rays-toggle" id="proj-toggle" title="Assist: unmarked LMs projected as ghosts, prioritized by gain">Assist</button>
+  <select class="rays-toggle" id="map-src-sel" title="Fond de carte (pyramides detectees dans vendor)"></select>
   <!-- [ASSIST-V1] to-mark LM panel, sorted by priority -->
   <div id="assist-panel"><h4>To mark</h4><div id="assist-list"></div>
   <div class="ap-note">Click a ghost or a row = arm the marking, then click the REAL location in the frame. On a badly calibrated cam, ghost positions are approximate &mdash; trust the names.</div></div>
@@ -1562,7 +1563,10 @@ async function init() {
   function tilesUrl(z, x, y)   {
     // [LEAK-TILES-V1] v=leak2: cache-buster bumpe au passage a la map clean
     // (memes URLs qu'avant -> les navigateurs resservaient les vieilles tiles)
-    const src = window._tileSrc === 'leak' ? '&src=leak&v=leak3' : '';  // leak3 = composite yanis+feather
+    // [TILE-SOURCES-V1] source par nom de dossier; cache-buster = le nom
+    const src = (window._tileSrc && window._tileSrc !== 'yanis,14')
+      ? '&src=' + encodeURIComponent(window._tileSrc) + '&v=' + encodeURIComponent(window._tileSrc + '.3')
+      : '';
     return `/tiles/${z}/${z},${y},${x}.jpg?v=14${src}`;
   }
   // [LEAK-TILES-V1] la source fait partie de la cle: sans ca, basculer
@@ -1678,30 +1682,35 @@ async function init() {
     // [TILES-V1-CANVAS] Tiles are now the default — no toggle button.
     // Activate immediately and re-render whenever map data is ready.
     document.body.classList.add('tiles-on');
-    // [LEAK-TILES-V2] bascule YANIS/LEAK: coin haut-droit sous le readout
-    // X/Y/Z, meme famille visuelle — plus de collision avec le nom de cam et
-    // les chips de filtres a gauche.
+    // [TILE-SOURCES-V1] dropdown des fonds de carte, dans la barre d'outils
+    // du header (a cote de Rays/Heat — visible en vue Map seulement, comme
+    // eux). Les pyramides sont detectees cote serveur: deposer une nouvelle
+    // version dans vendor/.../tiles/6/ suffit pour qu'elle apparaisse.
     (() => {
-      const b = document.createElement('div');
-      const label = () => 'map: ' + (window._tileSrc === 'leak' ? 'leak' : 'yanis') + ' ⇄';
-      b.id = 'tile-src-btn';
-      b.textContent = label();
-      b.title = 'Basculer le fond de carte (leak full map / yanis V14)';
-      b.style.cssText = 'display:none;position:fixed;right:10px;top:48px;z-index:31;'
-        + 'padding:4px 11px;background:rgba(10,10,13,.72);backdrop-filter:blur(6px);'
-        + 'border:1px solid #2c2c33;border-radius:8px;color:#4ade80;cursor:pointer;'
-        + 'font:11px ui-monospace,monospace;letter-spacing:.03em;user-select:none';
-      b.addEventListener('click', () => {
-        window._setTileSrc(window._tileSrc === 'leak' ? 'yanis' : 'leak');
-        b.textContent = label();
+      const sel = document.getElementById('map-src-sel');
+      if (!sel) return;
+      // migration des valeurs legacy
+      let cur = localStorage.getItem('ui.tileSrc') || 'yanis,14';
+      if (cur === 'yanis') cur = 'yanis,14';
+      if (cur === 'leak') cur = 'leak,1';
+      window._tileSrc = cur;
+      localStorage.setItem('ui.tileSrc', cur);
+      const label = d => d.startsWith('yanis,') ? 'map: yanis V' + d.slice(6)
+                    : d === 'leak,1' ? 'map: leak (clean)' : 'map: ' + d;
+      fetch('/api/tile_sources').then(r => r.json()).then(d => {
+        for (const s of d.sources) {
+          const o = document.createElement('option');
+          o.value = s; o.textContent = label(s);
+          sel.appendChild(o);
+        }
+        sel.value = cur;
+        if (sel.selectedIndex < 0) sel.value = 'yanis,14';
+      }).catch(() => {});
+      sel.addEventListener('change', () => {
+        window._setTileSrc(sel.value);
         window.tilesCache.clear(); window.tilesPending.clear();   // purge: URLs changent
         window.tilesRender();
       });
-      document.body.appendChild(b);
-      // visible seulement en vue Map
-      new MutationObserver(() => {
-        b.style.display = document.body.classList.contains('view-map') ? 'block' : 'none';
-      }).observe(document.body, {attributes: true, attributeFilter: ['class']});
     })();
     if (window.mapTx) window.tilesRender();
     window.addEventListener('resize', () => {

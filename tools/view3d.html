@@ -429,8 +429,12 @@ layers.ground.add(ground);
 // [LEAK-TILES-3D] meme bascule que calib (localStorage partage 'ui.tileSrc');
 // la pyramide leak,1 v3 est un composite leak-sur-yanis a bords adoucis.
 function loadGroundTiles() {
-  const leakOn = localStorage.getItem('ui.tileSrc') === 'leak';
-  const src = leakOn ? '&src=leak&v=leak3' : '';
+  // [TILE-SOURCES-V1] meme cle que calib; valeurs legacy migrees
+  let s0 = localStorage.getItem('ui.tileSrc') || 'yanis,14';
+  if (s0 === 'leak') s0 = 'leak,1';
+  if (s0 === 'yanis') s0 = 'yanis,14';
+  const src = s0 !== 'yanis,14'
+    ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.3')}` : '';
   for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) {
     const img = new Image();
     img.onload = () => {
@@ -443,10 +447,10 @@ function loadGroundTiles() {
 loadGroundTiles();
 {
   const chip = document.getElementById('ly-leakmap');
-  if (localStorage.getItem('ui.tileSrc') === 'leak') chip.classList.add('on');
+  if ((localStorage.getItem('ui.tileSrc') || '').startsWith('leak')) chip.classList.add('on');
   chip.addEventListener('click', () => {
     const on = chip.classList.toggle('on');
-    localStorage.setItem('ui.tileSrc', on ? 'leak' : 'yanis');
+    localStorage.setItem('ui.tileSrc', on ? 'leak,1' : 'yanis,14');
     loadGroundTiles();
   });
 }

@@ -660,15 +660,20 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_response(404)
                 self.end_headers()
                 return
-            # [LEAK-TILES-V1] source alternative: ?src=leak sert la pyramide
-            # generee depuis la full map leak (a retirer quand yanis integre).
+            # [TILE-SOURCES-V1] ?src=<dossier> sert n'importe quelle pyramide
+            # presente dans vendor/.../tiles/6/ (yanis,13 / yanis,14 / leak,1 /
+            # versions futures). 'leak' reste un alias legacy de leak,1.
             _src = qs.get('src', [''])[0]
-            _dir = TILES_DIR
             if _src == 'leak':
-                _dir = os.path.join(os.path.dirname(TILES_DIR), 'leak,1')
+                _src = 'leak,1'
+            _dir = TILES_DIR
+            if _src and re.fullmatch(r'[A-Za-z0-9,_.-]+', _src):
+                _cand = os.path.join(os.path.dirname(TILES_DIR), _src)
+                if os.path.isdir(_cand):
+                    _dir = _cand
             tile_path = os.path.join(_dir, z_dir, f'{z_in},{y},{x}.jpg')
-            if not os.path.exists(tile_path) and _src == 'leak':
-                # au-dela du z max du leak (ou hors emprise): retomber sur yanis
+            if not os.path.exists(tile_path) and _dir != TILES_DIR:
+                # au-dela du z max de la source (ou hors emprise): fallback yanis
                 tile_path = os.path.join(TILES_DIR, z_dir, f'{z_in},{y},{x}.jpg')
             if not os.path.exists(tile_path):
                 self.send_response(404)
@@ -849,6 +854,16 @@ class Handler(BaseHTTPRequestHandler):
             })
 
         # ── end SVG Map Refactor (Phase 1) ─────────────────────────
+
+        elif path == '/api/tile_sources':
+            # [TILE-SOURCES-V1] liste des pyramides disponibles (dropdown UI)
+            _root = os.path.dirname(TILES_DIR)
+            out = []
+            for d in sorted(os.listdir(_root)):
+                if os.path.isdir(os.path.join(_root, d)) and not d.startswith('.'):
+                    out.append(d)
+            self.send_json({'sources': out, 'default': os.path.basename(TILES_DIR)})
+            return
 
         elif path == '/api/terrain3d':
             # [HEIGHTMAP-V2] grille de terrain metrique depuis la CAPTURE GPU
