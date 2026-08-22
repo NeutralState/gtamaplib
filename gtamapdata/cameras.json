@@ -2936,17 +2936,17 @@
   "id": "T2/58",
   "player": null,
   "xyz": [
-   -996.773,
-   8.725,
-   18.976
+   -1000.953,
+   -212.369,
+   15.5
   ],
   "ypr": [
-   0.737,
-   -3.914,
+   -1.81,
+   -3.237,
    0.08
   ],
   "fov": [
-   35.761,
+   28.39,
    null
   ],
   "size": [
@@ -2954,8 +2954,8 @@
    1728
   ],
   "source": "Trailer 2 [3539]",
-  "note": "pose HORIZON-V1: 3 ancres + silhouette height map (18 clics de crete), z libre.",
-  "pose_verified": "SOLVED 2026-08-22 \u2014 ancres 201'->4.9' + silhouette 5.5', z 19.0 = highway (Alexandre)"
+  "note": "pose HORIZON-V1: 3 ancres + silhouette height map (18 clics de crete), z verrouille sol height map.",
+  "pose_verified": "SOLVED 2026-08-22 \u2014 z 15.5 tablier highway (pas au sommet, Alexandre), silhouette 2.2', ancres 10.2'; PROFONDEUR MOLLE le long de l'axe nord (y a oscille de 400 m entre solves) \u2014 a verrouiller par pointage leak map"
  },
  "Park (Mobile Phone)": {
   "id": "T2/59",
