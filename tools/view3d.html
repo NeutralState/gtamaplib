@@ -48,6 +48,7 @@
     <span class="lchip on" id="ly-meshes">meshes</span>
     <span class="lchip on" id="ly-terrain" title="Terrain reel (height map L16 du leak, z=706.07v-301.01)">terrain</span>
     <span class="lchip" id="ly-leakmap" title="Fond de carte: full map leak (composite sur yanis)">leak map</span>
+    <span class="lchip" id="ly-drape" title="Draper la map 2D sur le relief (lacs, routes, details — source du chip leak map)">drape 2D</span>
     <span class="lchip" id="btn-shot" title="PNG de la vue + frame en medaillon">&#8681; shot</span>
   </div>
 </div>
@@ -289,7 +290,72 @@ const data = await (await fetch('/api/scene3d')).json();
     g.setIndex(new THREE.BufferAttribute(idx, 1));
     g.computeVertexNormals();
     const mat = new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide });
-    layers.terrain.add(new THREE.Mesh(g, mat));
+    // [DRAPE-2D] UVs planaires pour draper la map 2D sur le relief
+    {
+      const W = (nx - 1) * step, H = (ny - 1) * step;
+      const uv = new Float32Array(nx * ny * 2);
+      for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
+        const k = j * nx + i;
+        uv[2*k] = (i * step) / W;
+        uv[2*k+1] = (j * step) / H;      // v=0 au sud; flipY=false sur la texture
+      }
+      g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+    }
+    const terrainMesh = new THREE.Mesh(g, mat);
+    layers.terrain.add(terrainMesh);
+    // [DRAPE-2D] texture assemblee depuis les tiles (source = chip leak map),
+    // 4 m/px; les lacs/routes/details de la carte apparaissent sur le relief.
+    let drapeTex = null;
+    function buildDrape() {
+      const TZ2 = 3, MPX = 32 / (2 ** TZ2);          // 4 m/px
+      const x1 = x0 + (nx - 1) * step, yTop = y0 + (ny - 1) * step;
+      const cw = Math.min(8192, Math.round((x1 - x0) / MPX));
+      const ch = Math.min(8192, Math.round((yTop - y0) / MPX));
+      const can = document.createElement('canvas');
+      can.width = cw; can.height = ch;
+      const ctx = can.getContext('2d');
+      ctx.fillStyle = '#1a4a6e'; ctx.fillRect(0, 0, cw, ch);
+      drapeTex = new THREE.CanvasTexture(can);
+      drapeTex.colorSpace = THREE.SRGBColorSpace;
+      drapeTex.flipY = false;                        // v=0 = rangee 0 du canvas
+      drapeTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      let s0 = localStorage.getItem('ui.tileSrc') || 'leak,1';
+      if (s0 === 'yanis') s0 = 'yanis,14'; if (s0 === 'leak') s0 = 'leak,1';
+      const srcQ = s0 !== 'yanis,14' ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.3')}` : '';
+      const t0x = Math.floor((16384 + x0) / MPX / 256), t1x = Math.floor((16384 + x1) / MPX / 256);
+      const t0y = Math.floor((16384 - yTop) / MPX / 256), t1y = Math.floor((16384 - y0) / MPX / 256);
+      for (let ty = t0y; ty <= t1y; ty++) for (let tx = t0x; tx <= t1x; tx++) {
+        const img = new Image();
+        img.onload = () => {
+          // monde du coin haut-gauche de la tile
+          const wx = tx * 256 * MPX - 16384, wyTop2 = 16384 - ty * 256 * MPX;
+          const cx = (wx - x0) / MPX;
+          const cy = ch - (wyTop2 - y0) / MPX;       // canvas rangee 0 = SUD (flipY=false)
+          ctx.save();
+          ctx.translate(cx, cy + 256);
+          ctx.scale(1, -1);                          // tiles dessinees nord-en-haut -> flip
+          ctx.drawImage(img, 0, 0);
+          ctx.restore();
+          drapeTex.needsUpdate = true;
+        };
+        img.src = `/tiles/${TZ2}/${TZ2},${ty},${tx}.jpg?v=14${srcQ}`;
+      }
+    }
+    {
+      const chip = document.getElementById('ly-drape');
+      const setDrape = on => {
+        if (on && !drapeTex) buildDrape();
+        mat.map = on ? drapeTex : null;
+        mat.vertexColors = !on;
+        mat.needsUpdate = true;
+      };
+      if (localStorage.getItem('ui.drape3d') === '1') { chip.classList.add('on'); setDrape(true); }
+      chip.addEventListener('click', () => {
+        const on = chip.classList.toggle('on');
+        localStorage.setItem('ui.drape3d', on ? '1' : '0');
+        setDrape(on);
+      });
+    }
     // plan de mer translucide a z=0
     const seaG = new THREE.PlaneGeometry((nx-1)*step, (ny-1)*step);
     seaG.translate(x0 + (nx-1)*step/2, y0 + (ny-1)*step/2, 0);

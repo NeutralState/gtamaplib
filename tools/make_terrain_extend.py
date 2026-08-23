@@ -109,11 +109,46 @@ def main():
     flat = key.ravel()
     pred = np.fromiter((lut.get(int(k), gmed) for k in flat), dtype=np.float64,
                        count=len(flat)).reshape(ny, nx)
-    pred = box(pred, 5)                                            # lissage 60 m
-    ext = np.where(water, -15.0, np.clip(pred, 1.0, 550.0))
-    known_full = (Z > -300.5).astype(np.float64)
-    alpha = np.clip((1.0 - box(known_full, 66)) * 1.4, 0, 1)
-    Z[fill] = (alpha[fill]*ext[fill] + (1-alpha[fill])*np.maximum(ext[fill], 0.0)).astype(np.float32)
+    pred = box(pred, 12)                                           # lissage 150 m
+    ext = np.clip(pred, 1.0, 550.0)
+
+    # [V4a] rampe cotiere: la terre monte depuis la rive (fini les murailles).
+    # distance approximative a l'eau par blurs concentriques.
+    wat = water.astype(np.float64)
+    dist = np.full((ny, nx), 400.0)
+    for r in (25, 10, 5, 2):                                       # 300..12 m
+        near = box(wat, r) > 1e-6
+        dist[near] = r * step
+    ramp = np.clip(dist / 180.0, 0.02, 1.0)
+    ext = ext * ramp                                               # plages douces
+    # profondeur progressive cote eau
+    dland = np.full((ny, nx), 400.0)
+    lnd = (~water).astype(np.float64)
+    for r in (25, 10, 5, 2):
+        near = box(lnd, r) > 1e-6
+        dland[near] = r * step
+    depth = -np.clip(dland / 300.0, 0.03, 1.0) * 15.0
+    ext = np.where(water, depth, ext)
+
+    # [V4b] raccord a la frontiere du mesure: diffuser l'ecart (Z_vrai - ext)
+    # depuis l'anneau de bord vers la zone inferee, avec decroissance ~2 km.
+    known_full = (Z > -300.5)
+    kf = known_full.astype(np.float64)
+    ring = known_full & (box((~known_full).astype(np.float64), 8) > 1e-6)
+    diff = np.where(ring, Z - ext, 0.0)
+    rmask = ring.astype(np.float64)
+    num = box(diff, 200); den = box(rmask, 200)
+    corr = np.where(den > 1e-9, num / np.maximum(den, 1e-9), 0.0)
+    dk = np.full((ny, nx), 3000.0)                                 # distance au connu
+    for r in (333, 166, 66, 20):                                   # ~2000..120 m
+        near = box(kf, r) > 1e-6
+        dk[near] = r * step
+    w = np.exp(-dk / 1500.0)
+    ext = ext + corr * w
+    ext = np.where(water & (ext > -0.5), depth, ext)               # l'eau reste l'eau
+
+    alpha = np.clip((1.0 - box(kf, 66)) * 1.4, 0, 1)
+    Z[fill] = (alpha[fill]*ext[fill] + (1-alpha[fill])*ext[fill]).astype(np.float32)
     south = (ys[:, None] < -4500) & fill & (Z > 0)
     Z[south] = np.minimum(Z[south], 4.0)
     np.save(os.path.join(hm_dir, 'terrain_hd_f32.npy'), Z)
