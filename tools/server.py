@@ -705,6 +705,7 @@ class Handler(BaseHTTPRequestHandler):
                         continue
                     entry = {
                         'name': name, 'xyz': cd['xyz'],
+                        'ypr': list(cd['ypr']) if cd.get('ypr') else None,   # [POSE-EDIT] yaw absolu pour le Save
                         'tier': (_ct.get(name) or {}).get('tier'),
                         'pose_verified': cd.get('pose_verified'),          # [POSE-VERIFIED-V1]
                         'rms_arcmin': (lambda r: round(r, 2) if r is not None else None)(_cam_rms(name)),

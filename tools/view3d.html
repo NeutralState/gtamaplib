@@ -67,6 +67,8 @@
          value="50" style="width:90px;vertical-align:middle"></label>
   <label style="margin-left:10px" title="[POSE-EDIT] hypothese de fov de la cam: la frame reste plein cadre, le relief derriere s'adapte — quand ils collent, Save">fov <input id="pov-fov" type="range" min="60" max="160" value="100" style="width:70px"></label>
   <span id="pov-fov-v" style="color:#facc15;font-size:10px"></span>
+  <label style="margin-left:8px" title="[POSE-EDIT] hypothese de yaw: tourne le monde derriere la frame, +/-15 deg">yaw <input id="pov-yaw" type="range" min="-1500" max="1500" value="0" style="width:80px"></label>
+  <span id="pov-yaw-v" style="color:#facc15;font-size:10px"></span>
   <button id="pov-fov-save" style="background:#166534;color:#dcfce7;border:1px solid #22c55e;border-radius:4px;font-size:10px;cursor:pointer">Save</button>
   <label style="margin-left:10px" title="scroll: widens the field of view without moving the camera — the frame shrinks by the same factor and stays aligned">zoom out <input id="pov-zoom" type="range" min="100" max="600"
          value="100" style="width:110px;vertical-align:middle"></label>
@@ -821,18 +823,39 @@ function enterPOV(c) {
     };
     s.oninput = upd;
     upd();
+    // [POSE-EDIT] slider yaw: tourne le monde derriere la frame (fixe).
+    const baseQuat = camera.quaternion.clone();
+    const sy = document.getElementById('pov-yaw');
+    const syv = document.getElementById('pov-yaw-v');
+    sy.value = 0;
+    let dyaw = 0;
+    sy.oninput = () => {
+      dyaw = parseFloat(sy.value) / 100;         // centiemes de degre
+      const qz = new THREE.Quaternion().setFromAxisAngle(
+        new THREE.Vector3(0, 0, 1), THREE.MathUtils.degToRad(dyaw));
+      camera.quaternion.copy(qz).multiply(baseQuat);
+      camera.updateMatrixWorld(true);
+      syv.textContent = (dyaw >= 0 ? '+' : '') + dyaw.toFixed(2) + '°';
+      renderPovMarks();
+    };
+    syv.textContent = '+0.00°';
     document.getElementById('pov-fov-save').onclick = async () => {
       const hf = THREE.MathUtils.radToDeg(2 * Math.atan(
         Math.tan(THREE.MathUtils.degToRad(povBase.vfov0) / 2) * povBase.ratio));
       const name = document.getElementById('pov-name').textContent;
       let url = `/api/set_cam_pose?cam=${encodeURIComponent(name)}&hfov=${hf.toFixed(3)}`;
+      if (dyaw !== 0 && c.ypr) {
+        url += `&yaw=${(c.ypr[0] + dyaw).toFixed(3)}`;
+      }
       let r = await fetch(url).then(x => x.json()).catch(() => ({error: 'reseau'}));
       if (r.error === 'SOLVED') {
-        if (confirm(name + ' est SOLVED (validee). Ecraser le fov quand meme?')) {
+        if (confirm(name + ' est SOLVED (validee). Ecraser fov/yaw quand meme?')) {
           r = await fetch(url + '&override=1').then(x => x.json()).catch(() => ({error: 'reseau'}));
         } else return;
       }
-      sv.textContent = r.ok ? ('sauve: hfov ' + hf.toFixed(1) + '°') : ('echec: ' + (r.error || '?'));
+      sv.textContent = r.ok
+        ? ('sauve: hfov ' + hf.toFixed(1) + '°' + (dyaw !== 0 ? ', yaw ' + (c.ypr[0] + dyaw).toFixed(2) + '°' : ''))
+        : ('echec: ' + (r.error || '?'));
     };
   }
   povZoom = 1;
