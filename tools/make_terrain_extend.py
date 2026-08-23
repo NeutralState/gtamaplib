@@ -109,7 +109,9 @@ def main():
     flat = key.ravel()
     pred = np.fromiter((lut.get(int(k), gmed) for k in flat), dtype=np.float64,
                        count=len(flat)).reshape(ny, nx)
-    pred = box(pred, 12)                                           # lissage 150 m
+    # [V5] echelle paysage: la carte peint routes/quartiers en couleurs propres
+    # -> la LUT les embosse en terrasses rectangulaires si on lisse trop peu.
+    pred = box(pred, 40)                                           # lissage 480 m
     ext = np.clip(pred, 1.0, 550.0)
 
     # [V4a] rampe cotiere: la terre monte depuis la rive (fini les murailles).
@@ -143,9 +145,10 @@ def main():
     for r in (333, 166, 66, 20):                                   # ~2000..120 m
         near = box(kf, r) > 1e-6
         dk[near] = r * step
-    w = np.exp(-dk / 1500.0)
+    w = np.exp(-dk / 2500.0)                                       # [V5] raccord plus long
     ext = ext + corr * w
     ext = np.where(water & (ext > -0.5), depth, ext)               # l'eau reste l'eau
+    ext = box(ext, 8)                                              # [V5] douceur finale (~100 m)
 
     alpha = np.clip((1.0 - box(kf, 66)) * 1.4, 0, 1)
     Z[fill] = (alpha[fill]*ext[fill] + (1-alpha[fill])*ext[fill]).astype(np.float32)

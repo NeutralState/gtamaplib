@@ -349,7 +349,9 @@ const data = await (await fetch('/api/scene3d')).json();
         mat.vertexColors = !on;
         mat.needsUpdate = true;
       };
-      if (localStorage.getItem('ui.drape3d') === '1') { chip.classList.add('on'); setDrape(true); }
+      // [DRAPE-DEFAULT] actif par defaut (l'eau, les routes, les details de
+      // la map 2D) — opt-out persistant via le chip.
+      if (localStorage.getItem('ui.drape3d') !== '0') { chip.classList.add('on'); setDrape(true); }
       chip.addEventListener('click', () => {
         const on = chip.classList.toggle('on');
         localStorage.setItem('ui.drape3d', on ? '1' : '0');
