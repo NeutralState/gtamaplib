@@ -44,6 +44,9 @@ def _locked_keys(cam_name):
     return ('xyz', 'ypr', 'fov')
 
 REF_PATH = os.path.join(ROOT, "tools", "audit", "leak_poses_ref.json")
+# [SOLVED-REF-V1] poses validees SOLVED/VERIFIED par Alexandre: intouchables
+# sauf ordre explicite (episode Kalaga 02, 2026-08-23).
+SOLVED_REF_PATH = os.path.join(ROOT, "tools", "audit", "solved_poses_ref.json")
 EPS = 1e-6
 
 
@@ -81,6 +84,9 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--freeze", action="store_true",
                     help="(re)gele la reference des poses leaks depuis l'etat actuel")
+    ap.add_argument("--freeze-solved", action="store_true",
+                    help="(re)gele la reference des poses SOLVED/VERIFIED — "
+                         "UNIQUEMENT sur ordre explicite d'Alexandre")
     ap.add_argument("--strict", action="store_true",
                     help="les WARN (dette legacy, ex: provenance orpheline) deviennent des FAIL")
     args = ap.parse_args()
@@ -91,6 +97,14 @@ def main():
         with open(REF_PATH, "w") as f:
             json.dump(ref, f, indent=1, sort_keys=True)
         print(f"FROZEN: {len(ref)} poses leaks -> {REF_PATH} (a committer)")
+        return 0
+
+    if args.freeze_solved:
+        ref = {n: {"xyz": list(c["xyz"]), "ypr": list(c["ypr"]), "fov": list(c["fov"])}
+               for n, c in md.cameras.items() if c.get("pose_verified")}
+        with open(SOLVED_REF_PATH, "w") as f:
+            json.dump(ref, f, indent=1, sort_keys=True)
+        print(f"FROZEN: {len(ref)} poses SOLVED -> {SOLVED_REF_PATH} (a committer)")
         return 0
 
     fails = []
@@ -147,6 +161,29 @@ def main():
         if new_leaks:
             print(f"NOTE: {len(new_leaks)} nouvelles cams HUD-locked pas dans la ref "
                   f"(normal apres intake; --freeze pour les geler): {sorted(new_leaks)[:5]}...")
+
+    # ── 2b. [SOLVED-REF-V1] poses SOLVED immobiles sauf ordre d'Alexandre ─
+    if os.path.exists(SOLVED_REF_PATH):
+        with open(SOLVED_REF_PATH) as f:
+            sref = json.load(f)
+        for n, r in sref.items():
+            c = md.cameras.get(n)
+            if c is None:
+                fails.append(f"SOLVED: {n} dans la ref mais absente de cameras.json")
+                continue
+            if not c.get("pose_verified"):
+                fails.append(f"SOLVED: {n} a perdu son badge pose_verified")
+            for k in ("xyz", "ypr", "fov"):
+                a, b = c.get(k), r.get(k)
+                if any((x is None) != (y is None) or
+                       (x is not None and abs(float(x) - float(y)) > EPS)
+                       for x, y in zip(a, b)):
+                    fails.append(f"SOLVED: {n}.{k} a bouge: {b} -> {a} — "
+                                 f"INTERDIT sans ordre explicite (--freeze-solved apres validation)")
+        new_solved = {n for n, c in md.cameras.items() if c.get("pose_verified")} - set(sref)
+        if new_solved:
+            print(f"NOTE: {len(new_solved)} cams SOLVED pas encore gelees "
+                  f"(--freeze-solved sur ordre d'Alexandre): {sorted(new_solved)[:5]}")
 
     # ── 2b. doublons case-insensitive (LMs et cams) ─────────────────────
     import collections as _coll

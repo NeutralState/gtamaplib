@@ -298,6 +298,11 @@ def main():
     if not args.apply:
         print('\nDRY-RUN (--apply pour ecrire).')
         return
+    # [SOLVED-REF-V1] pose validee par Alexandre = intouchable sans son ordre
+    if e.get('pose_verified') and not os.environ.get('OVERRIDE_SOLVED'):
+        print(f"\nREFUS: {args.cam} est SOLVED — modification interdite sans "
+              "ordre explicite d'Alexandre (OVERRIDE_SOLVED=1 apres son accord).")
+        return
     e['xyz'] = [round(v, 3) for v in t[:3]]
     e['ypr'] = [round(v, 3) for v in t[3:6]]
     if not args.keep_fov:
