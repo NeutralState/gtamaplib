@@ -69,6 +69,13 @@ def main():
     ny = ny0 + max(0, add)
     Z = np.full((ny, nx), -301.01, dtype=np.float32)
     Z[:ny0] = bak                                                  # rangee 0 = sud
+    # [V8] le bord de la capture s'effondre vers v=0 sur ses 1-4 dernieres
+    # rangees (fondu du cadre: 150 m -> -109 en un pixel) — ces valeurs
+    # empoisonnaient l'anneau de raccord (murs de 250 m). Erosion ~36 m:
+    # le bord malade redevient zone a reconstruire.
+    _k0 = (Z > -300.5)
+    _er = box(_k0.astype(np.float64), 6) > 0.999
+    Z[_k0 & ~_er] = -301.01
     xs = x0 + np.arange(nx) * step
     ys = y0 + np.arange(ny) * step
     print(f'grille {nx}x{ny0} -> {nx}x{ny} (nord etendu a y={ys[-1]:.0f})', flush=True)
@@ -141,12 +148,17 @@ def main():
     rmask = ring.astype(np.float64)
     num = box(diff, 200); den = box(rmask, 200)
     corr = np.where(den > 1e-9, num / np.maximum(den, 1e-9), 0.0)
+    # [V7] correction LOCALE pres de la couture: la moyenne a 1.2 km dilue les
+    # ecarts la ou la capture coupe en pleine montagne -> marche residuelle.
+    numf = box(diff, 25); denf = box(rmask, 25)
+    corrf = np.where(denf > 1e-9, numf / np.maximum(denf, 1e-9), corr)
     dk = np.full((ny, nx), 3000.0)                                 # distance au connu
     for r in (333, 166, 66, 20):                                   # ~2000..120 m
         near = box(kf, r) > 1e-6
         dk[near] = r * step
     w = np.exp(-dk / 2500.0)                                       # [V5] raccord plus long
-    ext = ext + corr * w
+    wf = np.exp(-dk / 300.0)                                       # [V7] poids du local
+    ext = ext + (wf * corrf + (1.0 - wf) * corr) * w
     ext = np.where(water & (ext > -0.5), depth, ext)               # l'eau reste l'eau
     ext = box(ext, 8)                                              # [V5] douceur finale (~100 m)
 
@@ -154,6 +166,19 @@ def main():
     Z[fill] = (alpha[fill]*ext[fill] + (1-alpha[fill])*ext[fill]).astype(np.float32)
     south = (ys[:, None] < -4500) & fill & (Z > 0)
     Z[south] = np.minimum(Z[south], 4.0)
+    # [V8b] relaxation finale: continuite GARANTIE aux coutures (nord et sud,
+    # terre et bathymetrie) — les cellules inferees proches du mesure diffusent
+    # vers le champ combine; le mesure ne bouge jamais.
+    wseam = np.clip(1.0 - dk / 1100.0, 0.05, 1.0)
+    for _ in range(36):
+        sm = box(Z, 3)
+        Z[fill] = ((1 - wseam[fill]) * Z[fill] + wseam[fill] * sm[fill]).astype(np.float32)
+    # bord hors couverture (reste a -301): adoucir la falaise du fond par
+    # diffusion depuis les voisins (le large reste un plateau profond)
+    for _ in range(30):
+        sm = box(Z, 6)
+        deep = Z < -290.0
+        Z[deep] = np.maximum(sm[deep], -301.0).astype(np.float32)
     np.save(os.path.join(hm_dir, 'terrain_hd_f32.npy'), Z)
     m['ny'] = int(ny)
     m['note'] = (m['note'].split(' | TERRAIN-EXTEND')[0]
