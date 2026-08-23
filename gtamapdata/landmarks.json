@@ -1124,27 +1124,28 @@
   },
   "Four Seasons Hotel Miami (BE)": {
     "xyz": [
-      -819.0251605330652,
-      -1307.1870983876358,
-      263.1162537198955
+      -819.7217716985044,
+      -1307.3189340574181,
+      263.0038995135626
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Motorboats (A)",
       "Prison",
       "Rooftop Party",
+      "Skyline",
       "Vice Beach (A)",
       "Port Vice City (B)"
     ],
-    "error_m": 2.958,
+    "error_m": 3.846,
     "zone": "vice_city",
     "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
   },
   "Four Seasons Hotel Miami (BW)": {
     "xyz": [
-      -847.3000825558164,
-      -1276.584672001814,
-      261.76373980614926
+      -847.3325797381933,
+      -1276.8865479722292,
+      262.39903417832056
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -1155,7 +1156,7 @@
       "Port Vice City (B)",
       "Ocean near Keys (N)"
     ],
-    "error_m": 5.209,
+    "error_m": 5.039,
     "zone": "vice_city",
     "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
   },
@@ -1181,36 +1182,34 @@
   },
   "Four Seasons Hotel Miami (NW)": {
     "xyz": [
-      -847.9399996385685,
-      -1255.8292832243733,
-      257.77802657785514
+      -847.1273217014369,
+      -1254.4292659595285,
+      257.8304101411636
     ],
     "source_cameras": [
       "Prison",
       "Skyline",
       "Vice Beach (A)",
       "Vice City Postcard",
-      "Port Vice City (A)"
+      "Port Vice City (B)"
     ],
-    "error_m": 5.585,
+    "error_m": 5.553,
     "zone": "vice_city",
     "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
   },
   "Four Seasons Hotel Miami (SE)": {
     "xyz": [
-      -818.5297747801333,
-      -1316.2241482520308,
-      253.14712268155395
+      -819.7526809845481,
+      -1315.4560058323918,
+      253.37208354573804
     ],
     "source_cameras": [
-      "Tennis Stadium (4K)",
+      "Motorboats (A)",
       "Prison",
       "Vice Beach (A)",
-      "Vice Beach (B)",
-      "Motorboats (A)",
-      "Motorboats (B)"
+      "Tennis Stadium (4K)"
     ],
-    "error_m": 3.145,
+    "error_m": 3.478,
     "zone": "vice_city",
     "notes": "[FOUR-SEASONS-RIGID-V1] xyz from FourSeasons rigid model"
   },
@@ -2376,9 +2375,9 @@
   },
   "Park Grove Condominium (S)": {
     "xyz": [
-      -1321.000886644853,
-      -2137.1933679607023,
-      97.3489888605262
+      -1322.1470793182839,
+      -2137.450380041094,
+      97.6679384947046
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -2387,7 +2386,7 @@
       "Port Vice City (B)",
       "Tennis Stadium (4K)"
     ],
-    "error_m": 1.08,
+    "error_m": 3.879,
     "zone": "grassrivers"
   },
   "Red Billboard (Hamlet)": {
@@ -2842,15 +2841,15 @@
   },
   "MIA North Terminal Tower": {
     "xyz": [
-      -2376.618610653735,
-      -515.669114292118,
-      59.695830911499385
+      -2373.3981540477225,
+      -517.8212444839456,
+      62.78298200270568
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Port Vice City (B)"
     ],
-    "error_m": 2.979,
+    "error_m": 0.808,
     "zone": "vice_city"
   },
   "Water Tower near Prison": {
@@ -2881,13 +2880,13 @@
   },
   "Wheelabrator South Broward (W)": {
     "xyz": [
-      -2448.858841786915,
-      2509.4169866555058,
-      51.504534377972746
+      -2448.8579744611916,
+      2509.4175523099184,
+      51.5046625992472
     ],
     "source_cameras": [
-      "Ambrosia 04 (Fires)",
-      "Leonida Keys 01 (Airplane) (X)"
+      "Leonida Keys 01 (Airplane) (X)",
+      "Ambrosia 04 (Fires)"
     ],
     "error_m": 2.484,
     "zone": "ambrosia"
@@ -3802,17 +3801,17 @@
   },
   "Asia Brickell Key (CC1)": {
     "xyz": [
-      -91.67516207380405,
-      -867.9788005405281,
-      214.0619557763343
+      -91.7943247738147,
+      -866.4712852230869,
+      213.70047489002582
     ],
     "source_cameras": [
       "Motorboats (A)",
-      "Motorboats (B)",
       "Skyline",
-      "Vice City Postcard"
+      "Vice City Postcard",
+      "Port Vice City (B)"
     ],
-    "error_m": 4.635,
+    "error_m": 7.051,
     "zone": "vice_city"
   },
   "Asia Brickell Key (CC2)": {
@@ -4619,15 +4618,15 @@
   },
   "1500 Sonora Ave (Tank)": {
     "xyz": [
-      -2979.492221281339,
-      3680.2071265052064,
-      40.752155392137425
+      -2972.6613190891458,
+      3678.498425209531,
+      41.73582365676252
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 0.767,
+    "error_m": 0.924,
     "zone": "ambrosia"
   },
   "Easy Hill": {
@@ -4683,80 +4682,80 @@
   },
   "USSM Smokestack (4)": {
     "xyz": [
-      -2916.526320149519,
-      3550.4644894151343,
-      101.4270834597645
+      -2915.325773353332,
+      3550.1706628842167,
+      100.537379050791
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 0.352,
+    "error_m": 2.005,
     "zone": "ambrosia"
   },
   "USSM Smokestack (5)": {
     "xyz": [
-      -2953.840644674009,
-      3524.322673403265,
-      81.65747898331037
+      -2954.405320646317,
+      3524.416122591705,
+      81.58812483038328
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 0.257,
+    "error_m": 0.101,
     "zone": "ambrosia"
   },
   "USSM Smokestack (6)": {
     "xyz": [
-      -2960.8956482564345,
-      3526.9034152247987,
-      86.20795746079773
+      -2961.1909352745947,
+      3526.930856683195,
+      86.2122975865794
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 0.807,
+    "error_m": 0.777,
     "zone": "ambrosia"
   },
   "USSM Smokestack (7)": {
     "xyz": [
-      -2988.0059271409236,
-      3528.3048393368067,
-      99.63309279614627
+      -2989.255239841131,
+      3528.5230526394394,
+      100.2180510506884
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 0.581,
+    "error_m": 0.472,
     "zone": "ambrosia"
   },
   "USSM Smokestack (8)": {
     "xyz": [
-      -3042.5760772277595,
-      3602.7733652717634,
-      48.688122094119876
+      -3042.351516253954,
+      3602.7391474654105,
+      48.31611708794327
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 0.438,
+    "error_m": 0.232,
     "zone": "ambrosia"
   },
   "USSM Smokestack (9)": {
     "xyz": [
-      -3049.1440334816057,
-      3605.495771623906,
-      59.07747123253873
+      -3049.1682903532037,
+      3605.497686338754,
+      58.71684119934507
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 1.077,
+    "error_m": 1.723,
     "zone": "ambrosia"
   },
   "1500 Sonora Ave (Silo)": {
@@ -4963,9 +4962,9 @@
   },
   "50 Biscayne Blvd (SE)": {
     "xyz": [
-      -449.485349721957,
-      -257.13234665176185,
-      144.3403029707961
+      -447.18459923378566,
+      -256.78512785324097,
+      144.35512155893724
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -4974,7 +4973,7 @@
       "Vice City Postcard",
       "Port Vice City (B)"
     ],
-    "error_m": 8.392,
+    "error_m": 7.659,
     "zone": "vice_city"
   },
   "Akoya Condominium": {
@@ -4994,9 +4993,9 @@
   },
   "Asia Brickell Key": {
     "xyz": [
-      -120.30091999973715,
-      -881.8076936412917,
-      184.1808713072034
+      -121.81295757931605,
+      -883.7553645526048,
+      184.34158350695918
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -5006,7 +5005,7 @@
       "Vice City Postcard",
       "Port Vice City (B)"
     ],
-    "error_m": 2.266,
+    "error_m": 2.444,
     "zone": "vice_city"
   },
   "Bank of America Financial Center": {
@@ -5630,57 +5629,57 @@
   },
   "Citigroup Center (NE)": {
     "xyz": [
-      -366.14732195792044,
-      -463.71314309479726,
-      150.8101331923862
+      -366.1060410484873,
+      -464.740088498652,
+      150.87768205252257
     ],
     "source_cameras": [
       "Rooftop Party",
       "Vice City Postcard",
       "Shitzu Squalo 01 (Bay)"
     ],
-    "error_m": 1.393,
+    "error_m": 1.803,
     "zone": "vice_city"
   },
   "Citigroup Center (NW)": {
     "xyz": [
-      -413.72892325536685,
-      -460.69833102679854,
-      151.04022214128926
+      -417.60971710809093,
+      -468.6803531914666,
+      151.72997931942172
     ],
     "source_cameras": [
       "Rooftop Party",
       "Skyline",
       "Vice City Postcard"
     ],
-    "error_m": 3.056,
+    "error_m": 3.418,
     "zone": "vice_city"
   },
   "Cruise Ship (FT)": {
     "xyz": [
-      224.16276270528812,
-      -268.346298662744,
-      50.89866049987605
+      225.0596016250875,
+      -268.1057031934721,
+      50.96319728147027
     ],
     "source_cameras": [
       "Skyline",
       "Vice City 08 (Ferris Wheel)",
       "Port Vice City (A)"
     ],
-    "error_m": 3.399,
+    "error_m": 5.239,
     "zone": "vice_city"
   },
   "Cruise Ship (RT)": {
     "xyz": [
-      375.16898010891856,
-      -306.4290666437932,
-      59.055369329154175
+      374.3718396058468,
+      -305.55100468597095,
+      57.47643193560765
     ],
     "source_cameras": [
       "Vice City 08 (Ferris Wheel)",
       "Port Vice City (A)"
     ],
-    "error_m": 1.272,
+    "error_m": 5.426,
     "zone": "vice_city"
   },
   "Di Lido Island (N)": {
@@ -6010,16 +6009,17 @@
   },
   "Kaseya Center (SE)": {
     "xyz": [
-      -221.15851475214635,
-      428.78258895454854,
-      45.855935791393016
+      -221.65371994588597,
+      429.08136905633444,
+      45.48369115855539
     ],
     "source_cameras": [
       "Skyline",
       "Vice City Postcard",
-      "Port Vice City (B)"
+      "Port Vice City (B)",
+      "Shitzu Squalo 01 (Bay)"
     ],
-    "error_m": 3.728,
+    "error_m": 8.162,
     "zone": "vice_city"
   },
   "Keys Bridge (C)": {
@@ -6207,20 +6207,19 @@
   },
   "Marina Blue (NE)": {
     "xyz": [
-      -458.973011063806,
-      419.9948419600194,
-      174.93213978679526
+      -455.8040495007475,
+      420.12395962214214,
+      175.4513107713948
     ],
     "source_cameras": [
-      "Jason Duval 05 (Machine Gun)",
       "Motorboats (B)",
       "Skyline",
       "Vice Beach (B)",
       "Vice City 03 (Basketball)",
       "Vice City Postcard",
-      "Port Vice City (A)"
+      "Port Vice City (B)"
     ],
-    "error_m": 3.241,
+    "error_m": 4.095,
     "zone": "vice_city"
   },
   "Marriott Miami Biscayne Bay (E)": {
@@ -6254,9 +6253,9 @@
   },
   "Miami Tower": {
     "xyz": [
-      -782.9913032753118,
-      -416.3033408388157,
-      161.55663701800248
+      -780.1378997915458,
+      -416.07593082342805,
+      161.35300550642722
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -6265,7 +6264,7 @@
       "Vice City Postcard",
       "Port Vice City (B)"
     ],
-    "error_m": 2.123,
+    "error_m": 2.667,
     "zone": "vice_city"
   },
   "New Foundation Church": {
@@ -6339,17 +6338,18 @@
   },
   "One Miami Condominium East (NE)": {
     "xyz": [
-      -234.1674403003154,
-      -525.0387317141623,
-      182.00687225151188
+      -235.52241746922948,
+      -526.3168474429405,
+      182.67096503631927
     ],
     "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)",
+      "Prison",
       "Skyline",
-      "Jason Duval 05 (Machine Gun)",
       "Vice City 03 (Basketball)",
       "Vice City Postcard"
     ],
-    "error_m": 1.303,
+    "error_m": 2.631,
     "zone": "vice_city"
   },
   "One Miami Condominium West (NE)": {
@@ -6565,9 +6565,9 @@
   },
   "Park Grove Condominium (C)": {
     "xyz": [
-      -1317.058240430328,
-      -2059.4845706343617,
-      97.30317443013539
+      -1318.8798546623177,
+      -2059.99026039994,
+      97.99058292901589
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -6575,14 +6575,14 @@
       "Port Vice City (B)",
       "Tennis Stadium (4K)"
     ],
-    "error_m": 2.074,
+    "error_m": 5.365,
     "zone": "vice_city"
   },
   "Park Grove Condominium (N)": {
     "xyz": [
-      -1323.6885467679583,
-      -1997.4440031553631,
-      97.48225867672346
+      -1323.8165123985225,
+      -1998.0682413734394,
+      97.14100970619162
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -6590,7 +6590,7 @@
       "Port Vice City (B)",
       "Metro (SE) (B)"
     ],
-    "error_m": 4.567,
+    "error_m": 7.459,
     "zone": "vice_city"
   },
   "Pelican Harbor Marina (A)": {
@@ -7171,9 +7171,9 @@
   },
   "Skyviews Miami Observation Wheel": {
     "xyz": [
-      33.13818203534034,
-      130.2967482466174,
-      71.18635049787076
+      33.35267896255344,
+      129.91912727884517,
+      71.23283225553968
     ],
     "source_cameras": [
       "Skyline",
@@ -7181,14 +7181,14 @@
       "Port Vice City (B)",
       "Shitzu Squalo 01 (Bay)"
     ],
-    "error_m": 5.373,
+    "error_m": 5.288,
     "zone": "vice_city"
   },
   "Southeast Financial Center": {
     "xyz": [
-      -481.60024728910633,
-      -460.5792868306524,
-      248.54339121599338
+      -482.08715935503574,
+      -461.7481342874849,
+      248.48321501526675
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7198,10 +7198,10 @@
       "Vice Beach (A)",
       "Vice City 03 (Basketball)",
       "Vice City Postcard",
-      "Port Vice City (A)",
+      "Port Vice City (B)",
       "Airport (X)"
     ],
-    "error_m": 3.931,
+    "error_m": 2.473,
     "zone": "vice_city"
   },
   "St. Moritz Hotel (SW)": {
@@ -7234,16 +7234,16 @@
   },
   "Ten Museum Park (SE)": {
     "xyz": [
-      -453.27490777266564,
-      477.8171746759801,
-      136.53935765998057
+      -452.47648727506316,
+      477.37392654957216,
+      135.91959120877192
     ],
     "source_cameras": [
       "Skyline",
       "Vice Beach (B)",
       "Port Vice City (B)"
     ],
-    "error_m": 2.288,
+    "error_m": 1.931,
     "zone": "vice_city"
   },
   "The Crimson (CC)": {
@@ -7305,9 +7305,9 @@
   },
   "Three Tequesta Point": {
     "xyz": [
-      -4.38,
-      -948.84,
-      206.01
+      -3.985262352021228,
+      -947.3332454541903,
+      206.81771035363994
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -7319,7 +7319,7 @@
       "Vice City Postcard",
       "Port Vice City (B)"
     ],
-    "error_m": 2.0,
+    "error_m": 5.865,
     "zone": "vice_city",
     "method": " | re-triangule apres MARK-ARB-V1 (2.4 m, perp 1.9 m)"
   },
@@ -7368,9 +7368,9 @@
   },
   "Turkey Point Nuclear Power Station (1)": {
     "xyz": [
-      -1490.9262765384156,
-      -3701.2811508592117,
-      79.50079763863938
+      -1491.8480422316131,
+      -3700.071821180859,
+      81.00703006935996
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7378,14 +7378,14 @@
       "Prison",
       "Port Vice City (B)"
     ],
-    "error_m": 0.687,
+    "error_m": 3.436,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (2)": {
     "xyz": [
-      -1490.4025901779353,
-      -3741.3159125270813,
-      79.4187528753887
+      -1490.8191558243711,
+      -3740.180767536225,
+      80.8320608754478
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7393,14 +7393,14 @@
       "Prison",
       "Port Vice City (B)"
     ],
-    "error_m": 0.48,
+    "error_m": 3.044,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (3)": {
     "xyz": [
-      -1489.8497426088722,
-      -3783.9196888351034,
-      79.56930756625101
+      -1491.5793854072776,
+      -3782.0458466877726,
+      80.61749046884903
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7408,14 +7408,14 @@
       "Prison",
       "Port Vice City (B)"
     ],
-    "error_m": 1.5,
+    "error_m": 3.443,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (N)": {
     "xyz": [
-      -1566.842667078899,
-      -3480.1069422206688,
-      55.6267674688612
+      -1569.062080274202,
+      -3478.474001258097,
+      56.7345205070563
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7423,28 +7423,28 @@
       "Prison",
       "Port Vice City (B)"
     ],
-    "error_m": 1.863,
+    "error_m": 2.06,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (S)": {
     "xyz": [
-      -1562.6957502048788,
-      -3545.996571977475,
-      55.84524437970925
+      -1566.9045773842536,
+      -3543.816141291432,
+      56.26943604038611
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Leonida Keys 01 (Airplane) (X)",
       "Prison"
     ],
-    "error_m": 1.129,
+    "error_m": 2.604,
     "zone": "grassrivers"
   },
   "Two Tequesta Point": {
     "xyz": [
-      50.18765056439621,
-      -1064.1672577972104,
-      160.58790004834708
+      49.70575718240857,
+      -1064.5087901307907,
+      160.72185530984027
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7456,7 +7456,7 @@
       "Vice City Postcard",
       "Port Vice City (B)"
     ],
-    "error_m": 3.863,
+    "error_m": 4.957,
     "zone": "vice_city"
   },
   "Unknown Sphere": {
@@ -7516,36 +7516,39 @@
   },
   "Vizcayne North Condominium (NE)": {
     "xyz": [
-      -542.978,
-      156.421,
-      177.217
+      -541.2537184383563,
+      157.11141956926093,
+      176.4143104896274
     ],
     "source_cameras": [
-      "Jason Duval 05 (Machine Gun)",
       "Motorboats (B)",
       "Skyline",
       "Vice Beach (A)",
       "Vice City 03 (Basketball)",
       "Vice City Postcard",
-      "Port Vice City (A)",
+      "Port Vice City (B)",
       "Shitzu Squalo 01 (Bay)"
     ],
-    "error_m": 3.992,
+    "error_m": 4.489,
     "zone": "vice_city"
   },
   "Vizcayne North Condominium (SE)": {
     "xyz": [
-      -540.29,
-      106.896,
-      176.361
+      -540.7274605839124,
+      107.03704364789716,
+      176.57781229668427
     ],
     "source_cameras": [
+      "Grassrivers 02 (Watson Bay)",
+      "Prison",
       "Skyline",
+      "Vice Beach (B)",
       "Vice City 03 (Basketball)",
       "Vice City Postcard",
-      "Port Vice City (B)"
+      "Port Vice City (B)",
+      "Shitzu Squalo 01 (Bay)"
     ],
-    "error_m": 2.314,
+    "error_m": 2.625,
     "zone": "vice_city"
   },
   "W South Beach (BNW)": {
@@ -7605,19 +7608,19 @@
   },
   "Wells Fargo Center (N)": {
     "xyz": [
-      -672.0471274173907,
-      -418.6746802057117,
-      186.94489011601988
+      -671.4955362533908,
+      -417.9742558742245,
+      186.78763222074616
     ],
     "source_cameras": [
-      "Prison",
-      "Vice Beach (B)",
-      "Skyline",
-      "Vice City 03 (Basketball)",
       "Grassrivers 02 (Watson Bay)",
+      "Prison",
+      "Skyline",
+      "Vice Beach (B)",
+      "Vice City 03 (Basketball)",
       "Vice City Postcard"
     ],
-    "error_m": 2.869,
+    "error_m": 1.785,
     "zone": "vice_city"
   },
   "West Venetian Causeway Bridge": {
@@ -7700,15 +7703,15 @@
   },
   "Container Crane (9)": {
     "xyz": [
-      1048.9510899291306,
-      -245.0562734742369,
-      72.1416309256854
+      1050.1228366269943,
+      -243.47313976749768,
+      72.11769494060724
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Vice Beach (A)"
     ],
-    "error_m": 1.308,
+    "error_m": 1.316,
     "zone": "vice_city"
   },
   "Courtyard by Marriott (NE)": {
@@ -8028,15 +8031,15 @@
   },
   "1500 Sonora Ave (Tank) (L)": {
     "xyz": [
-      -2966.0943722449715,
-      3653.9822066170636,
-      40.827111919850395
+      -2966.9697750713813,
+      3654.195793743408,
+      41.021699990448894
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 1.535,
+    "error_m": 1.158,
     "zone": "ambrosia"
   },
   "1500 Sonora Ave (Tank) (R)": {
@@ -8067,15 +8070,15 @@
   },
   "US Sugar Mill (Factory) (R)": {
     "xyz": [
-      -3026.0249552537825,
-      3326.334759830961,
-      71.71680705687504
+      -3030.34871380857,
+      3326.5387002650796,
+      72.31140655956555
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 1.12,
+    "error_m": 0.049,
     "zone": "ambrosia"
   },
   "White Silos (W)": {
@@ -8093,28 +8096,28 @@
   },
   "Wheelabrator South Broward (3B)": {
     "xyz": [
-      -2430.9554720785745,
-      2519.433037406461,
-      43.910655660655934
+      -2430.955296910964,
+      2519.4331939846206,
+      43.910074515104995
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)"
     ],
-    "error_m": 1.038,
+    "error_m": 1.039,
     "zone": "ambrosia"
   },
   "Billboard (South Ambrosia)": {
     "xyz": [
-      -2852.664745517277,
-      3054.4864945856325,
-      46.81795052800254
+      -2852.6648960297844,
+      3054.48681074087,
+      46.818526029646804
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 11.316,
+    "error_m": 11.317,
     "zone": "ambrosia"
   },
   "House C (E)": {
@@ -8403,9 +8406,9 @@
   },
   "Citigroup Center (SE)": {
     "xyz": [
-      -377.6385548056467,
-      -522.2646448005298,
-      150.98609384869894
+      -377.30691579273764,
+      -522.859164075478,
+      150.96570795025428
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -8414,7 +8417,7 @@
       "Vice Beach (B)",
       "Vice City Postcard"
     ],
-    "error_m": 0.908,
+    "error_m": 1.123,
     "zone": "vice_city"
   },
   "One Miami Condominium East (SE)": {
@@ -8438,9 +8441,9 @@
   },
   "One Miami Condominium West (SE)": {
     "xyz": [
-      -315.5316648744753,
-      -582.0726324979294,
-      187.7265663515764
+      -316.4246811154138,
+      -582.1351021853334,
+      188.00278345413076
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -8449,7 +8452,7 @@
       "Vice City 03 (Basketball)",
       "Vice City Postcard"
     ],
-    "error_m": 1.347,
+    "error_m": 1.595,
     "zone": "vice_city"
   },
   "Pole near Signature Hangar 2": {
@@ -8506,16 +8509,15 @@
   },
   "Kaseya Center (S)": {
     "xyz": [
-      -260.80371845162927,
-      399.3810981196972,
-      44.135249442745604
+      -260.76370731782777,
+      398.5411868619351,
+      44.933974777767375
     ],
     "source_cameras": [
       "Vice City Postcard",
-      "Vice City 08 (Ferris Wheel)",
-      "Port Vice City (A)"
+      "Port Vice City (B)"
     ],
-    "error_m": 2.233,
+    "error_m": 0.227,
     "zone": "vice_city"
   },
   "1000 Venetian Way (2)": {
@@ -8818,15 +8820,15 @@
   },
   "Cruise Terminal D": {
     "xyz": [
-      647.1113678580531,
-      -419.95189285614526,
-      35.7597396321199
+      647.1072296092784,
+      -419.9454931669137,
+      35.83451389129467
     ],
     "source_cameras": [
       "Motorboats (B)",
       "Vice City 08 (Ferris Wheel)"
     ],
-    "error_m": 2.864,
+    "error_m": 2.725,
     "zone": "vice_city"
   },
   "Cruise Terminal G (B)": {
@@ -9141,17 +9143,17 @@
   },
   "Stephen P. Clark Government Center (E)": {
     "xyz": [
-      -844.925194860008,
-      66.93934211585331,
-      155.1481760654615
+      -841.8718181253247,
+      65.98217368133938,
+      155.3354993147007
     ],
     "source_cameras": [
       "Motorboats (B)",
       "Skyline",
       "Vice City 03 (Basketball)",
-      "Port Vice City (A)"
+      "Port Vice City (B)"
     ],
-    "error_m": 4.102,
+    "error_m": 1.691,
     "zone": "vice_city"
   },
   "Infinity at Brickell": {
@@ -10663,16 +10665,16 @@
   },
   "Brickell Arch": {
     "author": "rlx",
-    "error_m": 1.358,
+    "error_m": 0.509,
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
-      "Port Vice City (A)",
+      "Port Vice City (B)",
       "Metro (SE) (B)"
     ],
     "xyz": [
-      -824.3260008205834,
-      -1141.1396047699895,
-      171.97016869055625
+      -825.5595302661764,
+      -1139.7625402705944,
+      171.80184684377969
     ],
     "zone": null
   },
@@ -10723,18 +10725,17 @@
   },
   "Vizcayne South Condominium (NW)": {
     "author": "rlx",
-    "error_m": 3.018,
+    "error_m": 2.933,
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
-      "Jason Duval 05 (Machine Gun)",
       "Prison",
       "Skyline",
-      "Port Vice City (A)"
+      "Port Vice City (B)"
     ],
     "xyz": [
-      -630.38,
-      96.129,
-      178.683
+      -633.9046632160081,
+      91.70475864562329,
+      178.54579686133394
     ],
     "zone": null
   },
@@ -10791,17 +10792,17 @@
   },
   "50 Biscayne Blvd": {
     "author": "rlx",
-    "error_m": 3.493,
+    "error_m": 1.386,
     "source_cameras": [
       "Skyline",
       "Vice City 03 (Basketball)",
       "Vice City Postcard",
-      "Port Vice City (A)"
+      "Port Vice City (B)"
     ],
     "xyz": [
-      -457.4446527029635,
-      -230.0745423768854,
-      146.5884664591384
+      -458.36659338564465,
+      -231.53356782235556,
+      146.9939464179009
     ],
     "zone": null
   },
@@ -10877,15 +10878,15 @@
   },
   "Southeast Financial Center (A)": {
     "author": "rlx",
-    "error_m": 2.88,
+    "error_m": 2.877,
     "source_cameras": [
-      "Port Vice City (A)",
+      "Port Vice City (B)",
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -484.4527954411709,
-      -464.18807774190054,
-      277.98083096431117
+      -484.48724972537445,
+      -464.3253650144875,
+      278.4046178264952
     ],
     "zone": null
   },
@@ -11070,15 +11071,15 @@
   },
   "Jet Skis in Miami": {
     "author": "rlx",
-    "error_m": 4.3,
+    "error_m": 32.203,
     "source_cameras": [
       "Port",
       "Port Vice City (B)"
     ],
     "xyz": [
-      1383.27,
-      -154.72,
-      22.95
+      1383.7239079556045,
+      -154.75031703918413,
+      21.88573195631959
     ],
     "zone": null,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 4.3 m, angle max 46.7 deg"
@@ -11165,16 +11166,15 @@
   },
   "Bank of America Financial Center (Vice City)": {
     "author": "rlx",
-    "error_m": 14.4,
+    "error_m": 29.764,
     "source_cameras": [
-      "Airport (X)",
-      "Port Vice City (A)",
-      "Port Vice City (B)"
+      "Port Vice City (B)",
+      "Airport (X)"
     ],
     "xyz": [
-      -341.97,
-      -138.1,
-      95.08
+      -398.63292224790564,
+      -138.97239712570496,
+      94.21371370609103
     ],
     "zone": null,
     "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 14.4 m, angle max 2.8 deg"
@@ -11237,15 +11237,15 @@
   },
   "Round Water Tower": {
     "author": "rlx",
-    "error_m": 4.282,
+    "error_m": 4.432,
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Vice City Postcard"
     ],
     "xyz": [
-      -2235.740564575172,
-      479.5905523043354,
-      75.01310316926667
+      -2235.7771344398448,
+      479.5841120186335,
+      73.02174197482522
     ],
     "zone": "ambrosia",
     "note": "retriangule le 2026-08-03 sur Panorama x Vice City Postcard (parallaxe 64.1 deg, gap 4.28 m), +81 m par rapport a la valeur precedente. Le clic de Port Vice City (A) est EXCLU: les trois clics etaient geometriquement incompatibles (aucune position sous 29.65 arcmin sur les trois, mediane reseau 6.4). L'ancienne position venait de VCP x PVC(A) et son gap de 0.23 m ne valait rien: le rayon de VCP fait 0.3 deg avec l'axe du desaccord, il ne contraint pas la profondeur et ne peut donc pas etre en desaccord le long de cet axe. Depuis le Panorama (0.15 px median sur 38 temoins externes, la mieux validee des trois) l'ancienne position tombait sur de la brume plate alors que son clic vise un objet net. Valeur a 4.9 m de celle de rlx."
@@ -11528,7 +11528,7 @@
   },
   "The Palace Condominium": {
     "author": "rlx",
-    "error_m": 3.005,
+    "error_m": 4.811,
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Motorboats (A)",
@@ -11536,9 +11536,9 @@
       "Port Vice City (B)"
     ],
     "xyz": [
-      -858.4499394131128,
-      -1549.0789765809568,
-      134.5929185672423
+      -857.6525046382405,
+      -1548.7823149589785,
+      135.3779726795016
     ],
     "zone": null
   },
@@ -11583,16 +11583,16 @@
   },
   "100 Biscayne Blvd (SE)": {
     "author": "rlx",
-    "error_m": 2.325,
+    "error_m": 2.09,
     "source_cameras": [
       "Vice City Postcard",
       "Port Vice City (B)",
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -445.88358617872615,
-      -166.56530540957007,
-      92.6172386741766
+      -444.6173438421562,
+      -165.75736909618627,
+      92.62605725978574
     ],
     "zone": null
   },
@@ -12416,15 +12416,15 @@
   },
   "Murano Grande (R3)": {
     "author": "rlx",
-    "error_m": 2.0,
+    "error_m": 28.646,
     "source_cameras": [
       "Port",
       "Port Vice City (B)"
     ],
     "xyz": [
-      1488.71,
-      -90.72,
-      94.07
+      1487.3402294245068,
+      -90.90628792643352,
+      89.96656259286921
     ],
     "zone": null,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 71.4 deg"
@@ -12487,16 +12487,16 @@
   },
   "Brickell Arch (W)": {
     "author": "rlx",
-    "error_m": 2.046,
+    "error_m": 2.248,
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Port Vice City (B)",
       "Metro (SE) (B)"
     ],
     "xyz": [
-      -841.0130977632698,
-      -1122.673935345569,
-      168.90581961399337
+      -841.0317599259764,
+      -1122.6777557470962,
+      169.07228061383864
     ],
     "zone": null
   },
@@ -12537,32 +12537,31 @@
   },
   "100 Biscayne Blvd (NE)": {
     "author": "rlx",
-    "error_m": 1.117,
+    "error_m": 0.264,
     "source_cameras": [
-      "Port Vice City (A)",
+      "Port Vice City (B)",
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -453.59060084538794,
-      -112.12600192938189,
-      92.61121202544076
+      -453.80104179081707,
+      -112.36708245590782,
+      92.85275036462716
     ],
     "zone": null
   },
   "Marina Blue (SE)": {
     "xyz": [
-      -493.7418643283078,
-      374.1511918075622,
-      175.81599074169142
+      -490.4027468390159,
+      374.98961354999295,
+      175.86360706907647
     ],
     "source_cameras": [
-      "Jason Duval 05 (Machine Gun)",
       "Prison",
       "Vice Beach (B)",
       "Vice City 03 (Basketball)",
       "Port Vice City (B)"
     ],
-    "error_m": 4.843,
+    "error_m": 4.487,
     "zone": "unknown"
   },
   "Vizcayne North Condominium (NW)": {
@@ -12706,15 +12705,15 @@
   },
   "Daytona Beach Water Tower (B)": {
     "author": "rlx",
-    "error_m": 2.254,
+    "error_m": 2.57,
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
     "xyz": [
-      -3941.991916501171,
-      3005.2821378391254,
-      56.31174116165316
+      -3939.7807788672417,
+      3005.452317871839,
+      56.05390876655454
     ],
     "zone": "ambrosia",
     "aliases": [
@@ -12971,15 +12970,15 @@
   },
   "Dark Billboard (Ambrosia) (TE)": {
     "author": "rlx",
-    "error_m": 0.821,
+    "error_m": 1.482,
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
     "xyz": [
-      -2778.976304216315,
-      2991.801441792069,
-      49.776826554587714
+      -2777.565707024235,
+      2992.019819005962,
+      49.34863507106153
     ],
     "zone": null
   },
@@ -13223,15 +13222,15 @@
   },
   "Daytona Beach Water Tower": {
     "author": "rlx",
-    "error_m": 0.568,
+    "error_m": 1.241,
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
     "xyz": [
-      -3942.511529731829,
-      3005.1821648600717,
-      72.76247550023709
+      -3939.4521889052844,
+      3005.4470850419316,
+      73.2934430516249
     ],
     "zone": "ambrosia",
     "depth_caveat": "profondeur: le solve 3-cams (Panorama/Fires/Postcard) est auto-coherent a ~2m perp. Le rayon Kalaga sous la pose rlx du 2026-07-26 tombe a 60px/20m perp \u2014 il CONFIRME l identification (la silhouette a tete renflee est visible au clic) mais sa pose hand-tuned (~1 deg) est trop grossiere pour re-trianguler avec. Le jour ou Kalaga est resolue par resection (les ancres Starlet sont cliquables), ce rayon devient le temoin de profondeur definitif.",
@@ -13324,16 +13323,16 @@
   },
   "Miami-Dade County Courthouse": {
     "author": "rlx",
-    "error_m": 3.112,
+    "error_m": 2.365,
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
       "Vice Beach (B)",
       "Port Vice City (B)"
     ],
     "xyz": [
-      -712.1582831695601,
-      4.567901570209128,
-      117.43833563953565
+      -715.5431936344664,
+      3.8315749778029486,
+      118.35999524842111
     ],
     "zone": null
   },
@@ -14201,18 +14200,17 @@
   },
   "Vizcayne South Condominium (NE)": {
     "author": "rlx",
-    "error_m": 2.995,
+    "error_m": 1.887,
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
-      "Jason Duval 05 (Machine Gun)",
       "Motorboats (B)",
       "Vice City Postcard",
-      "Port Vice City (A)"
+      "Port Vice City (B)"
     ],
     "xyz": [
-      -583.158,
-      100.52,
-      177.328
+      -580.7240002296762,
+      99.38274428880662,
+      176.9678662728091
     ],
     "zone": null
   },
@@ -14383,15 +14381,15 @@
   },
   "Dark Billboard (Ambrosia) (TW)": {
     "author": "rlx",
-    "error_m": 0.65,
+    "error_m": 1.334,
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
     "xyz": [
-      -2798.7729421567637,
-      3005.0646851446418,
-      49.72800560105439
+      -2799.3079860743915,
+      3004.9930678961296,
+      49.301536115936734
     ],
     "zone": null
   },
@@ -14504,16 +14502,16 @@
   },
   "Marquis Miami (SE)": {
     "xyz": [
-      -459.72555553610596,
-      522.9019864186376,
-      172.75181558055183
+      -456.2507944744055,
+      523.6873935637132,
+      172.79643357017773
     ],
     "source_cameras": [
       "Skyline",
       "Vice City 03 (Basketball)",
       "Port Vice City (B)"
     ],
-    "error_m": 5.184,
+    "error_m": 5.384,
     "zone": "unknown"
   },
   "Skyviews Miami Observation Wheel (C)": {
@@ -14558,17 +14556,16 @@
   },
   "Two Tequesta Point (NE)": {
     "xyz": [
-      57.62720393910414,
-      -1051.1492578815146,
-      159.42425253649378
+      59.078562943711084,
+      -1051.8389426839976,
+      158.67745192377615
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Motorboats (A)",
-      "Vice City Postcard",
-      "Port Vice City (A)"
+      "Vice City Postcard"
     ],
-    "error_m": 3.908,
+    "error_m": 2.806,
     "zone": "unknown"
   },
   "One Miami Condo East (NW)": {
@@ -14614,16 +14611,15 @@
   },
   "Two Tequesta Point (SE)": {
     "xyz": [
-      63.066123338215874,
-      -1078.318274660483,
-      160.69486161201667
+      64.11507157304145,
+      -1077.9986787721982,
+      159.649352595472
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
-      "Motorboats (A)",
-      "Port Vice City (A)"
+      "Motorboats (A)"
     ],
-    "error_m": 2.414,
+    "error_m": 0.392,
     "zone": "unknown"
   },
   "Quantum on the Bay South (SE)": {
@@ -14864,15 +14860,15 @@
   },
   "C. Clyde Atkins U.S Courthouse (SE)": {
     "xyz": [
-      -701.2006097720447,
-      772.1934788841536,
-      52.08235074508411
+      -714.7955991321014,
+      776.2729793338328,
+      52.161305158455576
     ],
     "source_cameras": [
       "Jason Duval 05 (Machine Gun)",
       "Port Vice City (A)"
     ],
-    "error_m": 3.397,
+    "error_m": 2.455,
     "zone": "unknown"
   },
   "C. Clyde Atkins U.S Courthouse (MSE)": {
@@ -14889,30 +14885,29 @@
   },
   "Asia Brickell Key (CC2B)": {
     "xyz": [
-      -132.0468857387109,
-      -862.3768413894975,
-      226.2582595168232
+      -129.8340681738312,
+      -861.0684667562102,
+      225.63070439024563
     ],
     "source_cameras": [
       "Vice Beach (B)",
       "Port Vice City (B)"
     ],
-    "error_m": 2.697,
+    "error_m": 2.736,
     "zone": "vice_city"
   },
   "Marquis Miami (NE)": {
     "xyz": [
-      -450.94,
-      570.08,
-      176.8
+      -453.4961008324285,
+      570.2957056907114,
+      178.07673455887243
     ],
     "source_cameras": [
       "Skyline",
       "Vice City 03 (Basketball)",
-      "Port Vice City (A)",
       "Port Vice City (B)"
     ],
-    "error_m": 3.1,
+    "error_m": 11.084,
     "zone": "unknown",
     "method": "ANCHOR-HARVEST-V1: triangulation 4 cams, perp med 3.1 m, angle max 54.5 deg"
   },
@@ -14938,29 +14933,28 @@
   },
   "Three Tequesta Point (SE)": {
     "xyz": [
-      6.7035443401706605,
-      -963.4362089061061,
-      206.86666158129896
+      8.448961350634725,
+      -963.1809464161805,
+      206.23436046161487
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
-      "Motorboats (A)",
-      "Port Vice City (A)"
+      "Motorboats (A)"
     ],
-    "error_m": 0.938,
+    "error_m": 0.044,
     "zone": "brickell"
   },
   "Three Tequesta Point (NE)": {
     "xyz": [
-      1.6500759325663414,
-      -930.0536969509734,
-      206.36189158214648
+      -2.8067982518957586,
+      -930.3934128901809,
+      206.11084985202905
     ],
     "source_cameras": [
       "Motorboats (A)",
       "Port Vice City (A)"
     ],
-    "error_m": 1.373,
+    "error_m": 0.614,
     "zone": "brickell"
   },
   "SunTrust International Center (SE)": {
@@ -15375,16 +15369,16 @@
   },
   "Marina Blue (LNE)": {
     "xyz": [
-      -466.30498755182344,
-      446.17724765919655,
-      127.30953110138682
+      -463.7151500914083,
+      446.12503348578286,
+      127.26837381612087
     ],
     "source_cameras": [
       "Skyline",
       "Vice Beach (B)",
       "Port Vice City (B)"
     ],
-    "error_m": 3.247,
+    "error_m": 3.77,
     "zone": "rlx_markings_0713"
   },
   "Maison Grande Condominium": {
@@ -16248,9 +16242,9 @@
   },
   "Factory A (Ambrosia) (N)": {
     "xyz": [
-      -2975.3691057989663,
-      3473.4559598824,
-      45.852375035603586
+      -2975.368399008482,
+      3473.4567257806475,
+      45.85265154772898
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
@@ -16261,15 +16255,15 @@
   },
   "Factory D (Ambrosia) (NW)": {
     "xyz": [
-      -3185.950828659877,
-      3585.8502352819914,
-      41.266473107276326
+      -3192.146496064816,
+      3586.977320064373,
+      40.13851846286062
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 1.53,
+    "error_m": 3.325,
     "zone": "rlx_markings_0713"
   },
   "Road E (Ambrosia)": {
@@ -16364,41 +16358,41 @@
   },
   "Wastewater Building (C)": {
     "xyz": [
-      496.9938578466628,
-      -1239.9925901906895,
-      37.306821407003376
+      495.5548705206752,
+      -1243.486439826076,
+      35.57403617917708
     ],
     "source_cameras": [
       "Vice City Postcard",
       "Port Vice City (A)"
     ],
-    "error_m": 3.588,
+    "error_m": 0.539,
     "zone": "rlx_markings_0713"
   },
   "Wastewater Building (B)": {
     "xyz": [
-      490.70890326573436,
-      -1228.9673473466073,
-      37.984837855140455
+      489.2690267588508,
+      -1232.3621691729932,
+      36.21215405379184
     ],
     "source_cameras": [
       "Vice City Postcard",
       "Port Vice City (A)"
     ],
-    "error_m": 4.291,
+    "error_m": 0.186,
     "zone": "rlx_markings_0713"
   },
   "50 Biscayne Blvd (NE)": {
     "xyz": [
-      -439.34327457046385,
-      -200.05414107167297,
-      138.27207265680434
+      -439.8305004930531,
+      -200.33364457060142,
+      138.52365454194728
     ],
     "source_cameras": [
       "Vice City Postcard",
-      "Port Vice City (A)"
+      "Port Vice City (B)"
     ],
-    "error_m": 1.216,
+    "error_m": 1.382,
     "zone": "rlx_markings_0713"
   },
   "Key Lento (F)": {
@@ -16742,16 +16736,16 @@
   },
   "Stephen P. Clark Government Center (N)": {
     "xyz": [
-      -852.203,
-      85.971,
-      154.787
+      -853.6020130999345,
+      85.29008804501501,
+      155.3374395902633
     ],
     "source_cameras": [
       "Motorboats (B)",
       "Vice City 03 (Basketball)",
-      "Port Vice City (A)"
+      "Port Vice City (B)"
     ],
-    "error_m": 3.184,
+    "error_m": 0.766,
     "zone": "unknown"
   },
   "Epic Miami Residences": {
@@ -17113,43 +17107,43 @@
   },
   "US Sugar Mill (Factory) (A)": {
     "xyz": [
-      -3025.2156724184124,
-      3326.320463986719,
-      102.55564865830232
+      -3030.340485702026,
+      3326.666251353501,
+      101.35568908988492
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 7.033,
+    "error_m": 3.797,
     "zone": "ambrosia",
     "author": "rlx"
   },
   "US Sugar Mill (Factory) (AC)": {
     "xyz": [
-      -3025.061212112593,
-      3326.3554374189407,
-      92.65620155622943
+      -3030.323556440269,
+      3326.6668239826145,
+      93.42285729302962
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 1.594,
+    "error_m": 2.647,
     "zone": "ambrosia",
     "author": "rlx"
   },
   "US Sugar Mill (Factory) (NW)": {
     "xyz": [
-      -3030.262607719554,
-      3360.098063779219,
-      71.36307649510182
+      -3036.1023873661375,
+      3360.4806828239352,
+      72.03658794005023
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 0.987,
+    "error_m": 0.274,
     "zone": "ambrosia",
     "author": "rlx"
   },
@@ -17162,15 +17156,15 @@
   },
   "US Sugar Mill (Factory) (SE)": {
     "xyz": [
-      -3012.430988635272,
-      3313.572968906982,
-      71.31552155358526
+      -3016.232064889119,
+      3313.732781902689,
+      71.98361022442305
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 0.532,
+    "error_m": 0.728,
     "zone": "ambrosia",
     "author": "rlx"
   },
@@ -17204,9 +17198,9 @@
   },
   "Billboard (South Ambrosia) (TE)": {
     "xyz": [
-      -2921.10753301535,
-      2667.818073127073,
-      40.687847763974816
+      -2921.1083580714003,
+      2667.8176094031815,
+      40.6879809146148
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
@@ -17232,15 +17226,15 @@
   },
   "Industrial Building 1 (Ambrosia)": {
     "xyz": [
-      -2771.4300392853456,
-      3307.3287384363393,
-      43.85744328414616
+      -2771.7608702580446,
+      3307.3737214379826,
+      42.95992159407431
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 1.861,
+    "error_m": 3.361,
     "zone": "ambrosia",
     "author": "rlx",
     "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 0.4 m, angle max 84.0 deg"
@@ -17303,15 +17297,15 @@
   },
   "US Sugar Mill (Factory) (P3)": {
     "xyz": [
-      -3027.6973086960566,
-      3388.360676630167,
-      65.55426642326293
+      -3027.6977818685614,
+      3388.360063461955,
+      65.55462257621218
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
-    "error_m": 0.719,
+    "error_m": 0.718,
     "zone": "ambrosia",
     "author": "rlx"
   },
@@ -17901,17 +17895,17 @@
   },
   "Stephen P. Clark Government Center (NE)": {
     "xyz": [
-      -845.794,
-      72.595,
-      155.208
+      -843.8922773677002,
+      71.95440355908003,
+      155.19938712052294
     ],
     "source_cameras": [
       "Motorboats (B)",
       "Skyline",
       "Vice City 03 (Basketball)",
-      "Port Vice City (A)"
+      "Port Vice City (B)"
     ],
-    "error_m": 5.111,
+    "error_m": 2.4,
     "zone": "unknown"
   },
   "Stephen P. Clark Government Center (S)": {
@@ -18683,15 +18677,15 @@
   },
   "Tall Billboard (Port VC)": {
     "xyz": [
-      780.55,
-      -799.65,
-      59.18
+      781.0654725267192,
+      -800.2296272507454,
+      55.83955728507382
     ],
     "source_cameras": [
       "Vice City 08 (Ferris Wheel)",
       "Port Vice City (A)"
     ],
-    "error_m": 2.0,
+    "error_m": 7.215,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.3 m, angle max 82.0 deg"
   },
   "Tall Yellow Sign": {
@@ -18722,16 +18716,15 @@
   },
   "Ten Museum Park (SW)": {
     "xyz": [
-      -506.57,
-      467.95,
-      137.28
+      -504.85560091407456,
+      467.8217894994459,
+      138.8613405515085
     ],
     "source_cameras": [
-      "Jason Duval 05 (Machine Gun)",
-      "Port Vice City (A)",
-      "Port Vice City (B)"
+      "Port Vice City (B)",
+      "Jason Duval 05 (Machine Gun)"
     ],
-    "error_m": 2.0,
+    "error_m": 3.024,
     "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 1.5 m, angle max 14.8 deg"
   },
   "Unknown Building near VCIA (N)": {
@@ -18788,41 +18781,41 @@
   },
   "1500 Sonora Ave (Tank) (A)": {
     "xyz": [
-      -2979.4928217446436,
-      3680.206800707654,
-      40.75222033411666
+      -2972.399533061861,
+      3678.433587449719,
+      41.73997593089349
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 0.766,
+    "error_m": 0.927,
     "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 3.1 m, angle max 83.8 deg"
   },
   "1500 Sonora Ave (Tank) (A) (L)": {
     "xyz": [
-      -2966.0943722449715,
-      3653.9822066170636,
-      40.827111919850395
+      -2966.9697750713813,
+      3654.195793743408,
+      41.021699990448894
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 1.535,
+    "error_m": 1.158,
     "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 0.4 m, angle max 83.8 deg"
   },
   "1500 Sonora Ave (Tank) (A) (R)": {
     "xyz": [
-      -2992.545912353454,
-      3706.6003139369705,
-      40.70219641937775
+      -2976.230407262745,
+      3702.314627219572,
+      42.50414956323711
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 0.033,
+    "error_m": 3.046,
     "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 6.4 m, angle max 83.7 deg"
   },
   "3001 Gordon Hwy (Water Tower)": {
@@ -18841,28 +18834,28 @@
   },
   "3400 Transmitter Rd": {
     "xyz": [
-      -3942.511984689264,
-      3005.182066898299,
-      72.76277947582693
+      -3939.8270778881333,
+      3005.415811026962,
+      73.29504272250348
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 0.568,
+    "error_m": 1.24,
     "method": "ANCHOR-HARVEST-V1: triangulation 4 cams, perp med 5.6 m, angle max 57.9 deg"
   },
   "3400 Transmitter Rd (B)": {
     "xyz": [
-      -3941.994480481189,
-      3005.28083079759,
-      56.15713128118347
+      -3939.780975667738,
+      3005.44996876793,
+      56.142433954527675
     ],
     "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Ambrosia Postcard (X)"
     ],
-    "error_m": 2.063,
+    "error_m": 2.081,
     "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 2.7 m, angle max 52.5 deg"
   },
   "Ambrosia Canal (A)": {
@@ -18972,15 +18965,15 @@
   },
   "Starlet Motel (RE)": {
     "xyz": [
-      -5337.21,
-      3498.96,
-      66.64
+      -5337.20754168865,
+      3498.962352494862,
+      66.64218785189121
     ],
     "source_cameras": [
-      "Port Gellhorn 01 (Starlet Motel)",
-      "Motel"
+      "Motel",
+      "Port Gellhorn 01 (Starlet Motel)"
     ],
-    "error_m": 2.0,
+    "error_m": 0.048,
     "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
   },
   "Starlet Motel (SRN)": {
@@ -19101,28 +19094,28 @@
   },
   "Wheelabrator South Broward (5B)": {
     "xyz": [
-      -2430.9554720785745,
-      2519.433037406461,
-      43.910655660655934
+      -2430.955296910964,
+      2519.4331939846206,
+      43.910074515104995
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)"
     ],
-    "error_m": 1.038,
+    "error_m": 1.039,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.8 m, angle max 62.7 deg"
   },
   "Wheelabrator South Broward (NW)": {
     "xyz": [
-      -2448.8586958189812,
-      2509.4170568217414,
-      51.50470380807684
+      -2430.626056559543,
+      2606.2283482346347,
+      54.14028462386453
     ],
     "source_cameras": [
-      "Ambrosia 04 (Fires)",
+      "Ambrosia 02 (Panorama)",
       "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.484,
+    "error_m": 1.521,
     "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 9.2 m, angle max 62.7 deg"
   },
   "Billboard near Intersection (BC)": {
