@@ -250,14 +250,30 @@ const data = await (await fetch('/api/scene3d')).json();
 // ── [HEIGHTMAP-V1] terrain reel: grille metrique depuis la height map leak ──
 (async () => {
   try {
-    // src=hd: grille 6 m enrichie par la clean map (affichage seulement,
-    // detail borne +/-5 m la ou il correle avec le vrai relief); le serveur
-    // retombe sur le DDS bicubique si la couche HD n'est pas generee.
-    // step=8: ~6M sommets, mesure 61 fps a step=10 sur cette machine.
-    const t = await (await fetch('/api/terrain3d?src=hd&step=6')).json();
+    // src=hd: grille 6 m (u16 quantifie, ~26 MB); retry puis repli en 12 m
+    // si le transfert echoue (Safari lache les gros payloads).
+    async function fetchTerrain() {
+      for (const [stp, wait] of [[6, 0], [6, 1500], [12, 1500]]) {
+        if (wait) await new Promise(r => setTimeout(r, wait));
+        try {
+          const r = await fetch(`/api/terrain3d?src=hd&step=${stp}`);
+          if (r.ok) return await r.json();
+        } catch (e) { console.warn(`terrain step=${stp}:`, e); }
+      }
+      throw new Error('terrain injoignable apres 3 essais');
+    }
+    const t = await fetchTerrain();
     if (t.error) { console.warn('terrain3d:', t.error); return; }
-    const raw = Uint8Array.from(atob(t.z_b64), ch => ch.charCodeAt(0));
-    const Z = new Float32Array(raw.buffer);
+    let Z;
+    if (t.z_u16_b64) {
+      const raw = Uint8Array.from(atob(t.z_u16_b64), ch => ch.charCodeAt(0));
+      const U = new Uint16Array(raw.buffer);
+      Z = new Float32Array(U.length);
+      for (let i = 0; i < U.length; i++) Z[i] = U[i] * t.z_scale + t.z_offset;
+    } else {
+      const raw = Uint8Array.from(atob(t.z_b64), ch => ch.charCodeAt(0));
+      Z = new Float32Array(raw.buffer);
+    }
     const { nx, ny, x0, y0, step } = t;
     const pos = new Float32Array(nx * ny * 3);
     const col = new Float32Array(nx * ny * 3);

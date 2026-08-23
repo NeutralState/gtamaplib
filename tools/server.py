@@ -899,14 +899,20 @@ class Handler(BaseHTTPRequestHandler):
                         _i1 = min(_m['nx'], int((_cx1 - _m['x0']) / _m['step']))
                         _j0 = max(0, int((_cy0 - _m['y0']) / _m['step']))
                         _j1 = min(_m['ny'], int((_cy1 - _m['y0']) / _m['step']))
-                        _Z = _A[_j0:_j1:_st, _i0:_i1:_st].astype(_np.float32)
+                        _Z = _A[_j0:_j1:_st, _i0:_i1:_st]
+                        # [TERRAIN-U16] payload / 2: quantification 16-bit
+                        # (offset -310, pas 1.5 cm) — Safari lachait le
+                        # transfert float32 de ~53 MB ("Load failed").
+                        _zoff, _zsc = -310.0, 0.015
+                        _Q = _np.clip((_Z - _zoff) / _zsc, 0, 65535).astype(_np.uint16)
                         self.send_json({
                             'x0': _m['x0'] + _i0 * _m['step'],
                             'y0': _m['y0'] + _j0 * _m['step'],
                             'step': _m['step'] * _st,
-                            'nx': _Z.shape[1], 'ny': _Z.shape[0],
+                            'nx': _Q.shape[1], 'ny': _Q.shape[0],
                             'sea_level': 0.0, 'hd': True,
-                            'z_b64': base64.b64encode(_Z.tobytes()).decode('ascii'),
+                            'z_offset': _zoff, 'z_scale': _zsc,
+                            'z_u16_b64': base64.b64encode(_Q.tobytes()).decode('ascii'),
                         })
                         return
                     # pas encore genere: retomber sur le DDS standard
