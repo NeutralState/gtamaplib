@@ -19261,30 +19261,15 @@
   "error_m": 0.96,
   "zone": "unknown"
  },
- "Sunshine Skyway Bridge (faux S)": {
-  "xyz": [
-   -6708.16147278848,
-   4415.706720072114,
-   124.77542396707945
-  ],
-  "source_cameras": [
-   "Ambrosia 04 (Fires)",
-   "Chase (2) (B)"
-  ],
-  "error_m": 6.624,
-  "zone": "port_gellhorn",
-  "notes": "[SUNSHINE-SKYWAY-RIGID-V2] xyz=st south-pylon-top z=119.352 from SunshineSkywayBridge rigid model; identical to rlx 73bbf43. Far LM (~2.5km from 04), residual at resolution limit. | source A->B: A is a chase frame, SSB at 1km exceeds A angular precision (~0.8deg). Marking kept on A as observation but excluded from A pose fit.",
-  "method": "PGH-BA-V1: solve joint zone Port Gellhorn (3 cams, leak figees)"
- },
  "Sunshine Skyway Bridge (N)": {
   "xyz": [
-   -6795.4,
-   4783.3,
+   -6838.0,
+   4940.4,
    119.47
   ],
   "error_m": null,
   "source_cameras": [],
   "zone": "port_gellhorn",
-  "note": "deduit: S + vecteur de l'ancienne paire (232.3 m, az 343.6) \u2014 a valider | axe du pont releve par Alexandre 2026-08-23: (-6844.6, 4964.5) -> (-6668.1, 4314.7); les piliers sont sur cette diago avec certitude, position le long de l axe a affiner"
+  "note": "pilier NORD sur l axe releve par Alexandre, t=25 m de P1 \u2014 position par la separation des rays Chase (2) A/B (415 - 372/409 m) x pilier (S) triple-valide. Ancien (N) deduit (t=188) etait faux. [AXE-SKYWAY-V1] 2026-08-23. Etait [-6795.4, 4783.3]"
  }
 }
