@@ -3591,17 +3591,17 @@
   "id": "S2/66",
   "player": null,
   "xyz": [
-   -1600.13,
-   6472.09,
-   177.21
+   -2283.1,
+   6231.624,
+   164.581
   ],
   "ypr": [
-   117.78,
-   6.393,
+   124.014,
+   7.776,
    0.0
   ],
   "fov": [
-   56.933,
+   66.65,
    null
   ],
   "size": [
@@ -3609,8 +3609,8 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Mount Kalaga National Park 02 [1]",
-  "note": "pose ABSOLUE: 4 sommets height map (13.5') + 63 traces silhouette (13.8'); la pose du solver externe etait glissee de ~720 m le long des cretes (probleme d ouverture \u2014 les traces ne contraignent pas le lateral). Cam a 133 m au-dessus du sol.",
-  "pose_verified": "SOLVED 2026-08-23 \u2014 double instrument ABSOLU: sommets height map 13.5' + silhouette 13.8'; correction du glissement lateral ~720 m de la pose solver externe (aperture des cretes)"
+  "note": "pose du solver externe (heightmap16bit + fullMap, releve Alexandre 2026-08-22) \u2014 RESTAUREE apres un override non autorise. QUESTION OUVERTE: les clics Easy/Starlet/Interstate Hill ratent de dx+270' identiques depuis cette pose \u2014 soit un glissement lateral de pose (aperture des cretes), soit une mauvaise identification commune des trois clics (meme bande d azimut). A arbitrer par Alexandre en verifiant dans la frame quelles bosses les clics designent.",
+  "pose_verified": "SOLVED 2026-08-22 \u2014 pose du solver externe d'Alexandre (ancres leak map + z terrain), silhouette 6.3' sur 63 traces; discordance clics-collines +270' documentee en note, arbitrage a venir"
  },
  "Mount Kalaga National Park 04 (Mountain Pass) (X)": {
   "id": "S2/68",
