@@ -321,7 +321,7 @@ const data = await (await fetch('/api/scene3d')).json();
     layers.terrain.add(terrainMesh);
     // [DRAPE-2D] texture assemblee depuis les tiles (source = chip leak map),
     // 4 m/px; les lacs/routes/details de la carte apparaissent sur le relief.
-    let drapeTex = null;
+    let drapeTex = null, drapeMat = null;
     function buildDrape() {
       const TZ2 = 3, MPX = 32 / (2 ** TZ2);          // 4 m/px
       const x1 = x0 + (nx - 1) * step, yTop = y0 + (ny - 1) * step;
@@ -334,7 +334,11 @@ const data = await (await fetch('/api/scene3d')).json();
       drapeTex = new THREE.CanvasTexture(can);
       drapeTex.colorSpace = THREE.SRGBColorSpace;
       drapeTex.flipY = false;                        // v=0 = rangee 0 du canvas
-      drapeTex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      drapeTex.anisotropy = 4;                       // 16 = trop cher sur petites machines
+      // [DRAPE-MAT] materiau DEDIE compile d'emblee avec map+logdepth: muter
+      // mat.map a chaud recompilait le shader et cassait l'ecriture de
+      // profondeur (la mer passait par-dessus tout le terrain).
+      drapeMat = new THREE.MeshLambertMaterial({ map: drapeTex, side: THREE.DoubleSide });
       let s0 = localStorage.getItem('ui.tileSrc') || 'leak,1';
       if (s0 === 'yanis') s0 = 'yanis,14'; if (s0 === 'leak') s0 = 'leak,1';
       const srcQ = s0 !== 'yanis,14' ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.3')}` : '';
@@ -357,13 +361,25 @@ const data = await (await fetch('/api/scene3d')).json();
         img.src = `/tiles/${TZ2}/${TZ2},${ty},${tx}.jpg?v=14${srcQ}`;
       }
     }
+    // plan de mer translucide a z=0
+    const seaG = new THREE.PlaneGeometry((nx-1)*step, (ny-1)*step);
+    seaG.translate(x0 + (nx-1)*step/2, y0 + (ny-1)*step/2, 0);
+    const sea = new THREE.Mesh(seaG, new THREE.MeshBasicMaterial({
+      color: 0x1a4a6e, transparent: true, opacity: 0.55, depthWrite: false }));
+    sea.renderOrder = 2;                 // toujours apres le relief
+    sea.name = 'terrain-sea';
+    layers.terrain.add(sea);
+    // [DRAPE-CHIP] APRES la creation de la mer (setDrape la reference — la
+    // placer avant = TDZ "Cannot access 'sea'" et tout le bloc terrain meurt)
     {
       const chip = document.getElementById('ly-drape');
       const setDrape = on => {
-        if (on && !drapeTex) buildDrape();
-        mat.map = on ? drapeTex : null;
-        mat.vertexColors = !on;
-        mat.needsUpdate = true;
+        if (on && !drapeMat) buildDrape();
+        terrainMesh.material = on ? drapeMat : mat;   // swap, pas de mutation
+        // la carte peint deja l'eau: le plan de mer est inutile en drape (et
+        // il gagnait a tort le depth test contre le terrain texture -> voile
+        // bleu sur toute l'ile)
+        sea.visible = !on;
       };
       // [DRAPE-DEFAULT] actif par defaut (l'eau, les routes, les details de
       // la map 2D) — opt-out persistant via le chip.
@@ -374,14 +390,6 @@ const data = await (await fetch('/api/scene3d')).json();
         setDrape(on);
       });
     }
-    // plan de mer translucide a z=0
-    const seaG = new THREE.PlaneGeometry((nx-1)*step, (ny-1)*step);
-    seaG.translate(x0 + (nx-1)*step/2, y0 + (ny-1)*step/2, 0);
-    const sea = new THREE.Mesh(seaG, new THREE.MeshBasicMaterial({
-      color: 0x1a4a6e, transparent: true, opacity: 0.55, depthWrite: false }));
-    sea.renderOrder = 2;                 // toujours apres le relief
-    sea.name = 'terrain-sea';
-    layers.terrain.add(sea);
     window.__terrain = { mesh: layers.terrain.children[0], sea, layers, THREE, camera };  // debug hook
     // [COORDREAD-3D] grille exposee pour le readout curseur (voir plus bas)
     window.__hgrid = { Z, nx, ny, x0, y0, step };
