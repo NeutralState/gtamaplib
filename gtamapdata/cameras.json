@@ -3591,41 +3591,42 @@
   "id": "S2/66",
   "player": null,
   "xyz": [
-   -2190.0,
-   6320.0,
-   187.885
+   -2283.1,
+   6231.624,
+   164.581
   ],
   "ypr": [
-   115.557,
-   10.2,
+   124.014,
+   7.776,
    0.0
   ],
   "fov": [
-   79.8,
-   50.377
+   64.12,
+   null
   ],
   "size": [
    3840,
    2160
   ],
   "source": "Screenshot 1 \u2014 Mount Kalaga National Park 02 [1]",
-  "note": "pose rlx upstream 54e49fe (2026-08-02), adoptee sur demande. Mesure DEFAVORABLE: sur les 3 landmarks positionnes sans cette cam, notre pose donne 21.3 arcmin contre 56.5 pour la sienne (Daytona WT 21.3->60.1, 3400 Transmitter Rd (B) 25.0->56.5, Starlet Motel (RE) 6.5->44.5). Ses chiffres sont RONDS = estimation a la main du 2026-08-02; la precedente etait solvee."
+  "note": "pose du solver externe (heightmap16bit + fullMap, releve Alexandre 2026-08-22); cam a 49.1 m au-dessus du sol height map (115.5).",
+  "pose_verified": "SOLVED 2026-08-22 \u2014 pose du solver externe d'Alexandre (ancres leak map + z terrain), silhouette 6.3' sur 63 traces (etait 29'); ancres reseau du secteur connues pourries (246')"
  },
  "Mount Kalaga National Park 04 (Mountain Pass) (X)": {
   "id": "S2/68",
   "player": null,
   "xyz": [
-   -4885.1,
-   5444.3,
-   125.8
+   -4887.688,
+   5449.336,
+   140.531
   ],
   "ypr": [
-   147.3,
-   -5.8,
+   153.414,
+   -16.023,
    0.0
   ],
   "fov": [
-   60.0,
+   66.65,
    null
   ],
   "size": [
@@ -3633,7 +3634,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Mount Kalaga National Park 04 [1]",
-  "note": "depart: pose repliquee a l oeil par Alexandre dans view3d (badge POSE-COPY), 2026-08-21"
+  "note": "pose du solver externe (heightmap16bit + fullMap overlay, essai Alexandre 2026-08-22): cam a 12.9 m au-dessus du sol height map (127.6) \u2014 aerienne, coherent avec la frame. Conventions verifiees (yaw meme sens que nous). A valider au POV."
  },
  "Vice City Postcard": {
   "id": "S2/71",
