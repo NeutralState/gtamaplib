@@ -3543,17 +3543,17 @@
   "id": "S2/59",
   "player": null,
   "xyz": [
-   -1164.591,
-   3236.594,
-   59.106
+   -1638.3,
+   3214.5,
+   42.1
   ],
   "ypr": [
-   97.658,
-   -2.006,
+   94.18,
+   -1.0,
    0.0
   ],
   "fov": [
-   46.092,
+   33.48,
    null
   ],
   "size": [
@@ -3561,7 +3561,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Ambrosia 04 [1]",
-  "note": "pose HORIZON-V1: 50 ancres + silhouette height map (108 clics de crete), z libre. | verdict Alexandre 2026-08-23: pose HORRIBLE \u2014 badge retire, a refaire (ancres absolues manquantes)"
+  "note": "position Alexandre (leak map, -1638.3/3214.5) FIXE; orientation/z/fov par le relief SEUL (99 traces, ancres reseau exclues du cout sur son ordre). En evaluation UI."
  },
  "Grassrivers 02 (Watson Bay)": {
   "id": "S2/62",
