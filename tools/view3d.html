@@ -375,7 +375,16 @@ const data = await (await fetch('/api/scene3d')).json();
       scene.add(sun, new THREE.AmbientLight(0xffffff, 0.45));
     }
     console.log('[HEIGHTMAP-V1] terrain', nx, 'x', ny, '@', step, 'm');
-  } catch (e) { console.warn('terrain3d:', e); }
+  } catch (e) {
+    console.warn('terrain3d:', e);
+    // [TERRAIN-ERR] echec visible: bandeau rouge au lieu d'un silence
+    const b = document.createElement('div');
+    b.style.cssText = 'position:fixed;left:50%;top:14px;transform:translateX(-50%);' +
+      'z-index:60;background:#7f1d1d;color:#fecaca;border:1px solid #b91c1c;' +
+      'border-radius:8px;padding:6px 14px;font:12px ui-monospace,monospace';
+    b.textContent = 'terrain: echec de chargement (' + (e && e.message || e) + ') — recharger (Cmd+Shift+R)';
+    document.body.appendChild(b);
+  }
 })();
 
 // ── frustums: un LineSegments par tier (perf: 174 cams en 5 draws) ──
