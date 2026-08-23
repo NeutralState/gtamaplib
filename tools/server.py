@@ -894,7 +894,7 @@ class Handler(BaseHTTPRequestHandler):
                         # l'ocean v=0 — inutile d'envoyer ces sommets.
                         # [TERRAIN-EXTEND-V2] crop elargi aux zones inferees
                         # (nord Kalaga, Keys) — la couverture leak old.
-                        _cx0, _cx1, _cy0, _cy1 = -9200.0, 5100.0, -9700.0, 12900.0
+                        _cx0, _cx1, _cy0, _cy1 = -10740.0, 5100.0, -9700.0, 12900.0
                         _i0 = max(0, int((_cx0 - _m['x0']) / _m['step']))
                         _i1 = min(_m['nx'], int((_cx1 - _m['x0']) / _m['step']))
                         _j0 = max(0, int((_cy0 - _m['y0']) / _m['step']))
