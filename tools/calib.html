@@ -2209,6 +2209,108 @@ async function init() {
     updateMapSelectionStyle();
   }
 
+  // ── [POSE-EDIT-V1] edition de pose sur la Map: drag du marker de la cam
+  // selectionnee + sliders yaw/fov, sauvegarde via /api/set_cam_pose ──────
+  (() => {
+    const panel = document.createElement('div');
+    panel.id = 'pose-edit-panel';
+    panel.style.cssText = 'display:none;position:fixed;right:10px;top:78px;z-index:32;' +
+      'background:rgba(10,10,13,.85);backdrop-filter:blur(6px);border:1px solid #2c2c33;' +
+      'border-radius:8px;padding:9px 12px;font:11px ui-monospace,monospace;color:#e5e5ea;width:230px';
+    panel.innerHTML =
+      '<div style="color:#facc15;font-weight:700;margin-bottom:6px">EDIT POSE <span id="pe-cam" style="color:#9ca3af;font-weight:400"></span></div>' +
+      '<div id="pe-xy" style="color:#4ade80;margin-bottom:6px">—</div>' +
+      '<label>yaw <input id="pe-yaw" type="range" min="0" max="360" step="0.1" style="width:120px"> <span id="pe-yaw-v"></span></label><br>' +
+      '<label>hfov <input id="pe-fov" type="range" min="15" max="110" step="0.1" style="width:117px"> <span id="pe-fov-v"></span></label>' +
+      '<div style="margin-top:7px;color:#9ca3af">drag le marker = deplacer x,y</div>' +
+      '<div style="margin-top:7px;display:flex;gap:6px">' +
+      '<button id="pe-save" style="flex:1;background:#166534;color:#dcfce7;border:1px solid #22c55e;border-radius:5px;padding:4px;cursor:pointer">Save</button>' +
+      '<button id="pe-cancel" style="flex:1;background:#3f3f46;color:#e5e5ea;border:1px solid #52525b;border-radius:5px;padding:4px;cursor:pointer">Annuler</button></div>';
+    document.body.appendChild(panel);
+    let editing = null;   // {name, orig:{x,y,yaw,hfov}, cur:{...}}
+    function camObj(name) { return (window.mapData?.cameras || []).find(c => c.name === name); }
+    function refresh() {
+      if (!editing) return;
+      const c = editing.cur;
+      document.getElementById('pe-xy').textContent = `X ${c.x.toFixed(1)}  Y ${c.y.toFixed(1)}`;
+      document.getElementById('pe-yaw-v').textContent = c.yaw.toFixed(1) + '°';
+      document.getElementById('pe-fov-v').textContent = c.hfov.toFixed(1) + '°';
+      // live: pousser dans mapData et re-render
+      const mc = camObj(editing.name);
+      if (mc) {
+        mc.xyz[0] = c.x; mc.xyz[1] = c.y;
+        if (mc.ypr) mc.ypr[0] = c.yaw;
+        mc.hfov = c.hfov;
+        renderCamsOnMap();
+      }
+    }
+    window._poseEditStart = name => {
+      const mc = camObj(name);
+      if (!mc) return;
+      editing = { name,
+        orig: { x: mc.xyz[0], y: mc.xyz[1], yaw: mc.ypr ? mc.ypr[0] : 0, hfov: mc.hfov || 60 },
+        cur:  { x: mc.xyz[0], y: mc.xyz[1], yaw: mc.ypr ? mc.ypr[0] : 0, hfov: mc.hfov || 60 } };
+      document.getElementById('pe-cam').textContent = name.slice(0, 24);
+      document.getElementById('pe-yaw').value = ((editing.cur.yaw % 360) + 360) % 360;
+      document.getElementById('pe-fov').value = editing.cur.hfov;
+      panel.style.display = 'block';
+      refresh();
+    };
+    document.getElementById('pe-yaw').addEventListener('input', e => {
+      if (editing) { editing.cur.yaw = parseFloat(e.target.value); refresh(); } });
+    document.getElementById('pe-fov').addEventListener('input', e => {
+      if (editing) { editing.cur.hfov = parseFloat(e.target.value); refresh(); } });
+    document.getElementById('pe-cancel').addEventListener('click', () => {
+      if (editing) { editing.cur = { ...editing.orig }; refresh(); }
+      panel.style.display = 'none'; editing = null;
+      window.mapRefreshData && window.mapRefreshData();
+    });
+    document.getElementById('pe-save').addEventListener('click', async () => {
+      if (!editing) return;
+      const c = editing.cur;
+      let url = `/api/set_cam_pose?cam=${encodeURIComponent(editing.name)}&x=${c.x}&y=${c.y}&yaw=${c.yaw}&hfov=${c.hfov}`;
+      let r = await fetch(url).then(x => x.json()).catch(() => ({error: 'reseau'}));
+      if (r.error === 'SOLVED') {
+        if (confirm(editing.name + ' est SOLVED (validee). Ecraser quand meme?')) {
+          r = await fetch(url + '&override=1').then(x => x.json()).catch(() => ({error: 'reseau'}));
+        } else return;
+      }
+      if (r.ok) { panel.style.display = 'none'; editing = null; }
+      else alert('echec: ' + JSON.stringify(r));
+    });
+    // drag du marker de la cam en edition
+    let dragging = false;
+    document.addEventListener('mousedown', e => {
+      if (!editing) return;
+      let n = e.target;
+      while (n && n !== document.body) {
+        if (n.classList && n.classList.contains('cam-marker') && n.dataset.camName === editing.name) {
+          dragging = true; e.stopPropagation(); e.preventDefault(); return;
+        }
+        n = n.parentNode;
+      }
+    }, true);
+    document.addEventListener('mousemove', e => {
+      if (!dragging || !editing || !window.mapTx || !window.svgToWorld) return;
+      const mv = document.getElementById('map-view');
+      const rect = mv.getBoundingClientRect();
+      const { scale, tx, ty } = window.mapTx;
+      const [wx, wy] = window.svgToWorld((e.clientX - rect.left - tx) / scale,
+                                         (e.clientY - rect.top - ty) / scale);
+      editing.cur.x = wx; editing.cur.y = wy;
+      refresh();
+    }, true);
+    document.addEventListener('mouseup', () => { dragging = false; }, true);
+    // raccourci: touche E = editer la cam selectionnee sur la map
+    addEventListener('keydown', ev => {
+      if (ev.key === 'e' && document.body.classList.contains('view-map')
+          && mapSelectedCamName && !editing
+          && !/input|textarea|select/i.test(document.activeElement?.tagName || '')) {
+        window._poseEditStart(mapSelectedCamName);
+      }
+    });
+  })();
+
   function updateMapSelectionStyle() {
     if (!window.mapOverlay) return;
     window.mapOverlay.querySelectorAll('g.cam-group').forEach(g => {

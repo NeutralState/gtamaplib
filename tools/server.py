@@ -857,6 +857,53 @@ class Handler(BaseHTTPRequestHandler):
 
         # ── end SVG Map Refactor (Phase 1) ─────────────────────────
 
+        elif path == '/api/set_cam_pose':
+            # [POSE-EDIT-V1] edition de pose depuis l'UI (drag marker, slider
+            # fov). Params: cam obligatoire; x,y,z,yaw,pitch,roll,hfov optionnels.
+            # Garde SOLVED: refuse sans override=1 (confirme par l'humain dans l'UI).
+            _cam = unquote(qs.get('cam', [''])[0])
+            _raw = json.load(open(os.path.join(GTAMAP_DIR, 'gtamapdata', 'cameras.json')))
+            if _cam not in _raw:
+                self.send_json({'error': 'cam inconnue'}, 400); return
+            _e = _raw[_cam]
+            if _e.get('pose_verified') and qs.get('override', ['0'])[0] != '1':
+                self.send_json({'error': 'SOLVED', 'msg': 'pose verrouillee — confirmer l override'}, 423)
+                return
+            def _f(k):
+                v = qs.get(k, [None])[0]
+                return None if v in (None, '') else float(v)
+            x, y, z = _f('x'), _f('y'), _f('z')
+            yaw, pitch, roll, hfov = _f('yaw'), _f('pitch'), _f('roll'), _f('hfov')
+            if x is not None: _e['xyz'][0] = round(x, 2)
+            if y is not None: _e['xyz'][1] = round(y, 2)
+            if z is not None: _e['xyz'][2] = round(z, 2)
+            if yaw is not None: _e['ypr'][0] = round(yaw, 3)
+            if pitch is not None: _e['ypr'][1] = round(pitch, 3)
+            if roll is not None: _e['ypr'][2] = round(roll, 3)
+            if hfov is not None: _e['fov'] = [round(hfov, 3), None]
+            _e['note'] = ((_e.get('note') or '').split(' | POSE-EDIT')[0]
+                          + ' | POSE-EDIT: ajustee a la main par Alexandre dans l UI').strip(' |')
+            import tempfile as _tmp
+            _p = os.path.join(GTAMAP_DIR, 'gtamapdata', 'cameras.json')
+            _fd, _t = _tmp.mkstemp(dir=os.path.dirname(_p), suffix='.tmp')
+            with os.fdopen(_fd, 'w') as _fh:
+                json.dump(_raw, _fh, indent=1, ensure_ascii=True)
+            os.replace(_t, _p)
+            # sync memoire (md est charge au demarrage)
+            md.cameras[_cam] = {
+                'id': _e.get('id'),
+                'player': tuple(_e['player']) if _e.get('player') else None,
+                'xyz': tuple(_e['xyz']), 'ypr': tuple(_e['ypr']),
+                'fov': tuple(_e['fov']), 'size': tuple(_e['size']) if _e.get('size') else None,
+                'source': _e.get('source'), 'pose_verified': _e.get('pose_verified'),
+            }
+            try:
+                ml.get_camera.cache_clear()
+            except Exception:
+                pass
+            self.send_json({'ok': True, 'xyz': _e['xyz'], 'ypr': _e['ypr'], 'fov': _e['fov']})
+            return
+
         elif path == '/api/tile_sources':
             # [TILE-SOURCES-V1] liste des pyramides disponibles (dropdown UI)
             _root = os.path.dirname(TILES_DIR)
