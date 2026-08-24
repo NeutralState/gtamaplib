@@ -813,12 +813,18 @@ function enterPOV(c) {
   // [POSE-EDIT] slider fov: 100 = fov stocke; la frame reste plein cadre,
   // seul le relief derriere change — l'oeil juge quand ils collent.
   {
+    // [POSE-EDIT-STICKY] les reglages survivent aux re-entrees de POV (sync
+    // calib, re-clic...) — c'etait le bug "les curseurs reviennent a zero
+    // des que je relache": quelque chose re-entrait dans le POV et on
+    // reinitialisait tout. Memorise par cam.
+    window.__povAdj = window.__povAdj || {};
+    const adj = window.__povAdj[c.name] = window.__povAdj[c.name] || { f: 100, dyaw: 0, dpitch: 0 };
     const s = document.getElementById('pov-fov');
     const sv = document.getElementById('pov-fov-v');
-    s.value = 100;
+    s.value = adj.f;
     const upd = () => {
-      const f = parseFloat(s.value) / 100;
-      povBase.vfov0 = povBase.vfovOrig * f;
+      adj.f = parseFloat(s.value);
+      povBase.vfov0 = povBase.vfovOrig * (adj.f / 100);
       const hf = 2 * Math.atan(Math.tan(THREE.MathUtils.degToRad(povBase.vfov0) / 2) * povBase.ratio);
       sv.textContent = 'hfov ' + THREE.MathUtils.radToDeg(hf).toFixed(1) + '°';
       setPovZoom(povZoom);
@@ -831,8 +837,8 @@ function enterPOV(c) {
     const syv = document.getElementById('pov-yaw-v');
     const sp = document.getElementById('pov-pitch');
     const spv = document.getElementById('pov-pitch-v');
-    sy.value = 0; sp.value = 0;
-    let dyaw = 0, dpitch = 0;
+    sy.value = adj.dyaw * 100; sp.value = adj.dpitch * 100;
+    let dyaw = adj.dyaw, dpitch = adj.dpitch;
     const applyOrient = () => {
       // yaw = rotation monde autour de Z; pitch = rotation locale autour de
       // l'axe droit de la camera (pitch + = lever le nez)
@@ -844,11 +850,12 @@ function enterPOV(c) {
       camera.updateMatrixWorld(true);
       syv.textContent = (dyaw >= 0 ? '+' : '') + dyaw.toFixed(2) + '°';
       spv.textContent = (dpitch >= 0 ? '+' : '') + dpitch.toFixed(2) + '°';
+      adj.dyaw = dyaw; adj.dpitch = dpitch;
       renderPovMarks();
     };
     sy.oninput = () => { dyaw = parseFloat(sy.value) / 100; applyOrient(); };
     sp.oninput = () => { dpitch = parseFloat(sp.value) / 100; applyOrient(); };
-    syv.textContent = '+0.00°'; spv.textContent = '+0.00°';
+    applyOrient();
     document.getElementById('pov-fov-save').onclick = async () => {
       const hf = THREE.MathUtils.radToDeg(2 * Math.atan(
         Math.tan(THREE.MathUtils.degToRad(povBase.vfov0) / 2) * povBase.ratio));
