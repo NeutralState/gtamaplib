@@ -34,6 +34,10 @@
   #info b { color:var(--text); }
   #info .rms-bad { color:var(--red); }
   #legend { bottom:12px; left:12px; display:flex; gap:13px; padding:7px 14px; }
+  #env { right:12px; bottom:44px; display:flex; flex-direction:column; gap:5px; }
+  #env label { display:flex; align-items:center; gap:8px; justify-content:space-between; }
+  #env input[type=range] { width:92px; accent-color:#facc15; }
+  #env .v { color:var(--text); min-width:34px; text-align:right; }
   .sw { display:inline-block; width:8px; height:8px; border-radius:50%;
         margin-right:6px; vertical-align:-1px; }
 </style>
@@ -49,6 +53,7 @@
     <span class="lchip on" id="ly-terrain" title="Terrain reel (height map L16 du leak, z=706.07v-301.01)">terrain</span>
     <span class="lchip" id="ly-leakmap" title="Fond de carte: full map leak (composite sur yanis)">leak map</span>
     <span class="lchip" id="ly-drape" title="Draper la map 2D sur le relief (lacs, routes, details — source du chip leak map)">drape 2D</span>
+    <span class="lchip" id="ly-contours" title="Courbes de niveau (50 m fortes, 10 m fines) sur le relief">contours</span>
     <span class="lchip" id="btn-shot" title="PNG de la vue + frame en medaillon">&#8681; shot</span>
   </div>
 </div>
@@ -80,6 +85,16 @@
           font:11px var(--mono)">exit (Esc)</button>
   <!-- tag de version: si tu ne vois pas ce numero, tu tournes du vieux code -->
   <span id="pov-ver" style="color:var(--dim);font-size:9px;margin-left:8px">v4</span>
+</div>
+<!-- [BEAUTY-V1] environnement: soleil et brume pilotent ciel + relief + mer -->
+<div class="panel" id="env">
+  <div class="sect">Environnement</div>
+  <label title="Azimut du soleil (0 = nord, sens horaire)">soleil az
+    <input id="env-az" type="range" min="0" max="359" step="1"><span class="v" id="env-az-v"></span></label>
+  <label title="Hauteur du soleil — bas = lumiere rasante et teintes chaudes">hauteur
+    <input id="env-el" type="range" min="4" max="80" step="1"><span class="v" id="env-el-v"></span></label>
+  <label title="Brume atmospherique (distance de visibilite)">brume
+    <input id="env-haze" type="range" min="0" max="100" step="1"><span class="v" id="env-haze-v"></span></label>
 </div>
 <div class="panel" id="legend">
   <span><span class="sw" style="background:#a78bfa"></span>anchor</span>
@@ -155,8 +170,7 @@ canvas.addEventListener('webglcontextrestored', () => {
 });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
 const scene = new THREE.Scene();
-scene.background = new THREE.Color(0x0a0a0c);
-let fog = null; // configure apres le calcul du span
+scene.background = new THREE.Color(0x0a0a0c);   // remplace par applyEnv() des l'init
 
 // Monde z-up (convention gtamaplib)
 const camera = new THREE.PerspectiveCamera(55, 1, 1, 50000);
@@ -172,6 +186,111 @@ controls.zoomSpeed = 3.0;
 controls.panSpeed = 3.0;
 controls.rotateSpeed = 1.0;
 controls.maxPolarAngle = Math.PI * 0.495;   // jamais sous le sol
+
+// ── [BEAUTY-V1] environnement: ciel, soleil, brume ──
+// Le rendu passe de "maquette sombre" a "monde": dome de ciel en degrade
+// (zenith->horizon, halo de soleil, teintes chaudes quand le soleil baisse),
+// brume accordee a la couleur d'horizon, et un soleil REGLABLE qui eclaire
+// le relief (hillshade) et la mer (glint speculaire).
+const ENV = Object.assign({ az: 215, el: 38, haze: 30 },
+  JSON.parse(localStorage.getItem('ui.env3d') || '{}'));
+const _lin = c => c.map(v => Math.pow(v, 2.2));   // sRGB -> lineaire (les shaders travaillent en lineaire)
+function skyColors() {
+  // t: 0 = couchant (teintes chaudes), 1 = plein jour
+  const t = Math.min(1, Math.max(0, (ENV.el - 4) / 30));
+  const L = (a, b) => a.map((v, i) => v + (b[i] - v) * t);
+  return { zen: _lin(L([0.28, 0.33, 0.52], [0.34, 0.56, 0.86])),
+           hor: _lin(L([0.99, 0.66, 0.42], [0.79, 0.87, 0.94])),
+           sun: _lin(L([1.00, 0.58, 0.26], [1.00, 0.96, 0.88])) };
+}
+function sunDirVec() {   // vecteur VERS le soleil; az horaire depuis le nord (+y)
+  const az = ENV.az * Math.PI / 180, el = ENV.el * Math.PI / 180;
+  return new THREE.Vector3(Math.sin(az) * Math.cos(el),
+                           Math.cos(az) * Math.cos(el), Math.sin(el));
+}
+// uniforms PARTAGES, crees avant tout chargement async: les chips/sliders
+// peuvent les referencer meme si le terrain n'est pas encore arrive.
+const terraUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
+  uSunDir:   { value: new THREE.Vector3(0, 0, 1) },
+  uDrape:    { value: null },
+  uUseDrape: { value: 0 },
+  uContours: { value: 0 },
+  uTerrBounds: { value: new THREE.Vector4(-1e7, -1e7, 1e7, 1e7) },
+  // rect MESURE du DDS (georef rlx): au-dela, la bathymetrie est inferee
+  // (rampes cotieres TERRAIN-EXTEND) — on la fond vers l'abysse plutot que
+  // d'exposer des plateaux fabriques dans l'ocean
+  uMeasBounds: { value: new THREE.Vector4(-13325.6, -9735.9, 5138.6, 11276.7) },
+}]);
+const seaUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
+  uSunDir:   { value: new THREE.Vector3(0, 0, 1) },
+  uTime:     { value: 0 },
+  uHorizon:  { value: new THREE.Vector3(.7, .8, .9) },
+  uZenith:   { value: new THREE.Vector3(.25, .45, .8) },
+  uSunColor: { value: new THREE.Vector3(1, 1, 1) },
+  uTerrBounds: { value: new THREE.Vector4(-1e7, -1e7, 1e7, 1e7) },  // x0,y0,x1,y1 du crop terrain
+}]);
+const skyUni = {
+  uZenith:   { value: new THREE.Vector3() },
+  uHorizon:  { value: new THREE.Vector3() },
+  uSunColor: { value: new THREE.Vector3() },
+  uSunDir:   { value: new THREE.Vector3() },
+};
+// dome de ciel: suit la camera (repositionne chaque frame), pas de depth —
+// dessine en premier, tout le reste passe par-dessus.
+const sky = new THREE.Mesh(
+  new THREE.SphereGeometry(42000, 48, 24),
+  new THREE.ShaderMaterial({
+    side: THREE.BackSide, depthWrite: false, depthTest: false, fog: false,
+    uniforms: skyUni,
+    vertexShader: `
+      varying vec3 vDir;
+      void main() {
+        vDir = position;
+        gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+      }`,
+    fragmentShader: `
+      varying vec3 vDir;
+      uniform vec3 uZenith, uHorizon, uSunColor, uSunDir;
+      void main() {
+        vec3 d = normalize(vDir);
+        vec3 col = mix(uHorizon, uZenith, pow(clamp(d.z, 0.0, 1.0), 0.55));
+        col = mix(col, uHorizon * 0.55, smoothstep(0.0, -0.12, d.z));  // sous l'horizon: assombri
+        float s = max(dot(d, uSunDir), 0.0);
+        col += uSunColor * (pow(s, 1400.0) * 1.5 + pow(s, 24.0) * 0.10 + pow(s, 3.0) * 0.05);
+        gl_FragColor = vec4(col, 1.0);
+        #include <colorspace_fragment>
+      }`}));
+sky.renderOrder = -10;
+sky.frustumCulled = false;
+scene.add(sky);
+let sceneSpan = 18000;   // provisoire; remplace par le vrai span apres chargement
+function applyEnv() {
+  const { zen, hor, sun } = skyColors();
+  const sd = sunDirVec();
+  skyUni.uZenith.value.fromArray(zen);   skyUni.uHorizon.value.fromArray(hor);
+  skyUni.uSunColor.value.fromArray(sun); skyUni.uSunDir.value.copy(sd);
+  terraUni.uSunDir.value.copy(sd);
+  seaUni.uSunDir.value.copy(sd);
+  seaUni.uHorizon.value.fromArray(hor);  seaUni.uZenith.value.fromArray(zen);
+  seaUni.uSunColor.value.fromArray(sun);
+  const h = ENV.haze / 100;
+  const fogC = new THREE.Color(hor[0], hor[1], hor[2]);   // deja lineaire
+  if (!scene.fog) scene.fog = new THREE.Fog(fogC.clone(), 1e6, 2e6);
+  scene.fog.color.copy(fogC);
+  scene.fog.near = sceneSpan * (2.2 - 1.9 * h);
+  scene.fog.far  = sceneSpan * (7.0 - 5.2 * h);
+  scene.background = fogC;
+  localStorage.setItem('ui.env3d', JSON.stringify(ENV));
+}
+for (const [id, key, suf] of [['env-az', 'az', '°'], ['env-el', 'el', '°'],
+                              ['env-haze', 'haze', '%']]) {
+  const s = document.getElementById(id), v = document.getElementById(id + '-v');
+  s.value = ENV[key]; v.textContent = ENV[key] + suf;
+  s.addEventListener('input', () => {
+    ENV[key] = +s.value; v.textContent = s.value + suf; applyEnv();
+  });
+}
+applyEnv();
 
 function realSize() {
   // [POV-V5] la verite de taille = le canvas mesure. innerWidth/innerHeight
@@ -283,23 +402,77 @@ const data = await (await fetch('/api/scene3d')).json();
     }
     const { nx, ny, x0, y0, step } = t;
     const pos = new Float32Array(nx * ny * 3);
-    const col = new Float32Array(nx * ny * 3);
-    // rampe hypsometrique: fond marin -> sable -> vert -> brun -> blanc
-    function ramp(z) {
-      if (z <= 0)  { const f = Math.max(0, 1 + z / 130); return [0.10*f+0.02, 0.22*f+0.04, 0.35*f+0.08]; }
-      if (z < 3)   return [0.80, 0.74, 0.55];
-      if (z < 60)  { const f = (z - 3) / 57;  return [0.24 - 0.06*f, 0.42 - 0.10*f, 0.20 - 0.04*f]; }
-      if (z < 250) { const f = (z - 60) / 190; return [0.18 + 0.28*f, 0.32 + 0.08*f, 0.16 + 0.08*f]; }
-      const f = Math.min(1, (z - 250) / 300);  return [0.46 + 0.5*f, 0.40 + 0.55*f, 0.24 + 0.7*f];
+    // [BATHY-DISPLAY] le DDS n'a PAS de bathymetrie en eau libre: no-data =
+    // -301, et la frontiere donnees/-301 dessinait des falaises rectangulaires
+    // sous l'ocean. On fabrique un z D'AFFICHAGE: pente douce (5%) qui part de
+    // la derniere valeur reelle (chamfer porteur de valeur, O(n), 2 passes),
+    // plancher -140. Z (la verite) n'est PAS modifie — COORDREAD et le
+    // raymarch continuent de lire le vrai (-301 = "Z —").
+    let zDisp;
+    {
+      const NDATA = -250;
+      const n = nx * ny;
+      const dd = new Float32Array(n);
+      const zr = new Float32Array(n);
+      // [SEAM-NORD] au nord de y=9400 la grille ne contient AUCUNE terre
+      // reelle (max mesure: 0.94 m) — ce qui depasse -2 m la-bas est le ruban
+      // de couture TERRAIN-EXTEND (plateau fabrique a +0.74 le long de
+      // l'ancien bord de map y=9736, 12 km de "plage" rectiligne) -> no-data
+      // pour l'affichage, l'ocean le remplace. Z verite intact.
+      for (let j = 0; j < ny; j++) {
+        const north = (y0 + j * step) > 9400;
+        for (let i = 0; i < nx; i++) {
+          const k = j * nx + i, z = Z[k];
+          if (z > NDATA && !(north && z > -2.0)) { dd[k] = 0; zr[k] = z; }
+          else { dd[k] = 1e9; zr[k] = -80; }
+        }
+      }
+      const D = step, DG = step * 1.41421356;
+      for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {   // passe avant
+        const k = j * nx + i;
+        if (dd[k] === 0) continue;
+        let bd = dd[k], bz = zr[k], c;
+        if (i > 0 && (c = dd[k-1] + D) < bd) { bd = c; bz = zr[k-1]; }
+        if (j > 0) {
+          if ((c = dd[k-nx] + D) < bd) { bd = c; bz = zr[k-nx]; }
+          if (i > 0 && (c = dd[k-nx-1] + DG) < bd) { bd = c; bz = zr[k-nx-1]; }
+          if (i < nx-1 && (c = dd[k-nx+1] + DG) < bd) { bd = c; bz = zr[k-nx+1]; }
+        }
+        dd[k] = bd; zr[k] = bz;
+      }
+      for (let j = ny-1; j >= 0; j--) for (let i = nx-1; i >= 0; i--) {   // passe arriere
+        const k = j * nx + i;
+        if (dd[k] === 0) continue;
+        let bd = dd[k], bz = zr[k], c;
+        if (i < nx-1 && (c = dd[k+1] + D) < bd) { bd = c; bz = zr[k+1]; }
+        if (j < ny-1) {
+          if ((c = dd[k+nx] + D) < bd) { bd = c; bz = zr[k+nx]; }
+          if (i < nx-1 && (c = dd[k+nx+1] + DG) < bd) { bd = c; bz = zr[k+nx+1]; }
+          if (i > 0 && (c = dd[k+nx-1] + DG) < bd) { bd = c; bz = zr[k+nx-1]; }
+        }
+        dd[k] = bd; zr[k] = bz;
+      }
+      zDisp = k => dd[k] === 0 ? Z[k]
+        : Math.max(-140, Math.min(zr[k], -2) - dd[k] * 0.05);
     }
+    // [BEAUTY-V1] plus de couleurs par sommet: la palette est calculee
+    // per-pixel dans le shader (plus fine, et ~120 MB de RAM economises)
     for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
-      const k = j * nx + i, z = Z[k];
+      const k = j * nx + i;
       pos[3*k]   = x0 + i * step;
       pos[3*k+1] = y0 + j * step;
+      // jupe de bord: les 400 derniers metres du grid plongent sous la mer —
+      // sans ca, la rangee frontiere de l'extension (z legerement > 0)
+      // dessinait une fausse plage rectiligne au-dessus de l'ocean
+      const db = Math.min(i, nx - 1 - i, j, ny - 1 - j) * step;
+      let z = zDisp(k);
+      if (db < 400) {
+        const f = db / 400, s = f * f * (3 - 2 * f);
+        z = -18 + (z + 18) * s;
+      }
       pos[3*k+2] = z;
-      const c = ramp(z);
-      col[3*k] = c[0]; col[3*k+1] = c[1]; col[3*k+2] = c[2];
     }
+    zDisp = null;   // libere dd/zr (fermeture)
     const idx = new Uint32Array((nx - 1) * (ny - 1) * 6);
     let p = 0;
     for (let j = 0; j < ny - 1; j++) for (let i = 0; i < nx - 1; i++) {
@@ -309,10 +482,122 @@ const data = await (await fetch('/api/scene3d')).json();
     }
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
-    g.setAttribute('color', new THREE.BufferAttribute(col, 3));
     g.setIndex(new THREE.BufferAttribute(idx, 1));
     g.computeVertexNormals();
-    const mat = new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide });
+    // [BEAUTY-V1] shader terrain unique (couleur OU drape via uniform — un
+    // seul programme, compile une fois: la lecon [DRAPE-MAT] est structurelle).
+    // Palette Leonida per-pixel: fonds marins turquoise->abysse, sable, verts
+    // de Floride, roche sur pentes raides; bruit de valeur pour casser les
+    // bandes; hillshade solaire + terme hemispherique; courbes de niveau
+    // optionnelles (50 m fortes / 10 m fines, anti-aliasees par fwidth).
+    const mat = new THREE.ShaderMaterial({
+      side: THREE.DoubleSide, fog: true, uniforms: terraUni,
+      vertexShader: `
+        varying vec3 vPos; varying vec3 vN; varying vec2 vUv;
+        #include <common>
+        #include <logdepthbuf_pars_vertex>
+        #include <fog_pars_vertex>
+        void main() {
+          vPos = position; vN = normal; vUv = uv;
+          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+          gl_Position = projectionMatrix * mvPosition;
+          #include <logdepthbuf_vertex>
+          #include <fog_vertex>
+        }`,
+      fragmentShader: `
+        varying vec3 vPos; varying vec3 vN; varying vec2 vUv;
+        uniform vec3 uSunDir;
+        uniform sampler2D uDrape;
+        uniform float uUseDrape, uContours;
+        uniform vec4 uTerrBounds, uMeasBounds;
+        #include <common>
+        #include <logdepthbuf_pars_fragment>
+        #include <fog_pars_fragment>
+        vec3 srgb(vec3 c) { return pow(c, vec3(2.2)); }
+        float hash2(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+        float vnoise(vec2 p) {
+          vec2 i = floor(p), f = fract(p);
+          f = f * f * (3.0 - 2.0 * f);
+          return mix(mix(hash2(i), hash2(i + vec2(1, 0)), f.x),
+                     mix(hash2(i + vec2(0, 1)), hash2(i + vec2(1, 1)), f.x), f.y);
+        }
+        vec3 landColor(float z, float slope, vec2 xy) {
+          float n = vnoise(xy * 0.013) * 0.6 + vnoise(xy * 0.11) * 0.4;
+          // jitter proportionnel a l'altitude: un jitter fixe de +/-8 m
+          // noyait toutes les basses terres (0-8 m = la moitie de l'ile)
+          // dans le sable
+          float zz = z + (n - 0.5) * min(16.0, 1.5 + z * 0.30);
+          vec3 sand   = srgb(vec3(0.85, 0.78, 0.58));
+          vec3 grass  = srgb(vec3(0.36, 0.53, 0.27));
+          vec3 forest = srgb(vec3(0.16, 0.33, 0.15));
+          vec3 dry    = srgb(vec3(0.52, 0.47, 0.28));
+          vec3 rock   = srgb(vec3(0.47, 0.41, 0.35));
+          vec3 c = sand;
+          c = mix(c, grass,  smoothstep(0.6, 2.4, zz));
+          c = mix(c, forest, smoothstep(15.0, 95.0, zz));
+          c = mix(c, dry,    smoothstep(130.0, 270.0, zz));
+          c = mix(c, rock,   smoothstep(250.0, 385.0, zz));
+          c = mix(c, rock * 0.92, smoothstep(0.35, 0.75, slope));   // pentes raides = roche
+          c *= 0.90 + 0.20 * vnoise(xy * 0.041);        // micro-variation
+          return c;
+        }
+        vec3 seabedColor(float z, vec2 xy) {
+          float d = clamp(-z / 90.0, 0.0, 1.0);
+          vec3 shallow = srgb(vec3(0.34, 0.62, 0.60));
+          vec3 deep    = srgb(vec3(0.03, 0.12, 0.24));
+          vec3 c = mix(shallow, deep, pow(d, 0.6));
+          return c * (0.94 + 0.12 * vnoise(xy * 0.03));
+        }
+        void main() {
+          #include <logdepthbuf_fragment>
+          vec3 n = normalize(vN);
+          float slope = clamp(1.0 - n.z, 0.0, 1.0);
+          vec3 base;
+          if (uUseDrape > 0.5) {
+            base = texture2D(uDrape, vUv).rgb;
+            // en mer (z<0) le fond est entierement procedural: l'ocean de la
+            // map 2D est une couleur plate dont les frontieres de couverture
+            // dessinaient des rectangles — la map ne garde que les eaux
+            // interieures (lacs/rivieres, au-dessus de z=0)
+            if (vPos.z < 0.0)
+              base = mix(base * vec3(0.72, 0.88, 1.0),
+                         seabedColor(vPos.z, vPos.xy),
+                         smoothstep(0.0, 2.5, -vPos.z));
+          } else {
+            base = vPos.z > 0.0 ? landColor(vPos.z, slope, vPos.xy)
+                                : seabedColor(vPos.z, vPos.xy);
+          }
+          float diff = max(dot(n, uSunDir), 0.0);
+          float back = max(dot(n, normalize(vec3(-uSunDir.x, -uSunDir.y, 0.4))), 0.0);
+          float amb  = 0.30 + 0.22 * clamp(n.z, 0.0, 1.0);
+          // en drape la map reste lisible (plancher de lumiere plus haut)
+          float lum = uUseDrape > 0.5 ? (0.58 + 0.48 * diff + 0.07 * back)
+                                      : (amb + 0.85 * diff + 0.10 * back);
+          vec3 lit = base * lum;
+          // fond marin pres des bords du crop OU hors zone mesuree du DDS:
+          // fondu vers l'abysse — ni la couture du crop ni les plateaux de
+          // bathymetrie INFEREE (extension nord) ne se dessinent dans l'ocean
+          if (vPos.z < 0.0) {
+            float dEdge = min(min(vPos.x - uTerrBounds.x, uTerrBounds.z - vPos.x),
+                              min(vPos.y - uTerrBounds.y, uTerrBounds.w - vPos.y));
+            float dMeas = min(min(vPos.x - uMeasBounds.x, uMeasBounds.z - vPos.x),
+                              min(vPos.y - uMeasBounds.y, uMeasBounds.w - vPos.y));
+            float fade = max(1.0 - smoothstep(0.0, 3000.0, dEdge),
+                             1.0 - smoothstep(-200.0, 1500.0, dMeas));
+            lit = mix(lit, srgb(vec3(0.03, 0.12, 0.24)), fade);
+          }
+          if (uContours > 0.5 && vPos.z > 0.0) {
+            float lw  = fwidth(vPos.z);
+            float c50 = abs(fract(vPos.z / 50.0 + 0.5) - 0.5) * 50.0;
+            float c10 = abs(fract(vPos.z / 10.0 + 0.5) - 0.5) * 10.0;
+            float l50 = 1.0 - smoothstep(0.0, max(lw * 1.6, 0.35), c50);
+            float l10 = 1.0 - smoothstep(0.0, max(lw * 1.2, 0.25), c10);
+            lit = mix(lit, lit * 0.55, min(1.0, l50 * 0.85 + l10 * 0.30));
+          }
+          gl_FragColor = vec4(lit, 1.0);
+          #include <fog_fragment>
+          #include <colorspace_fragment>
+        }`});
     // [DRAPE-2D] UVs planaires pour draper la map 2D sur le relief
     {
       const W = (nx - 1) * step, H = (ny - 1) * step;
@@ -328,7 +613,7 @@ const data = await (await fetch('/api/scene3d')).json();
     layers.terrain.add(terrainMesh);
     // [DRAPE-2D] texture assemblee depuis les tiles (source = chip leak map),
     // 4 m/px; les lacs/routes/details de la carte apparaissent sur le relief.
-    let drapeTex = null, drapeMat = null;
+    let drapeTex = null;
     function buildDrape() {
       const TZ2 = 3, MPX = 32 / (2 ** TZ2);          // 4 m/px
       const x1 = x0 + (nx - 1) * step, yTop = y0 + (ny - 1) * step;
@@ -345,10 +630,10 @@ const data = await (await fetch('/api/scene3d')).json();
       // miroir N-S — "le drap est completement brise", Alexandre avait raison)
       drapeTex.flipY = true;
       drapeTex.anisotropy = 4;                       // 16 = trop cher sur petites machines
-      // [DRAPE-MAT] materiau DEDIE compile d'emblee avec map+logdepth: muter
-      // mat.map a chaud recompilait le shader et cassait l'ecriture de
-      // profondeur (la mer passait par-dessus tout le terrain).
-      drapeMat = new THREE.MeshLambertMaterial({ map: drapeTex, side: THREE.DoubleSide });
+      // [BEAUTY-V1] plus de second materiau: la texture entre dans le shader
+      // terrain par uniform (uUseDrape bascule sans recompilation — la lecon
+      // [DRAPE-MAT] reglee par construction).
+      terraUni.uDrape.value = drapeTex;
       let s0 = localStorage.getItem('ui.tileSrc') || 'leak,1';
       if (s0 === 'yanis') s0 = 'yanis,14'; if (s0 === 'leak') s0 = 'leak,1';
       const srcQ = s0 !== 'yanis,14' ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.4')}` : '';
@@ -367,25 +652,87 @@ const data = await (await fetch('/api/scene3d')).json();
         img.src = `/tiles/${TZ2}/${TZ2},${ty},${tx}.jpg?v=14${srcQ}`;
       }
     }
-    // plan de mer translucide a z=0
-    const seaG = new THREE.PlaneGeometry((nx-1)*step, (ny-1)*step);
+    // [BEAUTY-V1] ocean vivant a z=0: vagues procedurales animees, fresnel
+    // qui reflete le ciel, glint speculaire du soleil. Le plan deborde
+    // largement du terrain -> l'eau court jusqu'a l'horizon (la brume fait
+    // la couture avec le dome de ciel). Translucide: les fonds marins du
+    // shader terrain donnent le degrade turquoise->abysse pres des cotes.
+    const seaG = new THREE.PlaneGeometry(160000, 160000);
     seaG.translate(x0 + (nx-1)*step/2, y0 + (ny-1)*step/2, 0);
-    const sea = new THREE.Mesh(seaG, new THREE.MeshBasicMaterial({
-      color: 0x1a4a6e, transparent: true, opacity: 0.55, depthWrite: false }));
+    seaUni.uTerrBounds.value.set(x0, y0, x0 + (nx-1)*step, y0 + (ny-1)*step);
+    terraUni.uTerrBounds.value.copy(seaUni.uTerrBounds.value);
+    const sea = new THREE.Mesh(seaG, new THREE.ShaderMaterial({
+      transparent: true, depthWrite: false, fog: true, side: THREE.DoubleSide,
+      uniforms: seaUni,
+      vertexShader: `
+        varying vec3 vPos;
+        #include <common>
+        #include <logdepthbuf_pars_vertex>
+        #include <fog_pars_vertex>
+        void main() {
+          vPos = position;
+          vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
+          gl_Position = projectionMatrix * mvPosition;
+          #include <logdepthbuf_vertex>
+          #include <fog_vertex>
+        }`,
+      fragmentShader: `
+        varying vec3 vPos;
+        uniform vec3 uSunDir, uHorizon, uZenith, uSunColor;
+        uniform float uTime;
+        uniform vec4 uTerrBounds;
+        #include <common>
+        #include <logdepthbuf_pars_fragment>
+        #include <fog_pars_fragment>
+        vec3 srgb(vec3 c) { return pow(c, vec3(2.2)); }
+        void main() {
+          #include <logdepthbuf_fragment>
+          vec2 p = vPos.xy; float t = uTime;
+          float dist = length(cameraPosition - vPos);
+          // les vagues s'eteignent avec la distance: sans ca, les sinus
+          // sous-pixel produisent un moire en grille sur tout l'ocean
+          float att = 1.0 / (1.0 + dist * 0.002 + dist * dist * 3.5e-7);
+          vec2 gwave = vec2(0.0);
+          gwave += vec2(sin(p.x * 0.030 + t * 0.9) * 0.030, sin(p.y * 0.041 + t * 0.7) * 0.041);
+          gwave += vec2(cos((p.x + p.y) * 0.019 + t * 1.25)) * 0.019 * 0.7;
+          gwave += vec2(sin(p.x * 0.110 - t * 1.8) * 0.110, sin(p.y * 0.089 + t * 2.1) * 0.089) * 0.22 * att;
+          vec3 n = normalize(vec3(-gwave * 8.0 * att, 1.0));
+          vec3 V = normalize(cameraPosition - vPos);
+          float fres = pow(1.0 - max(dot(n, V), 0.0), 3.0);
+          vec3 skyRefl = mix(uZenith, uHorizon, 0.65);
+          vec3 deep = srgb(vec3(0.05, 0.19, 0.28));
+          vec3 col = mix(deep, skyRefl, 0.22 + 0.58 * fres);
+          vec3 H = normalize(V + uSunDir);
+          float spec = pow(max(dot(n, H), 0.0), 340.0) * 2.0
+                     + pow(max(dot(n, H), 0.0), 60.0) * 0.22;
+          col += uSunColor * spec * (0.25 + 0.75 * att);
+          // hors du crop terrain il n'y a pas de fond marin sous l'eau: on
+          // opacifie et on fond vers l'abysse (fondu 2 km) — sinon le
+          // rectangle du crop se dessine dans l'ocean
+          float dEdge = min(min(vPos.x - uTerrBounds.x, uTerrBounds.z - vPos.x),
+                            min(vPos.y - uTerrBounds.y, uTerrBounds.w - vPos.y));
+          float outside = 1.0 - smoothstep(0.0, 2000.0, dEdge);
+          // constantes accordees a "mer translucide sur fond abyssal" du
+          // cote interieur — la couture du crop doit etre invisible
+          col = mix(col, mix(deep * 0.62, skyRefl, 0.26 + 0.56 * fres), outside);
+          gl_FragColor = vec4(col, mix(0.62 + 0.30 * fres, 1.0, outside));
+          #include <fog_fragment>
+          #include <colorspace_fragment>
+        }`}));
     sea.renderOrder = 2;                 // toujours apres le relief
     sea.name = 'terrain-sea';
+    sea.frustumCulled = false;
     layers.terrain.add(sea);
     // [DRAPE-CHIP] APRES la creation de la mer (setDrape la reference — la
     // placer avant = TDZ "Cannot access 'sea'" et tout le bloc terrain meurt)
     {
       const chip = document.getElementById('ly-drape');
       const setDrape = on => {
-        if (on && !drapeMat) buildDrape();
-        terrainMesh.material = on ? drapeMat : mat;   // swap, pas de mutation
-        // la carte peint deja l'eau: le plan de mer est inutile en drape (et
-        // il gagnait a tort le depth test contre le terrain texture -> voile
-        // bleu sur toute l'ile)
-        sea.visible = !on;
+        if (on && !drapeTex) buildDrape();
+        terraUni.uUseDrape.value = on ? 1 : 0;   // uniform: zero recompilation
+        // [BEAUTY-V1] la mer 3D reste visible en drape: l'eau plate de la map
+        // sous la surface animee (le voile bleu d'antan venait d'une
+        // recompilation qui cassait le depth write — resolu par construction)
       };
       // [DRAPE-DEFAULT] actif par defaut (l'eau, les routes, les details de
       // la map 2D) — opt-out persistant via le chip.
@@ -397,20 +744,24 @@ const data = await (await fetch('/api/scene3d')).json();
       });
       // [DRAPE-REBUILD] quand la source de tiles change (chip leak map)
       window.__rebuildDrape = () => {
-        drapeMat = null; drapeTex = null;
+        if (drapeTex) drapeTex.dispose();
+        drapeTex = null;
         if (chip.classList.contains('on')) setDrape(true);
       };
     }
-    window.__terrain = { mesh: layers.terrain.children[0], sea, layers, THREE, camera };  // debug hook
+    // [BEAUTY-V1] courbes de niveau (chip HUD)
+    {
+      const chip = document.getElementById('ly-contours');
+      chip.addEventListener('click', () => {
+        terraUni.uContours.value = chip.classList.toggle('on') ? 1 : 0;
+      });
+    }
+    window.__terrain = { mesh: layers.terrain.children[0], sea, layers, THREE, camera, controls };  // debug hook
     // [COORDREAD-3D] grille exposee pour le readout curseur (voir plus bas)
     window.__hgrid = { Z, nx, ny, x0, y0, step };
     layers.ground.visible = false;       // le relief remplace le sol plat au chargement
-    // lumiere pour le Lambert (la scene n'en avait pas forcement)
-    if (!scene.getObjectByName('terrain-sun')) {
-      const sun = new THREE.DirectionalLight(0xffffff, 0.9);
-      sun.position.set(-8000, -6000, 12000); sun.name = 'terrain-sun';
-      scene.add(sun, new THREE.AmbientLight(0xffffff, 0.45));
-    }
+    // [BEAUTY-V1] plus de lumieres three: l'eclairage vit dans les shaders
+    // (soleil reglable via le panneau Environnement)
     console.log('[HEIGHTMAP-V1] terrain', nx, 'x', ny, '@', step, 'm');
   } catch (e) {
     console.warn('terrain3d:', e);
@@ -663,7 +1014,8 @@ loadGroundTiles();
 
 camera.position.set(ctr.x + span * 0.30, ctr.y - span * 0.40, span * 0.28);
 controls.target.copy(ctr);
-scene.fog = new THREE.Fog(0x0a0a0c, span * 1.2, span * 3.5);
+sceneSpan = span;   // [BEAUTY-V1] la brume se calibre sur le vrai span
+applyEnv();
 
 // ── [VIEW3D-RAYS] rayons d'observation au hover d'une cam ──
 const lmByName = new Map(data.landmarks.map(l => [l.name, l.xyz]));
@@ -1177,6 +1529,8 @@ window.__camScreen = name => {
 renderer.setAnimationLoop(() => {
   sizeGuard();                                  // [POV-V4] auto-reparation de taille
   if (flyAnim) flyAnim();                       // [VIEW3D-SYNC] vol vers la cam
+  sky.position.copy(camera.position);           // [BEAUTY-V1] le dome suit la camera
+  seaUni.uTime.value = performance.now() / 1000;   // vagues animees
   // en POV la camera est pilotee par nous: controls.update() la re-orienterait
   // vers sa cible a chaque frame (meme controls.enabled=false) -> monde noir
   if (!povPrev) controls.update();
