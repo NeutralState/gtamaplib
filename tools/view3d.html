@@ -712,10 +712,13 @@ const data = await (await fetch('/api/scene3d')).json();
           float dEdge = min(min(vPos.x - uTerrBounds.x, uTerrBounds.z - vPos.x),
                             min(vPos.y - uTerrBounds.y, uTerrBounds.w - vPos.y));
           float outside = 1.0 - smoothstep(0.0, 2000.0, dEdge);
-          // constantes accordees a "mer translucide sur fond abyssal" du
-          // cote interieur — la couture du crop doit etre invisible
-          col = mix(col, mix(deep * 0.62, skyRefl, 0.26 + 0.56 * fres), outside);
-          gl_FragColor = vec4(col, mix(0.62 + 0.30 * fres, 1.0, outside));
+          // unification par la DISTANCE: au loin l'eau devient opaque partout
+          // (memes constantes dedans/dehors -> la couture du crop est
+          // invisible sous tout angle); la translucidite ne vit que pres des
+          // cotes, la ou les hauts-fonds la meritent
+          float farBlend = max(outside, smoothstep(3000.0, 10000.0, dist));
+          col = mix(col, mix(deep * 0.62, skyRefl, 0.26 + 0.56 * fres), farBlend);
+          gl_FragColor = vec4(col, mix(0.62 + 0.30 * fres, 1.0, farBlend));
           #include <fog_fragment>
           #include <colorspace_fragment>
         }`}));
