@@ -3590,17 +3590,17 @@
   "id": "S2/66",
   "player": null,
   "xyz": [
-   -2283.1,
-   6231.624,
-   164.581
+   -2279.137,
+   6236.089,
+   166.953
   ],
   "ypr": [
-   124.014,
-   7.776,
-   0.0
+   123.83,
+   7.7,
+   0.375
   ],
   "fov": [
-   66.65,
+   64.351,
    null
   ],
   "size": [
@@ -3608,8 +3608,8 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Mount Kalaga National Park 02 [1]",
-  "note": "pose du solver externe (heightmap16bit + fullMap, releve Alexandre 2026-08-22) \u2014 RESTAUREE apres un override non autorise. QUESTION OUVERTE: les clics Easy/Starlet/Interstate Hill ratent de dx+270' identiques depuis cette pose \u2014 soit un glissement lateral de pose (aperture des cretes), soit une mauvaise identification commune des trois clics (meme bande d azimut). A arbitrer par Alexandre en verifiant dans la frame quelles bosses les clics designent.",
-  "pose_verified": "SOLVED 2026-08-22 \u2014 pose du solver externe d'Alexandre (ancres leak map + z terrain), silhouette 6.3' sur 63 traces; discordance clics-collines +270' documentee en note, arbitrage a venir"
+  "note": "pose du solver externe v2 (raffinement Alexandre 2026-08-24); cam a 54.2 m au-dessus du sol (112.7); silhouette 8.2' sur 63 traces.",
+  "pose_verified": "SOLVED 2026-08-24 \u2014 solver externe v2 d'Alexandre (ancres leak map + z terrain), silhouette 8.2' sur 63 traces"
  },
  "Mount Kalaga National Park 04 (Mountain Pass) (X)": {
   "id": "S2/68",
@@ -5094,17 +5094,17 @@
   "id": "S/KalagaPostcard",
   "player": null,
   "xyz": [
-   -3358.1,
-   4951.7,
-   45.8
+   -3357.6,
+   4964.7,
+   35.8
   ],
   "ypr": [
-   30.59,
+   40.79,
    8.0,
    0.0
   ],
   "fov": [
-   40.0,
+   42.6,
    null
   ],
   "size": [
@@ -5113,6 +5113,6 @@
   ],
   "source": "Mount Kalaga Postcard (webp, 2026-08-23)",
   "constraint_class": null,
-  "note": "position Alexandre FIXE; z/yaw/pitch par fit silhouette massif Ambrosia (18.8' sur 46 pts), fov par grille (vallee plate \u2014 fov peu contraint par la silhouette seule) [AUTO-SKYLINE-V1]. A verifier au POV."
+  "note": "position Alexandre FIXE; z/yaw/pitch par fit silhouette massif Ambrosia (18.8' sur 46 pts), fov par grille (vallee plate \u2014 fov peu contraint par la silhouette seule) [AUTO-SKYLINE-V1]. A verifier au POV. | POSE-EDIT: ajustee a la main par Alexandre dans l UI"
  }
 }
