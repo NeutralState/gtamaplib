@@ -11,53 +11,142 @@
 <meta charset="utf-8">
 <title>gtamaplib — 3D</title>
 <style>
-  :root { --bg:#0a0a0c; --surface:#13131a; --surface2:#1c1c26; --border:#252535;
-          --green:#4ade80; --red:#f87171; --text:#e2e2f0; --dim:#5a5a7a;
-          --mid:#9090b0; --mono:'JetBrains Mono',monospace; }
+  /* [UI-V2] design system: verre sombre, accents chauds, typographie soignee */
+  :root { --bg:#0a0b0e; --surface:rgba(15,17,22,.86); --surface2:#1a1d26;
+          --border:#272b38; --border-soft:#1e2230;
+          --green:#4ade80; --amber:#fbbf24; --red:#f87171; --gold:#facc15;
+          --text:#e8eaf2; --dim:#596077; --mid:#9aa1b8;
+          --mono:'SF Mono','JetBrains Mono',ui-monospace,monospace;
+          --sans:-apple-system,'Inter',system-ui,sans-serif; }
   html, body { margin:0; height:100%; background:var(--bg); overflow:hidden;
-               font:11px var(--mono); color:var(--mid); }
+               font:11px var(--sans); color:var(--mid); }
   #c { position:fixed; inset:0; width:100%; height:100%; } /* [POV-V10] SANS width/height CSS, un canvas (element remplace) s affiche a sa taille INTERNE (= 2x viewport avec pixelRatio 2) ancre haut-gauche -> on voyait le quart haut-gauche zoome 2x. LA cause de toute la saga zoom. */
-  .panel { position:fixed; z-index:10; background:rgba(19,19,26,.88);
-           backdrop-filter:blur(8px); border:1px solid var(--border);
-           border-radius:10px; padding:10px 12px; }
-  #hud { top:12px; left:12px; display:flex; align-items:center; gap:12px; }
-  #hud .sect { color:var(--dim); font-size:9.5px; letter-spacing:.12em;
-               text-transform:uppercase; margin:0; }
-  #hud .chips { display:flex; flex-wrap:nowrap; gap:6px; }
-  .lchip { font:11px var(--mono); padding:3px 10px; border-radius:12px;
-           background:var(--surface2); border:1px solid var(--border);
-           color:var(--dim); cursor:pointer; user-select:none;
-           transition:color .12s, border-color .12s; }
-  .lchip:hover { color:var(--mid); }
-  .lchip.on { color:var(--green); border-color:rgba(74,222,128,.45); }
-  #info { top:12px; right:12px; display:none; max-width:280px; color:var(--mid); }
+  .panel { position:fixed; z-index:10; background:var(--surface);
+           backdrop-filter:blur(14px) saturate(1.2);
+           border:1px solid var(--border); border-radius:12px;
+           padding:10px 12px; box-shadow:0 8px 32px rgba(0,0,0,.35); }
+  .sect { color:var(--dim); font-size:9px; letter-spacing:.14em;
+          text-transform:uppercase; font-weight:600; }
+  /* ── barre superieure: marque + couches ── */
+  #hud { top:12px; left:12px; display:flex; align-items:center; gap:12px;
+         padding:8px 14px; }
+  #brand { color:var(--text); font-weight:700; font-size:12px;
+           letter-spacing:.04em; white-space:nowrap; }
+  #brand em { color:var(--gold); font-style:normal; }
+  #hud .chips { display:flex; flex-wrap:nowrap; gap:5px; }
+  .lchip { font:10.5px var(--sans); font-weight:500; padding:4px 11px;
+           border-radius:999px; background:var(--surface2);
+           border:1px solid var(--border-soft); color:var(--dim);
+           cursor:pointer; user-select:none;
+           transition:color .12s, border-color .12s, background .12s; }
+  .lchip:hover { color:var(--text); border-color:var(--border); }
+  .lchip.on { color:var(--green); border-color:rgba(74,222,128,.4);
+              background:rgba(74,222,128,.07); }
+  /* ── sidebar droite: cameras + environnement ── */
+  #side { top:12px; right:12px; bottom:12px; width:236px; display:flex;
+          flex-direction:column; gap:0; padding:0; overflow:hidden; }
+  #side .shead { display:flex; align-items:center; justify-content:space-between;
+                 padding:10px 12px 6px; }
+  #cam-search { margin:0 10px 8px; padding:6px 10px; background:var(--surface2);
+                border:1px solid var(--border-soft); border-radius:8px;
+                color:var(--text); font:11px var(--sans); outline:none; }
+  #cam-search:focus { border-color:var(--border); }
+  #cam-search::placeholder { color:var(--dim); }
+  #cam-list { flex:1 1 40%; overflow-y:auto; min-height:90px;
+              border-bottom:1px solid var(--border-soft); }
+  #cam-list::-webkit-scrollbar, #cam-details::-webkit-scrollbar { width:8px; }
+  #cam-list::-webkit-scrollbar-thumb,
+  #cam-details::-webkit-scrollbar-thumb { background:var(--surface2); border-radius:4px; }
+  .cam-it { display:flex; align-items:center; gap:7px; padding:4px 12px;
+            cursor:pointer; white-space:nowrap; }
+  .cam-it:hover { background:rgba(255,255,255,.04); }
+  .cam-it.active { background:rgba(250,204,21,.08); }
+  .cam-it .nm { flex:1; overflow:hidden; text-overflow:ellipsis; color:var(--mid); }
+  .cam-it.active .nm { color:var(--gold); }
+  .cam-it .ck { color:var(--green); font-size:10px; }
+  .tdot { width:7px; height:7px; border-radius:50%; flex:none; }
+  #cam-details { padding:9px 12px; border-bottom:1px solid var(--border-soft);
+                 max-height:34%; overflow-y:auto; display:none; }
+  #cam-details .cd-name { color:var(--text); font-weight:600; font-size:11.5px;
+                          margin-bottom:5px; overflow-wrap:anywhere; }
+  #cam-details .badges { display:flex; gap:5px; margin-bottom:7px; flex-wrap:wrap; }
+  .badge { font-size:9px; font-weight:600; padding:2px 8px; border-radius:999px;
+           letter-spacing:.05em; }
+  .badge.solved { color:#dcfce7; background:rgba(34,197,94,.18);
+                  border:1px solid rgba(34,197,94,.4); }
+  .cd-grid { display:grid; grid-template-columns:auto 1fr; gap:2px 10px;
+             font:10.5px var(--mono); }
+  .cd-grid .k { color:var(--dim); }
+  .cd-grid .v { color:var(--text); text-align:right; }
+  #cam-details .cd-note { margin-top:6px; color:var(--dim); font-size:10px;
+                          line-height:1.45; }
+  /* ── environnement ── */
+  #env { padding:9px 12px 12px; display:flex; flex-direction:column; gap:6px; }
+  #env label { display:flex; align-items:center; gap:8px;
+               justify-content:space-between; color:var(--mid); }
+  #env .v { color:var(--text); min-width:34px; text-align:right;
+            font:10.5px var(--mono); }
+  #env .toggles { display:flex; gap:5px; margin-top:3px; }
+  input[type=range] { -webkit-appearance:none; height:4px; border-radius:2px;
+                      background:var(--surface2); width:96px; outline:none; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px;
+        height:13px; border-radius:50%; background:var(--gold); cursor:pointer;
+        border:2px solid #0a0b0e; box-shadow:0 0 6px rgba(250,204,21,.35); }
+  /* ── divers ── */
+  #info { top:64px; left:12px; display:none; max-width:280px; color:var(--mid);
+          padding:0; overflow:hidden; }
+  #info .thumb { display:block; width:280px; max-height:160px; object-fit:cover; }
+  #info .body { padding:8px 12px; }
   #info b { color:var(--text); }
   #info .rms-bad { color:var(--red); }
-  #legend { bottom:12px; left:12px; display:flex; gap:13px; padding:7px 14px; }
-  #env { right:12px; bottom:44px; display:flex; flex-direction:column; gap:5px; }
-  #env label { display:flex; align-items:center; gap:8px; justify-content:space-between; }
-  #env input[type=range] { width:92px; accent-color:#facc15; }
-  #env .v { color:var(--text); min-width:34px; text-align:right; }
+  #legend { bottom:12px; left:12px; display:flex; gap:12px; padding:7px 14px;
+            font-size:10px; }
   .sw { display:inline-block; width:8px; height:8px; border-radius:50%;
-        margin-right:6px; vertical-align:-1px; }
+        margin-right:5px; vertical-align:-1px; }
+  /* labels de cams projetes dans la 3D */
+  .cam3d-label { position:absolute; transform:translate(-50%,-130%);
+                 color:var(--gold); font:10px var(--sans); font-weight:600;
+                 text-shadow:0 1px 3px #000, 0 0 8px rgba(0,0,0,.8);
+                 pointer-events:none; white-space:nowrap; }
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
 <div class="panel" id="hud">
-  <div class="sect">Layers</div>
+  <div id="brand">GTA<em>MAP</em>LIB <span style="color:var(--dim);font-weight:400">3D</span></div>
   <div class="chips">
-    <span class="lchip on" id="ly-cams">cams</span>
-    <span class="lchip on" id="ly-lms">landmarks</span>
-    <span class="lchip on" id="ly-meshes">meshes</span>
-    <span class="lchip on" id="ly-terrain" title="Terrain reel (height map L16 du leak, z=706.07v-301.01)">terrain</span>
-    <span class="lchip" id="ly-leakmap" title="Fond de carte: full map leak (composite sur yanis)">leak map</span>
-    <span class="lchip" id="ly-drape" title="Draper la map 2D sur le relief (lacs, routes, details — source du chip leak map)">drape 2D</span>
-    <span class="lchip" id="ly-contours" title="Courbes de niveau (50 m fortes, 10 m fines) sur le relief">contours</span>
-    <span class="lchip" id="btn-shot" title="PNG de la vue + frame en medaillon">&#8681; shot</span>
+    <span class="lchip on" id="ly-cams" title="Camera frustums (color = confidence tier)">Cameras</span>
+    <span class="lchip on" id="ly-lms" title="Triangulated landmarks (blue = z-constrained)">Landmarks</span>
+    <span class="lchip on" id="ly-meshes" title="Procedural structure meshes">Meshes</span>
+    <span class="lchip on" id="ly-terrain" title="Real terrain (leak L16 height map, z=706.07v-301.01)">Terrain</span>
+    <span class="lchip" id="ly-leakmap" title="Base map: full leak map (composite over yanis)">Leak map</span>
+    <span class="lchip" id="ly-drape" title="Drape the 2D map onto the relief (lakes, roads, details)">Drape</span>
+    <span class="lchip" id="ly-contours" title="Elevation contours (50 m major, 10 m minor)">Contours</span>
+    <span class="lchip" id="btn-shot" title="Save a PNG of this view (+ active frame inset)">&#8681; Shot</span>
   </div>
 </div>
 <div class="panel" id="info"></div>
+<!-- [UI-V2] sidebar: liste des cameras + details + environnement -->
+<div class="panel" id="side">
+  <div class="shead"><span class="sect">Cameras</span>
+    <span class="sect" id="cam-count" style="color:var(--mid)"></span></div>
+  <input id="cam-search" type="text" placeholder="Search cameras..." spellcheck="false">
+  <div id="cam-list"></div>
+  <div id="cam-details"></div>
+  <div id="env">
+    <div class="sect" style="margin-bottom:2px">Environment</div>
+    <label title="Sun azimuth (0 = north, clockwise)">Azimuth
+      <span style="display:flex;align-items:center;gap:7px"><input id="env-az" type="range" min="0" max="359" step="1"><span class="v" id="env-az-v"></span></span></label>
+    <label title="Sun elevation — low = grazing light, warm tones, long shadows">Sun height
+      <span style="display:flex;align-items:center;gap:7px"><input id="env-el" type="range" min="4" max="80" step="1"><span class="v" id="env-el-v"></span></span></label>
+    <label title="Atmospheric haze (visibility distance)">Haze
+      <span style="display:flex;align-items:center;gap:7px"><input id="env-haze" type="range" min="0" max="100" step="1"><span class="v" id="env-haze-v"></span></span></label>
+    <div class="toggles">
+      <span class="lchip on" id="env-clouds" title="Drifting clouds + their moving shadows on the terrain">Clouds</span>
+      <span class="lchip on" id="env-shadows" title="Terrain cast shadows (re-baked when the sun moves)">Shadows</span>
+    </div>
+  </div>
+</div>
 <!-- [VIEW3D-POV] vue a travers une cam: position/orientation/fov exacts -->
 <!-- [POV-ZOOM-V1] centre en X ET en Y: a zoom 1 la frame fait 100vh et top:50%
      translateY(-50%) est identique a top:0 ; des qu'elle rapetisse il faut
@@ -70,11 +159,11 @@
   <b id="pov-name" style="color:var(--text)"></b>
   <label style="margin-left:10px">frame <input id="pov-alpha" type="range" min="0" max="100"
          value="50" style="width:90px;vertical-align:middle"></label>
-  <label style="margin-left:10px" title="[POSE-EDIT] hypothese de fov de la cam: la frame reste plein cadre, le relief derriere s'adapte — quand ils collent, Save">fov <input id="pov-fov" type="range" min="60" max="160" value="100" style="width:70px"></label>
+  <label style="margin-left:10px" title="[POSE-EDIT] fov hypothesis: the frame stays full-screen, the relief behind adapts — when they match, Save">fov <input id="pov-fov" type="range" min="60" max="160" value="100" style="width:70px"></label>
   <span id="pov-fov-v" style="color:#facc15;font-size:10px"></span>
-  <label style="margin-left:8px" title="[POSE-EDIT] hypothese de yaw: tourne le monde derriere la frame, +/-15 deg">yaw <input id="pov-yaw" type="range" min="-1500" max="1500" value="0" style="width:80px"></label>
+  <label style="margin-left:8px" title="[POSE-EDIT] yaw hypothesis: rotates the world behind the frame, +/-15 deg">yaw <input id="pov-yaw" type="range" min="-1500" max="1500" value="0" style="width:80px"></label>
   <span id="pov-yaw-v" style="color:#facc15;font-size:10px"></span>
-  <label style="margin-left:8px" title="[POSE-EDIT] hypothese de pitch, +/-15 deg">pitch <input id="pov-pitch" type="range" min="-1500" max="1500" value="0" style="width:80px"></label>
+  <label style="margin-left:8px" title="[POSE-EDIT] pitch hypothesis, +/-15 deg">pitch <input id="pov-pitch" type="range" min="-1500" max="1500" value="0" style="width:80px"></label>
   <span id="pov-pitch-v" style="color:#facc15;font-size:10px"></span>
   <button id="pov-fov-save" style="background:#166534;color:#dcfce7;border:1px solid #22c55e;border-radius:4px;font-size:10px;cursor:pointer">Save</button>
   <label style="margin-left:10px" title="scroll: widens the field of view without moving the camera — the frame shrinks by the same factor and stays aligned">zoom out <input id="pov-zoom" type="range" min="100" max="600"
@@ -86,24 +175,15 @@
   <!-- tag de version: si tu ne vois pas ce numero, tu tournes du vieux code -->
   <span id="pov-ver" style="color:var(--dim);font-size:9px;margin-left:8px">v4</span>
 </div>
-<!-- [BEAUTY-V1] environnement: soleil et brume pilotent ciel + relief + mer -->
-<div class="panel" id="env">
-  <div class="sect">Environnement</div>
-  <label title="Azimut du soleil (0 = nord, sens horaire)">soleil az
-    <input id="env-az" type="range" min="0" max="359" step="1"><span class="v" id="env-az-v"></span></label>
-  <label title="Hauteur du soleil — bas = lumiere rasante et teintes chaudes">hauteur
-    <input id="env-el" type="range" min="4" max="80" step="1"><span class="v" id="env-el-v"></span></label>
-  <label title="Brume atmospherique (distance de visibilite)">brume
-    <input id="env-haze" type="range" min="0" max="100" step="1"><span class="v" id="env-haze-v"></span></label>
-</div>
 <div class="panel" id="legend">
   <span><span class="sw" style="background:#a78bfa"></span>anchor</span>
-  <span style="margin-left:10px"><span class="sw" style="background:#4ade80"></span>high</span>
-  <span style="margin-left:10px"><span class="sw" style="background:#fbbf24"></span>medium</span>
-  <span style="margin-left:10px"><span class="sw" style="background:#fb923c"></span>low</span>
-  <span style="margin-left:10px"><span class="sw" style="background:#6b7280"></span>unverified</span>
-  <span style="margin-left:14px"><span class="sw" style="background:#60a5fa"></span>z-constrained LM</span>
+  <span><span class="sw" style="background:#4ade80"></span>high</span>
+  <span><span class="sw" style="background:#fbbf24"></span>medium</span>
+  <span><span class="sw" style="background:#fb923c"></span>low</span>
+  <span><span class="sw" style="background:#6b7280"></span>unverified</span>
+  <span><span class="sw" style="background:#60a5fa"></span>z-constrained</span>
 </div>
+<div id="cam3d-labels" style="position:fixed;inset:0;z-index:8;pointer-events:none"></div>
 <!-- [POV-V5] toute erreur JS devient VISIBLE: plus d'ecran noir muet -->
 <div id="jserr" style="display:none;position:fixed;left:12px;bottom:52px;z-index:99;
      background:#7f1d1dee;color:#fecaca;font:11px monospace;padding:8px 12px;
@@ -149,10 +229,10 @@ try {
   renderer = new THREE.WebGLRenderer({ canvas, antialias: true, powerPreference: 'default',
     logarithmicDepthBuffer: true });  // [HEIGHTMAP-V1] 20 km de scene: sans ca, z-fighting terrain/tiles
 } catch (e) {
-  showErr('WebGL INDISPONIBLE — Safari a refuse le contexte (limite de contextes/GPU).\n' +
-          'Ferme des onglets lourds (cartes, videos), ou utilise Chrome pour le mode 3D.\n(' + (e.message || e) + ')');
+  showErr('WebGL UNAVAILABLE — the browser refused the context (context/GPU limit).\n' +
+          'Close heavy tabs (maps, videos) or use Chrome for the 3D view.\n(' + (e.message || e) + ')');
   const rb = document.createElement('button');
-  rb.textContent = 'reessayer';
+  rb.textContent = 'retry';
   rb.style.cssText = 'display:block;margin-top:8px;padding:4px 12px;cursor:pointer;' +
     'background:#450a0a;color:#fecaca;border:1px solid #fecaca;border-radius:5px;font:11px monospace';
   rb.onclick = () => location.reload();
@@ -161,7 +241,7 @@ try {
 }
 canvas.addEventListener('webglcontextlost', ev => {
   ev.preventDefault();   // permet la restauration automatique par three.js
-  showErr('Contexte WebGL perdu (trop d\'onglets/contextes) — tentative de recuperation...');
+  showErr('WebGL context lost (too many tabs/contexts) — attempting recovery...');
 });
 canvas.addEventListener('webglcontextrestored', () => {
   const el = document.getElementById('jserr');
@@ -169,6 +249,10 @@ canvas.addEventListener('webglcontextrestored', () => {
   resize();
 });
 renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+// [BEAUTY-V2] tone mapping cinema: les hautes lumieres roulent doucement au
+// lieu d'ecrete (glint du soleil, ciel au couchant)
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.15;
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x0a0a0c);   // remplace par applyEnv() des l'init
 
@@ -215,6 +299,10 @@ const terraUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uDrape:    { value: null },
   uUseDrape: { value: 0 },
   uContours: { value: 0 },
+  uTime:     { value: 0 },
+  uShadow:   { value: null },   // [SHADOWS-V1] carte d'ombres portees cuite en JS
+  uShadowOn: { value: 0 },
+  uClouds:   { value: 1 },
   uTerrBounds: { value: new THREE.Vector4(-1e7, -1e7, 1e7, 1e7) },
   // rect MESURE du DDS (georef rlx): au-dela, la bathymetrie est inferee
   // (rampes cotieres TERRAIN-EXTEND) — on la fond vers l'abysse plutot que
@@ -234,6 +322,8 @@ const skyUni = {
   uHorizon:  { value: new THREE.Vector3() },
   uSunColor: { value: new THREE.Vector3() },
   uSunDir:   { value: new THREE.Vector3() },
+  uTime:     { value: 0 },
+  uClouds:   { value: 1 },
 };
 // dome de ciel: suit la camera (repositionne chaque frame), pas de depth —
 // dessine en premier, tout le reste passe par-dessus.
@@ -251,13 +341,33 @@ const sky = new THREE.Mesh(
     fragmentShader: `
       varying vec3 vDir;
       uniform vec3 uZenith, uHorizon, uSunColor, uSunDir;
+      uniform float uTime, uClouds;
+      float hs2(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
+      float vn2(vec2 p) {
+        vec2 i = floor(p), f = fract(p);
+        f = f * f * (3.0 - 2.0 * f);
+        return mix(mix(hs2(i), hs2(i + vec2(1, 0)), f.x),
+                   mix(hs2(i + vec2(0, 1)), hs2(i + vec2(1, 1)), f.x), f.y);
+      }
       void main() {
         vec3 d = normalize(vDir);
         vec3 col = mix(uHorizon, uZenith, pow(clamp(d.z, 0.0, 1.0), 0.55));
         col = mix(col, uHorizon * 0.55, smoothstep(0.0, -0.12, d.z));  // sous l'horizon: assombri
         float s = max(dot(d, uSunDir), 0.0);
         col += uSunColor * (pow(s, 1400.0) * 1.5 + pow(s, 24.0) * 0.10 + pow(s, 3.0) * 0.05);
+        // [BEAUTY-V2] nuages: fbm projete sur un plan haut, derive lente,
+        // eclaires par le soleil (bords chauds au couchant)
+        if (uClouds > 0.5 && d.z > 0.005) {
+          vec2 cp = d.xy / (d.z + 0.14) * 1.1 + vec2(uTime * 0.006, uTime * 0.0024);
+          float cn = vn2(cp * 1.0) * 0.55 + vn2(cp * 2.7) * 0.30 + vn2(cp * 6.1) * 0.15;
+          float cov = smoothstep(0.52, 0.78, cn);
+          float horFade = smoothstep(0.01, 0.10, d.z);
+          float sunGlow = 0.65 + 0.55 * pow(s, 3.0);
+          vec3 cc = mix(uSunColor, vec3(1.0), 0.45) * sunGlow;
+          col = mix(col, cc, cov * horFade * 0.85);
+        }
         gl_FragColor = vec4(col, 1.0);
+        #include <tonemapping_fragment>
         #include <colorspace_fragment>
       }`}));
 sky.renderOrder = -10;
@@ -281,6 +391,7 @@ function applyEnv() {
   scene.fog.far  = sceneSpan * (7.0 - 5.2 * h);
   scene.background = fogC;
   localStorage.setItem('ui.env3d', JSON.stringify(ENV));
+  if (window.__bakeShadows) window.__bakeShadows();   // le soleil a bouge -> re-cuire
 }
 for (const [id, key, suf] of [['env-az', 'az', '°'], ['env-el', 'el', '°'],
                               ['env-haze', 'haze', '%']]) {
@@ -291,6 +402,24 @@ for (const [id, key, suf] of [['env-az', 'az', '°'], ['env-el', 'el', '°'],
   });
 }
 applyEnv();
+// [UI-V2] toggles nuages / ombres portees (persistants)
+{
+  const cl = document.getElementById('env-clouds');
+  const sh = document.getElementById('env-shadows');
+  const st = Object.assign({ clouds: 1, shadows: 1 },
+    JSON.parse(localStorage.getItem('ui.env3dtoggles') || '{}'));
+  const apply = () => {
+    terraUni.uClouds.value = st.clouds; skyUni.uClouds.value = st.clouds;
+    window.__shadowsWanted = !!st.shadows;
+    terraUni.uShadowOn.value = (st.shadows && window.__shadowsReady) ? 1 : 0;
+    cl.classList.toggle('on', !!st.clouds);
+    sh.classList.toggle('on', !!st.shadows);
+    localStorage.setItem('ui.env3dtoggles', JSON.stringify(st));
+  };
+  cl.addEventListener('click', () => { st.clouds = st.clouds ? 0 : 1; apply(); });
+  sh.addEventListener('click', () => { st.shadows = st.shadows ? 0 : 1; apply(); });
+  apply();
+}
 
 function realSize() {
   // [POV-V5] la verite de taille = le canvas mesure. innerWidth/innerHeight
@@ -386,7 +515,7 @@ const data = await (await fetch('/api/scene3d')).json();
           if (r.ok) return await r.json();
         } catch (e) { console.warn(`terrain step=${stp}:`, e); }
       }
-      throw new Error('terrain injoignable apres 3 essais');
+      throw new Error('terrain unreachable after 3 attempts');
     }
     const t = await fetchTerrain();
     if (t.error) { console.warn('terrain3d:', t.error); return; }
@@ -457,6 +586,7 @@ const data = await (await fetch('/api/scene3d')).json();
     }
     // [BEAUTY-V1] plus de couleurs par sommet: la palette est calculee
     // per-pixel dans le shader (plus fine, et ~120 MB de RAM economises)
+    const Zd = new Float32Array(nx * ny);   // hauteurs AFFICHEES (pour la bake d'ombres)
     for (let j = 0; j < ny; j++) for (let i = 0; i < nx; i++) {
       const k = j * nx + i;
       pos[3*k]   = x0 + i * step;
@@ -471,6 +601,7 @@ const data = await (await fetch('/api/scene3d')).json();
         z = -18 + (z + 18) * s;
       }
       pos[3*k+2] = z;
+      Zd[k] = z;
     }
     zDisp = null;   // libere dd/zr (fermeture)
     const idx = new Uint32Array((nx - 1) * (ny - 1) * 6);
@@ -507,8 +638,8 @@ const data = await (await fetch('/api/scene3d')).json();
       fragmentShader: `
         varying vec3 vPos; varying vec3 vN; varying vec2 vUv;
         uniform vec3 uSunDir;
-        uniform sampler2D uDrape;
-        uniform float uUseDrape, uContours;
+        uniform sampler2D uDrape, uShadow;
+        uniform float uUseDrape, uContours, uTime, uShadowOn, uClouds;
         uniform vec4 uTerrBounds, uMeasBounds;
         #include <common>
         #include <logdepthbuf_pars_fragment>
@@ -567,13 +698,39 @@ const data = await (await fetch('/api/scene3d')).json();
             base = vPos.z > 0.0 ? landColor(vPos.z, slope, vPos.xy)
                                 : seabedColor(vPos.z, vPos.xy);
           }
-          float diff = max(dot(n, uSunDir), 0.0);
+          // [BEAUTY-V2] grain de detail pres de la camera (le drape 4 m/px et
+          // la palette gagnent une texture quand on s'approche)
+          float dcam = length(cameraPosition - vPos);
+          base *= 1.0 + (vnoise(vPos.xy * 0.9) - 0.5) * 0.16
+                        * (1.0 - smoothstep(300.0, 2500.0, dcam));
+          // [SHADOWS-V1] ombres portees du relief (carte cuite en JS, memes
+          // UVs planaires que le drape)
+          float sh = mix(1.0, texture2D(uShadow, vUv).r, uShadowOn);
+          // ombres de nuages qui derivent (meme monde que le ciel)
+          float cl = 0.0;
+          if (uClouds > 0.5) {
+            vec2 cw = vPos.xy * 0.00030 + vec2(uTime * 0.005, uTime * 0.002);
+            float cn = vnoise(cw) * 0.6 + vnoise(cw * 3.1) * 0.4;
+            cl = smoothstep(0.58, 0.82, cn) * 0.32;
+          }
+          float diff = max(dot(n, uSunDir), 0.0) * sh * (1.0 - cl);
           float back = max(dot(n, normalize(vec3(-uSunDir.x, -uSunDir.y, 0.4))), 0.0);
-          float amb  = 0.30 + 0.22 * clamp(n.z, 0.0, 1.0);
+          float amb  = 0.34 + 0.24 * clamp(n.z, 0.0, 1.0);
           // en drape la map reste lisible (plancher de lumiere plus haut)
-          float lum = uUseDrape > 0.5 ? (0.58 + 0.48 * diff + 0.07 * back)
-                                      : (amb + 0.85 * diff + 0.10 * back);
+          float lum = uUseDrape > 0.5 ? (0.55 + 0.62 * diff + 0.08 * back)
+                                      : (amb + 1.00 * diff + 0.12 * back);
           vec3 lit = base * lum;
+          // [BEAUTY-V2] ecume animee sur la ligne de cote (bande z ~ 0.2 m):
+          // des langues blanches qui respirent au rythme des vagues
+          {
+            float shore = 1.0 - smoothstep(0.0, 1.5, abs(vPos.z - 0.2));
+            if (shore > 0.01) {
+              float ph = vnoise(vPos.xy * 0.008) * 12.0;
+              float fo = vnoise(vPos.xy * 0.06 + vec2(0.0, uTime * 0.12))
+                       * (0.55 + 0.45 * sin(uTime * 1.1 + ph));
+              lit = mix(lit, vec3(0.85), shore * smoothstep(0.32, 0.75, fo) * 0.7);
+            }
+          }
           // fond marin pres des bords du crop OU hors zone mesuree du DDS:
           // fondu vers l'abysse — ni la couture du crop ni les plateaux de
           // bathymetrie INFEREE (extension nord) ne se dessinent dans l'ocean
@@ -596,6 +753,7 @@ const data = await (await fetch('/api/scene3d')).json();
           }
           gl_FragColor = vec4(lit, 1.0);
           #include <fog_fragment>
+          #include <tonemapping_fragment>
           #include <colorspace_fragment>
         }`});
     // [DRAPE-2D] UVs planaires pour draper la map 2D sur le relief
@@ -720,6 +878,7 @@ const data = await (await fetch('/api/scene3d')).json();
           col = mix(col, mix(deep * 0.62, skyRefl, 0.26 + 0.56 * fres), farBlend);
           gl_FragColor = vec4(col, mix(0.62 + 0.30 * fres, 1.0, farBlend));
           #include <fog_fragment>
+          #include <tonemapping_fragment>
           #include <colorspace_fragment>
         }`}));
     sea.renderOrder = 2;                 // toujours apres le relief
@@ -759,6 +918,59 @@ const data = await (await fetch('/api/scene3d')).json();
         terraUni.uContours.value = chip.classList.toggle('on') ? 1 : 0;
       });
     }
+    // ── [SHADOWS-V1] ombres portees du relief, cuites en JS ──
+    // Raymarch du heightfield AFFICHE vers le soleil, grille 1/4 (24 m/texel),
+    // pas geometrique (x1.13), plafond 450 m (plus haut que tout sommet =
+    // rayon libre). ~0.5-1 s par bake — relancee (debounce 250 ms) quand le
+    // soleil bouge. Texture R8 lissee 3x3, memes UVs planaires que le drape.
+    {
+      const S = 4, nx2 = Math.ceil(nx / S), ny2 = Math.ceil(ny / S);
+      const shBuf = new Uint8Array(nx2 * ny2).fill(255);
+      const shTex = new THREE.DataTexture(shBuf, nx2, ny2, THREE.RedFormat, THREE.UnsignedByteType);
+      shTex.magFilter = THREE.LinearFilter;
+      shTex.minFilter = THREE.LinearFilter;
+      terraUni.uShadow.value = shTex;
+      const hAt = (x, y) => {
+        const fi = (x - x0) / step, fj = (y - y0) / step;
+        if (fi < 0 || fj < 0 || fi >= nx - 1 || fj >= ny - 1) return -1e3;
+        const i = fi | 0, j = fj | 0, u = fi - i, v = fj - j, k = j * nx + i;
+        return Zd[k]*(1-u)*(1-v) + Zd[k+1]*u*(1-v) + Zd[k+nx]*(1-u)*v + Zd[k+nx+1]*u*v;
+      };
+      function bakeShadows() {
+        const sd = sunDirVec();
+        const hl = Math.hypot(sd.x, sd.y) || 1e-6;
+        const ux = sd.x / hl, uy = sd.y / hl, slope = sd.z / hl;
+        const t0 = performance.now();
+        for (let j2 = 0; j2 < ny2; j2++) for (let i2 = 0; i2 < nx2; i2++) {
+          const i = Math.min(nx - 1, i2 * S), j = Math.min(ny - 1, j2 * S);
+          const z0 = Zd[j * nx + i] + 2.0;
+          let lit = 255;
+          if (z0 > -45) {                       // les abysses restent "eclaires" (invisibles)
+            const x = x0 + i * step, y = y0 + j * step;
+            for (let t = 18; t < 9000; t *= 1.13) {
+              const zRay = z0 + slope * t;
+              if (zRay > 450) break;
+              if (hAt(x + ux * t, y + uy * t) > zRay) { lit = 0; break; }
+            }
+          }
+          shBuf[j2 * nx2 + i2] = lit;
+        }
+        const tmp = shBuf.slice();              // lissage 3x3 (penombre)
+        for (let j2 = 1; j2 < ny2 - 1; j2++) for (let i2 = 1; i2 < nx2 - 1; i2++) {
+          let s = 0;
+          for (let a = -1; a <= 1; a++) for (let b = -1; b <= 1; b++)
+            s += tmp[(j2 + a) * nx2 + i2 + b];
+          shBuf[j2 * nx2 + i2] = s / 9;
+        }
+        shTex.needsUpdate = true;
+        window.__shadowsReady = true;
+        terraUni.uShadowOn.value = window.__shadowsWanted === false ? 0 : 1;
+        console.log('[SHADOWS-V1] bake', ((performance.now() - t0) | 0) + ' ms');
+      }
+      let bakeTimer = 0;
+      window.__bakeShadows = () => { clearTimeout(bakeTimer); bakeTimer = setTimeout(bakeShadows, 250); };
+      bakeShadows();
+    }
     window.__terrain = { mesh: layers.terrain.children[0], sea, layers, THREE, camera, controls };  // debug hook
     // [COORDREAD-3D] grille exposee pour le readout curseur (voir plus bas)
     window.__hgrid = { Z, nx, ny, x0, y0, step };
@@ -773,7 +985,7 @@ const data = await (await fetch('/api/scene3d')).json();
     b.style.cssText = 'position:fixed;left:50%;top:14px;transform:translateX(-50%);' +
       'z-index:60;background:#7f1d1d;color:#fecaca;border:1px solid #b91c1c;' +
       'border-radius:8px;padding:6px 14px;font:12px ui-monospace,monospace';
-    b.textContent = 'terrain: echec de chargement (' + (e && e.message || e) + ') — recharger (Cmd+Shift+R)';
+    b.textContent = 'terrain failed to load (' + (e && e.message || e) + ') — hard reload (Cmd+Shift+R)';
     document.body.appendChild(b);
   }
 })();
@@ -933,7 +1145,7 @@ loadGroundTiles();
     'background:rgba(10,10,13,.72);border:1px solid #2c2c33;border-radius:8px;' +
     'padding:5px 11px;font:11px ui-monospace,monospace;color:#facc15;' +
     'cursor:pointer;white-space:nowrap;user-select:none';
-  el.title = 'clic: copier la pose (JSON) pour la donner a Claude';
+  el.title = 'click: copy the camera pose (JSON) to paste in chat';
   document.body.appendChild(el);
   const dirV = new THREE.Vector3();
   function pose() {
@@ -946,13 +1158,13 @@ loadGroundTiles();
   }
   setInterval(() => {
     const p = pose();
-    el.textContent = `CAM ${p.xyz.join(', ')}  yaw ${p.ypr[0]}  pitch ${p.ypr[1]}  (clic = copier)`;
+    el.textContent = `CAM ${p.xyz.join(', ')}  yaw ${p.ypr[0]}  pitch ${p.ypr[1]}  (click = copy)`;
   }, 250);
   el.addEventListener('click', () => {
     const txt = JSON.stringify(pose());
     (navigator.clipboard ? navigator.clipboard.writeText(txt) : Promise.reject())
       .then(() => { el.style.color = '#4ade80'; setTimeout(() => el.style.color = '#facc15', 700); })
-      .catch(() => { prompt('copie manuelle:', txt); });
+      .catch(() => { prompt('copy manually:', txt); });
   });
 })();
 
@@ -1222,15 +1434,15 @@ function enterPOV(c) {
       if (dpitch !== 0 && c.ypr) {
         url += `&pitch=${(c.ypr[1] + dpitch).toFixed(3)}`;
       }
-      let r = await fetch(url).then(x => x.json()).catch(() => ({error: 'reseau'}));
+      let r = await fetch(url).then(x => x.json()).catch(() => ({error: 'network'}));
       if (r.error === 'SOLVED') {
-        if (confirm(name + ' est SOLVED (validee). Ecraser fov/yaw quand meme?')) {
-          r = await fetch(url + '&override=1').then(x => x.json()).catch(() => ({error: 'reseau'}));
+        if (confirm(name + ' is SOLVED (validated). Overwrite fov/yaw anyway?')) {
+          r = await fetch(url + '&override=1').then(x => x.json()).catch(() => ({error: 'network'}));
         } else return;
       }
       sv.textContent = r.ok
-        ? ('sauve: hfov ' + hf.toFixed(1) + '°' + (dyaw !== 0 ? ', yaw ' + (c.ypr[0] + dyaw).toFixed(2) + '°' : ''))
-        : ('echec: ' + (r.error || '?'));
+        ? ('saved: hfov ' + hf.toFixed(1) + '°' + (dyaw !== 0 ? ', yaw ' + (c.ypr[0] + dyaw).toFixed(2) + '°' : ''))
+        : ('failed: ' + (r.error || '?'));
     };
   }
   povZoom = 1;
@@ -1299,6 +1511,7 @@ function focusCam(name) {
   const c = camPickRefs.find(c => c.name === name);
   if (!c) return false;
   activeCamRef = c;
+  if (window.__uiSetActive) window.__uiSetActive(name);   // [UI-V2] sidebar suit
   if (povPrev) exitPOV();
   if (!focusMarker) {
     const g = new THREE.SphereGeometry(9, 12, 8);
@@ -1336,6 +1549,7 @@ function syncToCam(name) {
   if (!c) return false;
   if (!c.corners) return focusCam(name);         // pas de frustum -> survol
   activeCamRef = c;
+  if (window.__uiSetActive) window.__uiSetActive(name);   // [UI-V2] sidebar suit
   if (!focusMarker) {
     focusMarker = new THREE.Mesh(new THREE.SphereGeometry(9, 12, 8),
       new THREE.MeshBasicMaterial({ color: 0xfacc15, transparent: true, opacity: 0.9 }));
@@ -1359,6 +1573,104 @@ window.__focusCam = focusCam;
 window.__syncToCam = syncToCam;
 sceneReady = true;                               // [VIEW3D-SYNC]
 if (pendingFocus) { syncToCam(pendingFocus); pendingFocus = null; }
+
+// ── [UI-V2] sidebar: liste des cameras, recherche, details de pose ──
+(() => {
+  const list = document.getElementById('cam-list');
+  const search = document.getElementById('cam-search');
+  const details = document.getElementById('cam-details');
+  const cams = [...data.cameras].sort((a, b) => a.name.localeCompare(b.name));
+  document.getElementById('cam-count').textContent = cams.length;
+  const hex = t => '#' + TIER_COLORS[t || 'unverified'].toString(16).padStart(6, '0');
+  const rows = new Map();
+  function render(filter) {
+    list.innerHTML = '';
+    rows.clear();
+    const f = (filter || '').toLowerCase();
+    for (const c of cams) {
+      if (f && !c.name.toLowerCase().includes(f)) continue;
+      const it = document.createElement('div');
+      it.className = 'cam-it';
+      it.innerHTML = `<span class="tdot" style="background:${hex(c.tier)}"></span>` +
+                     `<span class="nm"></span>` +
+                     (c.pose_verified ? '<span class="ck">&#10003;</span>' : '');
+      it.querySelector('.nm').textContent = c.name;
+      it.addEventListener('click', () => {
+        syncToCam(c.name);
+        if (window.self !== window.top)
+          window.parent.postMessage({ type: 'gtamaplib-select-cam', name: c.name }, '*');
+      });
+      rows.set(c.name, it);
+      list.appendChild(it);
+    }
+  }
+  search.addEventListener('input', () => render(search.value));
+  render('');
+  window.__uiSetActive = name => {
+    for (const [n, el] of rows) el.classList.toggle('active', n === name);
+    const row = rows.get(name);
+    if (row) row.scrollIntoView({ block: 'nearest' });
+    const c = cams.find(c => c.name === name);
+    if (!c) { details.style.display = 'none'; return; }
+    const num = (v, d = 1) => v == null ? '&mdash;' : (+v).toFixed(d);
+    let h = `<div class="cd-name"></div><div class="badges">` +
+      `<span class="badge" style="color:#0a0b0e;background:${hex(c.tier)}">${(c.tier || 'unverified').toUpperCase()}</span>` +
+      (c.pose_verified ? '<span class="badge solved">&#10003; SOLVED</span>' : '') +
+      (c.hud_locked ? '<span class="badge" style="color:#bfdbfe;background:rgba(96,165,250,.15);border:1px solid rgba(96,165,250,.4)">HUD</span>' : '') +
+      `</div><div class="cd-grid">` +
+      `<span class="k">X / Y / Z</span><span class="v">${num(c.xyz[0])} / ${num(c.xyz[1])} / ${num(c.xyz[2])}</span>`;
+    if (c.ypr) h += `<span class="k">yaw / pitch</span><span class="v">${num(c.ypr[0], 2)}&deg; / ${num(c.ypr[1], 2)}&deg;</span>`;
+    if (c.rms_arcmin != null) h += `<span class="k">RMS</span><span class="v" style="color:${c.rms_arcmin > 10 ? 'var(--red)' : 'var(--green)'}">${c.rms_arcmin}&prime;</span>`;
+    h += `<span class="k">markings</span><span class="v">${c.n_pixels}</span></div>`;
+    if (c.pose_verified) h += `<div class="cd-note"></div>`;
+    details.innerHTML = h;
+    details.querySelector('.cd-name').textContent = c.name;
+    if (c.pose_verified) details.querySelector('.cd-note').textContent = c.pose_verified;
+    details.style.display = 'block';
+  };
+})();
+
+// ── [UI-V2] labels de cams projetes dans la 3D (au zoom, hors POV) ──
+(() => {
+  const layer = document.getElementById('cam3d-labels');
+  const els = new Map();
+  const v = new THREE.Vector3();
+  function tick() {
+    requestAnimationFrame(tick);
+    if (povPrev || !layers.cams.visible) {
+      if (layer.style.display !== 'none') layer.style.display = 'none';
+      return;
+    }
+    if (layer.style.display === 'none') layer.style.display = '';
+    const [W, H] = realSize();
+    const cand = [];
+    for (const c of camPickRefs) {
+      const dx = c.xyz[0] - camera.position.x, dy = c.xyz[1] - camera.position.y,
+            dz = c.xyz[2] - camera.position.z;
+      const d2 = dx*dx + dy*dy + dz*dz;
+      if (d2 < 3500 * 3500) cand.push([d2, c]);
+    }
+    cand.sort((a, b) => a[0] - b[0]);
+    const keep = new Set();
+    for (const [, c] of cand.slice(0, 24)) {
+      v.set(...c.xyz).project(camera);
+      if (v.z > 1 || v.x < -1 || v.x > 1 || v.y < -1 || v.y > 1) continue;
+      keep.add(c.name);
+      let el = els.get(c.name);
+      if (!el) {
+        el = document.createElement('div');
+        el.className = 'cam3d-label';
+        el.textContent = c.name;
+        layer.appendChild(el);
+        els.set(c.name, el);
+      }
+      el.style.left = ((v.x + 1) / 2 * W) + 'px';
+      el.style.top  = ((1 - v.y) / 2 * H) + 'px';
+    }
+    for (const [n, el] of els) if (!keep.has(n)) { el.remove(); els.delete(n); }
+  }
+  tick();
+})();
 
 // ── [VIEW3D-SHOT] export PNG: vue 3D + frame de la cam active en medaillon ──
 document.getElementById('btn-shot').addEventListener('click', async () => {
@@ -1422,6 +1734,7 @@ addEventListener('pointerup', ev => {
   }
 });
 
+let _hoverName = null;   // [UI-V2] ne reconstruit la carte (et son <img>) qu'au changement de cam
 addEventListener('pointermove', ev => {
   const ndc = new THREE.Vector2(ev.clientX / innerWidth * 2 - 1,
                                 -(ev.clientY / innerHeight) * 2 + 1);
@@ -1429,16 +1742,24 @@ addEventListener('pointermove', ev => {
   const hits = ray.intersectObject(pickPts);
   if (hits.length) {
     const c = camPickRefs[hits[0].index];
-    showHoverRays(c);                              // [VIEW3D-RAYS]
-    const rms = c.rms_arcmin;
+    if (c.name !== _hoverName) {
+      _hoverName = c.name;
+      showHoverRays(c);                            // [VIEW3D-RAYS]
+      const rms = c.rms_arcmin;
+      info.innerHTML =
+        `<img class="thumb" src="/frame/${encodeURIComponent(c.name)}"` +
+        ` onerror="this.style.display='none'">` +
+        `<div class="body"><b>${c.name}</b><br>` +
+        `tier ${c.tier || 'unverified'} &middot; ${c.n_pixels} markings` +
+        (c.hud_locked ? ' &middot; HUD-locked' : '') +
+        (rms != null ? `<br>RMS <span class="${rms > 10 ? 'rms-bad' : ''}">${rms}&#8242;</span>` : '') +
+        (c.pose_verified ? `<br><span style="color:#4ade80">&#10003; ${c.pose_verified.split(' — ')[0]}</span>` : '') +
+        (c.corners ? `<br><span style="color:var(--dim)">click to enter POV</span>` : '') +
+        `</div>`;
+    }
     info.style.display = 'block';
-    info.innerHTML = `<b>${c.name}</b><br>` +
-      `tier ${c.tier || 'unverified'} · ${c.n_pixels} markings` +
-      (c.hud_locked ? ' · HUD-locked' : '') +
-      (rms != null ? `<br>RMS <span class="${rms > 10 ? 'rms-bad' : ''}">${rms}&#8242;</span>` : '') +
-      (c.pose_verified ? `<br><span style="color:#4ade80">&#10003; ${c.pose_verified.split(' — ')[0]}</span>` : '') +
-      (c.corners ? `<br><span style="color:var(--dim)">click: jump POV</span>` : '');
   } else {
+    _hoverName = null;
     info.style.display = 'none';
     clearHoverRays();                              // [VIEW3D-RAYS]
   }
@@ -1533,7 +1854,10 @@ renderer.setAnimationLoop(() => {
   sizeGuard();                                  // [POV-V4] auto-reparation de taille
   if (flyAnim) flyAnim();                       // [VIEW3D-SYNC] vol vers la cam
   sky.position.copy(camera.position);           // [BEAUTY-V1] le dome suit la camera
-  seaUni.uTime.value = performance.now() / 1000;   // vagues animees
+  const _tSec = performance.now() / 1000;
+  seaUni.uTime.value = _tSec;                   // vagues animees
+  terraUni.uTime.value = _tSec;                 // ecume + ombres de nuages
+  skyUni.uTime.value = _tSec;                   // derive des nuages
   // en POV la camera est pilotee par nous: controls.update() la re-orienterait
   // vers sa cible a chaque frame (meme controls.enabled=false) -> monde noir
   if (!povPrev) controls.update();
