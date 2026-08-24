@@ -543,16 +543,18 @@ const data = await (await fetch('/api/scene3d')).json();
       const n = nx * ny;
       const dd = new Float32Array(n);
       const zr = new Float32Array(n);
-      // [SEAM-NORD] au nord de y=9400 la grille ne contient AUCUNE terre
-      // reelle (max mesure: 0.94 m) — ce qui depasse -2 m la-bas est le ruban
-      // de couture TERRAIN-EXTEND (plateau fabrique a +0.74 le long de
-      // l'ancien bord de map y=9736, 12 km de "plage" rectiligne) -> no-data
-      // pour l'affichage, l'ocean le remplace. Z verite intact.
+      // [SEAM-NORD/SUD] rubans de couture TERRAIN-EXTEND: plateaux fabriques
+      // a +0.74/+0.77 le long des anciens bords de map (nord y=9736 — au-dela
+      // de y=9400 la grille n'a AUCUNE terre reelle, max mesure 0.94 m; sud
+      // y~-8590 — transect E-W: 0.77 constant sur 13 km, aucune ile des Keys
+      // dans la bande) -> no-data pour l'affichage, l'ocean les remplace.
+      // Z verite intact.
       for (let j = 0; j < ny; j++) {
-        const north = (y0 + j * step) > 9400;
+        const wy = y0 + j * step;
+        const seam = wy > 9400 || (wy > -8680 && wy < -8470);
         for (let i = 0; i < nx; i++) {
           const k = j * nx + i, z = Z[k];
-          if (z > NDATA && !(north && z > -2.0)) { dd[k] = 0; zr[k] = z; }
+          if (z > NDATA && !(seam && z > -2.0)) { dd[k] = 0; zr[k] = z; }
           else { dd[k] = 1e9; zr[k] = -80; }
         }
       }
@@ -596,10 +598,11 @@ const data = await (await fetch('/api/scene3d')).json();
       // dessinait une fausse plage rectiligne au-dessus de l'ocean
       const db = Math.min(i, nx - 1 - i, j, ny - 1 - j) * step;
       let z = zDisp(k);
-      if (db < 400) {
-        const f = db / 400, s = f * f * (3 - 2 * f);
+      if (db < 250) {                        // rampe courte (les Keys frolent le bord sud)
+        const f = db / 250, s = f * f * (3 - 2 * f);
         z = -18 + (z + 18) * s;
       }
+      if (db < 100) z = Math.min(z, -2 - (100 - db) * 0.16);   // rebord toujours immerge
       pos[3*k+2] = z;
       Zd[k] = z;
     }
@@ -683,21 +686,37 @@ const data = await (await fetch('/api/scene3d')).json();
           #include <logdepthbuf_fragment>
           vec3 n = normalize(vN);
           float slope = clamp(1.0 - n.z, 0.0, 1.0);
+          float dEdge = min(min(vPos.x - uTerrBounds.x, uTerrBounds.z - vPos.x),
+                            min(vPos.y - uTerrBounds.y, uTerrBounds.w - vPos.y));
           vec3 base;
           if (uUseDrape > 0.5) {
             base = texture2D(uDrape, vUv).rgb;
-            // en mer (z<0) le fond est entierement procedural: l'ocean de la
-            // map 2D est une couleur plate dont les frontieres de couverture
-            // dessinaient des rectangles — la map ne garde que les eaux
-            // interieures (lacs/rivieres, au-dessus de z=0)
-            if (vPos.z < 0.0)
-              base = mix(base * vec3(0.72, 0.88, 1.0),
-                         seabedColor(vPos.z, vPos.xy),
-                         smoothstep(0.0, 2.5, -vPos.z));
+            // [DRAPE-WATER-V2] l'eau de la MAP est detectee par sa couleur
+            // (bleu dominant) et remplacee par le fond marin procedural — y
+            // compris le halo bleu qui debordait sur les rives (decoupage
+            // grossier des iles). Ce qui n'est PAS de l'eau (ponts et
+            // causeways des Keys, routes) garde sa couleur map meme sous le
+            // niveau de la mer et reste visible a travers l'ocean translucide.
+            float w = smoothstep(0.015, 0.06, base.b - max(base.r, base.g));
+            // bordure NOIRE du scan de la map (drapee sur les coutures sud):
+            // le presque-noir est de l'eau, mais seulement loin des villes
+            // (au sud du continent) — sinon les contours de texte urbains
+            // vireraient turquoise
+            w = max(w, (1.0 - smoothstep(0.05, 0.14, max(base.r, max(base.g, base.b))))
+                       * step(vPos.y, -8200.0));
+            vec3 sb = seabedColor(min(vPos.z, -1.5), vPos.xy);
+            float onLowLand = 1.0 - smoothstep(2.5, 5.0, vPos.z);
+            base = mix(base, sb, w * onLowLand);
+            float sub = smoothstep(0.5, 4.0, -vPos.z);   // structures immergees: teinte legere
+            base = mix(base, base * vec3(0.70, 0.88, 1.05), sub * (1.0 - w) * 0.7);
           } else {
             base = vPos.z > 0.0 ? landColor(vPos.z, slope, vPos.xy)
                                 : seabedColor(vPos.z, vPos.xy);
           }
+          // bord du crop: la jupe plonge sous la mer et prend la couleur du
+          // fond — plus de barre noire de pixels etires ni de liseret d'eau
+          base = mix(base, seabedColor(min(vPos.z, -2.0), vPos.xy),
+                     1.0 - smoothstep(250.0, 650.0, dEdge));
           // [BEAUTY-V2] grain de detail pres de la camera (le drape 4 m/px et
           // la palette gagnent une texture quand on s'approche)
           float dcam = length(cameraPosition - vPos);
@@ -723,7 +742,10 @@ const data = await (await fetch('/api/scene3d')).json();
           // [BEAUTY-V2] ecume animee sur la ligne de cote (bande z ~ 0.2 m):
           // des langues blanches qui respirent au rythme des vagues
           {
-            float shore = 1.0 - smoothstep(0.0, 1.5, abs(vPos.z - 0.2));
+            // gate par la pente: sur les flats fabriques a z~0.5 l'ecume
+            // peignait des bandes moirees sur des km — une vraie cote a du relief
+            float shore = (1.0 - smoothstep(0.0, 1.5, abs(vPos.z - 0.2)))
+                          * smoothstep(0.003, 0.012, slope);
             if (shore > 0.01) {
               float ph = vnoise(vPos.xy * 0.008) * 12.0;
               float fo = vnoise(vPos.xy * 0.06 + vec2(0.0, uTime * 0.12))
@@ -735,8 +757,6 @@ const data = await (await fetch('/api/scene3d')).json();
           // fondu vers l'abysse — ni la couture du crop ni les plateaux de
           // bathymetrie INFEREE (extension nord) ne se dessinent dans l'ocean
           if (vPos.z < 0.0) {
-            float dEdge = min(min(vPos.x - uTerrBounds.x, uTerrBounds.z - vPos.x),
-                              min(vPos.y - uTerrBounds.y, uTerrBounds.w - vPos.y));
             float dMeas = min(min(vPos.x - uMeasBounds.x, uMeasBounds.z - vPos.x),
                               min(vPos.y - uMeasBounds.y, uMeasBounds.w - vPos.y));
             float fade = max(1.0 - smoothstep(0.0, 3000.0, dEdge),
@@ -863,7 +883,9 @@ const data = await (await fetch('/api/scene3d')).json();
           vec3 H = normalize(V + uSunDir);
           float spec = pow(max(dot(n, H), 0.0), 340.0) * 2.0
                      + pow(max(dot(n, H), 0.0), 60.0) * 0.22;
-          col += uSunColor * spec * (0.25 + 0.75 * att);
+          // le glint est un phenomene d'incidence RASANTE: en vue plongeante,
+          // les sinus reguliers des vagues dessinaient des eventails moires
+          col += uSunColor * spec * (0.25 + 0.75 * att) * smoothstep(0.12, 0.40, fres);
           // hors du crop terrain il n'y a pas de fond marin sous l'eau: on
           // opacifie et on fond vers l'abysse (fondu 2 km) — sinon le
           // rectangle du crop se dessine dans l'ocean
@@ -875,7 +897,10 @@ const data = await (await fetch('/api/scene3d')).json();
           // invisible sous tout angle); la translucidite ne vit que pres des
           // cotes, la ou les hauts-fonds la meritent
           float farBlend = max(outside, smoothstep(3000.0, 10000.0, dist));
-          col = mix(col, mix(deep * 0.62, skyRefl, 0.26 + 0.56 * fres), farBlend);
+          // le bleu profond domine en vue plongeante; le ciel (chaud au
+          // couchant) ne gagne qu'en incidence rasante — sinon tout l'ocean
+          // lointain virait boue au soleil bas
+          col = mix(col, mix(deep * 0.72, skyRefl, 0.12 + 0.50 * fres), farBlend);
           gl_FragColor = vec4(col, mix(0.62 + 0.30 * fres, 1.0, farBlend));
           #include <fog_fragment>
           #include <tonemapping_fragment>
