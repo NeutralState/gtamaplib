@@ -1766,7 +1766,7 @@
   "error_m": 0.378,
   "zone": "port_gellhorn"
  },
- "Red Bird Caf\u00e9 (NW)": {
+ "Red Bird Café (NW)": {
   "xyz": [
    -6470.4712996219905,
    3166.845933889018,
@@ -7351,7 +7351,7 @@
   "zone": "port_gellhorn",
   "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
  },
- "Tr\u00e9sor Tower": {
+ "Trésor Tower": {
   "xyz": [
    1857.0847838693608,
    1943.302739963361,
@@ -9291,7 +9291,7 @@
    "Metro (SE) (A) (4K)"
   ],
   "author": "rlx",
-  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 40th floor NW corner",
+  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 40th floor NW corner",
   "error_m": null,
   "zone": "unknown"
  },
@@ -9306,7 +9306,7 @@
    "Grassrivers 02 (Watson Bay)"
   ],
   "author": "rlx",
-  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 40th floor W corner",
+  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 40th floor W corner",
   "error_m": 2.71,
   "zone": "unknown"
  },
@@ -9320,7 +9320,7 @@
    "Tennis Stadium (4K)"
   ],
   "author": "rlx",
-  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 40th floor E corner",
+  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 40th floor E corner",
   "error_m": null,
   "zone": "unknown"
  },
@@ -9335,7 +9335,7 @@
    "'95 Grotti Cheetah 04 (Garage)"
   ],
   "author": "rlx",
-  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 32nd floor NE corner",
+  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 32nd floor NE corner",
   "error_m": 0.16,
   "zone": "unknown"
  },
@@ -9349,7 +9349,7 @@
    "Tennis Stadium (4K)"
   ],
   "author": "rlx",
-  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 56th floor NE (rooftop)",
+  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — 56th floor NE (rooftop)",
   "error_m": null,
   "zone": "unknown"
  },
@@ -9364,7 +9364,7 @@
    "'95 Grotti Cheetah 04 (Garage)"
   ],
   "author": "rlx",
-  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 28 SE",
+  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — handlebar 28 SE",
   "error_m": 0.698,
   "zone": "unknown"
  },
@@ -9378,7 +9378,7 @@
    "Tennis Stadium (4K)"
   ],
   "author": "rlx",
-  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 8 SE",
+  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — handlebar 8 SE",
   "error_m": null,
   "zone": "unknown"
  },
@@ -9392,7 +9392,7 @@
    "Tennis Stadium (4K)"
   ],
   "author": "rlx",
-  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 58 SE",
+  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — handlebar 58 SE",
   "error_m": null,
   "zone": "unknown"
  },
@@ -9406,7 +9406,7 @@
    "Tennis Stadium (4K)"
   ],
   "author": "rlx",
-  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 handlebar 58 NE",
+  "notes": "[FOUR-SEASONS-RIGID-V1] rigid model — handlebar 58 NE",
   "error_m": null,
   "zone": "unknown"
  },
@@ -10721,7 +10721,7 @@
    28.407
   ],
   "zone": null,
-  "note": "derive parallelogramme du panneau rigide (BL=TL+BR-TR) \u2014 sa triangulation etait 15m off"
+  "note": "derive parallelogramme du panneau rigide (BL=TL+BR-TR) — sa triangulation etait 15m off"
  },
  "Vizcayne South Condominium (NW)": {
   "author": "rlx",
@@ -11496,7 +11496,7 @@
    "Metro (NE) (B)"
   ],
   "zone": "vice_city",
-  "note": "de-triangule 2026-07-27: le clic Jason 05 etait incertain (Alexandre) et verrouillait le yaw d Explosion a 14 \u2014 retire, landmark sans position (1 seul temoin restant: Metro (NE) (B))",
+  "note": "de-triangule 2026-07-27: le clic Jason 05 etait incertain (Alexandre) et verrouillait le yaw d Explosion a 14 — retire, landmark sans position (1 seul temoin restant: Metro (NE) (B))",
   "xyz": [
    -1041.84,
    162.68,
@@ -13233,7 +13233,7 @@
    73.2934430516249
   ],
   "zone": "ambrosia",
-  "depth_caveat": "profondeur: le solve 3-cams (Panorama/Fires/Postcard) est auto-coherent a ~2m perp. Le rayon Kalaga sous la pose rlx du 2026-07-26 tombe a 60px/20m perp \u2014 il CONFIRME l identification (la silhouette a tete renflee est visible au clic) mais sa pose hand-tuned (~1 deg) est trop grossiere pour re-trianguler avec. Le jour ou Kalaga est resolue par resection (les ancres Starlet sont cliquables), ce rayon devient le temoin de profondeur definitif.",
+  "depth_caveat": "profondeur: le solve 3-cams (Panorama/Fires/Postcard) est auto-coherent a ~2m perp. Le rayon Kalaga sous la pose rlx du 2026-07-26 tombe a 60px/20m perp — il CONFIRME l identification (la silhouette a tete renflee est visible au clic) mais sa pose hand-tuned (~1 deg) est trop grossiere pour re-trianguler avec. Le jour ou Kalaga est resolue par resection (les ancres Starlet sont cliquables), ce rayon devient le temoin de profondeur definitif.",
   "aliases": [
    "Sebring Water Tower"
   ]
@@ -17920,7 +17920,7 @@
   "z_constraint": {
    "type": "fixed",
    "value": 155.35,
-   "note": "derive par symetrie centrale du plan-toit (centre=milieu NW-SE) \u2014 a confirmer par temoins nord/est"
+   "note": "derive par symetrie centrale du plan-toit (centre=milieu NW-SE) — a confirmer par temoins nord/est"
   }
  },
  "Stephen P. Clark Government Center (SW)": {
@@ -17935,7 +17935,7 @@
   "z_constraint": {
    "type": "fixed",
    "value": 155.35,
-   "note": "derive par symetrie centrale du plan-toit (centre=milieu NW-SE) \u2014 a confirmer par temoins nord/est"
+   "note": "derive par symetrie centrale du plan-toit (centre=milieu NW-SE) — a confirmer par temoins nord/est"
   }
  },
  "Highway (Panorama) (SE)": {
@@ -18860,16 +18860,16 @@
  },
  "Ambrosia Canal (A)": {
   "xyz": [
-   -2838.94,
-   4916.23,
-   20.24
+   -2872.2,
+   4883.2,
+   26.0
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
-  "error_m": 2.4,
-  "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.4 m, angle max 19.9 deg"
+  "error_m": 8.6,
+  "method": "KALAGA-RETRI-V1: retriangulation memes sources (Ambrosia 02 SOLVED + Kalaga 02 solver v2 SOLVED), rayons croises a 8.6 m; ancienne position datait des poses pre-solver (delta 47 m)"
  },
  "BB Hill": {
   "xyz": [
@@ -19270,6 +19270,6 @@
   "error_m": null,
   "source_cameras": [],
   "zone": "port_gellhorn",
-  "note": "pilier NORD sur l axe releve par Alexandre, t=25 m de P1 \u2014 position par la separation des rays Chase (2) A/B (415 - 372/409 m) x pilier (S) triple-valide. Ancien (N) deduit (t=188) etait faux. [AXE-SKYWAY-V1] 2026-08-23. Etait [-6795.4, 4783.3]"
+  "note": "pilier NORD sur l axe releve par Alexandre, t=25 m de P1 — position par la separation des rays Chase (2) A/B (415 - 372/409 m) x pilier (S) triple-valide. Ancien (N) deduit (t=188) etait faux. [AXE-SKYWAY-V1] 2026-08-23. Etait [-6795.4, 4783.3]"
  }
 }
