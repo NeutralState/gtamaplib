@@ -4631,17 +4631,17 @@
  },
  "Easy Hill": {
   "xyz": [
-   -5947.3,
-   4183.2,
-   52.6
+   -5720.0,
+   3982.0,
+   87.4
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Diner (SE) (A)"
   ],
-  "error_m": 12.0,
+  "error_m": 15.0,
   "zone": "port_gellhorn",
-  "method": "PEAK-ALEXANDRE (2026-08-25): sommet pointe par Alexandre au tooltip map (-5947.3, 4183.2, z 53.1) = maximum local EXACT de la heightmap (montee de gradient: 0 m, h 52.6) + rayons Diner SE A/B (HUD, orientations corrigees par lui) a 19-20 m + Fires 56'. Ancienne position (harvest Ambrosia04+DinerSE pre-corrections) etait a 139 m."
+  "method": "PEAK-ALEXANDRE v2 (2026-08-25): 2e tooltip d'Alexandre (-5726, 3988, z 87) = le VRAI Easy Hill — les traces de crete des Diner SE A/B (orientations corrigees) dessinent l'horizon sur cette colline (24/25 points cote cand2, crete jusqu'a 84 m), pas sur la bosse de 53 m du 1er candidat. Sommet exact par montee de gradient: (-5720, 3982, 87.4), a 8 m du tooltip. Rayons: Diner SE 24-26 m, Fires 70'. Clic K02 reste exclu (354 m)."
  },
  "Radio Tower (Ambrosia)": {
   "xyz": [
