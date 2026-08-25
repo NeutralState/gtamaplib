@@ -166,6 +166,8 @@
   <span id="pov-yaw-v" style="color:#facc15;font-size:10px"></span>
   <label style="margin-left:8px" title="[POSE-EDIT] pitch hypothesis, +/-15 deg">pitch <input id="pov-pitch" type="range" min="-1500" max="1500" value="0" style="width:80px"></label>
   <span id="pov-pitch-v" style="color:#facc15;font-size:10px"></span>
+  <label style="margin-left:8px" title="[POSE-EDIT] roll hypothesis, +/-3 deg — tilts the world behind the frame">roll <input id="pov-roll" type="range" min="-300" max="300" value="0" style="width:70px"></label>
+  <span id="pov-roll-v" style="color:#facc15;font-size:10px"></span>
   <button id="pov-fov-save" style="background:#166534;color:#dcfce7;border:1px solid #22c55e;border-radius:4px;font-size:10px;cursor:pointer">Save</button>
   <label style="margin-left:10px" title="scroll: widens the field of view without moving the camera — the frame shrinks by the same factor and stays aligned">zoom out <input id="pov-zoom" type="range" min="100" max="600"
          value="100" style="width:110px;vertical-align:middle"></label>
@@ -1570,7 +1572,8 @@ function enterPOV(c) {
     // des que je relache": quelque chose re-entrait dans le POV et on
     // reinitialisait tout. Memorise par cam.
     window.__povAdj = window.__povAdj || {};
-    const adj = window.__povAdj[c.name] = window.__povAdj[c.name] || { f: 100, dyaw: 0, dpitch: 0 };
+    const adj = window.__povAdj[c.name] = window.__povAdj[c.name] || { f: 100, dyaw: 0, dpitch: 0, droll: 0 };
+    if (adj.droll === undefined) adj.droll = 0;   // sessions d'avant le slider roll
     const s = document.getElementById('pov-fov');
     const sv = document.getElementById('pov-fov-v');
     s.value = adj.f;
@@ -1589,24 +1592,32 @@ function enterPOV(c) {
     const syv = document.getElementById('pov-yaw-v');
     const sp = document.getElementById('pov-pitch');
     const spv = document.getElementById('pov-pitch-v');
-    sy.value = adj.dyaw * 100; sp.value = adj.dpitch * 100;
-    let dyaw = adj.dyaw, dpitch = adj.dpitch;
+    const sr = document.getElementById('pov-roll');
+    const srv = document.getElementById('pov-roll-v');
+    sy.value = adj.dyaw * 100; sp.value = adj.dpitch * 100; sr.value = adj.droll * 100;
+    let dyaw = adj.dyaw, dpitch = adj.dpitch, droll = adj.droll;
     const applyOrient = () => {
       // yaw = rotation monde autour de Z; pitch = rotation locale autour de
-      // l'axe droit de la camera (pitch + = lever le nez)
+      // l'axe droit de la camera (pitch + = lever le nez); roll = rotation
+      // locale autour de l'axe optique (signe calibre sur la convention
+      // cameras.json: + = le monde rendu tourne comme roll+ du serveur)
       const qz = new THREE.Quaternion().setFromAxisAngle(
         new THREE.Vector3(0, 0, 1), THREE.MathUtils.degToRad(dyaw));
       const qx = new THREE.Quaternion().setFromAxisAngle(
         new THREE.Vector3(1, 0, 0), THREE.MathUtils.degToRad(dpitch));
-      camera.quaternion.copy(qz).multiply(baseQuat).multiply(qx);
+      const qr = new THREE.Quaternion().setFromAxisAngle(
+        new THREE.Vector3(0, 0, 1), THREE.MathUtils.degToRad(-droll));
+      camera.quaternion.copy(qz).multiply(baseQuat).multiply(qx).multiply(qr);
       camera.updateMatrixWorld(true);
       syv.textContent = (dyaw >= 0 ? '+' : '') + dyaw.toFixed(2) + '°';
       spv.textContent = (dpitch >= 0 ? '+' : '') + dpitch.toFixed(2) + '°';
-      adj.dyaw = dyaw; adj.dpitch = dpitch;
+      srv.textContent = (droll >= 0 ? '+' : '') + droll.toFixed(2) + '°';
+      adj.dyaw = dyaw; adj.dpitch = dpitch; adj.droll = droll;
       renderPovMarks();
     };
     sy.oninput = () => { dyaw = parseFloat(sy.value) / 100; applyOrient(); };
     sp.oninput = () => { dpitch = parseFloat(sp.value) / 100; applyOrient(); };
+    sr.oninput = () => { droll = parseFloat(sr.value) / 100; applyOrient(); };
     applyOrient();
     document.getElementById('pov-fov-save').onclick = async () => {
       const hf = THREE.MathUtils.radToDeg(2 * Math.atan(
@@ -1618,6 +1629,9 @@ function enterPOV(c) {
       }
       if (dpitch !== 0 && c.ypr) {
         url += `&pitch=${(c.ypr[1] + dpitch).toFixed(3)}`;
+      }
+      if (droll !== 0 && c.ypr) {
+        url += `&roll=${(c.ypr[2] + droll).toFixed(3)}`;
       }
       let r = await fetch(url).then(x => x.json()).catch(() => ({error: 'network'}));
       if (r.error === 'SOLVED') {

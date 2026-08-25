@@ -102,7 +102,7 @@
   ],
   "source": "2021-07-12 12-19-51 [4945]",
   "constraint_class": "B_pos_fov_player",
-  "pose_verified": "VERIFIED 2026-08-22 — silhouette ~21', ancres 4.8', pose HUD"
+  "pose_verified": "VERIFIED 2026-08-22 \u2014 silhouette ~21', ancres 4.8', pose HUD"
  },
  "Diner (N)": {
   "id": "L1/4",
@@ -131,7 +131,7 @@
   ],
   "source": "2021-07-12 12-19-51 [4960]",
   "constraint_class": "C_pos_fov_only",
-  "pose_verified": "VERIFIED 2026-08-22 — silhouette ~20' (canopee crete Waffles), ancres 5.7', pose HUD"
+  "pose_verified": "VERIFIED 2026-08-22 \u2014 silhouette ~20' (canopee crete Waffles), ancres 5.7', pose HUD"
  },
  "Diner (NW)": {
   "id": "L1/4",
@@ -524,7 +524,7 @@
   ],
   "source": "2021-11-05 11-09-23 [?]",
   "constraint_class": "B_pos_fov_player",
-  "pose_verified": "VERIFIED 2026-08-22 — ancres 1.3' + silhouette 12.5' a la pose HUD, rien a changer"
+  "pose_verified": "VERIFIED 2026-08-22 \u2014 ancres 1.3' + silhouette 12.5' a la pose HUD, rien a changer"
  },
  "Motel": {
   "id": "L1/9",
@@ -553,7 +553,7 @@
   ],
   "source": "2021-12-14 19-52-44 [?]",
   "constraint_class": "C_pos_fov_only",
-  "note": "pose LEAK (immobile par invariant CI) — la valeur hand-tuned de rlx upstream ee83436 a ete REJETEE: une pose issue du leak est exacte et ne se remplace pas par un reglage a l oeil. Archivee dans pose_alternatives.json."
+  "note": "pose LEAK (immobile par invariant CI) \u2014 la valeur hand-tuned de rlx upstream ee83436 a ete REJETEE: une pose issue du leak est exacte et ne se remplace pas par un reglage a l oeil. Archivee dans pose_alternatives.json."
  },
  "Pawn Shop (W)": {
   "id": "L1/10",
@@ -1114,7 +1114,7 @@
   ],
   "source": "2022-05-03 11-20-11 [?]",
   "constraint_class": "B_pos_fov_player",
-  "pose_verified": "VERIFIED 2026-08-22 — ancres 3.2' a la pose HUD (tension silhouette 10' non tranchee)"
+  "pose_verified": "VERIFIED 2026-08-22 \u2014 ancres 3.2' a la pose HUD (tension silhouette 10' non tranchee)"
  },
  "Ocean near Keys (N)": {
   "id": "L1/21",
@@ -2002,7 +2002,7 @@
   ],
   "source": "2022-09-06 17-13-34 [?]",
   "constraint_class": "C_pos_fov_only",
-  "note": "pose LEAK (immobile par invariant CI) — la valeur hand-tuned de rlx upstream ee83436 a ete REJETEE: une pose issue du leak est exacte et ne se remplace pas par un reglage a l oeil. Archivee dans pose_alternatives.json."
+  "note": "pose LEAK (immobile par invariant CI) \u2014 la valeur hand-tuned de rlx upstream ee83436 a ete REJETEE: une pose issue du leak est exacte et ne se remplace pas par un reglage a l oeil. Archivee dans pose_alternatives.json."
  },
  "Tennis Stadium (4K)": {
   "id": "L1/44",
@@ -2303,7 +2303,7 @@
   ],
   "source": "Trailer 1 [653]",
   "note": "pose RESECT-V2: resection sur 17 ancres, juge 7 ancres laissees dehors 10.2 -> 6.2 arcmin (2.81 m).",
-  "pose_verified": "SOLVED 2026-08-22 — resection z-lock, juge 4.6->2.8 m"
+  "pose_verified": "SOLVED 2026-08-22 \u2014 resection z-lock, juge 4.6->2.8 m"
  },
  "Motorboats (A)": {
   "id": "T1/11",
@@ -2626,7 +2626,7 @@
    2160
   ],
   "source": "Trailer 1 [1498]",
-  "note": "z ancre au sol height map (8.2+1.7, etait 2.0) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.46 deg (dz +7.9 m a d~980 m) | orientation refittee sur markings (xyz fige), mediane 1' -> 0'"
+  "note": "z ancre au sol height map (8.2+1.7, etait 2.0) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.46 deg (dz +7.9 m a d~980 m) | orientation refittee sur markings (xyz fige), mediane 1' -> 0'"
  },
  "Gas Station (Chase) (S)": {
   "id": "T1/29",
@@ -2650,7 +2650,7 @@
    2160
   ],
   "source": "Trailer 1 [1529]",
-  "note": "z ancre au sol height map (8.2+1.7, etait 2.0) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +7.9 m a d~1929 m) | orientation refittee sur markings (xyz fige), mediane 0' -> 0'"
+  "note": "z ancre au sol height map (8.2+1.7, etait 2.0) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +7.9 m a d~1929 m) | orientation refittee sur markings (xyz fige), mediane 0' -> 0'"
  },
  "Interchange": {
   "id": "T1/30",
@@ -2674,7 +2674,7 @@
    2160
   ],
   "source": "Trailer 1 [1535]",
-  "note": "re-resection 2026-07-22 V2: 4 points fixes independants (Flagler; SPC W/NW; WDNA FM spot par Alexandre — 3.6km az 154, 30 deg / 5x la distance du paquet SPC: tue le mode profondeur) + verticalite mat Tall Billboard. Historique: ypr cale sur Flagler seul -> SPC 112-122'."
+  "note": "re-resection 2026-07-22 V2: 4 points fixes independants (Flagler; SPC W/NW; WDNA FM spot par Alexandre \u2014 3.6km az 154, 30 deg / 5x la distance du paquet SPC: tue le mode profondeur) + verticalite mat Tall Billboard. Historique: ypr cale sur Flagler seul -> SPC 112-122'."
  },
  "Waning Sands (A) (X)": {
   "id": "T1/36",
@@ -2813,7 +2813,7 @@
    2160
   ],
   "source": "Trailer 1 [2308]",
-  "note": "z ancre au sol height map (17.7+1.7, etait 14.7) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.08 deg (dz +4.7 m a d~248 m) | orientation refittee sur markings (xyz fige), mediane 5' -> 0'"
+  "note": "z ancre au sol height map (17.7+1.7, etait 14.7) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.08 deg (dz +4.7 m a d~248 m) | orientation refittee sur markings (xyz fige), mediane 5' -> 0'"
  },
  "Key Lento": {
   "id": "T2/1",
@@ -2930,7 +2930,7 @@
   ],
   "source": "Trailer 2",
   "note": "pose HORIZON-V1: 0 ancres + silhouette height map (13 clics de crete), z verrouille sol height map.",
-  "pose_verified": "SOLVED 2026-08-22 — position Alexandre (~10 m), z sol+1.7, orientation silhouette 1.8'"
+  "pose_verified": "SOLVED 2026-08-22 \u2014 position Alexandre (~10 m), z sol+1.7, orientation silhouette 1.8'"
  },
  "Explosion": {
   "id": "T2/58",
@@ -2955,7 +2955,7 @@
   ],
   "source": "Trailer 2 [3539]",
   "note": "pose HORIZON-V1: 3 ancres + silhouette height map (18 clics de crete), z verrouille sol height map.",
-  "pose_verified": "SOLVED 2026-08-22 — xyz (-1001, -212, 15.5): position validee visuellement par Alexandre, z tablier highway, silhouette 2.2' + ancres 10.2'"
+  "pose_verified": "SOLVED 2026-08-22 \u2014 xyz (-1001, -212, 15.5): position validee visuellement par Alexandre, z tablier highway, silhouette 2.2' + ancres 10.2'"
  },
  "Park (Mobile Phone)": {
   "id": "T2/59",
@@ -3117,7 +3117,7 @@
    1728
   ],
   "source": "Trailer 2 [4448]",
-  "note": "z ancre au sol height map (19.0+1.7, etait 5.5) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -6.88 deg (dz +15.2 m a d~126 m) | orientation refittee sur markings (xyz fige), mediane 360' -> 0'"
+  "note": "z ancre au sol height map (19.0+1.7, etait 5.5) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -6.88 deg (dz +15.2 m a d~126 m) | orientation refittee sur markings (xyz fige), mediane 360' -> 0'"
  },
  "Chase (2) (A)": {
   "id": "T2/77",
@@ -3209,7 +3209,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Jason Duval 02 [1]"
+  "source": "Screenshot 1 \u2014 Jason Duval 02 [1]"
  },
  "Jason Duval 05 (Machine Gun)": {
   "id": "S2/5",
@@ -3232,7 +3232,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Jason Duval 05 [1]"
+  "source": "Screenshot 1 \u2014 Jason Duval 05 [1]"
  },
  "Raul Bautista 03 (Motorboat)": {
   "id": "S2/31",
@@ -3255,7 +3255,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Raul Batista 03 [1]"
+  "source": "Screenshot 1 \u2014 Raul Batista 03 [1]"
  },
  "Vice City 03 (Basketball)": {
   "id": "S2/39",
@@ -3278,7 +3278,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Vice City 03 [1]"
+  "source": "Screenshot 1 \u2014 Vice City 03 [1]"
  },
  "Vice City 05 (Vice Beach)": {
   "id": "S2/41",
@@ -3301,8 +3301,8 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Vice City 05 [1]",
-  "note": "z ancre au sol height map (3.5+1.7, etait 0.6) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.53 deg (dz +4.6 m a d~174 m) | orientation refittee sur markings (xyz fige), mediane 57' -> 0'"
+  "source": "Screenshot 1 \u2014 Vice City 05 [1]",
+  "note": "z ancre au sol height map (3.5+1.7, etait 0.6) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.53 deg (dz +4.6 m a d~174 m) | orientation refittee sur markings (xyz fige), mediane 57' -> 0'"
  },
  "Vice City 06 (Ocean Drive)": {
   "id": "S2/42",
@@ -3325,7 +3325,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Vice City 06 [1]"
+  "source": "Screenshot 1 \u2014 Vice City 06 [1]"
  },
  "Vice City 08 (Ferris Wheel)": {
   "id": "S2/44",
@@ -3348,7 +3348,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Vice City 08 [1]"
+  "source": "Screenshot 1 \u2014 Vice City 08 [1]"
  },
  "Vice City 09 (La Perle)": {
   "id": "S2/45",
@@ -3371,7 +3371,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Vice City 09 [1]"
+  "source": "Screenshot 1 \u2014 Vice City 09 [1]"
  },
  "Leonida Keys 01 (Airplane) (X)": {
   "id": "S2/46",
@@ -3394,7 +3394,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Leonida Keys 01 [1]"
+  "source": "Screenshot 1 \u2014 Leonida Keys 01 [1]"
  },
  "Leonida Keys 05 (Boats)": {
   "id": "S2/50",
@@ -3417,7 +3417,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Leonida Keys 05 [1]"
+  "source": "Screenshot 1 \u2014 Leonida Keys 05 [1]"
  },
  "Port Gellhorn 01 (Starlet Motel)": {
   "id": "S2/51",
@@ -3440,7 +3440,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Port Gellhorn 01 [1]",
+  "source": "Screenshot 1 \u2014 Port Gellhorn 01 [1]",
   "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m."
  },
  "Port Gellhorn 04 (Delights) (X)": {
@@ -3464,8 +3464,8 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Port Gellhorn 04 [1]",
-  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m. | z ancre au sol height map (11.3+1.7, etait 7.1) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.19 deg (dz +5.9 m a d~282 m) | orientation refittee sur markings (xyz fige), mediane 5' -> 4'"
+  "source": "Screenshot 1 \u2014 Port Gellhorn 04 [1]",
+  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m. | z ancre au sol height map (11.3+1.7, etait 7.1) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.19 deg (dz +5.9 m a d~282 m) | orientation refittee sur markings (xyz fige), mediane 5' -> 4'"
  },
  "Port Gellhorn 05 (Fire)": {
   "id": "S2/55",
@@ -3488,7 +3488,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Port Gellhorn 05 [1]"
+  "source": "Screenshot 1 \u2014 Port Gellhorn 05 [1]"
  },
  "Ambrosia 01 (Bikers)": {
   "id": "S2/56",
@@ -3511,9 +3511,9 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Ambrosia 01 [1]",
+  "source": "Screenshot 1 \u2014 Ambrosia 01 [1]",
   "note": "pose HORIZON-V1: 13 ancres + silhouette height map (8 clics de crete), z verrouille sol height map.",
-  "pose_verified": "SOLVED 2026-08-21 — z ancre sol height map, silhouette 51 pts mediane -1.6', juge 0.53 m"
+  "pose_verified": "SOLVED 2026-08-21 \u2014 z ancre sol height map, silhouette 51 pts mediane -1.6', juge 0.53 m"
  },
  "Ambrosia 02 (Panorama)": {
   "id": "S2/57",
@@ -3536,32 +3536,33 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Ambrosia 02 [1]",
-  "pose_verified": "VERIFIED 2026-08-21 — ancres 0.1' (128) + silhouette 0.5', pose intacte"
+  "source": "Screenshot 1 \u2014 Ambrosia 02 [1]",
+  "pose_verified": "VERIFIED 2026-08-21 \u2014 ancres 0.1' (128) + silhouette 0.5', pose intacte"
  },
  "Ambrosia 04 (Fires)": {
   "id": "S2/59",
   "player": null,
   "xyz": [
-   -1638.3,
-   3214.5,
-   42.1
+   -1667.7,
+   3193.5,
+   57.1
   ],
   "ypr": [
-   94.18,
-   -1.0,
-   0.0
+   101.04,
+   -2.63,
+   0.232
   ],
   "fov": [
-   33.48,
+   58.6,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Ambrosia 04 [1]",
-  "note": "position Alexandre (leak map, -1638.3/3214.5) FIXE; orientation/z/fov par le relief SEUL (99 traces, ancres reseau exclues du cout sur son ordre). En evaluation UI. | POSE-EDIT: ajustee a la main par Alexandre dans l UI"
+  "source": "Screenshot 1 \u2014 Ambrosia 04 [1]",
+  "note": "position Alexandre (leak map, -1638.3/3214.5) FIXE; orientation/z/fov par le relief SEUL (99 traces, ancres reseau exclues du cout sur son ordre). En evaluation UI. | POSE-EDIT: ajustee a la main par Alexandre dans l UI",
+  "notes": "EN EVALUATION (2026-08-25) \u2014 fit PUR-VERITE: lignes map d'Alexandre (Canal B + Road B, 5 clics) + silhouette (99 pts) + prior position, ZERO ancre reseau. 35 m du tooltip d'Alexandre; fov 61.3 coherent avec la borne Wheelabrator<->Sonora (~65) et la famille Kalaga (64-69). Tension residuelle ~1.3 deg lignes-proches vs horizon (z des canaux lisse par la heightmap?) \u2014 en attente des lignes Route 10 (horizon gauche) et Road A (premier plan) pour trancher. Remplace l'AUTO relief-only fov 33.5 (refute: Wheelabrator hors cadre)."
  },
  "Grassrivers 02 (Watson Bay)": {
   "id": "S2/62",
@@ -3584,7 +3585,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Grassrivers 02 [1]"
+  "source": "Screenshot 1 \u2014 Grassrivers 02 [1]"
  },
  "Mount Kalaga National Park 02 (Helicopter) (X)": {
   "id": "S2/66",
@@ -3607,9 +3608,9 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Mount Kalaga National Park 02 [1]",
+  "source": "Screenshot 1 \u2014 Mount Kalaga National Park 02 [1]",
   "note": "pose du solver externe v2 (raffinement Alexandre 2026-08-24); cam a 54.2 m au-dessus du sol (112.7); silhouette 8.2' sur 63 traces.",
-  "pose_verified": "SOLVED 2026-08-24 — solver externe v2 d'Alexandre (ancres leak map + z terrain), silhouette 8.2' sur 63 traces"
+  "pose_verified": "SOLVED 2026-08-24 \u2014 solver externe v2 d'Alexandre (ancres leak map + z terrain), silhouette 8.2' sur 63 traces"
  },
  "Mount Kalaga National Park 04 (Mountain Pass) (X)": {
   "id": "S2/68",
@@ -3632,9 +3633,9 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Mount Kalaga National Park 04 [1]",
-  "note": "pose du solver externe (heightmap16bit + fullMap overlay, essai Alexandre 2026-08-22): cam a 12.9 m au-dessus du sol height map (127.6) — aerienne, coherent avec la frame. Conventions verifiees (yaw meme sens que nous). A valider au POV.",
-  "pose_verified": "SOLVED 2026-08-24 — solver externe v2 (Alexandre): pose complete xyz/ypr/hfov epinglee a l'oeil dans son outil (vFoV 42.144). Remplace la v1 du solver (-4887.7, 5449.3, 140.5 / yaw 153.41 / hfov 66.65)."
+  "source": "Screenshot 1 \u2014 Mount Kalaga National Park 04 [1]",
+  "note": "pose du solver externe (heightmap16bit + fullMap overlay, essai Alexandre 2026-08-22): cam a 12.9 m au-dessus du sol height map (127.6) \u2014 aerienne, coherent avec la frame. Conventions verifiees (yaw meme sens que nous). A valider au POV.",
+  "pose_verified": "SOLVED 2026-08-24 \u2014 solver externe v2 (Alexandre): pose complete xyz/ypr/hfov epinglee a l'oeil dans son outil (vFoV 42.144). Remplace la v1 du solver (-4887.7, 5449.3, 140.5 / yaw 153.41 / hfov 66.65)."
  },
  "Vice City Postcard": {
   "id": "S2/71",
@@ -3657,7 +3658,7 @@
    2458,
    1604
   ],
-  "source": "Screenshot 1 — Vice City Postcard [?]"
+  "source": "Screenshot 1 \u2014 Vice City Postcard [?]"
  },
  "Leonida Keys Postcard (X)": {
   "id": "S2/72",
@@ -3680,7 +3681,7 @@
    2563,
    1709
   ],
-  "source": "Screenshot 1 — Leonida Keys Postcard [?]"
+  "source": "Screenshot 1 \u2014 Leonida Keys Postcard [?]"
  },
  "Port Gellhorn Postcard (X)": {
   "id": "S2/73",
@@ -3703,7 +3704,7 @@
    3240,
    2160
   ],
-  "source": "Screenshot 1 — Port Gellhorn Postcard [1]",
+  "source": "Screenshot 1 \u2014 Port Gellhorn Postcard [1]",
   "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m."
  },
  "Ambrosia Postcard (X)": {
@@ -3727,8 +3728,8 @@
    3308,
    2160
   ],
-  "source": "Screenshot 1 — Ambrosia Postcard [?]",
-  "note": "verdict Alexandre 2026-08-23: pose HORRIBLE — a refaire"
+  "source": "Screenshot 1 \u2014 Ambrosia Postcard [?]",
+  "note": "verdict Alexandre 2026-08-23: pose HORRIBLE \u2014 a refaire"
  },
  "Grassrivers Postcard (X)": {
   "id": "S2/75",
@@ -3751,7 +3752,7 @@
    3240,
    2160
   ],
-  "source": "Screenshot 1 — Grassrivers Postcard [60]"
+  "source": "Screenshot 1 \u2014 Grassrivers Postcard [60]"
  },
  "Yacht (2)": {
   "id": "T2/38",
@@ -4162,7 +4163,7 @@
    2160
   ],
   "source": "Trailer 1 [?]",
-  "note": "z ancre au sol height map (4.8+1.7, etait -0.1) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +6.6 m a d~1537 m) | orientation refittee sur markings (xyz fige), mediane 3' -> 2'"
+  "note": "z ancre au sol height map (4.8+1.7, etait -0.1) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +6.6 m a d~1537 m) | orientation refittee sur markings (xyz fige), mediane 3' -> 2'"
  },
  "Intersection (Bikers)": {
   "id": "T1/41",
@@ -4232,7 +4233,7 @@
    1728
   ],
   "source": "Trailer 2 [1496]",
-  "note": "z ancre au sol height map (12.2+1.7, etait 9.7) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -4.75 deg (dz +4.2 m a d~50 m) | orientation refittee sur markings (xyz fige), mediane 101' -> 0'"
+  "note": "z ancre au sol height map (12.2+1.7, etait 9.7) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -4.75 deg (dz +4.2 m a d~50 m) | orientation refittee sur markings (xyz fige), mediane 101' -> 0'"
  },
  "Pier (Sea)": {
   "id": "T2/29",
@@ -4302,7 +4303,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Jason Duval 03 [1]"
+  "source": "Screenshot 1 \u2014 Jason Duval 03 [1]"
  },
  "Lucia Caminos 02 (Pool)": {
   "id": "S2/8",
@@ -4325,7 +4326,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Lucia Caminas 02 (Pool)"
+  "source": "Screenshot 1 \u2014 Lucia Caminas 02 (Pool)"
  },
  "Vice City 02 (Hotel)": {
   "id": "S2/38",
@@ -4348,7 +4349,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Vice City 02 [1]"
+  "source": "Screenshot 1 \u2014 Vice City 02 [1]"
  },
  "Leonida Keys 02 (Sidewalk)": {
   "id": "S2/47",
@@ -4371,7 +4372,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Leonida Keys 02 [1]"
+  "source": "Screenshot 1 \u2014 Leonida Keys 02 [1]"
  },
  "Port (B)": {
   "id": "L1/7b",
@@ -4449,9 +4450,9 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Vice City 01 [1]",
+  "source": "Screenshot 1 \u2014 Vice City 01 [1]",
   "note": "pose RESECT-V2: resection sur 27 ancres, juge 12 ancres laissees dehors 351.7 -> 33.0 arcmin (2.67 m).",
-  "pose_verified": "SOLVED 2026-08-22 — resection z-lock, juge 21.7->2.67 m (etait enterree -23 m)"
+  "pose_verified": "SOLVED 2026-08-22 \u2014 resection z-lock, juge 21.7->2.67 m (etait enterree -23 m)"
  },
  "Vice City Sign": {
   "id": "T1/21",
@@ -4497,9 +4498,9 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Port Vice City [1]",
+  "source": "Screenshot 2 \u2014 Port Vice City [1]",
   "note": "pose HORIZON-V1: 71 ancres + silhouette height map (30 clics de crete), z libre.",
-  "pose_verified": "SOLVED 2026-08-22 — silhouette 8.1'->2.2', ancres 4.6'"
+  "pose_verified": "SOLVED 2026-08-22 \u2014 silhouette 8.1'->2.2', ancres 4.6'"
  },
  "Port Vice City (B)": {
   "id": "S3/2",
@@ -4522,9 +4523,9 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Port Vice City [140]",
+  "source": "Screenshot 2 \u2014 Port Vice City [140]",
   "note": "pose HORIZON-V1: 59 ancres + silhouette height map (23 clics de crete), z libre.",
-  "pose_verified": "SOLVED 2026-08-22 — silhouette 7.8'->2.7', ancres 2.9'"
+  "pose_verified": "SOLVED 2026-08-22 \u2014 silhouette 7.8'->2.7', ancres 2.9'"
  },
  "'95 Grotti Cheetah 04 (Garage)": {
   "id": "S3/8",
@@ -4547,7 +4548,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — '95 Grotti Cheetah 04 [1]"
+  "source": "Screenshot 2 \u2014 '95 Grotti Cheetah 04 [1]"
  },
  "Crest Kayak": {
   "id": "S3/19",
@@ -4570,7 +4571,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Crest Kayak [1]"
+  "source": "Screenshot 2 \u2014 Crest Kayak [1]"
  },
  "Green Sports Car": {
   "id": "S3/2",
@@ -4593,7 +4594,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Green Sports Car [1]"
+  "source": "Screenshot 2 \u2014 Green Sports Car [1]"
  },
  "House (Keys)": {
   "id": "T2/2",
@@ -4639,7 +4640,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Jason's Safehouse Vehicles [1]"
+  "source": "Screenshot 2 \u2014 Jason's Safehouse Vehicles [1]"
  },
  "Landing Gear (B)": {
   "id": "T2/60",
@@ -4685,7 +4686,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Shitzu Squalo 01 [1]"
+  "source": "Screenshot 2 \u2014 Shitzu Squalo 01 [1]"
  },
  "Starlet Motel": {
   "id": "T2/54",
@@ -4732,7 +4733,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Stock 305 Clothing Store 01 [1]"
+  "source": "Screenshot 2 \u2014 Stock 305 Clothing Store 01 [1]"
  },
  "Ultimate Edition 02 (Green Sports Car)": {
   "id": "S3/4",
@@ -4755,8 +4756,8 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Ultimate Edition 02 [1]",
-  "note": "z ancre au sol height map (5.2+1.7, etait 1.0) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.49 deg (dz +5.9 m a d~700 m) | orientation refittee sur markings (xyz fige), mediane 327' -> 104'"
+  "source": "Screenshot 2 \u2014 Ultimate Edition 02 [1]",
+  "note": "z ancre au sol height map (5.2+1.7, etait 1.0) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.49 deg (dz +5.9 m a d~700 m) | orientation refittee sur markings (xyz fige), mediane 327' -> 104'"
  },
  "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)": {
   "id": "S3/63",
@@ -4779,7 +4780,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Vintage Vice City Outfits and Hairstyles 04 [1]"
+  "source": "Screenshot 2 \u2014 Vintage Vice City Outfits and Hairstyles 04 [1]"
  },
  "Vintage Vice City Pack 02 (Port)": {
   "id": "S3/55",
@@ -4802,8 +4803,8 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Vintage Vice City Pack 02 [1]",
-  "note": "z ancre au sol height map (2.6+1.7, etait 1.5) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +2.8 m a d~686 m) | orientation refittee sur markings (xyz fige), mediane 16' -> 3'"
+  "source": "Screenshot 2 \u2014 Vintage Vice City Pack 02 [1]",
+  "note": "z ancre au sol height map (2.6+1.7, etait 1.5) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +2.8 m a d~686 m) | orientation refittee sur markings (xyz fige), mediane 16' -> 3'"
  },
  "Highway (Panorama) (S)": {
   "id": "L2/1",
@@ -4826,7 +4827,7 @@
    1920,
    1080
   ],
-  "source": "Highway (Panorama) [L2/1, rlx placeholder — date inconnue]"
+  "source": "Highway (Panorama) [L2/1, rlx placeholder \u2014 date inconnue]"
  },
  "Highway (Panorama) (W)": {
   "id": "L2/1",
@@ -4849,7 +4850,7 @@
    1920,
    1080
   ],
-  "source": "Highway (Panorama) [L2/1, rlx placeholder — date inconnue]"
+  "source": "Highway (Panorama) [L2/1, rlx placeholder \u2014 date inconnue]"
  },
  "Loading Zone near Prison (S)": {
   "id": "L1/26",
@@ -5114,6 +5115,6 @@
   ],
   "source": "Mount Kalaga Postcard (webp, 2026-08-23)",
   "constraint_class": null,
-  "note": "position Alexandre FIXE; z/yaw/pitch par fit silhouette massif Ambrosia (18.8' sur 46 pts), fov par grille (vallee plate — fov peu contraint par la silhouette seule) [AUTO-SKYLINE-V1]. A verifier au POV. | POSE-EDIT: ajustee a la main par Alexandre dans l UI"
+  "note": "position Alexandre FIXE; z/yaw/pitch par fit silhouette massif Ambrosia (18.8' sur 46 pts), fov par grille (vallee plate \u2014 fov peu contraint par la silhouette seule) [AUTO-SKYLINE-V1]. A verifier au POV. | POSE-EDIT: ajustee a la main par Alexandre dans l UI"
  }
 }
