@@ -711,8 +711,17 @@ const data = await (await fetch('/api/scene3d')).json();
             vec3 sb = seabedColor(min(vPos.z, -1.5), vPos.xy);
             float onLowLand = 1.0 - smoothstep(2.5, 5.0, vPos.z);
             base = mix(base, sb, w * onLowLand);
-            float sub = smoothstep(0.5, 4.0, -vPos.z);   // structures immergees: teinte legere
-            base = mix(base, base * vec3(0.70, 0.88, 1.05), sub * (1.0 - w) * 0.7);
+            // sous l'eau, seules les STRUCTURES survivent (gris clair/blanc:
+            // ponts, causeways, routes) — les pixels couleur terre de la map
+            // peinte (brun/vert du nord) deviennent du fond marin, sinon on
+            // voyait "du ground sous l'eau"
+            float sub = smoothstep(0.5, 4.0, -vPos.z);
+            float maxc = max(base.r, max(base.g, base.b));
+            float minc = min(base.r, min(base.g, base.b));
+            float structy = smoothstep(0.40, 0.58, maxc)
+                          * (1.0 - smoothstep(0.12, 0.25, maxc - minc));
+            base = mix(base, sb, sub * (1.0 - structy));
+            base = mix(base, base * vec3(0.70, 0.88, 1.05), sub * structy * 0.7);
           } else {
             base = vPos.z > 0.0 ? landColor(vPos.z, slope, vPos.xy)
                                 : seabedColor(vPos.z, vPos.xy);
