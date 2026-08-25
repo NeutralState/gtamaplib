@@ -577,18 +577,63 @@ const data = await (await fetch('/api/scene3d')).json();
       const n = nx * ny;
       const dd = new Float32Array(n);
       const zr = new Float32Array(n);
-      // [SEAM-NORD/SUD] rubans de couture TERRAIN-EXTEND: plateaux fabriques
-      // a +0.74/+0.77 le long des anciens bords de map (nord y=9736 — au-dela
-      // de y=9400 la grille n'a AUCUNE terre reelle, max mesure 0.94 m; sud
-      // y~-8590 — transect E-W: 0.77 constant sur 13 km, aucune ile des Keys
-      // dans la bande) -> no-data pour l'affichage, l'ocean les remplace.
-      // Z verite intact.
+      // [SEAM-MAP-ARBITRAGE] rubans de couture TERRAIN-EXTEND: plateaux
+      // fabriques a +0.74/+0.77 le long des anciens bords de map (nord y~9736,
+      // sud y~-8590). La geometrie seule ne distingue PAS le ruban des
+      // iles-barrieres peintes (memes 0.4-0.9 m — une bande z>-2 aveugle
+      // coupait une ile au rasoir): on n'y noie que la ou la MAP dit eau ou
+      // bordure noire. Z verite intact.
+      // bande nord LARGE (la fausse plate-forme +0.5 court depuis ~y 8800):
+      // une bande trop courte dessinait sa propre frontiere en ligne droite
+      const BANDS = [[8750, 9800], [-8700, -8450]];
+      let mapWater = () => true;
+      try {
+        const s0v = localStorage.getItem('ui.tileSrc') || 'leak,1';
+        const srcQ = s0v !== 'yanis,14'
+          ? `&src=${encodeURIComponent(s0v)}&v=${encodeURIComponent(s0v + '.4')}` : '';
+        const strips = [];
+        const jobs = [];
+        const x1w = x0 + (nx - 1) * step;
+        for (const [yA, yB] of BANDS) {
+          const ty0 = Math.floor((16384 - yB) / 1024), ty1 = Math.floor((16384 - yA) / 1024);
+          const tx0 = Math.floor((16384 + x0) / 1024), tx1 = Math.floor((16384 + x1w) / 1024);
+          const can = document.createElement('canvas');
+          can.width = (tx1 - tx0 + 1) * 256; can.height = (ty1 - ty0 + 1) * 256;
+          const ctx = can.getContext('2d', { willReadFrequently: true });
+          const st = { yA, yB, tx0, ty0, can, ctx, img: null };
+          strips.push(st);
+          for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) {
+            jobs.push(new Promise(res => {
+              const im = new Image();
+              im.onload = () => { ctx.drawImage(im, (tx - tx0) * 256, (ty - ty0) * 256); res(); };
+              im.onerror = res;
+              im.src = `/tiles/3/3,${ty},${tx}.jpg?v=14${srcQ}`;
+            }));
+          }
+        }
+        await Promise.all(jobs);
+        for (const st of strips) st.img = st.ctx.getImageData(0, 0, st.can.width, st.can.height);
+        mapWater = (wx, wy) => {
+          for (const st of strips) {
+            if (wy < st.yA || wy > st.yB) continue;
+            const px = Math.round((16384 + wx) / 4) - st.tx0 * 256;
+            const py = Math.round((16384 - wy) / 4) - st.ty0 * 256;
+            if (px < 0 || py < 0 || px >= st.img.width || py >= st.img.height) return true;
+            const o = (py * st.img.width + px) * 4;
+            const r = st.img.data[o], g2 = st.img.data[o + 1], b = st.img.data[o + 2];
+            if (Math.max(r, g2, b) < 60) return true;              // bordure noire du scan
+            return b > r + 8 && b >= g2 - 6;                       // eau (bleu dominant)
+          }
+          return false;
+        };
+      } catch (e) { console.warn('seam-map-arbitrage:', e); }
       for (let j = 0; j < ny; j++) {
         const wy = y0 + j * step;
-        const seam = wy > 9400 || (wy > -8680 && wy < -8470);
+        const inBand = BANDS.some(([a, b2]) => wy > a && wy < b2);
         for (let i = 0; i < nx; i++) {
           const k = j * nx + i, z = Z[k];
-          if (z > NDATA && !(seam && z > -2.0)) { dd[k] = 0; zr[k] = z; }
+          const drown = inBand && z > -2.0 && z < 2.5 && mapWater(x0 + i * step, wy);
+          if (z > NDATA && !drown) { dd[k] = 0; zr[k] = z; }
           else { dd[k] = 1e9; zr[k] = -80; }
         }
       }
@@ -617,8 +662,12 @@ const data = await (await fetch('/api/scene3d')).json();
         }
         dd[k] = bd; zr[k] = bz;
       }
+      // pente RAIDE (22%): a 5% la rampe trainait des centaines de metres
+      // dans la zone "turquoise peu profond" -> les coutures noyees se
+      // dessinaient comme des lignes claires + ecume en plein ocean
+      // ("les limites du rectangle de la map")
       zDisp = k => dd[k] === 0 ? Z[k]
-        : Math.max(-140, Math.min(zr[k], -2) - dd[k] * 0.05);
+        : Math.max(-140, Math.min(zr[k], -2) - dd[k] * 0.22);
     }
     // [BEAUTY-V1] plus de couleurs par sommet: la palette est calculee
     // per-pixel dans le shader (plus fine, et ~120 MB de RAM economises)
@@ -763,9 +812,10 @@ const data = await (await fetch('/api/scene3d')).json();
             base = vPos.z > 0.0 ? landColor(vPos.z, slope, vPos.xy)
                                 : seabedColor(vPos.z, vPos.xy);
           }
-          // bord du crop: la jupe plonge sous la mer et prend la couleur du
-          // fond — plus de barre noire de pixels etires ni de liseret d'eau
-          base = mix(base, seabedColor(min(vPos.z, -2.0), vPos.xy),
+          // bord du crop: la jupe plonge sous la mer et prend une couleur
+          // ABYSSALE directe (min -30: a -2 le rebord dessinait un liseret
+          // turquoise le long de tout le rectangle)
+          base = mix(base, seabedColor(min(vPos.z, -30.0), vPos.xy),
                      1.0 - smoothstep(250.0, 650.0, dEdge));
           // [BEAUTY-V2] grain de detail pres de la camera (le drape 4 m/px et
           // la palette gagnent une texture quand on s'approche)
@@ -1047,7 +1097,11 @@ const data = await (await fetch('/api/scene3d')).json();
         const dBuf = new Uint8Array(nx2 * ny2);
         for (let j2 = 0; j2 < ny2; j2++) for (let i2 = 0; i2 < nx2; i2++) {
           const i = Math.min(nx - 1, i2 * S), j = Math.min(ny - 1, j2 * S);
-          dBuf[j2 * nx2 + i2] = Math.max(0, Math.min(255, Math.round(-Zd[j * nx + i] * 4)));
+          // la jupe de bord compte comme PROFONDE: sinon la surface teintait
+          // turquoise + ecume le long du rectangle du crop
+          const db = Math.min(i, nx - 1 - i, j, ny - 1 - j) * step;
+          dBuf[j2 * nx2 + i2] = db < 700 ? 255
+            : Math.max(0, Math.min(255, Math.round(-Zd[j * nx + i] * 4)));
         }
         const dTex = new THREE.DataTexture(dBuf, nx2, ny2, THREE.RedFormat, THREE.UnsignedByteType);
         dTex.magFilter = THREE.LinearFilter;
