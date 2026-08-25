@@ -714,12 +714,19 @@ const data = await (await fetch('/api/scene3d')).json();
             // sous l'eau, seules les STRUCTURES survivent (gris clair/blanc:
             // ponts, causeways, routes) — les pixels couleur terre de la map
             // peinte (brun/vert du nord) deviennent du fond marin, sinon on
-            // voyait "du ground sous l'eau"
-            float sub = smoothstep(0.5, 4.0, -vPos.z);
+            // voyait "du ground sous l'eau". La transition demarre DES la
+            // surface: les grands flats fabriques a z=-0.2 gardaient la map
+            // brute (papier brun) sous le voile d'eau.
+            float sub = smoothstep(0.0, 2.5, -vPos.z);
             float maxc = max(base.r, max(base.g, base.b));
             float minc = min(base.r, min(base.g, base.b));
-            float structy = smoothstep(0.40, 0.58, maxc)
-                          * (1.0 - smoothstep(0.12, 0.25, maxc - minc));
+            // filtre serre: le papier tan de la map (clair, presque neutre)
+            // passait a moitie et laissait une boue brune sous l'eau — une
+            // structure est FRANCHEMENT claire ET quasi neutre, et elle
+            // s'efface au-dela de ~15 m de fond (aucun pont ne vit la)
+            float structy = smoothstep(0.55, 0.72, maxc)
+                          * (1.0 - smoothstep(0.08, 0.16, maxc - minc))
+                          * (1.0 - smoothstep(8.0, 16.0, -vPos.z));
             base = mix(base, sb, sub * (1.0 - structy));
             base = mix(base, base * vec3(0.70, 0.88, 1.05), sub * structy * 0.7);
           } else {
