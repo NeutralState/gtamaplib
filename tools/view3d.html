@@ -1623,7 +1623,10 @@ function enterPOV(c) {
       const hf = THREE.MathUtils.radToDeg(2 * Math.atan(
         Math.tan(THREE.MathUtils.degToRad(povBase.vfov0) / 2) * povBase.ratio));
       const name = document.getElementById('pov-name').textContent;
-      let url = `/api/set_cam_pose?cam=${encodeURIComponent(name)}&hfov=${hf.toFixed(3)}`;
+      // [FOV-TRUTH-GUARD] slider fov intouche (100%) -> ne PAS envoyer hfov:
+      // la derive d'arrondi (0.03 deg) ecrasait le fov console des cams HUD
+      let url = `/api/set_cam_pose?cam=${encodeURIComponent(name)}`;
+      if (adj.f !== 100) url += `&hfov=${hf.toFixed(3)}`;
       if (dyaw !== 0 && c.ypr) {
         url += `&yaw=${(c.ypr[0] + dyaw).toFixed(3)}`;
       }

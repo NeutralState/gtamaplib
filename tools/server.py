@@ -881,7 +881,17 @@ class Handler(BaseHTTPRequestHandler):
             if yaw is not None: _e['ypr'][0] = round(yaw, 3)
             if pitch is not None: _e['ypr'][1] = round(pitch, 3)
             if roll is not None: _e['ypr'][2] = round(roll, 3)
-            if hfov is not None: _e['fov'] = [round(hfov, 3), None]
+            # [FOV-TRUTH-GUARD] cam HUD/leak: le fov est une VERITE console
+            # (invariant LEAK du healthcheck) — l'orientation reste editable,
+            # le fov JAMAIS: on l'ignore et on le signale. C'est ce guard qui
+            # manquait quand le Save du POV a ecrase le fov console de
+            # Diner (NW) ([80.593, 51.0] -> [80.564, None]).
+            _fov_ignored = False
+            if hfov is not None:
+                if _e.get('player') or (_e.get('fov') and _e['fov'][1] is not None):
+                    _fov_ignored = True
+                else:
+                    _e['fov'] = [round(hfov, 3), None]
             _e['note'] = ((_e.get('note') or '').split(' | POSE-EDIT')[0]
                           + ' | POSE-EDIT: ajustee a la main par Alexandre dans l UI').strip(' |')
             import tempfile as _tmp
@@ -902,7 +912,10 @@ class Handler(BaseHTTPRequestHandler):
                 ml.get_camera.cache_clear()
             except Exception:
                 pass
-            self.send_json({'ok': True, 'xyz': _e['xyz'], 'ypr': _e['ypr'], 'fov': _e['fov']})
+            _resp = {'ok': True, 'xyz': _e['xyz'], 'ypr': _e['ypr'], 'fov': _e['fov']}
+            if _fov_ignored:
+                _resp['fov_ignored'] = 'fov console (HUD/leak) — verite intouchable, orientation sauvee'
+            self.send_json(_resp)
             return
 
         elif path == '/api/tile_sources':
