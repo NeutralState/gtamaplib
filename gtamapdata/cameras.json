@@ -151,15 +151,16 @@
    -0.016455154190461896
   ],
   "fov": [
-   80.593,
-   51.0
+   80.564,
+   null
   ],
   "size": [
    1920,
    1080
   ],
   "source": "2021-07-12 12-19-51 [5103]",
-  "constraint_class": "C_pos_fov_only"
+  "constraint_class": "C_pos_fov_only",
+  "note": "POSE-EDIT: ajustee a la main par Alexandre dans l UI"
  },
  "Diner (W) (A)": {
   "id": "L1/4",
@@ -314,8 +315,8 @@
    16.4
   ],
   "ypr": [
-   224.73,
-   -6.418,
+   233.75,
+   -5.058,
    0.0
   ],
   "fov": [
@@ -327,7 +328,8 @@
    1080
   ],
   "source": "2021-07-12 12-19-51 [5373]",
-  "constraint_class": "C_pos_fov_only"
+  "constraint_class": "C_pos_fov_only",
+  "note": "POSE-EDIT: ajustee a la main par Alexandre dans l UI"
  },
  "Diner (SE) (B)": {
   "id": "L1/4",
@@ -342,8 +344,8 @@
    16.8
   ],
   "ypr": [
-   218.111,
-   -5.435,
+   231.841,
+   -4.595,
    0.0
   ],
   "fov": [
@@ -355,7 +357,8 @@
    1080
   ],
   "source": "2021-07-12 12-19-51 [5388]",
-  "constraint_class": "C_pos_fov_only"
+  "constraint_class": "C_pos_fov_only",
+  "note": "POSE-EDIT: ajustee a la main par Alexandre dans l UI"
  },
  "Easy Inn": {
   "id": "L1/4",
