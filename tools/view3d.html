@@ -492,10 +492,14 @@ for (const k of ['cams', 'lms', 'meshes', 'terrain']) {
 
 // [VIEW3D-SYNC] le parent peut envoyer le focus-cam AVANT la fin du build
 // de la scene (module en await) — on bufferise et on applique apres.
+// [UI-V2] le sync de calib FOCUS la cam (vol + marqueur + details sidebar)
+// mais n'entre plus en POV: le panneau d'edition de pose n'apparait que sur
+// un clic explicite (frustum ou liste) — "ce panel devrait juste apparaitre
+// si on clique sur de quoi".
 let pendingFocus = null, sceneReady = false;
 addEventListener('message', ev => {
   if (ev.data && ev.data.type === 'gtamaplib-focus-cam' && ev.data.name) {
-    if (sceneReady) syncToCam(ev.data.name);
+    if (sceneReady) focusCam(ev.data.name);
     else pendingFocus = ev.data.name;
   }
 });
@@ -1597,7 +1601,7 @@ function syncToCam(name) {
 window.__focusCam = focusCam;
 window.__syncToCam = syncToCam;
 sceneReady = true;                               // [VIEW3D-SYNC]
-if (pendingFocus) { syncToCam(pendingFocus); pendingFocus = null; }
+if (pendingFocus) { focusCam(pendingFocus); pendingFocus = null; }
 
 // ── [UI-V2] sidebar: liste des cameras, recherche, details de pose ──
 (() => {
