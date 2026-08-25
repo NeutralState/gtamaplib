@@ -19263,13 +19263,13 @@
  },
  "Sunshine Skyway Bridge (N)": {
   "xyz": [
-   -6838.0,
-   4940.4,
+   -6810.0,
+   4837.1,
    119.47
   ],
   "error_m": null,
   "source_cameras": [],
   "zone": "port_gellhorn",
-  "note": "pilier NORD sur l axe releve par Alexandre, t=25 m de P1 — position par la separation des rays Chase (2) A/B (415 - 372/409 m) x pilier (S) triple-valide. Ancien (N) deduit (t=188) etait faux. [AXE-SKYWAY-V1] 2026-08-23. Etait [-6795.4, 4783.3]"
+  "note": "AXE-SKYWAY-V2 (2026-08-25): position le long de l'axe AFFINEE par le match ferme demande par Alexandre — pylone Diner fixe a t415 (valide 3 rayons HUD), le rayon du clic N de Fires (pose lignes-verite) croise la diago a t=132 (miss 4.8 m; l'assignation inverse donnait t=683 hors segment + yaw +1.67). Separation reelle 283 m (t25->t132; le ~390 m de Chase etait un rayon rasant). Diago d'Alexandre inchangee."
  }
 }
