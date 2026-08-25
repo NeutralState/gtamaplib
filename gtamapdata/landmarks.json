@@ -18934,16 +18934,16 @@
  },
  "BB Hill": {
   "xyz": [
-   -3769.2,
-   3791.75,
-   68.52
+   -3663.0,
+   4696.0,
+   90.2
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)"
   ],
-  "error_m": 0.97,
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.0 m, parallaxe max 65 deg — remplace le harvest circulaire pre-poses"
+  "error_m": 15.0,
+  "method": "PEAK-ALEXANDRE (2026-08-25): sommet pointe par Alexandre au tooltip map (-3650.9, 4696.5, z 88.8), maximum local heightmap a 12 m (h 90.2). Remplace le croisement Panorama x Fires qui flottait +22 m au-dessus du sol a 912 m de la (aperture des clics de skyline — les collines ne se triangulent pas). NB: les traces de crete nommees 'BB Hill' silhouettent d'AUTRES cretes (Fires -> Easy Hill)."
  },
  "Building near Pool (N)": {
   "xyz": [
