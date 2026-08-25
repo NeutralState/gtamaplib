@@ -122,7 +122,8 @@
     <span class="lchip" id="ly-leakmap" title="Base map: full leak map (composite over yanis)">Leak map</span>
     <span class="lchip" id="ly-drape" title="Drape the 2D map onto the relief (lakes, roads, details)">Drape</span>
     <span class="lchip" id="ly-contours" title="Elevation contours (50 m major, 10 m minor)">Contours</span>
-    <span class="lchip" id="btn-shot" title="Save a PNG of this view (+ active frame inset)">&#8681; Shot</span>
+    <span class="lchip" id="btn-orbit" title="Slow cinematic orbit around the current target — great for captures">Orbit</span>
+    <span class="lchip" id="btn-shot" title="Save a 4K PNG of this view (+ active frame inset)">&#8681; Shot</span>
   </div>
 </div>
 <div class="panel" id="info"></div>
@@ -137,8 +138,8 @@
     <div class="sect" style="margin-bottom:2px">Environment</div>
     <label title="Sun azimuth (0 = north, clockwise)">Azimuth
       <span style="display:flex;align-items:center;gap:7px"><input id="env-az" type="range" min="0" max="359" step="1"><span class="v" id="env-az-v"></span></span></label>
-    <label title="Sun elevation — low = grazing light, warm tones, long shadows">Sun height
-      <span style="display:flex;align-items:center;gap:7px"><input id="env-el" type="range" min="4" max="80" step="1"><span class="v" id="env-el-v"></span></span></label>
+    <label title="Sun elevation — low = warm grazing light and long shadows; below 0 = night (stars + city lights)">Sun height
+      <span style="display:flex;align-items:center;gap:7px"><input id="env-el" type="range" min="-10" max="80" step="1"><span class="v" id="env-el-v"></span></span></label>
     <label title="Atmospheric haze (visibility distance)">Haze
       <span style="display:flex;align-items:center;gap:7px"><input id="env-haze" type="range" min="0" max="100" step="1"><span class="v" id="env-haze-v"></span></span></label>
     <div class="toggles">
@@ -280,12 +281,18 @@ const ENV = Object.assign({ az: 215, el: 38, haze: 30 },
   JSON.parse(localStorage.getItem('ui.env3d') || '{}'));
 const _lin = c => c.map(v => Math.pow(v, 2.2));   // sRGB -> lineaire (les shaders travaillent en lineaire)
 function skyColors() {
-  // t: 0 = couchant (teintes chaudes), 1 = plein jour
+  // t: 0 = couchant (teintes chaudes), 1 = plein jour;
+  // night: 0 = jour, 1 = nuit noire (el <= -6, crepuscule -6..+2)
   const t = Math.min(1, Math.max(0, (ENV.el - 4) / 30));
-  const L = (a, b) => a.map((v, i) => v + (b[i] - v) * t);
-  return { zen: _lin(L([0.28, 0.33, 0.52], [0.34, 0.56, 0.86])),
-           hor: _lin(L([0.99, 0.66, 0.42], [0.79, 0.87, 0.94])),
-           sun: _lin(L([1.00, 0.58, 0.26], [1.00, 0.96, 0.88])) };
+  const night = Math.min(1, Math.max(0, (2 - ENV.el) / 8));
+  const L = (a, b, k) => a.map((v, i) => v + (b[i] - v) * k);
+  let zen = L([0.28, 0.33, 0.52], [0.34, 0.56, 0.86], t);
+  let hor = L([0.99, 0.66, 0.42], [0.79, 0.87, 0.94], t);
+  let sun = L([1.00, 0.58, 0.26], [1.00, 0.96, 0.88], t);
+  zen = L(zen, [0.012, 0.020, 0.060], night);
+  hor = L(hor, [0.050, 0.070, 0.140], night);
+  sun = L(sun, [0.100, 0.080, 0.060], night);
+  return { zen: _lin(zen), hor: _lin(hor), sun: _lin(sun), night };
 }
 function sunDirVec() {   // vecteur VERS le soleil; az horaire depuis le nord (+y)
   const az = ENV.az * Math.PI / 180, el = ENV.el * Math.PI / 180;
@@ -303,6 +310,7 @@ const terraUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uShadow:   { value: null },   // [SHADOWS-V1] carte d'ombres portees cuite en JS
   uShadowOn: { value: 0 },
   uClouds:   { value: 1 },
+  uNight:    { value: 0 },
   uTerrBounds: { value: new THREE.Vector4(-1e7, -1e7, 1e7, 1e7) },
   // rect MESURE du DDS (georef rlx): au-dela, la bathymetrie est inferee
   // (rampes cotieres TERRAIN-EXTEND) — on la fond vers l'abysse plutot que
@@ -316,6 +324,8 @@ const seaUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uZenith:   { value: new THREE.Vector3(.25, .45, .8) },
   uSunColor: { value: new THREE.Vector3(1, 1, 1) },
   uTerrBounds: { value: new THREE.Vector4(-1e7, -1e7, 1e7, 1e7) },  // x0,y0,x1,y1 du crop terrain
+  uDepth:    { value: null },   // [SEA-DEPTH-V1] profondeur d'eau bakee (rivages)
+  uNight:    { value: 0 },
 }]);
 const skyUni = {
   uZenith:   { value: new THREE.Vector3() },
@@ -324,6 +334,7 @@ const skyUni = {
   uSunDir:   { value: new THREE.Vector3() },
   uTime:     { value: 0 },
   uClouds:   { value: 1 },
+  uNight:    { value: 0 },
 };
 // dome de ciel: suit la camera (repositionne chaque frame), pas de depth —
 // dessine en premier, tout le reste passe par-dessus.
@@ -341,7 +352,7 @@ const sky = new THREE.Mesh(
     fragmentShader: `
       varying vec3 vDir;
       uniform vec3 uZenith, uHorizon, uSunColor, uSunDir;
-      uniform float uTime, uClouds;
+      uniform float uTime, uClouds, uNight;
       float hs2(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
       float vn2(vec2 p) {
         vec2 i = floor(p), f = fract(p);
@@ -364,7 +375,23 @@ const sky = new THREE.Mesh(
           float horFade = smoothstep(0.01, 0.10, d.z);
           float sunGlow = 0.65 + 0.55 * pow(s, 3.0);
           vec3 cc = mix(uSunColor, vec3(1.0), 0.45) * sunGlow;
+          cc *= mix(1.0, 0.18, uNight);              // nuages sombres la nuit
           col = mix(col, cc, cov * horFade * 0.85);
+        }
+        // [NIGHT-V1] etoiles: cellules hashees, scintillement, fondu au ras
+        // de l'horizon — n'existent que la nuit
+        if (uNight > 0.02 && d.z > 0.02) {
+          vec2 sp = d.xy / (d.z + 0.35) * 42.0;
+          vec2 cell = floor(sp);
+          float h = hs2(cell);
+          float star = step(0.992, h);
+          if (star > 0.0) {
+            vec2 cuv = fract(sp) - 0.5;
+            float fall = 1.0 - smoothstep(0.0, 0.06 + 0.10 * fract(h * 13.7), length(cuv));
+            float tw = 0.7 + 0.3 * sin(uTime * (1.5 + h * 3.0) + h * 40.0);
+            col += vec3(0.85, 0.90, 1.0) * star * fall * tw * uNight
+                   * smoothstep(0.02, 0.15, d.z);
+          }
         }
         gl_FragColor = vec4(col, 1.0);
         #include <tonemapping_fragment>
@@ -375,7 +402,7 @@ sky.frustumCulled = false;
 scene.add(sky);
 let sceneSpan = 18000;   // provisoire; remplace par le vrai span apres chargement
 function applyEnv() {
-  const { zen, hor, sun } = skyColors();
+  const { zen, hor, sun, night } = skyColors();
   const sd = sunDirVec();
   skyUni.uZenith.value.fromArray(zen);   skyUni.uHorizon.value.fromArray(hor);
   skyUni.uSunColor.value.fromArray(sun); skyUni.uSunDir.value.copy(sd);
@@ -383,6 +410,9 @@ function applyEnv() {
   seaUni.uSunDir.value.copy(sd);
   seaUni.uHorizon.value.fromArray(hor);  seaUni.uZenith.value.fromArray(zen);
   seaUni.uSunColor.value.fromArray(sun);
+  skyUni.uNight.value = night;
+  terraUni.uNight.value = night;
+  seaUni.uNight.value = night;
   const h = ENV.haze / 100;
   const fogC = new THREE.Color(hor[0], hor[1], hor[2]);   // deja lineaire
   if (!scene.fog) scene.fog = new THREE.Fog(fogC.clone(), 1e6, 2e6);
@@ -646,7 +676,7 @@ const data = await (await fetch('/api/scene3d')).json();
         varying vec3 vPos; varying vec3 vN; varying vec2 vUv;
         uniform vec3 uSunDir;
         uniform sampler2D uDrape, uShadow;
-        uniform float uUseDrape, uContours, uTime, uShadowOn, uClouds;
+        uniform float uUseDrape, uContours, uTime, uShadowOn, uClouds, uNight;
         uniform vec4 uTerrBounds, uMeasBounds;
         #include <common>
         #include <logdepthbuf_pars_fragment>
@@ -758,7 +788,21 @@ const data = await (await fetch('/api/scene3d')).json();
           // en drape la map reste lisible (plancher de lumiere plus haut)
           float lum = uUseDrape > 0.5 ? (0.55 + 0.62 * diff + 0.08 * back)
                                       : (amb + 1.00 * diff + 0.12 * back);
+          // [NIGHT-V1] la nuit: lumiere effondree, teinte clair-de-lune
+          lum *= 1.0 - 0.80 * uNight;
           vec3 lit = base * lum;
+          lit *= mix(vec3(1.0), vec3(0.60, 0.68, 0.98), uNight);
+          // city lights: les pixels URBAINS de la map (gris neutre) s'allument
+          // en fenetres chaudes, motif de bruit pour l'irregularite
+          if (uNight > 0.02 && uUseDrape > 0.5 && vPos.z > 0.2) {
+            vec3 mc = texture2D(uDrape, vUv).rgb;
+            float m2 = max(mc.r, max(mc.g, mc.b)), n2 = min(mc.r, min(mc.g, mc.b));
+            float urban = smoothstep(0.35, 0.50, m2)
+                        * (1.0 - smoothstep(0.10, 0.20, m2 - n2));
+            float win = smoothstep(0.66, 0.80, vnoise(vPos.xy * 0.55)) * 0.75
+                      + smoothstep(0.72, 0.86, vnoise(vPos.xy * 0.13 + vec2(7.0))) * 0.45;
+            lit += vec3(1.0, 0.72, 0.40) * urban * win * uNight * 0.60;
+          }
           // [BEAUTY-V2] ecume animee sur la ligne de cote (bande z ~ 0.2 m):
           // des langues blanches qui respirent au rythme des vagues
           {
@@ -877,12 +921,20 @@ const data = await (await fetch('/api/scene3d')).json();
       fragmentShader: `
         varying vec3 vPos;
         uniform vec3 uSunDir, uHorizon, uZenith, uSunColor;
-        uniform float uTime;
+        uniform float uTime, uNight;
         uniform vec4 uTerrBounds;
+        uniform sampler2D uDepth;
         #include <common>
         #include <logdepthbuf_pars_fragment>
         #include <fog_pars_fragment>
         vec3 srgb(vec3 c) { return pow(c, vec3(2.2)); }
+        float hs2(vec2 q) { return fract(sin(dot(q, vec2(127.1, 311.7))) * 43758.5453); }
+        float vn2(vec2 q) {
+          vec2 i = floor(q), f = fract(q);
+          f = f * f * (3.0 - 2.0 * f);
+          return mix(mix(hs2(i), hs2(i + vec2(1, 0)), f.x),
+                     mix(hs2(i + vec2(0, 1)), hs2(i + vec2(1, 1)), f.x), f.y);
+        }
         void main() {
           #include <logdepthbuf_fragment>
           vec2 p = vPos.xy; float t = uTime;
@@ -890,11 +942,14 @@ const data = await (await fetch('/api/scene3d')).json();
           // les vagues s'eteignent avec la distance: sans ca, les sinus
           // sous-pixel produisent un moire en grille sur tout l'ocean
           float att = 1.0 / (1.0 + dist * 0.002 + dist * dist * 3.5e-7);
+          // warp de domaine: des sinus purs dessinent des rayures parfaites —
+          // on tord les fronts d'onde avec un bruit spatial pour l'organique
+          vec2 pw = p + vec2(vn2(p * 0.006), vn2(p * 0.006 + vec2(19.7))) * 90.0;
           vec2 gwave = vec2(0.0);
-          gwave += vec2(sin(p.x * 0.030 + t * 0.9) * 0.030, sin(p.y * 0.041 + t * 0.7) * 0.041);
-          gwave += vec2(cos((p.x + p.y) * 0.019 + t * 1.25)) * 0.019 * 0.7;
-          gwave += vec2(sin(p.x * 0.110 - t * 1.8) * 0.110, sin(p.y * 0.089 + t * 2.1) * 0.089) * 0.22 * att;
-          vec3 n = normalize(vec3(-gwave * 8.0 * att, 1.0));
+          gwave += vec2(sin(pw.x * 0.030 + t * 0.9) * 0.030, sin(pw.y * 0.041 + t * 0.7) * 0.041);
+          gwave += vec2(cos((pw.x + pw.y) * 0.019 + t * 1.25)) * 0.019 * 0.7;
+          gwave += vec2(sin(pw.x * 0.110 - t * 1.8) * 0.110, sin(pw.y * 0.089 + t * 2.1) * 0.089) * 0.22 * att;
+          vec3 n = normalize(vec3(-gwave * 7.0 * att, 1.0));
           vec3 V = normalize(cameraPosition - vPos);
           float fres = pow(1.0 - max(dot(n, V), 0.0), 3.0);
           vec3 skyRefl = mix(uZenith, uHorizon, 0.65);
@@ -921,7 +976,23 @@ const data = await (await fetch('/api/scene3d')).json();
           // couchant) ne gagne qu'en incidence rasante — sinon tout l'ocean
           // lointain virait boue au soleil bas
           col = mix(col, mix(deep * 0.72, skyRefl, 0.12 + 0.50 * fres), farBlend);
-          gl_FragColor = vec4(col, mix(0.62 + 0.30 * fres, 1.0, farBlend));
+          // ── [SEA-DEPTH-V1] rivages: profondeur d'eau bakee -> degrade
+          // turquoise + transparence accrue sur les hauts-fonds + ECUME
+          // animee qui leche la ligne de cote (bande 0..1.3 m) ──
+          vec2 duv = (vPos.xy - uTerrBounds.xy) / (uTerrBounds.zw - uTerrBounds.xy);
+          float inb = step(0.0, duv.x) * step(duv.x, 1.0) * step(0.0, duv.y) * step(duv.y, 1.0);
+          float wdepth = mix(63.75, texture2D(uDepth, clamp(duv, 0.0, 1.0)).r * 63.75, inb);
+          float shal = (1.0 - smoothstep(0.0, 12.0, wdepth)) * (1.0 - farBlend);
+          col = mix(col, srgb(vec3(0.30, 0.66, 0.62)), shal * 0.40);
+          float band = 1.0 - smoothstep(0.10, 1.3, wdepth);
+          float fo = vn2(p * 0.06 + vec2(0.0, t * 0.18)) * 0.6
+                   + vn2(p * 0.21 - vec2(t * 0.12, 0.0)) * 0.4;
+          float foam = smoothstep(0.52, 0.72, fo + band * 0.18) * band * (1.0 - farBlend);
+          col = mix(col, vec3(0.92), foam * 0.75 * (1.0 - 0.6 * uNight));
+          col *= mix(1.0, 0.45, uNight);             // [NIGHT-V1] mer nocturne
+          float aBase = (0.62 + 0.30 * fres) * mix(1.0, 0.55, shal);
+          float a = max(mix(aBase, 1.0, farBlend), foam * 0.85);
+          gl_FragColor = vec4(col, a);
           #include <fog_fragment>
           #include <tonemapping_fragment>
           #include <colorspace_fragment>
@@ -970,6 +1041,20 @@ const data = await (await fetch('/api/scene3d')).json();
     // soleil bouge. Texture R8 lissee 3x3, memes UVs planaires que le drape.
     {
       const S = 4, nx2 = Math.ceil(nx / S), ny2 = Math.ceil(ny / S);
+      // [SEA-DEPTH-V1] profondeur d'eau (0..63.75 m, pas 0.25) sur la meme
+      // grille coarse — le shader mer y lit rivages et bande d'ecume
+      {
+        const dBuf = new Uint8Array(nx2 * ny2);
+        for (let j2 = 0; j2 < ny2; j2++) for (let i2 = 0; i2 < nx2; i2++) {
+          const i = Math.min(nx - 1, i2 * S), j = Math.min(ny - 1, j2 * S);
+          dBuf[j2 * nx2 + i2] = Math.max(0, Math.min(255, Math.round(-Zd[j * nx + i] * 4)));
+        }
+        const dTex = new THREE.DataTexture(dBuf, nx2, ny2, THREE.RedFormat, THREE.UnsignedByteType);
+        dTex.magFilter = THREE.LinearFilter;
+        dTex.minFilter = THREE.LinearFilter;
+        dTex.needsUpdate = true;
+        seaUni.uDepth.value = dTex;
+      }
       const shBuf = new Uint8Array(nx2 * ny2).fill(255);
       const shTex = new THREE.DataTexture(shBuf, nx2, ny2, THREE.RedFormat, THREE.UnsignedByteType);
       shTex.magFilter = THREE.LinearFilter;
@@ -983,6 +1068,7 @@ const data = await (await fetch('/api/scene3d')).json();
       };
       function bakeShadows() {
         const sd = sunDirVec();
+        if (sd.z < 0.05) return;   // [NIGHT-V1] soleil sous l'horizon: diff=0, bake inutile
         const hl = Math.hypot(sd.x, sd.y) || 1e-6;
         const ux = sd.x / hl, uy = sd.y / hl, slope = sd.z / hl;
         const t0 = performance.now();
@@ -1719,12 +1805,20 @@ if (pendingFocus) { focusCam(pendingFocus); pendingFocus = null; }
 
 // ── [VIEW3D-SHOT] export PNG: vue 3D + frame de la cam active en medaillon ──
 document.getElementById('btn-shot').addEventListener('click', async () => {
+  // [SHOT-4K] rendu offscreen a 3840 px de large (pixelRatio 1 le temps du
+  // rendu), puis restauration immediate — la vue ne cille qu'une frame
+  const [W0, H0] = realSize();
+  const dpr0 = renderer.getPixelRatio();
+  renderer.setPixelRatio(1);
+  renderer.setSize(3840, Math.round(3840 * H0 / W0), false);
   renderer.render(scene, camera);
   const w = renderer.domElement.width, h = renderer.domElement.height;
   const out = document.createElement('canvas');
   out.width = w; out.height = h;
   const octx = out.getContext('2d');
   octx.drawImage(renderer.domElement, 0, 0);
+  renderer.setPixelRatio(dpr0);
+  resize();
   const cRef = (povPrev && povPanel.style.display !== 'none')
     ? camPickRefs.find(c => c.name === document.getElementById('pov-name').textContent)
     : activeCamRef;
@@ -1895,11 +1989,28 @@ window.__camScreen = name => {
   return { x: (v.x + 1) / 2 * innerWidth, y: (1 - v.y) / 2 * innerHeight, behind: v.z > 1 };
 };
 
+// [ORBIT-V1] orbite cinematique lente autour de la cible (captures video)
+let orbitOn = false, _orbitPrevT = 0;
+{
+  const oc = document.getElementById('btn-orbit');
+  oc.addEventListener('click', () => {
+    orbitOn = !orbitOn;
+    oc.classList.toggle('on', orbitOn);
+  });
+}
+const _orbitAxis = new THREE.Vector3(0, 0, 1);
 renderer.setAnimationLoop(() => {
   sizeGuard();                                  // [POV-V4] auto-reparation de taille
   if (flyAnim) flyAnim();                       // [VIEW3D-SYNC] vol vers la cam
   sky.position.copy(camera.position);           // [BEAUTY-V1] le dome suit la camera
   const _tSec = performance.now() / 1000;
+  const _dt = Math.min(0.1, _tSec - _orbitPrevT);
+  _orbitPrevT = _tSec;
+  if (orbitOn && !povPrev) {                    // [ORBIT-V1] ~70 s par tour
+    const off = camera.position.clone().sub(controls.target);
+    off.applyAxisAngle(_orbitAxis, _dt * 0.09);
+    camera.position.copy(controls.target).add(off);
+  }
   seaUni.uTime.value = _tSec;                   // vagues animees
   terraUni.uTime.value = _tSec;                 // ecume + ombres de nuages
   skyUni.uTime.value = _tSec;                   // derive des nuages
