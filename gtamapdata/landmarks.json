@@ -18934,16 +18934,16 @@
  },
  "BB Hill": {
   "xyz": [
-   -3663.0,
-   4696.0,
-   90.2
+   -4156.0,
+   3954.0,
+   60.0
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)"
   ],
   "error_m": 15.0,
-  "method": "PEAK-ALEXANDRE (2026-08-25): sommet pointe par Alexandre au tooltip map (-3650.9, 4696.5, z 88.8), maximum local heightmap a 12 m (h 90.2). Remplace le croisement Panorama x Fires qui flottait +22 m au-dessus du sol a 912 m de la (aperture des clics de skyline — les collines ne se triangulent pas). NB: les 3 clics historiques 'BB Hill' designaient un bosquet sur butte a (-3743, 3785) — migres vers 'Trees on Knoll (BB)' (la colline est hors cadre de Panorama/Fires). BB Hill n'a plus de clic; ancre map pure."
+  "method": "PEAK-ALEXANDRE v2 (2026-08-25): tooltip corrige d'Alexandre (-4167.6, 3960.1, z 60.0) = maximum local heightmap a 13 m (h 60.0). Son 1er tooltip (-3651, 4696, 90 m) pointait une autre colline plus au nord (hors cadre de Panorama/Fires — c'est ce qui a revele l'erreur). Coherence croisee: cette colline est la bosse qui masque les bases des pylones Skyway sur le rayon de Fires (profil terrain: ~56 m a 2.6 km). Ancre map pure, aucun clic (les clics historiques 'BB Hill' = bosquet a (-3743, 3785), voir 'Trees on Knoll (BB)')."
  },
  "Building near Pool (N)": {
   "xyz": [
