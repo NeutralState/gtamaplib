@@ -18943,7 +18943,7 @@
    "Ambrosia 04 (Fires)"
   ],
   "error_m": 15.0,
-  "method": "PEAK-ALEXANDRE (2026-08-25): sommet pointe par Alexandre au tooltip map (-3650.9, 4696.5, z 88.8), maximum local heightmap a 12 m (h 90.2). Remplace le croisement Panorama x Fires qui flottait +22 m au-dessus du sol a 912 m de la (aperture des clics de skyline — les collines ne se triangulent pas). NB: les traces de crete nommees 'BB Hill' silhouettent d'AUTRES cretes (Fires -> Easy Hill)."
+  "method": "PEAK-ALEXANDRE (2026-08-25): sommet pointe par Alexandre au tooltip map (-3650.9, 4696.5, z 88.8), maximum local heightmap a 12 m (h 90.2). Remplace le croisement Panorama x Fires qui flottait +22 m au-dessus du sol a 912 m de la (aperture des clics de skyline — les collines ne se triangulent pas). NB: les 3 clics historiques 'BB Hill' designaient un bosquet sur butte a (-3743, 3785) — migres vers 'Trees on Knoll (BB)' (la colline est hors cadre de Panorama/Fires). BB Hill n'a plus de clic; ancre map pure."
  },
  "Building near Pool (N)": {
   "xyz": [
@@ -19333,5 +19333,19 @@
   "source_cameras": [],
   "zone": "port_gellhorn",
   "note": "AXE-SKYWAY-V2 (2026-08-25): position le long de l'axe AFFINEE par le match ferme demande par Alexandre — pylone Diner fixe a t415 (valide 3 rayons HUD), le rayon du clic N de Fires (pose lignes-verite) croise la diago a t=132 (miss 4.8 m; l'assignation inverse donnait t=683 hors segment + yaw +1.67). Separation reelle 283 m (t25->t132; le ~390 m de Chase etait un rayon rasant). Diago d'Alexandre inchangee."
+ },
+ "Trees on Knoll (BB)": {
+  "xyz": [
+   -3743.5,
+   3784.5,
+   69.0
+  ],
+  "error_m": 25.0,
+  "source_cameras": [
+   "Ambrosia 02 (Panorama)",
+   "Ambrosia 04 (Fires)",
+   "Mount Kalaga National Park 02 (Helicopter) (X)"
+  ],
+  "method": "TRIPLE-RAYON (2026-08-25): l'objet reellement clique sous le nom 'BB Hill' dans les 3 frames — bouquet d'arbres sur butte (+22 m au-dessus du sol 46.5), croisements par paires 0.4-7.9 m autour de (-3740, 3790). La VRAIE BB Hill (map) est hors cadre de Panorama et Fires — deux entites distinctes portaient le meme nom. Position = moyenne des 2 paires serrees (A02xA04 1.9 m, A04xK02 0.4 m); scatter des clics sur le bosquet ~25 m."
  }
 }
