@@ -1483,6 +1483,19 @@ function povMaxZoom() {
   const v0 = THREE.MathUtils.degToRad(povBase.vfov0);
   return Math.min(6, Math.tan(THREE.MathUtils.degToRad(82.5)) / Math.tan(v0 / 2));
 }
+// [POV-PAN] deplacer la vue zoomee: drag = translation ecran COMMUNE (offset
+// de projection de la camera + translation CSS de la frame). La superposition
+// gnomonique frame<->rendu est invariante par translation d'ecran -> exact.
+let povPan = { x: 0, y: 0 };
+function applyPovPan() {
+  if (!povPrev) return;
+  const [W, H] = realSize();
+  camera.setViewOffset(W, H, -povPan.x, -povPan.y, W, H);
+  camera.updateProjectionMatrix();
+  povFrame.style.transform =
+    `translate(calc(-50% + ${povPan.x}px), calc(-50% + ${povPan.y}px))`;
+  renderPovMarks();
+}
 function renderPovMarks() {
   const div = document.getElementById('pov-marks');
   if (!povPrev || !povBase || !povBase.marks) return;
@@ -1490,7 +1503,7 @@ function renderPovMarks() {
   div.innerHTML = '';
   const [W, H] = realSize();
   const ih = H / povZoom, iw = ih * povBase.ratio;
-  const ileft = (W - iw) / 2, itop = (H - ih) / 2;   // centree en X ET en Y
+  const ileft = (W - iw) / 2 + povPan.x, itop = (H - ih) / 2 + povPan.y;   // centre + pan
   const W2 = d.size || [3840, 2160];
   for (const m of d.markings || []) {
     const fx = ileft + m.px[0] * (iw / W2[0]);
@@ -1519,9 +1532,23 @@ function setPovZoom(z) {
   povFrame.style.width = 'calc(' + h + 'vh * ' + povBase.ratio.toFixed(4) + ')';
   povZoomV.textContent = 'x' + povZoom.toFixed(1);
   if (document.activeElement !== povZoomEl) povZoomEl.value = Math.round(povZoom * 100);
+  applyPovPan();                       // [POV-PAN] l'offset survit au changement de fov
   renderPovMarks();
   updatePovDbg();
 }
+// [POV-PAN] drag sur le canvas en POV = deplacer la vue (frame + monde ensemble)
+let _panDrag = null;
+canvas.addEventListener('pointerdown', ev => {
+  if (povPrev) _panDrag = { x: ev.clientX, y: ev.clientY };
+});
+addEventListener('pointermove', ev => {
+  if (!_panDrag || !povPrev) return;
+  povPan.x += ev.clientX - _panDrag.x;
+  povPan.y += ev.clientY - _panDrag.y;
+  _panDrag = { x: ev.clientX, y: ev.clientY };
+  applyPovPan();
+});
+addEventListener('pointerup', () => { _panDrag = null; });
 povZoomEl.addEventListener('input', () => setPovZoom(+povZoomEl.value / 100));
 addEventListener('wheel', ev => {
   if (!povPrev || !povBase) return;   // hors POV, la molette reste a OrbitControls
@@ -1648,6 +1675,8 @@ function enterPOV(c) {
     };
   }
   povZoom = 1;
+  povPan = { x: 0, y: 0 };             // [POV-PAN] nouvelle entree = vue centree
+  povFrame.style.transform = 'translate(-50%,-50%)';
   setPovZoom(1);                       // pose fov, taille de la frame et l'affichage
   povFrame.style.outline = '1px solid rgba(250,204,21,.35)';
   povFrame.style.opacity = povAlpha.value / 100;
@@ -1683,6 +1712,10 @@ function exitPOV() {
   controls.enabled = true;
   povPrev = null;
   povBase = null; povZoom = 1;
+  povPan = { x: 0, y: 0 };             // [POV-PAN]
+  camera.clearViewOffset();
+  camera.updateProjectionMatrix();
+  povFrame.style.transform = 'translate(-50%,-50%)';
   povZoomEl.value = 100; povZoomV.textContent = 'x1.0';
   povPanel.style.display = 'none';
   killQuad();
