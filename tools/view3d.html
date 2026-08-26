@@ -162,9 +162,9 @@
          value="50" style="width:90px;vertical-align:middle"></label>
   <label style="margin-left:10px" title="[POSE-EDIT] fov hypothesis: the frame stays full-screen, the relief behind adapts — when they match, Save">fov <input id="pov-fov" type="range" min="60" max="160" value="100" step="0.1" style="width:110px"></label>
   <span id="pov-fov-v" style="color:#facc15;font-size:10px"></span>
-  <label style="margin-left:8px" title="[POSE-EDIT] yaw hypothesis: rotates the world behind the frame, +/-15 deg">yaw <input id="pov-yaw" type="range" min="-1500" max="1500" value="0" style="width:130px"></label>
+  <label style="margin-left:8px" title="[POSE-EDIT] yaw hypothesis, +/-15 deg. Wheel = 0.01, Shift+drag = ultra-fine (0.005/px)">yaw <input id="pov-yaw" type="range" min="-1500" max="1500" value="0" style="width:130px"></label>
   <span id="pov-yaw-v" style="color:#facc15;font-size:10px"></span>
-  <label style="margin-left:8px" title="[POSE-EDIT] pitch hypothesis, +/-15 deg">pitch <input id="pov-pitch" type="range" min="-1500" max="1500" value="0" style="width:130px"></label>
+  <label style="margin-left:8px" title="[POSE-EDIT] pitch hypothesis, +/-15 deg. Wheel = 0.01, Shift+drag = ultra-fine (0.005/px)">pitch <input id="pov-pitch" type="range" min="-1500" max="1500" value="0" style="width:130px"></label>
   <span id="pov-pitch-v" style="color:#facc15;font-size:10px"></span>
   <label style="margin-left:8px" title="[POSE-EDIT] roll hypothesis, +/-3 deg — tilts the world behind the frame">roll <input id="pov-roll" type="range" min="-300" max="300" value="0" style="width:110px"></label>
   <span id="pov-roll-v" style="color:#facc15;font-size:10px"></span>
@@ -1731,14 +1731,42 @@ povAlpha.addEventListener('input', () => { povFrame.style.opacity = povAlpha.val
 for (const id of ['pov-fov', 'pov-yaw', 'pov-pitch', 'pov-roll']) {
   const s = document.getElementById(id);
   if (!s) continue;
+  // molette a ACCUMULATION: le trackpad envoie des dizaines d'evenements par
+  // geste — sans seuil, chaque micro-scroll faisait un cran et ca filait.
+  let acc = 0;
   s.addEventListener('wheel', ev => {
     ev.preventDefault();
     ev.stopPropagation();
-    const fine = id === 'pov-fov' ? 0.1 : 1;      // = 0.1 % fov / 0.01 deg
-    const step = ev.shiftKey ? fine * 10 : fine;
-    s.value = +s.value + (ev.deltaY < 0 ? step : -step);
-    s.dispatchEvent(new Event('input'));
+    acc += ev.deltaY;
+    const TH = 24;                                 // ~1 cran de molette / geste doux
+    const fine = id === 'pov-fov' ? 0.1 : 1;       // = 0.1 % fov / 0.01 deg
+    const mult = ev.shiftKey ? 10 : 1;
+    let moved = false;
+    while (Math.abs(acc) >= TH) {
+      s.value = +s.value - Math.sign(acc) * fine * mult;
+      acc -= Math.sign(acc) * TH;
+      moved = true;
+    }
+    if (moved) s.dispatchEvent(new Event('input'));
   }, { passive: false });
+  // Shift+drag = mode ULTRA-FIN: 0.005 deg par pixel (0.02 % fov)
+  s.addEventListener('pointerdown', ev => {
+    if (!ev.shiftKey) return;
+    ev.preventDefault();
+    ev.stopPropagation();
+    const start = { x: ev.clientX, v: +s.value };
+    const perPx = id === 'pov-fov' ? 0.02 : 0.5;
+    const move = e2 => {
+      s.value = start.v + (e2.clientX - start.x) * perPx;
+      s.dispatchEvent(new Event('input'));
+    };
+    const up = () => {
+      removeEventListener('pointermove', move);
+      removeEventListener('pointerup', up);
+    };
+    addEventListener('pointermove', move);
+    addEventListener('pointerup', up);
+  });
 }
 document.getElementById('pov-exit').addEventListener('click', exitPOV);
 addEventListener('keydown', ev => { if (ev.key === 'Escape') exitPOV(); });
