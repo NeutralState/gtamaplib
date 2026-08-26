@@ -160,13 +160,13 @@
   <b id="pov-name" style="color:var(--text)"></b>
   <label style="margin-left:10px">frame <input id="pov-alpha" type="range" min="0" max="100"
          value="50" style="width:90px;vertical-align:middle"></label>
-  <label style="margin-left:10px" title="[POSE-EDIT] fov hypothesis: the frame stays full-screen, the relief behind adapts — when they match, Save">fov <input id="pov-fov" type="range" min="60" max="160" value="100" style="width:70px"></label>
+  <label style="margin-left:10px" title="[POSE-EDIT] fov hypothesis: the frame stays full-screen, the relief behind adapts — when they match, Save">fov <input id="pov-fov" type="range" min="60" max="160" value="100" step="0.1" style="width:110px"></label>
   <span id="pov-fov-v" style="color:#facc15;font-size:10px"></span>
-  <label style="margin-left:8px" title="[POSE-EDIT] yaw hypothesis: rotates the world behind the frame, +/-15 deg">yaw <input id="pov-yaw" type="range" min="-1500" max="1500" value="0" style="width:80px"></label>
+  <label style="margin-left:8px" title="[POSE-EDIT] yaw hypothesis: rotates the world behind the frame, +/-15 deg">yaw <input id="pov-yaw" type="range" min="-1500" max="1500" value="0" style="width:130px"></label>
   <span id="pov-yaw-v" style="color:#facc15;font-size:10px"></span>
-  <label style="margin-left:8px" title="[POSE-EDIT] pitch hypothesis, +/-15 deg">pitch <input id="pov-pitch" type="range" min="-1500" max="1500" value="0" style="width:80px"></label>
+  <label style="margin-left:8px" title="[POSE-EDIT] pitch hypothesis, +/-15 deg">pitch <input id="pov-pitch" type="range" min="-1500" max="1500" value="0" style="width:130px"></label>
   <span id="pov-pitch-v" style="color:#facc15;font-size:10px"></span>
-  <label style="margin-left:8px" title="[POSE-EDIT] roll hypothesis, +/-3 deg — tilts the world behind the frame">roll <input id="pov-roll" type="range" min="-300" max="300" value="0" style="width:70px"></label>
+  <label style="margin-left:8px" title="[POSE-EDIT] roll hypothesis, +/-3 deg — tilts the world behind the frame">roll <input id="pov-roll" type="range" min="-300" max="300" value="0" style="width:110px"></label>
   <span id="pov-roll-v" style="color:#facc15;font-size:10px"></span>
   <button id="pov-fov-save" style="background:#166534;color:#dcfce7;border:1px solid #22c55e;border-radius:4px;font-size:10px;cursor:pointer">Save</button>
   <label style="margin-left:10px" title="scroll: widens the field of view without moving the camera — the frame shrinks by the same factor and stays aligned">zoom out <input id="pov-zoom" type="range" min="100" max="600"
@@ -1692,6 +1692,21 @@ function exitPOV() {
   md2.style.display = 'none'; md2.innerHTML = '';
 }
 povAlpha.addEventListener('input', () => { povFrame.style.opacity = povAlpha.value / 100; });
+// [FINE-SLIDERS] molette SUR un slider de pose = increments fins et precis
+// (fov: 0.1 %, angles: 0.01 deg; Shift = x10). stopPropagation empeche le
+// zoom POV global de la molette de se declencher en meme temps.
+for (const id of ['pov-fov', 'pov-yaw', 'pov-pitch', 'pov-roll']) {
+  const s = document.getElementById(id);
+  if (!s) continue;
+  s.addEventListener('wheel', ev => {
+    ev.preventDefault();
+    ev.stopPropagation();
+    const fine = id === 'pov-fov' ? 0.1 : 1;      // = 0.1 % fov / 0.01 deg
+    const step = ev.shiftKey ? fine * 10 : fine;
+    s.value = +s.value + (ev.deltaY < 0 ? step : -step);
+    s.dispatchEvent(new Event('input'));
+  }, { passive: false });
+}
 document.getElementById('pov-exit').addEventListener('click', exitPOV);
 addEventListener('keydown', ev => { if (ev.key === 'Escape') exitPOV(); });
 // en iframe, le focus clavier vit chez le parent — on ecoute aussi la-bas
