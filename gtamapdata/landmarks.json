@@ -265,20 +265,18 @@
  },
  "536 Richard Jackson Blvd (RSE)": {
   "xyz": [
-   -6185.783,
-   4513.381,
-   16.996
+   -6185.79,
+   4513.37,
+   17.0
   ],
   "source_cameras": [
-   "Diner (N)",
    "Diner (NE)",
-   "Diner (W) (B)",
-   "Diner (W) (A)",
-   "Diner (NW)"
+   "Diner (N)"
   ],
-  "error_m": 0.015,
+  "error_m": 0.01,
   "zone": "port_gellhorn",
-  "author": "rlx"
+  "author": "rlx",
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.0 m, parallaxe 21 deg"
  },
  "536 Richard Jackson Blvd (RSW)": {
   "xyz": [
@@ -2852,7 +2850,7 @@
   ],
   "error_m": 2.01,
   "zone": "vice_city",
-  "method": "RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (SOLVED + poses lignes-verite), perp max 2.0 m — reseau post-decontamination"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.0 m, parallaxe 85 deg"
  },
  "Water Tower near Prison": {
   "xyz": [
@@ -4620,18 +4618,18 @@
  },
  "1500 Sonora Ave (Tank)": {
   "xyz": [
-   -3006.66,
-   3599.91,
-   37.89
+   -3002.73,
+   3606.37,
+   37.84
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 0.19,
+  "error_m": 2.06,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.2 m, parallaxe max 88 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.1 m, parallaxe 87 deg"
  },
  "Easy Hill": {
   "xyz": [
@@ -4673,68 +4671,68 @@
  },
  "US Sugar Mill (Factory)": {
   "xyz": [
-   -3041.89,
-   3270.1,
-   97.42
+   -3036.25,
+   3280.3,
+   97.54
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 1.97,
+  "error_m": 1.23,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 2.0 m, parallaxe max 65 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.2 m, parallaxe 63 deg"
  },
  "USSM Smokestack (4)": {
   "xyz": [
-   -2937.66,
-   3474.93,
-   98.82
+   -2933.45,
+   3485.09,
+   98.37
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 4.06,
+  "error_m": 4.05,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 4.1 m, parallaxe max 87 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 4.1 m, parallaxe 86 deg"
  },
  "USSM Smokestack (5)": {
   "xyz": [
-   -2975.02,
-   3453.31,
-   79.26
+   -2970.75,
+   3462.88,
+   79.1
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 2.93,
+  "error_m": 2.95,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 2.9 m, parallaxe max 85 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.0 m, parallaxe 84 deg"
  },
  "USSM Smokestack (6)": {
   "xyz": [
-   -2982.16,
-   3456.06,
-   83.82
+   -2977.88,
+   3465.47,
+   83.6
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 2.67,
+  "error_m": 2.71,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 2.7 m, parallaxe max 85 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.7 m, parallaxe 84 deg"
  },
  "USSM Smokestack (7)": {
   "xyz": [
-   -3010.03,
-   3459.13,
-   97.57
+   -3005.7,
+   3467.97,
+   97.21
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
@@ -4743,37 +4741,37 @@
   ],
   "error_m": 3.66,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 3.7 m, parallaxe max 84 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.7 m, parallaxe 83 deg"
  },
  "USSM Smokestack (8)": {
   "xyz": [
-   -3067.93,
-   3532.59,
-   45.76
+   -3063.97,
+   3539.04,
+   45.73
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 1.51,
+  "error_m": 2.27,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.5 m, parallaxe max 84 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.3 m, parallaxe 83 deg"
  },
  "USSM Smokestack (9)": {
   "xyz": [
-   -3074.77,
-   3535.62,
-   56.26
+   -3070.82,
+   3541.95,
+   56.13
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 1.02,
+  "error_m": 1.9,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.0 m, parallaxe max 84 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.9 m, parallaxe 83 deg"
  },
  "1500 Sonora Ave (Silo)": {
   "xyz": [
@@ -4813,7 +4811,7 @@
   ],
   "error_m": 0.08,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.1 m, parallaxe max 33 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.1 m, parallaxe 33 deg"
  },
  "USSM Smokestack (11)": {
   "xyz": [
@@ -4827,7 +4825,7 @@
   ],
   "error_m": 0.25,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.2 m, parallaxe max 34 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.2 m, parallaxe 34 deg"
  },
  "USSM Smokestack (2)": {
   "xyz": [
@@ -4844,17 +4842,17 @@
  },
  "USSM Smokestack (3)": {
   "xyz": [
-   -2978.9,
-   2998.43,
-   36.85
+   -2975.26,
+   3009.9,
+   38.38
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 1.85,
+  "error_m": 3.05,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.8 m, parallaxe max 64 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.1 m, parallaxe 63 deg"
  },
  "1000 Venetian Way (4)": {
   "xyz": [
@@ -8051,32 +8049,32 @@
  },
  "1500 Sonora Ave (Tank) (L)": {
   "xyz": [
-   -2994.14,
-   3576.37,
-   37.82
+   -2990.08,
+   3583.45,
+   37.83
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 2.92,
+  "error_m": 1.04,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 2.9 m, parallaxe max 88 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.0 m, parallaxe 87 deg"
  },
  "1500 Sonora Ave (Tank) (R)": {
   "xyz": [
-   -3012.97,
-   3623.06,
-   37.96
+   -3006.13,
+   3629.07,
+   37.77
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 0.74,
+  "error_m": 1.39,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.7 m, parallaxe max 59 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.4 m, parallaxe 58 deg"
  },
  "Industrial Building (Ambrosia)": {
   "xyz": [
@@ -8093,18 +8091,18 @@
  },
  "US Sugar Mill (Factory) (R)": {
   "xyz": [
-   -3042.64,
-   3269.73,
-   69.64
+   -3038.52,
+   3279.6,
+   69.97
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 1.06,
+  "error_m": 1.76,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.1 m, parallaxe max 77 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.8 m, parallaxe 76 deg"
  },
  "White Silos (W)": {
   "xyz": [
@@ -8118,35 +8116,35 @@
   ],
   "error_m": 0.62,
   "zone": "ambrosia",
-  "method": "RETRI-V2 (2026-08-25): triangulation 2 cams de confiance, perp max 0.6 m"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 12 deg"
  },
  "Wheelabrator South Broward (3B)": {
   "xyz": [
-   -2430.56,
-   2589.88,
-   45.99
+   -2430.48,
+   2602.76,
+   48.76
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)"
   ],
-  "error_m": 0.1,
+  "error_m": 2.67,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.1 m, parallaxe max 52 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.7 m, parallaxe 51 deg"
  },
  "Billboard (South Ambrosia)": {
   "xyz": [
-   -2858.36,
-   3015.38,
-   43.27
+   -2855.8,
+   3029.1,
+   44.72
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 2.9,
+  "error_m": 1.67,
   "zone": "ambrosia",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 2.9 m, parallaxe max 71 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.7 m, parallaxe 70 deg"
  },
  "House C (E)": {
   "xyz": [
@@ -11651,7 +11649,7 @@
   ],
   "error_m": 3.57,
   "zone": "unknown",
-  "method": "RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (SOLVED + poses lignes-verite), perp max 3.6 m — reseau post-decontamination"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.6 m, parallaxe 83 deg"
  },
  "MIA North Terminal (B)": {
   "author": "rlx",
@@ -12734,22 +12732,22 @@
  },
  "Daytona Beach Water Tower (B)": {
   "author": "rlx",
-  "error_m": 2.52,
+  "error_m": 4.56,
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
   "xyz": [
-   -3991.59,
-   2929.17,
-   53.32
+   -3999.4,
+   2920.15,
+   54.17
   ],
   "zone": "ambrosia",
   "aliases": [
    "Sebring Water Tower (B)"
   ],
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 2.5 m, parallaxe max 51 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 4.6 m, parallaxe 49 deg"
  },
  "Jason's House (Pillar 8) (TNE)": {
   "author": "rlx",
@@ -13001,19 +12999,19 @@
  },
  "Dark Billboard (Ambrosia) (TE)": {
   "author": "rlx",
-  "error_m": 1.29,
+  "error_m": 2.65,
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
   "xyz": [
-   -2783.58,
-   2960.91,
-   48.19
+   -2781.72,
+   2975.72,
+   49.36
   ],
   "zone": null,
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.3 m, parallaxe max 73 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.7 m, parallaxe 72 deg"
  },
  "Train Signal (Ambrosia) (4W)": {
   "author": "rlx",
@@ -13300,7 +13298,7 @@
    25.1
   ],
   "zone": null,
-  "method": "RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (SOLVED + poses lignes-verite), perp max 1.5 m — reseau post-decontamination"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.5 m, parallaxe 10 deg"
  },
  "Jason's House (Window 4) (BN)": {
   "author": "rlx",
@@ -13679,19 +13677,19 @@
  },
  "White Silos (E) (NE)": {
   "author": "rlx",
-  "error_m": 1.32,
+  "error_m": 0.89,
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
   "xyz": [
-   -2851.91,
-   3484.46,
-   32.77
+   -2848.34,
+   3496.06,
+   33.15
   ],
   "zone": null,
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.3 m, parallaxe max 89 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.9 m, parallaxe 90 deg"
  },
  "Road C (Ambrosia) (1)": {
   "author": "rlx",
@@ -13770,7 +13768,7 @@
    32.37
   ],
   "zone": null,
-  "method": "RETRI-V2 (2026-08-25): triangulation 2 cams de confiance, perp max 0.6 m"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 11 deg"
  },
  "Jason's House (Pillar 1) (BNE)": {
   "author": "rlx",
@@ -14179,7 +14177,7 @@
    32.2
   ],
   "zone": null,
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.6 m, parallaxe max 12 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 12 deg"
  },
  "Jason's House (Window 4) (BS)": {
   "author": "rlx",
@@ -14429,19 +14427,19 @@
  },
  "Dark Billboard (Ambrosia) (TW)": {
   "author": "rlx",
-  "error_m": 1.31,
+  "error_m": 2.49,
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
   "xyz": [
-   -2804.59,
-   2971.81,
-   48.12
+   -2802.52,
+   2986.33,
+   49.26
   ],
   "zone": null,
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.3 m, parallaxe max 72 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.5 m, parallaxe 71 deg"
  },
  "Jason's House (Pillar 4) (BSW)": {
   "author": "rlx",
@@ -16279,23 +16277,23 @@
  },
  "Factory A (Ambrosia) (S)": {
   "xyz": [
-   -3001.38,
-   3377.31,
-   43.73
+   -2995.6,
+   3387.16,
+   44.15
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 0.21,
+  "error_m": 0.3,
   "zone": "rlx_markings_0713",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.2 m, parallaxe max 68 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.3 m, parallaxe 67 deg"
  },
  "Factory A (Ambrosia) (N)": {
   "xyz": [
-   -2993.07,
-   3406.78,
-   43.36
+   -2987.21,
+   3416.47,
+   43.7
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
@@ -16303,22 +16301,22 @@
   ],
   "error_m": 0.4,
   "zone": "rlx_markings_0713",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.4 m, parallaxe max 68 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.4 m, parallaxe 67 deg"
  },
  "Factory D (Ambrosia) (NW)": {
   "xyz": [
-   -3212.5,
-   3525.43,
-   37.94
+   -3209.48,
+   3529.5,
+   37.9
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 1.08,
+  "error_m": 1.67,
   "zone": "rlx_markings_0713",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.1 m, parallaxe max 79 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.7 m, parallaxe 78 deg"
  },
  "Road E (Ambrosia)": {
   "xyz": null,
@@ -17119,17 +17117,17 @@
  },
  "Billboard near Intersection (TN)": {
   "xyz": [
-   -5285.31,
-   3343.95,
-   91.33
+   -5291.75,
+   3310.14,
+   90.82
   ],
   "source_cameras": [
    "Mount Kalaga National Park 04 (Mountain Pass) (X)",
    "Ambrosia 04 (Fires)"
   ],
-  "error_m": 1.35,
+  "error_m": 1.62,
   "zone": "port_gellhorn",
-  "method": "RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (SOLVED + poses lignes-verite), perp max 1.3 m — reseau post-decontamination"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.6 m, parallaxe 81 deg"
  },
  "Radio Tower near Intersection 2": {
   "xyz": null,
@@ -17161,51 +17159,51 @@
  },
  "US Sugar Mill (Factory) (A)": {
   "xyz": [
-   -3042.24,
-   3269.78,
-   100.42
+   -3038.07,
+   3279.77,
+   100.5
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 6.93,
+  "error_m": 6.84,
   "zone": "ambrosia",
   "author": "rlx",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 6.9 m, parallaxe max 77 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 6.8 m, parallaxe 76 deg"
  },
  "US Sugar Mill (Factory) (AC)": {
   "xyz": [
-   -3042.1,
-   3269.87,
-   90.85
+   -3037.94,
+   3279.84,
+   91.0
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 3.37,
+  "error_m": 2.95,
   "zone": "ambrosia",
   "author": "rlx",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 3.4 m, parallaxe max 77 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.9 m, parallaxe 76 deg"
  },
  "US Sugar Mill (Factory) (NW)": {
   "xyz": [
-   -3048.49,
-   3302.22,
-   69.29
+   -3044.32,
+   3311.74,
+   69.55
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 1.22,
+  "error_m": 1.19,
   "zone": "ambrosia",
   "author": "rlx",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.2 m, parallaxe max 78 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.2 m, parallaxe 76 deg"
  },
  "US Sugar Mill (Factory) (R2)": {
   "xyz": null,
@@ -17216,19 +17214,19 @@
  },
  "US Sugar Mill (Factory) (SE)": {
   "xyz": [
-   -3028.3,
-   3257.34,
-   69.33
+   -3024.22,
+   3267.58,
+   69.68
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 1.38,
+  "error_m": 1.9,
   "zone": "ambrosia",
   "author": "rlx",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.4 m, parallaxe max 77 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.9 m, parallaxe 76 deg"
  },
  "Wheelabrator South Broward (5)": {
   "xyz": null,
@@ -17246,33 +17244,33 @@
  },
  "Wheelabrator South Broward (R)": {
   "xyz": [
-   -2394.13,
-   2601.69,
-   53.97
+   -2394.21,
+   2615.12,
+   56.75
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)"
   ],
-  "error_m": 0.66,
+  "error_m": 1.95,
   "zone": "ambrosia",
   "author": "rlx",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.7 m, parallaxe max 52 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.0 m, parallaxe 50 deg"
  },
  "Billboard (South Ambrosia) (TE)": {
   "xyz": [
-   -2922.92,
-   2638.1,
-   38.81
+   -2921.41,
+   2646.4,
+   41.3
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 0.5,
+  "error_m": 1.86,
   "zone": "ambrosia",
   "author": "rlx",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.5 m, parallaxe max 56 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.9 m, parallaxe 55 deg"
  },
  "Building A (Ambrosia) (NW)": {
   "xyz": null,
@@ -17290,34 +17288,34 @@
  },
  "Industrial Building 1 (Ambrosia)": {
   "xyz": [
-   -2782.22,
-   3247.87,
-   41.56
+   -2779.84,
+   3263.1,
+   42.28
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 1.42,
+  "error_m": 2.03,
   "zone": "ambrosia",
   "author": "rlx",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.4 m, parallaxe max 85 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.0 m, parallaxe 84 deg"
  },
  "Industrial Building 2 (Ambrosia) (TE)": {
   "xyz": [
-   -2756.14,
-   3288.26,
-   32.49
+   -2754.52,
+   3303.82,
+   33.44
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 2.9,
+  "error_m": 3.07,
   "zone": "ambrosia",
   "author": "rlx",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 2.9 m, parallaxe max 89 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.1 m, parallaxe 88 deg"
  },
  "Road E (Ambrosia) (1)": {
   "xyz": null,
@@ -17349,33 +17347,33 @@
  },
  "US Sugar Mill (Factory) (P2)": {
   "xyz": [
-   -3042.17,
-   3319.16,
-   62.68
+   -3036.38,
+   3328.84,
+   63.02
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 0.37,
+  "error_m": 0.01,
   "zone": "ambrosia",
   "author": "rlx",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.4 m, parallaxe max 65 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.0 m, parallaxe 64 deg"
  },
  "US Sugar Mill (Factory) (P3)": {
   "xyz": [
-   -3041.42,
-   3328.46,
-   62.64
+   -3035.59,
+   3338.07,
+   62.95
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 0.38,
+  "error_m": 0.03,
   "zone": "ambrosia",
   "author": "rlx",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.4 m, parallaxe max 65 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.0 m, parallaxe 64 deg"
  },
  "1500 Sonora Ave (Silo) (BR)": {
   "xyz": null,
@@ -17386,18 +17384,18 @@
  },
  "Billboard (South Ambrosia) (TW)": {
   "xyz": [
-   -2933.69,
-   2642.55,
-   38.89
+   -2932.12,
+   2650.77,
+   41.37
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 0.55,
+  "error_m": 1.79,
   "zone": "ambrosia",
   "author": "rlx",
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.5 m, parallaxe max 56 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.8 m, parallaxe 55 deg"
  },
  "Guard Booth (Ambrosia) (E)": {
   "xyz": null,
@@ -18849,45 +18847,45 @@
  },
  "1500 Sonora Ave (Tank) (A)": {
   "xyz": [
-   -3006.57,
-   3599.82,
-   37.89
+   -3002.64,
+   3606.28,
+   37.84
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 0.24,
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.2 m, parallaxe max 88 deg — remplace le harvest circulaire pre-poses"
+  "error_m": 2.18,
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.2 m, parallaxe 87 deg"
  },
  "1500 Sonora Ave (Tank) (A) (L)": {
   "xyz": [
-   -2994.14,
-   3576.37,
-   37.82
+   -2990.08,
+   3583.45,
+   37.83
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 2.92,
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 2.9 m, parallaxe max 88 deg — remplace le harvest circulaire pre-poses"
+  "error_m": 1.04,
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.0 m, parallaxe 87 deg"
  },
  "1500 Sonora Ave (Tank) (A) (R)": {
   "xyz": [
-   -3018.66,
-   3623.01,
-   37.96
+   -3014.9,
+   3628.86,
+   37.83
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 3.76,
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 3.8 m, parallaxe max 89 deg — remplace le harvest circulaire pre-poses"
+  "error_m": 5.73,
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 5.7 m, parallaxe 87 deg"
  },
  "3001 Gordon Hwy (Water Tower)": {
   "xyz": [
@@ -18933,16 +18931,16 @@
  },
  "Ambrosia Canal (A)": {
   "xyz": [
-   -2872.2,
-   4883.2,
+   -2872.19,
+   4883.22,
    26.0
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Mount Kalaga National Park 02 (Helicopter) (X)"
   ],
-  "error_m": 8.6,
-  "method": "KALAGA-RETRI-V1: retriangulation memes sources (Ambrosia 02 SOLVED + Kalaga 02 solver v2 SOLVED), rayons croises a 8.6 m; ancienne position datait des poses pre-solver (delta 47 m)"
+  "error_m": 8.58,
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 8.6 m, parallaxe 21 deg"
  },
  "BB Hill": {
   "xyz": [
@@ -18981,7 +18979,7 @@
    "Ambrosia Postcard (X)"
   ],
   "error_m": 0.45,
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.5 m, parallaxe max 27 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.5 m, parallaxe 27 deg"
  },
  "Interstate Hill": {
   "xyz": [
@@ -19116,16 +19114,16 @@
  },
  "Trees near Wheelabrator": {
   "xyz": [
-   -2290.26,
-   2715.02,
-   43.92
+   -2291.07,
+   2732.2,
+   46.37
   ],
-  "error_m": 1.09,
+  "error_m": 3.23,
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)"
   ],
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.1 m, parallaxe max 56 deg — remplace le harvest circulaire pre-poses"
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.2 m, parallaxe 54 deg"
  },
  "Unknown Building (North Port Gellhorn) (T)": {
   "xyz": [
@@ -19142,55 +19140,55 @@
  },
  "Warehouse 4 (Ambrosia) (C)": {
   "xyz": [
-   -3004.94,
-   3127.7,
-   31.81
+   -3000.45,
+   3138.84,
+   33.03
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 1.86,
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.9 m, parallaxe max 66 deg — remplace le harvest circulaire pre-poses"
+  "error_m": 2.63,
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.6 m, parallaxe 64 deg"
  },
  "Warehouse 4 (Ambrosia) (T)": {
   "xyz": [
-   -3011.43,
-   3076.86,
-   33.43
+   -3007.17,
+   3087.88,
+   34.77
   ],
   "source_cameras": [
    "Ambrosia 04 (Fires)",
    "Ambrosia Postcard (X)"
   ],
-  "error_m": 1.55,
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.5 m, parallaxe max 64 deg — remplace le harvest circulaire pre-poses"
+  "error_m": 2.49,
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.5 m, parallaxe 63 deg"
  },
  "Wheelabrator South Broward (5B)": {
   "xyz": [
-   -2430.56,
-   2589.88,
-   45.99
+   -2430.48,
+   2602.76,
+   48.76
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)"
   ],
-  "error_m": 0.1,
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.1 m, parallaxe max 52 deg — remplace le harvest circulaire pre-poses"
+  "error_m": 2.67,
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.7 m, parallaxe 51 deg"
  },
  "Wheelabrator South Broward (NW)": {
   "xyz": [
-   -2430.75,
-   2589.93,
-   53.09
+   -2430.65,
+   2602.87,
+   55.9
   ],
   "source_cameras": [
    "Ambrosia 02 (Panorama)",
    "Ambrosia 04 (Fires)"
   ],
-  "error_m": 0.52,
-  "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 2 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 0.5 m, parallaxe max 52 deg — remplace le harvest circulaire pre-poses"
+  "error_m": 2.12,
+  "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.1 m, parallaxe 51 deg"
  },
  "Billboard near Intersection (BC)": {
   "xyz": [
