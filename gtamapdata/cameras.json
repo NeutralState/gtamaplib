@@ -5121,7 +5121,7 @@
   "constraint_class": null,
   "note": "position Alexandre FIXE; z/yaw/pitch par fit silhouette massif Ambrosia (18.8' sur 46 pts), fov par grille (vallee plate — fov peu contraint par la silhouette seule) [AUTO-SKYLINE-V1]. A verifier au POV. | POSE-EDIT: ajustee a la main par Alexandre dans l UI"
  },
- "Skyway Gas Station (Extended Look)": {
+ "Hank's Waffle (Bocamar Bridge)": {
   "id": 999,
   "xyz": [
    -6100.0,
@@ -5142,7 +5142,8 @@
    2160
   ],
   "source": "GTA VI: An Extended Look (2026-08-28) ~11:26 — frame 4K via miroir Netflix showcase (VGS)",
-  "notes": "PRELIMINAIRE — pose init grossiere (secteur Diner, visee vers le pont). LA frame qui montre LES DEUX pylones du Sunshine Skyway avec leurs eventails de haubans + le tablier complet: clics des pylones -> resolution finale du mystere des positions le long de l'axe. Remplacer la frame par un rip officiel si Rockstar publie sans age-gate.",
-  "player": null
+  "notes": "PRELIMINAIRE — pose init grossiere (secteur Diner/Hank's Waffles, visee vers le pont). Frame Extended Look (~11:26): le pont Bocamar COMPLET — les deux eventails de haubans + le tablier. Clics des deux pylones -> resolution definitive des positions le long de l'axe (S=t415 triple-valide, N=t132 par match ferme — cette frame est le juge final). Remplacer la frame par un rip officiel si Rockstar publie sans age-gate.",
+  "player": null,
+  "tag": "extended-look"
  }
 }
