@@ -8592,18 +8592,11 @@
     "zone": "port_gellhorn"
   },
   "Easy Inn Sign": {
-    "xyz": [
-      -6158.809817305822,
-      4410.320350061042,
-      21.58976885963728
-    ],
-    "source_cameras": [
-      "Diner (S)",
-      "Diner (SE) (A)",
-      "Easy Inn"
-    ],
-    "error_m": 307.917,
-    "zone": "port_gellhorn"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "port_gellhorn",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 308 m, triangulation degeneree ['Diner (S)', 'Diner (SE) (A)', 'Easy Inn']); marquages conserves | "
   },
   "Citigroup Center (SE)": {
     "xyz": [
@@ -17792,303 +17785,165 @@
     "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 34 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 35 m (garde tel quel, probable clic croise) | "
   },
   "Vice City Sign (C1)": {
-    "xyz": [
-      -3482.3635932417446,
-      -546.8471360442234,
-      21.959881750098006
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 453.523,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 454 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C10)": {
-    "xyz": [
-      -3518.073040446552,
-      -547.0460239288493,
-      20.442371190688128
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 555.125,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 555 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C2)": {
-    "xyz": [
-      -3478.8731638529803,
-      -537.1071376815801,
-      32.517515956179835
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 356.943,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 357 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C3)": {
-    "xyz": [
-      -3517.9135196601737,
-      -512.9034809945952,
-      55.58095115369132
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 192.37,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 192 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C4)": {
-    "xyz": [
-      -3535.5131200423275,
-      -510.78227523691237,
-      58.25276053143463
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 198.066,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 198 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C5)": {
-    "xyz": [
-      -3553.60207834359,
-      -516.4086165881592,
-      54.107607951641455
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 299.867,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 300 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C6)": {
-    "xyz": [
-      -3547.158489686779,
-      -521.9445880132249,
-      47.93594728427131
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 358.789,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 359 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C7)": {
-    "xyz": [
-      -3528.855610050943,
-      -517.5546650666108,
-      51.48942828952397
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 265.594,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 266 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C8)": {
-    "xyz": [
-      -3502.403557797423,
-      -536.293925579879,
-      32.78772967314096
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 405.787,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 406 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C9)": {
-    "xyz": [
-      -3527.928949366751,
-      -538.6248780034477,
-      30.37345322899516
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 498.266,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 498 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E1)": {
-    "xyz": [
-      -3523.3504163907237,
-      -547.8627035449131,
-      19.68383152618518
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 580.503,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 581 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E10)": {
-    "xyz": [
-      -3543.7873100671345,
-      -540.8840131426329,
-      28.720045110174734
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 562.921,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 563 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E11)": {
-    "xyz": [
-      -3558.857110525267,
-      -543.1977461992356,
-      27.742166944517386
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 620.088,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 620 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E12)": {
-    "xyz": [
-      -3553.1283423040973,
-      -549.8691288464889,
-      19.369191085369877
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 672.018,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 672 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E2)": {
-    "xyz": [
-      -3556.5495231391246,
-      -517.9167567203644,
-      53.02487496660363
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 327.401,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 327 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E3)": {
-    "xyz": [
-      -3574.8887891318923,
-      -524.4660787649834,
-      49.18410958235886
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 461.637,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 462 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E4)": {
-    "xyz": [
-      -3570.632207148089,
-      -529.4713193279608,
-      43.45781531593769
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 508.057,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 508 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E5)": {
-    "xyz": [
-      -3558.7576441646834,
-      -525.923885749565,
-      45.39821647996055
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 430.382,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 430 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E6)": {
-    "xyz": [
-      -3554.770017746141,
-      -529.9268479505303,
-      41.10528371507988
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 468.348,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 468 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E7)": {
-    "xyz": [
-      -3567.4476503878395,
-      -533.2783516578467,
-      39.33668513989868
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 539.564,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 540 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E8)": {
-    "xyz": [
-      -3562.741498496936,
-      -538.794076326915,
-      32.738775197034734
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 582.019,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 582 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E9)": {
-    "xyz": [
-      -3548.425416740676,
-      -536.3397627128552,
-      34.03505624005862
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 524.53,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 525 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (I1)": {
-    "xyz": [
-      -3413.627922634579,
-      -547.3993473126894,
-      26.315870574808688
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 304.543,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 305 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (I2)": {
     "xyz": [
@@ -18104,30 +17959,18 @@
     "zone": "vice_city"
   },
   "Vice City Sign (I3)": {
-    "xyz": [
-      -3520.345518666156,
-      -506.22207479257236,
-      62.020403539703565
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 118.547,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 119 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (I4)": {
-    "xyz": [
-      -3449.8884961393737,
-      -546.715503590131,
-      23.92126477708404
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 371.064,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 371 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (V1)": {
     "xyz": [
@@ -18144,17 +17987,11 @@
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 12.8 m, angle max 10.7 deg | projete sur vice-city-sign-plane (ecart initial 3.8 m)"
   },
   "Vice City Sign (V2)": {
-    "xyz": [
-      -3446.527293088755,
-      -479.5776063412282,
-      78.69856370466516
-    ],
-    "source_cameras": [
-      "Vice City 01 (Vice City Sign)",
-      "Vice City Sign"
-    ],
-    "error_m": 158.986,
-    "zone": "vice_city"
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "vice_city",
+    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 159 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (V3)": {
     "xyz": [

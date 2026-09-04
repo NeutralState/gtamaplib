@@ -2208,17 +2208,17 @@
   "id": "T1/1",
   "player": null,
   "xyz": [
-   -3401.091,
-   -2797.908,
-   36.903
+   -3401.9,
+   -2798.505,
+   36.829
   ],
   "ypr": [
-   282.0461,
-   -2.6001,
-   0.0428
+   282.0607,
+   -2.5823,
+   0.024
   ],
   "fov": [
-   79.994,
+   79.911,
    null
   ],
   "size": [
@@ -2226,7 +2226,7 @@
    2160
   ],
   "source": "Trailer 1 [81]",
-  "notes": "RECALIB-PRISON 2026-09-03: re-solve sur landmarks tenus par d'autres cams + tooltips (6 tours) x3; ses 11 points mono-cam re-derives sur les nouveaux rayons (meme distance); tooltips 121->14 px | "
+  "notes": "RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 57 clics): mediane 1.7->1.5 px, move 1.0 m | RECALIB-PRISON 2026-09-03: re-solve sur landmarks tenus par d'autres cams + tooltips (6 tours) x3; ses 11 points mono-cam re-derives sur les nouveaux rayons (meme distance); tooltips 121->14 px | "
  },
  "Vice Beach (A)": {
   "id": "T1/6",
@@ -2328,17 +2328,17 @@
   "id": "T1/11",
   "player": null,
   "xyz": [
-   1509.754,
-   -783.044,
-   1.941
+   1510.962,
+   -782.735,
+   1.587
   ],
   "ypr": [
-   93.0152,
-   1.9659,
-   0.0274
+   93.044,
+   2.0042,
+   -0.0725
   ],
   "fov": [
-   63.045,
+   62.855,
    null
   ],
   "size": [
@@ -2346,7 +2346,7 @@
    2160
   ],
   "source": "Trailer 1 [699]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | "
+  "notes": "RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 28 clics): mediane 3.0->2.0 px, move 1.3 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | "
  },
  "Motorboats (B)": {
   "id": "T1/11",
@@ -2470,24 +2470,25 @@
   "id": "T1/19",
   "player": null,
   "xyz": [
-   -6467.348455874934,
-   -7090.916172981065,
-   225.4938319759654
+   -6466.803,
+   -7075.478,
+   225.345
   ],
   "ypr": [
-   276.3560658661949,
-   -18.334347063878173,
-   0.23356018790979585
+   276.0677,
+   -18.3829,
+   0.2909
   ],
   "fov": [
-   51.115838128422794,
+   51.199,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Trailer 1 [1123]"
+  "source": "Trailer 1 [1123]",
+  "notes": "RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 84 clics): mediane 9.2->2.8 px, move 15.4 m | "
  },
  "Rooftop Party": {
   "id": "T1/20",
@@ -4640,47 +4641,49 @@
   "id": "T2/2",
   "player": null,
   "xyz": [
-   -2332.2,
-   -5549.3,
-   2.587
+   -2331.93,
+   -5549.65,
+   2.427
   ],
   "ypr": [
-   50.503,
-   10.9,
-   0.0
+   50.3372,
+   11.023,
+   -0.0287
   ],
   "fov": [
-   66.4,
-   32.816
+   65.646,
+   null
   ],
   "size": [
    3840,
    1728
   ],
-  "source": "Trailer 2 [245]"
+  "source": "Trailer 2 [245]",
+  "notes": "RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 53 clics): mediane 3.5->1.8 px, move 0.5 m | "
  },
  "Jason's Safehouse Vehicles (X)": {
   "id": "S3/17",
   "player": null,
   "xyz": [
-   -2333.599321689332,
-   -5551.299859334555,
-   5.611033608632425
+   -2333.703,
+   -5551.035,
+   5.701
   ],
   "ypr": [
-   36.79767300404309,
-   -1.8565704837623143,
-   9.054317811767689e-07
+   36.9576,
+   -2.0572,
+   0.0339
   ],
   "fov": [
-   57.01627548759805,
+   57.436,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 2 \u2014 Jason's Safehouse Vehicles [1]"
+  "source": "Screenshot 2 \u2014 Jason's Safehouse Vehicles [1]",
+  "notes": "RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 64 clics): mediane 3.5->2.2 px, move 0.3 m | "
  },
  "Landing Gear (B)": {
   "id": "T2/60",
