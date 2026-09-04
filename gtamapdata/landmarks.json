@@ -15759,13 +15759,18 @@
   },
   "Blimp Road (N)": {
     "xyz": [
-      -4375.722,
-      -7029.12,
+      -4350.95,
+      -7021.51,
       0.0
     ],
     "source_cameras": [],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    },
+    "note": "LINE-TOOLTIP 2026-09-04 (Alexandre: 'Blimp road est sur cette ligne', (-4351.7,-7001.4)-(-4347.6,-7111.3)): point = rayon Keys \u2229 plan vertical de la ligne, z=0; etait a 25.9 m | "
   },
   "Old Bahia Honda Bridge (20B)": {
     "xyz": null,
@@ -15817,13 +15822,18 @@
   },
   "Blimp Road (S)": {
     "xyz": [
-      -4365.642,
-      -7146.533,
+      -4346.451,
+      -7142.096,
       0.0
     ],
     "source_cameras": [],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "z_constraint": {
+      "type": "fixed",
+      "value": 0.0
+    },
+    "note": "LINE-TOOLTIP 2026-09-04 (Alexandre: 'Blimp road est sur cette ligne', (-4351.7,-7001.4)-(-4347.6,-7111.3)): point = rayon Keys \u2229 plan vertical de la ligne, z=0; etait a 19.7 m | "
   },
   "Old Bahia Honda Bridge (15B)": {
     "xyz": null,
