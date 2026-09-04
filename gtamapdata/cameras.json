@@ -4519,17 +4519,17 @@
   "id": "S3/1",
   "player": null,
   "xyz": [
-   1402.327,
-   -164.522,
-   73.908
+   1408.382,
+   -160.928,
+   75.228
   ],
   "ypr": [
-   103.131,
-   -2.113,
-   0.092
+   103.172,
+   -2.161,
+   0.004
   ],
   "fov": [
-   75.836,
+   75.596,
    null
   ],
   "size": [
@@ -4537,9 +4537,9 @@
    2160
   ],
   "source": "Screenshot 2 \u2014 Port Vice City [1]",
-  "note": "pose HORIZON-V1: 71 ancres + silhouette height map (30 clics de crete), z libre. | POSE-EDIT: ajustee a la main par Alexandre dans l UI | UNSOLVED 2026-08-30 (ordre Alexandre): badge retire \u2014 le premier plan ne fit plus (Container Cranes 8/9 a 50-80px a 250-360m) alors que le far-field est excellent (61 clics >1.5km a 7.3px rms, orientation conservee). Discordance near/far a investiguer: cranes deplacees? clics herites? Ancien statut: SOLVED 2026-08-22 \u2014 silhouette 8.1'->2.2', ancres 4.6'",
-  "pose_verified": "SOLVED 2026-08-22 \u2014 silhouette 8.1'->2.2', ancres 4.6'",
-  "notes": "RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 8.1 m), residu mediane 3.6->2.4 px | "
+  "note": "pose HORIZON-V1: 70 ancres + silhouette height map (31 clics de crete), z libre.",
+  "pose_verified": null,
+  "notes": "BADGE RETIRE 2026-09-04 (Alexandre: 'PVC est pas vraiment solved, on avait fit le relief mais le reste est pas si good'). Re-solve conjoint horizon_resect (70 ancres + traces Gellhorn Bluff + Crazy Hill, 4 restarts): ancres 4.0'->3.2', silhouette 2.2'->2.0'. | RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 8.1 m), residu mediane 3.6->2.4 px | "
  },
  "Port Vice City (B)": {
   "id": "S3/2",
