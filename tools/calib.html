@@ -3186,12 +3186,13 @@ function renderLmList() {
                : lmFilter === 'indep' ? !lm.is_circular
                : (lm.delta != null && lm.delta > 5);
     const div = document.createElement('div');
-    div.className = 'lm-item' + (selectedLm === lm.name ? ' sel' : '') + (!show ? ' faded' : '');
+    // [EXCLUDED-AWARE-V1] marquage exclu (excluded_markings.json): grise, badge ⊘, ne compte pas dans la sante
+    div.className = 'lm-item' + (selectedLm === lm.name ? ' sel' : '') + ((!show || lm.excluded) ? ' faded' : '');
     div.innerHTML = `
-      <div class="lm-dot" style="background:${dColor(lm.delta)}"></div>
-      <span class="lm-badge ${lm.is_circular ? 'c' : 'i'}">${lm.is_circular ? '↻' : '★'}</span>
-      <span class="lm-name">${lm.name}</span>
-      <span class="lm-d" style="color:${dColor(lm.delta)}">${lm.delta != null ? lm.delta.toFixed(2) : '—'}</span>
+      <div class="lm-dot" style="background:${lm.excluded ? 'var(--dim)' : dColor(lm.delta)}"></div>
+      <span class="lm-badge ${lm.is_circular ? 'c' : 'i'}" title="${lm.excluded ? 'exclu (excluded_markings.json)' : ''}">${lm.excluded ? '⊘' : (lm.is_circular ? '↻' : '★')}</span>
+      <span class="lm-name" style="${lm.excluded ? 'text-decoration:line-through;opacity:.6' : ''}">${lm.name}</span>
+      <span class="lm-d" style="color:${lm.excluded ? 'var(--dim)' : dColor(lm.delta)}">${lm.delta != null ? lm.delta.toFixed(2) : '—'}</span>
       <span class="lm-edit-btn" title="Edit pixel" style="font-size:10px;color:var(--dim);padding:2px 4px;border-radius:3px;cursor:pointer;flex-shrink:0" onmouseenter="this.style.color='var(--blue)'" onmouseleave="this.style.color='var(--dim)'">✎</span>
       <span class="lm-tri-btn" title="Triangulate landmark" style="font-size:10px;color:var(--dim);padding:2px 4px;border-radius:3px;cursor:pointer;flex-shrink:0" onmouseenter="this.style.color='var(--green)'" onmouseleave="this.style.color='var(--dim)'">⊕</span>
     `;
@@ -3952,11 +3953,11 @@ function draw2() {
   for (const lm of projections2) {
     if (!lm.marked_pixel) continue;
     const hi = hoveredLm2 === lm.name || selectedLm2 === lm.name;
-    const color = dColor(lm.delta);
+    const color = lm.excluded ? '#777' : dColor(lm.delta);   // [EXCLUDED-AWARE-V1]
     const visible = lmFilter === 'all'   ? true
                   : lmFilter === 'indep' ? !lm.is_circular
                   : (lm.delta != null && lm.delta > 5);
-    ctx2.globalAlpha = visible ? 1 : 0.12;
+    ctx2.globalAlpha = visible ? (lm.excluded ? 0.3 : 1) : 0.12;
     const [mx, my] = toCanvas2(lm.marked_pixel[0], lm.marked_pixel[1]);
     const r = hi ? 8 : (lm.is_circular ? 4.5 : 5.5);
     _mv2Reticle(ctx2, mx, my, r, color, { hi, dash: lm.is_circular });   // [MARKERS-V2] [POLISH-V3.1] chip removed (duplicate of tooltip)
@@ -4082,12 +4083,12 @@ function draw() {
 
   projections.forEach(lm => {
     const hi = hoveredLm === lm.name || selectedLm === lm.name;
-    const color = dColor(lm.delta);
+    const color = lm.excluded ? '#777' : dColor(lm.delta);   // [EXCLUDED-AWARE-V1] exclu = gris, semi-transparent
     const visible = lmFilter === 'all'   ? true
                   : lmFilter === 'indep' ? !lm.is_circular
                   : (lm.delta != null && lm.delta > 5);
 
-    ctx.globalAlpha = visible ? 1 : 0.12;
+    ctx.globalAlpha = visible ? (lm.excluded ? 0.3 : 1) : 0.12;
 
     // Error line
     if (hi && lm.marked_pixel && lm.projected) {

@@ -326,6 +326,16 @@ def compute_projections(cam_name, xyz=None, ypr=None, hfov=None):
     cam = get_cam(cam_name, xyz, ypr, hfov)
     cam_pixels = md.pixels.get(cam_name, {})
     result = []
+    # [EXCLUDED-AWARE-V1 2026-09-04] les marquages exclus (excluded_markings.json)
+    # sont projetes et affiches, mais flagges: la sante des cams et les stats
+    # ne doivent plus les compter (Peacock A/B affichees 'broken' a cause de
+    # clics ecartes par les outils).
+    try:
+        _ep = os.path.join(os.path.dirname(TOOL_DIR), 'gtamapdata', 'excluded_markings.json')
+        _exd = json.load(open(_ep))
+        excluded_set = set(_exd.get(cam_name, []) or []) if isinstance(_exd, dict) else set()
+    except Exception:
+        excluded_set = set()
 
     # [VIRTUAL-LMS-V1] Include virtual LMs (no marker, e.g. building wireframes)
     # for known prefixes. They get projected but no marked_pixel/delta.
@@ -371,6 +381,7 @@ def compute_projections(cam_name, xyz=None, ypr=None, hfov=None):
             'has_xyz': lm_xyz is not None,
             'is_circular': is_circular,
             'error_m': err_m,
+            'excluded': lm_name in excluded_set,
         })
 
     # [VIRTUAL-LMS-V1] Add virtual LMs (no marker, only projection)
@@ -397,8 +408,9 @@ def compute_projections(cam_name, xyz=None, ypr=None, hfov=None):
             'is_virtual': True,
         })
 
-    all_d = [r['delta'] for r in result if r['delta'] is not None]
-    indep_d = [r['delta'] for r in result if r['delta'] is not None and not r['is_circular']]
+    # [EXCLUDED-AWARE-V1] les marquages exclus ne pesent pas dans la perte
+    all_d = [r['delta'] for r in result if r['delta'] is not None and not r.get('excluded')]
+    indep_d = [r['delta'] for r in result if r['delta'] is not None and not r['is_circular'] and not r.get('excluded')]
 
     losses = {
         'total': round(sum(all_d) / len(all_d), 3) if all_d else None,
@@ -1446,6 +1458,8 @@ class Handler(BaseHTTPRequestHandler):
                 except Exception:
                     continue
 
+                # [EXCLUDED-AWARE-V1] les marquages exclus ne comptent pas
+                projs = [p for p in projs if not p.get('excluded')]
                 errs = [p['delta'] for p in projs if p['delta'] is not None]
                 indep_errs = [p['delta'] for p in projs
                               if p['delta'] is not None and not p['is_circular']]
