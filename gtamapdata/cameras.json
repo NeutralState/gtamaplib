@@ -2868,47 +2868,49 @@
   "id": "T2/12",
   "player": null,
   "xyz": [
-   -1480.5879902856923,
-   -2341.6188252216007,
-   14.994930136267548
+   -1513.349,
+   -2337.607,
+   17.572
   ],
   "ypr": [
-   339.0727579985598,
-   3.65373422691547,
-   -0.0019897825282462777
+   336.4886,
+   3.2095,
+   0.0
   ],
   "fov": [
-   50.25943247809957,
-   23.838072478366517
-  ],
-  "size": [
-   3840,
-   1728
-  ],
-  "source": "Trailer 2 [1039]"
- },
- "Highway (Peacock Bay) (B)": {
-  "id": "T2/12",
-  "player": null,
-  "xyz": [
-   -1486.7,
-   -2300.2,
-   14.692931223708257
-  ],
-  "ypr": [
-   344.4,
-   13.6,
-   -0.0026990449203606343
-  ],
-  "fov": [
-   52.25,
+   52.666,
    null
   ],
   "size": [
    3840,
    1728
   ],
-  "source": "Trailer 2 [1111]"
+  "source": "Trailer 2 [1039]",
+  "notes": "ROAD-SNAP 2026-09-04 (Alexandre: 'les cams tombent meme pas sur la highway'): position sur la chaussee est (sens nord) de la I-97 d'apres V16, lateral +1.8 m, z libre (viaduc) -> 17.6, roll 0; clics Park Grove re-etiquetes sur les noyaux SW/W (V16); mediane 128.3->2.5 px | "
+ },
+ "Highway (Peacock Bay) (B)": {
+  "id": "T2/12",
+  "player": null,
+  "xyz": [
+   -1504.345,
+   -2297.926,
+   16.459
+  ],
+  "ypr": [
+   343.8284,
+   13.8339,
+   0.0
+  ],
+  "fov": [
+   54.121,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [1111]",
+  "notes": "ROAD-SNAP 2026-09-04 (Alexandre: 'les cams tombent meme pas sur la highway'): position sur la chaussee est (sens nord) de la I-97 d'apres V16, lateral -3.1 m, z libre (viaduc) -> 16.5, roll 0; clics Park Grove re-etiquetes sur les noyaux SW/W (V16); mediane 14.2->4.2 px | "
  },
  "Beach Gym": {
   "id": "T2/13",

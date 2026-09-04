@@ -19762,5 +19762,27 @@
     "zone": "unknown",
     "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z herite des coins voisins | ",
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.2 m | "
+  },
+  "Park Grove Condominium (C) (SW core)": {
+    "xyz": [
+      -1340.9,
+      -2073.64,
+      97.99071342308798
+    ],
+    "source_cameras": [],
+    "error_m": 2.5,
+    "zone": "vice_city",
+    "note": "V16-CORE 2026-09-04: deuxieme tour du complexe (noyau SW/W sur V16), positionne par solve joint Peacock A/B sur la chaussee I-97 puis controle empreinte V16; z = celui de Park Grove Condominium (C)"
+  },
+  "Park Grove Condominium (N) (W core)": {
+    "xyz": [
+      -1340.49,
+      -2011.88,
+      97.23907437940272
+    ],
+    "source_cameras": [],
+    "error_m": 2.5,
+    "zone": "vice_city",
+    "note": "V16-CORE 2026-09-04: deuxieme tour du complexe (noyau SW/W sur V16), positionne par solve joint Peacock A/B sur la chaussee I-97 puis controle empreinte V16; z = celui de Park Grove Condominium (N)"
   }
 }
