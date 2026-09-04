@@ -4476,17 +4476,17 @@
   "id": "S2/37",
   "player": null,
   "xyz": [
-   -3703.472,
-   -395.769,
-   10.7
+   -3797.0,
+   -419.0,
+   10.65
   ],
   "ypr": [
-   230.708,
-   11.821,
-   -2.856
+   215.825,
+   22.626,
+   -0.036
   ],
   "fov": [
-   46.3,
+   79.307,
    null
   ],
   "size": [
@@ -4495,30 +4495,32 @@
   ],
   "source": "Screenshot 1 \u2014 Vice City 01 [1]",
   "note": "pose RESECT-V2: resection sur 27 ancres, juge 12 ancres laissees dehors 351.7 -> 33.0 arcmin (2.67 m).",
-  "pose_verified": "SOLVED 2026-08-22 \u2014 resection z-lock, juge 21.7->2.67 m (etait enterree -23 m)"
+  "pose_verified": null,
+  "notes": "V16-MARKER 2026-09-04 (Alexandre: 'deplace-les ou y a les markers sur cette map'): position = marqueur S2/37 dessine sur V16 (Yanis), z sol 8.9 + oeil; orientation/fov re-resolus sur 6 landmarks lointains (mediane 6.7 px). Lettres du panneau en quarantaine: le panneau est a 30-150 m (grand-angle 79 deg / tele 22 deg) et la base de 10 m entre marqueurs ne permet pas de les trianguler; il faut un tooltip du panneau. | "
  },
  "Vice City Sign": {
   "id": "T1/21",
   "player": null,
   "xyz": [
-   -3678.7653691706255,
-   -450.86954987734794,
-   38.80307661352707
+   -3805.0,
+   -429.0,
+   16.4
   ],
   "ypr": [
-   250.640585392751,
-   4.386211207014029,
-   -2.8065687510634842
+   250.976,
+   4.834,
+   -1.353
   ],
   "fov": [
-   22.958985407608203,
+   22.214,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Trailer 1 [1199]"
+  "source": "Trailer 1 [1199]",
+  "notes": "V16-MARKER 2026-09-04 (Alexandre: 'deplace-les ou y a les markers sur cette map'): position = marqueur T1/21 dessine sur V16 (Yanis), z sol 8.9 + oeil; orientation/fov re-resolus sur 7 landmarks lointains (mediane 17.7 px). Lettres du panneau en quarantaine: le panneau est a 30-150 m (grand-angle 79 deg / tele 22 deg) et la base de 10 m entre marqueurs ne permet pas de les trianguler; il faut un tooltip du panneau. | "
  },
  "Port Vice City (A)": {
   "id": "S3/1",
