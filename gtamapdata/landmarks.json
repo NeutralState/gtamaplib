@@ -1,9 +1,9 @@
 {
   "112 NE 41st St": {
     "xyz": [
-      32.87,
-      2228.127,
-      65.878
+      32.83,
+      2228.156,
+      65.888
     ],
     "source_cameras": [
       "Highway (N)",
@@ -17,9 +17,9 @@
   },
   "112 NE 41st St (NW)": {
     "xyz": [
-      16.4774227643305,
-      2264.927689936175,
-      49.81044011539824
+      16.497,
+      2264.961,
+      49.86
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -31,9 +31,9 @@
   },
   "112 NE 41st St (SE)": {
     "xyz": [
-      44.15142592209861,
-      2188.727034086117,
-      49.069590719590465
+      44.118,
+      2188.675,
+      49.005
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -45,9 +45,9 @@
   },
   "112 NE 41st St (SW)": {
     "xyz": [
-      16.677199320940048,
-      2195.6083487199003,
-      49.39690002930341
+      16.602,
+      2195.548,
+      49.424
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -59,9 +59,9 @@
   },
   "1500 Ocean Dr": {
     "xyz": [
-      2091.926,
-      981.708,
-      63.792
+      2092.261,
+      980.676,
+      63.546
     ],
     "source_cameras": [
       "Beach",
@@ -73,13 +73,13 @@
     ],
     "error_m": 4.175,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.3 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.3 m | "
   },
   "1500 Ocean Dr (S) (SE)": {
     "xyz": [
-      2026.803,
-      965.976,
-      62.311
+      2026.905,
+      964.844,
+      62.076
     ],
     "source_cameras": [
       "Beach",
@@ -88,7 +88,7 @@
     ],
     "error_m": 1.631,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.3 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.3 m | "
   },
   "1703 E 5th St (Shack) (SE)": {
     "xyz": [
@@ -551,9 +551,9 @@
   },
   "Art Deco Welcome Center (S)": {
     "xyz": [
-      2019.131771397454,
-      593.5083355063559,
-      4.12398136808562
+      2019.131,
+      593.508,
+      4.124
     ],
     "source_cameras": [
       "Park",
@@ -1084,9 +1084,9 @@
   },
   "Flamingo South Beach (TE)": {
     "xyz": [
-      1360.789,
-      936.995,
-      111.386
+      1360.938,
+      936.313,
+      111.265
     ],
     "source_cameras": [
       "Alley (W)",
@@ -1100,9 +1100,9 @@
   },
   "Flamingo South Beach (TNE)": {
     "xyz": [
-      1357.037,
-      947.584,
-      111.413
+      1357.054,
+      946.794,
+      111.3
     ],
     "source_cameras": [
       "Alley (W)",
@@ -1116,9 +1116,9 @@
   },
   "Flamingo South Beach (TSE)": {
     "xyz": [
-      1363.28,
-      926.545,
-      111.491
+      1363.436,
+      925.87,
+      111.369
     ],
     "source_cameras": [
       "Alley (W)",
@@ -1295,9 +1295,9 @@
   },
   "Hotel Breakwater": {
     "xyz": [
-      1948.51,
-      566.394,
-      26.58
+      1948.806,
+      565.705,
+      26.332
     ],
     "source_cameras": [
       "Beach",
@@ -1310,9 +1310,9 @@
   },
   "Jenny Hostel (NE)": {
     "xyz": [
-      1905.228,
-      611.966,
-      33.197
+      1905.551,
+      611.263,
+      32.874
     ],
     "source_cameras": [
       "Beach",
@@ -1514,9 +1514,9 @@
   },
   "Murano Grande": {
     "xyz": [
-      1440.6179797279601,
-      -17.559091035616834,
-      139.60703743244
+      1438.715,
+      -21.525,
+      138.943
     ],
     "source_cameras": [
       "Port",
@@ -1525,13 +1525,13 @@
     ],
     "error_m": 1.979,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.1 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 10.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.8 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 9.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 4.4 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.1 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 10.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.8 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 9.1 m | "
   },
   "Old City Hall": {
     "xyz": [
-      1688.493,
-      612.485,
-      52.554
+      1687.072,
+      610.04,
+      52.326
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -1540,7 +1540,7 @@
     ],
     "error_m": 6.443,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.5 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 6.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.4 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.8 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.5 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 6.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.4 m | "
   },
   "PTCC (3) (BB2)": {
     "xyz": [
@@ -1752,9 +1752,9 @@
   },
   "Portofino Tower (NW)": {
     "xyz": [
-      1737.172,
-      -183.118,
-      148.15
+      1736.812,
+      -184.682,
+      148.354
     ],
     "source_cameras": [
       "Port",
@@ -1764,7 +1764,7 @@
     ],
     "error_m": 3.075,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.3 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.6 m | TOOLTIP ALEXANDRE 2026-09-03: x,y = position in-game (1739.8,-182.5), z conserve 145.502; ancien (1723.1,-195.1) -> deplace 20.9 m ('l'actuel debordait sur la rue') | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.6 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.3 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.6 m | TOOLTIP ALEXANDRE 2026-09-03: x,y = position in-game (1739.8,-182.5), z conserve 145.502; ancien (1723.1,-195.1) -> deplace 20.9 m ('l'actuel debordait sur la rue') | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | "
   },
   "Pylon (3)": {
     "xyz": [
@@ -1909,9 +1909,9 @@
   },
   "The Floridian": {
     "xyz": [
-      1264.569,
-      410.617,
-      96.543
+      1264.816,
+      409.986,
+      96.453
     ],
     "source_cameras": [
       "Jason Duval 05 (Machine Gun)",
@@ -3817,9 +3817,9 @@
   },
   "Asia Brickell Key (CC1)": {
     "xyz": [
-      -85.764,
-      -862.646,
-      213.4
+      -86.313,
+      -863.388,
+      213.641
     ],
     "source_cameras": [
       "Motorboats (A)",
@@ -3833,9 +3833,9 @@
   },
   "Asia Brickell Key (CC2)": {
     "xyz": [
-      -139.428,
-      -848.26,
-      222.528
+      -139.971,
+      -849.16,
+      222.852
     ],
     "source_cameras": [
       "Motorboats (A)",
@@ -3844,7 +3844,7 @@
     ],
     "error_m": 5.735,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 5.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.4 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 5.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.4 m | "
   },
   "C (BNE)": {
     "xyz": [
@@ -3920,9 +3920,9 @@
   },
   "CC (3) (BB2)": {
     "xyz": [
-      1270.588,
-      -753.373,
-      41.193
+      1271.334,
+      -753.551,
+      41.061
     ],
     "source_cameras": [
       "Motorboats (A)",
@@ -3934,9 +3934,9 @@
   },
   "Container Crane (1)": {
     "xyz": [
-      957.97,
-      -820.628,
-      73.279
+      957.994,
+      -820.789,
+      73.278
     ],
     "source_cameras": [
       "Motorboats (A)",
@@ -3948,9 +3948,9 @@
   },
   "Container Crane (3)": {
     "xyz": [
-      1270.949,
-      -753.42,
-      75.779
+      1271.565,
+      -753.667,
+      75.443
     ],
     "source_cameras": [
       "Amphitheater",
@@ -3963,16 +3963,17 @@
   },
   "Stack (T)": {
     "xyz": [
-      1286.2050719868416,
-      -777.1807856257784,
-      27.55495733610412
+      1298.046,
+      -777.336,
+      26.448
     ],
     "source_cameras": [
       "Motorboats (A)",
       "Motorboats (B)"
     ],
     "error_m": 3.935,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 11.9 m | "
   },
   "Island W (N)": {
     "xyz": [
@@ -4626,9 +4627,9 @@
   },
   "Container Crane (2)": {
     "xyz": [
-      1109.703,
-      -789.54,
-      74.787
+      1108.219,
+      -789.695,
+      74.982
     ],
     "source_cameras": [
       "Motorboats (B)",
@@ -4636,7 +4637,7 @@
     ],
     "error_m": 0.665,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.5 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 9.0 m | TOOLTIP ALEXANDRE 2026-09-03: x,y in-game (1117.3,-783.7), z conserve 79.47; ancien (1083.1,-790.8) deplace 35.0 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.5 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.5 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 9.0 m | TOOLTIP ALEXANDRE 2026-09-03: x,y in-game (1117.3,-783.7), z conserve 79.47; ancien (1083.1,-790.8) deplace 35.0 m | "
   },
   "1500 Sonora Ave (Tank)": {
     "xyz": [
@@ -4878,9 +4879,9 @@
   },
   "1000 Venetian Way (4)": {
     "xyz": [
-      296.355,
-      1134.258,
-      53.891
+      295.568,
+      1132.121,
+      53.948
     ],
     "source_cameras": [
       "Skyline",
@@ -4890,13 +4891,13 @@
     "error_m": 2.0,
     "zone": "vice_city",
     "method": " | re-triangule apres MARK-ARB-V1 (5.4 m, perp 0.6 m)",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.7 m | "
   },
   "1000 Venetian Way (SE)": {
     "xyz": [
-      350.327,
-      1125.417,
-      67.825
+      350.298,
+      1123.903,
+      67.807
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -4906,13 +4907,13 @@
     ],
     "error_m": 2.493,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.5 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.7 m | "
   },
   "1000 Venetian Way (SW)": {
     "xyz": [
-      302.169,
-      1111.91,
-      67.737
+      301.361,
+      1109.779,
+      67.789
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -4922,13 +4923,13 @@
     ],
     "error_m": 6.654,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.7 m | "
   },
   "12th St Lifeguard Tower": {
     "xyz": [
-      2216.375,
-      1028.491,
-      8.142
+      2216.422,
+      1027.267,
+      7.889
     ],
     "source_cameras": [
       "Beach",
@@ -4936,13 +4937,13 @@
     ],
     "error_m": 0.891,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.9 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.9 m | "
   },
   "1500 Ocean Dr (S) (NW)": {
     "xyz": [
-      2021.948,
-      997.055,
-      62.33
+      2022.234,
+      995.99,
+      62.092
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -4950,13 +4951,13 @@
     ],
     "error_m": 0.504,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.3 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.3 m | "
   },
   "1500 Ocean Dr (S) (SW)": {
     "xyz": [
-      2021.9162274248988,
-      967.0860298047647,
-      62.68579485313392
+      2021.894,
+      966.079,
+      62.343
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -4964,13 +4965,13 @@
     ],
     "error_m": 0.853,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.4 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.4 m | "
   },
   "1800 Club": {
     "xyz": [
-      -358.985,
-      1043.905,
-      160.288
+      -359.488,
+      1044.837,
+      160.314
     ],
     "source_cameras": [
       "Vice City 03 (Basketball)",
@@ -4978,13 +4979,13 @@
     ],
     "error_m": 0.18,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.4 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.4 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | "
   },
   "22 Biscayne Bay (SE)": {
     "xyz": [
-      -351.564,
-      1366.563,
-      70.174
+      -354.579,
+      1366.793,
+      70.199
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -4993,13 +4994,13 @@
     ],
     "error_m": 0.345,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.6 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.3 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.0 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.6 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.3 m | "
   },
   "419 NE 4th Ave (W)": {
     "xyz": [
-      -431.992,
-      1223.854,
-      30.524
+      -434.811,
+      1223.913,
+      30.45
     ],
     "source_cameras": [
       "Vice City 03 (Basketball)",
@@ -5007,13 +5008,13 @@
     ],
     "error_m": 6.1,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.1 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.3 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.8 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.1 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.3 m | "
   },
   "50 Biscayne Blvd (SE)": {
     "xyz": [
-      -446.655,
-      -255.934,
-      144.737
+      -447.319,
+      -255.73,
+      145.024
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -5027,9 +5028,9 @@
   },
   "Akoya Condominium": {
     "xyz": [
-      1492.615,
-      2631.146,
-      145.42
+      1492.623,
+      2631.165,
+      145.45
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -5042,9 +5043,9 @@
   },
   "Asia Brickell Key": {
     "xyz": [
-      -116.8342312248066,
-      -881.3115401172943,
-      184.0422305197934
+      -116.908,
+      -880.905,
+      185.251
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -5055,20 +5056,21 @@
     ],
     "error_m": 1.52,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.0 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.3 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.0 m | "
   },
   "Bank of America Financial Center": {
     "xyz": [
-      1717.937,
-      1376.905,
-      84.948
+      1718.233,
+      1375.82,
+      84.864
     ],
     "source_cameras": [
       "Beach",
       "Venetian Islands"
     ],
     "error_m": 0.047,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | "
   },
   "Bay (A)": {
     "xyz": [
@@ -5645,9 +5647,9 @@
   },
   "Brown Hotel Sign": {
     "xyz": [
-      1846.154,
-      1559.663,
-      7.857
+      1847.475,
+      1559.647,
+      7.874
     ],
     "source_cameras": [
       "Hotel (W)",
@@ -5655,7 +5657,7 @@
     ],
     "error_m": 1.239,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.4 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.4 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.7 m | "
   },
   "Canal (Hotel Valetta)": {
     "xyz": [
@@ -5675,9 +5677,9 @@
   },
   "Capri South Beach (SE)": {
     "xyz": [
-      1321.582,
-      1127.339,
-      56.819
+      1321.538,
+      1126.561,
+      56.675
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -5691,9 +5693,9 @@
   },
   "Carbonell Brickell": {
     "xyz": [
-      -228.731,
-      -789.62,
-      123.6
+      -228.506,
+      -788.944,
+      123.764
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -5707,9 +5709,9 @@
   },
   "Citigroup Center (NE)": {
     "xyz": [
-      -363.5080350409583,
-      -463.02408217487374,
-      150.815283543448
+      -363.749,
+      -462.842,
+      151.134
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -5723,9 +5725,9 @@
   },
   "Citigroup Center (NW)": {
     "xyz": [
-      -411.244,
-      -458.578,
-      150.844
+      -411.746,
+      -458.46,
+      151.137
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -5738,9 +5740,9 @@
   },
   "Cruise Ship (FT)": {
     "xyz": [
-      233.118,
-      -260.906,
-      50.661
+      232.495,
+      -261.277,
+      50.798
     ],
     "source_cameras": [
       "Skyline",
@@ -5753,9 +5755,9 @@
   },
   "Cruise Ship (RT)": {
     "xyz": [
-      387.075,
-      -303.091,
-      58.354
+      386.675,
+      -303.46,
+      58.391
     ],
     "source_cameras": [
       "Vice City 08 (Ferris Wheel)",
@@ -5767,9 +5769,9 @@
   },
   "Di Lido Island (N)": {
     "xyz": [
-      470.706,
-      1504.775,
-      4.614
+      472.953,
+      1504.992,
+      4.303
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -5777,7 +5779,7 @@
     ],
     "error_m": 6.987,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.0 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.3 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.0 m | "
   },
   "Di Lido Island (S)": {
     "xyz": [
@@ -5920,9 +5922,9 @@
   },
   "Flamingo South Beach (NENE)": {
     "xyz": [
-      1371.255,
-      1081.193,
-      51.452
+      1371.201,
+      1080.365,
+      51.288
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -5935,9 +5937,9 @@
   },
   "Flamingo South Beach (SDS)": {
     "xyz": [
-      1285.665,
-      816.753,
-      64.283
+      1284.24,
+      815.537,
+      64.161
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -5945,13 +5947,13 @@
     ],
     "error_m": 2.018,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.0 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.9 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.0 m | "
   },
   "Flamingo South Beach (SRSW)": {
     "xyz": [
-      1293.315,
-      804.382,
-      59.58
+      1291.968,
+      803.164,
+      59.454
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -5960,7 +5962,7 @@
     "error_m": 2.0,
     "zone": "vice_city",
     "method": " | re-triangule apres MARK-ARB-V1 (17.6 m, perp 0.2 m)",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.6 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.8 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.6 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
   },
   "Flamingo South Beach (TSW)": {
     "xyz": [
@@ -5975,13 +5977,13 @@
     "error_m": 7.5,
     "zone": "vice_city",
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 7.5 m, angle max 3.7 deg",
-    "note": "REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 173 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 202 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 191 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 95 m (garde tel quel, probable clic croise) | "
+    "note": "REVUE BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 97 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 173 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 202 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 191 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 95 m (garde tel quel, probable clic croise) | "
   },
   "Green Diamond": {
     "xyz": [
-      1798.702,
-      2123.4,
-      144.638
+      1798.783,
+      2122.887,
+      144.558
     ],
     "source_cameras": [
       "Beach",
@@ -5994,9 +5996,9 @@
   },
   "Hotel Victor (SW)": {
     "xyz": [
-      1943.511,
-      741.642,
-      35.078
+      1942.117,
+      747.555,
+      35.239
     ],
     "source_cameras": [
       "Park",
@@ -6004,13 +6006,13 @@
     ],
     "error_m": 3.476,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 5.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.2 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 6.1 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 5.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.2 m | "
   },
   "InterContinental Miami (N)": {
     "xyz": [
-      -253.403,
-      -461.209,
-      132.236
+      -254.0,
+      -461.528,
+      132.56
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -6022,9 +6024,9 @@
   },
   "Jade Ocean Condos": {
     "xyz": [
-      1621.364,
-      2510.793,
-      202.862
+      1621.543,
+      2510.812,
+      202.928
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -6037,9 +6039,9 @@
   },
   "Jade Ocean Condos (SW)": {
     "xyz": [
-      1626.817,
-      2485.228,
-      202.603
+      1626.867,
+      2485.042,
+      202.613
     ],
     "source_cameras": [
       "Beach",
@@ -6108,9 +6110,9 @@
   },
   "Kaseya Center (SE)": {
     "xyz": [
-      -222.47609621008064,
-      431.29653508554,
-      45.80922662666533
+      -223.761,
+      431.902,
+      45.533
     ],
     "source_cameras": [
       "Convertible",
@@ -6121,7 +6123,7 @@
     ],
     "error_m": 11.013,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.8 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.4 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.8 m | "
   },
   "Keys Bridge (C)": {
     "xyz": [
@@ -6218,9 +6220,9 @@
   },
   "Loews Miami Beach": {
     "xyz": [
-      1957.273,
-      1147.109,
-      87.106
+      1957.446,
+      1146.003,
+      86.916
     ],
     "source_cameras": [
       "Beach",
@@ -6230,13 +6232,13 @@
     ],
     "error_m": 8.578,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.2 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.2 m | "
   },
   "Loft Downtown II": {
     "xyz": [
-      -543.212,
-      54.804,
-      124.014
+      -545.426,
+      54.274,
+      124.452
     ],
     "source_cameras": [
       "Prison",
@@ -6248,13 +6250,13 @@
     ],
     "error_m": 4.229,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.2 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.3 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.2 m | "
   },
   "Margaret Pace Park": {
     "xyz": [
-      -285.03483858237746,
-      1090.520998631622,
-      8.49473128750906
+      -286.259,
+      1091.504,
+      8.473
     ],
     "source_cameras": [
       "Vice City Postcard",
@@ -6262,12 +6264,12 @@
     ],
     "error_m": 0.994,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.6 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.1 m | "
   },
   "Marina (Stockyard) (NE)": {
     "xyz": [
-      -225.71,
-      1445.623,
+      -229.327,
+      1445.473,
       0.0
     ],
     "source_cameras": [
@@ -6280,7 +6282,7 @@
       "type": "fixed",
       "value": 0.0
     },
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.8 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.6 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.8 m | "
   },
   "Marina (Stockyard) (SE)": {
     "xyz": [
@@ -6316,9 +6318,9 @@
   },
   "Marina Blue (NE)": {
     "xyz": [
-      -459.138,
-      420.09,
-      175.244
+      -459.705,
+      420.538,
+      175.338
     ],
     "source_cameras": [
       "Motorboats (B)",
@@ -6334,9 +6336,9 @@
   },
   "Marriott Miami Biscayne Bay (E)": {
     "xyz": [
-      -228.551,
-      856.456,
-      145.324
+      -230.266,
+      855.937,
+      145.644
     ],
     "source_cameras": [
       "Skyline",
@@ -6345,13 +6347,13 @@
     ],
     "error_m": 0.543,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.8 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.9 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.8 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.8 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.9 m | "
   },
   "Marriott Miami Biscayne Bay (NE)": {
     "xyz": [
-      -233.628,
-      873.624,
-      145.124
+      -235.194,
+      873.225,
+      145.412
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -6361,13 +6363,13 @@
     ],
     "error_m": 2.312,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.8 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.9 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.6 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.8 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.9 m | "
   },
   "Miami Tower": {
     "xyz": [
-      -783.221,
-      -417.374,
-      161.497
+      -783.004,
+      -416.329,
+      161.671
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -6378,7 +6380,7 @@
     ],
     "error_m": 2.667,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.5 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.5 m | "
   },
   "New Foundation Church": {
     "xyz": [
@@ -6397,9 +6399,9 @@
   },
   "New Wave Condominiums": {
     "xyz": [
-      -334.913,
-      1434.28,
-      110.681
+      -338.237,
+      1434.557,
+      110.811
     ],
     "source_cameras": [
       "Vice City 03 (Basketball)",
@@ -6407,7 +6409,7 @@
     ],
     "error_m": 0.45,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.2 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.2 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.3 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.2 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.2 m | "
   },
   "Nine at Mary Brickell Village (A)": {
     "xyz": [
@@ -6452,9 +6454,9 @@
   },
   "One Miami Condominium East (NE)": {
     "xyz": [
-      -233.12113746981527,
-      -526.9808940423507,
-      183.10853267180775
+      -232.381,
+      -526.367,
+      182.459
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -6464,13 +6466,13 @@
     ],
     "error_m": 2.324,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.7 m | "
   },
   "One Miami Condominium West (NE)": {
     "xyz": [
-      -316.846,
-      -558.986,
-      188.09
+      -317.052,
+      -559.029,
+      188.431
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -6485,9 +6487,9 @@
   },
   "Opera Tower": {
     "xyz": [
-      -428.0550490919596,
-      873.9115785190047,
-      199.79992049599701
+      -428.71,
+      872.853,
+      199.939
     ],
     "source_cameras": [
       "Prison",
@@ -6497,7 +6499,8 @@
       "Vice City Postcard"
     ],
     "error_m": 2.241,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.3 m | "
   },
   "PGH Barrier Island (E)": {
     "xyz": [
@@ -6866,8 +6869,8 @@
   },
   "Port (C)": {
     "xyz": [
-      807.194,
-      -177.86,
+      808.074,
+      -178.35,
       0.0
     ],
     "source_cameras": [
@@ -6880,13 +6883,13 @@
       "type": "fixed",
       "value": 0.0
     },
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 4.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.8 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 7.0 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.0 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 4.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.8 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 7.0 m | "
   },
   "Port (D)": {
     "xyz": [
-      765.182,
-      -187.417,
-      5.714
+      765.484,
+      -187.728,
+      4.897
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -6898,9 +6901,9 @@
   },
   "Port (E)": {
     "xyz": [
-      616.372,
-      -189.142,
-      13.282
+      616.48,
+      -189.569,
+      12.716
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -7149,9 +7152,9 @@
   },
   "Quantum on the Bay Condominium (N) (NE)": {
     "xyz": [
-      -427.8246189716994,
-      1167.7528222303379,
-      178.40520285950512
+      -432.033,
+      1167.223,
+      179.669
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7160,13 +7163,13 @@
     ],
     "error_m": 1.101,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.6 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.2 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 4.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.6 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.2 m | "
   },
   "Quantum on the Bay Condominium (S) (NE)": {
     "xyz": [
-      -387.13845475157564,
-      1134.2469821429286,
-      205.77352248335495
+      -387.992,
+      1135.134,
+      206.542
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7175,7 +7178,7 @@
     ],
     "error_m": 0.67,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.5 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
   },
   "Reworld Miami-Dade (SE)": {
     "xyz": [
@@ -7224,9 +7227,9 @@
   },
   "Royal Palm South Beach (N) (N)": {
     "xyz": [
-      2028.902,
-      1052.847,
-      68.007
+      2029.091,
+      1051.746,
+      67.772
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -7235,13 +7238,13 @@
     ],
     "error_m": 1.654,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.3 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.3 m | "
   },
   "Royal Palm South Beach (N) (S)": {
     "xyz": [
-      2029.84,
-      1042.977,
-      67.971
+      2029.983,
+      1041.87,
+      67.743
     ],
     "source_cameras": [
       "Beach",
@@ -7250,13 +7253,14 @@
       "Vice Beach (B)"
     ],
     "error_m": 1.092,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | "
   },
   "Royal Palm South Beach (S)": {
     "xyz": [
-      2006.609,
-      1025.567,
-      67.081
+      2006.767,
+      1024.477,
+      66.863
     ],
     "source_cameras": [
       "Beach",
@@ -7265,7 +7269,7 @@
     ],
     "error_m": 2.46,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.2 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.2 m | "
   },
   "Ship (A)": {
     "xyz": [
@@ -7320,9 +7324,9 @@
   },
   "Skyviews Miami Observation Wheel": {
     "xyz": [
-      37.581,
-      131.324,
-      71.216
+      36.866,
+      131.344,
+      70.983
     ],
     "source_cameras": [
       "Skyline",
@@ -7336,9 +7340,9 @@
   },
   "Southeast Financial Center": {
     "xyz": [
-      -479.803,
-      -460.853,
-      249.027
+      -480.055,
+      -461.155,
+      249.71
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7357,9 +7361,9 @@
   },
   "St. Moritz Hotel (SW)": {
     "xyz": [
-      1968.328,
-      1101.028,
-      49.287
+      1968.793,
+      1099.933,
+      49.078
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -7367,13 +7371,14 @@
       "Vice Beach (B)"
     ],
     "error_m": 3.642,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | "
   },
   "Sunset Harbour South Condo": {
     "xyz": [
-      1447.295,
-      1666.214,
-      88.257
+      1447.563,
+      1665.564,
+      88.009
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -7385,9 +7390,9 @@
   },
   "Ten Museum Park (SE)": {
     "xyz": [
-      -456.258,
-      474.989,
-      135.941
+      -456.829,
+      475.819,
+      136.153
     ],
     "source_cameras": [
       "Skyline",
@@ -7396,13 +7401,13 @@
     ],
     "error_m": 1.931,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 5.4 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.0 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 5.4 m | "
   },
   "The Crimson (CC)": {
     "xyz": [
-      -459.796,
-      1252.229,
-      119.154
+      -466.478,
+      1251.512,
+      118.703
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -7411,13 +7416,13 @@
     ],
     "error_m": 1.811,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.6 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 6.7 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.6 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.1 m | "
   },
   "The Grand (E)": {
     "xyz": [
-      -257.482,
-      964.058,
-      175.421
+      -258.081,
+      964.063,
+      175.586
     ],
     "source_cameras": [
       "Prison",
@@ -7432,9 +7437,9 @@
   },
   "The Tides South Beach": {
     "xyz": [
-      1992.727,
-      893.409,
-      54.877
+      1992.902,
+      892.338,
+      54.656
     ],
     "source_cameras": [
       "Beach",
@@ -7442,13 +7447,13 @@
     ],
     "error_m": 2.72,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
   },
   "The Waverly South Beach (SE)": {
     "xyz": [
-      1274.026,
-      582.927,
-      113.176
+      1273.778,
+      581.939,
+      113.083
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7457,13 +7462,13 @@
     ],
     "error_m": 2.072,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.0 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
   },
   "Three Tequesta Point": {
     "xyz": [
-      3.639,
-      -942.632,
-      206.619
+      2.52,
+      -943.086,
+      206.866
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -7478,7 +7483,7 @@
     "error_m": 5.865,
     "zone": "vice_city",
     "method": " | re-triangule apres MARK-ARB-V1 (2.4 m, perp 1.9 m)",
-    "note": "NOTE 2026-09-04: tour en haricot (empreinte 110.6x63.1 m, 5408 m2, centroide [-7.3, -921.2]); ce landmark 'sommet' est un point de silhouette dependant du point de vue -> preferer 'Three Tequesta Point (Helipad)' et le mesh 'Pegassi Towers' | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.8 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.6 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | NOTE 2026-09-04: tour en haricot (empreinte 110.6x63.1 m, 5408 m2, centroide [-7.3, -921.2]); ce landmark 'sommet' est un point de silhouette dependant du point de vue -> preferer 'Three Tequesta Point (Helipad)' et le mesh 'Pegassi Towers' | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.8 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.6 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.7 m | "
   },
   "Train Signal (S) (E)": {
     "xyz": [
@@ -7510,9 +7515,9 @@
   },
   "Tr\u00e9sor Tower": {
     "xyz": [
-      1856.617,
-      1943.186,
-      119.844
+      1856.695,
+      1942.588,
+      119.731
     ],
     "source_cameras": [
       "Beach",
@@ -7597,9 +7602,9 @@
   },
   "Two Tequesta Point": {
     "xyz": [
-      55.728,
-      -1061.484,
-      160.462
+      55.331,
+      -1062.66,
+      160.321
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7613,13 +7618,13 @@
     ],
     "error_m": 4.957,
     "zone": "vice_city",
-    "note": "NOTE 2026-09-04: tour en haricot (empreinte 101.5x56.0 m, 4244 m2, centroide [79.0, -1050.5]); ce landmark 'sommet' est un point de silhouette dependant du point de vue -> preferer 'Two Tequesta Point (Helipad)' et le mesh 'Pegassi Towers' | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.0 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.9 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | NOTE 2026-09-04: tour en haricot (empreinte 101.5x56.0 m, 4244 m2, centroide [79.0, -1050.5]); ce landmark 'sommet' est un point de silhouette dependant du point de vue -> preferer 'Two Tequesta Point (Helipad)' et le mesh 'Pegassi Towers' | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.0 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.9 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.1 m | "
   },
   "Unknown Sphere": {
     "xyz": [
-      -177.002,
-      396.266,
-      27.841
+      -177.877,
+      396.428,
+      27.979
     ],
     "source_cameras": [
       "Skyline",
@@ -7631,9 +7636,9 @@
   },
   "Uptown Lofts (NE)": {
     "xyz": [
-      -338.776,
-      1331.971,
-      43.522
+      -341.643,
+      1332.142,
+      43.483
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -7642,13 +7647,13 @@
     ],
     "error_m": 1.65,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.5 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.9 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.5 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | "
   },
   "Uptown Lofts (SE)": {
     "xyz": [
-      -343.902,
-      1313.456,
-      43.499
+      -346.729,
+      1313.602,
+      43.464
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -7657,13 +7662,13 @@
     ],
     "error_m": 1.45,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.5 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.4 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.8 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.5 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.4 m | "
   },
   "Venetian Isle Condominium": {
     "xyz": [
-      43.349,
-      1199.502,
-      45.574
+      41.26,
+      1198.16,
+      45.431
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -7672,13 +7677,13 @@
     ],
     "error_m": 3.847,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.4 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.0 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.5 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.4 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.0 m | "
   },
   "Vizcayne North Condominium (NE)": {
     "xyz": [
-      -541.3,
-      159.4,
-      177.291
+      -543.328,
+      157.751,
+      177.656
     ],
     "source_cameras": [
       "Convertible",
@@ -7692,14 +7697,14 @@
     ],
     "error_m": 4.203,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | ",
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.6 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | ",
     "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z conserve | "
   },
   "Vizcayne North Condominium (SE)": {
     "xyz": [
-      -542.3,
-      108.9,
-      177.19
+      -542.398,
+      108.035,
+      177.42
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7772,9 +7777,9 @@
   },
   "Wells Fargo Center (N)": {
     "xyz": [
-      -671.386,
-      -419.3,
-      187.21
+      -672.344,
+      -419.301,
+      187.724
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7786,13 +7791,13 @@
     ],
     "error_m": 1.785,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.5 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.5 m | "
   },
   "West Venetian Causeway Bridge": {
     "xyz": [
-      -124.942,
-      1073.134,
-      13.709
+      -114.311,
+      1066.448,
+      14.008
     ],
     "source_cameras": [
       "Tennis Court (SE)",
@@ -7800,7 +7805,7 @@
     ],
     "error_m": 0.309,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 4.7 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 12.6 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 12.6 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 4.7 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 12.6 m | "
   },
   "Billboard with Diversity Motif (E)": {
     "xyz": [
@@ -7830,9 +7835,9 @@
   },
   "Cardozo South Beach": {
     "xyz": [
-      2010.303,
-      912.753,
-      18.542
+      2010.625,
+      911.769,
+      18.331
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7840,13 +7845,13 @@
     ],
     "error_m": 0.751,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.9 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.9 m | "
   },
   "Cavalier Hotel": {
     "xyz": [
-      1967.553,
-      701.662,
-      20.262
+      1967.815,
+      700.793,
+      20.039
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7858,9 +7863,9 @@
   },
   "Construction Crane (Vice Beach)": {
     "xyz": [
-      1488.099,
-      263.538,
-      60.141
+      1487.87,
+      262.389,
+      59.949
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7868,13 +7873,13 @@
     ],
     "error_m": 0.32,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.2 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 5.0 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.2 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 5.0 m | "
   },
   "Container Crane (9)": {
     "xyz": [
-      1063.731,
-      -229.547,
-      72.496
+      1064.189,
+      -229.984,
+      72.332
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -7886,9 +7891,9 @@
   },
   "Courtyard by Marriott (NE)": {
     "xyz": [
-      1689.135,
-      1064.554,
-      32.872
+      1689.554,
+      1063.602,
+      32.709
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7896,13 +7901,13 @@
     ],
     "error_m": 1.803,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
   },
   "Hotel Victor (NW)": {
     "xyz": [
-      1946.024,
-      752.962,
-      38.682
+      1946.315,
+      752.071,
+      38.456
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7914,9 +7919,9 @@
   },
   "Icon at South Beach": {
     "xyz": [
-      1458.918,
-      112.067,
-      142.577
+      1459.577,
+      111.543,
+      142.212
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7930,9 +7935,9 @@
   },
   "Leslie Hotel": {
     "xyz": [
-      1969.186,
-      719.116,
-      22.111
+      1969.453,
+      718.238,
+      21.888
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7944,9 +7949,9 @@
   },
   "McAlpin Ocean Plaza": {
     "xyz": [
-      2001.503,
-      859.388,
-      24.71
+      2001.812,
+      858.438,
+      24.493
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7954,13 +7959,13 @@
     ],
     "error_m": 0.403,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.1 m | "
   },
   "Miami Beach Parking Garage (SE)": {
     "xyz": [
-      1849.0,
-      683.336,
-      34.766
+      1849.271,
+      682.464,
+      34.55
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7972,9 +7977,9 @@
   },
   "Southeast Financial Center (D)": {
     "xyz": [
-      -475.745,
-      -475.463,
-      247.003
+      -470.59,
+      -473.282,
+      247.477
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7986,13 +7991,13 @@
     ],
     "error_m": 1.498,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.4 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 5.6 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.4 m | "
   },
   "The Grand": {
     "xyz": [
-      -287.945,
-      955.866,
-      175.354
+      -288.62,
+      956.149,
+      175.474
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -8005,9 +8010,9 @@
   },
   "The Waverly South Beach (NW)": {
     "xyz": [
-      1233.839985612835,
-      629.981087074987,
-      106.39569870455699
+      1234.022,
+      629.455,
+      106.903
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -8019,9 +8024,9 @@
   },
   "Winter Haven": {
     "xyz": [
-      1998.748,
-      842.475,
-      29.072
+      1999.054,
+      841.535,
+      28.851
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -8029,13 +8034,13 @@
     ],
     "error_m": 0.222,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.3 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.3 m | "
   },
   "1111 Lincoln Rd (NW)": {
     "xyz": [
-      1476.204,
-      1364.539,
-      54.499
+      1476.237,
+      1363.722,
+      54.273
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8047,9 +8052,9 @@
   },
   "Bank of America Financial Center (NW)": {
     "xyz": [
-      1695.5944758030248,
-      1375.8530145217728,
-      66.81867021827597
+      1696.08,
+      1375.394,
+      66.541
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8062,9 +8067,9 @@
   },
   "Flamingo South Beach (NWNW)": {
     "xyz": [
-      1276.017,
-      1081.808,
-      51.588
+      1275.084,
+      1080.318,
+      51.441
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8072,13 +8077,13 @@
     ],
     "error_m": 2.081,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.6 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.8 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.6 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.1 m | "
   },
   "New World Center": {
     "xyz": [
-      1640.697,
-      1426.493,
-      42.47
+      1640.236,
+      1425.256,
+      42.213
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8086,13 +8091,13 @@
     ],
     "error_m": 0.053,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.5 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.5 m | "
   },
   "Sunset Harbour South Condo (RN)": {
     "xyz": [
-      1442.607,
-      1696.85,
-      81.097
+      1443.479,
+      1696.163,
+      80.789
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8100,13 +8105,13 @@
     ],
     "error_m": 2.038,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.8 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.8 m | "
   },
   "Sunset Harbour South Condo (RS)": {
     "xyz": [
-      1440.940546072106,
-      1634.2873426872543,
-      81.24095767783152
+      1441.52,
+      1633.657,
+      81.013
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8119,9 +8124,9 @@
   },
   "The Gates Hotel South Beach (NW)": {
     "xyz": [
-      1786.219,
-      1582.882,
-      47.945
+      1786.523,
+      1582.041,
+      47.637
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8480,9 +8485,9 @@
   },
   "Blue Diamond": {
     "xyz": [
-      1842.796,
-      2052.056,
-      146.058
+      1842.808,
+      2051.448,
+      145.916
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8494,9 +8499,9 @@
   },
   "East Venetian Causeway Bridge": {
     "xyz": [
-      1233.001,
-      1442.314,
-      15.88
+      1232.95,
+      1440.941,
+      15.722
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8504,13 +8509,13 @@
     ],
     "error_m": 3.232,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | "
   },
   "Pelican Harbor Radio Tower": {
     "xyz": [
-      1088.529,
-      1852.098,
-      101.427
+      1088.718,
+      1851.174,
+      101.373
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8523,8 +8528,8 @@
   "Sherry Frontenac Oceanfront Hotel (N)": {
     "xyz": [
       1524.66,
-      2577.433,
-      49.41
+      2577.413,
+      49.412
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8536,9 +8541,9 @@
   },
   "Sherry Frontenac Oceanfront Hotel (S)": {
     "xyz": [
-      1550.27,
-      2549.111,
-      49.184
+      1550.273,
+      2549.066,
+      49.188
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8550,9 +8555,9 @@
   },
   "The Ritz-Carlton Bal Harbour": {
     "xyz": [
-      1405.454,
-      2786.207,
-      103.643
+      1405.432,
+      2786.215,
+      103.678
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8604,9 +8609,9 @@
   },
   "Citigroup Center (SE)": {
     "xyz": [
-      -374.89,
-      -521.777,
-      151.062
+      -375.332,
+      -521.799,
+      151.325
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -8621,9 +8626,9 @@
   },
   "One Miami Condominium East (SE)": {
     "xyz": [
-      -231.503,
-      -550.962,
-      182.323
+      -231.611,
+      -550.871,
+      182.48
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -8641,9 +8646,9 @@
   },
   "One Miami Condominium West (SE)": {
     "xyz": [
-      -313.096,
-      -582.842,
-      187.987
+      -313.455,
+      -582.695,
+      188.153
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -8707,13 +8712,13 @@
     ],
     "error_m": 0.508,
     "zone": "grassrivers",
-    "note": "REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 71 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 69 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 47 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 49 m (garde tel quel, probable clic croise) | "
+    "note": "REVUE BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 66 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 71 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 69 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 47 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 49 m (garde tel quel, probable clic croise) | "
   },
   "Kaseya Center (S)": {
     "xyz": [
-      -262.00645966607215,
-      398.7905213544504,
-      44.185117655083786
+      -263.805,
+      400.564,
+      44.284
     ],
     "source_cameras": [
       "Vice City 08 (Ferris Wheel)",
@@ -8722,13 +8727,13 @@
     ],
     "error_m": 1.151,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.3 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.5 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.3 m | "
   },
   "1000 Venetian Way (2)": {
     "xyz": [
-      286.808,
-      1155.764,
-      29.405
+      286.016,
+      1153.575,
+      29.509
     ],
     "source_cameras": [
       "Skyline",
@@ -8737,13 +8742,13 @@
     ],
     "error_m": 3.694,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.8 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.8 m | "
   },
   "1000 Venetian Way (3)": {
     "xyz": [
-      289.923,
-      1144.741,
-      41.692
+      289.124,
+      1142.576,
+      41.777
     ],
     "source_cameras": [
       "Skyline",
@@ -8752,7 +8757,7 @@
     ],
     "error_m": 6.455,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.5 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.5 m | "
   },
   "Nine at Mary Brickell Village (C)": {
     "xyz": [
@@ -8811,9 +8816,9 @@
   },
   "City View Parking Garage (S)": {
     "xyz": [
-      -185.497,
-      2060.852,
-      33.986
+      -185.278,
+      2061.181,
+      34.017
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8824,9 +8829,9 @@
   },
   "City View Parking Garage (SE)": {
     "xyz": [
-      -159.218,
-      2059.582,
-      33.947
+      -158.982,
+      2059.9,
+      33.977
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8944,9 +8949,9 @@
   },
   "Portofino Tower (S)": {
     "xyz": [
-      1763.56,
-      -208.669,
-      149.353
+      1763.536,
+      -210.834,
+      149.718
     ],
     "source_cameras": [
       "Port",
@@ -8955,7 +8960,7 @@
     ],
     "error_m": 5.393,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.5 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 7.4 m | TOOLTIP ALEXANDRE 2026-09-03: x,y = position in-game (1763.3,-202.5), z conserve 143.21; ancien (1737.5,-223.8) -> deplace 33.5 m ('l'actuel debordait sur la rue') | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.2 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.5 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 7.4 m | TOOLTIP ALEXANDRE 2026-09-03: x,y = position in-game (1763.3,-202.5), z conserve 143.21; ancien (1737.5,-223.8) -> deplace 33.5 m ('l'actuel debordait sur la rue') | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.1 m | "
   },
   "536 Richard Jackson Blvd (BSW)": {
     "xyz": [
@@ -8975,9 +8980,9 @@
   },
   "Bayshore Place Condominium (TE)": {
     "xyz": [
-      -596.824,
-      -1371.677,
-      61.228
+      -596.747,
+      -1371.739,
+      61.212
     ],
     "source_cameras": [
       "Tennis Stadium (4K)",
@@ -9030,9 +9035,9 @@
   },
   "Cruise Terminal D": {
     "xyz": [
-      672.201,
-      -429.906,
-      34.717
+      671.771,
+      -429.903,
+      34.768
     ],
     "source_cameras": [
       "Motorboats (B)",
@@ -9044,9 +9049,9 @@
   },
   "Cruise Terminal G (B)": {
     "xyz": [
-      339.959,
-      -331.721,
-      17.209
+      339.04,
+      -332.778,
+      17.252
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -9054,13 +9059,13 @@
     ],
     "error_m": 0.226,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 5.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.4 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.4 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 5.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.4 m | "
   },
   "Flamingo South Beach (NERNE)": {
     "xyz": [
-      1366.656,
-      1058.318,
-      55.498
+      1366.59,
+      1057.483,
+      55.341
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -9072,9 +9077,9 @@
   },
   "Bank of America Financial Center (SW)": {
     "xyz": [
-      1691.824,
-      1358.567,
-      66.419
+      1692.304,
+      1356.845,
+      66.355
     ],
     "source_cameras": [
       "Beach",
@@ -9083,7 +9088,7 @@
     ],
     "error_m": 1.683,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.8 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.7 m | "
   },
   "Four Seasons Hotel Miami (40NE)": {
     "xyz": [
@@ -9102,9 +9107,9 @@
   },
   "Kaseya Center (NW)": {
     "xyz": [
-      -348.179,
-      490.152,
-      44.909
+      -349.11,
+      490.709,
+      44.893
     ],
     "source_cameras": [
       "Skyline",
@@ -9112,7 +9117,7 @@
     ],
     "error_m": 1.712,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.9 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.9 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.7 m | "
   },
   "Office in the Grove": {
     "xyz": [
@@ -9129,9 +9134,9 @@
   },
   "Hotel Breakwater (K)": {
     "xyz": [
-      1948.756,
-      565.784,
-      14.33
+      1949.069,
+      565.144,
+      14.084
     ],
     "source_cameras": [
       "Park",
@@ -9196,9 +9201,9 @@
   },
   "Star Island Water Tower": {
     "xyz": [
-      759.4611277927515,
-      482.0395801048415,
-      29.7887934104464
+      760.225,
+      481.692,
+      31.131
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -9206,7 +9211,7 @@
     ],
     "error_m": 4.21,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.6 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.0 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 7.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.6 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.6 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.0 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 7.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.7 m | "
   },
   "Tall Billboard": {
     "xyz": [
@@ -9234,13 +9239,13 @@
     ],
     "error_m": 1.144,
     "zone": "vice_city",
-    "note": "REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 32 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 36 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 34 m, garde | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 13.8 m | "
+    "note": "REVUE BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 31 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 32 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 36 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 34 m, garde | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 13.8 m | "
   },
   "1111 Lincoln Rd (SE)": {
     "xyz": [
-      1516.852,
-      1331.387,
-      54.735
+      1517.047,
+      1330.724,
+      54.508
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -9266,9 +9271,9 @@
   },
   "Continuum on South Beach (S)": {
     "xyz": [
-      1980.639,
-      -319.959,
-      144.662
+      1980.964,
+      -317.395,
+      144.371
     ],
     "source_cameras": [
       "Amphitheater",
@@ -9281,13 +9286,13 @@
     "error_m": 39.8,
     "zone": "vice_city",
     "method": "ANCHOR-HARVEST-V1: triangulation 6 cams, perp med 39.8 m, angle max 85.4 deg",
-    "note": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.4 m | TOOLTIP ALEXANDRE 2026-09-03: x,y in-game (1979.7,-320.6), z conserve 143.93; ancien (1984.8,-278.2) deplace 42.7 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 28.6 m | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 36 m (garde tel quel, probable clic croise) | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.6 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.4 m | TOOLTIP ALEXANDRE 2026-09-03: x,y in-game (1979.7,-320.6), z conserve 143.93; ancien (1984.8,-278.2) deplace 42.7 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 28.6 m | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 36 m (garde tel quel, probable clic croise) | "
   },
   "Flamingo South Beach (NWNE)": {
     "xyz": [
-      1203.039,
-      1016.23,
-      52.026
+      1202.928,
+      1015.462,
+      51.88
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -9299,9 +9304,9 @@
   },
   "Uptown Lofts": {
     "xyz": [
-      -364.527,
-      1345.162,
-      45.932
+      -367.5,
+      1345.367,
+      45.898
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -9310,13 +9315,13 @@
     ],
     "error_m": 1.409,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.6 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.0 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.6 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.7 m | "
   },
   "W South Beach (SE)": {
     "xyz": [
-      1988.779,
-      1571.961,
-      75.618
+      1988.88,
+      1570.72,
+      75.543
     ],
     "source_cameras": [
       "Sidewalk (Jason) (E)",
@@ -9325,7 +9330,7 @@
     "error_m": 2.0,
     "zone": "vice_city",
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.7 m, angle max 5.6 deg",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | "
   },
   "Waffles Ridge (C)": {
     "xyz": [
@@ -9646,9 +9651,9 @@
   },
   "Portofino Tower (NE)": {
     "xyz": [
-      1769.919,
-      -172.706,
-      148.459
+      1769.879,
+      -173.423,
+      148.559
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -9660,9 +9665,9 @@
   },
   "Hotel Victor (NE)": {
     "xyz": [
-      1971.181,
-      743.129,
-      37.91
+      1971.566,
+      742.382,
+      37.732
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -10538,9 +10543,9 @@
   },
   "1000 Venetian Way (W-Box-NW)": {
     "xyz": [
-      299.822,
-      1126.219,
-      62.308
+      299.159,
+      1124.08,
+      62.342
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -10548,13 +10553,13 @@
     ],
     "error_m": 2.097,
     "zone": "unknown",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.0 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.2 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.0 m | "
   },
   "1000 Venetian Way (NW)": {
     "xyz": [
-      301.115,
-      1126.446,
-      67.932
+      299.991,
+      1124.172,
+      67.988
     ],
     "source_cameras": [
       "Tennis Court (SE)",
@@ -10563,13 +10568,13 @@
     ],
     "error_m": 1.766,
     "zone": "unknown",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.5 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.1 m | "
   },
   "1000 Venetian Way (T-NW)": {
     "xyz": [
-      289.85,
-      1122.172,
-      62.367
+      289.13,
+      1120.026,
+      62.404
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -10577,7 +10582,7 @@
     ],
     "error_m": 2.632,
     "zone": "unknown",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.9 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.9 m | "
   },
   "1000 Venetian Way (T-SW)": {
     "xyz": null,
@@ -10605,9 +10610,9 @@
   },
   "1000 Venetian Way (Center-NE)": {
     "xyz": [
-      336.818,
-      1136.92,
-      67.637
+      336.244,
+      1134.836,
+      67.638
     ],
     "source_cameras": [
       "Skyline",
@@ -10616,13 +10621,13 @@
     ],
     "error_m": 3.16,
     "zone": "unknown",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.6 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.2 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.6 m | "
   },
   "1000 Venetian Way (NE)": {
     "xyz": [
-      347.288,
-      1139.726,
-      67.57
+      346.778,
+      1137.655,
+      67.559
     ],
     "source_cameras": [
       "Skyline",
@@ -10631,7 +10636,7 @@
     ],
     "error_m": 1.275,
     "zone": "unknown",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.3 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.1 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.3 m | "
   },
   "1000 Venetian Way (T-NE)": {
     "xyz": null,
@@ -10876,7 +10881,7 @@
     "error_m": 17.7,
     "zone": "unknown",
     "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 17.7 m, angle max 40.9 deg",
-    "note": "REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 54 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 50 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 44 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 50 m (garde tel quel, probable clic croise) | "
+    "note": "REVUE BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 54 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 54 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 50 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 44 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 50 m (garde tel quel, probable clic croise) | "
   },
   "Grove at Grand Bay (S)": {
     "xyz": null,
@@ -10898,12 +10903,12 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -100.62455181755115,
-      538.6704959547741,
-      31.379505484335123
+      -101.017,
+      541.161,
+      31.553
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 8.4 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.5 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 8.4 m | "
   },
   "Brickell Arch": {
     "author": "rlx",
@@ -10958,12 +10963,12 @@
     "error_m": 0.4,
     "source_cameras": [],
     "xyz": [
-      -100.812,
-      537.991,
-      28.407
+      -100.744,
+      541.213,
+      28.37
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 9.2 m | derive parallelogramme du panneau rigide (BL=TL+BR-TR) \u2014 sa triangulation etait 15m off"
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.2 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 9.2 m | derive parallelogramme du panneau rigide (BL=TL+BR-TR) \u2014 sa triangulation etait 15m off"
   },
   "Vizcayne South Condominium (NW)": {
     "author": "rlx",
@@ -10974,12 +10979,12 @@
       "Port Vice City (A)"
     ],
     "xyz": [
-      -636.8,
-      99.4,
-      178.637
+      -630.194,
+      96.854,
+      178.668
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 5.1 m | ",
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 7.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 5.1 m | ",
     "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z conserve | "
   },
   "Four Seasons Hotel Miami (?NW)": {
@@ -10997,12 +11002,12 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -99.798,
-      553.084,
-      32.836
+      -100.127,
+      556.834,
+      32.34
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 9.6 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.8 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 9.6 m | "
   },
   "Starlet Motel Sign (A)": {
     "author": "rlx",
@@ -11044,12 +11049,12 @@
       "Port Vice City (B)"
     ],
     "xyz": [
-      -457.9139716907665,
-      -231.75155021059868,
-      147.19922567717921
+      -456.838,
+      -230.114,
+      147.211
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.9 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.9 m | "
   },
   "Jason's Boat Ramp": {
     "author": "rlx",
@@ -11078,9 +11083,9 @@
       "Ultimate Edition 02 (Green Sports Car)"
     ],
     "xyz": [
-      -733.876,
-      -1123.451,
-      173.052
+      -733.92,
+      -1123.34,
+      173.089
     ],
     "zone": null,
     "method": "ANCHOR-HARVEST-V1: triangulation 6 cams, perp med 8.9 m, angle max 85.4 deg",
@@ -11130,9 +11135,9 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -482.3267725991411,
-      -463.9019779337734,
-      278.62259525658163
+      -482.879,
+      -464.015,
+      278.911
     ],
     "zone": null,
     "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.5 m | "
@@ -11189,12 +11194,12 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -99.66675955962546,
-      553.9320268435413,
-      28.32219562210173
+      -100.256,
+      556.83,
+      28.612
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 8.9 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.0 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 8.9 m | "
   },
   "Jason's House (SW)": {
     "author": "rlx",
@@ -11325,9 +11330,9 @@
       "Port Vice City (B)"
     ],
     "xyz": [
-      1384.406,
-      -154.438,
-      23.152
+      1384.021,
+      -154.5,
+      23.039
     ],
     "zone": null,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 4.3 m, angle max 46.7 deg",
@@ -11421,9 +11426,9 @@
       "Airport (X)"
     ],
     "xyz": [
-      -357.877,
-      -129.643,
-      96.936
+      -357.482,
+      -129.389,
+      96.857
     ],
     "zone": null,
     "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 14.4 m, angle max 2.8 deg",
@@ -11444,9 +11449,9 @@
       "Vice City Postcard"
     ],
     "xyz": [
-      -323.514,
-      939.273,
-      176.685
+      -324.309,
+      939.859,
+      176.832
     ],
     "zone": null,
     "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.6 m | "
@@ -11662,9 +11667,9 @@
       "Dominion Hotel"
     ],
     "xyz": [
-      1996.949,
-      851.343,
-      17.506
+      1997.347,
+      850.48,
+      17.303
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.3 m | "
@@ -11842,9 +11847,9 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -444.623,
-      -166.649,
-      92.783
+      -445.513,
+      -166.417,
+      92.941
     ],
     "zone": null,
     "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.5 m | "
@@ -12077,9 +12082,9 @@
       "Dominion Hotel"
     ],
     "xyz": [
-      1999.156,
-      862.022,
-      17.503
+      1999.548,
+      861.131,
+      17.305
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.5 m | "
@@ -12197,12 +12202,12 @@
       "Dominion Hotel"
     ],
     "xyz": [
-      2008.668,
-      906.054,
-      7.249
+      2008.987,
+      905.069,
+      7.043
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.2 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.2 m | "
   },
   "EB Hotel Miami (SW)": {
     "author": "rlx",
@@ -12226,13 +12231,13 @@
       "Vice Beach (B)"
     ],
     "xyz": [
-      2008.723,
-      910.677,
-      7.205
+      2009.041,
+      909.703,
+      7.0
     ],
     "zone": null,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.4 m, angle max 19.7 deg",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.4 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.0 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.4 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.7 m | "
   },
   "701 Brickell Ave (NE)": {
     "author": "rlx",
@@ -12564,9 +12569,9 @@
       "Park"
     ],
     "xyz": [
-      1935.922,
-      555.937,
-      7.194
+      1935.91,
+      555.949,
+      7.192
     ],
     "zone": null,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 11.9 deg"
@@ -12666,12 +12671,12 @@
       "Vice City 08 (Ferris Wheel)"
     ],
     "xyz": [
-      -362.805,
-      690.356,
-      45.031
+      -363.997,
+      690.703,
+      44.78
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 6.8 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.2 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.3 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 6.8 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.2 m | "
   },
   "Murano Grande (R3)": {
     "author": "rlx",
@@ -12681,13 +12686,13 @@
       "Port Vice City (B)"
     ],
     "xyz": [
-      1487.3397760011512,
-      -90.9062410305728,
-      89.96668387066237
+      1485.585,
+      -90.203,
+      90.107
     ],
     "zone": null,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 71.4 deg",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.9 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.9 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.9 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | "
   },
   "KC02": {
     "author": "rlx",
@@ -12697,12 +12702,12 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -257.376,
-      511.484,
-      30.189
+      -258.652,
+      512.064,
+      29.998
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.3 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.4 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.3 m | "
   },
   "KC08": {
     "author": "rlx",
@@ -12712,12 +12717,12 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -256.645,
-      511.105,
-      36.134
+      -257.909,
+      511.687,
+      35.942
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.4 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.1 m | "
   },
   "KC07": {
     "author": "rlx",
@@ -12727,12 +12732,12 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -249.976,
-      507.034,
-      35.609
+      -251.241,
+      507.605,
+      35.405
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.6 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.4 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.6 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.1 m | "
   },
   "Four Seasons Hotel Miami (32NW)": {
     "author": "rlx",
@@ -12792,12 +12797,12 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -248.143,
-      505.825,
-      32.242
+      -249.417,
+      506.392,
+      32.035
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.4 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.1 m | "
   },
   "100 Biscayne Blvd (NE)": {
     "author": "rlx",
@@ -12807,18 +12812,18 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -452.7045821776068,
-      -112.3704097634776,
-      92.87364636680104
+      -452.642,
+      -111.145,
+      92.844
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.7 m | "
   },
   "Marina Blue (SE)": {
     "xyz": [
-      -494.877,
-      374.708,
-      175.811
+      -496.863,
+      375.358,
+      175.38
     ],
     "source_cameras": [
       "Prison",
@@ -12828,13 +12833,13 @@
     ],
     "error_m": 4.487,
     "zone": "unknown",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.1 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.1 m | "
   },
   "Vizcayne North Condominium (NW)": {
     "xyz": [
-      -560.8,
-      161.4,
-      177.876
+      -552.882,
+      155.733,
+      177.766
     ],
     "source_cameras": [
       "Jason Duval 05 (Machine Gun)",
@@ -12844,7 +12849,8 @@
     ],
     "error_m": 2.195,
     "zone": "unknown",
-    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z conserve | "
+    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z conserve | ",
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 9.7 m | "
   },
   "Vice River (B)": {
     "author": "rlx",
@@ -13607,9 +13613,9 @@
       "Port Vice City (B)"
     ],
     "xyz": [
-      -712.272,
-      4.103,
-      117.419
+      -712.278,
+      4.085,
+      117.42
     ],
     "zone": null,
     "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.3 m | "
@@ -14197,12 +14203,13 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -560.8,
-      109.4,
-      177.452
+      -557.465,
+      110.062,
+      177.328
     ],
     "zone": null,
-    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z herite des coins voisins | "
+    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z herite des coins voisins | ",
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.4 m | "
   },
   "Canal C (Ambrosia) (2)": {
     "author": "rlx",
@@ -14500,12 +14507,12 @@
       "Port Vice City (A)"
     ],
     "xyz": [
-      -586.3,
-      99.9,
-      177.35
+      -584.359,
+      100.574,
+      177.579
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.5 m | ",
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.5 m | ",
     "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z conserve | "
   },
   "Ambrosia Main St (Y)": {
@@ -14798,9 +14805,9 @@
   },
   "Marquis Miami (SE)": {
     "xyz": [
-      -459.894,
-      523.139,
-      173.548
+      -460.765,
+      523.833,
+      173.725
     ],
     "source_cameras": [
       "Skyline",
@@ -14809,7 +14816,7 @@
     ],
     "error_m": 5.384,
     "zone": "unknown",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.7 m | "
   },
   "Skyviews Miami Observation Wheel (C)": {
     "xyz": null,
@@ -14830,7 +14837,7 @@
     "error_m": 2.0,
     "zone": "unknown",
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.6 m, angle max 2.9 deg",
-    "note": "REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 41 m, garde | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 11.7 m | "
+    "note": "REVUE BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 40 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 41 m, garde | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 11.7 m | "
   },
   "Skyviews Miami Observation Wheel Center (W)": {
     "xyz": null,
@@ -14840,9 +14847,9 @@
   },
   "Two Tequesta Point (NW)": {
     "xyz": [
-      33.56,
-      -1066.656,
-      160.035
+      33.706,
+      -1066.607,
+      160.225
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -14855,9 +14862,9 @@
   },
   "Two Tequesta Point (NE)": {
     "xyz": [
-      59.766,
-      -1049.339,
-      157.827
+      59.61,
+      -1049.882,
+      157.811
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -14870,9 +14877,9 @@
   },
   "One Miami Condo East (NW)": {
     "xyz": [
-      -300.595,
-      -557.873,
-      178.692
+      -301.05,
+      -558.476,
+      178.994
     ],
     "source_cameras": [
       "Vice City Postcard",
@@ -14885,9 +14892,9 @@
   },
   "One Miami Condo West (NW)": {
     "xyz": [
-      -383.936,
-      -589.969,
-      187.526
+      -382.863,
+      -587.965,
+      187.748
     ],
     "source_cameras": [
       "Skyline",
@@ -14896,13 +14903,13 @@
     ],
     "error_m": 1.355,
     "zone": "unknown",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | "
   },
   "Quantum on the Bay Condominium (S) (SE)": {
     "xyz": [
-      -381.695,
-      1115.445,
-      206.615
+      -383.062,
+      1115.556,
+      207.795
     ],
     "source_cameras": [
       "Vice City 03 (Basketball)",
@@ -14910,13 +14917,13 @@
     ],
     "error_m": 0.611,
     "zone": "unknown",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.8 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.4 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.8 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.8 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.4 m | "
   },
   "Two Tequesta Point (SE)": {
     "xyz": [
-      61.013685504830384,
-      -1077.4942973945736,
-      159.99713712079648
+      64.771,
+      -1077.611,
+      159.184
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -14925,7 +14932,7 @@
     ],
     "error_m": 1.213,
     "zone": "unknown",
-    "note": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.1 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.8 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.1 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
   },
   "Quantum on the Bay South (SE)": {
     "xyz": null,
@@ -15175,7 +15182,7 @@
     ],
     "error_m": 0.354,
     "zone": "unknown",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 26.4 m | "
+    "note": "REVUE BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 34 m, garde | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 26.4 m | "
   },
   "C. Clyde Atkins U.S Courthouse (MSE)": {
     "xyz": null,
@@ -15191,9 +15198,9 @@
   },
   "Asia Brickell Key (CC2B)": {
     "xyz": [
-      -123.79916210078595,
-      -858.483553542039,
-      225.28701486875045
+      -126.23,
+      -860.671,
+      225.723
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -15201,13 +15208,13 @@
     ],
     "error_m": 2.162,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.8 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 7.1 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 4.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.5 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.3 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.8 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 7.1 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 4.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.5 m | "
   },
   "Marquis Miami (NE)": {
     "xyz": [
-      -453.897,
-      572.132,
-      178.992
+      -454.724,
+      572.872,
+      179.115
     ],
     "source_cameras": [
       "Skyline",
@@ -15217,7 +15224,7 @@
     "error_m": 11.084,
     "zone": "unknown",
     "method": "ANCHOR-HARVEST-V1: triangulation 4 cams, perp med 3.1 m, angle max 54.5 deg",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.0 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.0 m | "
   },
   "Marquis Miami (NW)": {
     "xyz": null,
@@ -15242,9 +15249,9 @@
   },
   "Three Tequesta Point (SE)": {
     "xyz": [
-      9.628201367569915,
-      -959.0849430254409,
-      205.43537540476314
+      8.501,
+      -960.433,
+      205.881
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -15254,13 +15261,13 @@
     ],
     "error_m": 2.018,
     "zone": "brickell",
-    "note": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.9 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 7.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.0 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.8 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.9 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 7.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.0 m | "
   },
   "Three Tequesta Point (NE)": {
     "xyz": [
-      6.5552344907313955,
-      -924.6265941457257,
-      204.6433794073356
+      7.311,
+      -925.565,
+      204.949
     ],
     "source_cameras": [
       "Motorboats (A)",
@@ -15268,7 +15275,7 @@
     ],
     "error_m": 1.177,
     "zone": "brickell",
-    "note": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.6 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 8.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 7.0 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.6 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 8.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 7.0 m | "
   },
   "SunTrust International Center (SE)": {
     "xyz": null,
@@ -15662,9 +15669,9 @@
   },
   "Met 1 Condominium": {
     "xyz": [
-      -524.806,
-      -536.056,
-      195.043
+      -525.072,
+      -536.225,
+      194.872
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -15683,9 +15690,9 @@
   },
   "Marina Blue (LNE)": {
     "xyz": [
-      -466.067,
-      446.356,
-      127.333
+      -467.112,
+      446.929,
+      127.304
     ],
     "source_cameras": [
       "Skyline",
@@ -15694,7 +15701,7 @@
     ],
     "error_m": 3.77,
     "zone": "rlx_markings_0713",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.8 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.8 m | "
   },
   "Maison Grande Condominium": {
     "xyz": null,
@@ -15704,9 +15711,9 @@
   },
   "5959 Collins Ave": {
     "xyz": [
-      1688.073,
-      2274.544,
-      80.211
+      1688.17,
+      2274.182,
+      80.126
     ],
     "source_cameras": [
       "Jet Ski",
@@ -16018,9 +16025,9 @@
   },
   "Apogee Condominium": {
     "xyz": [
-      1616.494,
-      -170.615,
-      91.927
+      1615.265,
+      -176.977,
+      92.022
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -16029,7 +16036,7 @@
     ],
     "error_m": 0.885,
     "zone": "rlx_markings_0713",
-    "note": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.6 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.2 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 13.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.9 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 6.5 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.6 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.2 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 13.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.9 m | "
   },
   "Stephen P. Clark Government Center (A)": {
     "xyz": [
@@ -16286,9 +16293,9 @@
   },
   "Wells Fargo Center (S)": {
     "xyz": [
-      -749.192,
-      -507.184,
-      192.212
+      -748.688,
+      -506.312,
+      192.495
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -16296,7 +16303,7 @@
     ],
     "error_m": 0.205,
     "zone": "rlx_markings_0713",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.0 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.0 m | "
   },
   "Longer Island (S)": {
     "xyz": null,
@@ -16316,9 +16323,9 @@
   },
   "Flamingo South Beach (TW)": {
     "xyz": [
-      1472.088,
-      916.312,
-      117.18
+      1471.195,
+      915.013,
+      116.964
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -16326,7 +16333,7 @@
     ],
     "error_m": 0.315,
     "zone": "rlx_markings_0713",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.4 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.6 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.4 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
   },
   "Lake Surprise Viaduct (17B)": {
     "xyz": [
@@ -16681,9 +16688,9 @@
   },
   "Wastewater Building (C)": {
     "xyz": [
-      504.68208674666164,
-      -1233.3725387309712,
-      34.497785130719706
+      505.12,
+      -1234.704,
+      36.111
     ],
     "source_cameras": [
       "Vice City Postcard",
@@ -16691,13 +16698,13 @@
     ],
     "error_m": 0.984,
     "zone": "rlx_markings_0713",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 4.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.9 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.1 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 4.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.9 m | "
   },
   "Wastewater Building (B)": {
     "xyz": [
-      498.345841942253,
-      -1222.42941024635,
-      35.142517887583644
+      498.799,
+      -1223.759,
+      36.808
     ],
     "source_cameras": [
       "Vice City Postcard",
@@ -16705,13 +16712,13 @@
     ],
     "error_m": 1.71,
     "zone": "rlx_markings_0713",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 4.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.8 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.2 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 4.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.8 m | "
   },
   "50 Biscayne Blvd (NE)": {
     "xyz": [
-      -440.0471576404925,
-      -200.32431708092446,
-      138.64523910953932
+      -440.608,
+      -199.699,
+      138.827
     ],
     "source_cameras": [
       "Vice City Postcard",
@@ -16981,9 +16988,9 @@
   },
   "Maison Grande Condominium (NW)": {
     "xyz": [
-      1617.51,
-      2429.615,
-      58.743
+      1617.672,
+      2429.547,
+      58.709
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -17002,9 +17009,9 @@
   },
   "Maison Grande Condominium (TN)": {
     "xyz": [
-      1641.7456929757623,
-      2430.168245483991,
-      63.50587762429708
+      1642.811,
+      2430.551,
+      63.379
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -17013,13 +17020,13 @@
     ],
     "error_m": 0.721,
     "zone": "unknown",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.9 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.9 m | "
   },
   "Maison Grande Condominium (TC)": {
     "xyz": [
-      1661.952,
-      2396.408,
-      63.554
+      1662.141,
+      2396.326,
+      63.511
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -17032,9 +17039,9 @@
   },
   "Maison Grande Condominium (TS)": {
     "xyz": [
-      1690.4471510253725,
-      2378.308895783129,
-      63.903047292329816
+      1690.68,
+      2378.246,
+      63.9
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -17782,7 +17789,7 @@
     "error_m": 17.7,
     "zone": "unknown",
     "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 17.7 m, angle max 29.0 deg",
-    "note": "REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 34 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 35 m (garde tel quel, probable clic croise) | "
+    "note": "REVUE BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 34 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 35 m (garde tel quel, probable clic croise) | "
   },
   "Vice City Sign (C1)": {
     "xyz": [
@@ -18333,9 +18340,9 @@
   },
   "Marina Blue (NW)": {
     "xyz": [
-      -474.438,
-      415.091,
-      169.085
+      -475.557,
+      415.779,
+      169.051
     ],
     "source_cameras": [
       "Jason Duval 05 (Machine Gun)",
@@ -18343,7 +18350,8 @@
     ],
     "error_m": 2.0,
     "zone": "unknown",
-    "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.2 m, angle max 69.2 deg"
+    "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.2 m, angle max 69.2 deg",
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.3 m | "
   },
   "Lake Leonida (A)": {
     "xyz": [
@@ -18747,9 +18755,9 @@
   },
   "Cardozo South Beach (D)": {
     "xyz": [
-      2009.092,
-      905.273,
-      7.152
+      2009.425,
+      904.294,
+      6.942
     ],
     "source_cameras": [
       "Dominion Hotel",
@@ -18758,13 +18766,13 @@
     ],
     "error_m": 2.0,
     "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 1.0 m, angle max 19.5 deg",
-    "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.4 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.8 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.4 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.8 m | "
   },
   "Container Crane (7)": {
     "xyz": [
-      1244.374,
-      -389.533,
-      70.925
+      1244.083,
+      -389.757,
+      70.922
     ],
     "source_cameras": [
       "Amphitheater",
@@ -18776,9 +18784,9 @@
   },
   "Container Crane (8)": {
     "xyz": [
-      1152.991,
-      -304.286,
-      72.559
+      1153.217,
+      -304.176,
+      72.568
     ],
     "source_cameras": [
       "Amphitheater",
@@ -18830,9 +18838,9 @@
   },
   "Highway Sign (S)": {
     "xyz": [
-      -99.395,
-      540.832,
-      32.002
+      -100.846,
+      541.199,
+      31.505
     ],
     "source_cameras": [
       "Convertible",
@@ -18840,7 +18848,7 @@
     ],
     "error_m": 3.3,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 3.3 m, angle max 56.1 deg",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.2 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 20.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.6 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.2 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 20.7 m | "
   },
   "House #1 (Waning Sands)": {
     "xyz": [
@@ -18870,9 +18878,9 @@
   },
   "KC03": {
     "xyz": [
-      -257.969,
-      511.929,
-      27.365
+      -259.241,
+      512.504,
+      27.184
     ],
     "source_cameras": [
       "Convertible",
@@ -18880,13 +18888,13 @@
     ],
     "error_m": 2.0,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.9 m, angle max 66.8 deg",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 11.7 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.4 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 11.7 m | "
   },
   "KC04": {
     "xyz": [
-      -258.471,
-      512.253,
-      22.836
+      -259.755,
+      512.828,
+      22.655
     ],
     "source_cameras": [
       "Convertible",
@@ -18894,13 +18902,13 @@
     ],
     "error_m": 2.5,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.5 m, angle max 66.9 deg",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 11.6 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.4 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 11.6 m | "
   },
   "KC06": {
     "xyz": [
-      -244.433,
-      502.831,
-      25.951
+      -245.711,
+      503.386,
+      25.745
     ],
     "source_cameras": [
       "Convertible",
@@ -18908,13 +18916,13 @@
     ],
     "error_m": 2.0,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.0 m, angle max 69.5 deg",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 10.3 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.4 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 10.3 m | "
   },
   "KC09": {
     "xyz": [
-      -265.474,
-      515.309,
-      36.933
+      -266.714,
+      515.897,
+      36.762
     ],
     "source_cameras": [
       "Convertible",
@@ -18922,13 +18930,13 @@
     ],
     "error_m": 2.0,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.1 m, angle max 65.8 deg",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.8 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 12.2 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.4 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.8 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 12.2 m | "
   },
   "KC10": {
     "xyz": [
-      -266.96,
-      515.885,
-      34.609
+      -268.205,
+      516.476,
+      34.442
     ],
     "source_cameras": [
       "Convertible",
@@ -18936,13 +18944,13 @@
     ],
     "error_m": 2.0,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.2 m, angle max 65.7 deg",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 12.2 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.4 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 12.2 m | "
   },
   "KC11": {
     "xyz": [
-      -273.057,
-      517.917,
-      24.966
+      -274.324,
+      518.516,
+      24.813
     ],
     "source_cameras": [
       "Convertible",
@@ -18950,7 +18958,7 @@
     ],
     "error_m": 2.1,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.1 m, angle max 65.6 deg",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 12.1 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.4 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 12.1 m | "
   },
   "Mount Waffles (W)": {
     "xyz": [
@@ -19032,9 +19040,9 @@
   },
   "Tall Billboard (Port VC)": {
     "xyz": [
-      794.7280768877097,
-      -787.3345705783737,
-      55.552208818226006
+      794.819,
+      -788.232,
+      57.53
     ],
     "source_cameras": [
       "Vice City 08 (Ferris Wheel)",
@@ -19042,7 +19050,7 @@
     ],
     "error_m": 2.938,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.3 m, angle max 82.0 deg",
-    "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 22.0 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.4 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.2 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 22.0 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.4 m | "
   },
   "Tall Yellow Sign": {
     "xyz": [
@@ -19059,9 +19067,9 @@
   },
   "Ten Museum Park (NE)": {
     "xyz": [
-      -416.176,
-      486.83,
-      134.58
+      -403.678,
+      483.005,
+      134.03
     ],
     "source_cameras": [
       "Port Vice City (A)",
@@ -19069,20 +19077,21 @@
     ],
     "error_m": 2.0,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 2.8 deg",
-    "note": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 25.2 m | "
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 13.1 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 25.2 m | "
   },
   "Ten Museum Park (SW)": {
     "xyz": [
-      -504.85517758785636,
-      467.82164495844256,
-      138.86133353161472
+      -505.576,
+      468.601,
+      138.859
     ],
     "source_cameras": [
       "Port Vice City (B)",
       "Jason Duval 05 (Machine Gun)"
     ],
     "error_m": 3.024,
-    "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 1.5 m, angle max 14.8 deg"
+    "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 1.5 m, angle max 14.8 deg",
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | "
   },
   "Unknown Building near VCIA (N)": {
     "xyz": [
@@ -19122,7 +19131,7 @@
     ],
     "error_m": 2.0,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.1 m, angle max 71.3 deg",
-    "note": "REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 41 m, garde | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 10.2 m | "
+    "note": "REVUE BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 40 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 41 m, garde | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 10.2 m | "
   },
   "WTP (W)": {
     "xyz": [
@@ -19136,7 +19145,7 @@
     ],
     "error_m": 2.0,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.2 m, angle max 70.8 deg",
-    "note": "REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 41 m, garde | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 10.5 m | "
+    "note": "REVUE BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 41 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 41 m, garde | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 10.5 m | "
   },
   "1500 Sonora Ave (Tank) (A)": {
     "xyz": [
@@ -19498,9 +19507,9 @@
   "Mount Ambrosia (D)": {},
   "123 NE 36th St": {
     "xyz": [
-      32.87,
-      2228.127,
-      65.878
+      32.83,
+      2228.156,
+      65.888
     ],
     "source_cameras": [
       "Gas Station (Chase) (SE)",
@@ -19513,9 +19522,9 @@
   },
   "123 NE 36th St (NW)": {
     "xyz": [
-      16.4774227643305,
-      2264.927689936175,
-      49.81044011539824
+      16.497,
+      2264.961,
+      49.86
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -19526,9 +19535,9 @@
   },
   "123 NE 36th St (SE)": {
     "xyz": [
-      44.15142592209861,
-      2188.727034086117,
-      49.069590719590465
+      44.118,
+      2188.675,
+      49.005
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -19539,9 +19548,9 @@
   },
   "123 NE 36th St (SW)": {
     "xyz": [
-      16.677199320940048,
-      2195.6083487199003,
-      49.39690002930341
+      16.602,
+      2195.548,
+      49.424
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -19852,14 +19861,15 @@
   },
   "Vizcayne South Condominium (SW)": {
     "xyz": [
-      -637.3,
-      81.9,
-      177.993
+      -627.567,
+      82.045,
+      178.539
     ],
     "source_cameras": [],
     "error_m": null,
     "zone": "unknown",
-    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z herite des coins voisins | "
+    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z herite des coins voisins | ",
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 9.7 m | "
   },
   "Three Tequesta Point (Helipad)": {
     "xyz": [
@@ -19905,13 +19915,14 @@
   },
   "Vizcayne South Condominium (SE)": {
     "xyz": [
-      -585.8,
-      81.4,
-      177.993
+      -582.697,
+      81.885,
+      178.865
     ],
     "source_cameras": [],
     "error_m": null,
     "zone": "unknown",
-    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z herite des coins voisins | "
+    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z herite des coins voisins | ",
+    "note": "BA-DOWNTOWN-6 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.3 m | "
   }
 }
