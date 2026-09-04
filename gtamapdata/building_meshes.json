@@ -2,7 +2,7 @@
  "_comment": "Building wireframe meshes. Edges are LM suffixes (the part after 'BuildingName (...)' stripped). The frontend expands them to full LM names by prepending the building name. Add/remove edges here, then reload the calib UI.",
  "Portofino Tower": {
   "color": "#ff9d3d",
-  "source": "tools/gen_portofino_v4.py — auto-generated procedural mesh"
+  "source": "tools/gen_portofino_v4.py \u2014 auto-generated procedural mesh"
  },
  "Four Seasons Hotel Miami": {
   "color": "#60a5fa",

@@ -74,7 +74,7 @@
   ],
   "source": "2021-07-09 15-18-02 [1]",
   "constraint_class": "D_no_ground_truth",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | POSITION ALEXANDRE 2026-09-02: x,y = tooltip (-244.2,-244.8), sol 3.4, estrades -> z = sol+8 = 11.4 (les 8 clics sont a 1.4-2.2 km et ne contraignent pas z: residu plat de +2 a +25 m, a ajuster au slider si besoin). Orientation+fov re-solves: mediane 9.5 px, max 15. Ancienne pose (-367.9,-151.8,-9.6) etait sous le sol. Backup cameras.json.bak_amphi_0902 | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 18.8 m), residu mediane 4.7->3.5 px | ",
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | POSITION ALEXANDRE 2026-09-02: x,y = tooltip (-244.2,-244.8), sol 3.4, estrades -> z = sol+8 = 11.4 (les 8 clics sont a 1.4-2.2 km et ne contraignent pas z: residu plat de +2 a +25 m, a ajuster au slider si besoin). Orientation+fov re-solves: mediane 9.5 px, max 15. Ancienne pose (-367.9,-151.8,-9.6) etait sous le sol. Backup cameras.json.bak_amphi_0902 | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 18.8 m), residu mediane 4.7->3.5 px | ",
   "pose_verified": null
  },
  "Diner (NE)": {
@@ -104,7 +104,7 @@
   ],
   "source": "2021-07-12 12-19-51 [4945]",
   "constraint_class": "B_pos_fov_player",
-  "pose_verified": "VERIFIED 2026-08-22 — silhouette ~21', ancres 4.8', pose HUD"
+  "pose_verified": "VERIFIED 2026-08-22 \u2014 silhouette ~21', ancres 4.8', pose HUD"
  },
  "Diner (N)": {
   "id": "L1/4",
@@ -133,8 +133,8 @@
   ],
   "source": "2021-07-12 12-19-51 [4960]",
   "constraint_class": "C_pos_fov_only",
-  "pose_verified": "VERIFIED 2026-08-22 — silhouette ~20' (canopee crete Waffles), ancres 5.7', pose HUD",
-  "note": "DINER-LOCK (2026-08-29, ordre Alexandre): secteur Diner fige — orientations originales certifiees far-field 1px. Ne pas modifier sans son GO explicite."
+  "pose_verified": "VERIFIED 2026-08-22 \u2014 silhouette ~20' (canopee crete Waffles), ancres 5.7', pose HUD",
+  "note": "DINER-LOCK (2026-08-29, ordre Alexandre): secteur Diner fige \u2014 orientations originales certifiees far-field 1px. Ne pas modifier sans son GO explicite."
  },
  "Diner (NW)": {
   "id": "L1/4",
@@ -163,8 +163,8 @@
   ],
   "source": "2021-07-12 12-19-51 [5103]",
   "constraint_class": "C_pos_fov_only",
-  "note": "POSE-EDIT: ajustee a la main par Alexandre dans l UI | POSE-EDIT: ajustee a la main par Alexandre dans l UI | DINER-LOCK (2026-08-29, ordre Alexandre): secteur Diner fige — orientations originales certifiees far-field 1px. Ne pas modifier sans son GO explicite.",
-  "pose_verified": "LOCKED 2026-08-29 — DINER-LOCK (ordre Alexandre): orientation originale certifiee far-field ~1px, secteur fige"
+  "note": "POSE-EDIT: ajustee a la main par Alexandre dans l UI | POSE-EDIT: ajustee a la main par Alexandre dans l UI | DINER-LOCK (2026-08-29, ordre Alexandre): secteur Diner fige \u2014 orientations originales certifiees far-field 1px. Ne pas modifier sans son GO explicite.",
+  "pose_verified": "LOCKED 2026-08-29 \u2014 DINER-LOCK (ordre Alexandre): orientation originale certifiee far-field ~1px, secteur fige"
  },
  "Diner (W) (A)": {
   "id": "L1/4",
@@ -193,8 +193,8 @@
   ],
   "source": "2021-07-12 12-19-51 [5233]",
   "constraint_class": "C_pos_fov_only",
-  "note": "POSE-EDIT: ajustee a la main par Alexandre dans l UI | POSE-EDIT: ajustee a la main par Alexandre dans l UI | DINER-LOCK (2026-08-29, ordre Alexandre): secteur Diner fige — orientations originales certifiees far-field 1px. Ne pas modifier sans son GO explicite.",
-  "pose_verified": "LOCKED 2026-08-29 — DINER-LOCK (ordre Alexandre): orientation originale certifiee far-field ~1px, secteur fige"
+  "note": "POSE-EDIT: ajustee a la main par Alexandre dans l UI | POSE-EDIT: ajustee a la main par Alexandre dans l UI | DINER-LOCK (2026-08-29, ordre Alexandre): secteur Diner fige \u2014 orientations originales certifiees far-field 1px. Ne pas modifier sans son GO explicite.",
+  "pose_verified": "LOCKED 2026-08-29 \u2014 DINER-LOCK (ordre Alexandre): orientation originale certifiee far-field ~1px, secteur fige"
  },
  "Diner (W) (B)": {
   "id": "L1/4",
@@ -223,8 +223,8 @@
   ],
   "source": "2021-07-12 12-19-51 [5235]",
   "constraint_class": "C_pos_fov_only",
-  "note": "POSE-EDIT: ajustee a la main par Alexandre dans l UI | POSE-EDIT: ajustee a la main par Alexandre dans l UI | DINER-LOCK (2026-08-29, ordre Alexandre): secteur Diner fige — orientations originales certifiees far-field 1px. Ne pas modifier sans son GO explicite.",
-  "pose_verified": "LOCKED 2026-08-29 — DINER-LOCK (ordre Alexandre): orientation originale certifiee far-field ~1px, secteur fige"
+  "note": "POSE-EDIT: ajustee a la main par Alexandre dans l UI | POSE-EDIT: ajustee a la main par Alexandre dans l UI | DINER-LOCK (2026-08-29, ordre Alexandre): secteur Diner fige \u2014 orientations originales certifiees far-field 1px. Ne pas modifier sans son GO explicite.",
+  "pose_verified": "LOCKED 2026-08-29 \u2014 DINER-LOCK (ordre Alexandre): orientation originale certifiee far-field ~1px, secteur fige"
  },
  "Diner (SW)": {
   "id": "L1/4",
@@ -460,18 +460,18 @@
    3.2
   ],
   "xyz": [
-   -463.882,
-   1234.221,
-   5.147
+   -464.0,
+   1233.8,
+   4.6
   ],
   "ypr": [
-   245.0727,
-   -19.8339,
-   0.0649
+   244.93331144591076,
+   -19.793081781594996,
+   0.13998855470654303
   ],
   "fov": [
-   80.361,
-   null
+   null,
+   50.8
   ],
   "size": [
    1920,
@@ -479,7 +479,7 @@
   ],
   "source": "2021-09-10 16-37-50 [?]",
   "constraint_class": "C_pos_fov_only",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.7 m), residu mediane 1.8->1.4 px | "
+  "notes": "RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.7 m), residu mediane 1.8->1.4 px | "
  },
  "Port": {
   "id": "L1/7",
@@ -489,18 +489,18 @@
    5.2
   ],
   "xyz": [
-   1189.79,
-   -426.691,
-   7.454
+   1190.0,
+   -426.9,
+   7.2
   ],
   "ypr": [
-   302.8015,
-   13.9504,
-   0.3022
+   302.5,
+   14.1,
+   0.0
   ],
   "fov": [
-   77.385,
-   null
+   78.6577,
+   49.6
   ],
   "size": [
    1376,
@@ -508,7 +508,7 @@
   ],
   "source": "2021-10-29 20-21-10 [241]",
   "constraint_class": "A_full_hud",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | RESOLVE-PORTOFINO 2026-09-03: orientation+fov re-solves a position fixe apres tooltips Alexandre sur les coins Portofino (figes): mediane 8.2->4.0 px, max 17->9 | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.4 m), residu mediane 6.7->1.2 px | "
+  "notes": "RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | RESOLVE-PORTOFINO 2026-09-03: orientation+fov re-solves a position fixe apres tooltips Alexandre sur les coins Portofino (figes): mediane 8.2->4.0 px, max 17->9 | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.4 m), residu mediane 6.7->1.2 px | "
  },
  "Gas Station (Lucia)": {
   "id": "L1/8",
@@ -537,7 +537,7 @@
   ],
   "source": "2021-11-05 11-09-23 [?]",
   "constraint_class": "B_pos_fov_player",
-  "pose_verified": "VERIFIED 2026-08-22 — ancres 1.3' + silhouette 12.5' a la pose HUD, rien a changer"
+  "pose_verified": "VERIFIED 2026-08-22 \u2014 ancres 1.3' + silhouette 12.5' a la pose HUD, rien a changer"
  },
  "Motel": {
   "id": "L1/9",
@@ -566,7 +566,7 @@
   ],
   "source": "2021-12-14 19-52-44 [?]",
   "constraint_class": "C_pos_fov_only",
-  "note": "pose LEAK (immobile par invariant CI) — la valeur hand-tuned de rlx upstream ee83436 a ete REJETEE: une pose issue du leak est exacte et ne se remplace pas par un reglage a l oeil. Archivee dans pose_alternatives.json."
+  "note": "pose LEAK (immobile par invariant CI) \u2014 la valeur hand-tuned de rlx upstream ee83436 a ete REJETEE: une pose issue du leak est exacte et ne se remplace pas par un reglage a l oeil. Archivee dans pose_alternatives.json."
  },
  "Pawn Shop (W)": {
   "id": "L1/10",
@@ -800,18 +800,18 @@
    3.3
   ],
   "xyz": [
-   2010.374,
-   452.127,
-   3.392
+   2010.3,
+   452.4,
+   3.7
   ],
   "ypr": [
-   0.0237,
-   0.1344,
-   0.1677
+   0.0003889438271953414,
+   0.02348762374252632,
+   -0.05015105304311135
   ],
   "fov": [
-   78.679,
-   null
+   null,
+   49.6
   ],
   "size": [
    1920,
@@ -819,7 +819,7 @@
   ],
   "source": "2022-04-12 10-28-55 [?]",
   "constraint_class": "C_pos_fov_only",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.4 m), residu mediane 2.6->1.6 px | "
+  "notes": "RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.4 m), residu mediane 2.6->1.6 px | "
  },
  "Bar": {
   "id": "L1/15",
@@ -1128,7 +1128,7 @@
   ],
   "source": "2022-05-03 11-20-11 [?]",
   "constraint_class": "B_pos_fov_player",
-  "pose_verified": "VERIFIED 2026-08-22 — ancres 3.2' a la pose HUD (tension silhouette 10' non tranchee)"
+  "pose_verified": "VERIFIED 2026-08-22 \u2014 ancres 3.2' a la pose HUD (tension silhouette 10' non tranchee)"
  },
  "Ocean near Keys (N)": {
   "id": "L1/21",
@@ -1447,17 +1447,17 @@
   ],
   "xyz": [
    -506.7,
-   1712.013,
-   15.419
+   1712.0,
+   15.4
   ],
   "ypr": [
-   325.9921,
-   -16.2989,
-   0.0091
+   326.0,
+   -16.3,
+   0.0
   ],
   "fov": [
-   81.08,
-   null
+   81.0997,
+   51.4
   ],
   "size": [
    1920,
@@ -1465,7 +1465,7 @@
   ],
   "source": "2022-06-27 14-52-04 [?]",
   "constraint_class": "A_full_hud",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.0 m), residu mediane 0.4->0.3 px | "
+  "notes": "RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.0 m), residu mediane 0.4->0.3 px | "
  },
  "Intersection (N)": {
   "id": "L1/28",
@@ -1970,18 +1970,18 @@
    3.5
   ],
   "xyz": [
-   -317.289,
-   1174.64,
-   4.758
+   -317.232,
+   1174.859,
+   5.021
   ],
   "ypr": [
-   258.8749,
-   -9.9704,
-   -0.4368
+   258.5947633562555,
+   -9.931504554860885,
+   -0.10544067138282232
   ],
   "fov": [
-   60.069,
-   null
+   null,
+   37.649
   ],
   "size": [
    1824,
@@ -1989,7 +1989,7 @@
   ],
   "source": "2022-09-01 14-37-21 [?]",
   "constraint_class": "C_pos_fov_only",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.3 m), residu mediane 1.4->0.6 px | "
+  "notes": "RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.3 m), residu mediane 1.4->0.6 px | "
  },
  "Pool": {
   "id": "L1/43",
@@ -2018,7 +2018,7 @@
   ],
   "source": "2022-09-06 17-13-34 [?]",
   "constraint_class": "C_pos_fov_only",
-  "note": "pose LEAK (immobile par invariant CI) — la valeur hand-tuned de rlx upstream ee83436 a ete REJETEE: une pose issue du leak est exacte et ne se remplace pas par un reglage a l oeil. Archivee dans pose_alternatives.json."
+  "note": "pose LEAK (immobile par invariant CI) \u2014 la valeur hand-tuned de rlx upstream ee83436 a ete REJETEE: une pose issue du leak est exacte et ne se remplace pas par un reglage a l oeil. Archivee dans pose_alternatives.json."
  },
  "Tennis Stadium (4K)": {
   "id": "L1/44",
@@ -2250,7 +2250,7 @@
    2160
   ],
   "source": "Trailer 1 [415]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 2.3 m), residu mediane 3.0->1.2 px | "
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 2.3 m), residu mediane 3.0->1.2 px | "
  },
  "Vice Beach (B)": {
   "id": "T1/6",
@@ -2274,7 +2274,7 @@
    2160
   ],
   "source": "Trailer 1 [489]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 1.8 m), residu mediane 2.7->1.3 px | "
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 1.8 m), residu mediane 2.7->1.3 px | "
  },
  "Brickell": {
   "id": "T1/7",
@@ -2322,7 +2322,7 @@
   ],
   "source": "Trailer 1 [653]",
   "note": "pose RESECT-V2: resection sur 17 ancres, juge 7 ancres laissees dehors 10.2 -> 6.2 arcmin (2.81 m).",
-  "pose_verified": "SOLVED 2026-08-22 — resection z-lock, juge 4.6->2.8 m"
+  "pose_verified": "SOLVED 2026-08-22 \u2014 resection z-lock, juge 4.6->2.8 m"
  },
  "Motorboats (A)": {
   "id": "T1/11",
@@ -2346,7 +2346,7 @@
    2160
   ],
   "source": "Trailer 1 [699]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | "
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | "
  },
  "Motorboats (B)": {
   "id": "T1/11",
@@ -2370,7 +2370,7 @@
    2160
   ],
   "source": "Trailer 1 [745]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | "
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | "
  },
  "Convertible": {
   "id": "T1/12",
@@ -2394,7 +2394,7 @@
    2160
   ],
   "source": "Trailer 1 [746]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 46.0 m), residu mediane 131.7->0.9 px | "
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 46.0 m), residu mediane 131.7->0.9 px | "
  },
  "Wynwood": {
   "id": "T1/13",
@@ -2441,7 +2441,7 @@
    2160
   ],
   "source": "Trailer 1 [932]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.8 m), residu mediane 2.7->1.8 px | "
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.8 m), residu mediane 2.7->1.8 px | "
  },
  "Ocean Drive (NW)": {
   "id": "T1/17",
@@ -2511,7 +2511,7 @@
    2160
   ],
   "source": "Trailer 1 [1124]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | RECALIB-PORTOFINO 2026-09-03 (demande Alexandre): pose complete re-solvee avec les 3 coins Portofino (tooltips) figes et ponderes x3; mediane 2.1->3.0 px, deplacement 4.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 7.9 m), residu mediane 4.8->1.9 px | ",
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | RECALIB-PORTOFINO 2026-09-03 (demande Alexandre): pose complete re-solvee avec les 3 coins Portofino (tooltips) figes et ponderes x3; mediane 2.1->3.0 px, deplacement 4.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 7.9 m), residu mediane 4.8->1.9 px | ",
   "pose_verified": null
  },
  "Boat": {
@@ -2651,7 +2651,7 @@
    2160
   ],
   "source": "Trailer 1 [1498]",
-  "note": "z ancre au sol height map (8.2+1.7, etait 2.0) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.46 deg (dz +7.9 m a d~980 m) | orientation refittee sur markings (xyz fige), mediane 1' -> 0'"
+  "note": "z ancre au sol height map (8.2+1.7, etait 2.0) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.46 deg (dz +7.9 m a d~980 m) | orientation refittee sur markings (xyz fige), mediane 1' -> 0'"
  },
  "Gas Station (Chase) (S)": {
   "id": "T1/29",
@@ -2675,7 +2675,7 @@
    2160
   ],
   "source": "Trailer 1 [1529]",
-  "note": "z ancre au sol height map (8.2+1.7, etait 2.0) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +7.9 m a d~1929 m) | orientation refittee sur markings (xyz fige), mediane 0' -> 0'"
+  "note": "z ancre au sol height map (8.2+1.7, etait 2.0) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +7.9 m a d~1929 m) | orientation refittee sur markings (xyz fige), mediane 0' -> 0'"
  },
  "Interchange": {
   "id": "T1/30",
@@ -2699,7 +2699,7 @@
    2160
   ],
   "source": "Trailer 1 [1535]",
-  "note": "re-resection 2026-07-22 V2: 4 points fixes independants (Flagler; SPC W/NW; WDNA FM spot par Alexandre — 3.6km az 154, 30 deg / 5x la distance du paquet SPC: tue le mode profondeur) + verticalite mat Tall Billboard. Historique: ypr cale sur Flagler seul -> SPC 112-122'."
+  "note": "re-resection 2026-07-22 V2: 4 points fixes independants (Flagler; SPC W/NW; WDNA FM spot par Alexandre \u2014 3.6km az 154, 30 deg / 5x la distance du paquet SPC: tue le mode profondeur) + verticalite mat Tall Billboard. Historique: ypr cale sur Flagler seul -> SPC 112-122'."
  },
  "Waning Sands (A) (X)": {
   "id": "T1/36",
@@ -2838,7 +2838,7 @@
    2160
   ],
   "source": "Trailer 1 [2308]",
-  "note": "z ancre au sol height map (17.7+1.7, etait 14.7) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.08 deg (dz +4.7 m a d~248 m) | orientation refittee sur markings (xyz fige), mediane 5' -> 0'"
+  "note": "z ancre au sol height map (17.7+1.7, etait 14.7) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.08 deg (dz +4.7 m a d~248 m) | orientation refittee sur markings (xyz fige), mediane 5' -> 0'"
  },
  "Key Lento": {
   "id": "T2/1",
@@ -2955,7 +2955,7 @@
   ],
   "source": "Trailer 2",
   "note": "pose HORIZON-V1: 0 ancres + silhouette height map (13 clics de crete), z verrouille sol height map.",
-  "pose_verified": "SOLVED 2026-08-22 — position Alexandre (~10 m), z sol+1.7, orientation silhouette 1.8'"
+  "pose_verified": "SOLVED 2026-08-22 \u2014 position Alexandre (~10 m), z sol+1.7, orientation silhouette 1.8'"
  },
  "Explosion": {
   "id": "T2/58",
@@ -2980,7 +2980,7 @@
   ],
   "source": "Trailer 2 [3539]",
   "note": "pose HORIZON-V1: 3 ancres + silhouette height map (18 clics de crete), z verrouille sol height map.",
-  "pose_verified": "SOLVED 2026-08-22 — xyz (-1001, -212, 15.5): position validee visuellement par Alexandre, z tablier highway, silhouette 2.2' + ancres 10.2'"
+  "pose_verified": "SOLVED 2026-08-22 \u2014 xyz (-1001, -212, 15.5): position validee visuellement par Alexandre, z tablier highway, silhouette 2.2' + ancres 10.2'"
  },
  "Park (Mobile Phone)": {
   "id": "T2/59",
@@ -3050,7 +3050,7 @@
    1728
   ],
   "source": "Trailer 2 [3802]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | RECALIB-PORTOFINO 2026-09-03 (demande Alexandre): pose complete re-solvee avec les 3 coins Portofino (tooltips) figes et ponderes x3; mediane 0.3->6.6 px, deplacement 1.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 4.0 m), residu mediane 70.7->0.2 px | ",
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | RECALIB-PORTOFINO 2026-09-03 (demande Alexandre): pose complete re-solvee avec les 3 coins Portofino (tooltips) figes et ponderes x3; mediane 0.3->6.6 px, deplacement 1.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 4.0 m), residu mediane 70.7->0.2 px | ",
   "pose_verified": null
  },
  "Television": {
@@ -3098,7 +3098,7 @@
    1728
   ],
   "source": "Trailer 2 [4202]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 7.2 m), residu mediane 4.0->1.4 px | "
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 7.2 m), residu mediane 4.0->1.4 px | "
  },
  "Truck (2)": {
   "id": "T2/74",
@@ -3145,7 +3145,7 @@
    1728
   ],
   "source": "Trailer 2 [4448]",
-  "note": "z ancre au sol height map (19.0+1.7, etait 5.5) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -6.88 deg (dz +15.2 m a d~126 m) | orientation refittee sur markings (xyz fige), mediane 360' -> 0'"
+  "note": "z ancre au sol height map (19.0+1.7, etait 5.5) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -6.88 deg (dz +15.2 m a d~126 m) | orientation refittee sur markings (xyz fige), mediane 360' -> 0'"
  },
  "Chase (2) (A)": {
   "id": "T2/77",
@@ -3215,7 +3215,7 @@
    1728
   ],
   "source": "Trailer 2 [4665]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 9.2 m), residu mediane 3.5->1.9 px | "
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 9.2 m), residu mediane 3.5->1.9 px | "
  },
  "Jason Duval 02 (Car)": {
   "id": "S2/2",
@@ -3238,7 +3238,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Jason Duval 02 [1]"
+  "source": "Screenshot 1 \u2014 Jason Duval 02 [1]"
  },
  "Jason Duval 05 (Machine Gun)": {
   "id": "S2/5",
@@ -3261,7 +3261,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Jason Duval 05 [1]"
+  "source": "Screenshot 1 \u2014 Jason Duval 05 [1]"
  },
  "Raul Bautista 03 (Motorboat)": {
   "id": "S2/31",
@@ -3284,8 +3284,8 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Raul Batista 03 [1]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 50.6 m), residu mediane 7.9->2.3 px | "
+  "source": "Screenshot 1 \u2014 Raul Batista 03 [1]",
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 50.6 m), residu mediane 7.9->2.3 px | "
  },
  "Vice City 03 (Basketball)": {
   "id": "S2/39",
@@ -3308,8 +3308,8 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Vice City 03 [1]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 4.7 m), residu mediane 2.6->1.3 px | "
+  "source": "Screenshot 1 \u2014 Vice City 03 [1]",
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 4.7 m), residu mediane 2.6->1.3 px | "
  },
  "Vice City 05 (Vice Beach)": {
   "id": "S2/41",
@@ -3332,8 +3332,8 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Vice City 05 [1]",
-  "note": "z ancre au sol height map (3.5+1.7, etait 0.6) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.53 deg (dz +4.6 m a d~174 m) | orientation refittee sur markings (xyz fige), mediane 57' -> 0'"
+  "source": "Screenshot 1 \u2014 Vice City 05 [1]",
+  "note": "z ancre au sol height map (3.5+1.7, etait 0.6) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.53 deg (dz +4.6 m a d~174 m) | orientation refittee sur markings (xyz fige), mediane 57' -> 0'"
  },
  "Vice City 06 (Ocean Drive)": {
   "id": "S2/42",
@@ -3356,7 +3356,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Vice City 06 [1]"
+  "source": "Screenshot 1 \u2014 Vice City 06 [1]"
  },
  "Vice City 08 (Ferris Wheel)": {
   "id": "S2/44",
@@ -3379,8 +3379,8 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Vice City 08 [1]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 25.4 m), residu mediane 13.2->1.8 px | "
+  "source": "Screenshot 1 \u2014 Vice City 08 [1]",
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 25.4 m), residu mediane 13.2->1.8 px | "
  },
  "Vice City 09 (La Perle)": {
   "id": "S2/45",
@@ -3403,7 +3403,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Vice City 09 [1]"
+  "source": "Screenshot 1 \u2014 Vice City 09 [1]"
  },
  "Leonida Keys 01 (Airplane) (X)": {
   "id": "S2/46",
@@ -3426,7 +3426,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Leonida Keys 01 [1]"
+  "source": "Screenshot 1 \u2014 Leonida Keys 01 [1]"
  },
  "Leonida Keys 05 (Boats)": {
   "id": "S2/50",
@@ -3449,7 +3449,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Leonida Keys 05 [1]"
+  "source": "Screenshot 1 \u2014 Leonida Keys 05 [1]"
  },
  "Port Gellhorn 01 (Starlet Motel)": {
   "id": "S2/51",
@@ -3472,7 +3472,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Port Gellhorn 01 [1]",
+  "source": "Screenshot 1 \u2014 Port Gellhorn 01 [1]",
   "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m."
  },
  "Port Gellhorn 04 (Delights) (X)": {
@@ -3496,8 +3496,8 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Port Gellhorn 04 [1]",
-  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m. | z ancre au sol height map (11.3+1.7, etait 7.1) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.19 deg (dz +5.9 m a d~282 m) | orientation refittee sur markings (xyz fige), mediane 5' -> 4'"
+  "source": "Screenshot 1 \u2014 Port Gellhorn 04 [1]",
+  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m. | z ancre au sol height map (11.3+1.7, etait 7.1) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.19 deg (dz +5.9 m a d~282 m) | orientation refittee sur markings (xyz fige), mediane 5' -> 4'"
  },
  "Port Gellhorn 05 (Fire)": {
   "id": "S2/55",
@@ -3520,7 +3520,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Port Gellhorn 05 [1]"
+  "source": "Screenshot 1 \u2014 Port Gellhorn 05 [1]"
  },
  "Ambrosia 01 (Bikers)": {
   "id": "S2/56",
@@ -3543,9 +3543,9 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Ambrosia 01 [1]",
+  "source": "Screenshot 1 \u2014 Ambrosia 01 [1]",
   "note": "pose HORIZON-V1: 13 ancres + silhouette height map (8 clics de crete), z verrouille sol height map.",
-  "pose_verified": "SOLVED 2026-08-21 — z ancre sol height map, silhouette 51 pts mediane -1.6', juge 0.53 m"
+  "pose_verified": "SOLVED 2026-08-21 \u2014 z ancre sol height map, silhouette 51 pts mediane -1.6', juge 0.53 m"
  },
  "Ambrosia 02 (Panorama)": {
   "id": "S2/57",
@@ -3568,8 +3568,8 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Ambrosia 02 [1]",
-  "pose_verified": "VERIFIED 2026-08-21 — ancres 0.1' (128) + silhouette 0.5', pose intacte"
+  "source": "Screenshot 1 \u2014 Ambrosia 02 [1]",
+  "pose_verified": "VERIFIED 2026-08-21 \u2014 ancres 0.1' (128) + silhouette 0.5', pose intacte"
  },
  "Ambrosia 04 (Fires)": {
   "id": "S2/59",
@@ -3592,9 +3592,9 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Ambrosia 04 [1]",
+  "source": "Screenshot 1 \u2014 Ambrosia 04 [1]",
   "note": "position Alexandre (leak map, -1638.3/3214.5) FIXE; orientation/z/fov par le relief SEUL (99 traces, ancres reseau exclues du cout sur son ordre). En evaluation UI. | POSE-EDIT: ajustee a la main par Alexandre dans l UI",
-  "notes": "EN EVALUATION (2026-08-25) — fit PUR-VERITE: lignes map d'Alexandre (Canal B + Road B, 5 clics) + silhouette (99 pts) + prior position, ZERO ancre reseau. 35 m du tooltip d'Alexandre; fov 61.3 coherent avec la borne Wheelabrator<->Sonora (~65) et la famille Kalaga (64-69). Tension residuelle ~1.3 deg lignes-proches vs horizon (z des canaux lisse par la heightmap?) — en attente des lignes Route 10 (horizon gauche) et Road A (premier plan) pour trancher. Remplace l'AUTO relief-only fov 33.5 (refute: Wheelabrator hors cadre)."
+  "notes": "EN EVALUATION (2026-08-25) \u2014 fit PUR-VERITE: lignes map d'Alexandre (Canal B + Road B, 5 clics) + silhouette (99 pts) + prior position, ZERO ancre reseau. 35 m du tooltip d'Alexandre; fov 61.3 coherent avec la borne Wheelabrator<->Sonora (~65) et la famille Kalaga (64-69). Tension residuelle ~1.3 deg lignes-proches vs horizon (z des canaux lisse par la heightmap?) \u2014 en attente des lignes Route 10 (horizon gauche) et Road A (premier plan) pour trancher. Remplace l'AUTO relief-only fov 33.5 (refute: Wheelabrator hors cadre)."
  },
  "Grassrivers 02 (Watson Bay)": {
   "id": "S2/62",
@@ -3617,7 +3617,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Grassrivers 02 [1]"
+  "source": "Screenshot 1 \u2014 Grassrivers 02 [1]"
  },
  "Mount Kalaga National Park 02 (Helicopter) (X)": {
   "id": "S2/66",
@@ -3640,9 +3640,9 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Mount Kalaga National Park 02 [1]",
+  "source": "Screenshot 1 \u2014 Mount Kalaga National Park 02 [1]",
   "note": "pose du solver externe v2 (raffinement Alexandre 2026-08-24); cam a 54.2 m au-dessus du sol (112.7); silhouette 8.2' sur 63 traces.",
-  "pose_verified": "SOLVED 2026-08-24 — solver externe v2 d'Alexandre (ancres leak map + z terrain), silhouette 8.2' sur 63 traces",
+  "pose_verified": "SOLVED 2026-08-24 \u2014 solver externe v2 d'Alexandre (ancres leak map + z terrain), silhouette 8.2' sur 63 traces",
   "notes": "FAR-FIELD 2026-09-02: clics lointains (2-4 km, brume) en conflit avec des cams lockees ou sur des collines exclus de la triangulation: ['Blob', 'Tree near Port Gellhorn', 'Starlet Hill', 'Easy Hill', 'Starlet Motel (RE)', 'Interstate Hill']. Pose lockee inchangee. | "
  },
  "Mount Kalaga National Park 04 (Mountain Pass) (X)": {
@@ -3666,9 +3666,9 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Mount Kalaga National Park 04 [1]",
-  "note": "pose du solver externe (heightmap16bit + fullMap overlay, essai Alexandre 2026-08-22): cam a 12.9 m au-dessus du sol height map (127.6) — aerienne, coherent avec la frame. Conventions verifiees (yaw meme sens que nous). A valider au POV.",
-  "pose_verified": "SOLVED 2026-08-24 — solver externe v2 (Alexandre): pose complete xyz/ypr/hfov epinglee a l'oeil dans son outil (vFoV 42.144). Remplace la v1 du solver (-4887.7, 5449.3, 140.5 / yaw 153.41 / hfov 66.65).",
+  "source": "Screenshot 1 \u2014 Mount Kalaga National Park 04 [1]",
+  "note": "pose du solver externe (heightmap16bit + fullMap overlay, essai Alexandre 2026-08-22): cam a 12.9 m au-dessus du sol height map (127.6) \u2014 aerienne, coherent avec la frame. Conventions verifiees (yaw meme sens que nous). A valider au POV.",
+  "pose_verified": "SOLVED 2026-08-24 \u2014 solver externe v2 (Alexandre): pose complete xyz/ypr/hfov epinglee a l'oeil dans son outil (vFoV 42.144). Remplace la v1 du solver (-4887.7, 5449.3, 140.5 / yaw 153.41 / hfov 66.65).",
   "notes": "FAR-FIELD 2026-09-02: clics lointains (2-4 km, brume) en conflit avec des cams lockees ou sur des collines exclus de la triangulation: ['Blob', 'Billboard (Delights)', 'Tree near Port Gellhorn', 'Crazy Hill', 'Billboard near Intersection (BC)', 'Billboard near Starlet Motel (B)', '3001 Gordon Hwy (Water Tower)', 'Quarry']. Pose lockee inchangee. | "
  },
  "Vice City Postcard": {
@@ -3692,8 +3692,8 @@
    2458,
    1604
   ],
-  "source": "Screenshot 1 — Vice City Postcard [?]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 9.9 m), residu mediane 2.2->1.3 px | "
+  "source": "Screenshot 1 \u2014 Vice City Postcard [?]",
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 9.9 m), residu mediane 2.2->1.3 px | "
  },
  "Leonida Keys Postcard (X)": {
   "id": "S2/72",
@@ -3716,7 +3716,7 @@
    2563,
    1709
   ],
-  "source": "Screenshot 1 — Leonida Keys Postcard [?]"
+  "source": "Screenshot 1 \u2014 Leonida Keys Postcard [?]"
  },
  "Port Gellhorn Postcard (X)": {
   "id": "S2/73",
@@ -3739,8 +3739,8 @@
    3240,
    2160
   ],
-  "source": "Screenshot 1 — Port Gellhorn Postcard [1]",
-  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m. | POSE-EDIT: ajustee a la main par Alexandre dans l UI | YAW-ALEXANDRE 2026-08-30: yaw 51.97->48.77 applique sur son ordre (match du relief rendu). DISCORDANCE DOCUMENTEE: les 15 vrais objets passent de 27 a 145 px rms; les Container Cranes (ancrees par Diner W A/B LOCKEES, far-field 1px) partent a 109-122 px et AUCUNE position (teste +/-300m) ni fov ne les recupere. NB: le relief heightmap de ce secteur est marque \"DISPLAY ONLY - INFERE, mediane |err| 4.8m, r2=0.52\" dans terrain_hd_meta.json — il ne peut pas servir de reference de calibration. Backup: cameras.json.bak_pgh_yaw.",
+  "source": "Screenshot 1 \u2014 Port Gellhorn Postcard [1]",
+  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m. | POSE-EDIT: ajustee a la main par Alexandre dans l UI | YAW-ALEXANDRE 2026-08-30: yaw 51.97->48.77 applique sur son ordre (match du relief rendu). DISCORDANCE DOCUMENTEE: les 15 vrais objets passent de 27 a 145 px rms; les Container Cranes (ancrees par Diner W A/B LOCKEES, far-field 1px) partent a 109-122 px et AUCUNE position (teste +/-300m) ni fov ne les recupere. NB: le relief heightmap de ce secteur est marque \"DISPLAY ONLY - INFERE, mediane |err| 4.8m, r2=0.52\" dans terrain_hd_meta.json \u2014 il ne peut pas servir de reference de calibration. Backup: cameras.json.bak_pgh_yaw.",
   "pose_verified": null
  },
  "Ambrosia Postcard (X)": {
@@ -3764,9 +3764,9 @@
    3308,
    2160
   ],
-  "source": "Screenshot 1 — Ambrosia Postcard [?]",
-  "note": "verdict Alexandre 2026-08-23: pose HORRIBLE — a refaire | POSE-EDIT: ajustee a la main par Alexandre dans l UI",
-  "notes": "PRELIMINAIRE (2026-08-25) — resection sur 21 ancres FRAICHES triangulees Panorama(SOLVED) x Fires(lignes-verite), parallaxes 42-89 deg, croisements sub-metriques (Sonora 0.1-0.6 m, USSM 0.9-3.5 m). Mediane 6.7 arcmin, deplacement 68 m vs ancienne pose. A raffiner au POV (sliders) + tooltips map de la liste de courses."
+  "source": "Screenshot 1 \u2014 Ambrosia Postcard [?]",
+  "note": "verdict Alexandre 2026-08-23: pose HORRIBLE \u2014 a refaire | POSE-EDIT: ajustee a la main par Alexandre dans l UI",
+  "notes": "PRELIMINAIRE (2026-08-25) \u2014 resection sur 21 ancres FRAICHES triangulees Panorama(SOLVED) x Fires(lignes-verite), parallaxes 42-89 deg, croisements sub-metriques (Sonora 0.1-0.6 m, USSM 0.9-3.5 m). Mediane 6.7 arcmin, deplacement 68 m vs ancienne pose. A raffiner au POV (sliders) + tooltips map de la liste de courses."
  },
  "Grassrivers Postcard (X)": {
   "id": "S2/75",
@@ -3789,7 +3789,7 @@
    3240,
    2160
   ],
-  "source": "Screenshot 1 — Grassrivers Postcard [60]"
+  "source": "Screenshot 1 \u2014 Grassrivers Postcard [60]"
  },
  "Yacht (2)": {
   "id": "T2/38",
@@ -4201,7 +4201,7 @@
    2160
   ],
   "source": "Trailer 1 [?]",
-  "note": "z ancre au sol height map (4.8+1.7, etait -0.1) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +6.6 m a d~1537 m) | orientation refittee sur markings (xyz fige), mediane 3' -> 2'"
+  "note": "z ancre au sol height map (4.8+1.7, etait -0.1) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +6.6 m a d~1537 m) | orientation refittee sur markings (xyz fige), mediane 3' -> 2'"
  },
  "Intersection (Bikers)": {
   "id": "T1/41",
@@ -4271,7 +4271,7 @@
    1728
   ],
   "source": "Trailer 2 [1496]",
-  "note": "z ancre au sol height map (12.2+1.7, etait 9.7) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -4.75 deg (dz +4.2 m a d~50 m) | orientation refittee sur markings (xyz fige), mediane 101' -> 0'"
+  "note": "z ancre au sol height map (12.2+1.7, etait 9.7) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -4.75 deg (dz +4.2 m a d~50 m) | orientation refittee sur markings (xyz fige), mediane 101' -> 0'"
  },
  "Pier (Sea)": {
   "id": "T2/29",
@@ -4341,7 +4341,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Jason Duval 03 [1]"
+  "source": "Screenshot 1 \u2014 Jason Duval 03 [1]"
  },
  "Lucia Caminos 02 (Pool)": {
   "id": "S2/8",
@@ -4364,7 +4364,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Lucia Caminas 02 (Pool)"
+  "source": "Screenshot 1 \u2014 Lucia Caminas 02 (Pool)"
  },
  "Vice City 02 (Hotel)": {
   "id": "S2/38",
@@ -4387,7 +4387,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Vice City 02 [1]"
+  "source": "Screenshot 1 \u2014 Vice City 02 [1]"
  },
  "Leonida Keys 02 (Sidewalk)": {
   "id": "S2/47",
@@ -4410,7 +4410,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Leonida Keys 02 [1]"
+  "source": "Screenshot 1 \u2014 Leonida Keys 02 [1]"
  },
  "Port (B)": {
   "id": "L1/7b",
@@ -4488,9 +4488,9 @@
    3840,
    2160
   ],
-  "source": "Screenshot 1 — Vice City 01 [1]",
+  "source": "Screenshot 1 \u2014 Vice City 01 [1]",
   "note": "pose RESECT-V2: resection sur 27 ancres, juge 12 ancres laissees dehors 351.7 -> 33.0 arcmin (2.67 m).",
-  "pose_verified": "SOLVED 2026-08-22 — resection z-lock, juge 21.7->2.67 m (etait enterree -23 m)"
+  "pose_verified": "SOLVED 2026-08-22 \u2014 resection z-lock, juge 21.7->2.67 m (etait enterree -23 m)"
  },
  "Vice City Sign": {
   "id": "T1/21",
@@ -4519,27 +4519,27 @@
   "id": "S3/1",
   "player": null,
   "xyz": [
-   1406.848,
-   -163.016,
-   78.521
+   1402.327,
+   -164.522,
+   73.908
   ],
   "ypr": [
-   103.136,
-   -2.2902,
-   0.0372
+   103.131,
+   -2.113,
+   0.092
   ],
   "fov": [
-   75.785,
+   75.836,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Port Vice City [1]",
-  "note": "pose HORIZON-V1: 71 ancres + silhouette height map (30 clics de crete), z libre. | POSE-EDIT: ajustee a la main par Alexandre dans l UI | UNSOLVED 2026-08-30 (ordre Alexandre): badge retire — le premier plan ne fit plus (Container Cranes 8/9 a 50-80px a 250-360m) alors que le far-field est excellent (61 clics >1.5km a 7.3px rms, orientation conservee). Discordance near/far a investiguer: cranes deplacees? clics herites? Ancien statut: SOLVED 2026-08-22 — silhouette 8.1'->2.2', ancres 4.6'",
-  "pose_verified": null,
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 8.1 m), residu mediane 3.6->2.4 px | "
+  "source": "Screenshot 2 \u2014 Port Vice City [1]",
+  "note": "pose HORIZON-V1: 71 ancres + silhouette height map (30 clics de crete), z libre. | POSE-EDIT: ajustee a la main par Alexandre dans l UI | UNSOLVED 2026-08-30 (ordre Alexandre): badge retire \u2014 le premier plan ne fit plus (Container Cranes 8/9 a 50-80px a 250-360m) alors que le far-field est excellent (61 clics >1.5km a 7.3px rms, orientation conservee). Discordance near/far a investiguer: cranes deplacees? clics herites? Ancien statut: SOLVED 2026-08-22 \u2014 silhouette 8.1'->2.2', ancres 4.6'",
+  "pose_verified": "SOLVED 2026-08-22 \u2014 silhouette 8.1'->2.2', ancres 4.6'",
+  "notes": "RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 8.1 m), residu mediane 3.6->2.4 px | "
  },
  "Port Vice City (B)": {
   "id": "S3/2",
@@ -4562,9 +4562,9 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Port Vice City [140]",
+  "source": "Screenshot 2 \u2014 Port Vice City [140]",
   "note": "pose HORIZON-V1: 59 ancres + silhouette height map (23 clics de crete), z libre.",
-  "pose_verified": "SOLVED 2026-08-22 — silhouette 7.8'->2.7', ancres 2.9'"
+  "pose_verified": "SOLVED 2026-08-22 \u2014 silhouette 7.8'->2.7', ancres 2.9'"
  },
  "'95 Grotti Cheetah 04 (Garage)": {
   "id": "S3/8",
@@ -4587,7 +4587,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — '95 Grotti Cheetah 04 [1]"
+  "source": "Screenshot 2 \u2014 '95 Grotti Cheetah 04 [1]"
  },
  "Crest Kayak": {
   "id": "S3/19",
@@ -4610,7 +4610,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Crest Kayak [1]"
+  "source": "Screenshot 2 \u2014 Crest Kayak [1]"
  },
  "Green Sports Car": {
   "id": "S3/2",
@@ -4633,7 +4633,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Green Sports Car [1]"
+  "source": "Screenshot 2 \u2014 Green Sports Car [1]"
  },
  "House (Keys)": {
   "id": "T2/2",
@@ -4679,7 +4679,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Jason's Safehouse Vehicles [1]"
+  "source": "Screenshot 2 \u2014 Jason's Safehouse Vehicles [1]"
  },
  "Landing Gear (B)": {
   "id": "T2/60",
@@ -4703,7 +4703,7 @@
    1728
   ],
   "source": "Trailer 2 [3612]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 3.7 m), residu mediane 12.1->0.5 px | "
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 3.7 m), residu mediane 12.1->0.5 px | "
  },
  "Shitzu Squalo 01 (Bay)": {
   "id": "S3/27",
@@ -4726,8 +4726,8 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Shitzu Squalo 01 [1]",
-  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy σ0.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 σ2.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 σ2.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 9.1 m), residu mediane 5.4->1.7 px | "
+  "source": "Screenshot 2 \u2014 Shitzu Squalo 01 [1]",
+  "notes": "BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 9.1 m), residu mediane 5.4->1.7 px | "
  },
  "Starlet Motel": {
   "id": "T2/54",
@@ -4774,7 +4774,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Stock 305 Clothing Store 01 [1]"
+  "source": "Screenshot 2 \u2014 Stock 305 Clothing Store 01 [1]"
  },
  "Ultimate Edition 02 (Green Sports Car)": {
   "id": "S3/4",
@@ -4797,8 +4797,8 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Ultimate Edition 02 [1]",
-  "note": "z ancre au sol height map (5.2+1.7, etait 1.0) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.49 deg (dz +5.9 m a d~700 m) | orientation refittee sur markings (xyz fige), mediane 327' -> 104'"
+  "source": "Screenshot 2 \u2014 Ultimate Edition 02 [1]",
+  "note": "z ancre au sol height map (5.2+1.7, etait 1.0) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.49 deg (dz +5.9 m a d~700 m) | orientation refittee sur markings (xyz fige), mediane 327' -> 104'"
  },
  "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)": {
   "id": "S3/63",
@@ -4821,7 +4821,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Vintage Vice City Outfits and Hairstyles 04 [1]"
+  "source": "Screenshot 2 \u2014 Vintage Vice City Outfits and Hairstyles 04 [1]"
  },
  "Vintage Vice City Pack 02 (Port)": {
   "id": "S3/55",
@@ -4844,8 +4844,8 @@
    3840,
    2160
   ],
-  "source": "Screenshot 2 — Vintage Vice City Pack 02 [1]",
-  "note": "z ancre au sol height map (2.6+1.7, etait 1.5) 2026-08-22 — ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +2.8 m a d~686 m) | orientation refittee sur markings (xyz fige), mediane 16' -> 3'"
+  "source": "Screenshot 2 \u2014 Vintage Vice City Pack 02 [1]",
+  "note": "z ancre au sol height map (2.6+1.7, etait 1.5) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +2.8 m a d~686 m) | orientation refittee sur markings (xyz fige), mediane 16' -> 3'"
  },
  "Highway (Panorama) (S)": {
   "id": "L2/1",
@@ -4868,10 +4868,10 @@
    1920,
    1080
   ],
-  "source": "Highway (Panorama) [L2/1, rlx placeholder — date inconnue]",
+  "source": "Highway (Panorama) [L2/1, rlx placeholder \u2014 date inconnue]",
   "constraint_class": "X_excluded",
   "excluded": true,
-  "notes": "EXCLU 2026-09-02 (ordre Alexandre): placeholder rlx jamais resolu, panorama non exploitable — tous ses clics (21) exclus de toute triangulation. | "
+  "notes": "EXCLU 2026-09-02 (ordre Alexandre): placeholder rlx jamais resolu, panorama non exploitable \u2014 tous ses clics (21) exclus de toute triangulation. | "
  },
  "Highway (Panorama) (W)": {
   "id": "L2/1",
@@ -4894,10 +4894,10 @@
    1920,
    1080
   ],
-  "source": "Highway (Panorama) [L2/1, rlx placeholder — date inconnue]",
+  "source": "Highway (Panorama) [L2/1, rlx placeholder \u2014 date inconnue]",
   "constraint_class": "X_excluded",
   "excluded": true,
-  "notes": "EXCLU 2026-09-02 (ordre Alexandre): placeholder rlx jamais resolu, panorama non exploitable — tous ses clics (0) exclus de toute triangulation. | "
+  "notes": "EXCLU 2026-09-02 (ordre Alexandre): placeholder rlx jamais resolu, panorama non exploitable \u2014 tous ses clics (0) exclus de toute triangulation. | "
  },
  "Loading Zone near Prison (S)": {
   "id": "L1/26",
@@ -5162,7 +5162,7 @@
   ],
   "source": "Mount Kalaga Postcard (webp, 2026-08-23)",
   "constraint_class": null,
-  "note": "position Alexandre FIXE; z/yaw/pitch par fit silhouette massif Ambrosia (18.8' sur 46 pts), fov par grille (vallee plate — fov peu contraint par la silhouette seule) [AUTO-SKYLINE-V1]. A verifier au POV. | POSE-EDIT: ajustee a la main par Alexandre dans l UI"
+  "note": "position Alexandre FIXE; z/yaw/pitch par fit silhouette massif Ambrosia (18.8' sur 46 pts), fov par grille (vallee plate \u2014 fov peu contraint par la silhouette seule) [AUTO-SKYLINE-V1]. A verifier au POV. | POSE-EDIT: ajustee a la main par Alexandre dans l UI"
  },
  "Hank's Waffle (Bocamar Bridge)": {
   "id": "S/EL-HanksWaffle",
@@ -5184,8 +5184,8 @@
    3840,
    2160
   ],
-  "source": "GTA VI: An Extended Look (2026-08-28) ~11:26 — frame 4K via miroir Netflix showcase (VGS)",
-  "notes": "ILOTS 2026-09-02: orientation+fov re-solves a position fixe sur les 4 clics de mats (N/BN/S/BS aux ilots), residus [3.1, 4.3, 5.0, 5.6] px; mats identiques. Le pres-champ 536 (clics Arch/RSW/Roofline) est vu en rasant a 2-7 m et n'est pas utilisable au pixel. Pas SOLVED. | ancien: AXE-SKYWAY-FINAL (2026-08-29): calibree sur le secteur Diner LOCKE (arches 536 + ligne mat t415 + tablier extrait au gradient, rms 2px). Teleobjectif fov~33 (plan serre Jason, compression ✓). VERDICT PYLONES: mat visible gauche = SUD a t415 (0.2px); mat NORD t132 projete x~3680 = occulte par l'avant-toit de Hank's Waffles; la colonne jaune x2895 est un POTEAU D'AVANT-PLAN (aucun eventail, descend ",
+  "source": "GTA VI: An Extended Look (2026-08-28) ~11:26 \u2014 frame 4K via miroir Netflix showcase (VGS)",
+  "notes": "ILOTS 2026-09-02: orientation+fov re-solves a position fixe sur les 4 clics de mats (N/BN/S/BS aux ilots), residus [3.1, 4.3, 5.0, 5.6] px; mats identiques. Le pres-champ 536 (clics Arch/RSW/Roofline) est vu en rasant a 2-7 m et n'est pas utilisable au pixel. Pas SOLVED. | ancien: AXE-SKYWAY-FINAL (2026-08-29): calibree sur le secteur Diner LOCKE (arches 536 + ligne mat t415 + tablier extrait au gradient, rms 2px). Teleobjectif fov~33 (plan serre Jason, compression \u2713). VERDICT PYLONES: mat visible gauche = SUD a t415 (0.2px); mat NORD t132 projete x~3680 = occulte par l'avant-toit de Hank's Waffles; la colonne jaune x2895 est un POTEAU D'AVANT-PLAN (aucun eventail, descend ",
   "player": null,
   "tag": "extended-look",
   "note": "POSE-EDIT: ajustee a la main par Alexandre dans l UI | POSE-EDIT: ajustee a la main par Alexandre dans l UI",
@@ -5212,10 +5212,10 @@
    3840,
    2160
   ],
-  "source": "Screenshot — Grassrivers 05 (seaplane, Sunrise RV Park, skyline Vice City)",
+  "source": "Screenshot \u2014 Grassrivers 05 (seaplane, Sunrise RV Park, skyline Vice City)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "SOLVE-MARQUAGES-4 2026-09-03: 34 clics (dont Four Seasons x5, Miami Tower, Quantum S); position ±(1,2) m, mediane 9.4 px; z fige 13 | AJOUT 2026-09-03: position approximative donnee par Alexandre ('la plus approximative au monde'), fov initial 50 a caler sur la skyline (Four Seasons = plus haute tour)."
+  "notes": "SOLVE-MARQUAGES-4 2026-09-03: 34 clics (dont Four Seasons x5, Miami Tower, Quantum S); position \u00b1(1,2) m, mediane 9.4 px; z fige 13 | AJOUT 2026-09-03: position approximative donnee par Alexandre ('la plus approximative au monde'), fov initial 50 a caler sur la skyline (Four Seasons = plus haute tour)."
  },
  "Vice City 10 (Pegassi Towers)": {
   "id": "S2/77",
@@ -5238,7 +5238,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot — Vice City 10 (Pegassi Towers, Brickell Key vu du sud-est, en hauteur)",
+  "source": "Screenshot \u2014 Vice City 10 (Pegassi Towers, Brickell Key vu du sud-est, en hauteur)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "SOLVE-MARQUAGES v2 2026-09-04: +4 clics Four Seasons (NW, 56NE, 40NW, 40NE) d'Alexandre -> l'ancienne pose etait a 70 px sur le FS; re-solve 11 clics: deplacement 7.6 m, fov 70.9->72.2, roll -0.57->-0.04; FS 2-13 px, Tequesta 1 px, mediane 4.4 px; mesh FS et Pegassi verifies au rendu. Reste: Vizcayne N NE/NW 33-47 px (landmarks trop ecartes ou clics croises). | SOLVE-MARQUAGES 2026-09-04: pose complete sur 7 clics (Tequesta x2, Marina Blue, Vizcayne N x3, Vizcayne S NE); grand-angle 70.9 deg, ~288 m des tours a 67 m de haut; mediane 4.0 px. Exclus: One Miami Condo East/West (NW) (landmarks legacy inverses E/W vs 'Condominium') et Vizcayne S (NW) (coin cache) | AJOUT 2026-09-03: pose initiale a 2 points (Two/Three Tequesta) + priors; le solve a 5 points avec mes identifications de Four Seasons/Vizcayne a diverge (fov 96) -> identifications douteuses, annule. A verrouiller avec les clics d'Alexandre (helipads + skyline via Assist)."
