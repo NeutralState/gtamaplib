@@ -8971,15 +8971,15 @@
   },
   "Bayshore Place Condominium (TE)": {
     "xyz": [
-      -598.42,
-      -1374.187,
-      61.492
+      -624.0347403885534,
+      -1348.270556837256,
+      62.34097000534744
     ],
     "source_cameras": [
       "Tennis Stadium (4K)",
       "Raul Bautista 03 (Motorboat)"
     ],
-    "error_m": 0.09,
+    "error_m": 1.634,
     "zone": "grassrivers",
     "note": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.0 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 27.1 m | "
   },
@@ -19784,5 +19784,49 @@
     "error_m": 2.5,
     "zone": "vice_city",
     "note": "V16-CORE 2026-09-04: deuxieme tour du complexe (noyau SW/W sur V16), positionne par solve joint Peacock A/B sur la chaussee I-97 puis controle empreinte V16; z = celui de Park Grove Condominium (N)"
+  },
+  "Four Seasons Hotel Miami (16NE)": {
+    "xyz": [
+      -800.0,
+      -1273.0,
+      91.63
+    ],
+    "source_cameras": [],
+    "error_m": 1.0,
+    "zone": "vice_city",
+    "note": "MESH-DERIVED 2026-09-04: coin du mesh Four Seasons (verite Alexandre) aux etages 16/24 (z = HB8SE + 4.025 m/etage), pour les clics de Raul Bautista 03"
+  },
+  "Four Seasons Hotel Miami (16E)": {
+    "xyz": [
+      -809.46,
+      -1298.29,
+      91.63
+    ],
+    "source_cameras": [],
+    "error_m": 1.0,
+    "zone": "vice_city",
+    "note": "MESH-DERIVED 2026-09-04: coin du mesh Four Seasons (verite Alexandre) aux etages 16/24 (z = HB8SE + 4.025 m/etage), pour les clics de Raul Bautista 03"
+  },
+  "Four Seasons Hotel Miami (24NE)": {
+    "xyz": [
+      -800.0,
+      -1273.0,
+      123.83
+    ],
+    "source_cameras": [],
+    "error_m": 1.0,
+    "zone": "vice_city",
+    "note": "MESH-DERIVED 2026-09-04: coin du mesh Four Seasons (verite Alexandre) aux etages 16/24 (z = HB8SE + 4.025 m/etage), pour les clics de Raul Bautista 03"
+  },
+  "Four Seasons Hotel Miami (24E)": {
+    "xyz": [
+      -809.46,
+      -1298.29,
+      123.83
+    ],
+    "source_cameras": [],
+    "error_m": 1.0,
+    "zone": "vice_city",
+    "note": "MESH-DERIVED 2026-09-04: coin du mesh Four Seasons (verite Alexandre) aux etages 16/24 (z = HB8SE + 4.025 m/etage), pour les clics de Raul Bautista 03"
   }
 }
