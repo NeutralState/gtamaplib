@@ -5221,17 +5221,17 @@
   "id": "S2/77",
   "player": null,
   "xyz": [
-   341.02,
-   -1104.6,
-   66.64
+   336.68,
+   -1099.44,
+   63.17
   ],
   "ypr": [
-   63.117,
-   0.026,
-   -0.569
+   63.724,
+   0.399,
+   -0.036
   ],
   "fov": [
-   70.897,
+   72.214,
    null
   ],
   "size": [
@@ -5241,6 +5241,6 @@
   "source": "Screenshot — Vice City 10 (Pegassi Towers, Brickell Key vu du sud-est, en hauteur)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "SOLVE-MARQUAGES 2026-09-04: pose complete sur 7 clics (Tequesta x2, Marina Blue, Vizcayne N x3, Vizcayne S NE); grand-angle 70.9 deg, ~288 m des tours a 67 m de haut; mediane 4.0 px. Exclus: One Miami Condo East/West (NW) (landmarks legacy inverses E/W vs 'Condominium') et Vizcayne S (NW) (coin cache) | AJOUT 2026-09-03: pose initiale a 2 points (Two/Three Tequesta) + priors; le solve a 5 points avec mes identifications de Four Seasons/Vizcayne a diverge (fov 96) -> identifications douteuses, annule. A verrouiller avec les clics d'Alexandre (helipads + skyline via Assist)."
+  "notes": "SOLVE-MARQUAGES v2 2026-09-04: +4 clics Four Seasons (NW, 56NE, 40NW, 40NE) d'Alexandre -> l'ancienne pose etait a 70 px sur le FS; re-solve 11 clics: deplacement 7.6 m, fov 70.9->72.2, roll -0.57->-0.04; FS 2-13 px, Tequesta 1 px, mediane 4.4 px; mesh FS et Pegassi verifies au rendu. Reste: Vizcayne N NE/NW 33-47 px (landmarks trop ecartes ou clics croises). | SOLVE-MARQUAGES 2026-09-04: pose complete sur 7 clics (Tequesta x2, Marina Blue, Vizcayne N x3, Vizcayne S NE); grand-angle 70.9 deg, ~288 m des tours a 67 m de haut; mediane 4.0 px. Exclus: One Miami Condo East/West (NW) (landmarks legacy inverses E/W vs 'Condominium') et Vizcayne S (NW) (coin cache) | AJOUT 2026-09-03: pose initiale a 2 points (Two/Three Tequesta) + priors; le solve a 5 points avec mes identifications de Four Seasons/Vizcayne a diverge (fov 96) -> identifications douteuses, annule. A verrouiller avec les clics d'Alexandre (helipads + skyline via Assist)."
  }
 }
