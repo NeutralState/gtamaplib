@@ -5221,17 +5221,17 @@
   "id": "S2/77",
   "player": null,
   "xyz": [
-   358.0,
-   -1103.0,
-   57.6
+   339.4,
+   -1099.5,
+   62.9
   ],
   "ypr": [
-   64.05,
-   0.56,
-   0.08
+   63.94,
+   0.44,
+   -0.03
   ],
   "fov": [
-   70.92,
+   71.74,
    null
   ],
   "size": [
@@ -5241,6 +5241,6 @@
   "source": "Screenshot \u2014 Vice City 10 (Pegassi Towers, Brickell Key vu du sud-est, en hauteur)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "RELIEF-TRUTH 2026-09-04 (Alexandre: 'c'est bien le bon relief rien a change'): pose = solve conjoint 11 clics + 71 points de crete Ambrosia/Kalaga (trace tools/data/silhouettes.json, poids 8): crete 0.9 px (forme 1.2), clics: Four Seasons 4-10 px, Two Tequesta 8, Three Tequesta 29 (clic sur le rebord du toit, landmark sommet a 5.9 m d'erreur), Vizcayne N SE 22 / S NE 21 / Marina Blue SE 21 px = ces landmarks (err 3.5-4.5 m, sources Skyline/Vice Beach/Motorboats) sont probablement ~7-10 m au SW de la verite; V16 montre Vizcayne N (SE) 6-8 m hors de l'empreinte dans ce sens. A confirmer par tooltips Vizcayne N/S + Marina Blue. Sans la crete, le yaw etait tire de -0.32 deg par ces landmarks. | RELIEF 2026-09-04: la crete de montagne visible a droite (x 3440-3720, y ~1018-1037 = massif Ambrosia/Kalaga, segment x -4800..-3781 y 5984..6553, 8.5 km) colle a l'horizon heightmap seulement avec yaw +0.85 (forme 1.5 px vs 6.9 px a 0) = observation d'Alexandre (+0.81). Le champ proche (helipads Tequesta tooltips, Four Seasons, Vizcayne) interdit ce yaw (Three Tequesta 140 px si impose). Trait de cote heightmap = V16 a 12 m pres en ville (pas de rotation globale). Autres cams a traces (Explosion, Empty Lot, Hedge, PVC A/B, Lucia): aucun decalage commun. NON TRANCHE: ce segment de relief serait ~125 m ENE de la heightmap (build different?) ou autre cause; il faut une 2e vue lointaine tracee (Farm classe A a 10.8 km, x 1032-1168). Pose gardee sur le champ proche. | SOLVE-MARQUAGES v2 2026-09-04: +4 clics Four Seasons (NW, 56NE, 40NW, 40NE) d'Alexandre -> l'ancienne pose etait a 70 px sur le FS; re-solve 11 clics: deplacement 7.6 m, fov 70.9->72.2, roll -0.57->-0.04; FS 2-13 px, Tequesta 1 px, mediane 4.4 px; mesh FS et Pegassi verifies au rendu. Reste: Vizcayne N NE/NW 33-47 px (landmarks trop ecartes ou clics croises). | SOLVE-MARQUAGES 2026-09-04: pose complete sur 7 clics (Tequesta x2, Marina Blue, Vizcayne N x3, Vizcayne S NE); grand-angle 70.9 deg, ~288 m des tours a 67 m de haut; mediane 4.0 px. Exclus: One Miami Condo East/West (NW) (landmarks legacy inverses E/W vs 'Condominium') et Vizcayne S (NW) (coin cache) | AJOUT 2026-09-03: pose initiale a 2 points (Two/Three Tequesta) + priors; le solve a 5 points avec mes identifications de Four Seasons/Vizcayne a diverge (fov 96) -> identifications douteuses, annule. A verrouiller avec les clics d'Alexandre (helipads + skyline via Assist)."
+  "notes": "VIZCAYNE-TOOLTIPS 2026-09-04: 8 coins Vizcayne tooltips (ancres x3); clics VC10 re-etiquetes (labels tournes d'un coin: droite=NE, milieu=SE, gauche=SW, les deux tours). Solve 13 clics: mediane 5.2 px (Tequesta 2-3, Vizcayne 2-12, FS 1-12, Marina Blue SE 17), crete Ambrosia/Kalaga 2.4 px (etait 5.5). Yaw +0.22 vs pose clics d'origine. Tension residuelle: la forme de la crete prefere encore +0.6 deg (~90 m a 8.5 km) au prix de 20-27 px sur Tequesta/Marina Blue -> probablement LOD terrain lointain vs heightmap 12 m/px; pose gardee sur les ancres dures. | RELIEF-TRUTH 2026-09-04 (Alexandre: 'c'est bien le bon relief rien a change'): pose = solve conjoint 11 clics + 71 points de crete Ambrosia/Kalaga (trace tools/data/silhouettes.json, poids 8): crete 0.9 px (forme 1.2), clics: Four Seasons 4-10 px, Two Tequesta 8, Three Tequesta 29 (clic sur le rebord du toit, landmark sommet a 5.9 m d'erreur), Vizcayne N SE 22 / S NE 21 / Marina Blue SE 21 px = ces landmarks (err 3.5-4.5 m, sources Skyline/Vice Beach/Motorboats) sont probablement ~7-10 m au SW de la verite; V16 montre Vizcayne N (SE) 6-8 m hors de l'empreinte dans ce sens. A confirmer par tooltips Vizcayne N/S + Marina Blue. Sans la crete, le yaw etait tire de -0.32 deg par ces landmarks. | RELIEF 2026-09-04: la crete de montagne visible a droite (x 3440-3720, y ~1018-1037 = massif Ambrosia/Kalaga, segment x -4800..-3781 y 5984..6553, 8.5 km) colle a l'horizon heightmap seulement avec yaw +0.85 (forme 1.5 px vs 6.9 px a 0) = observation d'Alexandre (+0.81). Le champ proche (helipads Tequesta tooltips, Four Seasons, Vizcayne) interdit ce yaw (Three Tequesta 140 px si impose). Trait de cote heightmap = V16 a 12 m pres en ville (pas de rotation globale). Autres cams a traces (Explosion, Empty Lot, Hedge, PVC A/B, Lucia): aucun decalage commun. NON TRANCHE: ce segment de relief serait ~125 m ENE de la heightmap (build different?) ou autre cause; il faut une 2e vue lointaine tracee (Farm classe A a 10.8 km, x 1032-1168). Pose gardee sur le champ proche. | SOLVE-MARQUAGES v2 2026-09-04: +4 clics Four Seasons (NW, 56NE, 40NW, 40NE) d'Alexandre -> l'ancienne pose etait a 70 px sur le FS; re-solve 11 clics: deplacement 7.6 m, fov 70.9->72.2, roll -0.57->-0.04; FS 2-13 px, Tequesta 1 px, mediane 4.4 px; mesh FS et Pegassi verifies au rendu. Reste: Vizcayne N NE/NW 33-47 px (landmarks trop ecartes ou clics croises). | SOLVE-MARQUAGES 2026-09-04: pose complete sur 7 clics (Tequesta x2, Marina Blue, Vizcayne N x3, Vizcayne S NE); grand-angle 70.9 deg, ~288 m des tours a 67 m de haut; mediane 4.0 px. Exclus: One Miami Condo East/West (NW) (landmarks legacy inverses E/W vs 'Condominium') et Vizcayne S (NW) (coin cache) | AJOUT 2026-09-03: pose initiale a 2 points (Two/Three Tequesta) + priors; le solve a 5 points avec mes identifications de Four Seasons/Vizcayne a diverge (fov 96) -> identifications douteuses, annule. A verrouiller avec les clics d'Alexandre (helipads + skyline via Assist)."
  }
 }

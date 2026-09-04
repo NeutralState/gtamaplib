@@ -7676,9 +7676,9 @@
   },
   "Vizcayne North Condominium (NE)": {
     "xyz": [
-      -543.2725321206776,
-      156.5884599255893,
-      177.29103238757403
+      -541.3,
+      159.4,
+      177.291
     ],
     "source_cameras": [
       "Convertible",
@@ -7692,13 +7692,14 @@
     ],
     "error_m": 4.203,
     "zone": "vice_city",
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | "
+    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | ",
+    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z conserve | "
   },
   "Vizcayne North Condominium (SE)": {
     "xyz": [
-      -541.9417113162237,
-      106.87352786940755,
-      177.19011255328908
+      -542.3,
+      108.9,
+      177.19
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7710,7 +7711,8 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "error_m": 3.461,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z conserve | "
   },
   "W South Beach (BNW)": {
     "xyz": [
@@ -10972,12 +10974,13 @@
       "Port Vice City (A)"
     ],
     "xyz": [
-      -631.3378547429256,
-      93.82840872937709,
-      178.63671787939353
+      -636.8,
+      99.4,
+      178.637
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 5.1 m | "
+    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 5.1 m | ",
+    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z conserve | "
   },
   "Four Seasons Hotel Miami (?NW)": {
     "author": "rlx",
@@ -12829,8 +12832,8 @@
   },
   "Vizcayne North Condominium (NW)": {
     "xyz": [
-      -550.925,
-      153.892,
+      -560.8,
+      161.4,
       177.876
     ],
     "source_cameras": [
@@ -12840,7 +12843,8 @@
       "Vice City Postcard"
     ],
     "error_m": 2.195,
-    "zone": "unknown"
+    "zone": "unknown",
+    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z conserve | "
   },
   "Vice River (B)": {
     "author": "rlx",
@@ -14192,8 +14196,13 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
-    "zone": null
+    "xyz": [
+      -560.8,
+      109.4,
+      177.452
+    ],
+    "zone": null,
+    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z herite des coins voisins | "
   },
   "Canal C (Ambrosia) (2)": {
     "author": "rlx",
@@ -14491,12 +14500,13 @@
       "Port Vice City (A)"
     ],
     "xyz": [
-      -583.2355743014432,
-      99.61849311236875,
-      177.34973038874782
+      -586.3,
+      99.9,
+      177.35
     ],
     "zone": null,
-    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.5 m | "
+    "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.5 m | ",
+    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z conserve | "
   },
   "Ambrosia Main St (Y)": {
     "author": "rlx",
@@ -19841,10 +19851,15 @@
     "zone": "vice_city"
   },
   "Vizcayne South Condominium (SW)": {
-    "xyz": null,
+    "xyz": [
+      -637.3,
+      81.9,
+      177.993
+    ],
     "source_cameras": [],
     "error_m": null,
-    "zone": "unknown"
+    "zone": "unknown",
+    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z herite des coins voisins | "
   },
   "Three Tequesta Point (Helipad)": {
     "xyz": [
@@ -19889,9 +19904,14 @@
     "zone": "unknown"
   },
   "Vizcayne South Condominium (SE)": {
-    "xyz": null,
+    "xyz": [
+      -585.8,
+      81.4,
+      177.993
+    ],
     "source_cameras": [],
     "error_m": null,
-    "zone": "unknown"
+    "zone": "unknown",
+    "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z herite des coins voisins | "
   }
 }
