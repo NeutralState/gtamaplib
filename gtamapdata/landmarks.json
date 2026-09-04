@@ -17264,31 +17264,33 @@
   },
   "Blimp (F)": {
     "xyz": [
-      -4468.606367179182,
-      -6857.600960900074,
-      34.35285231110581
+      -4390.9,
+      -6820.0,
+      31.8
     ],
     "source_cameras": [
       "Key Lento",
       "Keys"
     ],
-    "error_m": 2.606,
+    "error_m": 5.0,
     "zone": "rlx_markings_0713",
-    "author": "rlx"
+    "author": "rlx",
+    "note": "TOOLTIP-APPROX xy Alexandre 2026-09-04 ('environ'), z = rayon Key Lento au-dessus du tooltip; etait a 86 m (triangulation Key Lento x Keys) | "
   },
   "Blimp (R)": {
     "xyz": [
-      -4587.30574608515,
-      -6838.0577682260555,
-      37.7902716611519
+      -4451.9,
+      -6799.5,
+      34.7
     ],
     "source_cameras": [
       "Key Lento",
       "Keys"
     ],
-    "error_m": 2.82,
+    "error_m": 5.0,
     "zone": "rlx_markings_0713",
-    "author": "rlx"
+    "author": "rlx",
+    "note": "TOOLTIP-APPROX xy Alexandre 2026-09-04 ('environ'), z = rayon Key Lento au-dessus du tooltip; etait a 141 m (triangulation Key Lento x Keys) | "
   },
   "Alpha Gas Station (A2)": {
     "xyz": null,
