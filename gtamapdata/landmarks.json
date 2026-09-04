@@ -6193,28 +6193,28 @@
   },
   "Latitude on the River (S) (NW)": {
     "xyz": [
-      -971.3047920750215,
-      -809.0416925156584,
-      92.03307575047744
-    ],
-    "source_cameras": [
-      "Airport (X)",
-      "Grassrivers 02 (Watson Bay)"
-    ],
-    "error_m": 0.6,
-    "zone": "vice_city"
-  },
-  "Latitude on the River (S) (SW)": {
-    "xyz": [
-      -984.7904167866784,
-      -847.2811635180753,
-      91.74913574469488
+      -967.1117784374007,
+      -810.8705884421199,
+      92.234242493066
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Airport (X)"
     ],
-    "error_m": 2.111,
+    "error_m": 1.425,
+    "zone": "vice_city"
+  },
+  "Latitude on the River (S) (SW)": {
+    "xyz": [
+      -980.7655486132796,
+      -849.0967235605516,
+      91.96597618025662
+    ],
+    "source_cameras": [
+      "Grassrivers 02 (Watson Bay)",
+      "Airport (X)"
+    ],
+    "error_m": 2.161,
     "zone": "vice_city"
   },
   "Loews Miami Beach": {
@@ -6440,15 +6440,15 @@
   },
   "Nine at Mary Brickell Village (E)": {
     "xyz": [
-      -1067.0902970225593,
-      -1034.2736939093131,
-      118.78757699666698
+      -1063.4457495673055,
+      -1037.1345526322425,
+      118.54283443456933
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Tennis Stadium (4K)"
     ],
-    "error_m": 0.833,
+    "error_m": 1.367,
     "zone": "vice_city"
   },
   "One Miami Condominium East (NE)": {
@@ -6709,9 +6709,9 @@
   },
   "Park Grove Condominium (N)": {
     "xyz": [
-      -1323.8165123985225,
-      -1998.0682413734394,
-      97.14100970619162
+      -1323.6597118796144,
+      -2000.5180495360673,
+      97.23907437940272
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -6719,7 +6719,7 @@
       "Port Vice City (B)",
       "Metro (SE) (B)"
     ],
-    "error_m": 7.459,
+    "error_m": 7.497,
     "zone": "vice_city"
   },
   "Pelican Harbor Marina (A)": {
@@ -7775,19 +7775,19 @@
   },
   "Wells Fargo Center (N)": {
     "xyz": [
-      -671.033,
-      -418.977,
-      187.426
+      -671.9598211388563,
+      -419.4758648326617,
+      187.80483043925355
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
-      "Prison",
       "Skyline",
       "Vice Beach (B)",
       "Vice City 03 (Basketball)",
-      "Vice City Postcard"
+      "Vice City Postcard",
+      "Port Vice City (A)"
     ],
-    "error_m": 1.785,
+    "error_m": 2.148,
     "zone": "vice_city",
     "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.5 m | "
   },
@@ -8136,54 +8136,54 @@
   },
   "Turkey Point Nuclear Power Station (CNE)": {
     "xyz": [
-      -1588.7072780167603,
-      -3443.2287972342183,
-      37.5960694987034
+      -1589.916015126319,
+      -3445.5713500949423,
+      37.628929274472966
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Grassrivers 02 (Watson Bay)"
+      "Grassrivers 02 (Watson Bay)",
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 1.344,
+    "error_m": 0.058,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (CNW)": {
     "xyz": [
-      -1630.1812623872406,
-      -3449.0764319228665,
-      37.53116741336268
+      -1632.1063540248197,
+      -3451.944664640294,
+      37.69577002970192
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Grassrivers 02 (Watson Bay)"
+      "Grassrivers 02 (Watson Bay)",
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 1.525,
+    "error_m": 0.25,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (CSE)": {
     "xyz": [
-      -1763.8554658290361,
-      -3787.7679607461723,
-      34.583851137163194
+      -1765.0444001849155,
+      -3790.617976452453,
+      35.80950936780779
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 3.688,
+    "error_m": 2.783,
     "zone": "grassrivers"
   },
   "Turkey Point Nuclear Power Station (CSW)": {
     "xyz": [
-      -1806.8081472965523,
-      -3805.0474046448107,
-      34.35557742399804
+      -1808.3478392205125,
+      -3808.4854292252753,
+      35.67834779989428
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 4.145,
+    "error_m": 3.228,
     "zone": "grassrivers"
   },
   "1500 Sonora Ave (Silo) (L)": {
@@ -8607,18 +8607,19 @@
   },
   "Citigroup Center (SE)": {
     "xyz": [
-      -375.11,
-      -521.673,
-      151.327
+      -375.6009931546299,
+      -521.6676555451604,
+      151.0411988180621
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Rooftop Party",
       "Skyline",
       "Vice Beach (B)",
-      "Vice City Postcard"
+      "Vice City Postcard",
+      "Port Vice City (A)"
     ],
-    "error_m": 1.123,
+    "error_m": 1.448,
     "zone": "vice_city",
     "note": "BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.8 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.4 m | "
   },
@@ -9526,17 +9527,17 @@
   },
   "Four Seasons Hotel Miami (40W)": {
     "xyz": [
-      -855.9522409861405,
-      -1284.3815471125572,
-      188.29913740828056
+      -854.6663955199972,
+      -1286.1552590204249,
+      188.78913859960585
     ],
     "source_cameras": [
-      "Metro (SE) (A) (4K)",
-      "Grassrivers 02 (Watson Bay)"
+      "Grassrivers 02 (Watson Bay)",
+      "Metro (SE) (A) (4K)"
     ],
     "author": "rlx",
     "notes": "[FOUR-SEASONS-RIGID-V1] rigid model \u2014 40th floor W corner",
-    "error_m": 2.71,
+    "error_m": 3.148,
     "zone": "unknown"
   },
   "Four Seasons Hotel Miami (40E)": {
@@ -10873,7 +10874,6 @@
     ],
     "source_cameras": [
       "Amphitheater",
-      "Jason Duval 05 (Machine Gun)",
       "Sidewalk (Jason) (E)"
     ],
     "error_m": 17.7,
@@ -10910,16 +10910,16 @@
   },
   "Brickell Arch": {
     "author": "rlx",
-    "error_m": 0.509,
+    "error_m": 1.807,
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
-      "Port Vice City (B)",
+      "Port Vice City (A)",
       "Metro (SE) (B)"
     ],
     "xyz": [
-      -825.5595302661764,
-      -1139.7625402705944,
-      171.80184684377969
+      -824.4380333813842,
+      -1141.0201265995668,
+      171.83815027850673
     ],
     "zone": null
   },
@@ -11783,17 +11783,17 @@
   },
   "The Palace Condominium": {
     "author": "rlx",
-    "error_m": 4.811,
+    "error_m": 4.197,
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Motorboats (A)",
       "Vice Beach (B)",
-      "Port Vice City (B)"
+      "Port Vice City (A)"
     ],
     "xyz": [
-      -857.6525046382405,
-      -1548.7823149589785,
-      135.3779726795016
+      -855.3691829114499,
+      -1548.9529853652812,
+      135.3046697179412
     ],
     "zone": null
   },
@@ -14845,31 +14845,33 @@
   },
   "Two Tequesta Point (NW)": {
     "xyz": [
-      32.65,
-      -1067.465,
-      160.479
+      33.822173372898256,
+      -1061.2085606522974,
+      160.67788828635108
     ],
     "source_cameras": [
+      "Grassrivers 02 (Watson Bay)",
       "Leonida Keys 01 (Airplane) (X)",
       "Skyline",
       "Vice City Postcard"
     ],
-    "error_m": 1.978,
+    "error_m": 2.205,
     "zone": "unknown",
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.3 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.6 m | "
   },
   "Two Tequesta Point (NE)": {
     "xyz": [
-      59.177,
-      -1049.847,
-      158.647
+      60.31419773941788,
+      -1048.2491922974716,
+      158.94772853586306
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Motorboats (A)",
-      "Vice City Postcard"
+      "Vice City Postcard",
+      "Port Vice City (A)"
     ],
-    "error_m": 2.806,
+    "error_m": 4.602,
     "zone": "unknown",
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.6 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.6 m | "
   },
@@ -14919,16 +14921,16 @@
   },
   "Two Tequesta Point (SE)": {
     "xyz": [
-      64.762,
-      -1077.321,
-      160.031
+      62.69160746290808,
+      -1076.6879404541082,
+      160.32728836991828
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
-      "Motorboats (B)",
+      "Motorboats (A)",
       "Port Vice City (A)"
     ],
-    "error_m": 1.213,
+    "error_m": 2.939,
     "zone": "unknown",
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.8 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.1 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.1 m | "
   },
@@ -15247,17 +15249,16 @@
   },
   "Three Tequesta Point (SE)": {
     "xyz": [
-      8.249,
-      -960.513,
-      206.279
+      8.945411517607003,
+      -960.1728601811537,
+      206.30920867940637
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
       "Motorboats (A)",
-      "Port Vice City (A)",
-      "Grassrivers 05 (Sunrise RV Park)"
+      "Port Vice City (A)"
     ],
-    "error_m": 2.018,
+    "error_m": 2.099,
     "zone": "brickell",
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.2 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.9 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 7.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.0 m | "
   },

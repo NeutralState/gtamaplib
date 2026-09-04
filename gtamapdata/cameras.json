@@ -3600,24 +3600,25 @@
   "id": "S2/62",
   "player": null,
   "xyz": [
-   -5268.775152327707,
-   -3368.205479228709,
-   33.35137871181261
+   -5306.41,
+   -3432.337,
+   31.121
   ],
   "ypr": [
-   282.2338,
-   -6.06,
-   0.0706
+   282.9453,
+   -5.8982,
+   0.0654
   ],
   "fov": [
-   49.536377882221416,
+   48.659,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 1 \u2014 Grassrivers 02 [1]"
+  "source": "Screenshot 1 \u2014 Grassrivers 02 [1]",
+  "notes": "RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 55 clics): mediane 1.8->3.6 px, move 74.4 m | "
  },
  "Mount Kalaga National Park 02 (Helicopter) (X)": {
   "id": "S2/66",
@@ -5196,17 +5197,17 @@
   "id": "S2/76",
   "player": null,
   "xyz": [
-   -3554.18,
-   -4620.86,
-   13.0
+   -3548.82,
+   -4614.265,
+   24.547
   ],
   "ypr": [
-   321.193,
-   -3.872,
-   0.248
+   321.1765,
+   -4.0529,
+   -0.0797
   ],
   "fov": [
-   29.63,
+   29.723,
    null
   ],
   "size": [
@@ -5216,7 +5217,7 @@
   "source": "Screenshot \u2014 Grassrivers 05 (seaplane, Sunrise RV Park, skyline Vice City)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "SOLVE-MARQUAGES-4 2026-09-03: 34 clics (dont Four Seasons x5, Miami Tower, Quantum S); position \u00b1(1,2) m, mediane 9.4 px; z fige 13 | AJOUT 2026-09-03: position approximative donnee par Alexandre ('la plus approximative au monde'), fov initial 50 a caler sur la skyline (Four Seasons = plus haute tour)."
+  "notes": "RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 35 clics): mediane 8.2->6.4 px, move 14.3 m | SOLVE-MARQUAGES-4 2026-09-03: 34 clics (dont Four Seasons x5, Miami Tower, Quantum S); position \u00b1(1,2) m, mediane 9.4 px; z fige 13 | AJOUT 2026-09-03: position approximative donnee par Alexandre ('la plus approximative au monde'), fov initial 50 a caler sur la skyline (Four Seasons = plus haute tour)."
  },
  "Vice City 10 (Pegassi Towers)": {
   "id": "S2/77",
