@@ -1567,7 +1567,7 @@ async function init() {
     // (memes URLs qu'avant -> les navigateurs resservaient les vieilles tiles)
     // [TILE-SOURCES-V1] source par nom de dossier; cache-buster = le nom
     const src = (window._tileSrc && window._tileSrc !== 'yanis,14')
-      ? '&src=' + encodeURIComponent(window._tileSrc) + '&v=' + encodeURIComponent(window._tileSrc + '.4')
+      ? '&src=' + encodeURIComponent(window._tileSrc) + '&v=' + encodeURIComponent(window._tileSrc + '.5')
       : '';
     return `/tiles/${z}/${z},${y},${x}.jpg?v=14${src}`;
   }
@@ -1642,12 +1642,17 @@ async function init() {
     const zoomReal = Math.log2(32 * s);
     const zoom = Math.min(TILES_MAX_Z, Math.max(TILES_MIN_Z, zoomReal));
     const zInt = Math.min(TILES_MAX_Z, Math.max(TILES_MIN_Z, Math.ceil(zoom)));
-    const tileWorldPxFactor = (1024 * Math.pow(2, zoom)) / TILES_MAP_W;  // tile-pixels per world meter
+    // [DEZOOM-V16] sous z0 (32 m/px) on continue de reduire les tuiles z0 au
+    // lieu de figer le fond a 256 px/tuile: sinon, en dezoomant fort, le fond
+    // (V16) restait a une echelle fixe pendant que l'overlay continuait a
+    // retrecir — la carte semblait "disparaitre"/se desaligner.
+    const zoomDraw = Math.min(TILES_MAX_Z, zoomReal);
+    const tileWorldPxFactor = (1024 * Math.pow(2, zoomDraw)) / TILES_MAP_W;  // tile-pixels per world meter
     const cxPix = (centerX + TILES_ZERO_X) * tileWorldPxFactor;
     const cyPix = (TILES_ZERO_Y - centerY) * tileWorldPxFactor;
     const offX = cssW / 2 - cxPix;
     const offY = cssH / 2 - cyPix;
-    const drawSize = TILES_SIZE * Math.pow(2, zoom - zInt);
+    const drawSize = TILES_SIZE * Math.pow(2, zoomDraw - zInt);
 
     tilesCtx.fillStyle = '#0a0a0c';
     tilesCtx.fillRect(0, 0, cssW, cssH);

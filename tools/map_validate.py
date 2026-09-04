@@ -48,16 +48,23 @@ sys.path.insert(0, os.path.join(REPO, 'tools'))
 LANDMARKS_JSON = os.path.join(REPO, 'gtamapdata', 'landmarks.json')
 TIERS_JSON = os.path.join(REPO, 'tools', 'generated', 'confidence_tiers.json')
 VALIDATED_JSON = os.path.join(REPO, 'gtamapdata', 'map_validated.json')
-TILES_DIR_LOCAL = os.path.join(REPO, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,14')
+# [TILES-SRC-V16, 2026-09-02] source: yanis,16 (V16 calquee sur la leak, 1 m/px,
+# pyramide z0-z5) des que sa pyramide existe, sinon yanis,14 (z6, 0.5 m/px,
+# avec telechargement distant). Override: GTAMAP_TILES_SRC=...
+_TILES_ROOT = os.path.join(REPO, 'vendor', 'gtadb.org', 'maps', 'tiles', '6')
+TILES_SRC = os.environ.get('GTAMAP_TILES_SRC') or (
+    'yanis,16' if os.path.isdir(os.path.join(_TILES_ROOT, 'yanis,16')) else 'yanis,14')
+TILES_DIR_LOCAL = os.path.join(_TILES_ROOT, TILES_SRC)
 TILE_CACHE = os.path.join(REPO, 'tools', 'generated', 'tile_cache')
-TILE_URL = 'https://gtadb.org/maps/tiles/6/yanis,14/{z}/{z},{y},{x}.jpg'
+TILE_URL = 'https://gtadb.org/maps/tiles/6/yanis,14/{z}/{z},{y},{x}.jpg' if TILES_SRC == 'yanis,14' else None
 OUT_HTML = os.path.join(REPO, 'tools', 'generated', 'map_validate_sheet.html')
 
-Z = 6
-MPPX = 32768 / (1024 * 2 ** Z)      # 0.5 m/px
+_RANGES = {5: [[0, 17], [77, 95]], 6: [[0, 34], [155, 190]]}
+Z = 6 if TILES_SRC == 'yanis,14' else 5
+MPPX = 32768 / (1024 * 2 ** Z)      # 0.5 m/px (z6) ou 1.0 m/px (z5)
 ZX = ZY = 16384
 TS = 256
-RANGE = [[0, 34], [155, 190]]        # [[x0,y0],[x1,y1]] valid tiles at z=6
+RANGE = _RANGES[Z]                    # [[x0,y0],[x1,y1]] valid tiles at Z
 
 
 def load_validated():
@@ -85,6 +92,8 @@ def get_tile(ty, tx):
     p = os.path.join(TILES_DIR_LOCAL, str(Z), f'{Z},{ty},{tx}.jpg')
     if os.path.exists(p):
         return p
+    if TILE_URL is None:
+        return None          # pyramide locale seulement (V16): pas de fallback distant
     os.makedirs(TILE_CACHE, exist_ok=True)
     p = os.path.join(TILE_CACHE, f'{Z}_{ty}_{tx}.jpg')
     if os.path.exists(p):

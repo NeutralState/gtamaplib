@@ -120,6 +120,7 @@
     <span class="lchip on" id="ly-meshes" title="Procedural structure meshes">Meshes</span>
     <span class="lchip on" id="ly-terrain" title="Real terrain (leak L16 height map, z=706.07v-301.01)">Terrain</span>
     <span class="lchip" id="ly-leakmap" title="Base map: full leak map (composite over yanis)">Leak map</span>
+    <span class="lchip" id="ly-v16" title="Base map: YANIS V16 community map (1 m/px, georeferenced x=px-16992, y=11008-py)">V16</span>
     <span class="lchip" id="ly-drape" title="Drape the 2D map onto the relief (lakes, roads, details)">Drape</span>
     <span class="lchip" id="ly-contours" title="Elevation contours (50 m major, 10 m minor)">Contours</span>
     <span class="lchip" id="btn-orbit" title="Slow cinematic orbit around the current target — great for captures">Orbit</span>
@@ -162,9 +163,9 @@
          value="50" style="width:90px;vertical-align:middle"></label>
   <label style="margin-left:10px" title="[POSE-EDIT] fov hypothesis: the frame stays full-screen, the relief behind adapts — when they match, Save">fov <input id="pov-fov" type="range" min="60" max="160" value="100" step="0.1" style="width:110px"></label>
   <span id="pov-fov-v" style="color:#facc15;font-size:10px"></span>
-  <label style="margin-left:8px" title="[POSE-EDIT] yaw hypothesis, +/-15 deg. Wheel = 0.01, Shift+drag = ultra-fine (0.005/px)">yaw <input id="pov-yaw" type="range" min="-1500" max="1500" value="0" style="width:130px"></label>
+  <label style="margin-left:8px" title="[POSE-EDIT] yaw hypothesis, +/-15 deg. drag = 0.029 deg/px (damped), Shift+drag = 0.005 deg/px, wheel = 0.01/notch">yaw <input id="pov-yaw" type="range" min="-1500" max="1500" value="0" style="width:130px"></label>
   <span id="pov-yaw-v" style="color:#facc15;font-size:10px"></span>
-  <label style="margin-left:8px" title="[POSE-EDIT] pitch hypothesis, +/-15 deg. Wheel = 0.01, Shift+drag = ultra-fine (0.005/px)">pitch <input id="pov-pitch" type="range" min="-1500" max="1500" value="0" style="width:130px"></label>
+  <label style="margin-left:8px" title="[POSE-EDIT] pitch hypothesis, +/-15 deg. drag = 0.029 deg/px (damped), Shift+drag = 0.005 deg/px, wheel = 0.01/notch">pitch <input id="pov-pitch" type="range" min="-1500" max="1500" value="0" style="width:130px"></label>
   <span id="pov-pitch-v" style="color:#facc15;font-size:10px"></span>
   <label style="margin-left:8px" title="[POSE-EDIT] roll hypothesis, +/-3 deg — tilts the world behind the frame">roll <input id="pov-roll" type="range" min="-300" max="300" value="0" style="width:110px"></label>
   <span id="pov-roll-v" style="color:#facc15;font-size:10px"></span>
@@ -592,7 +593,7 @@ const data = await (await fetch('/api/scene3d')).json();
       try {
         const s0v = localStorage.getItem('ui.tileSrc') || 'leak,1';
         const srcQ = s0v !== 'yanis,14'
-          ? `&src=${encodeURIComponent(s0v)}&v=${encodeURIComponent(s0v + '.4')}` : '';
+          ? `&src=${encodeURIComponent(s0v)}&v=${encodeURIComponent(s0v + '.5')}` : '';
         const strips = [];
         const jobs = [];
         const x1w = x0 + (nx - 1) * step;
@@ -930,7 +931,7 @@ const data = await (await fetch('/api/scene3d')).json();
       terraUni.uDrape.value = drapeTex;
       let s0 = localStorage.getItem('ui.tileSrc') || 'leak,1';
       if (s0 === 'yanis') s0 = 'yanis,14'; if (s0 === 'leak') s0 = 'leak,1';
-      const srcQ = s0 !== 'yanis,14' ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.4')}` : '';
+      const srcQ = s0 !== 'yanis,14' ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.5')}` : '';
       const t0x = Math.floor((16384 + x0) / MPX / 256), t1x = Math.floor((16384 + x1) / MPX / 256);
       const t0y = Math.floor((16384 - yTop) / MPX / 256), t1y = Math.floor((16384 - y0) / MPX / 256);
       for (let ty = t0y; ty <= t1y; ty++) for (let tx = t0x; tx <= t1x; tx++) {
@@ -1201,9 +1202,17 @@ for (const [tier, cams] of Object.entries(byTier)) {
   }
   const g = new THREE.BufferGeometry();
   g.setAttribute('position', new THREE.Float32BufferAttribute(verts, 3));
+  // [STANDOUT-V1] les frustums doivent sauter aux yeux: toujours au-dessus du
+  // relief (depthTest off), opacite haute, + un halo additif derriere.
+  // [FRUSTUM-LIGHT, 2026-09-02] "c'est agressant": traits fins et discrets,
+  // plus de halo additif; toujours visibles a travers le relief (depthTest
+  // off) mais a faible opacite pour ne pas ecraser la map V16 et les meshes.
   const m = new THREE.LineBasicMaterial({ color: TIER_COLORS[tier],
-    transparent: true, opacity: tier === 'unverified' ? 0.22 : 0.65 });
-  layers.cams.add(new THREE.LineSegments(g, m));
+    transparent: true, opacity: tier === 'unverified' ? 0.16 : 0.32,
+    depthTest: false, depthWrite: false });
+  const seg = new THREE.LineSegments(g, m);
+  seg.renderOrder = 10;
+  layers.cams.add(seg);
 }
 // points invisibles aux apex pour le hover
 const pickGeo = new THREE.BufferGeometry();
@@ -1258,8 +1267,18 @@ if (meshVerts.length) {
   const mg = new THREE.BufferGeometry();
   mg.setAttribute('position', new THREE.Float32BufferAttribute(meshVerts, 3));
   mg.setAttribute('color', new THREE.Float32BufferAttribute(meshCols, 3));
-  layers.meshes.add(new THREE.LineSegments(mg, new THREE.LineBasicMaterial({
-    vertexColors: true, transparent: true, opacity: 0.9 })));
+  // [STANDOUT-V1] meshes toujours visibles + halo additif
+  const mseg = new THREE.LineSegments(mg, new THREE.LineBasicMaterial({
+    vertexColors: true, transparent: true, opacity: 1.0,
+    depthTest: false, depthWrite: false }));
+  mseg.renderOrder = 12;
+  layers.meshes.add(mseg);
+  const mhalo = new THREE.LineSegments(mg, new THREE.LineBasicMaterial({
+    vertexColors: true, transparent: true, opacity: 0.35,
+    depthTest: false, depthWrite: false, blending: THREE.AdditiveBlending }));
+  mhalo.renderOrder = 11;
+  mhalo.scale.setScalar(1.0015);
+  layers.meshes.add(mhalo);
 }
 
 // ── ocean z=0 + grille ──
@@ -1288,7 +1307,7 @@ const groundCx = (tx0 * TMETERS - 16384) + groundW / 2;
 const groundCy = (16384 - ty0 * TMETERS) - groundH / 2;
 const ground = new THREE.Mesh(
   new THREE.PlaneGeometry(groundW, groundH),
-  new THREE.MeshBasicMaterial({ map: gtex, color: 0xb8bcc6 }));  // legerement assombri: les frustums restent les heros
+  new THREE.MeshBasicMaterial({ map: gtex, color: 0x6e737f }));  // [STANDOUT-V1] sol assombri: frustums/meshes ressortent
 ground.position.set(groundCx, groundCy, -0.8);
 layers.ground.add(ground);
 // [LEAK-TILES-3D] meme bascule que calib (localStorage partage 'ui.tileSrc');
@@ -1299,7 +1318,7 @@ function loadGroundTiles() {
   if (s0 === 'leak') s0 = 'leak,1';
   if (s0 === 'yanis') s0 = 'yanis,14';
   const src = s0 !== 'yanis,14'
-    ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.4')}` : '';
+    ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.5')}` : '';
   for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) {
     const img = new Image();
     img.onload = () => {
@@ -1310,16 +1329,27 @@ function loadGroundTiles() {
   }
 }
 loadGroundTiles();
+// [BASEMAP-V16] trois sources exclusives: yanis,14 (defaut) / leak,1 / yanis,16
 {
-  const chip = document.getElementById('ly-leakmap');
-  if ((localStorage.getItem('ui.tileSrc') || '').startsWith('leak')) chip.classList.add('on');
-  chip.addEventListener('click', () => {
-    const on = chip.classList.toggle('on');
-    localStorage.setItem('ui.tileSrc', on ? 'leak,1' : 'yanis,14');
+  const chipLeak = document.getElementById('ly-leakmap');
+  const chipV16 = document.getElementById('ly-v16');
+  const sync = () => {
+    const s = localStorage.getItem('ui.tileSrc') || 'yanis,14';
+    chipLeak.classList.toggle('on', s.startsWith('leak'));
+    chipV16.classList.toggle('on', s === 'yanis,16');
+  };
+  const setSrc = src => {
+    localStorage.setItem('ui.tileSrc', src);
+    sync();
     loadGroundTiles();
     // le drapage 3D depend de la source: le reconstruire s'il existe
     if (window.__rebuildDrape) window.__rebuildDrape();
-  });
+  };
+  sync();
+  chipLeak.addEventListener('click', () =>
+    setSrc(chipLeak.classList.contains('on') ? 'yanis,14' : 'leak,1'));
+  chipV16.addEventListener('click', () =>
+    setSrc(chipV16.classList.contains('on') ? 'yanis,14' : 'yanis,16'));
 }
 
 // ── [POSE-COPY] pose camera live (bas-gauche): vole jusqu'a repliquer une
@@ -1749,13 +1779,19 @@ for (const id of ['pov-fov', 'pov-yaw', 'pov-pitch', 'pov-roll']) {
     }
     if (moved) s.dispatchEvent(new Event('input'));
   }, { passive: false });
-  // Shift+drag = mode ULTRA-FIN: 0.005 deg par pixel (0.02 % fov)
+  // [SLIDER-DAMP] tout drag est amorti: le drag natif donnait 0.23 deg/px
+  // (±15 deg sur 130 px) — increvable a regler. Normal = /8 (0.029 deg/px),
+  // Shift = ultra-fin 0.005 deg/px. On capture le pointeur pour que le
+  // slider natif ne prenne pas la main.
   s.addEventListener('pointerdown', ev => {
-    if (!ev.shiftKey) return;
     ev.preventDefault();
     ev.stopPropagation();
+    try { s.setPointerCapture(ev.pointerId); } catch (e) {}
     const start = { x: ev.clientX, v: +s.value };
-    const perPx = id === 'pov-fov' ? 0.02 : 0.5;
+    const fovMode = id === 'pov-fov';
+    const perPx = ev.shiftKey
+      ? (fovMode ? 0.02 : 0.5)                     // ultra-fin: 0.005 deg/px
+      : (fovMode ? 0.12 : 2.9);                    // normal amorti: 0.029 deg/px
     const move = e2 => {
       s.value = start.v + (e2.clientX - start.x) * perPx;
       s.dispatchEvent(new Event('input'));
@@ -2039,7 +2075,7 @@ addEventListener('pointermove', ev => {
         `tier ${c.tier || 'unverified'} &middot; ${c.n_pixels} markings` +
         (c.hud_locked ? ' &middot; HUD-locked' : '') +
         (rms != null ? `<br>RMS <span class="${rms > 10 ? 'rms-bad' : ''}">${rms}&#8242;</span>` : '') +
-        (c.pose_verified ? `<br><span style="color:#4ade80">&#10003; ${c.pose_verified.split(' — ')[0]}</span>` : '') +
+        (c.pose_verified ? `<br><span style="color:#4ade80">&#10003; ${String(c.pose_verified).split(' — ')[0]}</span>` : '') +
         (c.corners ? `<br><span style="color:var(--dim)">click to enter POV</span>` : '') +
         `</div>`;
     }

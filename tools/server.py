@@ -23,7 +23,13 @@ REPO_ROOT = os.path.dirname(TOOL_DIR)
 # [TILES-V1] gtadb.org tile checkout (sparse, vendored, gitignored).
 # Tiles are 256x256 JPGs at /vendor/gtadb.org/maps/tiles/6/yanis,14/{z}/{z},{y},{x}.jpg
 # 7 zoom levels (0-6). Served via /tiles/{z}/{filename} route.
-TILES_DIR = os.path.join(REPO_ROOT, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,14')
+# [TILES-SRC-V16, 2026-09-02] source par defaut des rendus cote serveur
+# (minimap cams, crop map des LMs, export): yanis,16 (V16 calquee sur la leak)
+# des que sa pyramide existe, sinon yanis,14. Override: GTAMAP_TILES_SRC=leak,1
+_TILES_ROOT = os.path.join(REPO_ROOT, 'vendor', 'gtadb.org', 'maps', 'tiles', '6')
+TILES_SRC = os.environ.get('GTAMAP_TILES_SRC') or (
+    'yanis,16' if os.path.isdir(os.path.join(_TILES_ROOT, 'yanis,16')) else 'yanis,14')
+TILES_DIR = os.path.join(_TILES_ROOT, TILES_SRC)
 
 sys.path.insert(0, GTAMAP_DIR)
 import gtamaplib as ml
@@ -92,7 +98,9 @@ def _minimap_cache_path(cam_name):
     try:
         cam = ml.get_camera(cam_name)
         if cam.xyz is not None:
-            key = f'{cam.xyz[0]:.0f}_{cam.xyz[1]:.0f}_{float(cam.ypr[0]):.0f}_{int(_MINIMAP_RADIUS_M)}'
+            # [TILES-SRC-V16] la source fait partie de la cle: un minimap V14
+            # en cache ne doit jamais etre resservi quand la source est V16
+            key = f'{cam.xyz[0]:.0f}_{cam.xyz[1]:.0f}_{float(cam.ypr[0]):.0f}_{int(_MINIMAP_RADIUS_M)}_{_minimap_safe_name(TILES_SRC)}'
         else:
             key = 'noxyz'
     except Exception:
@@ -666,7 +674,11 @@ class Handler(BaseHTTPRequestHandler):
             _src = qs.get('src', [''])[0]
             if _src == 'leak':
                 _src = 'leak,1'
-            _dir = TILES_DIR
+            # [TILES-SRC-V16] sans ?src, les clients (calib/view3d) veulent la
+            # V14 (ils n'envoient src que pour les autres sources): garder ce
+            # contrat, TILES_DIR (V16) ne sert que les rendus cote serveur.
+            _legacy = os.path.join(_TILES_ROOT, 'yanis,14')
+            _dir = _legacy if os.path.isdir(_legacy) else TILES_DIR
             if _src and re.fullmatch(r'[A-Za-z0-9,_.-]+', _src):
                 _cand = os.path.join(os.path.dirname(TILES_DIR), _src)
                 if os.path.isdir(_cand):
@@ -1916,8 +1928,32 @@ class Handler(BaseHTTPRequestHandler):
                     pass
             _cam_n_obs = _cam_meta.get('n_obs', 99)
 
+            # [ASSIST-UNCAL-V1, 2026-09-04] cam peu marquee (< 10 marquages) =
+            # on la CALIBRE: ce qu'il faut d'abord, ce sont des ancres solides
+            # (>= 3 cams sources, ou validees par tooltip in-game), pas des
+            # points mono-source a 7 km. Ordre: ancres, puis 2 sources, puis
+            # mono-source; a priorite egale, le plus proche d'abord.
+            _n_marked = len(target_pixels)
+            _validated = set()
+            try:
+                _mvp = os.path.join(GTAMAP_DIR, 'gtamapdata', 'map_validated.json')
+                if os.path.exists(_mvp):
+                    with open(_mvp) as _f:
+                        _validated = {k for k, v in json.load(_f).items()
+                                      if isinstance(v, dict) and v.get('verdict') == 'validated'}
+            except Exception:
+                pass
+
             def _assist_score(lm_name, n_src):
                 lt = _lm_tier.get(lm_name)
+                if _n_marked < 10:
+                    if lm_name in _validated:
+                        return 1, 'ancre tooltip (calibre cette cam)'
+                    if n_src >= 3 or lt in ('anchor', 'high'):
+                        return 1, 'ancre multi-cams (calibre cette cam)'
+                    if n_src == 2:
+                        return 2, '2 sources (redondance)'
+                    return 3, 'mono-source (a laisser pour plus tard)'
                 if n_src == 1:
                     return 1, '2nd source -> triangulation'
                 if lt in ('anchor', 'high') and _cam_n_obs < 5:
@@ -1966,10 +2002,10 @@ class Handler(BaseHTTPRequestHandler):
                         'type': 'point',
                         'pixel': [x, y],
                     }
-                    if smart and target_cam.xyz is not None:
+                    if target_cam.xyz is not None:
                         _dx = [lm_xyz[k] - target_cam.xyz[k] for k in range(3)]
                         _d = math.sqrt(sum(v * v for v in _dx))
-                        if _f_px and _d > 1.0 and (6.0 / _d) * _f_px < 2.0:
+                        if smart and _f_px and _d > 1.0 and (6.0 / _d) * _f_px < 2.0:
                             _smart_hidden += 1
                             continue
                         _entry['_d'] = _d
@@ -2030,7 +2066,9 @@ class Handler(BaseHTTPRequestHandler):
                         continue
 
             if assist:
-                projections.sort(key=lambda p: (p.get('priority', 3), p['name']))
+                # [ASSIST-UNCAL-V1] a priorite egale, le plus proche d'abord
+                # (gros dans l'image = cliquable), puis le nom.
+                projections.sort(key=lambda p: (p.get('priority', 3), p.get('_d', 1e9), p['name']))
             # [ASSIST-SMART-V1] occlusion pairwise sur les points projetes
             if smart:
                 _pts = [p for p in projections if p.get('_d') is not None]

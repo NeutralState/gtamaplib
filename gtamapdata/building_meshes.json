@@ -1,165 +1,186 @@
 {
-  "_comment": "Building wireframe meshes. Edges are LM suffixes (the part after 'BuildingName (...)' stripped). The frontend expands them to full LM names by prepending the building name. Add/remove edges here, then reload the calib UI.",
-  "Portofino Tower": {
-    "color": "#ff9d3d",
-    "source": "tools/gen_portofino_v4.py \u2014 auto-generated procedural mesh"
-  },
-  "Four Seasons Hotel Miami": {
-    "color": "#60a5fa",
-    "edges": [
-      [
-        "NE",
-        "NW"
-      ],
-      [
-        "NW",
-        "SW"
-      ],
-      [
-        "SW",
-        "SE"
-      ],
-      [
-        "SE",
-        "NE"
-      ],
-      [
-        "40NE",
-        "40NW"
-      ],
-      [
-        "40NW",
-        "40W"
-      ],
-      [
-        "40W",
-        "40E"
-      ],
-      [
-        "40E",
-        "40NE"
-      ],
-      [
-        "32NE",
-        "40NE"
-      ],
-      [
-        "40NE",
-        "56NE"
-      ],
-      [
-        "56NE",
-        "NE"
-      ],
-      [
-        "BE",
-        "BW"
-      ],
-      [
-        "E",
-        "BE"
-      ],
-      [
-        "BW",
-        "NW"
-      ]
-    ]
-  },
-  "Sunshine Skyway Bridge": {
-    "color": "#4ade80",
-    "edges": [
-      [
-        "NR",
-        "N"
-      ],
-      [
-        "SR",
-        "S"
-      ],
-      [
-        "N",
-        "S"
-      ],
-      [
-        "NNR",
-        "NR"
-      ],
-      [
-        "SSR",
-        "SR"
-      ]
-    ]
-  },
-  "Jason's House (Main)": {
-    "color": "#4ade80",
-    "edges": [
-      [
-        "TNE",
-        "TSE"
-      ],
-      [
-        "TSE",
-        "TSW"
-      ],
-      [
-        "BNE",
-        "TNE"
-      ]
-    ]
-  },
-  "Jason's House (Roof)": {
-    "color": "#4ade80",
-    "edges": [
-      [
-        "SE",
-        "S"
-      ],
-      [
-        "S",
-        "SW"
-      ],
-      [
-        "SE",
-        "NE"
-      ]
-    ]
-  },
-  "Jason's House (South Veranda)": {
-    "color": "#4ade80",
-    "edges": [
-      [
-        "TNE",
-        "TSE"
-      ],
-      [
-        "TSE",
-        "TSW"
-      ]
-    ]
-  },
-  "Jason's House (Boat Ramp)": {
-    "color": "#4ade80",
-    "edges": [
-      [
-        "S",
-        "SW"
-      ],
-      [
-        "SW",
-        "NW"
-      ]
-    ]
-  },
-  "Stephen P. Clark Government Center": {
-    "color": "#fb923c",
-    "source": "plan-toit octogonal 2026-07-18: E/N/NE/NW/SE triangules (z=155.2-155.4), S/SW/W derives par symetrie centrale"
-  },
-  "Vizcayne South Condominium": {
-    "color": "#4ade80",
-    "source": "parametrique V4: octogone chanfreine + encoches + bande podium (fl.8) + couronne cruciforme 2 etages (hauteur 10.0m estimee silhouettes JD05/Squalo), 90 deg exact, echelle 1.080, s_z=1.15; topologie: \"The Vizcayne, Miami\" par aitortilla01 (sketchfab CC-BY-4.0)"
-  },
-  "Vizcayne North Condominium": {
-    "color": "#4ade80",
-    "source": "parametrique V4: octogone chanfreine + encoches + bande podium (fl.8) + couronne cruciforme 2 etages (hauteur 10.0m estimee silhouettes JD05/Squalo), 90 deg exact, echelle 1.080, s_z=1.15; topologie: \"The Vizcayne, Miami\" par aitortilla01 (sketchfab CC-BY-4.0)"
-  }
+ "_comment": "Building wireframe meshes. Edges are LM suffixes (the part after 'BuildingName (...)' stripped). The frontend expands them to full LM names by prepending the building name. Add/remove edges here, then reload the calib UI.",
+ "Portofino Tower": {
+  "color": "#ff9d3d",
+  "source": "tools/gen_portofino_v4.py — auto-generated procedural mesh"
+ },
+ "Four Seasons Hotel Miami": {
+  "color": "#60a5fa",
+  "edges": [
+   [
+    "NE",
+    "NW"
+   ],
+   [
+    "NW",
+    "SW"
+   ],
+   [
+    "SW",
+    "SE"
+   ],
+   [
+    "SE",
+    "NE"
+   ],
+   [
+    "40NE",
+    "40NW"
+   ],
+   [
+    "40NW",
+    "40W"
+   ],
+   [
+    "40W",
+    "40E"
+   ],
+   [
+    "40E",
+    "40NE"
+   ],
+   [
+    "32NE",
+    "40NE"
+   ],
+   [
+    "40NE",
+    "56NE"
+   ],
+   [
+    "56NE",
+    "NE"
+   ],
+   [
+    "BE",
+    "BW"
+   ],
+   [
+    "E",
+    "BE"
+   ],
+   [
+    "BW",
+    "NW"
+   ]
+  ]
+ },
+ "Jason's House (Main)": {
+  "color": "#4ade80",
+  "edges": [
+   [
+    "TNE",
+    "TSE"
+   ],
+   [
+    "TSE",
+    "TSW"
+   ],
+   [
+    "BNE",
+    "TNE"
+   ]
+  ]
+ },
+ "Jason's House (Roof)": {
+  "color": "#4ade80",
+  "edges": [
+   [
+    "SE",
+    "S"
+   ],
+   [
+    "S",
+    "SW"
+   ],
+   [
+    "SE",
+    "NE"
+   ]
+  ]
+ },
+ "Jason's House (South Veranda)": {
+  "color": "#4ade80",
+  "edges": [
+   [
+    "TNE",
+    "TSE"
+   ],
+   [
+    "TSE",
+    "TSW"
+   ]
+  ]
+ },
+ "Jason's House (Boat Ramp)": {
+  "color": "#4ade80",
+  "edges": [
+   [
+    "S",
+    "SW"
+   ],
+   [
+    "SW",
+    "NW"
+   ]
+  ]
+ },
+ "Stephen P. Clark Government Center": {
+  "color": "#fb923c",
+  "source": "plan-toit octogonal 2026-07-18: E/N/NE/NW/SE triangules (z=155.2-155.4), S/SW/W derives par symetrie centrale"
+ },
+ "Vizcayne South Condominium": {
+  "color": "#4ade80",
+  "source": "parametrique V4: octogone chanfreine + encoches + bande podium (fl.8) + couronne cruciforme 2 etages (hauteur 10.0m estimee silhouettes JD05/Squalo), 90 deg exact, echelle 1.080, s_z=1.15; topologie: \"The Vizcayne, Miami\" par aitortilla01 (sketchfab CC-BY-4.0)"
+ },
+ "Vizcayne North Condominium": {
+  "color": "#4ade80",
+  "source": "parametrique V4: octogone chanfreine + encoches + bande podium (fl.8) + couronne cruciforme 2 etages (hauteur 10.0m estimee silhouettes JD05/Squalo), 90 deg exact, echelle 1.080, s_z=1.15; topologie: \"The Vizcayne, Miami\" par aitortilla01 (sketchfab CC-BY-4.0)"
+ },
+ "536 Richard Jackson Blvd": {
+  "color": "#fbbf24",
+  "edges": [
+   [
+    "RNE",
+    "RSE"
+   ],
+   [
+    "RSE",
+    "RSW"
+   ],
+   [
+    "RSW",
+    "RNW"
+   ],
+   [
+    "RNW",
+    "RNE"
+   ]
+  ]
+ },
+ "Bocamar Bridge": {
+  "color": "#4ade80",
+  "edges": [
+   [
+    "NR",
+    "N"
+   ],
+   [
+    "SR",
+    "S"
+   ],
+   [
+    "N",
+    "S"
+   ],
+   [
+    "NNR",
+    "NR"
+   ],
+   [
+    "SSR",
+    "SR"
+   ]
+  ]
+ }
 }
