@@ -1207,7 +1207,7 @@ class Map:
         self.draw = ImageDraw.Draw(self.image)
         return self
 
-    def project_camera_parallel(self, cam_names, area=None, r=(0, 10000)):
+    def project_camera_parallel(self, cam_names, area=None, r=(0, 10000), processes=None):
         """
         Projects a camera image onto the map (multi-threaded)
         """
@@ -1237,7 +1237,8 @@ class Map:
             (self.scale, self.zero, map_y, map_x0, map_x1, r, cam_values, cam_images_np)
             for map_y in range(map_y0, map_y1)
         ]
-        with multiprocessing.Pool() as pool:
+        # [PROCESSES-V1 2026-09-05] processes=None -> max(1, cpu//2): ne plus saturer la machine
+        with multiprocessing.Pool(processes or max(1, (os.cpu_count() or 2)//2)) as pool:
             for results in tqdm(
                 pool.imap_unordered(_project_camera_parallel, pool_args),
                 total=len(pool_args)
