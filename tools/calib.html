@@ -315,6 +315,8 @@ header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(
 .cam-filter-chip[data-type=screenshots].on{border-color:var(--purple);color:var(--purple)}
 .cam-filter-chip[data-type="Screenshot 1"].on{border-color:var(--purple);color:var(--purple)} /* [SS-SPLIT-V1] */
 .cam-filter-chip[data-type="Screenshot 2"].on{border-color:#e879f9;color:#e879f9}
+.cam-filter-chip[data-type="Screenshot 3"].on{border-color:#f472b6;color:#f472b6} /* [T3-S3-V1] */
+.cam-filter-chip[data-type="Trailer 3"].on{border-color:#2dd4bf;color:#2dd4bf} /* [T3-S3-V1] Extended Look */
 /* [LEAK-TYPE-V1] sous-chips classe (A=vert anchor ... D=rouge libre) + tag liste */
 #leak-class-chips{margin-top:2px}
 .cam-filter-chip[data-lclass=A].on{border-color:#4ade80;color:#4ade80}
@@ -673,6 +675,8 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
         <button class="cam-filter-chip on" data-type="Trailer 2">T2</button>
         <button class="cam-filter-chip on" data-type="Screenshot 1">S1</button><!-- [SS-SPLIT-V1] -->
         <button class="cam-filter-chip on" data-type="Screenshot 2">S2</button>
+        <button class="cam-filter-chip on" data-type="Screenshot 3">S3</button><!-- [T3-S3-V1] derniers screenshots -->
+        <button class="cam-filter-chip on" data-type="Trailer 3">T3</button><!-- [T3-S3-V1] Extended Look -->
       </div>
       <div class="ls-filter-chips" id="leak-class-chips" title="Sous-filtre des LEAKs par classe de contrainte (A=pose HUD complete ... D=rien de verrouille)"><!-- [LEAK-TYPE-V1] -->
         <button class="cam-filter-chip on" data-lclass="A">A</button>
@@ -985,13 +989,17 @@ function updateClassLabel() {
     const src = cam.source || '';
     let t = 'Screenshot';
     if (src.startsWith('Trailer 1')) t = 'Trailer 1';
+    else if (src.startsWith('Trailer 3')) t = 'Trailer 3 (Extended Look)'; // [T3-S3-V1]
     else if (src.startsWith('Trailer')) t = 'Trailer 2';
     else if (src.startsWith('Screenshot 1')) t = 'Screenshot 1';   // [SS-SPLIT-V1]
     else if (src.startsWith('Screenshot 2')) t = 'Screenshot 2';
+    else if (src.startsWith('Screenshot 3')) t = 'Screenshot 3';   // [T3-S3-V1]
     el.textContent = t;
     if (t === 'Trailer 1') { el.style.color='var(--blue)'; el.style.borderColor='var(--blue)'; }
     else if (t === 'Trailer 2') { el.style.color='var(--green)'; el.style.borderColor='var(--green)'; }
+    else if (t.startsWith('Trailer 3')) { el.style.color='#2dd4bf'; el.style.borderColor='#2dd4bf'; }
     else if (t === 'Screenshot 2') { el.style.color='#e879f9'; el.style.borderColor='#e879f9'; }
+    else if (t === 'Screenshot 3') { el.style.color='#f472b6'; el.style.borderColor='#f472b6'; }
     else { el.style.color='var(--violet)'; el.style.borderColor='var(--violet)'; }
   }
 }
@@ -1182,7 +1190,7 @@ const NUM_IDS = {x:'num-x',y:'num-y',z:'num-z',yaw:'num-yaw',pitch:'num-pitch',r
 // ── Init ───────────────────────────────────────────────────────────────────
 // State for cam picker
 let allCams = [];
-const camFilters = { 'LEAK': true, 'Trailer 1': true, 'Trailer 2': true, 'Screenshot 1': true, 'Screenshot 2': true, 'screenshots': true }; // [SS-SPLIT-V1]
+const camFilters = { 'LEAK': true, 'Trailer 1': true, 'Trailer 2': true, 'Trailer 3': true, 'Screenshot 1': true, 'Screenshot 2': true, 'Screenshot 3': true, 'screenshots': true }; // [T3-S3-V1] // [SS-SPLIT-V1]
 let camSearchQ = '';
 // [LEAK-TYPE-V1] sous-filtre des leaks par classe de contrainte + tri campagne
 const leakClassFilters = { A: true, B: true, C: true, Cm: true, D: true, X: true };
@@ -1205,9 +1213,11 @@ function getCamType(c) {
   if (/^L\d/.test(c.id || '')) return 'LEAK'; // [L2-PANORAMA] leaks sans date de source (id L2/...)
   if (src.startsWith('Trailer 1')) return 'Trailer 1';
   if (src.startsWith('Trailer 2') || src === 'Trailer 2') return 'Trailer 2';
+  if (src.startsWith('Trailer 3')) return 'Trailer 3'; // [T3-S3-V1] Extended Look
   if (src.startsWith('Trailer')) return 'Trailer 2'; // fallback to T2 group
   if (src.startsWith('Screenshot 1')) return 'Screenshot 1';   // [SS-SPLIT-V1]
   if (src.startsWith('Screenshot 2')) return 'Screenshot 2';
+  if (src.startsWith('Screenshot 3')) return 'Screenshot 3';   // [T3-S3-V1]
   return 'screenshots';
 }
 

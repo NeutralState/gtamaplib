@@ -1476,8 +1476,12 @@ class Handler(BaseHTTPRequestHandler):
                     source_type = 'Trailer 1'
                 elif source.startswith('Trailer 2') or source == 'Trailer 2':
                     source_type = 'Trailer 2'
+                elif source.startswith('Trailer 3'):
+                    source_type = 'Trailer 3'  # [T3-S3-V1] Extended Look
                 elif source.startswith('Trailer'):
                     source_type = 'Trailer'
+                elif source.startswith('Screenshot 3'):
+                    source_type = 'Screenshot 3'  # [T3-S3-V1] derniers screenshots
                 else:
                     source_type = 'screenshots'
 

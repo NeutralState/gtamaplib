@@ -5186,12 +5186,12 @@
    1366,
    911
   ],
-  "source": "Mount Kalaga Postcard (webp, 2026-08-23)",
+  "source": "Screenshot 3 \u2014 Mount Kalaga Postcard (webp, 2026-08-23)",
   "constraint_class": null,
   "note": "position Alexandre FIXE; z/yaw/pitch par fit silhouette massif Ambrosia (18.8' sur 46 pts), fov par grille (vallee plate \u2014 fov peu contraint par la silhouette seule) [AUTO-SKYLINE-V1]. A verifier au POV. | POSE-EDIT: ajustee a la main par Alexandre dans l UI"
  },
  "Hank's Waffle (Bocamar Bridge)": {
-  "id": "S/EL-HanksWaffle",
+  "id": "T3/1",
   "xyz": [
    -6184.014,
    4511.199,
@@ -5210,7 +5210,7 @@
    3840,
    2160
   ],
-  "source": "GTA VI: An Extended Look (2026-08-28) ~11:26 \u2014 frame 4K via miroir Netflix showcase (VGS)",
+  "source": "Trailer 3 (Extended Look) \u2014 GTA VI: An Extended Look (2026-08-28) ~11:26 \u2014 frame 4K via miroir Netflix showcase (VGS)",
   "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 12 clics, 0 ancres): mediane 298.7->119.1 px, ancres None->None, move 4.3 m | ILOTS 2026-09-02: orientation+fov re-solves a position fixe sur les 4 clics de mats (N/BN/S/BS aux ilots), residus [3.1, 4.3, 5.0, 5.6] px; mats identiques. Le pres-champ 536 (clics Arch/RSW/Roofline) est vu en rasant a 2-7 m et n'est pas utilisable au pixel. Pas SOLVED. | ancien: AXE-SKYWAY-FINAL (2026-08-29): calibree sur le secteur Diner LOCKE (arches 536 + ligne mat t415 + tablier extrait au gradient, rms 2px). Teleobjectif fov~33 (plan serre Jason, compression \u2713). VERDICT PYLONES: mat visible gauche = SUD a t415 (0.2px); mat NORD t132 projete x~3680 = occulte par l'avant-toit de Hank's Waffles; la colonne jaune x2895 est un POTEAU D'AVANT-PLAN (aucun eventail, descend ",
   "player": null,
   "tag": "extended-look",
@@ -5238,7 +5238,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot \u2014 Grassrivers 05 (seaplane, Sunrise RV Park, skyline Vice City)",
+  "source": "Screenshot 3 \u2014 Grassrivers 05 (seaplane, Sunrise RV Park, skyline Vice City)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 35 clics, 8 ancres): mediane 6.3->6.4 px, ancres 1.9->2.1, move 0.8 m | RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 35 clics): mediane 8.2->6.4 px, move 14.3 m | SOLVE-MARQUAGES-4 2026-09-03: 34 clics (dont Four Seasons x5, Miami Tower, Quantum S); position \u00b1(1,2) m, mediane 9.4 px; z fige 13 | AJOUT 2026-09-03: position approximative donnee par Alexandre ('la plus approximative au monde'), fov initial 50 a caler sur la skyline (Four Seasons = plus haute tour)."
@@ -5264,7 +5264,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot \u2014 Vice City 10 (Pegassi Towers, Brickell Key vu du sud-est, en hauteur)",
+  "source": "Screenshot 3 \u2014 Vice City 10 (Pegassi Towers, Brickell Key vu du sud-est, en hauteur)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RECAL-ANCRES 2026-09-06 (tooltips x3, 17 clics, 6 ancres): mediane 1.5->1.5 px, ancres 3.2->3.2, move 0.4 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne"
@@ -5290,7 +5290,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot \u2014 Vice City 11 (Megamundo, Ferris Wheel, Amphitheater; Bayfront Park vu de l ouest en hauteur, crepuscule)",
+  "source": "Screenshot 3 \u2014 Vice City 11 (Megamundo, Ferris Wheel, Amphitheater; Bayfront Park vu de l ouest en hauteur, crepuscule)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "SOLVE 2026-09-06c: 20 clics (skyline lointain, roue, 5 coins de toit Hard Rock derives de l octogone V16 avec retrait 3.4 m): mediane 2.7 px; z 87 m | SOLVE 2026-09-06 sur 13 clics d'Alexandre (roue + skyline Vice Beach 2-3.6 km): mediane 2.1 px, max 7; z 88 m confirme par les landmarks lointains (pas > 120 m) | z>120 m selon Alexandre (init 150), fov ~69 deg deduit de la taille apparente de la roue a sa position approx; yaw/pitch ajustes sur les 2 clics roue | POSITION APPROX Alexandre 2026-09-06 (-365.4,-427.7, 'zero precis': ne pas traiter comme ancre), z et orientation estimes; a resoudre librement des que les clics sont poses | AJOUT 2026-09-06 (fichier ~/Downloads/Vice_City_11.jpg, 3840x2160, converti PNG): pose INITIALE approximative a la main, a resoudre des que les clics sont poses (grande roue Skyviews, amphitheatre, tours Bayfront, skyline Vice Beach au fond)"
