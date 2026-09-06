@@ -4202,17 +4202,17 @@
   "id": "T1/40",
   "player": null,
   "xyz": [
-   -834.346,
-   1751.417,
-   -18.077
+   -823.4668094101253,
+   1599.284013379892,
+   6.47
   ],
   "ypr": [
-   152.2592,
-   0.0451,
-   0.0618
+   152.157,
+   -0.215,
+   -0.026
   ],
   "fov": [
-   60.358,
+   59.668,
    null
   ],
   "size": [
@@ -4221,7 +4221,7 @@
   ],
   "source": "Trailer 1 [?]",
   "note": "z ancre au sol height map (4.8+1.7, etait -0.1) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +6.6 m a d~1537 m) | orientation refittee sur markings (xyz fige), mediane 3' -> 2'",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | "
+  "notes": "RESTAURE 2026-09-06: le bundle Downtown elargi l'avait enfoncee a z=-18 (7 clics, profondeur degeneree) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | "
  },
  "Intersection (Bikers)": {
   "id": "T1/41",
