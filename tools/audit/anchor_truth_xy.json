@@ -784,6 +784,27 @@
     -31.68
    ],
    "src": "tooltip Alexandre 2026-09-06 octogone regulier"
+  },
+  "One Biscayne Tower (SE)": {
+   "xy": [
+    -444.3,
+    -304.7
+   ],
+   "src": "tooltip Alexandre 2026-09-06 (sommet V16); z rayon Vice City 11"
+  },
+  "One Biscayne Tower (SW)": {
+   "xy": [
+    -480.7,
+    -303.8
+   ],
+   "src": "tooltip Alexandre 2026-09-06 (sommet V16); z suppose = toit SE"
+  },
+  "One Biscayne Tower (NE)": {
+   "xy": [
+    -442.9,
+    -271.3
+   ],
+   "src": "sommet V16 frole a 0.08 m par le rayon du clic Vice City 11 (etiquete SW par erreur), z rayon"
   }
  },
  "footprint_only": {

@@ -18353,22 +18353,45 @@
     "zone": "unknown"
   },
   "One Biscayne Tower (SE)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
-    "zone": "unknown"
+    "xyz": [
+      -444.3,
+      -304.7,
+      113.5
+    ],
+    "source_cameras": [
+      "Truck (2)",
+      "Vice City 11 (Megamundo)"
+    ],
+    "error_m": 0.5,
+    "zone": "vice_city",
+    "note": "ANCRE 2026-09-06: tooltip Alexandre 2026-09-06 (sommet V16); z rayon Vice City 11"
   },
   "One Biscayne Tower (SW)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
-    "zone": "unknown"
+    "xyz": [
+      -480.7,
+      -303.8,
+      113.5
+    ],
+    "source_cameras": [
+      "Truck (2)"
+    ],
+    "error_m": 0.5,
+    "zone": "vice_city",
+    "note": "ANCRE 2026-09-06: tooltip Alexandre 2026-09-06 (sommet V16); z suppose = toit SE"
   },
   "One Biscayne Tower (NE)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
-    "zone": "unknown"
+    "xyz": [
+      -442.9,
+      -271.3,
+      120.1
+    ],
+    "source_cameras": [
+      "Truck (2)",
+      "Vice City 11 (Megamundo)"
+    ],
+    "error_m": 0.5,
+    "zone": "vice_city",
+    "note": "ANCRE 2026-09-06: sommet V16 frole a 0.08 m par le rayon du clic Vice City 11 (etiquete SW par erreur), z rayon"
   },
   "Stephen P. Clark Government Center (NE)": {
     "xyz": [

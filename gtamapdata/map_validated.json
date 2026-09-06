@@ -545,5 +545,17 @@
  "Hard Rock Cafe (SE)": {
   "verdict": "validated",
   "source": "tooltip Alexandre 2026-09-06 (Hard Rock Cafe, octogone regulier)"
+ },
+ "One Biscayne Tower (SE)": {
+  "verdict": "validated",
+  "source": "tooltip Alexandre 2026-09-06 (sommet V16); z rayon Vice City 11"
+ },
+ "One Biscayne Tower (SW)": {
+  "verdict": "validated",
+  "source": "tooltip Alexandre 2026-09-06 (sommet V16); z suppose = toit SE"
+ },
+ "One Biscayne Tower (NE)": {
+  "verdict": "validated",
+  "source": "sommet V16 frole a 0.08 m par le rayon du clic Vice City 11 (etiquete SW par erreur), z rayon"
  }
 }
