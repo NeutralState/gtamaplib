@@ -17,12 +17,22 @@
   "source": "tooltip in-game Alexandre 2026-09-06"
  },
  "Portofino Tower (NW)": {
-  "verdict": "validated",
-  "source": "tooltip in-game Alexandre 2026-09-03"
+  "verdict": "footprint_only",
+  "source": "tooltip in-game Alexandre 2026-09-03",
+  "footprint_xy": [
+   1739.8,
+   -182.5
+  ],
+  "note": "coin de toit != empreinte V16/tooltip; xy libre"
  },
  "Portofino Tower (NE)": {
-  "verdict": "validated",
-  "source": "tooltip in-game Alexandre 2026-09-03"
+  "verdict": "footprint_only",
+  "source": "tooltip in-game Alexandre 2026-09-03",
+  "footprint_xy": [
+   1767.8,
+   -172.0
+  ],
+  "note": "coin de toit != empreinte V16/tooltip; xy libre"
  },
  "Portofino Tower (S)": {
   "verdict": "validated",
@@ -105,12 +115,22 @@
   "source": "leak map close-up (Tequesta Retreat) georeferencee 2026-09-04"
  },
  "Vizcayne North Condominium (NE)": {
-  "verdict": "validated",
-  "source": "tooltip in-game Alexandre 2026-09-04"
+  "verdict": "footprint_only",
+  "source": "tooltip in-game Alexandre 2026-09-04",
+  "footprint_xy": [
+   -541.3,
+   159.4
+  ],
+  "note": "coin de toit != empreinte V16/tooltip; xy libre"
  },
  "Vizcayne North Condominium (NW)": {
-  "verdict": "validated",
-  "source": "tooltip in-game Alexandre 2026-09-04"
+  "verdict": "footprint_only",
+  "source": "tooltip in-game Alexandre 2026-09-04",
+  "footprint_xy": [
+   -560.8,
+   161.4
+  ],
+  "note": "coin de toit != empreinte V16/tooltip; xy libre"
  },
  "Vizcayne North Condominium (SE)": {
   "verdict": "validated",
@@ -129,12 +149,22 @@
   "source": "tooltip in-game Alexandre 2026-09-04"
  },
  "Vizcayne South Condominium (SW)": {
-  "verdict": "validated",
-  "source": "tooltip in-game Alexandre 2026-09-04"
+  "verdict": "footprint_only",
+  "source": "tooltip in-game Alexandre 2026-09-04",
+  "footprint_xy": [
+   -637.3,
+   81.9
+  ],
+  "note": "coin de toit != empreinte V16/tooltip; xy libre"
  },
  "Vizcayne South Condominium (NW)": {
-  "verdict": "validated",
-  "source": "tooltip in-game Alexandre 2026-09-04"
+  "verdict": "footprint_only",
+  "source": "tooltip in-game Alexandre 2026-09-04",
+  "footprint_xy": [
+   -636.8,
+   99.4
+  ],
+  "note": "coin de toit != empreinte V16/tooltip; xy libre"
  },
  "Park Grove Condominium (C) (SW core)": {
   "verdict": "validated",
@@ -178,7 +208,7 @@
  },
  "Stephen P. Clark Government Center (NW)": {
   "verdict": "validated",
-  "source": "tooltip in-game Alexandre 2026-09-06 (symetrise)"
+  "source": "tooltip in-game Alexandre 2026-09-06 (octogone symetrique)"
  },
  "Stephen P. Clark Government Center (N)": {
   "verdict": "validated",
@@ -190,7 +220,7 @@
  },
  "Stephen P. Clark Government Center (E)": {
   "verdict": "validated",
-  "source": "tooltip in-game Alexandre 2026-09-06 (symetrise)"
+  "source": "tooltip in-game Alexandre 2026-09-06 (octogone symetrique)"
  },
  "Stephen P. Clark Government Center (SE)": {
   "verdict": "validated",
@@ -206,7 +236,7 @@
  },
  "Stephen P. Clark Government Center (W)": {
   "verdict": "validated",
-  "source": "tooltip in-game Alexandre 2026-09-06 (symetrise)"
+  "source": "tooltip in-game Alexandre 2026-09-06 (octogone symetrique)"
  },
  "Stephen P. Clark Government Center (BNW)": {
   "verdict": "validated",
@@ -429,8 +459,13 @@
   "source": "tooltip in-game Alexandre 2026-09-06 (Four Seasons NE)"
  },
  "Four Seasons Hotel Miami (NW)": {
-  "verdict": "validated",
-  "source": "tooltip in-game Alexandre 2026-09-06 (Four Seasons NW)"
+  "verdict": "footprint_only",
+  "source": "tooltip in-game Alexandre 2026-09-06 (Four Seasons NW)",
+  "footprint_xy": [
+   -839.3,
+   -1264.3
+  ],
+  "note": "coin de toit != empreinte V16/tooltip; xy libre"
  },
  "Four Seasons Hotel Miami (40NE)": {
   "verdict": "validated",
@@ -441,8 +476,13 @@
   "source": "tooltip in-game Alexandre 2026-09-06 (Four Seasons NW)"
  },
  "Four Seasons Hotel Miami (32NE)": {
-  "verdict": "validated",
-  "source": "tooltip in-game Alexandre 2026-09-06 (Four Seasons NE)"
+  "verdict": "footprint_only",
+  "source": "tooltip in-game Alexandre 2026-09-06 (Four Seasons NE)",
+  "footprint_xy": [
+   -795.0,
+   -1280.7
+  ],
+  "note": "coin de toit != empreinte V16/tooltip; xy libre"
  },
  "Four Seasons Hotel Miami (56NE)": {
   "verdict": "validated",
@@ -457,11 +497,21 @@
   "source": "tooltip in-game Alexandre 2026-09-06"
  },
  "Four Seasons Hotel Miami (SE)": {
-  "verdict": "validated",
-  "source": "tooltip in-game Alexandre 2026-09-06 (Four Seasons)"
+  "verdict": "footprint_only",
+  "source": "tooltip in-game Alexandre 2026-09-06 (Four Seasons)",
+  "footprint_xy": [
+   -810.8,
+   -1322.4
+  ],
+  "note": "coin de toit != empreinte V16/tooltip; xy libre"
  },
  "Four Seasons Hotel Miami (SW)": {
-  "verdict": "validated",
-  "source": "tooltip in-game Alexandre 2026-09-06 (Four Seasons)"
+  "verdict": "footprint_only",
+  "source": "tooltip in-game Alexandre 2026-09-06 (Four Seasons)",
+  "footprint_xy": [
+   -855.1,
+   -1306.7
+  ],
+  "note": "coin de toit != empreinte V16/tooltip; xy libre"
  }
 }

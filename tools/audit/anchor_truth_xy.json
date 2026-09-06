@@ -127,13 +127,6 @@
    ],
    "src": "transcript/known"
   },
-  "Four Seasons Hotel Miami (32NE)": {
-   "xy": [
-    -795.0,
-    -1280.7
-   ],
-   "src": "transcript/known"
-  },
   "Four Seasons Hotel Miami (40NE)": {
    "xy": [
     -795.0,
@@ -159,27 +152,6 @@
    "xy": [
     -795.0,
     -1280.7
-   ],
-   "src": "transcript/known"
-  },
-  "Four Seasons Hotel Miami (NW)": {
-   "xy": [
-    -839.3,
-    -1264.3
-   ],
-   "src": "transcript/known"
-  },
-  "Four Seasons Hotel Miami (SE)": {
-   "xy": [
-    -810.8,
-    -1322.4
-   ],
-   "src": "transcript/known"
-  },
-  "Four Seasons Hotel Miami (SW)": {
-   "xy": [
-    -855.1,
-    -1306.7
    ],
    "src": "transcript/known"
   },
@@ -351,20 +323,6 @@
    ],
    "src": "transcript/known"
   },
-  "Portofino Tower (NE)": {
-   "xy": [
-    1767.8,
-    -172.0
-   ],
-   "src": "transcript/known"
-  },
-  "Portofino Tower (NW)": {
-   "xy": [
-    1739.8,
-    -182.5
-   ],
-   "src": "transcript/known"
-  },
   "Portofino Tower (S)": {
    "xy": [
     1763.3,
@@ -374,10 +332,10 @@
   },
   "Prison Tower (1)": {
    "xy": [
-    -2909.7,
-    -2723.8
+    -2906.1,
+    -2723.0
    ],
-   "src": "git 19b772f"
+   "src": "sommet V16 choisi par les cams 2026-09-06 (tooltip voisin [-2909.7, -2723.8])"
   },
   "Prison Tower (2)": {
    "xy": [
@@ -442,13 +400,6 @@
    ],
    "src": "git 46675be"
   },
-  "Stephen P. Clark Government Center (E)": {
-   "xy": [
-    -844.31,
-    60.65
-   ],
-   "src": "git 46675be"
-  },
   "Stephen P. Clark Government Center (N)": {
    "xy": [
     -854.54,
@@ -460,13 +411,6 @@
    "xy": [
     -844.31,
     72.95
-   ],
-   "src": "git 46675be"
-  },
-  "Stephen P. Clark Government Center (NW)": {
-   "xy": [
-    -905.14,
-    85.4
    ],
    "src": "git 46675be"
   },
@@ -488,13 +432,6 @@
    "xy": [
     -915.36,
     60.65
-   ],
-   "src": "git 46675be"
-  },
-  "Stephen P. Clark Government Center (W)": {
-   "xy": [
-    -915.36,
-    72.95
    ],
    "src": "git 46675be"
   },
@@ -743,20 +680,6 @@
    ],
    "src": "git 46675be"
   },
-  "Vizcayne North Condominium (NE)": {
-   "xy": [
-    -541.3,
-    159.4
-   ],
-   "src": "transcript/known"
-  },
-  "Vizcayne North Condominium (NW)": {
-   "xy": [
-    -560.8,
-    161.4
-   ],
-   "src": "transcript/known"
-  },
   "Vizcayne North Condominium (SE)": {
    "xy": [
     -542.3,
@@ -766,22 +689,15 @@
   },
   "Vizcayne North Condominium (SW)": {
    "xy": [
-    -560.8,
-    109.4
+    -556.4,
+    108.6
    ],
-   "src": "transcript/known"
+   "src": "sommet V16 choisi par les cams 2026-09-06 (tooltip voisin [-560.8, 109.4])"
   },
   "Vizcayne South Condominium (NE)": {
    "xy": [
     -586.3,
     99.9
-   ],
-   "src": "transcript/known"
-  },
-  "Vizcayne South Condominium (NW)": {
-   "xy": [
-    -636.8,
-    99.4
    ],
    "src": "transcript/known"
   },
@@ -792,12 +708,108 @@
    ],
    "src": "transcript/known"
   },
+  "Stephen P. Clark Government Center (E)": {
+   "xy": [
+    -844.31,
+    60.65
+   ],
+   "src": "git 46675be"
+  },
+  "Stephen P. Clark Government Center (NW)": {
+   "xy": [
+    -905.14,
+    85.4
+   ],
+   "src": "git 46675be"
+  },
+  "Stephen P. Clark Government Center (W)": {
+   "xy": [
+    -915.36,
+    72.95
+   ],
+   "src": "git 46675be"
+  }
+ },
+ "footprint_only": {
+  "Four Seasons Hotel Miami (32NE)": {
+   "xy": [
+    -795.0,
+    -1280.7
+   ],
+   "src": "transcript/known",
+   "why": "coin de toit en retrait: cams concordantes a 0.9 m, 6.8 m a l interieur de l empreinte"
+  },
+  "Four Seasons Hotel Miami (NW)": {
+   "xy": [
+    -839.3,
+    -1264.3
+   ],
+   "src": "transcript/known",
+   "why": "coin de toit en retrait: cams concordantes a 2.0 m, 6.2 m a l interieur de l empreinte"
+  },
+  "Four Seasons Hotel Miami (SE)": {
+   "xy": [
+    -810.8,
+    -1322.4
+   ],
+   "src": "transcript/known",
+   "why": "coin de toit en retrait: cams concordantes a 2.4 m, 5.6 m a l interieur de l empreinte"
+  },
+  "Four Seasons Hotel Miami (SW)": {
+   "xy": [
+    -855.1,
+    -1306.7
+   ],
+   "src": "transcript/known",
+   "why": "coin de toit en retrait: cams concordantes a 0.5 m, 8.8 m a l interieur de l empreinte"
+  },
+  "Portofino Tower (NE)": {
+   "xy": [
+    1767.8,
+    -172.0
+   ],
+   "src": "transcript/known",
+   "why": "coin de toit en retrait: cams concordantes a 0.6 m, 7.7 m a l interieur de l empreinte"
+  },
+  "Portofino Tower (NW)": {
+   "xy": [
+    1739.8,
+    -182.5
+   ],
+   "src": "transcript/known",
+   "why": "coin de toit en retrait: cams concordantes a 2.6 m, 7.0 m a l interieur de l empreinte"
+  },
+  "Vizcayne North Condominium (NE)": {
+   "xy": [
+    -541.3,
+    159.4
+   ],
+   "src": "transcript/known",
+   "why": "coin de toit en retrait: cams concordantes a 1.5 m, 3.6 m a l interieur de l empreinte"
+  },
+  "Vizcayne North Condominium (NW)": {
+   "xy": [
+    -560.8,
+    161.4
+   ],
+   "src": "transcript/known",
+   "why": "coin de toit en retrait: cams concordantes a 0.5 m, 11.5 m a l interieur de l empreinte"
+  },
+  "Vizcayne South Condominium (NW)": {
+   "xy": [
+    -636.8,
+    99.4
+   ],
+   "src": "transcript/known",
+   "why": "coin de toit en retrait: cams concordantes a 1.9 m, 8.8 m a l interieur de l empreinte"
+  },
   "Vizcayne South Condominium (SW)": {
    "xy": [
     -637.3,
     81.9
    ],
-   "src": "transcript/known"
+   "src": "transcript/known",
+   "why": "coin de toit en retrait: cams concordantes a 1.0 m, 9.3 m a l interieur de l empreinte"
   }
  }
 }
