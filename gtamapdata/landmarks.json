@@ -18359,8 +18359,7 @@
       113.5
     ],
     "source_cameras": [
-      "Truck (2)",
-      "Vice City 11 (Megamundo)"
+      "Truck (2)"
     ],
     "error_m": 0.5,
     "zone": "vice_city",
@@ -20361,5 +20360,18 @@
     "error_m": 1.0,
     "zone": "vice_city",
     "note": "DERIVE 2026-09-06: coin de TOIT = coin d empreinte V16 (-61.22,-31.68) ramene de 3.37 m vers le centre de l octogone (retrait ajuste sur les 5 clics Vice City 11, z toit 14.49 m); l empreinte reste le landmark valide Hard Rock Cafe (SE)"
+  },
+  "One Biscayne Tower (ESE)": {
+    "xyz": [
+      -436.9,
+      -299.0,
+      114.7
+    ],
+    "source_cameras": [
+      "Vice City 11 (Megamundo)"
+    ],
+    "error_m": 0.5,
+    "zone": "vice_city",
+    "note": "ANCRE 2026-09-06: sommet V16 du decrochement est du polygone One Biscayne (7.5 m a l est du coin SE tooltip -444.3,-304.7), frole a 0.2 m par le rayon du clic Vice City 11; z rayon"
   }
 }
