@@ -13,17 +13,17 @@
   "tol_m": 3.0,
   "enforce": false,
   "point": [
-   -3523.984,
-   -523.26,
-   46.128
+   -3748.5,
+   -420.0,
+   NaN
   ],
   "normal": [
-   -0.02589,
-   0.67631,
-   -0.73616
+   0.88063,
+   -0.47381,
+   0.0
   ],
   "members_pattern": "^Vice City Sign \\([CEIV]\\d+\\)$",
-  "note": "panneau type Hollywood sur pente; fit gele 2026-07-18 (26/31 lettres <2m); check-only: les lettres restent mesurees"
+  "note": "Plan vertical de la ligne de base du panneau donnee par Alexandre 2026-09-06 (-3748.5,-420)-(-3777.5,-473.9); l'ancien plan (2026-07) etait ajuste sur des lettres triangulees 300 m trop loin"
  },
  "spc-roof-plane": {
   "type": "fixed_z",
