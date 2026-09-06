@@ -239,9 +239,9 @@
    16.2
   ],
   "ypr": [
-   116.00352192032051,
-   -4.9077021210566,
-   -0.11204192947847362
+   116.004,
+   -4.9161,
+   -0.1081
   ],
   "fov": [
    81.226,
@@ -252,7 +252,8 @@
    1080
   ],
   "source": "2021-07-12 12-19-51 [5244]",
-  "constraint_class": "C_pos_fov_only"
+  "constraint_class": "C_pos_fov_only",
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 7 clics, 0 ancres): mediane 0.4->0.5 px, ancres None->None, move 0.0 m | "
  },
  "Diner (S)": {
   "id": "L1/4",
@@ -295,9 +296,9 @@
    15.8
   ],
   "ypr": [
-   264.166,
-   -0.178,
-   0.0
+   264.176,
+   -0.3022,
+   0.2428
   ],
   "fov": [
    81.1,
@@ -308,7 +309,8 @@
    1080
   ],
   "source": "2021-07-12 12-19-51 [5273]",
-  "constraint_class": "C_pos_fov_only"
+  "constraint_class": "C_pos_fov_only",
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 8 clics, 0 ancres): mediane 3.1->3.4 px, ancres None->None, move 0.0 m | "
  },
  "Diner (SE) (A)": {
   "id": "L1/4",
@@ -465,9 +467,9 @@
    4.6
   ],
   "ypr": [
-   245.0327,
+   245.0284,
    -19.7989,
-   0.0774
+   0.0758
   ],
   "fov": [
    null,
@@ -479,7 +481,7 @@
   ],
   "source": "2021-09-10 16-37-50 [?]",
   "constraint_class": "C_pos_fov_only",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.7 m), residu mediane 1.8->1.4 px | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.7 m), residu mediane 1.8->1.4 px | "
  },
  "Port": {
   "id": "L1/7",
@@ -552,9 +554,9 @@
    67.7997
   ],
   "ypr": [
-   313.6914,
-   10.4611,
-   0.0
+   313.7387,
+   10.4478,
+   -0.0699
   ],
   "fov": [
    86.5152,
@@ -566,7 +568,8 @@
   ],
   "source": "2021-12-14 19-52-44 [?]",
   "constraint_class": "C_pos_fov_only",
-  "note": "pose LEAK (immobile par invariant CI) \u2014 la valeur hand-tuned de rlx upstream ee83436 a ete REJETEE: une pose issue du leak est exacte et ne se remplace pas par un reglage a l oeil. Archivee dans pose_alternatives.json."
+  "note": "pose LEAK (immobile par invariant CI) \u2014 la valeur hand-tuned de rlx upstream ee83436 a ete REJETEE: une pose issue du leak est exacte et ne se remplace pas par un reglage a l oeil. Archivee dans pose_alternatives.json.",
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 7 clics, 0 ancres): mediane 10.3->10.0 px, ancres None->None, move 0.0 m | "
  },
  "Pawn Shop (W)": {
   "id": "L1/10",
@@ -805,9 +808,9 @@
    3.7
   ],
   "ypr": [
-   0.0083,
-   0.0575,
-   0.0721
+   0.0092,
+   0.0587,
+   0.0773
   ],
   "fov": [
    null,
@@ -819,7 +822,7 @@
   ],
   "source": "2022-04-12 10-28-55 [?]",
   "constraint_class": "C_pos_fov_only",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.4 m), residu mediane 2.6->1.6 px | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RECAL-ANCRES 2026-09-06 (tooltips x3, 9 clics, 0 ancres): mediane 1.5->1.4 px, ancres None->None, move 0.0 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coin"
  },
  "Bar": {
   "id": "L1/15",
@@ -1255,9 +1258,9 @@
    20.9
   ],
   "ypr": [
-   307.3462,
-   -15.1951,
-   0.018
+   307.0669,
+   -15.3896,
+   -1.4855
   ],
   "fov": [
    null,
@@ -1268,7 +1271,8 @@
    1020
   ],
   "source": "2022-05-13 08-48-26 [?]",
-  "constraint_class": "C_pos_fov_only"
+  "constraint_class": "C_pos_fov_only",
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 5 clics, 4 ancres): mediane 3.8->1.9 px, ancres 2.4->1.9, move 0.0 m | "
  },
  "Tarmac": {
   "id": "L1/23",
@@ -1812,9 +1816,9 @@
    7.3
   ],
   "ypr": [
-   276.7,
-   -17.18,
-   0.0
+   276.7035,
+   -17.1743,
+   -0.0308
   ],
   "fov": [
    null,
@@ -1825,7 +1829,8 @@
    1080
   ],
   "source": "2022-08-11 10-01-02 [?]",
-  "constraint_class": "C_pos_fov_only"
+  "constraint_class": "C_pos_fov_only",
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 22 clics, 0 ancres): mediane 0.5->0.6 px, ancres None->None, move 0.0 m | "
  },
  "Strip Club (Lucia)": {
   "id": "L1/38",
@@ -1975,9 +1980,9 @@
    5.021
   ],
   "ypr": [
-   258.7297,
-   -9.9301,
-   -0.4548
+   258.7199,
+   -9.9313,
+   -0.4576
   ],
   "fov": [
    null,
@@ -1989,7 +1994,7 @@
   ],
   "source": "2022-09-01 14-37-21 [?]",
   "constraint_class": "C_pos_fov_only",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.3 m), residu mediane 1.4->0.6 px | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.3 m), residu mediane 1.4->0.6 px | "
  },
  "Pool": {
   "id": "L1/43",
@@ -2232,14 +2237,14 @@
   "id": "T1/6",
   "player": null,
   "xyz": [
-   2352.511,
-   1107.969,
-   50.333
+   2352.61,
+   1107.82,
+   50.316
   ],
   "ypr": [
-   112.6676,
-   -12.7767,
-   0.0781
+   112.6678,
+   -12.7763,
+   0.0807
   ],
   "fov": [
    62.747,
@@ -2250,23 +2255,23 @@
    2160
   ],
   "source": "Trailer 1 [415]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 2.3 m), residu mediane 3.0->1.2 px | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RECAL-ANCRES 2026-09-06 (tooltips x3, 53 clics, 2 ancres): mediane 1.2->1.5 px, ancres 0.2->0.7, move 0.5 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams "
  },
  "Vice Beach (B)": {
   "id": "T1/6",
   "player": null,
   "xyz": [
-   2251.744,
-   1068.342,
-   70.657
+   2251.837,
+   1068.188,
+   70.641
   ],
   "ypr": [
-   112.6682,
-   -5.8758,
-   0.0673
+   112.6678,
+   -5.8756,
+   0.0696
   ],
   "fov": [
-   62.815,
+   62.817,
    null
   ],
   "size": [
@@ -2274,7 +2279,7 @@
    2160
   ],
   "source": "Trailer 1 [489]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 1.8 m), residu mediane 2.7->1.3 px | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RECAL-ANCRES 2026-09-06 (tooltips x3, 91 clics, 3 ancres): mediane 1.2->1.3 px, ancres 0.9->0.9, move 0.0 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams "
  },
  "Brickell": {
   "id": "T1/7",
@@ -2328,17 +2333,17 @@
   "id": "T1/11",
   "player": null,
   "xyz": [
-   1510.62,
-   -782.98,
-   1.803
+   1510.915,
+   -782.993,
+   1.775
   ],
   "ypr": [
-   93.0238,
-   1.9849,
-   -0.018
+   93.0228,
+   1.9858,
+   -0.0196
   ],
   "fov": [
-   62.962,
+   62.964,
    null
   ],
   "size": [
@@ -2346,23 +2351,23 @@
    2160
   ],
   "source": "Trailer 1 [699]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 28 clics): mediane 3.0->2.0 px, move 1.3 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RECAL-ANCRES 2026-09-06 (tooltips x3, 28 clics, 3 ancres): mediane 2.7->1.7 px, ancres 1.4->1.9, move 0.9 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 28 clics): mediane 3.0->2.0 px, move 1.3 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 co"
  },
  "Motorboats (B)": {
   "id": "T1/11",
   "player": null,
   "xyz": [
-   1527.933,
-   -776.383,
-   2.489
+   1528.262,
+   -776.378,
+   2.472
   ],
   "ypr": [
-   88.994,
-   -0.2943,
-   0.0053
+   88.9955,
+   -0.2932,
+   0.0061
   ],
   "fov": [
-   62.411,
+   62.401,
    null
   ],
   "size": [
@@ -2370,23 +2375,23 @@
    2160
   ],
   "source": "Trailer 1 [745]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | "
  },
  "Convertible": {
   "id": "T1/12",
   "player": null,
   "xyz": [
-   -68.475,
-   545.651,
+   -68.546,
+   545.61,
    22.66
   ],
   "ypr": [
-   101.5245,
-   0.138,
-   0.8452
+   101.4739,
+   0.1343,
+   0.802
   ],
   "fov": [
-   64.463,
+   64.595,
    null
   ],
   "size": [
@@ -2394,7 +2399,7 @@
    2160
   ],
   "source": "Trailer 1 [746]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 46.0 m), residu mediane 131.7->0.9 px | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RECAL-ANCRES 2026-09-06 (tooltips x3, 22 clics, 5 ancres): mediane 1.4->1.4 px, ancres 6.0->5.9, move 0.0 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams "
  },
  "Wynwood": {
   "id": "T1/13",
@@ -2423,17 +2428,17 @@
   "id": "T1/16",
   "player": null,
   "xyz": [
-   -46.0,
-   1096.131,
-   70.557
+   -46.868,
+   1095.971,
+   70.541
   ],
   "ypr": [
-   286.2647,
-   -12.9214,
-   -0.0605
+   286.2599,
+   -12.9168,
+   -0.0601
   ],
   "fov": [
-   62.613,
+   62.595,
    null
   ],
   "size": [
@@ -2441,7 +2446,7 @@
    2160
   ],
   "source": "Trailer 1 [932]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.8 m), residu mediane 2.7->1.8 px | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 0.8 m), residu mediane "
  },
  "Ocean Drive (NW)": {
   "id": "T1/17",
@@ -2494,17 +2499,17 @@
   "id": "T1/20",
   "player": null,
   "xyz": [
-   1912.436,
-   1941.308,
-   103.485
+   1912.721,
+   1941.566,
+   103.447
   ],
   "ypr": [
-   162.8929,
-   -7.548,
-   0.221
+   162.8877,
+   -7.5431,
+   0.2221
   ],
   "fov": [
-   59.783,
+   59.761,
    null
   ],
   "size": [
@@ -2512,7 +2517,7 @@
    2160
   ],
   "source": "Trailer 1 [1124]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | RECALIB-PORTOFINO 2026-09-03 (demande Alexandre): pose complete re-solvee avec les 3 coins Portofino (tooltips) figes et ponderes x3; mediane 2.1->3.0 px, deplacement 4.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 7.9 m), residu mediane 4",
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RECAL-ANCRES 2026-09-06 (tooltips x3, 33 clics, 4 ancres): mediane 2.9->3.2 px, ancres 3.2->8.4, move 15.1 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | RECALIB-PORTOFINO 2026-09-03 (demande Alexandre): pose complete re-solvee avec l",
   "pose_verified": null
  },
  "Boat": {
@@ -2658,17 +2663,17 @@
   "id": "T1/29",
   "player": null,
   "xyz": [
-   -747.2,
-   2819.6,
-   9.94
+   -754.746,
+   2816.885,
+   4.481
   ],
   "ypr": [
-   202.29,
-   5.951,
-   -0.867
+   202.4954,
+   6.1311,
+   -0.7696
   ],
   "fov": [
-   61.657,
+   61.623,
    null
   ],
   "size": [
@@ -2676,7 +2681,8 @@
    2160
   ],
   "source": "Trailer 1 [1529]",
-  "note": "z ancre au sol height map (8.2+1.7, etait 2.0) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +7.9 m a d~1929 m) | orientation refittee sur markings (xyz fige), mediane 0' -> 0'"
+  "note": "z ancre au sol height map (8.2+1.7, etait 2.0) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +7.9 m a d~1929 m) | orientation refittee sur markings (xyz fige), mediane 0' -> 0'",
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 5 clics, 0 ancres): mediane 1.7->0.6 px, ancres None->None, move 9.7 m | "
  },
  "Interchange": {
   "id": "T1/30",
@@ -2798,24 +2804,25 @@
   "id": "T1/44",
   "player": null,
   "xyz": [
-   -6289.734417727313,
-   3531.734823055377,
-   9.952534879081323
+   -6292.831,
+   3531.293,
+   12.239
   ],
   "ypr": [
-   341.1532878769961,
-   -1.3765670185128083,
-   5.091134420515526e-17
+   342.1205,
+   12.3671,
+   -38.8904
   ],
   "fov": [
-   45.57272152830473,
+   45.575,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Trailer 1 [2168]"
+  "source": "Trailer 1 [2168]",
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 5 clics, 0 ancres): mediane 707.1->707.1 px, ancres None->None, move 3.9 m | "
  },
  "Uncle Jack's": {
   "id": "T1/46",
@@ -2845,24 +2852,25 @@
   "id": "T2/1",
   "player": null,
   "xyz": [
-   -1683.1458926785965,
-   -5152.594455751918,
-   25.131103346024094
+   -1682.967,
+   -5152.264,
+   25.16
   ],
   "ypr": [
-   133.94511820886441,
-   -7.870266775066446,
-   0.0053893603422790325
+   133.9713,
+   -7.8629,
+   -0.0105
   ],
   "fov": [
-   62.59454669534614,
+   62.518,
    null
   ],
   "size": [
    3840,
    1728
   ],
-  "source": "Trailer 2 [244]"
+  "source": "Trailer 2 [244]",
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 46 clics, 2 ancres): mediane 0.9->1.9 px, ancres 23.2->20.7, move 0.4 m | "
  },
  "Highway (Peacock Bay) (A)": {
   "id": "T2/12",
@@ -3035,17 +3043,17 @@
   "id": "T2/64",
   "player": null,
   "xyz": [
-   2039.713,
-   929.361,
-   2.359
+   2039.892,
+   929.209,
+   2.38
   ],
   "ypr": [
-   142.269,
-   2.0697,
-   0.7543
+   142.2333,
+   2.0545,
+   0.7705
   ],
   "fov": [
-   50.642,
+   50.692,
    null
   ],
   "size": [
@@ -3053,7 +3061,7 @@
    1728
   ],
   "source": "Trailer 2 [3802]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | RECALIB-PORTOFINO 2026-09-03 (demande Alexandre): pose complete re-solvee avec les 3 coins Portofino (tooltips) figes et ponderes x3; mediane 0.3->6.6 px, deplacement 1.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 4.0 m), residu mediane 7",
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | RECALIB-PORTOFINO 2026-09-03 (demande Alexandre): pose complete re-solvee avec les 3 coins Portofino (tooltips) figes et ponderes x3; mediane 0.3->6.6 px, deplacement 1.7 m | BA-DOWNTOWN 2026",
   "pose_verified": null
  },
  "Television": {
@@ -3083,17 +3091,17 @@
   "id": "T2/71",
   "player": null,
   "xyz": [
-   873.463,
-   852.636,
-   -0.969
+   873.763,
+   852.701,
+   -1.011
   ],
   "ypr": [
-   336.2494,
-   1.194,
-   -0.4224
+   336.2567,
+   1.1951,
+   -0.4244
   ],
   "fov": [
-   61.172,
+   61.183,
    null
   ],
   "size": [
@@ -3101,7 +3109,7 @@
    1728
   ],
   "source": "Trailer 2 [4202]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 7.2 m), residu mediane 4.0->1.4 px | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RECAL-ANCRES 2026-09-06 (tooltips x3, 20 clics, 0 ancres): mediane 1.5->1.5 px, ancres None->None, move 0.5 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cam"
  },
  "Truck (2)": {
   "id": "T2/74",
@@ -3200,17 +3208,17 @@
   "id": "T2/80",
   "player": null,
   "xyz": [
-   722.509,
-   1333.258,
-   16.313
+   723.507,
+   1333.593,
+   16.165
   ],
   "ypr": [
-   135.5371,
-   -2.5152,
-   0.0778
+   135.5285,
+   -2.5127,
+   0.08
   ],
   "fov": [
-   60.382,
+   60.377,
    null
   ],
   "size": [
@@ -3218,7 +3226,7 @@
    1728
   ],
   "source": "Trailer 2 [4665]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 9.2 m), residu mediane 3.5->1.9 px | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 9.2 m), residu mediane "
  },
  "Jason Duval 02 (Car)": {
   "id": "S2/2",
@@ -3247,40 +3255,41 @@
   "id": "S2/5",
   "player": null,
   "xyz": [
-   -1439.734384481444,
-   993.2532286489158,
-   52.373673528686496
+   -1441.71,
+   993.48,
+   52.057
   ],
   "ypr": [
-   237.2388669868988,
-   -3.8324240507151095,
-   0.15229959263301032
+   237.2786,
+   -3.8178,
+   0.1469
   ],
   "fov": [
-   41.99557628942113,
+   41.949,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 1 \u2014 Jason Duval 05 [1]"
+  "source": "Screenshot 1 \u2014 Jason Duval 05 [1]",
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 16 clics, 6 ancres): mediane 1.3->1.3 px, ancres 1.1->1.2, move 2.0 m | "
  },
  "Raul Bautista 03 (Motorboat)": {
   "id": "S2/31",
   "player": null,
   "xyz": [
-   -732.695,
-   -1933.306,
-   7.617
+   -731.442,
+   -1920.412,
+   8.908
   ],
   "ypr": [
-   354.6284,
-   0.3894,
-   1.2282
+   354.6656,
+   0.3281,
+   1.2927
   ],
   "fov": [
-   39.995,
+   40.489,
    null
   ],
   "size": [
@@ -3288,23 +3297,23 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Raul Batista 03 [1]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | FS-MESH 2026-09-04 (Alexandre: '4S meme pas bien aligne'): la pose tenait sur 2 landmarks circulaires (Bayshore TE, Brickell Arch E); re-solve avec 4 coins Four Seasons pris sur le mesh (etages 16/24) x2 + One Miami/Carbonell: FS 2.5-8 px, Carbonell 1.3, deplacement 50 m, z 5.4 (bateau). | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RECAL-ANCRES 2026-09-06 (tooltips x3, 10 clics, 4 ancres): mediane 138.8->4.2 px, ancres 326.9->3.2, move 53.2 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | FS-MESH 2026-09-04 (Alexandre: '4S meme pas bien aligne'): la pose tenait sur 2 landmarks circulaires (Bayshore TE, Brickell Arch E); re-solve avec 4 coins Four Seasons pris sur le mesh (etages 16/24) x2 + One Miami/Carbonell: FS 2.5-8 px, Carbonell 1.3, deplacement 50 m, z 5.4 (bateau). | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + toolti"
  },
  "Vice City 03 (Basketball)": {
   "id": "S2/39",
   "player": null,
   "xyz": [
-   1964.356,
-   1650.72,
-   40.655
+   1964.478,
+   1650.678,
+   40.633
   ],
   "ypr": [
-   109.9385,
-   -8.0812,
-   0.0419
+   109.9378,
+   -8.083,
+   0.0441
   ],
   "fov": [
-   55.376,
+   55.383,
    null
   ],
   "size": [
@@ -3312,7 +3321,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Vice City 03 [1]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 4.7 m), residu mediane 2.6->1.3 px | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 4.7 m), residu mediane "
  },
  "Vice City 05 (Vice Beach)": {
   "id": "S2/41",
@@ -3365,17 +3374,17 @@
   "id": "S2/44",
   "player": null,
   "xyz": [
-   -597.653,
-   967.78,
-   93.06
+   -595.609,
+   965.974,
+   92.817
   ],
   "ypr": [
-   214.2924,
-   -9.6299,
-   -0.0521
+   214.2673,
+   -9.6418,
+   -0.0509
   ],
   "fov": [
-   38.311,
+   38.383,
    null
   ],
   "size": [
@@ -3383,7 +3392,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Vice City 08 [1]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 25.4 m), residu mediane 13.2->1.8 px | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 25.4 m), residu mediane"
  },
  "Vice City 09 (La Perle)": {
   "id": "S2/45",
@@ -3412,24 +3421,25 @@
   "id": "S2/46",
   "player": null,
   "xyz": [
-   -4401.236240067111,
-   -7598.136268339488,
-   82.13284077515137
+   -4401.334,
+   -7597.65,
+   82.244
   ],
   "ypr": [
-   318.5139899545348,
-   -9.426316741726582,
-   0.09666323005572149
+   318.5034,
+   -9.4301,
+   0.1032
   ],
   "fov": [
-   62.51046629305509,
+   62.554,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 1 \u2014 Leonida Keys 01 [1]"
+  "source": "Screenshot 1 \u2014 Leonida Keys 01 [1]",
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 180 clics, 25 ancres): mediane 0.9->1.2 px, ancres 0.6->0.4, move 0.5 m | "
  },
  "Leonida Keys 05 (Boats)": {
   "id": "S2/50",
@@ -3459,25 +3469,26 @@
   "id": "S2/51",
   "player": null,
   "xyz": [
-   -5329.3,
-   3566.119,
-   68.112
+   -5329.445,
+   3567.254,
+   68.165
   ],
   "ypr": [
-   174.299,
-   4.3,
-   3.734
+   174.5206,
+   4.21,
+   3.6163
   ],
   "fov": [
-   47.312,
-   24.987
+   46.588,
+   null
   ],
   "size": [
    3840,
    2160
   ],
   "source": "Screenshot 1 \u2014 Port Gellhorn 01 [1]",
-  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m."
+  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m.",
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 23 clics, 0 ancres): mediane 24.2->24.1 px, ancres None->None, move 1.1 m | "
  },
  "Port Gellhorn 04 (Delights) (X)": {
   "id": "S2/54",
@@ -3604,17 +3615,17 @@
   "id": "S2/62",
   "player": null,
   "xyz": [
-   -5306.41,
-   -3432.337,
-   31.121
+   -5328.1,
+   -3439.221,
+   30.82
   ],
   "ypr": [
-   282.9453,
-   -5.8982,
-   0.0654
+   282.9709,
+   -5.8609,
+   0.0563
   ],
   "fov": [
-   48.659,
+   48.431,
    null
   ],
   "size": [
@@ -3622,7 +3633,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Grassrivers 02 [1]",
-  "notes": "RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 55 clics): mediane 1.8->3.6 px, move 74.4 m | "
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 55 clics, 11 ancres): mediane 2.9->2.6 px, ancres 3.9->2.6, move 22.8 m | RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 55 clics): mediane 1.8->3.6 px, move 74.4 m | "
  },
  "Mount Kalaga National Park 02 (Helicopter) (X)": {
   "id": "S2/66",
@@ -3680,17 +3691,17 @@
   "id": "S2/71",
   "player": null,
   "xyz": [
-   356.223,
-   1863.435,
-   36.829
+   356.031,
+   1863.788,
+   36.76
   ],
   "ypr": [
-   152.3492,
-   2.9688,
-   0.1626
+   152.3618,
+   2.9697,
+   0.1644
   ],
   "fov": [
-   68.804,
+   68.817,
    null
   ],
   "size": [
@@ -3698,47 +3709,48 @@
    1604
   ],
   "source": "Screenshot 1 \u2014 Vice City Postcard [?]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 9.9 m), residu mediane 2.2->1.3 px | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 9.9 m), residu mediane "
  },
  "Leonida Keys Postcard (X)": {
   "id": "S2/72",
   "player": null,
   "xyz": [
-   -3801.634393438013,
-   -6761.867184941497,
-   157.1435857211566
+   -3802.711,
+   -6762.925,
+   157.374
   ],
   "ypr": [
-   299.5267888445343,
-   -12.38087524532424,
-   0.013070284333605466
+   299.5576,
+   -12.373,
+   0.0334
   ],
   "fov": [
-   47.85371296647916,
+   47.796,
    null
   ],
   "size": [
    2563,
    1709
   ],
-  "source": "Screenshot 1 \u2014 Leonida Keys Postcard [?]"
+  "source": "Screenshot 1 \u2014 Leonida Keys Postcard [?]",
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 119 clics, 18 ancres): mediane 1.4->1.3 px, ancres 1.6->1.3, move 1.5 m | "
  },
  "Port Gellhorn Postcard (X)": {
   "id": "S2/73",
   "player": null,
   "xyz": [
-   -6550.0,
-   3608.0,
-   31.297
+   -6552.338,
+   3609.353,
+   31.396
   ],
   "ypr": [
-   48.774,
-   -3.231,
-   0.157
+   48.7655,
+   -3.2326,
+   0.1277
   ],
   "fov": [
-   71.531,
-   50.865
+   71.666,
+   null
   ],
   "size": [
    3240,
@@ -3746,7 +3758,8 @@
   ],
   "source": "Screenshot 1 \u2014 Port Gellhorn Postcard [1]",
   "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m. | POSE-EDIT: ajustee a la main par Alexandre dans l UI | YAW-ALEXANDRE 2026-08-30: yaw 51.97->48.77 applique sur son ordre (match du relief rendu). DISCORDANCE DOCUMENTEE: les 15 vrais objets passent de 27 a 145 px rms; les Container Cranes (ancrees par Diner W A/B LOCKEES, far-field 1px) partent a 109-122 px et AUCUNE position (teste +/-300m) ni fov ne les recupere. NB: le relief heightmap de ce secteur est marque \"DISPLAY ONLY - INFERE, mediane |err| 4.8m, r2=0.52\" dans terrain_hd_meta.json \u2014 il ne peut pas servir de reference de calibration. Backup: cameras.json.bak_pgh_yaw.",
-  "pose_verified": null
+  "pose_verified": null,
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 54 clics, 0 ancres): mediane 0.7->0.7 px, ancres None->None, move 2.7 m | "
  },
  "Ambrosia Postcard (X)": {
   "id": "S2/74",
@@ -4476,17 +4489,17 @@
   "id": "S2/37",
   "player": null,
   "xyz": [
-   -3797.467,
-   -417.969,
-   11.164
+   -3797.489,
+   -417.927,
+   11.151
   ],
   "ypr": [
-   215.5966,
-   21.6151,
-   -0.494
+   215.5885,
+   21.6085,
+   -0.4928
   ],
   "fov": [
-   78.119,
+   78.058,
    null
   ],
   "size": [
@@ -4496,7 +4509,7 @@
   "source": "Screenshot 1 \u2014 Vice City 01 [1]",
   "note": "pose RESECT-V2: resection sur 27 ancres, juge 12 ancres laissees dehors 351.7 -> 33.0 arcmin (2.67 m).",
   "pose_verified": null,
-  "notes": "RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 33 clics): mediane 5.0->2.7 px, move 1.2 m | V16-MARKER 2026-09-04 (Alexandre: 'deplace-les ou y a les markers sur cette map'): position = marqueur S2/37 dessine sur V16 (Yanis), z sol 8.9 + oeil; orientation/fov re-resolus sur 6 landmarks lointains (mediane 6.7 px). Lettres du panneau en quarantaine: le panneau est a 30-150 m (grand-angle 79 deg / tele 22 deg) et la base de 10 m entre marqueurs ne permet pas de les trianguler; il faut un tooltip du panneau. | "
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 33 clics, 33 ancres): mediane 2.7->2.6 px, ancres 2.7->2.6, move 0.0 m | RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 33 clics): mediane 5.0->2.7 px, move 1.2 m | V16-MARKER 2026-09-04 (Alexandre: 'deplace-les ou y a les markers sur cette map'): position = marqueur S2/37 dessine sur V16 (Yanis), z sol 8.9 + oeil; orientation/fov re-resolus sur 6 landmarks lointains (mediane 6.7 px). Lettres du panneau en quarantaine: le panneau est a 30-150 m (grand-angle 79 deg / tele 22 deg) et la base de 10 m entre marqueurs ne permet pas de les trianguler; il faut un tooltip du panneau. | "
  },
  "Vice City Sign": {
   "id": "T1/21",
@@ -4526,17 +4539,17 @@
   "id": "S3/1",
   "player": null,
   "xyz": [
-   1410.79,
-   -160.932,
-   78.404
+   1410.948,
+   -160.824,
+   78.393
   ],
   "ypr": [
-   103.1817,
-   -2.2694,
-   0.0999
+   103.1885,
+   -2.2688,
+   0.1033
   ],
   "fov": [
-   75.619,
+   75.623,
    null
   ],
   "size": [
@@ -4546,7 +4559,7 @@
   "source": "Screenshot 2 \u2014 Port Vice City [1]",
   "note": "pose HORIZON-V1: 70 ancres + silhouette height map (31 clics de crete), z libre.",
   "pose_verified": null,
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BADGE RETIRE 2026-09-04 (Alexandre: 'PVC est pas vraiment solved, on avait fit le relief mais le reste est pas si good'). Re-solve conjoint horizon_resect (70 ancres + traces Gellhorn Bluff + Crazy Hill, 4 restarts): ancres 4.0'->3.2', silhouette 2.2'->2.0'. | RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofin"
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RECAL-ANCRES 2026-09-06 (tooltips x3, 65 clics, 9 ancres): mediane 2.1->2.1 px, ancres 1.2->1.4, move 2.5 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BADGE RETIRE 2026-09-04 (Alexandre: 'PVC est pas vraiment solved, on avait fit le relief mais le reste est pas si good'). Re-solve conjoint horizon_resect (70 ancres + traces Gellhorn Bluff + Crazy Hill, 4 restarts): ancres 4.0'->3.2', silhouette 2.2'->2.0'. | RESTAURE 2026-09-04: pose remise a l'identique du commit 393e0df (le bundle Downtown du 0902/0903 l'avait deplacee malgre son statut SOLVED/leak - interdit). | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, g"
  },
  "Port Vice City (B)": {
   "id": "S3/2",
@@ -4670,17 +4683,17 @@
   "id": "S3/17",
   "player": null,
   "xyz": [
-   -2333.703,
-   -5551.035,
-   5.701
+   -2333.722,
+   -5551.007,
+   5.699
   ],
   "ypr": [
-   36.9576,
-   -2.0572,
-   0.0339
+   36.9607,
+   -2.0542,
+   0.0332
   ],
   "fov": [
-   57.436,
+   57.502,
    null
   ],
   "size": [
@@ -4688,23 +4701,23 @@
    2160
   ],
   "source": "Screenshot 2 \u2014 Jason's Safehouse Vehicles [1]",
-  "notes": "RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 64 clics): mediane 3.5->2.2 px, move 0.3 m | "
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 64 clics, 0 ancres): mediane 2.1->2.3 px, ancres None->None, move 0.0 m | RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 64 clics): mediane 3.5->2.2 px, move 0.3 m | "
  },
  "Landing Gear (B)": {
   "id": "T2/60",
   "player": null,
   "xyz": [
-   -323.841,
-   -196.49,
-   454.087
+   -322.868,
+   -196.141,
+   453.122
   ],
   "ypr": [
-   173.1167,
-   -47.9085,
-   0.3727
+   173.0075,
+   -47.794,
+   0.2613
   ],
   "fov": [
-   66.806,
+   66.863,
    null
   ],
   "size": [
@@ -4712,23 +4725,23 @@
    1728
   ],
   "source": "Trailer 2 [3612]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 3.7 m), residu mediane 12.1->0.5 px | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RECAL-ANCRES 2026-09-06 (tooltips x3, 5 clics, 0 ancres): mediane 0.7->0.7 px, ancres None->None, move 0.5 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams"
  },
  "Shitzu Squalo 01 (Bay)": {
   "id": "S3/27",
   "player": null,
   "xyz": [
-   372.129,
-   837.268,
-   2.343
+   373.161,
+   837.892,
+   2.292
   ],
   "ypr": [
-   139.7491,
-   2.3479,
-   2.3689
+   139.7429,
+   2.3463,
+   2.3696
   ],
   "fov": [
-   44.513,
+   44.497,
    null
   ],
   "size": [
@@ -4736,23 +4749,23 @@
    2160
   ],
   "source": "Screenshot 2 \u2014 Shitzu Squalo 01 [1]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 9.1 m), residu mediane 5.4->1.7 px | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 9.1 m), residu mediane "
  },
  "Starlet Motel": {
   "id": "T2/54",
   "player": null,
   "xyz": [
-   -5330.188,
-   3448.062,
-   66.8
+   -5330.41,
+   3445.632,
+   66.637
   ],
   "ypr": [
-   10.031,
-   7.5,
-   0.547
+   9.4146,
+   7.3602,
+   0.628
   ],
   "fov": [
-   53.593,
+   51.694,
    null
   ],
   "size": [
@@ -4760,7 +4773,8 @@
    1728
   ],
   "source": "Trailer 2 [4322]",
-  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m."
+  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m.",
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 7 clics, 0 ancres): mediane 4.0->2.5 px, ancres None->None, move 2.4 m | "
  },
  "Stock 305 Clothing Store 01 (Van)": {
   "id": "S3/31",
@@ -4813,17 +4827,17 @@
   "id": "S3/63",
   "player": null,
   "xyz": [
-   -442.804,
-   872.971,
-   183.489
+   -442.987,
+   871.139,
+   183.431
   ],
   "ypr": [
-   155.2085,
-   -5.786,
-   -0.9423
+   155.1897,
+   -5.791,
+   -0.9487
   ],
   "fov": [
-   25.627,
+   25.658,
    null
   ],
   "size": [
@@ -4831,7 +4845,7 @@
    2160
   ],
   "source": "Screenshot 2 \u2014 Vintage Vice City Outfits and Hairstyles 04 [1]",
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | "
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RECAL-ANCRES 2026-09-06 (tooltips x3, 5 clics, 1 ancres): mediane 0.4->0.3 px, ancres 0.1->0.1, move 0.5 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | "
  },
  "Vintage Vice City Pack 02 (Port)": {
   "id": "S3/55",
@@ -5177,17 +5191,17 @@
  "Hank's Waffle (Bocamar Bridge)": {
   "id": "S/EL-HanksWaffle",
   "xyz": [
-   -6180.1,
-   4510.28,
-   14.03
+   -6184.014,
+   4511.199,
+   15.416
   ],
   "ypr": [
-   86.498,
-   -2.46,
-   0.284
+   85.2446,
+   -3.5009,
+   -1.4252
   ],
   "fov": [
-   55.67,
+   60.909,
    null
   ],
   "size": [
@@ -5195,7 +5209,7 @@
    2160
   ],
   "source": "GTA VI: An Extended Look (2026-08-28) ~11:26 \u2014 frame 4K via miroir Netflix showcase (VGS)",
-  "notes": "ILOTS 2026-09-02: orientation+fov re-solves a position fixe sur les 4 clics de mats (N/BN/S/BS aux ilots), residus [3.1, 4.3, 5.0, 5.6] px; mats identiques. Le pres-champ 536 (clics Arch/RSW/Roofline) est vu en rasant a 2-7 m et n'est pas utilisable au pixel. Pas SOLVED. | ancien: AXE-SKYWAY-FINAL (2026-08-29): calibree sur le secteur Diner LOCKE (arches 536 + ligne mat t415 + tablier extrait au gradient, rms 2px). Teleobjectif fov~33 (plan serre Jason, compression \u2713). VERDICT PYLONES: mat visible gauche = SUD a t415 (0.2px); mat NORD t132 projete x~3680 = occulte par l'avant-toit de Hank's Waffles; la colonne jaune x2895 est un POTEAU D'AVANT-PLAN (aucun eventail, descend ",
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 12 clics, 0 ancres): mediane 298.7->119.1 px, ancres None->None, move 4.3 m | ILOTS 2026-09-02: orientation+fov re-solves a position fixe sur les 4 clics de mats (N/BN/S/BS aux ilots), residus [3.1, 4.3, 5.0, 5.6] px; mats identiques. Le pres-champ 536 (clics Arch/RSW/Roofline) est vu en rasant a 2-7 m et n'est pas utilisable au pixel. Pas SOLVED. | ancien: AXE-SKYWAY-FINAL (2026-08-29): calibree sur le secteur Diner LOCKE (arches 536 + ligne mat t415 + tablier extrait au gradient, rms 2px). Teleobjectif fov~33 (plan serre Jason, compression \u2713). VERDICT PYLONES: mat visible gauche = SUD a t415 (0.2px); mat NORD t132 projete x~3680 = occulte par l'avant-toit de Hank's Waffles; la colonne jaune x2895 est un POTEAU D'AVANT-PLAN (aucun eventail, descend ",
   "player": null,
   "tag": "extended-look",
   "note": "POSE-EDIT: ajustee a la main par Alexandre dans l UI | POSE-EDIT: ajustee a la main par Alexandre dans l UI",
@@ -5205,17 +5219,17 @@
   "id": "S2/76",
   "player": null,
   "xyz": [
-   -3548.82,
-   -4614.265,
-   24.547
+   -3548.974,
+   -4614.978,
+   24.762
   ],
   "ypr": [
-   321.1765,
-   -4.0529,
-   -0.0797
+   321.1764,
+   -4.0573,
+   -0.0919
   ],
   "fov": [
-   29.723,
+   29.727,
    null
   ],
   "size": [
@@ -5225,23 +5239,23 @@
   "source": "Screenshot \u2014 Grassrivers 05 (seaplane, Sunrise RV Park, skyline Vice City)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 35 clics): mediane 8.2->6.4 px, move 14.3 m | SOLVE-MARQUAGES-4 2026-09-03: 34 clics (dont Four Seasons x5, Miami Tower, Quantum S); position \u00b1(1,2) m, mediane 9.4 px; z fige 13 | AJOUT 2026-09-03: position approximative donnee par Alexandre ('la plus approximative au monde'), fov initial 50 a caler sur la skyline (Four Seasons = plus haute tour)."
+  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 35 clics, 8 ancres): mediane 6.3->6.4 px, ancres 1.9->2.1, move 0.8 m | RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 35 clics): mediane 8.2->6.4 px, move 14.3 m | SOLVE-MARQUAGES-4 2026-09-03: 34 clics (dont Four Seasons x5, Miami Tower, Quantum S); position \u00b1(1,2) m, mediane 9.4 px; z fige 13 | AJOUT 2026-09-03: position approximative donnee par Alexandre ('la plus approximative au monde'), fov initial 50 a caler sur la skyline (Four Seasons = plus haute tour)."
  },
  "Vice City 10 (Pegassi Towers)": {
   "id": "S2/77",
   "player": null,
   "xyz": [
-   325.942,
-   -1097.651,
-   68.135
+   327.024,
+   -1097.606,
+   68.0
   ],
   "ypr": [
-   63.78,
-   0.1887,
-   -0.0519
+   63.7946,
+   0.1946,
+   -0.0537
   ],
   "fov": [
-   72.426,
+   72.384,
    null
   ],
   "size": [
@@ -5251,6 +5265,6 @@
   "source": "Screenshot \u2014 Vice City 10 (Pegassi Towers, Brickell Key vu du sud-est, en hauteur)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | VIZCAYNE-TOOLTIPS 2026-09-04: 8 coins Vizcayne tooltips (ancres x3); clics VC10 re-etiquetes (labels tournes d'un coin: droite=NE, milieu=SE, gauche=SW, les deux tours). Solve 13 clics: mediane 5.2 px (Tequesta 2-3, Vizcayne 2-12, FS 1-12, Marina Blue SE 17), crete Ambrosia/Kalaga 2.4 px (etait 5.5). Yaw +0.22 vs pose clics d'origine. Tension residuelle: la forme de la crete prefere encore +0.6 deg (~90 m a 8.5 km) au prix de 20-27 px sur Tequesta/Marina Blue -> probablement LOD terrain lointain vs heightmap 12 m/px; pose gardee sur les ancres dures. | RELIEF-TRUTH 2026-09-04 (Alexandre: 'c'est bien le bon relief rien a change'): pose = solve conjoint 11 clics + 71 points de crete Ambrosia/Kalaga (trace tools/data/silhouettes.json, poids 8): crete 0.9 px (forme 1.2), clics: Four Season"
+  "notes": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RECAL-ANCRES 2026-09-06 (tooltips x3, 17 clics, 6 ancres): mediane 1.5->1.5 px, ancres 3.2->3.2, move 0.4 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | VIZCAYNE-TOOLTIPS 2026-09-04: 8 coins Vizcayne tooltips (ancres x3); clics VC10 re-etiquetes (labels tournes d'un coin: droite=NE, milieu=SE, gauche=SW, les deux tours). Solve 13 clics: mediane 5.2 px (Tequesta 2-3, Vizcayne 2-12, FS 1-12, Marina Blue SE 17), crete Ambrosia/Kalaga 2.4 px (etait 5.5). Yaw +0.22 vs pose clics d'origine. Tension residuelle: la forme de la crete prefere encore +0.6 deg (~90 m a 8.5 km) au prix de 20-27 px sur Tequesta/Marina Blue -> probablement LOD terrain lointain vs height"
  }
 }
