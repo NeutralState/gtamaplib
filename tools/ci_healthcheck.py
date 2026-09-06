@@ -84,6 +84,29 @@ def main():
     else:
         print('✓ invariants OK')
 
+    # ── 2b. ANCHOR-XY: les ancres validees (tooltips) gardent leur xy exact ──
+    ref_p = os.path.join(ROOT, 'tools', 'audit', 'anchor_truth_xy.json')
+    if os.path.exists(ref_p):
+        with open(ref_p) as f:
+            ref = json.load(f).get('anchors', {})
+        with open(os.path.join(ROOT, 'gtamapdata', 'landmarks.json')) as f:
+            lms = json.load(f)
+        drift = []
+        for k, v in ref.items():
+            lm = lms.get(k)
+            if not isinstance(lm, dict) or not isinstance(lm.get('xyz'), list):
+                continue
+            d = ((lm['xyz'][0] - v['xy'][0]) ** 2 + (lm['xyz'][1] - v['xy'][1]) ** 2) ** 0.5
+            if d > 0.05:
+                drift.append((round(d, 2), k))
+        if drift:
+            drift.sort(reverse=True)
+            fails.append(f'ANCHOR-XY: {len(drift)} ancre(s) validee(s) deplacee(s) '
+                         f'(> 0.05 m) — un bundle a fait deriver des tooltips: '
+                         + ', '.join(f'{k} {d} m' for d, k in drift[:6]))
+        else:
+            print(f'✓ ancres xy: {len(ref)} ancres validees a leur valeur de reference')
+
     # ── 3. cycles purs ───────────────────────────────────────────────────
     r = run(['tools/audit/circular_deps.py'])
     pure = parse_pure_cycles(r.stdout)

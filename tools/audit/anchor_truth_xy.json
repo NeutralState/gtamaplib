@@ -1,0 +1,803 @@
+{
+ "_doc": "ANCHOR-XY ref 2026-09-06: xy de verite des landmarks map_validated (tooltips in-game / lignes / mesh recale). Un bundle ne doit JAMAIS les deplacer (le prior sigma 0.5 sous soft_l1 avait laisse deriver FS/Infinity/Vizcayne de 5-13 m). Ajouter ici toute nouvelle ancre validee. src=git 19b772f: valeur possiblement deja derivee de 1-6 m (grues, Continuum) \u2014 a confirmer par tooltip.",
+ "anchors": {
+  "Blimp (F)": {
+   "xy": [
+    -4390.9,
+    -6820.0
+   ],
+   "src": "transcript/known"
+  },
+  "Blimp (R)": {
+   "xy": [
+    -4451.9,
+    -6799.5
+   ],
+   "src": "transcript/known"
+  },
+  "Blimp Road (N)": {
+   "xy": [
+    -4350.95,
+    -7021.51
+   ],
+   "src": "git cbb51a8"
+  },
+  "Blimp Road (S)": {
+   "xy": [
+    -4346.451,
+    -7142.096
+   ],
+   "src": "git cbb51a8"
+  },
+  "Container Crane (1)": {
+   "xy": [
+    957.97,
+    -820.628
+   ],
+   "src": "git 19b772f"
+  },
+  "Container Crane (2)": {
+   "xy": [
+    1109.703,
+    -789.54
+   ],
+   "src": "git 19b772f"
+  },
+  "Container Crane (3)": {
+   "xy": [
+    1270.949,
+    -753.42
+   ],
+   "src": "git 19b772f"
+  },
+  "Container Crane (4)": {
+   "xy": [
+    1372.3,
+    -728.7
+   ],
+   "src": "git 19b772f"
+  },
+  "Container Crane (5)": {
+   "xy": [
+    1496.9,
+    -589.8
+   ],
+   "src": "git 19b772f"
+  },
+  "Container Crane (6)": {
+   "xy": [
+    1360.9,
+    -479.3
+   ],
+   "src": "git 19b772f"
+  },
+  "Container Crane (7)": {
+   "xy": [
+    1244.374,
+    -389.533
+   ],
+   "src": "git 19b772f"
+  },
+  "Container Crane (8)": {
+   "xy": [
+    1152.991,
+    -304.286
+   ],
+   "src": "git 19b772f"
+  },
+  "Container Crane (9)": {
+   "xy": [
+    1063.731,
+    -229.547
+   ],
+   "src": "git 19b772f"
+  },
+  "Continuum on South Beach (S)": {
+   "xy": [
+    1980.639,
+    -319.959
+   ],
+   "src": "git 19b772f"
+  },
+  "Four Seasons Hotel Miami (16E)": {
+   "xy": [
+    -802.09,
+    -1304.791
+   ],
+   "src": "git pre-ba6d (non commite)"
+  },
+  "Four Seasons Hotel Miami (16NE)": {
+   "xy": [
+    -795.0,
+    -1280.7
+   ],
+   "src": "transcript/known"
+  },
+  "Four Seasons Hotel Miami (24E)": {
+   "xy": [
+    -802.09,
+    -1304.791
+   ],
+   "src": "git pre-ba6d (non commite)"
+  },
+  "Four Seasons Hotel Miami (24NE)": {
+   "xy": [
+    -795.0,
+    -1280.7
+   ],
+   "src": "transcript/known"
+  },
+  "Four Seasons Hotel Miami (32NE)": {
+   "xy": [
+    -795.0,
+    -1280.7
+   ],
+   "src": "transcript/known"
+  },
+  "Four Seasons Hotel Miami (40NE)": {
+   "xy": [
+    -795.0,
+    -1280.7
+   ],
+   "src": "transcript/known"
+  },
+  "Four Seasons Hotel Miami (40NW)": {
+   "xy": [
+    -839.3,
+    -1264.3
+   ],
+   "src": "transcript/known"
+  },
+  "Four Seasons Hotel Miami (56NE)": {
+   "xy": [
+    -795.0,
+    -1280.7
+   ],
+   "src": "transcript/known"
+  },
+  "Four Seasons Hotel Miami (NE)": {
+   "xy": [
+    -795.0,
+    -1280.7
+   ],
+   "src": "transcript/known"
+  },
+  "Four Seasons Hotel Miami (NW)": {
+   "xy": [
+    -839.3,
+    -1264.3
+   ],
+   "src": "transcript/known"
+  },
+  "Four Seasons Hotel Miami (SE)": {
+   "xy": [
+    -810.8,
+    -1322.4
+   ],
+   "src": "transcript/known"
+  },
+  "Four Seasons Hotel Miami (SW)": {
+   "xy": [
+    -855.1,
+    -1306.7
+   ],
+   "src": "transcript/known"
+  },
+  "Infinity at Brickell (SE)": {
+   "xy": [
+    -1173.8,
+    -1443.1
+   ],
+   "src": "transcript/known"
+  },
+  "Infinity at Brickell (SW)": {
+   "xy": [
+    -1203.7,
+    -1444.2
+   ],
+   "src": "transcript/known"
+  },
+  "Lake Surprise Viaduct (10B)": {
+   "xy": [
+    -2235.57,
+    -4864.17
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (11B)": {
+   "xy": [
+    -2246.68,
+    -4840.16
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (12B)": {
+   "xy": [
+    -2256.76,
+    -4818.39
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (13B)": {
+   "xy": [
+    -2267.93,
+    -4794.24
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (14B)": {
+   "xy": [
+    -2278.13,
+    -4772.23
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (15B)": {
+   "xy": [
+    -2290.49,
+    -4745.52
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (16B)": {
+   "xy": [
+    -2309.05,
+    -4705.41
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (17B)": {
+   "xy": [
+    -2321.08,
+    -4679.43
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (20B)": {
+   "xy": [
+    -2353.28,
+    -4609.87
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (2B)": {
+   "xy": [
+    -2150.34,
+    -5048.3
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (3B)": {
+   "xy": [
+    -2160.63,
+    -5026.06
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (4B)": {
+   "xy": [
+    -2171.97,
+    -5001.57
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (5B)": {
+   "xy": [
+    -2183.13,
+    -4977.45
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (6B)": {
+   "xy": [
+    -2194.37,
+    -4953.19
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (7B)": {
+   "xy": [
+    -2203.65,
+    -4933.12
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (8B)": {
+   "xy": [
+    -2215.01,
+    -4908.58
+   ],
+   "src": "git 46675be"
+  },
+  "Lake Surprise Viaduct (9B)": {
+   "xy": [
+    -2224.94,
+    -4887.13
+   ],
+   "src": "git 46675be"
+  },
+  "Palazzo del Sol": {
+   "xy": [
+    1915.6,
+    -1024.9
+   ],
+   "src": "transcript/known"
+  },
+  "Park Grove Condominium (C) (SW core)": {
+   "xy": [
+    -1340.9,
+    -2073.64
+   ],
+   "src": "git f2a659b"
+  },
+  "Park Grove Condominium (N) (W core)": {
+   "xy": [
+    -1340.49,
+    -2011.88
+   ],
+   "src": "git f2a659b"
+  },
+  "Port (J)": {
+   "xy": [
+    84.7,
+    -476.6
+   ],
+   "src": "transcript/known"
+  },
+  "Port (K)": {
+   "xy": [
+    58.7,
+    -469.1
+   ],
+   "src": "transcript/known"
+  },
+  "Portofino Tower (NE)": {
+   "xy": [
+    1767.8,
+    -172.0
+   ],
+   "src": "transcript/known"
+  },
+  "Portofino Tower (NW)": {
+   "xy": [
+    1739.8,
+    -182.5
+   ],
+   "src": "transcript/known"
+  },
+  "Portofino Tower (S)": {
+   "xy": [
+    1763.3,
+    -202.5
+   ],
+   "src": "transcript/known"
+  },
+  "Prison Tower (1)": {
+   "xy": [
+    -2909.7,
+    -2723.8
+   ],
+   "src": "git 19b772f"
+  },
+  "Prison Tower (2)": {
+   "xy": [
+    -2744.2,
+    -2749.8
+   ],
+   "src": "git 19b772f"
+  },
+  "Prison Tower (3)": {
+   "xy": [
+    -2603.7,
+    -2834.3
+   ],
+   "src": "git 19b772f"
+  },
+  "Prison Tower (4)": {
+   "xy": [
+    -2653.2,
+    -2906.8
+   ],
+   "src": "git 19b772f"
+  },
+  "Prison Tower (5)": {
+   "xy": [
+    -2908.7,
+    -2925.3
+   ],
+   "src": "git 19b772f"
+  },
+  "Prison Tower (6)": {
+   "xy": [
+    -3010.2,
+    -2813.3
+   ],
+   "src": "git 19b772f"
+  },
+  "Stephen P. Clark Government Center (BNW)": {
+   "xy": [
+    -905.14,
+    85.4
+   ],
+   "src": "git 46675be"
+  },
+  "Stephen P. Clark Government Center (BS)": {
+   "xy": [
+    -905.14,
+    48.2
+   ],
+   "src": "git 46675be"
+  },
+  "Stephen P. Clark Government Center (BSW)": {
+   "xy": [
+    -915.36,
+    60.65
+   ],
+   "src": "git 46675be"
+  },
+  "Stephen P. Clark Government Center (BW)": {
+   "xy": [
+    -915.36,
+    72.95
+   ],
+   "src": "git 46675be"
+  },
+  "Stephen P. Clark Government Center (E)": {
+   "xy": [
+    -844.31,
+    60.65
+   ],
+   "src": "git 46675be"
+  },
+  "Stephen P. Clark Government Center (N)": {
+   "xy": [
+    -854.54,
+    85.4
+   ],
+   "src": "git 46675be"
+  },
+  "Stephen P. Clark Government Center (NE)": {
+   "xy": [
+    -844.31,
+    72.95
+   ],
+   "src": "git 46675be"
+  },
+  "Stephen P. Clark Government Center (NW)": {
+   "xy": [
+    -905.14,
+    85.4
+   ],
+   "src": "git 46675be"
+  },
+  "Stephen P. Clark Government Center (S)": {
+   "xy": [
+    -905.14,
+    48.2
+   ],
+   "src": "git 46675be"
+  },
+  "Stephen P. Clark Government Center (SE)": {
+   "xy": [
+    -854.54,
+    48.2
+   ],
+   "src": "git 46675be"
+  },
+  "Stephen P. Clark Government Center (SW)": {
+   "xy": [
+    -915.36,
+    60.65
+   ],
+   "src": "git 46675be"
+  },
+  "Stephen P. Clark Government Center (W)": {
+   "xy": [
+    -915.36,
+    72.95
+   ],
+   "src": "git 46675be"
+  },
+  "Three Tequesta Point (Helipad)": {
+   "xy": [
+    -5.3,
+    -933.7
+   ],
+   "src": "git 19b772f"
+  },
+  "Two Tequesta Point (Helipad)": {
+   "xy": [
+    50.7,
+    -1060.5
+   ],
+   "src": "git 19b772f"
+  },
+  "Vice City Sign (C1)": {
+   "xy": [
+    -3764.81,
+    -450.31
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (C10)": {
+   "xy": [
+    -3768.52,
+    -457.21
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (C2)": {
+   "xy": [
+    -3763.28,
+    -447.46
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (C3)": {
+   "xy": [
+    -3763.21,
+    -447.35
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (C4)": {
+   "xy": [
+    -3764.8,
+    -450.3
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (C5)": {
+   "xy": [
+    -3768.46,
+    -457.09
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (C6)": {
+   "xy": [
+    -3768.43,
+    -457.05
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (C7)": {
+   "xy": [
+    -3765.18,
+    -451.0
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (C8)": {
+   "xy": [
+    -3765.22,
+    -451.08
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (C9)": {
+   "xy": [
+    -3768.51,
+    -457.18
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (E1)": {
+   "xy": [
+    -3769.31,
+    -458.68
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (E10)": {
+   "xy": [
+    -3771.27,
+    -462.32
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (E11)": {
+   "xy": [
+    -3774.52,
+    -468.35
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (E12)": {
+   "xy": [
+    -3774.55,
+    -468.41
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (E2)": {
+   "xy": [
+    -3769.26,
+    -458.58
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (E3)": {
+   "xy": [
+    -3774.45,
+    -468.24
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (E4)": {
+   "xy": [
+    -3774.46,
+    -468.26
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (E5)": {
+   "xy": [
+    -3771.23,
+    -462.24
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (E6)": {
+   "xy": [
+    -3771.25,
+    -462.27
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (E7)": {
+   "xy": [
+    -3774.5,
+    -468.33
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (E8)": {
+   "xy": [
+    -3774.52,
+    -468.36
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (E9)": {
+   "xy": [
+    -3771.29,
+    -462.35
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (I1)": {
+   "xy": [
+    -3760.49,
+    -442.28
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (I2)": {
+   "xy": [
+    -3760.39,
+    -442.1
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (I3)": {
+   "xy": [
+    -3762.35,
+    -445.74
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (I4)": {
+   "xy": [
+    -3762.42,
+    -445.87
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (V1)": {
+   "xy": [
+    -3756.17,
+    -434.26
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (V2)": {
+   "xy": [
+    -3753.75,
+    -429.76
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (V3)": {
+   "xy": [
+    -3755.72,
+    -433.42
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (V4)": {
+   "xy": [
+    -3756.78,
+    -435.4
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (V5)": {
+   "xy": [
+    -3757.69,
+    -437.08
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (V6)": {
+   "xy": [
+    -3759.65,
+    -440.73
+   ],
+   "src": "git 46675be"
+  },
+  "Vice City Sign (V7)": {
+   "xy": [
+    -3757.96,
+    -437.58
+   ],
+   "src": "git 46675be"
+  },
+  "Vizcayne North Condominium (NE)": {
+   "xy": [
+    -541.3,
+    159.4
+   ],
+   "src": "transcript/known"
+  },
+  "Vizcayne North Condominium (NW)": {
+   "xy": [
+    -560.8,
+    161.4
+   ],
+   "src": "transcript/known"
+  },
+  "Vizcayne North Condominium (SE)": {
+   "xy": [
+    -542.3,
+    108.9
+   ],
+   "src": "transcript/known"
+  },
+  "Vizcayne North Condominium (SW)": {
+   "xy": [
+    -560.8,
+    109.4
+   ],
+   "src": "transcript/known"
+  },
+  "Vizcayne South Condominium (NE)": {
+   "xy": [
+    -586.3,
+    99.9
+   ],
+   "src": "transcript/known"
+  },
+  "Vizcayne South Condominium (NW)": {
+   "xy": [
+    -636.8,
+    99.4
+   ],
+   "src": "transcript/known"
+  },
+  "Vizcayne South Condominium (SE)": {
+   "xy": [
+    -585.8,
+    81.4
+   ],
+   "src": "transcript/known"
+  },
+  "Vizcayne South Condominium (SW)": {
+   "xy": [
+    -637.3,
+    81.9
+   ],
+   "src": "transcript/known"
+  }
+ }
+}
