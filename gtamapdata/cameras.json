@@ -5273,17 +5273,17 @@
   "id": "S2/78",
   "player": null,
   "xyz": [
-   -586.03,
-   -490.75,
-   89.29
+   -564.073,
+   -468.446,
+   87.802
   ],
   "ypr": [
-   316.737,
-   0.134,
-   0.0
+   316.7378,
+   0.2025,
+   0.037
   ],
   "fov": [
-   56.78,
+   57.272,
    null
   ],
   "size": [
@@ -5293,6 +5293,6 @@
   "source": "Screenshot \u2014 Vice City 11 (Megamundo, Ferris Wheel, Amphitheater; Bayfront Park vu de l ouest en hauteur, crepuscule)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "2026-09-06 solve 4 contraintes (top roue, rayon vertical roue via centre, 2 diamants permutes, roll 0): z 89 m, fov 56.8; la taille apparente de la roue contredit z > 120 m sauf si le top de la roue (70.8 m) est sous-estime | z>120 m selon Alexandre (init 150), fov ~69 deg deduit de la taille apparente de la roue a sa position approx; yaw/pitch ajustes sur les 2 clics roue | POSITION APPROX Alexandre 2026-09-06 (-365.4,-427.7, 'zero precis': ne pas traiter comme ancre), z et orientation estimes; a resoudre librement des que les clics sont poses | AJOUT 2026-09-06 (fichier ~/Downloads/Vice_City_11.jpg, 3840x2160, converti PNG): pose INITIALE approximative a la main, a resoudre des que les clics sont poses (grande roue Skyviews, amphitheatre, tours Bayfront, skyline Vice Beach au fond)"
+  "notes": "SOLVE 2026-09-06 sur 13 clics d'Alexandre (roue + skyline Vice Beach 2-3.6 km): mediane 2.1 px, max 7; z 88 m confirme par les landmarks lointains (pas > 120 m) | z>120 m selon Alexandre (init 150), fov ~69 deg deduit de la taille apparente de la roue a sa position approx; yaw/pitch ajustes sur les 2 clics roue | POSITION APPROX Alexandre 2026-09-06 (-365.4,-427.7, 'zero precis': ne pas traiter comme ancre), z et orientation estimes; a resoudre librement des que les clics sont poses | AJOUT 2026-09-06 (fichier ~/Downloads/Vice_City_11.jpg, 3840x2160, converti PNG): pose INITIALE approximative a la main, a resoudre des que les clics sont poses (grande roue Skyviews, amphitheatre, tours Bayfront, skyline Vice Beach au fond)"
  }
 }

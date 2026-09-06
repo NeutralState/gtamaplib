@@ -14893,10 +14893,18 @@
     "note": "REVUE BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 46 m, garde | REVUE BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 72 m, garde | REVUE BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 46 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 61 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 47 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 46 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_"
   },
   "Skyviews Miami Observation Wheel Center (W)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
-    "zone": "unknown"
+    "xyz": [
+      30.491,
+      131.339,
+      38.254
+    ],
+    "source_cameras": [
+      "Vice City 08 (Ferris Wheel)",
+      "Vice City 11 (Megamundo)"
+    ],
+    "error_m": 0.93,
+    "zone": "unknown",
+    "note": "TRI 2026-09-06 Vice City 08 (Ferris Wheel) x Vice City 11 (Megamundo) (rayons 0.9 m, parallaxe 98 deg)"
   },
   "Two Tequesta Point (NW)": {
     "xyz": [
