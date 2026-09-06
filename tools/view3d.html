@@ -593,7 +593,7 @@ const data = await (await fetch('/api/scene3d')).json();
       try {
         const s0v = localStorage.getItem('ui.tileSrc') || 'leak,1';
         const srcQ = s0v !== 'yanis,14'
-          ? `&src=${encodeURIComponent(s0v)}&v=${encodeURIComponent(s0v + '.5')}` : '';
+          ? `&src=${encodeURIComponent(s0v)}&v=${encodeURIComponent(s0v + '.6')}` : '';
         const strips = [];
         const jobs = [];
         const x1w = x0 + (nx - 1) * step;
@@ -931,7 +931,7 @@ const data = await (await fetch('/api/scene3d')).json();
       terraUni.uDrape.value = drapeTex;
       let s0 = localStorage.getItem('ui.tileSrc') || 'leak,1';
       if (s0 === 'yanis') s0 = 'yanis,14'; if (s0 === 'leak') s0 = 'leak,1';
-      const srcQ = s0 !== 'yanis,14' ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.5')}` : '';
+      const srcQ = s0 !== 'yanis,14' ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.6')}` : '';
       const t0x = Math.floor((16384 + x0) / MPX / 256), t1x = Math.floor((16384 + x1) / MPX / 256);
       const t0y = Math.floor((16384 - yTop) / MPX / 256), t1y = Math.floor((16384 - y0) / MPX / 256);
       for (let ty = t0y; ty <= t1y; ty++) for (let tx = t0x; tx <= t1x; tx++) {
@@ -1318,7 +1318,7 @@ function loadGroundTiles() {
   if (s0 === 'leak') s0 = 'leak,1';
   if (s0 === 'yanis') s0 = 'yanis,14';
   const src = s0 !== 'yanis,14'
-    ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.5')}` : '';
+    ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.6')}` : '';
   for (let ty = ty0; ty <= ty1; ty++) for (let tx = tx0; tx <= tx1; tx++) {
     const img = new Image();
     img.onload = () => {

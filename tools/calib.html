@@ -1567,7 +1567,7 @@ async function init() {
     // (memes URLs qu'avant -> les navigateurs resservaient les vieilles tiles)
     // [TILE-SOURCES-V1] source par nom de dossier; cache-buster = le nom
     const src = (window._tileSrc && window._tileSrc !== 'yanis,14')
-      ? '&src=' + encodeURIComponent(window._tileSrc) + '&v=' + encodeURIComponent(window._tileSrc + '.5')
+      ? '&src=' + encodeURIComponent(window._tileSrc) + '&v=' + encodeURIComponent(window._tileSrc + '.6')
       : '';
     return `/tiles/${z}/${z},${y},${x}.jpg?v=14${src}`;
   }
