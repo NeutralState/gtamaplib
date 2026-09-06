@@ -5275,15 +5275,15 @@
   "xyz": [
    -365.4,
    -427.7,
-   120.0
+   150.0
   ],
   "ypr": [
-   327.0,
-   -10.0,
+   327.305,
+   -4.908,
    0.0
   ],
   "fov": [
-   60.0,
+   69.25,
    null
   ],
   "size": [
@@ -5293,6 +5293,6 @@
   "source": "Screenshot \u2014 Vice City 11 (Megamundo, Ferris Wheel, Amphitheater; Bayfront Park vu de l ouest en hauteur, crepuscule)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "POSITION APPROX Alexandre 2026-09-06 (-365.4,-427.7, 'zero precis': ne pas traiter comme ancre), z et orientation estimes; a resoudre librement des que les clics sont poses | AJOUT 2026-09-06 (fichier ~/Downloads/Vice_City_11.jpg, 3840x2160, converti PNG): pose INITIALE approximative a la main, a resoudre des que les clics sont poses (grande roue Skyviews, amphitheatre, tours Bayfront, skyline Vice Beach au fond)"
+  "notes": "z>120 m selon Alexandre (init 150), fov ~69 deg deduit de la taille apparente de la roue a sa position approx; yaw/pitch ajustes sur les 2 clics roue | POSITION APPROX Alexandre 2026-09-06 (-365.4,-427.7, 'zero precis': ne pas traiter comme ancre), z et orientation estimes; a resoudre librement des que les clics sont poses | AJOUT 2026-09-06 (fichier ~/Downloads/Vice_City_11.jpg, 3840x2160, converti PNG): pose INITIALE approximative a la main, a resoudre des que les clics sont poses (grande roue Skyviews, amphitheatre, tours Bayfront, skyline Vice Beach au fond)"
  }
 }
