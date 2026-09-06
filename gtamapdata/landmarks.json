@@ -59,9 +59,9 @@
   },
   "1500 Ocean Dr": {
     "xyz": [
-      2092.201,
-      980.885,
-      63.656
+      2092.262,
+      980.741,
+      63.632
     ],
     "source_cameras": [
       "Beach",
@@ -77,9 +77,9 @@
   },
   "1500 Ocean Dr (S) (SE)": {
     "xyz": [
-      2026.887,
-      965.136,
-      62.19
+      2026.901,
+      964.968,
+      62.168
     ],
     "source_cameras": [
       "Beach",
@@ -1084,9 +1084,9 @@
   },
   "Flamingo South Beach (TE)": {
     "xyz": [
-      1360.977,
-      936.579,
-      111.269
+      1361.45,
+      936.516,
+      111.229
     ],
     "source_cameras": [
       "Alley (W)",
@@ -1100,9 +1100,9 @@
   },
   "Flamingo South Beach (TNE)": {
     "xyz": [
-      1357.196,
-      947.154,
-      111.297
+      1357.643,
+      947.061,
+      111.269
     ],
     "source_cameras": [
       "Alley (W)",
@@ -1116,9 +1116,9 @@
   },
   "Flamingo South Beach (TSE)": {
     "xyz": [
-      1363.471,
-      926.13,
-      111.376
+      1363.941,
+      926.071,
+      111.334
     ],
     "source_cameras": [
       "Alley (W)",
@@ -1298,9 +1298,9 @@
   },
   "Hotel Breakwater": {
     "xyz": [
-      1948.971,
-      565.397,
-      26.45
+      1949.029,
+      565.27,
+      26.408
     ],
     "source_cameras": [
       "Beach",
@@ -1313,9 +1313,9 @@
   },
   "Jenny Hostel (NE)": {
     "xyz": [
-      1905.648,
-      611.102,
-      33.064
+      1905.715,
+      610.976,
+      33.038
     ],
     "source_cameras": [
       "Beach",
@@ -1517,9 +1517,9 @@
   },
   "Murano Grande": {
     "xyz": [
-      1438.967,
-      -21.041,
-      139.085
+      1438.956,
+      -21.286,
+      139.064
     ],
     "source_cameras": [
       "Port",
@@ -1532,9 +1532,9 @@
   },
   "Old City Hall": {
     "xyz": [
-      1688.173,
-      611.21,
-      52.48
+      1688.175,
+      611.009,
+      52.451
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -1755,9 +1755,9 @@
   },
   "Portofino Tower (NW)": {
     "xyz": [
-      1736.737,
-      -186.002,
-      148.458
+      1736.472,
+      -186.361,
+      148.333
     ],
     "source_cameras": [
       "Port",
@@ -1912,9 +1912,9 @@
   },
   "The Floridian": {
     "xyz": [
-      1265.085,
-      410.346,
-      96.5
+      1265.282,
+      410.283,
+      96.473
     ],
     "source_cameras": [
       "Jason Duval 05 (Machine Gun)",
@@ -3196,171 +3196,185 @@
   },
   "Lake Surprise Viaduct (10B)": {
     "xyz": [
-      -2377.1279003420505,
-      -5035.381275345045,
-      13.49052323994258
+      -2235.57,
+      -4864.17,
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": null,
-    "zone": "leonida_keys"
+    "error_m": 3.0,
+    "zone": "leonida_keys",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys Postcard (X) x plan vertical de la ligne | "
   },
   "Lake Surprise Viaduct (11B)": {
     "xyz": [
-      -2383.1842065469555,
-      -5010.707233473796,
-      11.044677658746565
+      -2246.68,
+      -4840.16,
+      0.29
     ],
     "source_cameras": [
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": null,
-    "zone": "leonida_keys"
+    "error_m": 3.0,
+    "zone": "leonida_keys",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Lake Surprise Viaduct (12B)": {
     "xyz": [
-      -2390.3628485669847,
-      -4987.4890952344385,
-      10.968620637566541
+      -2256.76,
+      -4818.39,
+      0.1
     ],
     "source_cameras": [
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": null,
-    "zone": "leonida_keys"
+    "error_m": 3.0,
+    "zone": "leonida_keys",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Lake Surprise Viaduct (13B)": {
     "xyz": [
-      -2402.0448191524974,
-      -4968.095882417183,
-      10.948005975855818
+      -2267.93,
+      -4794.24,
+      0.0
     ],
     "source_cameras": [
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": null,
-    "zone": "leonida_keys"
+    "error_m": 3.0,
+    "zone": "leonida_keys",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Lake Surprise Viaduct (14B)": {
     "xyz": [
-      -2413.1342934135787,
-      -4948.919868593618,
-      11.105100278401657
+      -2278.13,
+      -4772.23,
+      0.24
     ],
     "source_cameras": [
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": null,
-    "zone": "leonida_keys"
+    "error_m": 3.0,
+    "zone": "leonida_keys",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Lake Surprise Viaduct (15B)": {
     "xyz": [
-      -2422.913332370568,
-      -4920.471933261594,
-      11.022116405908845
+      -2290.49,
+      -4745.52,
+      0.01
     ],
     "source_cameras": [
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": null,
-    "zone": "leonida_keys"
+    "error_m": 3.0,
+    "zone": "leonida_keys",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Lake Surprise Viaduct (2B)": {
     "xyz": [
-      -2279.3840981451003,
-      -5184.058851473968,
-      9.859174447071862
+      -2150.34,
+      -5048.3,
+      0.0
     ],
     "source_cameras": [
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": null,
-    "zone": "leonida_keys"
+    "error_m": 3.0,
+    "zone": "leonida_keys",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Lake Surprise Viaduct (3B)": {
     "xyz": [
-      -2291.089390520735,
-      -5165.2432631195725,
-      9.869670816573649
+      -2160.63,
+      -5026.06,
+      0.0
     ],
     "source_cameras": [
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": null,
-    "zone": "leonida_keys"
+    "error_m": 3.0,
+    "zone": "leonida_keys",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Lake Surprise Viaduct (4B)": {
     "xyz": [
-      -2300.8213531240244,
-      -5142.572546204085,
-      9.656067868936972
+      -2171.97,
+      -5001.57,
+      0.0
     ],
     "source_cameras": [
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": null,
-    "zone": "leonida_keys"
+    "error_m": 3.0,
+    "zone": "leonida_keys",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Lake Surprise Viaduct (5B)": {
     "xyz": [
-      -2314.2348758397666,
-      -5124.157074644739,
-      9.743462750634002
+      -2183.13,
+      -4977.45,
+      0.0
     ],
     "source_cameras": [
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": null,
-    "zone": "leonida_keys"
+    "error_m": 3.0,
+    "zone": "leonida_keys",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Lake Surprise Viaduct (6B)": {
     "xyz": [
-      -2325.5497136601307,
-      -5104.105162020238,
-      9.911284732951758
+      -2194.37,
+      -4953.19,
+      0.0
     ],
     "source_cameras": [
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": null,
-    "zone": "leonida_keys"
+    "error_m": 3.0,
+    "zone": "leonida_keys",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Lake Surprise Viaduct (7B)": {
     "xyz": [
-      -2331.48455827202,
-      -5080.4219363166085,
-      9.772409616266543
+      -2203.65,
+      -4933.12,
+      0.0
     ],
     "source_cameras": [
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": null,
-    "zone": "leonida_keys"
+    "error_m": 3.0,
+    "zone": "leonida_keys",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Lake Surprise Viaduct (8B)": {
     "xyz": [
-      -2348.343388951947,
-      -5066.3320708376195,
-      10.449019270251622
+      -2215.01,
+      -4908.58,
+      0.0
     ],
     "source_cameras": [
-      "Leonida Keys Postcard (X)"
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": null,
-    "zone": "leonida_keys"
+    "error_m": 3.0,
+    "zone": "leonida_keys",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Lake Surprise Viaduct (9B)": {
     "xyz": [
-      -2366.2086143412184,
-      -5054.759325325961,
-      13.510208602077038
+      -2224.94,
+      -4887.13,
+      0.0
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)"
     ],
-    "error_m": null,
-    "zone": "leonida_keys"
+    "error_m": 3.0,
+    "zone": "leonida_keys",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys Postcard (X) x plan vertical de la ligne | "
   },
   "Pin A02R": {
     "xyz": [
@@ -3819,9 +3833,9 @@
   },
   "Asia Brickell Key (CC1)": {
     "xyz": [
-      -87.486,
-      -865.115,
-      214.082
+      -87.17,
+      -865.059,
+      214.147
     ],
     "source_cameras": [
       "Motorboats (A)",
@@ -3835,9 +3849,9 @@
   },
   "Asia Brickell Key (CC2)": {
     "xyz": [
-      -141.006,
-      -851.057,
-      223.201
+      -140.697,
+      -851.007,
+      223.282
     ],
     "source_cameras": [
       "Motorboats (A)",
@@ -3922,9 +3936,9 @@
   },
   "CC (3) (BB2)": {
     "xyz": [
-      1271.124,
-      -753.827,
-      40.732
+      1271.115,
+      -753.795,
+      40.776
     ],
     "source_cameras": [
       "Motorboats (A)",
@@ -3936,9 +3950,9 @@
   },
   "Container Crane (1)": {
     "xyz": [
-      958.581,
-      -820.816,
-      73.171
+      958.636,
+      -820.843,
+      73.203
     ],
     "source_cameras": [
       "Motorboats (A)",
@@ -3950,9 +3964,9 @@
   },
   "Container Crane (3)": {
     "xyz": [
-      1271.884,
-      -753.932,
-      74.514
+      1272.065,
+      -753.931,
+      74.556
     ],
     "source_cameras": [
       "Amphitheater",
@@ -4629,9 +4643,9 @@
   },
   "Container Crane (2)": {
     "xyz": [
-      1105.882,
-      -789.853,
-      74.996
+      1105.227,
+      -789.879,
+      75.162
     ],
     "source_cameras": [
       "Motorboats (B)",
@@ -4881,9 +4895,9 @@
   },
   "1000 Venetian Way (4)": {
     "xyz": [
-      295.734,
-      1133.317,
-      53.808
+      295.83,
+      1133.334,
+      53.903
     ],
     "source_cameras": [
       "Skyline",
@@ -4897,9 +4911,9 @@
   },
   "1000 Venetian Way (SE)": {
     "xyz": [
-      350.286,
-      1124.83,
-      67.732
+      350.318,
+      1124.768,
+      67.849
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -4913,9 +4927,9 @@
   },
   "1000 Venetian Way (SW)": {
     "xyz": [
-      301.529,
-      1111.032,
-      67.614
+      301.625,
+      1110.999,
+      67.712
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -4929,9 +4943,9 @@
   },
   "12th St Lifeguard Tower": {
     "xyz": [
-      2216.497,
-      1027.41,
-      7.635
+      2216.495,
+      1027.233,
+      7.632
     ],
     "source_cameras": [
       "Beach",
@@ -4943,9 +4957,9 @@
   },
   "1500 Ocean Dr (S) (NW)": {
     "xyz": [
-      2022.759,
-      996.581,
-      62.225
+      2022.679,
+      996.386,
+      62.198
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -4957,9 +4971,9 @@
   },
   "1500 Ocean Dr (S) (SW)": {
     "xyz": [
-      2021.974,
-      966.686,
-      62.634
+      2021.959,
+      966.483,
+      62.599
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -4971,9 +4985,9 @@
   },
   "1800 Club": {
     "xyz": [
-      -359.517,
-      1044.371,
-      159.951
+      -359.515,
+      1044.609,
+      159.817
     ],
     "source_cameras": [
       "Vice City 03 (Basketball)",
@@ -4985,9 +4999,9 @@
   },
   "22 Biscayne Bay (SE)": {
     "xyz": [
-      -357.764,
-      1366.035,
-      69.65
+      -357.613,
+      1366.289,
+      69.472
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -5000,9 +5014,9 @@
   },
   "419 NE 4th Ave (W)": {
     "xyz": [
-      -436.232,
-      1222.912,
-      29.84
+      -435.673,
+      1223.441,
+      29.635
     ],
     "source_cameras": [
       "Vice City 03 (Basketball)",
@@ -5014,9 +5028,9 @@
   },
   "50 Biscayne Blvd (SE)": {
     "xyz": [
-      -446.447,
-      -255.988,
-      144.891
+      -446.208,
+      -256.133,
+      144.714
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -5030,9 +5044,9 @@
   },
   "Akoya Condominium": {
     "xyz": [
-      1492.608,
-      2631.17,
-      145.433
+      1492.613,
+      2631.162,
+      145.439
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -5045,9 +5059,9 @@
   },
   "Asia Brickell Key": {
     "xyz": [
-      -116.972,
-      -880.605,
-      185.016
+      -116.626,
+      -880.473,
+      185.048
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -5062,9 +5076,9 @@
   },
   "Bank of America Financial Center": {
     "xyz": [
-      1718.059,
-      1376.459,
-      84.907
+      1718.09,
+      1376.344,
+      84.902
     ],
     "source_cameras": [
       "Beach",
@@ -5648,9 +5662,9 @@
   },
   "Brown Hotel Sign": {
     "xyz": [
-      1846.77,
-      1559.662,
-      7.847
+      1847.594,
+      1559.647,
+      7.871
     ],
     "source_cameras": [
       "Hotel (W)",
@@ -5678,9 +5692,9 @@
   },
   "Capri South Beach (SE)": {
     "xyz": [
-      1321.744,
-      1126.904,
-      56.681
+      1322.232,
+      1126.765,
+      56.669
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -5694,9 +5708,9 @@
   },
   "Carbonell Brickell": {
     "xyz": [
-      -227.883,
-      -787.205,
-      123.815
+      -227.506,
+      -787.197,
+      123.945
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -5710,9 +5724,9 @@
   },
   "Citigroup Center (NE)": {
     "xyz": [
-      -363.199,
-      -463.057,
-      151.104
+      -362.954,
+      -463.21,
+      151.045
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -5726,9 +5740,9 @@
   },
   "Citigroup Center (NW)": {
     "xyz": [
-      -411.028,
-      -458.663,
-      151.072
+      -410.807,
+      -458.853,
+      150.971
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -5741,9 +5755,9 @@
   },
   "Cruise Ship (FT)": {
     "xyz": [
-      232.999,
-      -260.613,
-      50.811
+      233.276,
+      -260.642,
+      50.748
     ],
     "source_cameras": [
       "Skyline",
@@ -5756,9 +5770,9 @@
   },
   "Cruise Ship (RT)": {
     "xyz": [
-      387.035,
-      -303.321,
-      58.316
+      386.692,
+      -302.694,
+      58.241
     ],
     "source_cameras": [
       "Vice City 08 (Ferris Wheel)",
@@ -5770,9 +5784,9 @@
   },
   "Di Lido Island (N)": {
     "xyz": [
-      471.589,
-      1504.673,
-      4.377
+      471.671,
+      1504.988,
+      4.408
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -5923,9 +5937,9 @@
   },
   "Flamingo South Beach (NENE)": {
     "xyz": [
-      1371.372,
-      1080.664,
-      51.349
+      1371.913,
+      1080.54,
+      51.338
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -5938,9 +5952,9 @@
   },
   "Flamingo South Beach (SDS)": {
     "xyz": [
-      1285.556,
-      816.189,
-      64.143
+      1285.435,
+      815.998,
+      64.144
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -5952,9 +5966,9 @@
   },
   "Flamingo South Beach (SRSW)": {
     "xyz": [
-      1293.236,
-      803.816,
-      59.44
+      1293.117,
+      803.622,
+      59.439
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -5978,13 +5992,13 @@
     "error_m": 7.5,
     "zone": "vice_city",
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 7.5 m, angle max 3.7 deg",
-    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 139 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 81 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 69 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 173 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 202 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 191 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 95 m (garde tel quel, probable clic croise) | "
+    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 131 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 139 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 81 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 69 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 173 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 202 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 191 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 95 m (garde tel quel, probable clic croi"
   },
   "Green Diamond": {
     "xyz": [
-      1798.721,
-      2123.247,
-      144.605
+      1798.746,
+      2123.137,
+      144.6
     ],
     "source_cameras": [
       "Beach",
@@ -5997,9 +6011,9 @@
   },
   "Hotel Victor (SW)": {
     "xyz": [
-      1943.086,
-      743.334,
-      35.123
+      1943.036,
+      743.544,
+      35.129
     ],
     "source_cameras": [
       "Park",
@@ -6011,9 +6025,9 @@
   },
   "InterContinental Miami (N)": {
     "xyz": [
-      -254.353,
-      -463.053,
-      132.388
+      -253.989,
+      -462.909,
+      132.258
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -6025,9 +6039,9 @@
   },
   "Jade Ocean Condos": {
     "xyz": [
-      1621.389,
-      2510.828,
-      202.89
+      1621.409,
+      2510.791,
+      202.898
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -6040,9 +6054,9 @@
   },
   "Jade Ocean Condos (SW)": {
     "xyz": [
-      1626.822,
-      2485.221,
-      202.602
+      1626.832,
+      2485.16,
+      202.605
     ],
     "source_cameras": [
       "Beach",
@@ -6111,9 +6125,9 @@
   },
   "Kaseya Center (SE)": {
     "xyz": [
-      -222.508,
-      430.15,
-      45.278
+      -222.179,
+      430.277,
+      45.158
     ],
     "source_cameras": [
       "Convertible",
@@ -6221,9 +6235,9 @@
   },
   "Loews Miami Beach": {
     "xyz": [
-      1957.361,
-      1146.91,
-      87.061
+      1957.778,
+      1146.685,
+      87.012
     ],
     "source_cameras": [
       "Beach",
@@ -6237,9 +6251,9 @@
   },
   "Loft Downtown II": {
     "xyz": [
-      -542.794,
-      54.369,
-      123.969
+      -542.366,
+      54.389,
+      123.626
     ],
     "source_cameras": [
       "Skyline",
@@ -6254,9 +6268,9 @@
   },
   "Margaret Pace Park": {
     "xyz": [
-      -286.166,
-      1092.067,
-      8.477
+      -286.192,
+      1092.064,
+      8.458
     ],
     "source_cameras": [
       "Vice City Postcard",
@@ -6268,8 +6282,8 @@
   },
   "Marina (Stockyard) (NE)": {
     "xyz": [
-      -234.4,
-      1444.595,
+      -233.79,
+      1445.137,
       0.0
     ],
     "source_cameras": [
@@ -6318,9 +6332,9 @@
   },
   "Marina Blue (NE)": {
     "xyz": [
-      -458.935,
-      420.022,
-      175.206
+      -458.874,
+      419.933,
+      175.118
     ],
     "source_cameras": [
       "Motorboats (B)",
@@ -6336,9 +6350,9 @@
   },
   "Marriott Miami Biscayne Bay (E)": {
     "xyz": [
-      -230.755,
-      855.067,
-      145.442
+      -230.684,
+      855.064,
+      145.146
     ],
     "source_cameras": [
       "Skyline",
@@ -6351,9 +6365,9 @@
   },
   "Marriott Miami Biscayne Bay (NE)": {
     "xyz": [
-      -235.368,
-      872.587,
-      145.137
+      -235.351,
+      872.564,
+      144.882
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -6367,9 +6381,9 @@
   },
   "Miami Tower": {
     "xyz": [
-      -781.733,
-      -416.527,
-      160.807
+      -781.684,
+      -416.962,
+      160.684
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -6399,9 +6413,9 @@
   },
   "New Wave Condominiums": {
     "xyz": [
-      -343.407,
-      1433.424,
-      110.486
+      -342.654,
+      1434.009,
+      110.256
     ],
     "source_cameras": [
       "Vice City 03 (Basketball)",
@@ -6454,9 +6468,9 @@
   },
   "One Miami Condominium East (NE)": {
     "xyz": [
-      -232.233,
-      -526.725,
-      182.575
+      -232.103,
+      -526.967,
+      182.633
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -6470,9 +6484,9 @@
   },
   "One Miami Condominium West (NE)": {
     "xyz": [
-      -316.816,
-      -559.276,
-      188.364
+      -316.723,
+      -559.467,
+      188.372
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -6487,9 +6501,9 @@
   },
   "Opera Tower": {
     "xyz": [
-      -427.953,
-      872.599,
-      199.518
+      -427.982,
+      872.597,
+      199.387
     ],
     "source_cameras": [
       "Prison",
@@ -6869,8 +6883,8 @@
   },
   "Port (C)": {
     "xyz": [
-      806.753,
-      -179.082,
+      806.953,
+      -179.18,
       0.0
     ],
     "source_cameras": [
@@ -6887,9 +6901,9 @@
   },
   "Port (D)": {
     "xyz": [
-      764.273,
-      -188.352,
-      4.759
+      764.47,
+      -188.45,
+      4.815
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -6901,9 +6915,9 @@
   },
   "Port (E)": {
     "xyz": [
-      615.575,
-      -189.893,
-      12.643
+      615.778,
+      -189.985,
+      12.64
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -7152,9 +7166,9 @@
   },
   "Quantum on the Bay Condominium (N) (NE)": {
     "xyz": [
-      -432.928,
-      1166.791,
-      178.502
+      -432.953,
+      1166.909,
+      178.374
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7167,9 +7181,9 @@
   },
   "Quantum on the Bay Condominium (S) (NE)": {
     "xyz": [
-      -388.143,
-      1134.837,
-      205.345
+      -388.181,
+      1134.97,
+      205.247
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7227,9 +7241,9 @@
   },
   "Royal Palm South Beach (N) (N)": {
     "xyz": [
-      2029.061,
-      1052.378,
-      67.903
+      2029.455,
+      1052.247,
+      67.877
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -7242,9 +7256,9 @@
   },
   "Royal Palm South Beach (N) (S)": {
     "xyz": [
-      2029.928,
-      1042.459,
-      67.869
+      2029.952,
+      1042.291,
+      67.848
     ],
     "source_cameras": [
       "Beach",
@@ -7257,9 +7271,9 @@
   },
   "Royal Palm South Beach (S)": {
     "xyz": [
-      2006.72,
-      1025.008,
-      66.981
+      2006.919,
+      1024.877,
+      66.959
     ],
     "source_cameras": [
       "Beach",
@@ -7323,9 +7337,9 @@
   },
   "Skyviews Miami Observation Wheel": {
     "xyz": [
-      36.726,
-      131.477,
-      70.943
+      37.261,
+      131.335,
+      71.013
     ],
     "source_cameras": [
       "Skyline",
@@ -7339,9 +7353,9 @@
   },
   "Southeast Financial Center": {
     "xyz": [
-      -478.854,
-      -460.635,
-      249.079
+      -478.723,
+      -460.732,
+      248.944
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7360,9 +7374,9 @@
   },
   "St. Moritz Hotel (SW)": {
     "xyz": [
-      1968.918,
-      1100.689,
-      49.132
+      1969.096,
+      1100.512,
+      49.117
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -7374,9 +7388,9 @@
   },
   "Sunset Harbour South Condo": {
     "xyz": [
-      1447.532,
-      1665.991,
-      88.026
+      1448.005,
+      1666.175,
+      88.058
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -7388,9 +7402,9 @@
   },
   "Ten Museum Park (SE)": {
     "xyz": [
-      -455.955,
-      474.534,
-      136.466
+      -455.487,
+      475.044,
+      136.363
     ],
     "source_cameras": [
       "Skyline",
@@ -7403,9 +7417,9 @@
   },
   "The Crimson (CC)": {
     "xyz": [
-      -468.607,
-      1250.473,
-      118.059
+      -468.46,
+      1250.754,
+      117.847
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -7418,9 +7432,9 @@
   },
   "The Grand (E)": {
     "xyz": [
-      -258.063,
-      963.499,
-      175.313
+      -258.1,
+      963.528,
+      175.06
     ],
     "source_cameras": [
       "Prison",
@@ -7435,9 +7449,9 @@
   },
   "The Tides South Beach": {
     "xyz": [
-      1992.886,
-      892.448,
-      54.762
+      1992.913,
+      892.285,
+      54.743
     ],
     "source_cameras": [
       "Beach",
@@ -7449,9 +7463,9 @@
   },
   "The Waverly South Beach (SE)": {
     "xyz": [
-      1273.986,
-      582.272,
-      113.103
+      1274.243,
+      582.226,
+      113.067
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7464,9 +7478,9 @@
   },
   "Three Tequesta Point": {
     "xyz": [
-      0.714,
-      -944.78,
-      206.988
+      0.85,
+      -944.827,
+      207.01
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -7513,9 +7527,9 @@
   },
   "Tr\u00e9sor Tower": {
     "xyz": [
-      1856.638,
-      1942.994,
-      119.798
+      1856.668,
+      1942.848,
+      119.788
     ],
     "source_cameras": [
       "Beach",
@@ -7600,9 +7614,9 @@
   },
   "Two Tequesta Point": {
     "xyz": [
-      55.529,
-      -1061.907,
-      160.901
+      55.924,
+      -1061.704,
+      160.92
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7620,9 +7634,9 @@
   },
   "Unknown Sphere": {
     "xyz": [
-      -178.105,
-      395.248,
-      28.029
+      -178.184,
+      394.562,
+      27.851
     ],
     "source_cameras": [
       "Skyline",
@@ -7634,9 +7648,9 @@
   },
   "Uptown Lofts (NE)": {
     "xyz": [
-      -344.438,
-      1331.346,
-      42.9
+      -344.302,
+      1331.591,
+      42.721
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -7649,9 +7663,9 @@
   },
   "Uptown Lofts (SE)": {
     "xyz": [
-      -349.294,
-      1312.789,
-      42.888
+      -349.162,
+      1313.032,
+      42.709
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -7664,9 +7678,9 @@
   },
   "Venetian Isle Condominium": {
     "xyz": [
-      40.339,
-      1198.813,
-      45.13
+      40.321,
+      1198.833,
+      45.057
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -7679,9 +7693,9 @@
   },
   "Vizcayne North Condominium (NE)": {
     "xyz": [
-      -542.95,
-      157.03,
-      177.25
+      -542.695,
+      156.813,
+      177.187
     ],
     "source_cameras": [
       "Convertible",
@@ -7700,9 +7714,9 @@
   },
   "Vizcayne North Condominium (SE)": {
     "xyz": [
-      -541.296,
-      106.761,
-      176.983
+      -541.112,
+      106.605,
+      176.724
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7775,9 +7789,9 @@
   },
   "Wells Fargo Center (N)": {
     "xyz": [
-      -670.524,
-      -419.175,
-      187.418
+      -670.568,
+      -419.589,
+      187.132
     ],
     "source_cameras": [
       "Skyline",
@@ -7792,9 +7806,9 @@
   },
   "West Venetian Causeway Bridge": {
     "xyz": [
-      -117.141,
-      1068.902,
-      14.215
+      -116.799,
+      1068.686,
+      14.226
     ],
     "source_cameras": [
       "Tennis Court (SE)",
@@ -7832,9 +7846,9 @@
   },
   "Cardozo South Beach": {
     "xyz": [
-      2010.806,
-      912.015,
-      18.352
+      2010.908,
+      911.897,
+      18.346
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7846,9 +7860,9 @@
   },
   "Cavalier Hotel": {
     "xyz": [
-      1967.889,
-      700.566,
-      20.119
+      1968.011,
+      700.506,
+      20.112
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7860,9 +7874,9 @@
   },
   "Construction Crane (Vice Beach)": {
     "xyz": [
-      1487.027,
-      261.662,
-      60.113
+      1487.183,
+      261.581,
+      60.085
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7874,9 +7888,9 @@
   },
   "Container Crane (9)": {
     "xyz": [
-      1064.084,
-      -229.904,
-      72.498
+      1064.232,
+      -230.053,
+      72.462
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -7888,9 +7902,9 @@
   },
   "Courtyard by Marriott (NE)": {
     "xyz": [
-      1688.321,
-      1064.083,
-      32.646
+      1688.823,
+      1063.951,
+      32.64
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7902,9 +7916,9 @@
   },
   "Hotel Victor (NW)": {
     "xyz": [
-      1946.316,
-      751.943,
-      38.561
+      1946.435,
+      751.862,
+      38.547
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7916,9 +7930,9 @@
   },
   "Icon at South Beach": {
     "xyz": [
-      1459.554,
-      111.635,
-      142.289
+      1459.641,
+      111.526,
+      142.252
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7932,9 +7946,9 @@
   },
   "Leslie Hotel": {
     "xyz": [
-      1969.532,
-      718.047,
-      21.968
+      1969.65,
+      717.98,
+      21.959
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7946,9 +7960,9 @@
   },
   "McAlpin Ocean Plaza": {
     "xyz": [
-      2001.977,
-      858.557,
-      24.545
+      2002.073,
+      858.448,
+      24.536
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7960,9 +7974,9 @@
   },
   "Miami Beach Parking Garage (SE)": {
     "xyz": [
-      1848.994,
-      682.171,
-      34.644
+      1849.154,
+      682.117,
+      34.629
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -7974,9 +7988,9 @@
   },
   "Southeast Financial Center (D)": {
     "xyz": [
-      -469.945,
-      -473.016,
-      246.331
+      -469.497,
+      -472.82,
+      246.22
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -7992,9 +8006,9 @@
   },
   "The Grand": {
     "xyz": [
-      -288.548,
-      955.659,
-      175.136
+      -288.555,
+      955.651,
+      175.1
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -8007,9 +8021,9 @@
   },
   "The Waverly South Beach (NW)": {
     "xyz": [
-      1241.15,
-      632.765,
-      106.744
+      1241.049,
+      632.559,
+      106.722
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -8021,9 +8035,9 @@
   },
   "Winter Haven": {
     "xyz": [
-      1999.214,
-      841.617,
-      28.919
+      1999.309,
+      841.51,
+      28.908
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -8035,9 +8049,9 @@
   },
   "1111 Lincoln Rd (NW)": {
     "xyz": [
-      1476.403,
-      1364.187,
-      54.359
+      1476.933,
+      1364.105,
+      54.371
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8049,9 +8063,9 @@
   },
   "Bank of America Financial Center (NW)": {
     "xyz": [
-      1696.456,
-      1376.195,
-      66.691
+      1697.067,
+      1376.01,
+      66.754
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8064,9 +8078,9 @@
   },
   "Flamingo South Beach (NWNW)": {
     "xyz": [
-      1276.038,
-      1081.203,
-      51.498
+      1276.514,
+      1081.064,
+      51.468
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8078,9 +8092,9 @@
   },
   "New World Center": {
     "xyz": [
-      1640.712,
-      1426.024,
-      42.351
+      1641.547,
+      1426.083,
+      42.374
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8092,9 +8106,9 @@
   },
   "Sunset Harbour South Condo (RN)": {
     "xyz": [
-      1443.045,
-      1696.618,
-      80.823
+      1443.643,
+      1696.822,
+      80.837
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8106,9 +8120,9 @@
   },
   "Sunset Harbour South Condo (RS)": {
     "xyz": [
-      1439.953,
-      1634.051,
-      81.134
+      1440.54,
+      1634.209,
+      81.148
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8121,9 +8135,9 @@
   },
   "The Gates Hotel South Beach (NW)": {
     "xyz": [
-      1786.333,
-      1582.561,
-      47.811
+      1786.457,
+      1582.337,
+      47.896
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8482,9 +8496,9 @@
   },
   "Blue Diamond": {
     "xyz": [
-      1842.716,
-      2051.805,
-      145.996
+      1842.833,
+      2051.763,
+      145.994
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8496,8 +8510,8 @@
   },
   "East Venetian Causeway Bridge": {
     "xyz": [
-      1233.205,
-      1441.795,
+      1233.663,
+      1441.882,
       15.738
     ],
     "source_cameras": [
@@ -8510,9 +8524,9 @@
   },
   "Pelican Harbor Radio Tower": {
     "xyz": [
-      1088.725,
-      1851.76,
-      101.331
+      1088.907,
+      1851.947,
+      101.39
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -8525,8 +8539,8 @@
   "Sherry Frontenac Oceanfront Hotel (N)": {
     "xyz": [
       1524.66,
-      2577.463,
-      49.406
+      2577.437,
+      49.41
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8538,9 +8552,9 @@
   },
   "Sherry Frontenac Oceanfront Hotel (S)": {
     "xyz": [
-      1550.269,
-      2549.129,
-      49.182
+      1550.271,
+      2549.101,
+      49.185
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8552,9 +8566,9 @@
   },
   "The Ritz-Carlton Bal Harbour": {
     "xyz": [
-      1405.444,
-      2786.217,
-      103.662
+      1405.438,
+      2786.216,
+      103.665
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -8599,9 +8613,9 @@
   },
   "Citigroup Center (SE)": {
     "xyz": [
-      -374.543,
-      -521.529,
-      151.308
+      -374.276,
+      -521.618,
+      151.239
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -8617,9 +8631,9 @@
   },
   "One Miami Condominium East (SE)": {
     "xyz": [
-      -230.981,
-      -550.357,
-      182.514
+      -230.927,
+      -550.535,
+      182.576
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -8637,9 +8651,9 @@
   },
   "One Miami Condominium West (SE)": {
     "xyz": [
-      -313.392,
-      -583.282,
-      188.08
+      -313.345,
+      -583.449,
+      188.116
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -8703,13 +8717,13 @@
     ],
     "error_m": 0.508,
     "zone": "grassrivers",
-    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 81 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 84 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 85 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 71 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 69 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 47 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 49 m (garde tel quel, probable clic croise) | "
+    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 79 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 81 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 84 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 85 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 71 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 69 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 47 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 49 m (garde tel quel, probable clic croise) |"
   },
   "Kaseya Center (S)": {
     "xyz": [
-      -262.739,
-      400.018,
-      44.299
+      -262.164,
+      399.888,
+      44.09
     ],
     "source_cameras": [
       "Vice City 08 (Ferris Wheel)",
@@ -8722,9 +8736,9 @@
   },
   "1000 Venetian Way (2)": {
     "xyz": [
-      286.122,
-      1154.75,
-      29.367
+      286.23,
+      1154.807,
+      29.413
     ],
     "source_cameras": [
       "Skyline",
@@ -8737,9 +8751,9 @@
   },
   "1000 Venetian Way (3)": {
     "xyz": [
-      289.262,
-      1143.763,
-      41.634
+      289.362,
+      1143.799,
+      41.706
     ],
     "source_cameras": [
       "Skyline",
@@ -8940,9 +8954,9 @@
   },
   "Portofino Tower (S)": {
     "xyz": [
-      1763.117,
-      -211.703,
-      149.72
+      1762.885,
+      -212.018,
+      149.663
     ],
     "source_cameras": [
       "Port",
@@ -8981,7 +8995,7 @@
     ],
     "error_m": 1.634,
     "zone": "grassrivers",
-    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.0 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 27.1 m | "
+    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 36 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.0 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 27.1 m | "
   },
   "Billboard (Hank's Waffles) (B)": {
     "xyz": [
@@ -9026,9 +9040,9 @@
   },
   "Cruise Terminal D": {
     "xyz": [
-      672.979,
-      -431.363,
-      34.619
+      672.961,
+      -431.245,
+      34.658
     ],
     "source_cameras": [
       "Motorboats (B)",
@@ -9040,9 +9054,9 @@
   },
   "Cruise Terminal G (B)": {
     "xyz": [
-      340.447,
-      -331.352,
-      17.201
+      340.33,
+      -331.687,
+      17.211
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -9054,9 +9068,9 @@
   },
   "Flamingo South Beach (NERNE)": {
     "xyz": [
-      1366.816,
-      1057.786,
-      55.411
+      1367.411,
+      1057.685,
+      55.382
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -9068,9 +9082,9 @@
   },
   "Bank of America Financial Center (SW)": {
     "xyz": [
-      1691.997,
-      1357.955,
-      66.387
+      1692.031,
+      1357.836,
+      66.384
     ],
     "source_cameras": [
       "Beach",
@@ -9098,9 +9112,9 @@
   },
   "Kaseya Center (NW)": {
     "xyz": [
-      -347.843,
-      490.391,
-      45.005
+      -347.241,
+      490.412,
+      44.783
     ],
     "source_cameras": [
       "Skyline",
@@ -9125,9 +9139,9 @@
   },
   "Hotel Breakwater (K)": {
     "xyz": [
-      1949.25,
-      564.802,
-      14.211
+      1949.315,
+      564.675,
+      14.163
     ],
     "source_cameras": [
       "Park",
@@ -9192,9 +9206,9 @@
   },
   "Star Island Water Tower": {
     "xyz": [
-      763.839,
-      483.189,
-      31.227
+      763.842,
+      483.051,
+      31.163
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -9220,23 +9234,23 @@
   },
   "Palazzo del Sol": {
     "xyz": [
-      1919.302,
-      -1328.479,
-      53.873
+      1916.752,
+      -1025.042,
+      60.438
     ],
     "source_cameras": [
       "Leonida Keys Postcard (X)",
       "Rooftop Party"
     ],
-    "error_m": 1.144,
+    "error_m": null,
     "zone": "vice_city",
-    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 32 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 31 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 31 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 32 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 36 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 34 m, garde | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 13.8 m | "
+    "note": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 6.7 m | TOOLTIP xy Alexandre 2026-09-06; l'ancienne position (1919,-1328) etait 304 m au sud (triangulation Leonida Keys Postcard x Rooftop Party quasi colineaire, aucune empreinte V16 a moins de 25 m) | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 32 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 31 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 31 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 32 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 36 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/po"
   },
   "1111 Lincoln Rd (SE)": {
     "xyz": [
-      1517.082,
-      1331.066,
-      54.609
+      1517.6,
+      1330.921,
+      54.627
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -9262,9 +9276,9 @@
   },
   "Continuum on South Beach (S)": {
     "xyz": [
-      1981.585,
-      -316.31,
-      144.7
+      1981.324,
+      -315.873,
+      144.516
     ],
     "source_cameras": [
       "Amphitheater",
@@ -9281,9 +9295,9 @@
   },
   "Flamingo South Beach (NWNE)": {
     "xyz": [
-      1202.928,
-      1015.499,
-      51.914
+      1203.314,
+      1015.295,
+      51.904
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -9295,9 +9309,9 @@
   },
   "Uptown Lofts": {
     "xyz": [
-      -370.352,
-      1344.57,
-      45.299
+      -370.202,
+      1344.822,
+      45.115
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -9310,9 +9324,9 @@
   },
   "W South Beach (SE)": {
     "xyz": [
-      1988.823,
-      1571.592,
-      75.581
+      1988.839,
+      1571.506,
+      75.562
     ],
     "source_cameras": [
       "Sidewalk (Jason) (E)",
@@ -9364,8 +9378,8 @@
   },
   "Stephen P. Clark Government Center (E)": {
     "xyz": [
-      -841.8718181253247,
-      65.98217368133938,
+      -844.31,
+      60.65,
       155.3354993147007
     ],
     "source_cameras": [
@@ -9375,7 +9389,8 @@
       "Port Vice City (B)"
     ],
     "error_m": 1.691,
-    "zone": "vice_city"
+    "zone": "vice_city",
+    "note": "TOOLTIP xy Alexandre 2026-09-06 (8 coins), symetrise (octogone 2 axes, rms 0.46 m), etait a 5.9 m | "
   },
   "Infinity at Brickell": {
     "xyz": [
@@ -9643,9 +9658,9 @@
   },
   "Portofino Tower (NE)": {
     "xyz": [
-      1769.832,
-      -174.794,
-      148.661
+      1769.586,
+      -175.347,
+      148.541
     ],
     "source_cameras": [
       "Rooftop Party",
@@ -9657,9 +9672,9 @@
   },
   "Hotel Victor (NE)": {
     "xyz": [
-      1971.693,
-      742.28,
-      37.83
+      1971.783,
+      742.181,
+      37.818
     ],
     "source_cameras": [
       "Vice Beach (A)",
@@ -10535,9 +10550,9 @@
   },
   "1000 Venetian Way (W-Box-NW)": {
     "xyz": [
-      299.184,
+      299.287,
       1125.308,
-      62.202
+      62.305
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -10549,9 +10564,9 @@
   },
   "1000 Venetian Way (NW)": {
     "xyz": [
-      300.493,
-      1125.509,
-      67.821
+      300.561,
+      1125.501,
+      67.935
     ],
     "source_cameras": [
       "Tennis Court (SE)",
@@ -10564,9 +10579,9 @@
   },
   "1000 Venetian Way (T-NW)": {
     "xyz": [
-      289.105,
-      1121.258,
-      62.263
+      289.206,
+      1121.253,
+      62.366
     ],
     "source_cameras": [
       "Venetian Islands",
@@ -10602,9 +10617,9 @@
   },
   "1000 Venetian Way (Center-NE)": {
     "xyz": [
-      336.472,
-      1136.066,
-      67.515
+      336.6,
+      1136.084,
+      67.653
     ],
     "source_cameras": [
       "Skyline",
@@ -10617,9 +10632,9 @@
   },
   "1000 Venetian Way (NE)": {
     "xyz": [
-      347.027,
-      1138.9,
-      67.442
+      347.161,
+      1138.921,
+      67.586
     ],
     "source_cameras": [
       "Skyline",
@@ -10861,9 +10876,9 @@
   },
   "The Floridian (SW)": {
     "xyz": [
-      1416.511,
-      298.008,
-      113.377
+      1416.276,
+      297.932,
+      113.361
     ],
     "source_cameras": [
       "Amphitheater",
@@ -10932,8 +10947,8 @@
   },
   "Stephen P. Clark Government Center (SE)": {
     "xyz": [
-      -852.6775927382347,
-      53.84606260445761,
+      -854.54,
+      48.2,
       155.35
     ],
     "error_m": 4.0,
@@ -10947,7 +10962,8 @@
       "type": "fixed",
       "value": 155.35,
       "note": "plan-toit SPC"
-    }
+    },
+    "note": "TOOLTIP xy Alexandre 2026-09-06 (8 coins), symetrise (octogone 2 axes, rms 0.46 m), etait a 5.9 m | "
   },
   "Highway Sign (404) (BL)": {
     "author": "rlx",
@@ -10970,9 +10986,9 @@
       "Port Vice City (A)"
     ],
     "xyz": [
-      -628.893,
-      95.464,
-      178.441
+      -628.702,
+      95.226,
+      178.396
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 7.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 5.1 m | ",
@@ -11040,9 +11056,9 @@
       "Port Vice City (B)"
     ],
     "xyz": [
-      -455.668,
-      -230.311,
-      147.01
+      -455.408,
+      -230.475,
+      146.822
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.9 m | "
@@ -11074,9 +11090,9 @@
       "Ultimate Edition 02 (Green Sports Car)"
     ],
     "xyz": [
-      -734.123,
-      -1122.875,
-      173.184
+      -733.944,
+      -1123.285,
+      173.085
     ],
     "zone": null,
     "method": "ANCHOR-HARVEST-V1: triangulation 6 cams, perp med 8.9 m, angle max 85.4 deg",
@@ -11127,9 +11143,9 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -482.002,
-      -464.011,
-      278.543
+      -481.929,
+      -464.222,
+      278.397
     ],
     "zone": null,
     "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.5 m | "
@@ -11217,8 +11233,8 @@
   },
   "Stephen P. Clark Government Center (NW)": {
     "xyz": [
-      -896.714,
-      82.881,
+      -905.14,
+      85.4,
       155.35
     ],
     "error_m": 6.0,
@@ -11233,7 +11249,8 @@
       "type": "fixed",
       "value": 155.35,
       "note": "plan-toit SPC (E/N/NE a 155.2-155.4)"
-    }
+    },
+    "note": "TOOLTIP xy Alexandre 2026-09-06 (8 coins), symetrise (octogone 2 axes, rms 0.46 m), etait a 8.8 m | "
   },
   "Jason's House (SE)": {
     "author": "rlx",
@@ -11399,8 +11416,8 @@
     "error_m": 3.0,
     "source_cameras": [],
     "xyz": [
-      -907.75,
-      77.837,
+      -915.36,
+      72.95,
       18.2
     ],
     "zone": null,
@@ -11418,13 +11435,13 @@
       "Airport (X)"
     ],
     "xyz": [
-      -362.714,
-      -129.707,
-      96.893
+      -359.43,
+      -129.947,
+      96.851
     ],
     "zone": null,
     "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 14.4 m, angle max 2.8 deg",
-    "note": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.7 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.0 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.0 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 21.2 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 7.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 17.1 m | "
+    "note": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.3 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.7 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.0 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 2.0 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 21.2 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 7.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 17.1 m | "
   },
   "Broken Keys Bridge (7B)": {
     "author": "rlx",
@@ -11441,9 +11458,9 @@
       "Vice City Postcard"
     ],
     "xyz": [
-      -324.05,
-      939.61,
-      176.215
+      -324.057,
+      939.611,
+      176.167
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.6 m | "
@@ -11531,8 +11548,8 @@
     "error_m": 3.0,
     "source_cameras": [],
     "xyz": [
-      -898.728,
-      69.434,
+      -915.36,
+      60.65,
       18.2
     ],
     "zone": null,
@@ -11659,9 +11676,9 @@
       "Dominion Hotel"
     ],
     "xyz": [
-      1997.543,
-      850.628,
-      17.373
+      1997.675,
+      850.549,
+      17.371
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.3 m | "
@@ -11721,8 +11738,8 @@
     "error_m": 2.5,
     "source_cameras": [],
     "xyz": [
-      -907.75,
-      77.837,
+      -915.36,
+      72.95,
       155.35
     ],
     "zone": null,
@@ -11730,7 +11747,8 @@
       "type": "fixed",
       "value": 155.35,
       "note": "x corrige -902.02 -> -907.75 par ray^plan-toit Street (Bikers) (B) (07-20): methode calibree sur les coins multi-temoins (NW dx -0.34, N dx 0.00); y conserve de la symetrie (dimension along-ray non fiable a 1 temoin)"
-    }
+    },
+    "note": "TOOLTIP xy Alexandre 2026-09-06 (8 coins), symetrise (octogone 2 axes, rms 0.46 m), etait a 9.0 m | "
   },
   "South Hill": {
     "author": "rlx",
@@ -11842,9 +11860,9 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -444.219,
-      -166.678,
-      92.877
+      -443.931,
+      -166.925,
+      92.735
     ],
     "zone": null,
     "note": "BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.5 m | "
@@ -12077,8 +12095,8 @@
       "Dominion Hotel"
     ],
     "xyz": [
-      1999.752,
-      861.312,
+      1999.887,
+      861.234,
       17.371
     ],
     "zone": null,
@@ -12197,9 +12215,9 @@
       "Dominion Hotel"
     ],
     "xyz": [
-      2009.323,
-      905.414,
-      7.085
+      2009.464,
+      905.322,
+      7.092
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 3.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.2 m | "
@@ -12226,9 +12244,9 @@
       "Vice Beach (B)"
     ],
     "xyz": [
-      2009.395,
-      910.05,
-      7.038
+      2009.534,
+      909.958,
+      7.046
     ],
     "zone": null,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.4 m, angle max 19.7 deg",
@@ -12564,8 +12582,8 @@
       "Park"
     ],
     "xyz": [
-      1935.919,
-      555.94,
+      1935.912,
+      555.947,
       7.195
     ],
     "zone": null,
@@ -12666,9 +12684,9 @@
       "Vice City 08 (Ferris Wheel)"
     ],
     "xyz": [
-      -364.11,
-      689.39,
-      45.06
+      -363.678,
+      689.317,
+      44.938
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.3 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 6.8 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.1 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.2 m | "
@@ -12697,9 +12715,9 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -257.4,
-      509.943,
-      30.018
+      -257.15,
+      510.184,
+      29.876
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.0 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.3 m | "
@@ -12712,9 +12730,9 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -256.624,
-      509.544,
-      35.933
+      -256.373,
+      509.782,
+      35.798
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.0 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.7 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.1 m | "
@@ -12727,9 +12745,9 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -249.987,
-      505.451,
-      35.384
+      -249.735,
+      505.672,
+      35.252
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.0 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.6 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.1 m | "
@@ -12792,9 +12810,9 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -248.176,
-      504.24,
-      32.025
+      -247.92,
+      504.455,
+      31.891
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.0 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 3.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 4.1 m | "
@@ -12807,18 +12825,18 @@
       "Shitzu Squalo 01 (Bay)"
     ],
     "xyz": [
-      -451.571,
-      -111.647,
-      92.751
+      -451.33,
+      -111.901,
+      92.591
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 1.7 m | "
   },
   "Marina Blue (SE)": {
     "xyz": [
-      -496.408,
-      375.087,
-      175.439
+      -496.427,
+      375.112,
+      175.409
     ],
     "source_cameras": [
       "Prison",
@@ -12832,9 +12850,9 @@
   },
   "Vizcayne North Condominium (NW)": {
     "xyz": [
-      -551.056,
-      154.013,
-      177.877
+      -550.844,
+      153.81,
+      177.792
     ],
     "source_cameras": [
       "Jason Duval 05 (Machine Gun)",
@@ -13608,9 +13626,9 @@
       "Port Vice City (B)"
     ],
     "xyz": [
-      -712.493,
-      4.023,
-      116.716
+      -712.248,
+      4.016,
+      116.701
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 3.3 m | "
@@ -14198,9 +14216,9 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -556.91,
-      109.869,
-      177.353
+      -556.716,
+      109.692,
+      177.366
     ],
     "zone": null,
     "notes": "TOOLTIP xy Alexandre 2026-09-04 (8 coins Vizcayne), z herite des coins voisins | ",
@@ -14502,9 +14520,9 @@
       "Port Vice City (A)"
     ],
     "xyz": [
-      -583.319,
-      100.277,
-      177.553
+      -583.116,
+      100.071,
+      177.561
     ],
     "zone": null,
     "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.3 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 2.5 m | ",
@@ -14801,9 +14819,9 @@
   },
   "Marquis Miami (SE)": {
     "xyz": [
-      -459.85,
-      523.032,
-      173.359
+      -460.062,
+      522.73,
+      173.038
     ],
     "source_cameras": [
       "Skyline",
@@ -14833,7 +14851,7 @@
     "error_m": 2.0,
     "zone": "unknown",
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.6 m, angle max 2.9 deg",
-    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 39 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 41 m, garde | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 11.7 m | "
+    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 46 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 39 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 41 m, garde | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, pert"
   },
   "Skyviews Miami Observation Wheel Center (W)": {
     "xyz": null,
@@ -14843,9 +14861,9 @@
   },
   "Two Tequesta Point (NW)": {
     "xyz": [
-      35.05,
-      -1059.594,
-      160.285
+      35.45,
+      -1059.336,
+      160.596
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -14859,9 +14877,9 @@
   },
   "Two Tequesta Point (NE)": {
     "xyz": [
-      58.964,
-      -1049.619,
-      158.749
+      59.128,
+      -1049.64,
+      158.797
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -14875,9 +14893,9 @@
   },
   "One Miami Condo East (NW)": {
     "xyz": [
-      -300.846,
-      -558.87,
-      179.033
+      -300.795,
+      -559.073,
+      179.063
     ],
     "source_cameras": [
       "Vice City Postcard",
@@ -14890,9 +14908,9 @@
   },
   "One Miami Condo West (NW)": {
     "xyz": [
-      -382.562,
-      -588.214,
-      187.622
+      -382.451,
+      -588.456,
+      187.564
     ],
     "source_cameras": [
       "Skyline",
@@ -14905,9 +14923,9 @@
   },
   "Quantum on the Bay Condominium (S) (SE)": {
     "xyz": [
-      -384.654,
-      1114.981,
-      205.433
+      -384.349,
+      1115.419,
+      205.216
     ],
     "source_cameras": [
       "Vice City 03 (Basketball)",
@@ -14919,9 +14937,9 @@
   },
   "Two Tequesta Point (SE)": {
     "xyz": [
-      64.498,
-      -1077.108,
-      160.126
+      64.681,
+      -1077.145,
+      160.172
     ],
     "source_cameras": [
       "Motorboats (A)",
@@ -15179,7 +15197,7 @@
     ],
     "error_m": 0.354,
     "zone": "unknown",
-    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 34 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 34 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 34 m, garde | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 26.4 m | "
+    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 34 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 34 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 34 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 34 m, garde | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 26.4 m | "
   },
   "C. Clyde Atkins U.S Courthouse (MSE)": {
     "xyz": null,
@@ -15195,9 +15213,9 @@
   },
   "Asia Brickell Key (CC2B)": {
     "xyz": [
-      -127.78,
-      -861.246,
-      226.051
+      -127.202,
+      -861.079,
+      226.013
     ],
     "source_cameras": [
       "Vice Beach (B)",
@@ -15209,9 +15227,9 @@
   },
   "Marquis Miami (NE)": {
     "xyz": [
-      -453.849,
-      572.028,
-      178.778
+      -454.086,
+      571.723,
+      178.502
     ],
     "source_cameras": [
       "Skyline",
@@ -15246,9 +15264,9 @@
   },
   "Three Tequesta Point (SE)": {
     "xyz": [
-      6.593,
-      -960.814,
-      206.363
+      6.742,
+      -960.822,
+      206.416
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)",
@@ -15261,9 +15279,9 @@
   },
   "Three Tequesta Point (NE)": {
     "xyz": [
-      4.301,
-      -926.973,
-      205.765
+      4.821,
+      -926.91,
+      205.795
     ],
     "source_cameras": [
       "Motorboats (A)",
@@ -15686,9 +15704,9 @@
   },
   "Marina Blue (LNE)": {
     "xyz": [
-      -466.002,
-      446.293,
-      127.293
+      -465.814,
+      446.134,
+      127.225
     ],
     "source_cameras": [
       "Skyline",
@@ -15707,9 +15725,9 @@
   },
   "5959 Collins Ave": {
     "xyz": [
-      1688.094,
-      2274.436,
-      80.174
+      1688.171,
+      2274.417,
+      80.175
     ],
     "source_cameras": [
       "Jet Ski",
@@ -16031,9 +16049,9 @@
   },
   "Apogee Condominium": {
     "xyz": [
-      1616.308,
-      -172.345,
-      92.08
+      1615.525,
+      -172.441,
+      91.904
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -16299,9 +16317,9 @@
   },
   "Wells Fargo Center (S)": {
     "xyz": [
-      -750.051,
-      -508.893,
-      192.284
+      -750.103,
+      -508.854,
+      191.931
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -16319,19 +16337,22 @@
   },
   "Lake Surprise Viaduct (20B)": {
     "xyz": [
-      -2368.045,
-      -4613.781,
+      -2353.28,
+      -4609.87,
       0.0
     ],
-    "source_cameras": [],
-    "error_m": null,
-    "zone": "rlx_markings_0713"
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": 3.0,
+    "zone": "rlx_markings_0713",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Flamingo South Beach (TW)": {
     "xyz": [
-      1471.734,
-      915.794,
-      117.036
+      1471.611,
+      915.621,
+      117.056
     ],
     "source_cameras": [
       "Leonida Keys 01 (Airplane) (X)",
@@ -16343,23 +16364,29 @@
   },
   "Lake Surprise Viaduct (17B)": {
     "xyz": [
-      -2318.103,
-      -4658.074,
+      -2321.08,
+      -4679.43,
       0.0
     ],
-    "source_cameras": [],
-    "error_m": null,
-    "zone": "rlx_markings_0713"
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": 3.0,
+    "zone": "rlx_markings_0713",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Lake Surprise Viaduct (16B)": {
     "xyz": [
-      -2313.271,
-      -4694.162,
+      -2309.05,
+      -4705.41,
       0.0
     ],
-    "source_cameras": [],
-    "error_m": null,
-    "zone": "rlx_markings_0713"
+    "source_cameras": [
+      "Leonida Keys 01 (Airplane) (X)"
+    ],
+    "error_m": 3.0,
+    "zone": "rlx_markings_0713",
+    "note": "LINE-TOOLTIP 2026-09-06 (Alexandre: viaduc Lake Surprise sur la ligne (-2291.7,-4742.9)-(-2139.0,-5072.8)): rayon Leonida Keys 01 (Airplane) (X) x plan vertical de la ligne | "
   },
   "Long Island (S)": {
     "xyz": [
@@ -16694,9 +16721,9 @@
   },
   "Wastewater Building (C)": {
     "xyz": [
-      501.812,
-      -1238.685,
-      36.821
+      502.456,
+      -1239.699,
+      36.845
     ],
     "source_cameras": [
       "Vice City Postcard",
@@ -16704,13 +16731,13 @@
     ],
     "error_m": 0.984,
     "zone": "rlx_markings_0713",
-    "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 7.7 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 4.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.9 m | "
+    "note": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 7.7 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 4.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.9 m | "
   },
   "Wastewater Building (B)": {
     "xyz": [
-      495.508,
-      -1227.642,
-      37.512
+      496.145,
+      -1228.614,
+      37.537
     ],
     "source_cameras": [
       "Vice City Postcard",
@@ -16718,13 +16745,13 @@
     ],
     "error_m": 1.71,
     "zone": "rlx_markings_0713",
-    "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 7.6 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 4.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.8 m | "
+    "note": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.2 m | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 7.6 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.7 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 4.0 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.8 m | "
   },
   "50 Biscayne Blvd (NE)": {
     "xyz": [
-      -439.333,
-      -199.901,
-      138.804
+      -439.177,
+      -200.118,
+      138.747
     ],
     "source_cameras": [
       "Vice City Postcard",
@@ -16994,9 +17021,9 @@
   },
   "Maison Grande Condominium (NW)": {
     "xyz": [
-      1617.552,
-      2429.617,
-      58.741
+      1617.6,
+      2429.606,
+      58.744
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -17015,9 +17042,9 @@
   },
   "Maison Grande Condominium (TN)": {
     "xyz": [
-      1642.712,
-      2430.616,
-      63.414
+      1642.743,
+      2430.595,
+      63.415
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -17030,9 +17057,9 @@
   },
   "Maison Grande Condominium (TC)": {
     "xyz": [
-      1661.991,
-      2396.394,
-      63.55
+      1662.041,
+      2396.377,
+      63.551
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -17045,9 +17072,9 @@
   },
   "Maison Grande Condominium (TS)": {
     "xyz": [
-      1690.511,
-      2378.311,
-      63.946
+      1690.563,
+      2378.291,
+      63.945
     ],
     "source_cameras": [
       "Highway (NE)",
@@ -17078,8 +17105,8 @@
   },
   "Stephen P. Clark Government Center (N)": {
     "xyz": [
-      -853.6020130999345,
-      85.29008804501501,
+      -854.54,
+      85.4,
       155.3374395902633
     ],
     "source_cameras": [
@@ -17088,7 +17115,8 @@
       "Port Vice City (B)"
     ],
     "error_m": 0.766,
-    "zone": "unknown"
+    "zone": "unknown",
+    "note": "TOOLTIP xy Alexandre 2026-09-06 (8 coins), symetrise (octogone 2 axes, rms 0.46 m), etait a 0.9 m | "
   },
   "Epic Miami Residences": {
     "xyz": null,
@@ -17785,9 +17813,9 @@
   },
   "Icon at Brickell South Tower": {
     "xyz": [
-      -545.294,
-      -890.892,
-      171.392
+      -560.214,
+      -896.608,
+      180.15
     ],
     "source_cameras": [
       "Vice City Sign",
@@ -17797,274 +17825,470 @@
     "error_m": 17.7,
     "zone": "unknown",
     "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 17.7 m, angle max 29.0 deg",
-    "note": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 4.1 m | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 34 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 35 m (garde tel quel, probable clic croise) | "
+    "note": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 18.2 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 4.1 m | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): voulait bouger de 34 m, garde | REVUE BA-DOWNTOWN 2026-09-02: le bundle voulait le deplacer de 35 m (garde tel quel, probable clic croise) | "
   },
   "Vice City Sign (C1)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3764.81,
+      -450.31,
+      14.61
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 454 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.05 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 454 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C10)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3768.52,
+      -457.21,
+      14.6
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 555 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.00 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 555 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C2)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3763.28,
+      -447.46,
+      17.92
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 357 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.09 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 357 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C3)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3763.21,
+      -447.35,
+      29.23
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 192 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.01 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 192 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C4)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3764.8,
+      -450.3,
+      32.56
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 198 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.06 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 198 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C5)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3768.46,
+      -457.09,
+      32.58
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 300 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.10 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 300 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C6)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3768.43,
+      -457.05,
+      28.31
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 359 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.05 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 359 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C7)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3765.18,
+      -451.0,
+      28.32
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 266 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.04 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 266 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C8)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3765.22,
+      -451.08,
+      18.8
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 406 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.05 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 406 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (C9)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3768.51,
+      -457.18,
+      18.81
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 498 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.06 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 498 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E1)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3769.31,
+      -458.68,
+      14.4
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 581 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.07 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 581 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E10)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3771.27,
+      -462.32,
+      18.66
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 563 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.07 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 563 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E11)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3774.52,
+      -468.35,
+      18.65
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 620 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.08 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 620 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E12)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3774.55,
+      -468.41,
+      14.49
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 672 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.07 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 672 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E2)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3769.26,
+      -458.58,
+      32.33
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 327 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.06 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 327 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E3)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3774.45,
+      -468.24,
+      32.3
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 462 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.06 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 462 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E4)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3774.46,
+      -468.26,
+      28.11
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 508 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.04 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 508 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E5)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3771.23,
+      -462.24,
+      28.11
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 430 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.02 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 430 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E6)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3771.25,
+      -462.27,
+      25.39
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 468 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.02 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 468 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E7)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3774.5,
+      -468.33,
+      25.37
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 540 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.01 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 540 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E8)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3774.52,
+      -468.36,
+      21.39
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 582 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.00 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 582 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (E9)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3771.29,
+      -462.35,
+      21.38
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 525 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.04 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 525 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (I1)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3760.49,
+      -442.28,
+      14.91
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 305 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.23 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 305 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (I2)": {
     "xyz": [
-      -3506.8179672443957,
-      -501.7750143678155,
-      65.22308875209828
+      -3760.39,
+      -442.1,
+      32.69
     ],
     "source_cameras": [
       "Vice City 01 (Vice City Sign)",
       "Vice City Sign"
     ],
-    "error_m": 55.949,
-    "zone": "vice_city"
+    "error_m": 0.5,
+    "zone": "vice_city",
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.04 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | "
   },
   "Vice City Sign (I3)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3762.35,
+      -445.74,
+      32.71
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 119 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.08 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 119 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (I4)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3762.42,
+      -445.87,
+      14.72
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 371 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.05 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 371 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (V1)": {
     "xyz": [
-      -3332.78,
-      -531.43,
-      31.9
+      -3756.17,
+      -434.26,
+      14.34
     ],
     "source_cameras": [
       "Vice City 01 (Vice City Sign)",
       "Vice City Sign"
     ],
-    "error_m": 12.8,
+    "error_m": 0.5,
     "zone": "vice_city",
-    "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 12.8 m, angle max 10.7 deg | projete sur vice-city-sign-plane (ecart initial 3.8 m)"
+    "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 12.8 m, angle max 10.7 deg | projete sur vice-city-sign-plane (ecart initial 3.8 m)",
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.11 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | "
   },
   "Vice City Sign (V2)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
+    "xyz": [
+      -3753.75,
+      -429.76,
+      32.51
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
     "zone": "vice_city",
-    "note": "QUARANTAINE 2026-09-04: xyz efface (error_m 159 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.08 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | QUARANTAINE 2026-09-04: xyz efface (error_m 159 m, triangulation degeneree ['Vice City 01 (Vice City Sign)', 'Vice City Sign']); marquages conserves | "
   },
   "Vice City Sign (V3)": {
     "xyz": [
-      -3466.3579257410115,
-      -487.6764401126734,
-      74.36613313760718
+      -3755.72,
+      -433.42,
+      32.55
     ],
     "source_cameras": [
       "Vice City 01 (Vice City Sign)",
       "Vice City Sign"
     ],
-    "error_m": 98.225,
-    "zone": "vice_city"
+    "error_m": 0.5,
+    "zone": "vice_city",
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.01 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | "
   },
   "Vice City Sign (V4)": {
     "xyz": [
-      -3422.7756483679495,
-      -509.4012640679876,
-      57.59094047161575
+      -3756.78,
+      -435.4,
+      23.49
     ],
     "source_cameras": [
       "Vice City 01 (Vice City Sign)",
       "Vice City Sign"
     ],
-    "error_m": 39.868,
-    "zone": "vice_city"
+    "error_m": 0.5,
+    "zone": "vice_city",
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.12 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | "
   },
   "Vice City Sign (V5)": {
     "xyz": [
-      -3484.9227071532646,
-      -494.3009794817352,
-      70.08198563842373
+      -3757.69,
+      -437.08,
+      32.51
     ],
     "source_cameras": [
       "Vice City 01 (Vice City Sign)",
       "Vice City Sign"
     ],
-    "error_m": 32.12,
-    "zone": "vice_city"
+    "error_m": 0.5,
+    "zone": "vice_city",
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.00 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | "
   },
   "Vice City Sign (V6)": {
     "xyz": [
-      -3501.0051146252954,
-      -499.9907368584629,
-      66.36500712132356
+      -3759.65,
+      -440.73,
+      32.56
     ],
     "source_cameras": [
       "Vice City 01 (Vice City Sign)",
       "Vice City Sign"
     ],
-    "error_m": 32.116,
-    "zone": "vice_city"
+    "error_m": 0.5,
+    "zone": "vice_city",
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.05 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | "
   },
   "Vice City Sign (V7)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
-    "zone": "vice_city"
+    "xyz": [
+      -3757.96,
+      -437.58,
+      14.49
+    ],
+    "source_cameras": [
+      "Vice City 01 (Vice City Sign)",
+      "Vice City Sign"
+    ],
+    "error_m": 0.5,
+    "zone": "vice_city",
+    "note": "SIGN-LINE 2026-09-06: triangulation Vice City 01 x Vice City Sign (ecart rayons 0.07 m), projetee sur la ligne du panneau d'Alexandre (-3748.5,-420)-(-3777.5,-473.9) | LINE-PLANE 2026-09-06: rayon Vice City 01 (pose marqueur V16) x plan vertical de la ligne du panneau donnee par Alexandre (-3748.5,-420)-(-3777.5,-473.9); a retrianguler des que la Trailer 1 est posee | "
   },
   "One Downtown (SW)": {
     "xyz": null,
@@ -18098,8 +18322,8 @@
   },
   "Stephen P. Clark Government Center (NE)": {
     "xyz": [
-      -845.3142720024167,
-      71.22587237950061,
+      -844.31,
+      72.95,
       154.61458931467752
     ],
     "source_cameras": [
@@ -18110,12 +18334,13 @@
       "Port Vice City (B)"
     ],
     "error_m": 3.798,
-    "zone": "unknown"
+    "zone": "unknown",
+    "note": "TOOLTIP xy Alexandre 2026-09-06 (8 coins), symetrise (octogone 2 axes, rms 0.46 m), etait a 2.0 m | "
   },
   "Stephen P. Clark Government Center (S)": {
     "xyz": [
-      -893.313,
-      57.935,
+      -905.14,
+      48.2,
       155.35
     ],
     "source_cameras": [],
@@ -18125,12 +18350,13 @@
       "type": "fixed",
       "value": 155.35,
       "note": "derive par symetrie centrale du plan-toit (centre=milieu NW-SE) \u2014 a confirmer par temoins nord/est"
-    }
+    },
+    "note": "TOOLTIP xy Alexandre 2026-09-06 (8 coins), symetrise (octogone 2 axes, rms 0.46 m), etait a 15.3 m | "
   },
   "Stephen P. Clark Government Center (SW)": {
     "xyz": [
-      -898.728,
-      69.434,
+      -915.36,
+      60.65,
       155.35
     ],
     "source_cameras": [],
@@ -18140,7 +18366,8 @@
       "type": "fixed",
       "value": 155.35,
       "note": "derive par symetrie centrale du plan-toit (centre=milieu NW-SE) \u2014 a confirmer par temoins nord/est"
-    }
+    },
+    "note": "TOOLTIP xy Alexandre 2026-09-06 (8 coins), symetrise (octogone 2 axes, rms 0.46 m), etait a 18.8 m | "
   },
   "Highway (Panorama) (SE)": {
     "xyz": null,
@@ -18162,8 +18389,8 @@
   },
   "Stephen P. Clark Government Center (BS)": {
     "xyz": [
-      -893.313,
-      57.935,
+      -905.14,
+      48.2,
       18.2
     ],
     "source_cameras": [],
@@ -18177,8 +18404,8 @@
   },
   "Stephen P. Clark Government Center (BNW)": {
     "xyz": [
-      -896.714,
-      82.881,
+      -905.14,
+      85.4,
       18.2
     ],
     "source_cameras": [],
@@ -18192,9 +18419,9 @@
   },
   "Marina Blue (NW)": {
     "xyz": [
-      -474.429,
-      415.089,
-      169.104
+      -474.274,
+      414.979,
+      169.024
     ],
     "source_cameras": [
       "Jason Duval 05 (Machine Gun)",
@@ -18606,9 +18833,9 @@
   },
   "Cardozo South Beach (D)": {
     "xyz": [
-      2009.746,
-      904.629,
-      6.988
+      2009.888,
+      904.539,
+      6.994
     ],
     "source_cameras": [
       "Dominion Hotel",
@@ -18621,9 +18848,9 @@
   },
   "Container Crane (7)": {
     "xyz": [
-      1243.512,
-      -390.213,
-      70.913
+      1243.227,
+      -390.44,
+      70.91
     ],
     "source_cameras": [
       "Amphitheater",
@@ -18635,9 +18862,9 @@
   },
   "Container Crane (8)": {
     "xyz": [
-      1153.675,
-      -303.978,
-      72.55
+      1153.907,
+      -303.882,
+      72.553
     ],
     "source_cameras": [
       "Amphitheater",
@@ -18689,9 +18916,9 @@
   },
   "Highway Sign (S)": {
     "xyz": [
-      -100.349,
-      538.147,
-      31.405
+      -100.288,
+      538.16,
+      31.388
     ],
     "source_cameras": [
       "Convertible",
@@ -18729,9 +18956,9 @@
   },
   "KC03": {
     "xyz": [
-      -258.071,
-      510.43,
-      27.228
+      -257.828,
+      510.678,
+      27.089
     ],
     "source_cameras": [
       "Convertible",
@@ -18743,9 +18970,9 @@
   },
   "KC04": {
     "xyz": [
-      -258.592,
-      510.765,
-      22.716
+      -258.345,
+      511.015,
+      22.567
     ],
     "source_cameras": [
       "Convertible",
@@ -18757,9 +18984,9 @@
   },
   "KC06": {
     "xyz": [
-      -244.563,
-      501.273,
-      25.754
+      -244.309,
+      501.482,
+      25.618
     ],
     "source_cameras": [
       "Convertible",
@@ -18771,9 +18998,9 @@
   },
   "KC09": {
     "xyz": [
-      -265.501,
-      513.835,
-      36.787
+      -265.268,
+      514.106,
+      36.655
     ],
     "source_cameras": [
       "Convertible",
@@ -18785,9 +19012,9 @@
   },
   "KC10": {
     "xyz": [
-      -266.994,
-      514.425,
-      34.479
+      -266.759,
+      514.699,
+      34.344
     ],
     "source_cameras": [
       "Convertible",
@@ -18799,9 +19026,9 @@
   },
   "KC11": {
     "xyz": [
-      -273.11,
-      516.513,
-      24.905
+      -272.863,
+      516.802,
+      24.755
     ],
     "source_cameras": [
       "Convertible",
@@ -18891,9 +19118,9 @@
   },
   "Tall Billboard (Port VC)": {
     "xyz": [
-      795.487,
-      -787.856,
-      57.761
+      796.191,
+      -788.739,
+      57.749
     ],
     "source_cameras": [
       "Vice City 08 (Ferris Wheel)",
@@ -18901,7 +19128,7 @@
     ],
     "error_m": 2.938,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.3 m, angle max 82.0 deg",
-    "note": "BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.4 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 22.0 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.4 m | "
+    "note": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.4 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 22.0 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 2.2 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 6.4 m | "
   },
   "Tall Yellow Sign": {
     "xyz": [
@@ -18918,9 +19145,9 @@
   },
   "Ten Museum Park (NE)": {
     "xyz": [
-      -421.143,
-      488.383,
-      134.312
+      -434.462,
+      492.49,
+      134.634
     ],
     "source_cameras": [
       "Port Vice City (A)",
@@ -18928,13 +19155,13 @@
     ],
     "error_m": 2.0,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.1 m, angle max 2.8 deg",
-    "note": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.8 m | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.5 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 25.2 m | "
+    "note": "BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 13.9 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.8 m | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.5 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.4 m | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.5 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 25.2 m | "
   },
   "Ten Museum Park (SW)": {
     "xyz": [
-      -505.362,
-      468.385,
-      138.856
+      -505.181,
+      468.21,
+      138.865
     ],
     "source_cameras": [
       "Port Vice City (B)",
@@ -18981,7 +19208,7 @@
     ],
     "error_m": 2.0,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.1 m, angle max 71.3 deg",
-    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 43 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 43 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 41 m, garde | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 10.2 m | "
+    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 43 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 43 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 41 m, garde | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, pert"
   },
   "WTP (W)": {
     "xyz": [
@@ -18995,7 +19222,7 @@
     ],
     "error_m": 2.0,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 1.2 m, angle max 70.8 deg",
-    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 43 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 44 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 44 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 41 m, garde | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): deplace de 10.5 m | "
+    "note": "REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 43 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 43 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 44 m, garde | REVUE BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 44 m, garde | REVUE BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 42 m, garde | REVUE BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees): voulait bouger de 41 m, garde | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m): deplace 1.9 m | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, pert"
   },
   "1500 Sonora Ave (Tank) (A)": {
     "xyz": [
@@ -19711,9 +19938,9 @@
   },
   "Vizcayne South Condominium (SW)": {
     "xyz": [
-      -627.581,
-      82.389,
-      178.351
+      -627.616,
+      82.449,
+      178.342
     ],
     "source_cameras": [],
     "error_m": null,

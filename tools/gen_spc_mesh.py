@@ -32,10 +32,10 @@ import numpy as np
 from scipy.optimize import least_squares
 P2 = np.array([p[:2] for p in roof])
 def _model(p):
-    cx, cy, th, L, W, c = p
+    cx, cy, th, L, W, c, c2 = p   # [SPC-V7 2026-09-06] chanfreins inegaux (c en x, c2 en y): tooltips Alexandre 10.2 / 12.5 m
     ct, st = math.cos(th), math.sin(th)
-    loc = [(-(L - c), W), ((L - c), W), (L, W - c), (L, -(W - c)),
-           ((L - c), -W), (-(L - c), -W), (-L, -(W - c)), (-L, W - c)]
+    loc = [(-(L - c), W), ((L - c), W), (L, W - c2), (L, -(W - c2)),
+           ((L - c), -W), (-(L - c), -W), (-L, -(W - c2)), (-L, W - c2)]
     return np.array([[cx + x * ct - y * st, cy + x * st + y * ct] for x, y in loc])
 c0 = P2.mean(0)
 best = None
@@ -43,7 +43,7 @@ for th0 in np.arange(0, math.pi / 2, 0.15):
     for rot in range(8):
         Pr = np.roll(P2, rot, axis=0)
         r = least_squares(lambda p, Pr=Pr: (_model(p) - Pr).ravel(),
-                          [c0[0], c0[1], th0, 30, 14, 6], method='lm')
+                          [c0[0], c0[1], th0, 30, 14, 6, 6], method='lm')
         if best is None or r.cost < best[0]:
             best = (r.cost, r.x, rot)
 _, psym, rot = best
