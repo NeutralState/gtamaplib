@@ -3133,7 +3133,9 @@
    3840,
    1728
   ],
-  "source": "Trailer 2 [4333]"
+  "source": "Trailer 2 [4333]",
+  "excluded": true,
+  "notes": "EXCLUE 2026-09-06: cam placeholder jamais resolue (pose par defaut -250,-420,10 / yaw 90); ses 3 clics One Biscayne donnaient 1000-1500' et gonflaient la moyenne; a reactiver quand elle aura assez de clics pour un solve | "
  },
  "Chase (1)": {
   "id": "T2/76",
