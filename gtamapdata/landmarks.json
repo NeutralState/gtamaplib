@@ -1494,16 +1494,17 @@
   },
   "Mr. Bingo (SE)": {
     "xyz": [
-      -6344.644114322143,
-      2824.1469901970636,
-      10.03927740946631
+      -6345.438,
+      2824.148,
+      14.832
     ],
     "source_cameras": [
       "AI World Editor Map (4K)"
     ],
     "error_m": null,
     "zone": "port_gellhorn",
-    "author": "rlx"
+    "author": "rlx",
+    "note": "TRIAGE-RETRI 2026-09-06: retriangule sur 2 cams (dispersion 0.7 m), etait a 4.9 m; residus px AI World Editor Ma 0->1, Gas Station (Jason 75->11 | "
   },
   "Mr. Bingo (SW)": {
     "xyz": [
@@ -8730,9 +8731,9 @@
   },
   "Central District Wastewater Treatment Plant (Tank)": {
     "xyz": [
-      482.3049023646967,
-      -1323.8427604665524,
-      37.622474681156135
+      490.624,
+      -1289.821,
+      36.655
     ],
     "source_cameras": [
       "Vice City Postcard",
@@ -8740,7 +8741,7 @@
     ],
     "error_m": 0.508,
     "zone": "grassrivers",
-    "note": "REVUE BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 32 m, garde | REVUE BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 40 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 68 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 76 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 79 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_"
+    "note": "TRIAGE-RETRI 2026-09-06: retriangule sur 2 cams (dispersion 1.7 m), etait a 35.0 m; residus px Vice City 08 (Ferr 50->4, Vice City Postcard 7->1 | REVUE BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 35 m, garde | REVUE BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 32 m, garde | REVUE BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 40 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 68 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 76 m, garde | REVUE BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): voulait bouger de 79 m, garde"
   },
   "Kaseya Center (S)": {
     "xyz": [
@@ -9191,9 +9192,9 @@
   },
   "Radio Tower #1 (Port Gellhorn)": {
     "xyz": [
-      -6500.77,
-      3488.41,
-      52.74
+      -6499.807,
+      3478.987,
+      50.9
     ],
     "source_cameras": [
       "Chase (2) (A)",
@@ -9201,7 +9202,8 @@
     ],
     "error_m": 47.85,
     "zone": "port_gellhorn",
-    "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)"
+    "method": "PGH-BA-V1: solve joint zone Port Gellhorn (2 cams, leak figees)",
+    "note": "TRIAGE-RETRI 2026-09-06: retriangule sur 3 cams (dispersion 0.2 m), etait a 9.6 m; residus px U-Turn (NW) 127->0, Chase (2) (A) 12->4, Chase (2) (B) 2->3 | "
   },
   "Sombrero Key Light (B)": {
     "xyz": [
