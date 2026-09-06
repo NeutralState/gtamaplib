@@ -62,5 +62,25 @@
    300
   ],
   "filename": "/Users/alexandreleblanc/Downloads/gtamaplib-main/maps/yanis,16_vc10.png"
+ },
+ "yanis16_vc11": {
+  "version": 16,
+  "scale": 1.0,
+  "zero": [
+   800,
+   2400
+  ],
+  "filename": "/Users/alexandreleblanc/Downloads/gtamaplib-main/maps/yanis,16_vc11.png",
+  "source": "crop V16 SVG raster autour de Vice City 11"
+ },
+ "yanis16_vc11n": {
+  "version": 16,
+  "scale": 1.0,
+  "zero": [
+   800,
+   900
+  ],
+  "filename": "/Users/alexandreleblanc/Downloads/gtamaplib-main/maps/yanis,16_vc11n.png",
+  "source": "crop V16 champ proche Vice City 11"
  }
 }
