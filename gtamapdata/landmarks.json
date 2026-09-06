@@ -7784,8 +7784,8 @@
   },
   "Water Tower (West Port Gellhorn)": {
     "xyz": [
-      -6645.582,
-      3654.912,
+      -6647.14,
+      3662.07,
       37.28
     ],
     "source_cameras": [
@@ -7795,12 +7795,13 @@
     ],
     "error_m": null,
     "zone": "port_gellhorn",
-    "method": "Rayon PGH Postcard (X) corrige \u2229 verticale de Water Tower (West Port Gellhorn) (C) (2026-08-30)"
+    "method": "Rayon PGH Postcard (X) corrige \u2229 verticale de Water Tower (West Port Gellhorn) (C) (2026-08-30)",
+    "note": "ANCRE V16 2026-09-06: centre du disque V16 du chateau d eau (rayon 6.8 m), l'ancienne position (Postcard X + PG04 X) etait a 7.3 m; z conserve | "
   },
   "Water Tower (West Port Gellhorn) (C)": {
     "xyz": [
-      -6645.582,
-      3654.912,
+      -6647.14,
+      3662.07,
       26.315
     ],
     "source_cameras": [
@@ -7809,7 +7810,8 @@
     ],
     "error_m": null,
     "zone": "port_gellhorn",
-    "method": "RETRIANGULATION 2026-08-30 (yaw PGH Postcard corrige par Alexandre): 2 cams, ecart rayons 0.6 m"
+    "method": "RETRIANGULATION 2026-08-30 (yaw PGH Postcard corrige par Alexandre): 2 cams, ecart rayons 0.6 m",
+    "note": "ANCRE V16 2026-09-06: centre du disque V16 du chateau d eau (rayon 6.8 m), l'ancienne position (Postcard X + PG04 X) etait a 7.3 m; z conserve | "
   },
   "Wells Fargo Center (N)": {
     "xyz": [
