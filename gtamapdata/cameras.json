@@ -5303,15 +5303,15 @@
   "xyz": [
    -6776.9,
    3979.1,
-   20.0
+   21.1
   ],
   "ypr": [
-   186.803,
-   -2.47,
+   188.7,
+   -1.97,
    0.0
   ],
   "fov": [
-   60.5,
+   53.8,
    null
   ],
   "size": [
@@ -5321,6 +5321,6 @@
   "source": "Screenshot 3 \u2014 Port Gellhorn 06 (Trailer Park; chateau d eau, reservoir incendie 145 000 L, lignes HT, crepuscule)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "2026-09-06: pitch d'Alexandre (+5.78 dans la vue 3D, le relief lointain colle) conserve, yaw ajuste pour passer par le clic du chateau d eau (position et z toujours approximatifs) | POSITION APPROX Alexandre 2026-09-06 (-6776.9,3979.1, sol z 3.5; cam en hauteur, z init 20), orientation visee sur le chateau d eau ouest; a resoudre librement apres clics | AJOUT 2026-09-06 (fichier ~/Downloads/Port_Gellhorn_06.jpg, 3840x2160, converti PNG): pose INITIALE arbitraire (500 m SE du chateau d eau ouest, visee dessus), a resoudre des que les clics sont poses"
+  "notes": "2026-09-06b: z 21.1 m et fov 53.8 deduits de l'ecart vertical sommet/centre du chateau d eau (11.0 m sur 122 px) a la position d'Alexandre; yaw 188.7 coherent avec le relief; position xy toujours approximative, reservoir sans position | 2026-09-06: pitch d'Alexandre (+5.78 dans la vue 3D, le relief lointain colle) conserve, yaw ajuste pour passer par le clic du chateau d eau (position et z toujours approximatifs) | POSITION APPROX Alexandre 2026-09-06 (-6776.9,3979.1, sol z 3.5; cam en hauteur, z init 20), orientation visee sur le chateau d eau ouest; a resoudre librement apres clics | AJOUT 2026-09-06 (fichier ~/Downloads/Port_Gellhorn_06.jpg, 3840x2160, converti PNG): pose INITIALE arbitraire (500 m SE du chateau d eau ouest, visee dessus), a resoudre des que les clics sont poses"
  }
 }
