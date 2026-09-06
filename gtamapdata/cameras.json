@@ -5301,17 +5301,17 @@
   "id": "S2/79",
   "player": null,
   "xyz": [
-   -6776.9,
-   3979.1,
-   21.1
+   -6779.64,
+   3977.05,
+   20.99
   ],
   "ypr": [
-   188.7,
-   -1.97,
+   189.216,
+   -1.964,
    0.0
   ],
   "fov": [
-   53.8,
+   53.89,
    null
   ],
   "size": [
@@ -5321,6 +5321,6 @@
   "source": "Screenshot 3 \u2014 Port Gellhorn 06 (Trailer Park; chateau d eau, reservoir incendie 145 000 L, lignes HT, crepuscule)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "2026-09-06b: z 21.1 m et fov 53.8 deduits de l'ecart vertical sommet/centre du chateau d eau (11.0 m sur 122 px) a la position d'Alexandre; yaw 188.7 coherent avec le relief; position xy toujours approximative, reservoir sans position | 2026-09-06: pitch d'Alexandre (+5.78 dans la vue 3D, le relief lointain colle) conserve, yaw ajuste pour passer par le clic du chateau d eau (position et z toujours approximatifs) | POSITION APPROX Alexandre 2026-09-06 (-6776.9,3979.1, sol z 3.5; cam en hauteur, z init 20), orientation visee sur le chateau d eau ouest; a resoudre librement apres clics | AJOUT 2026-09-06 (fichier ~/Downloads/Port_Gellhorn_06.jpg, 3840x2160, converti PNG): pose INITIALE arbitraire (500 m SE du chateau d eau ouest, visee dessus), a resoudre des que les clics sont poses"
+  "notes": "SOLVE 2026-09-06c: chateau d eau (sommet+centre) + reservoir tooltip (z libre), prior position Alexandre sigma 20 m; xyz (-6779.6,3977.1,21.0) fov 53.9 | 2026-09-06b: z 21.1 m et fov 53.8 deduits de l'ecart vertical sommet/centre du chateau d eau (11.0 m sur 122 px) a la position d'Alexandre; yaw 188.7 coherent avec le relief; position xy toujours approximative, reservoir sans position | 2026-09-06: pitch d'Alexandre (+5.78 dans la vue 3D, le relief lointain colle) conserve, yaw ajuste pour passer par le clic du chateau d eau (position et z toujours approximatifs) | POSITION APPROX Alexandre 2026-09-06 (-6776.9,3979.1, sol z 3.5; cam en hauteur, z init 20), orientation visee sur le chateau d eau ouest; a resoudre librement apres clics | AJOUT 2026-09-06 (fichier ~/Downloads/Port_Gellhorn_06.jpg, 3840x2160, converti PNG): pose INITIALE arbitraire (500 m SE du chateau d eau ouest, visee dessus), a resoudre des que les clics sont poses"
  }
 }

@@ -20379,9 +20379,16 @@
     "note": "ANCRE 2026-09-06: sommet V16 du decrochement est du polygone One Biscayne (7.5 m a l est du coin SE tooltip -444.3,-304.7), frole a 0.2 m par le rayon du clic Vice City 11; z rayon"
   },
   "Water Tank (West Port Gellhorn)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
-    "zone": "unknown"
+    "xyz": [
+      -6683.7,
+      3837.6,
+      23.3
+    ],
+    "source_cameras": [
+      "Port Gellhorn 06 (Trailer Park)"
+    ],
+    "error_m": 0.5,
+    "zone": "port_gellhorn",
+    "note": "TOOLTIP xy Alexandre 2026-09-06 (reservoir incendie 145 000 L); z = sommet vu par Port Gellhorn 06 (solve joint)"
   }
 }
