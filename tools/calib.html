@@ -1646,7 +1646,7 @@ async function init() {
     // lieu de figer le fond a 256 px/tuile: sinon, en dezoomant fort, le fond
     // (V16) restait a une echelle fixe pendant que l'overlay continuait a
     // retrecir — la carte semblait "disparaitre"/se desaligner.
-    const zoomDraw = Math.min(TILES_MAX_Z, zoomReal);
+    const zoomDraw = zoomReal;   // [ZOOM-V16-Z8] au-dela de z6 les tuiles z6 sont agrandies (drawSize > 256), la geometrie reste coherente avec l'overlay
     const tileWorldPxFactor = (1024 * Math.pow(2, zoomDraw)) / TILES_MAP_W;  // tile-pixels per world meter
     const cxPix = (centerX + TILES_ZERO_X) * tileWorldPxFactor;
     const cyPix = (TILES_ZERO_Y - centerY) * tileWorldPxFactor;
@@ -1777,7 +1777,7 @@ async function init() {
     const factor = e.deltaY < 0 ? 1.2 : 1 / 1.2;
     const sz = window.mapData.transform.svg_size;
     const minScale = Math.min(rect.width / sz[0], rect.height / sz[1]) * 0.5;
-    const maxScale = 2.0;  // [TILES-V1-CANVAS] cap zoom at exactly z=6 native (s=2 -> zoom=log2(64)=6.0) to avoid sub-pixel stretching drift
+    const maxScale = 8.0;  // [ZOOM-V16-Z8 2026-09-06] etait 2.0 (z6 natif); on autorise 2 crans de plus (tuiles z6 agrandies) pour pointer plus fin
     let ns = Math.max(minScale, Math.min(maxScale, s * factor));
     // Adjust translate so the cursor stays over the same map point.
     const ntx = mx - (mx - tx) * (ns / s);
@@ -1824,8 +1824,47 @@ async function init() {
       const z = window.groundZ(wx, wy);
       readEl.textContent = `X ${wx.toFixed(1)}   Y ${wy.toFixed(1)}   Z ${z === null ? '—' : z.toFixed(1)}`;
       readEl.classList.add('show');
+      // [V16-SNAP-V1 2026-09-06] aimantation sur les sommets vectoriels V16 (coins
+      // de batiments/structures du SVG): rayon 3 m monde, Shift = desactive.
+      if (!e.shiftKey) {
+        const now = performance.now();
+        if (!window._v16SnapT || now - window._v16SnapT > 70) {
+          window._v16SnapT = now;
+          const r = Math.max(1.0, 3.0 / Math.max(1, scale / 2));   // plus on zoome, plus le rayon d'accroche se resserre
+          fetch(`/api/v16_snap?x=${wx.toFixed(2)}&y=${wy.toFixed(2)}&r=${r.toFixed(2)}`).then(r => r.json()).then(j => {
+            window._v16SnapLast = { wx, wy, snap: (j && j.snap) || null, cat: j && j.cat };
+            if (j && j.snap) {
+              readEl.textContent = `X ${wx.toFixed(1)}   Y ${wy.toFixed(1)}   Z ${z === null ? '—' : z.toFixed(1)}   ⌖ ${j.snap[0].toFixed(1)}, ${j.snap[1].toFixed(1)} (${j.cat}, ${j.d.toFixed(1)} m)`;
+              readEl.style.color = '#fde68a';
+            } else {
+              readEl.style.color = '';
+            }
+          }).catch(() => {});
+        }
+      } else {
+        readEl.style.color = '';
+      }
     });
     mapView.addEventListener('mouseleave', () => readEl.classList.remove('show'));
+    // [COPY-XY-V1 2026-09-06] Alt+clic sur la carte: copie "X, Y" dans le presse-papier
+    // (coordonnees aimantees V16 si le tooltip en affiche, sinon le curseur) au lieu
+    // de prendre des captures d'ecran.
+    mapView.addEventListener('click', e => {
+      if (!e.altKey || window.currentView !== 'map' || !window.mapTx || !window.svgToWorld) return;
+      e.preventDefault(); e.stopPropagation();
+      const rect = mapView.getBoundingClientRect();
+      const { scale, tx, ty } = window.mapTx;
+      const svgX = (e.clientX - rect.left - tx) / scale;
+      const svgY = (e.clientY - rect.top  - ty) / scale;
+      let [wx, wy] = window.svgToWorld(svgX, svgY);
+      let tag = '';
+      const L = window._v16SnapLast;
+      if (!e.shiftKey && L && L.snap && Math.hypot(L.wx - wx, L.wy - wy) < 1.5) { wx = L.snap[0]; wy = L.snap[1]; tag = ` (⌖ ${L.cat})`; }
+      const txt = `${wx.toFixed(1)}, ${wy.toFixed(1)}`;
+      const done = () => { readEl.textContent = `✓ copié  ${txt}${tag}`; readEl.style.color = '#86efac'; readEl.classList.add('show'); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, done);
+      else { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (_) {} ta.remove(); done(); }
+    }, true);
   })();
 
   mapView.addEventListener('mousedown', e => {

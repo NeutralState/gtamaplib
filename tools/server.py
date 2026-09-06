@@ -2519,6 +2519,39 @@ class Handler(BaseHTTPRequestHandler):
                 _f.write('\n')
             self.send_json({'ok': True, 'excluded': [_cam, _lm]})
 
+        elif path == '/api/v16_snap':
+            # [V16-SNAP-V1 2026-09-06] sommet vectoriel V16 (gtamapdata/v16_vertices.json,
+            # extrait du SVG communautaire) le plus proche d'un point monde, dans un
+            # rayon r (m): le tooltip de la carte s'aimante dessus -> coordonnees
+            # exactes des coins dessines au lieu d'un pointage a la main.
+            try:
+                _x = float(qs.get('x', [''])[0]); _y = float(qs.get('y', [''])[0]); _r = float(qs.get('r', ['3'])[0])
+            except ValueError:
+                self.send_json({'error': 'x,y requis'}, 400); return
+            global _V16_SNAP
+            try:
+                _V16_SNAP
+            except NameError:
+                _V16_SNAP = None
+            if _V16_SNAP is None:
+                try:
+                    import numpy as _np
+                    from scipy.spatial import cKDTree as _KD
+                    _vp = os.path.join(os.path.dirname(TOOL_DIR), 'gtamapdata', 'v16_vertices.json')
+                    _vd = json.load(open(_vp))['categories']
+                    _pts = []; _cat = []
+                    for _k, _v in _vd.items():
+                        _pts += _v; _cat += [_k] * len(_v)
+                    _V16_SNAP = (_KD(_np.array(_pts, float)), _np.array(_pts, float), _cat)
+                except Exception as _e:
+                    self.send_json({'error': f'v16_vertices indisponible: {_e}'}, 500); return
+            _tree, _pts, _cat = _V16_SNAP
+            _d, _i = _tree.query([_x, _y], k=1)
+            if _d <= _r:
+                self.send_json({'snap': [round(float(_pts[_i][0]), 2), round(float(_pts[_i][1]), 2)], 'd': round(float(_d), 2), 'cat': _cat[_i]})
+            else:
+                self.send_json({'snap': None, 'd': round(float(_d), 2)})
+
         elif path == '/api/quarantine_lm':
             # [TRIAGE-V1] action: null the xyz of a known-wrong LM (markings
             # remain in pixels.json for future retriangulation)
