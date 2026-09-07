@@ -5106,7 +5106,7 @@
   "Bay (A)": {
     "xyz": [
       -7945.5,
-      4088.5,
+      4082.5,
       0.0
     ],
     "source_cameras": [
@@ -5119,7 +5119,7 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait a terre a 7.1 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 6.0 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait a terre a 7.1 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Bay (B)": {
     "xyz": [
@@ -5140,8 +5140,8 @@
   },
   "Bay (C)": {
     "xyz": [
-      -7830.5,
-      4140.5,
+      -7829.5,
+      4130.5,
       0.0
     ],
     "source_cameras": [
@@ -5154,11 +5154,11 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait a terre a 8.2 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 10.0 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait a terre a 8.2 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Bay (D)": {
     "xyz": [
-      -7821.5,
+      -7804.5,
       4206.5,
       0.0
     ],
@@ -5172,7 +5172,7 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait a terre a 5.0 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 17.0 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait a terre a 5.0 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Bay (E)": {
     "xyz": [
@@ -5193,8 +5193,8 @@
   },
   "Bay (F)": {
     "xyz": [
-      -7835.5,
-      4352.5,
+      -7828.5,
+      4360.5,
       0.0
     ],
     "source_cameras": [
@@ -5207,7 +5207,7 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 16.0 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 10.6 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 16.0 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Bay (G)": {
     "xyz": [
@@ -5228,8 +5228,8 @@
   },
   "Bay (H)": {
     "xyz": [
-      -7958.5,
-      4719.5,
+      -7956.5,
+      4721.5,
       0.0
     ],
     "source_cameras": [
@@ -5243,12 +5243,12 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 37.2 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 2.8 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 37.2 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Bay (I)": {
     "xyz": [
       -7782.5,
-      4604.5,
+      4605.5,
       0.0
     ],
     "source_cameras": [
@@ -5262,7 +5262,7 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 21.6 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 1.0 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 21.6 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Bay (J)": {
     "xyz": [
@@ -5374,8 +5374,8 @@
   },
   "Bay (P)": {
     "xyz": [
-      -7068.5,
-      4794.5,
+      -7053.5,
+      4784.5,
       0.0
     ],
     "source_cameras": [
@@ -5389,12 +5389,12 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 29.1 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 18.0 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 29.1 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Bay (Q)": {
     "xyz": [
-      -7110.5,
-      4868.5,
+      -7116.5,
+      4862.5,
       0.0
     ],
     "source_cameras": [
@@ -5408,12 +5408,12 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 34.2 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 8.5 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 34.2 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Bay (R)": {
     "xyz": [
-      -7028.5,
-      4737.5,
+      -7026.5,
+      4739.5,
       0.0
     ],
     "source_cameras": [
@@ -5427,12 +5427,12 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 4.5 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 2.8 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 4.5 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Bay (S)": {
     "xyz": [
       -7016.5,
-      4735.5,
+      4736.5,
       0.0
     ],
     "source_cameras": [
@@ -5446,12 +5446,12 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 7.8 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 1.0 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 7.8 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Bay (T)": {
     "xyz": [
-      -6961.5,
-      4821.5,
+      -6953.5,
+      4804.5,
       0.0
     ],
     "source_cameras": [
@@ -5465,12 +5465,12 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 19.0 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 18.8 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 19.0 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Bay (U)": {
     "xyz": [
-      -6941.5,
-      4833.5,
+      -6929.5,
+      4819.5,
       0.0
     ],
     "source_cameras": [
@@ -5484,12 +5484,12 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 12.7 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 18.4 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 12.7 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Bay (V)": {
     "xyz": [
-      -6930.5,
-      4843.5,
+      -6919.5,
+      4827.5,
       0.0
     ],
     "source_cameras": [
@@ -5503,12 +5503,12 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait a terre a 5.8 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 19.4 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait a terre a 5.8 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Bay (W)": {
     "xyz": [
-      -6903.5,
-      4870.5,
+      -6886.5,
+      4859.5,
       0.0
     ],
     "source_cameras": [
@@ -5522,7 +5522,7 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 14.2 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 20.2 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 14.2 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Bay (X)": {
     "xyz": [
@@ -5562,8 +5562,8 @@
   },
   "Bay (Z)": {
     "xyz": [
-      -6889.5,
-      5029.5,
+      -6880.5,
+      5035.5,
       0.0
     ],
     "source_cameras": [
@@ -5577,7 +5577,7 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 4.5 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 10.8 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 4.5 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "Beach (A)": {
     "xyz": [
@@ -6571,8 +6571,8 @@
   },
   "PGH Canal (A)": {
     "xyz": [
-      -6974.5,
-      3925.5,
+      -6971.5,
+      3926.5,
       0.0
     ],
     "source_cameras": [
@@ -6585,12 +6585,12 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait a terre a 4.0 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 3.2 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait a terre a 4.0 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "PGH Canal (B)": {
     "xyz": [
-      -6904.5,
-      3879.5,
+      -6903.5,
+      3878.5,
       0.0
     ],
     "source_cameras": [
@@ -6603,7 +6603,7 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait a terre a 5.0 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 1.4 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait a terre a 5.0 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "PGH Canal (C)": {
     "xyz": [
@@ -6677,8 +6677,8 @@
   },
   "PGH Island A (W)": {
     "xyz": [
-      -7299.5,
-      3840.5,
+      -7287.5,
+      3826.5,
       0.0
     ],
     "source_cameras": [
@@ -6691,7 +6691,7 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 8.2 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 18.4 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 8.2 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "PGH Island B (E)": {
     "xyz": [
@@ -6712,8 +6712,8 @@
   },
   "PGH Island B (W)": {
     "xyz": [
-      -7422.5,
-      3678.5,
+      -7417.5,
+      3661.5,
       0.0
     ],
     "source_cameras": [
@@ -6726,7 +6726,7 @@
       "value": 0.0
     },
     "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
-    "note": "LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 18.0 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
+    "note": "V16-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote V16 (etait a 17.7 m; la leak map est decalee de ~22 m ici, snap precedent annule) | LEAK-COAST-SNAP 2026-09-06: point de rive ramene sur le trait de cote de la leak map (etait dans l eau a 18.0 m); position mono-cam Postcard (rayon rasant) non fiable en profondeur | "
   },
   "PTCC (1) (BB2)": {
     "xyz": null,
