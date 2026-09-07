@@ -20432,10 +20432,17 @@
       23.3
     ],
     "source_cameras": [
-      "Port Gellhorn 06 (Trailer Park)"
+      "Port Gellhorn Postcard (X)"
     ],
     "error_m": 0.5,
     "zone": "port_gellhorn",
     "note": "TOOLTIP xy Alexandre 2026-09-06 (reservoir incendie 145 000 L); z = sommet vu par Port Gellhorn 06 (solve joint)"
+  },
+  "Fire Water Tank (145000 L) (Port Gellhorn)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "port_gellhorn",
+    "note": "2026-09-06: gros reservoir blanc '145 000 liters' au bord gauche de Port Gellhorn 06; different du rond V16 (-6683.7,3837.6) vu par le Postcard; position inconnue (pas sur V16?)"
   }
 }
