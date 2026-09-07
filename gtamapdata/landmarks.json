@@ -1745,8 +1745,8 @@
   },
   "Port of Tampa Container Crane (3)": {
     "xyz": [
-      -7597.969,
-      4599.747,
+      -7648.6,
+      4607.2,
       70.946
     ],
     "source_cameras": [
@@ -1756,7 +1756,8 @@
     "error_m": 0.062,
     "zone": "port_gellhorn",
     "author": "rlx",
-    "method": "RETRIANGULATION 2026-08-30 (yaw PGH Postcard corrige par Alexandre): 2 cams, ecart rayons 1.1 m"
+    "method": "RETRIANGULATION 2026-08-30 (yaw PGH Postcard corrige par Alexandre): 2 cams, ecart rayons 1.1 m",
+    "note": "TOOLTIP xy Alexandre 2026-09-06 (grue V16), etait a 51.2 m | "
   },
   "Portofino Tower (NW)": {
     "xyz": [
@@ -7085,8 +7086,8 @@
   },
   "Port of Tampa Container Crane (1)": {
     "xyz": [
-      -7921.244,
-      4667.305,
+      -7931.2,
+      4729.7,
       69.027
     ],
     "source_cameras": [
@@ -7095,12 +7096,13 @@
     ],
     "error_m": 0.009,
     "zone": "port_gellhorn",
-    "method": "RETRIANGULATION 2026-08-30 (yaw PGH Postcard corrige par Alexandre): 2 cams, ecart rayons 0.7 m"
+    "method": "RETRIANGULATION 2026-08-30 (yaw PGH Postcard corrige par Alexandre): 2 cams, ecart rayons 0.7 m",
+    "note": "TOOLTIP xy Alexandre 2026-09-06 (grue V16), etait a 63.2 m | "
   },
   "Port of Tampa Container Crane (2)": {
     "xyz": [
-      -7877.214,
-      4653.114,
+      -7859.3,
+      4682.6,
       71.258
     ],
     "source_cameras": [
@@ -7109,7 +7111,8 @@
     ],
     "error_m": 0.125,
     "zone": "port_gellhorn",
-    "method": "RETRIANGULATION 2026-08-30 (yaw PGH Postcard corrige par Alexandre): 2 cams, ecart rayons 0.1 m"
+    "method": "RETRIANGULATION 2026-08-30 (yaw PGH Postcard corrige par Alexandre): 2 cams, ecart rayons 0.1 m",
+    "note": "TOOLTIP xy Alexandre 2026-09-06 (grue V16), etait a 34.5 m | "
   },
   "Prison Tower (1)": {
     "xyz": [
