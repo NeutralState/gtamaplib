@@ -3742,17 +3742,17 @@
   "id": "S2/73",
   "player": null,
   "xyz": [
-   -6552.338,
-   3609.353,
-   31.396
+   -6531.3,
+   3607.3,
+   30.6
   ],
   "ypr": [
-   48.7655,
-   -3.2326,
+   49.56,
+   -3.18,
    0.1277
   ],
   "fov": [
-   71.666,
+   72.0,
    null
   ],
   "size": [
@@ -3762,7 +3762,7 @@
   "source": "Screenshot 1 \u2014 Port Gellhorn Postcard [1]",
   "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m. | POSE-EDIT: ajustee a la main par Alexandre dans l UI | YAW-ALEXANDRE 2026-08-30: yaw 51.97->48.77 applique sur son ordre (match du relief rendu). DISCORDANCE DOCUMENTEE: les 15 vrais objets passent de 27 a 145 px rms; les Container Cranes (ancrees par Diner W A/B LOCKEES, far-field 1px) partent a 109-122 px et AUCUNE position (teste +/-300m) ni fov ne les recupere. NB: le relief heightmap de ce secteur est marque \"DISPLAY ONLY - INFERE, mediane |err| 4.8m, r2=0.52\" dans terrain_hd_meta.json \u2014 il ne peut pas servir de reference de calibration. Backup: cameras.json.bak_pgh_yaw.",
   "pose_verified": null,
-  "notes": "DIAGNOSTIC 2026-09-06 (soiree): image probablement NON pinhole (postcard 3:2 retouche/composite). Preuve: avec les axes de la route 9 et de la route de gauche donnes par Alexandre (points V16), la tour (disque V16), 19 points de cote et le relief, aucune pose pinhole ne satisfait a la fois le champ proche (routes, tour) et le champ lointain (cote, grues, horizon): le solve doit soit piquer a -6.4 deg/z 38 m (cote a 132 px, horizon 110 px trop haut), soit surelever la route 9 de 15 m. Etirements d'image et centre optique testes sans succes. Pose conservee; a n'utiliser que pour des directions lointaines, jamais pour des positions | RETOUR 2026-09-06 a la pose relief (fov 71.7, yaw 48.77) apres essai leak-route rejete par Alexandre (ne fit ni relief ni route); les 5 ancres du secteur restent a 50-120 px: cam a reposer sur des ancres ponctuelles reparties dans le cadre | SOLVE 2026-09-06: 5 ancres + axe de la route (bords traces par Alexandre) contre la leak map, pitch/roll relief conserves; xyz (-6553.2,3645.5,29.6) fov 94.5 | RECAL-ANCRES 2026-09-06 (tooltips x3, 54 clics, 0 ancres): mediane 0.7->0.7 px, ancres None->None, move 2.7 m | "
+  "notes": "SOLVE 2026-09-06 (nuit): axe route 9 (6 points V16 d'Alexandre) 0.3 m + tour V16 12/18 px + 19 points de cote 18 px + relief (yaw 49.6, pitch -3.2); fov 72.0; 21 m a l'est de l'ancienne pose. La route de gauche (ligne verte vs 4 points) reste a ~40 m: identification a revoir | DIAGNOSTIC 2026-09-06 (soiree): image probablement NON pinhole (postcard 3:2 retouche/composite). Preuve: avec les axes de la route 9 et de la route de gauche donnes par Alexandre (points V16), la tour (disque V16), 19 points de cote et le relief, aucune pose pinhole ne satisfait a la fois le champ proche (routes, tour) et le champ lointain (cote, grues, horizon): le solve doit soit piquer a -6.4 deg/z 38 m (cote a 132 px, horizon 110 px trop haut), soit surelever la route 9 de 15 m. Etirements d'image et centre optique testes sans succes. Pose conservee; a n'utiliser que pour des directions lointaines, jamais pour des positions | RETOUR 2026-09-06 a la pose relief (fov 71.7, yaw 48.77) apres essai leak-route rejete par Alexandre (ne fit ni relief ni route); les 5 ancres du secteur restent a 50-120 px: cam a reposer sur des ancres ponctuelles reparties dans le cadre | SOLVE 2026-09-06: 5 ancres + axe de la route (bords traces par Alexandre) contre la leak map, pitch/roll relief conserves; xyz (-6553.2,3645.5,29.6) fov 94.5 | RECAL-ANCRES 2026-09-06 (tooltips x3, 54 clics, 0 ancres): mediane 0.7->0.7 px, ancres None->None, move 2.7 m | "
  },
  "Ambrosia Postcard (X)": {
   "id": "S2/74",
