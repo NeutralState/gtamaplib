@@ -1552,9 +1552,9 @@
   },
   "PTCC (3) (BB2)": {
     "xyz": [
-      -7597.969,
-      4599.747,
-      40.114
+      -7602.64,
+      4594.703,
+      41.288
     ],
     "source_cameras": [
       "Diner (W) (A)",
@@ -1564,7 +1564,8 @@
     "error_m": null,
     "zone": "port_gellhorn",
     "author": "rlx",
-    "method": "Rayon PGH Postcard (X) corrige \u2229 verticale de Port of Tampa Container Crane (3) (2026-08-30)"
+    "method": "Rayon PGH Postcard (X) corrige \u2229 verticale de Port of Tampa Container Crane (3) (2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 7.0 m) | "
   },
   "Park (E)": {
     "xyz": [
@@ -5123,8 +5124,8 @@
   },
   "Bay (B)": {
     "xyz": [
-      -7864.53,
-      4134.723,
+      -7869.879,
+      4118.594,
       0.0
     ],
     "source_cameras": [
@@ -5136,7 +5137,8 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 17.0 m) | "
   },
   "Bay (C)": {
     "xyz": [
@@ -5176,8 +5178,8 @@
   },
   "Bay (E)": {
     "xyz": [
-      -7828.781,
-      4270.101,
+      -7840.807,
+      4259.723,
       0.0
     ],
     "source_cameras": [
@@ -5189,7 +5191,8 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 15.9 m) | "
   },
   "Bay (F)": {
     "xyz": [
@@ -5211,8 +5214,8 @@
   },
   "Bay (G)": {
     "xyz": [
-      -8357.253,
-      4631.924,
+      -8426.478,
+      4643.214,
       0.0
     ],
     "source_cameras": [
@@ -5224,7 +5227,8 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 70.1 m) | "
   },
   "Bay (H)": {
     "xyz": [
@@ -5266,8 +5270,8 @@
   },
   "Bay (J)": {
     "xyz": [
-      -7708.074,
-      4531.141,
+      -7729.677,
+      4535.595,
       0.0
     ],
     "source_cameras": [
@@ -5280,12 +5284,13 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 22.1 m) | "
   },
   "Bay (K)": {
     "xyz": [
-      -7657.965,
-      4535.483,
+      -7677.428,
+      4540.312,
       0.0
     ],
     "source_cameras": [
@@ -5298,12 +5303,13 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 20.1 m) | "
   },
   "Bay (L)": {
     "xyz": [
-      -7520.397,
-      4547.767,
+      -7534.389,
+      4553.612,
       0.0
     ],
     "source_cameras": [
@@ -5316,12 +5322,13 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 15.2 m) | "
   },
   "Bay (M)": {
     "xyz": [
-      -7439.045,
-      4554.453,
+      -7450.038,
+      4560.84,
       0.0
     ],
     "source_cameras": [
@@ -5334,12 +5341,13 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 12.7 m) | "
   },
   "Bay (N)": {
     "xyz": [
-      -7236.19,
-      4677.867,
+      -7244.493,
+      4692.258,
       0.0
     ],
     "source_cameras": [
@@ -5352,12 +5360,13 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 16.6 m) | "
   },
   "Bay (O)": {
     "xyz": [
-      -7218.659,
-      4693.92,
+      -7226.903,
+      4709.384,
       0.0
     ],
     "source_cameras": [
@@ -5370,7 +5379,8 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 17.5 m) | "
   },
   "Bay (P)": {
     "xyz": [
@@ -5526,8 +5536,8 @@
   },
   "Bay (X)": {
     "xyz": [
-      -6960.112,
-      5119.425,
+      -6971.245,
+      5169.086,
       0.0
     ],
     "source_cameras": [
@@ -5540,12 +5550,13 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 50.9 m) | "
   },
   "Bay (Y)": {
     "xyz": [
-      -6946.32,
-      5097.614,
+      -6956.269,
+      5145.018,
       0.0
     ],
     "source_cameras": [
@@ -5558,7 +5569,8 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 48.4 m) | "
   },
   "Bay (Z)": {
     "xyz": [
@@ -6554,8 +6566,8 @@
   },
   "PGH Barrier Island (E)": {
     "xyz": [
-      -8616.458,
-      3822.812,
+      -8632.428,
+      3788.29,
       0.0
     ],
     "source_cameras": [
@@ -6567,7 +6579,8 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 38.0 m) | "
   },
   "PGH Canal (A)": {
     "xyz": [
@@ -6643,8 +6656,8 @@
   },
   "PGH Island A (E)": {
     "xyz": [
-      -7454.804,
-      3785.007,
+      -7432.502,
+      3767.464,
       0.0
     ],
     "source_cameras": [
@@ -6656,12 +6669,13 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 28.4 m) | "
   },
   "PGH Island A (S)": {
     "xyz": [
-      -7366.701,
-      3793.69,
+      -7319.59,
+      3772.357,
       0.0
     ],
     "source_cameras": [
@@ -6673,7 +6687,8 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 51.7 m) | "
   },
   "PGH Island A (W)": {
     "xyz": [
@@ -6695,8 +6710,8 @@
   },
   "PGH Island B (E)": {
     "xyz": [
-      -7395.21,
-      3724.097,
+      -7369.932,
+      3707.55,
       0.0
     ],
     "source_cameras": [
@@ -6708,7 +6723,8 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 30.2 m) | "
   },
   "PGH Island B (W)": {
     "xyz": [
@@ -6737,9 +6753,9 @@
   },
   "PTCC (2) (BB2)": {
     "xyz": [
-      -7877.214,
-      4653.114,
-      37.923
+      -7885.154,
+      4642.815,
+      39.26
     ],
     "source_cameras": [
       "Port Gellhorn Postcard (X)",
@@ -6747,7 +6763,8 @@
     ],
     "error_m": null,
     "zone": "port_gellhorn",
-    "method": "Rayon PGH Postcard (X) corrige \u2229 verticale de Port of Tampa Container Crane (2) (2026-08-30)"
+    "method": "Rayon PGH Postcard (X) corrige \u2229 verticale de Port of Tampa Container Crane (2) (2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 13.1 m) | "
   },
   "Park Grove Condominium (C)": {
     "xyz": [
@@ -7331,8 +7348,8 @@
   },
   "Ship (A)": {
     "xyz": [
-      -7114.781,
-      4571.708,
+      -7115.484,
+      4579.552,
       0.0
     ],
     "source_cameras": [
@@ -7344,12 +7361,13 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 7.9 m) | "
   },
   "Ship (B)": {
     "xyz": [
-      -7086.165,
-      4598.678,
+      -7086.902,
+      4608.096,
       0.0
     ],
     "source_cameras": [
@@ -7361,12 +7379,13 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 9.4 m) | "
   },
   "Ship (C)": {
     "xyz": [
-      -7047.228,
-      4635.376,
+      -7047.964,
+      4646.982,
       0.0
     ],
     "source_cameras": [
@@ -7378,7 +7397,8 @@
       "type": "fixed",
       "value": 0.0
     },
-    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)"
+    "method": "Re-caste z=0 depuis Port Gellhorn Postcard (X) yaw-corrige (ordre Alexandre 2026-08-30)",
+    "note": "REPOSE 2026-09-06: point mono-cam Postcard recalcule sur la nouvelle pose (bouge 11.6 m) | "
   },
   "Skyviews Miami Observation Wheel": {
     "xyz": [
@@ -7544,9 +7564,9 @@
   },
   "Train Signal (S) (E)": {
     "xyz": [
-      -6614.07,
-      3687.879,
-      18.716
+      -6598.012,
+      3688.518,
+      18.032
     ],
     "source_cameras": [
       "Port Gellhorn Postcard (X)",
@@ -7554,13 +7574,14 @@
     ],
     "error_m": null,
     "zone": "port_gellhorn",
-    "method": "RETRIANGULATION 2026-08-30 (yaw PGH Postcard corrige par Alexandre): 2 cams, ecart rayons 0.2 m"
+    "method": "RETRIANGULATION 2026-08-30 (yaw PGH Postcard corrige par Alexandre): 2 cams, ecart rayons 0.2 m",
+    "note": "RETRI 2026-09-06 apres repose du Postcard (Port Gellhorn Postcard (X) x Port Gellhorn 04 (Delights) (X), rayons 0.1 m, parallaxe 53 deg, bouge 16.1 m) | "
   },
   "Train Signal (S) (W)": {
     "xyz": [
-      -6615.751,
-      3686.798,
-      18.755
+      -6599.83,
+      3687.488,
+      18.064
     ],
     "source_cameras": [
       "Port Gellhorn Postcard (X)",
@@ -7568,7 +7589,8 @@
     ],
     "error_m": null,
     "zone": "port_gellhorn",
-    "method": "RETRIANGULATION 2026-08-30 (yaw PGH Postcard corrige par Alexandre): 2 cams, ecart rayons 0.2 m"
+    "method": "RETRIANGULATION 2026-08-30 (yaw PGH Postcard corrige par Alexandre): 2 cams, ecart rayons 0.2 m",
+    "note": "RETRI 2026-09-06 apres repose du Postcard (Port Gellhorn Postcard (X) x Port Gellhorn 04 (Delights) (X), rayons 0.1 m, parallaxe 52 deg, bouge 16.0 m) | "
   },
   "Tr\u00e9sor Tower": {
     "xyz": [
@@ -19608,16 +19630,17 @@
   },
   "Unknown Building (North Port Gellhorn) (T)": {
     "xyz": [
-      -7328.133,
-      4799.202,
-      28.494
+      -7329.957,
+      4800.208,
+      28.733
     ],
     "source_cameras": [
       "Diner (W) (B)",
       "Port Gellhorn Postcard (X)"
     ],
     "error_m": 6.0,
-    "method": "RETRIANGULATION 2026-08-30 (yaw PGH Postcard corrige par Alexandre): 2 cams, ecart rayons 5.5 m"
+    "method": "RETRIANGULATION 2026-08-30 (yaw PGH Postcard corrige par Alexandre): 2 cams, ecart rayons 5.5 m",
+    "note": "RETRI 2026-09-06 apres repose du Postcard (Port Gellhorn Postcard (X) x Diner (W) (B), rayons 4.8 m, parallaxe 42 deg, bouge 2.1 m) | "
   },
   "Warehouse 4 (Ambrosia) (C)": {
     "xyz": [
