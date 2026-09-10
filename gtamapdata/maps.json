@@ -82,5 +82,15 @@
   ],
   "filename": "/Users/alexandreleblanc/Downloads/gtamaplib-main/maps/yanis,16_vc11n.png",
   "source": "crop V16 champ proche Vice City 11"
+ },
+ "yanis16_sunrise": {
+  "version": 16,
+  "scale": 1.0,
+  "zero": [
+   2700,
+   1300
+  ],
+  "filename": "/Users/alexandreleblanc/Downloads/gtamaplib-main/maps/yanis,16_sunrise.png",
+  "source": "crop V16 pour la projection de Sunrise over Vice City"
  }
 }
