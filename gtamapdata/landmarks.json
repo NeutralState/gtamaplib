@@ -20455,5 +20455,31 @@
     "error_m": 3.0,
     "zone": "vice_city",
     "note": "2026-09-10: coin SE approx d'Alexandre ('environ'), z = toit NE; pas d'ancre validee"
+  },
+  "Metro (1)": {
+    "xyz": [
+      -1797.3,
+      -135.1,
+      12.4
+    ],
+    "source_cameras": [
+      "Sunrise over Vice City (Extended Look)"
+    ],
+    "error_m": 3.0,
+    "zone": "vice_city",
+    "note": "2026-09-10: xy lu par Alexandre sur la leak map, corrige du decalage leak->V16 local (+5 m est); z initial sol+10 m, affine par le solve Sunrise"
+  },
+  "Overpass (1)": {
+    "xyz": [
+      -1663.5,
+      -264.5,
+      24.5
+    ],
+    "source_cameras": [
+      "Sunrise over Vice City (Extended Look)"
+    ],
+    "error_m": 3.0,
+    "zone": "vice_city",
+    "note": "2026-09-10: xy lu par Alexandre sur la leak map, corrige du decalage leak->V16 local (+5 m est); z initial sol+10 m, affine par le solve Sunrise"
   }
 }
