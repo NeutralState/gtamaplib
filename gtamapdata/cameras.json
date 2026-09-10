@@ -5327,12 +5327,12 @@
   "id": "T3/2",
   "player": null,
   "xyz": [
-   -3200.0,
-   900.0,
-   220.0
+   -2473.3,
+   -9.4,
+   200.0
   ],
   "ypr": [
-   250.0,
+   274.17,
    -8.0,
    0.0
   ],
@@ -5347,6 +5347,6 @@
   "source": "Trailer 3 (Extended Look) \u2014 Sunrise over Vice City (vue aerienne vers Downtown au lever du soleil, echangeur autoroutier et metro aerien au premier plan, hotel jaune a gauche, deux reservoirs ronds a droite)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "AJOUT 2026-09-10 (fichier ~/Downloads/Sunrise over Vice City.png): pose INITIALE arbitraire (~3 km a l ouest-nord-ouest de Downtown, 220 m, visee est-sud-est, fov 50), a resoudre des que les clics sont poses (skyline Downtown/Brickell = ancres Vizcayne, SPC, One Miami, Four Seasons; echangeur = routes V16)"
+  "notes": "POSITION APPROX Alexandre 2026-09-10 (-2473.3,-9.4), z eleve (init 200 m), visee sur Vizcayne (1918 m, az 86 deg); a resoudre librement apres clics | AJOUT 2026-09-10 (fichier ~/Downloads/Sunrise over Vice City.png): pose INITIALE arbitraire (~3 km a l ouest-nord-ouest de Downtown, 220 m, visee est-sud-est, fov 50), a resoudre des que les clics sont poses (skyline Downtown/Brickell = ancres Vizcayne, SPC, One Miami, Four Seasons; echangeur = routes V16)"
  }
 }
