@@ -5329,15 +5329,15 @@
   "xyz": [
    -2473.3,
    -9.4,
-   200.0
+   149.6
   ],
   "ypr": [
-   259.37,
-   -7.19,
-   0.0
+   261.547,
+   -4.696,
+   -0.208
   ],
   "fov": [
-   50.0,
+   43.6,
    null
   ],
   "size": [
@@ -5347,6 +5347,6 @@
   "source": "Trailer 3 (Extended Look) \u2014 Sunrise over Vice City (vue aerienne vers Downtown au lever du soleil, echangeur autoroutier et metro aerien au premier plan, hotel jaune a gauche, deux reservoirs ronds a droite)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "2026-09-10: yaw -14.8 / pitch +0.81 poses par Alexandre dans la vue 3D (alignement grossier Vizcayne x2 + SPC) | POSITION APPROX Alexandre 2026-09-10 (-2473.3,-9.4), z eleve (init 200 m), visee sur Vizcayne (1918 m, az 86 deg); a resoudre librement apres clics | AJOUT 2026-09-10 (fichier ~/Downloads/Sunrise over Vice City.png): pose INITIALE arbitraire (~3 km a l ouest-nord-ouest de Downtown, 220 m, visee est-sud-est, fov 50), a resoudre des que les clics sont poses (skyline Downtown/Brickell = ancres Vizcayne, SPC, One Miami, Four Seasons; echangeur = routes V16)"
+  "notes": "SOLVE 2026-09-10a: 9 clics Downtown (2.3-2.8 km), xy tenu au point d'Alexandre (profondeur inobservable avec des cibles toutes a la meme distance), z 150 m, fov 43.6; mediane 11.8 px | 2026-09-10: yaw -14.8 / pitch +0.81 poses par Alexandre dans la vue 3D (alignement grossier Vizcayne x2 + SPC) | POSITION APPROX Alexandre 2026-09-10 (-2473.3,-9.4), z eleve (init 200 m), visee sur Vizcayne (1918 m, az 86 deg); a resoudre librement apres clics | AJOUT 2026-09-10 (fichier ~/Downloads/Sunrise over Vice City.png): pose INITIALE arbitraire (~3 km a l ouest-nord-ouest de Downtown, 220 m, visee est-sud-est, fov 50), a resoudre des que les clics sont poses (skyline Downtown/Brickell = ancres Vizcayne, SPC, One Miami, Four Seasons; echangeur = routes V16)"
  }
 }
