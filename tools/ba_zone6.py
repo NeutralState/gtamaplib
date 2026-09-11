@@ -38,7 +38,7 @@ Lall=[lm for lm,o in obs.items() if len(o)>=2 or lm in HARD]
 L=[lm for lm in Lall if inzone(lms[lm]['xyz']) and lm not in STRUCT_MEMBERS and (parallax(lm)>=2.0 or lm in HARD)]
 camset=sorted({cn for lm in Lall for cn,_ in obs[lm]})
 nclk=collections.Counter(cn for lm in Lall for cn,_ in obs[lm])
-free=[c for c in camset if not locked(c) and inzone(cams[c]['xyz']) and nclk[c]>=8 and 'POSITION ALEXANDRE' not in str(cams[c].get('notes',''))]
+free=[c for c in camset if not locked(c) and inzone(cams[c]['xyz']) and nclk[c]>=8 and 'POSITION ALEXANDRE' not in str(cams[c].get('notes','')) and 'ROAD-LOCK' not in str(cams[c].get('notes','')) and not _cls(c).startswith('X_') and not c.endswith('(X)')]  # 2026-09-10: cams X et cams verrouillees sur la route hors variables
 print(f"zone: {len(Lall)} landmarks, {len(L)} libres dont {len([l for l in L if l in HARD])} ancres tooltips, {len([l for l in L if l in ZFIX])} z fixes | {len(camset)} cams, {len(free)} libres (lockees: {len([c for c in camset if locked(c)])})")
 print("cams libres:",free)
 ci={c:i for i,c in enumerate(free)}; li={lm:i for i,lm in enumerate(L)}; NC=7*len(free)
@@ -95,6 +95,9 @@ gate={}
 for c in free:
     idx=[i for i,(lm,cn,p,w) in enumerate(rows) if cn==c]
     m0=np.median(e0[idx]); m1=np.median(e1[idx]); gate[c]=(m1<=m0*1.2+0.3, m0, m1)
+MAXMOVE=20.0
+for j,c in enumerate(free):
+    if float(np.linalg.norm(x[7*j:7*j+3]-x0[7*j:7*j+3]))>MAXMOVE and not (gate[c][2]<=gate[c][1]*0.7): gate[c]=(False,gate[c][1],gate[c][2])  # 2026-09-10: deplacement > 20 m refuse sauf gain > 30%
 bad=[c for c,(g,m0,m1) in gate.items() if not g]; print("cams refusees par le garde-fou (mediane +20%):",[(c,round(gate[c][1],1),round(gate[c][2],1)) for c in bad])
 if APPLY:
     LM=json.load(open(ROOT+'landmarks.json')); CM=json.load(open(ROOT+'cameras.json'))
