@@ -2537,19 +2537,25 @@ class Handler(BaseHTTPRequestHandler):
                 _V16_SNAP
             except NameError:
                 _V16_SNAP = None
-            if _V16_SNAP is None:
+            _vp = os.path.join(os.path.dirname(TOOL_DIR), 'gtamapdata', 'v16_vertices.json')
+            # [V16-SNAP-V2 2026-09-12] cache invalide par mtime: une nouvelle version de la
+            # V16 (tools/v16/svg_vertices.py) est prise en compte sans redemarrer le serveur
+            try:
+                _vmt = os.path.getmtime(_vp)
+            except OSError:
+                _vmt = None
+            if _V16_SNAP is None or _V16_SNAP[3] != _vmt:
                 try:
                     import numpy as _np
                     from scipy.spatial import cKDTree as _KD
-                    _vp = os.path.join(os.path.dirname(TOOL_DIR), 'gtamapdata', 'v16_vertices.json')
                     _vd = json.load(open(_vp))['categories']
                     _pts = []; _cat = []
                     for _k, _v in _vd.items():
                         _pts += _v; _cat += [_k] * len(_v)
-                    _V16_SNAP = (_KD(_np.array(_pts, float)), _np.array(_pts, float), _cat)
+                    _V16_SNAP = (_KD(_np.array(_pts, float)), _np.array(_pts, float), _cat, _vmt)
                 except Exception as _e:
                     self.send_json({'error': f'v16_vertices indisponible: {_e}'}, 500); return
-            _tree, _pts, _cat = _V16_SNAP
+            _tree, _pts, _cat = _V16_SNAP[:3]
             _d, _i = _tree.query([_x, _y], k=1)
             if _d <= _r:
                 self.send_json({'snap': [round(float(_pts[_i][0]), 2), round(float(_pts[_i][1]), 2)], 'd': round(float(_d), 2), 'cat': _cat[_i]})
