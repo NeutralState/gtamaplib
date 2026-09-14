@@ -545,7 +545,15 @@ const data = await (await fetch('/api/scene3d')).json();
     // src=hd: grille 6 m (u16 quantifie, ~26 MB); retry puis repli en 12 m
     // si le transfert echoue (Safari lache les gros payloads).
     async function fetchTerrain() {
-      for (const [stp, wait] of [[6, 0], [6, 1500], [12, 1500]]) {
+      // [LITE-3D 2026-09-14] grille 6 m = 9.9 M sommets (~600 Mo de buffers) -> l'onglet plante au zoom sur
+      // un Mac 8 Go deja en swap (Alexandre: "ca bug et crash quand je zoom"). Sur <= 8 Go (deviceMemory,
+      // Chrome/Edge; Safari ne l'expose pas -> plein) on part a 12 m (2.5 M sommets, ~150 Mo);
+      // ?hd=1 force le 6 m, ?lite=1 force le 12 m.
+      const q = new URLSearchParams(location.search);
+      const lite = q.get('lite') === '1' || (q.get('hd') !== '1' && navigator.deviceMemory && navigator.deviceMemory <= 8);
+      window.__terrainLite = !!lite;
+      const plan = lite ? [[12, 0], [12, 1500], [24, 1500]] : [[6, 0], [6, 1500], [12, 1500]];
+      for (const [stp, wait] of plan) {
         if (wait) await new Promise(r => setTimeout(r, wait));
         try {
           const r = await fetch(`/api/terrain3d?src=hd&step=${stp}`);
