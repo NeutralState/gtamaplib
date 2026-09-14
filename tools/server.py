@@ -3063,12 +3063,36 @@ class Handler(BaseHTTPRequestHandler):
 
 
 if __name__ == '__main__':
-    port = 8765
+    port = int(os.environ.get('GTAMAP_PORT', 8765))
+    # [FD-LIMIT 2026-09-14] macOS lance les shells avec 256 descripteurs (launchctl limit maxfiles);
+    # au zoom, Safari ouvre des dizaines de connexions de tuiles en rafale (URLs V16 non cachees) ->
+    # accept() echoue avec EMFILE, serve_forever() leve OSError et le serveur MOURAIT en silence
+    # (Alexandre: "ca bug et crash quand je zoom", serveur relance a la main). On monte la limite
+    # au maximum autorise et on ne laisse plus une erreur d'accept tuer la boucle.
+    try:
+        import resource as _res
+        _soft, _hard = _res.getrlimit(_res.RLIMIT_NOFILE)
+        _want = min(_hard if _hard != _res.RLIM_INFINITY else 65536, 65536)
+        if _soft < _want:
+            _res.setrlimit(_res.RLIMIT_NOFILE, (_want, _hard))
+        _fd_msg = f'descripteurs: {_soft} -> {_res.getrlimit(_res.RLIMIT_NOFILE)[0]}'
+    except Exception as _e:
+        _fd_msg = f'descripteurs: limite inchangee ({_e})'
+    ThreadingHTTPServer.daemon_threads = True
+    ThreadingHTTPServer.request_queue_size = 128
     server = ThreadingHTTPServer(('localhost', port), Handler)
     print(f"\n🗺  gtamaplib Calibration Tool")
-    print(f"   http://localhost:{port}")
+    print(f"   http://localhost:{port}   ({_fd_msg})")
     print(f"   Ctrl+C to stop\n")
-    try:
-        server.serve_forever()
-    except KeyboardInterrupt:
-        print("\nStopped.")
+    import time as _time
+    while True:
+        try:
+            server.serve_forever()
+            break
+        except KeyboardInterrupt:
+            print("\nStopped.")
+            break
+        except OSError as _e:
+            # EMFILE / ENFILE / ECONNABORTED pendant accept(): on souffle et on reprend au lieu de mourir
+            print(f"\n[serveur] accept() a echoue ({_e}) - reprise dans 0.5 s", flush=True)
+            _time.sleep(0.5)
