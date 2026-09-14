@@ -27,9 +27,12 @@ def catmull_rom(P, n_per=8):
     out.append(P[-1]); return np.array(out)
 
 def main():
-    ap = argparse.ArgumentParser(); ap.add_argument('--apply', action='store_true'); ap.add_argument('--out'); ap.add_argument('--ring', type=float, default=5.0); a = ap.parse_args()
+    ap = argparse.ArgumentParser(); ap.add_argument('--apply', action='store_true'); ap.add_argument('--out'); ap.add_argument('--ring', type=float, default=5.0)
+    ap.add_argument('--se', type=float, nargs=2, default=None, help='coin SE impose (x y): le tooltip SE d\'Alexandre est « environ »; Skyline (vue en bout depuis le NE) montre la tour ~10 m plus large cote SE')
+    a = ap.parse_args()
     L = json.load(open(os.path.join(REPO, 'gtamapdata', 'landmarks.json')))
     c = {k: np.array(L[f'{B} ({k})']['xyz'], float) for k in ('SW', 'NW', 'NE', 'SE')}
+    if a.se: c['SE'] = np.array([a.se[0], a.se[1], c['SE'][2]])
     z_roof = float(np.median([c[k][2] for k in c])); z_ground = float(ground(*((c['SW'][:2] + c['SE'][:2]) / 2)))
     north = catmull_rom([c['SW'][:2], c['NW'][:2], c['NE'][:2], c['SE'][:2]])       # face nord bombee (SW -> SE)
     ring = np.vstack([north, [c['SE'][:2]], [c['SW'][:2]]])                           # + corde sud SE -> SW (fermeture)
@@ -58,7 +61,7 @@ def main():
     chord = float(np.linalg.norm(c['SE'][:2] - c['SW'][:2]))
     mesh = {'color': '#38bdf8', 'world_edges': edges,
             'note': f'MB-MESH-V1 2026-09-13: fut « spinnaker » sur les 4 coins de toit (corde SW-SE {chord:.1f} m, face nord Catmull-Rom SW-NW-NE-SE), sol {z_ground:.1f} (heightmap), toit {z_roof:.1f} (mediane 4 coins), anneaux {a.ring:g} m, couronne 4 m; tour 2 (lobe NE de l\'ilot V16, coin NW = LNE, toit {z2:.1f}) incluse [MB-MESH-V2]; podium non modelise; la V16 ne dessine que l\'ilot (polygone 2577)',
-            '_credit': 'coins: triangulation gtamaplib (SW 4 cams, NE 6 cams, NW 2 cams, SE tooltip V16 Alexandre)'}
+            '_credit': 'coins: triangulation gtamaplib (SW 4 cams, NE 6 cams, NW 2 cams, SE tooltip V16 Alexandre' + (f', SE deplace a ({a.se[0]}, {a.se[1]}) = bord est de l\'ilot V16, d\'apres la silhouette Skyline' if a.se else '') + ')'}
     print(f'{B}: corde {chord:.1f} m, sol {z_ground:.1f}, toit {z_roof:.1f}, {len(ring)} sommets, {len(edges)} aretes')
     if a.out: json.dump({B: mesh}, open(a.out, 'w'), ensure_ascii=True); print('->', a.out)
     if a.apply:
