@@ -42,9 +42,22 @@ def main():
         edges.append([[float(c[k][0]), float(c[k][1]), z_ground], [float(c[k][0]), float(c[k][1]), z_roof]])
     z = z_ground + a.ring
     while z < z_roof - 5: edges += loop(z); z += a.ring
+    # [MB-MESH-V2] tour 2 (plus basse, 52 etages IRL): lobe nord-est de l'ilot V16 (polygone 2577, face courbe
+    # (-466.7,453.3)->(-441.1,425.6)), adossee a la face nord de la tour 1; coin NW = LNE (3 cams, z 126.6).
+    # Identifiee par projection: Jason Duval 05 (tour basse a gauche du fut, sommet a LNE) et Port Vice City (B)
+    # (tour basse a droite, couronne bleue a LNE). La lame nord-ouest du bloc etait l'autre hypothese: refutee
+    # (elle chevauchait la tour 1 dans Jason Duval 05).
+    lne = np.array(L[f'{B} (LNE)']['xyz'], float); z2 = float(lne[2])
+    ring2 = np.array([[lne[0], lne[1]], [-458.5, 450.4], [-452.3, 444.9], [-446.6, 436.9], [-441.1, 425.6], [-446.9, 421.5],
+                      [c['NE'][0], c['NE'][1]], [lne[0], 419.0]])
+    def loop2(z): return [[[float(p[0]), float(p[1]), z], [float(q[0]), float(q[1]), z]] for p, q in zip(ring2, np.roll(ring2, -1, axis=0))]
+    edges += loop2(z_ground) + loop2(z2) + loop2(z2 - 3.0)
+    for p in ring2: edges.append([[float(p[0]), float(p[1]), z_ground], [float(p[0]), float(p[1]), z2]])
+    z = z_ground + a.ring
+    while z < z2 - 4: edges += loop2(z); z += a.ring
     chord = float(np.linalg.norm(c['SE'][:2] - c['SW'][:2]))
     mesh = {'color': '#38bdf8', 'world_edges': edges,
-            'note': f'MB-MESH-V1 2026-09-13: fut « spinnaker » sur les 4 coins de toit (corde SW-SE {chord:.1f} m, face nord Catmull-Rom SW-NW-NE-SE), sol {z_ground:.1f} (heightmap), toit {z_roof:.1f} (mediane 4 coins), anneaux {a.ring:g} m, couronne 4 m; tour sud (LNE 127 m) et podium non modelises; la V16 ne dessine que l\'ilot (polygone 2577)',
+            'note': f'MB-MESH-V1 2026-09-13: fut « spinnaker » sur les 4 coins de toit (corde SW-SE {chord:.1f} m, face nord Catmull-Rom SW-NW-NE-SE), sol {z_ground:.1f} (heightmap), toit {z_roof:.1f} (mediane 4 coins), anneaux {a.ring:g} m, couronne 4 m; tour 2 (lobe NE de l\'ilot V16, coin NW = LNE, toit {z2:.1f}) incluse [MB-MESH-V2]; podium non modelise; la V16 ne dessine que l\'ilot (polygone 2577)',
             '_credit': 'coins: triangulation gtamaplib (SW 4 cams, NE 6 cams, NW 2 cams, SE tooltip V16 Alexandre)'}
     print(f'{B}: corde {chord:.1f} m, sol {z_ground:.1f}, toit {z_roof:.1f}, {len(ring)} sommets, {len(edges)} aretes')
     if a.out: json.dump({B: mesh}, open(a.out, 'w'), ensure_ascii=True); print('->', a.out)
