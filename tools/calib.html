@@ -1570,7 +1570,7 @@ async function init() {
   // [LEAK-TILES-V1] bascule de fond de carte: yanis V14 <-> full map leak
   // (georef: zero (9996,9504), 1 px = 1 m, ±20 m — temporaire, a retirer
   // quand yanis integre le leak). Persistant via localStorage 'ui.tileSrc'.
-  window._tileSrc = localStorage.getItem('ui.tileSrc') || 'yanis';
+  window._tileSrc = localStorage.getItem('ui.tileSrc') || 'yanis,16';
   window._setTileSrc = s => { window._tileSrc = s; localStorage.setItem('ui.tileSrc', s); };
   function tilesUrl(z, x, y)   {
     // [LEAK-TILES-V1] v=leak2: cache-buster bumpe au passage a la map clean
@@ -1707,7 +1707,7 @@ async function init() {
       const sel = document.getElementById('map-src-sel');
       if (!sel) return;
       // migration des valeurs legacy
-      let cur = localStorage.getItem('ui.tileSrc') || 'yanis,14';
+      let cur = localStorage.getItem('ui.tileSrc') || 'yanis,16';
       if (cur === 'yanis') cur = 'yanis,14';
       if (cur === 'leak') cur = 'leak,1';
       window._tileSrc = cur;

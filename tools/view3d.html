@@ -591,7 +591,7 @@ const data = await (await fetch('/api/scene3d')).json();
       const BANDS = [[8750, 9800], [-8700, -8450]];
       let mapWater = () => true;
       try {
-        const s0v = localStorage.getItem('ui.tileSrc') || 'leak,1';
+        const s0v = localStorage.getItem('ui.tileSrc') || 'yanis,16';
         const srcQ = s0v !== 'yanis,14'
           ? `&src=${encodeURIComponent(s0v)}&v=${encodeURIComponent(s0v + '.7')}` : '';
         const strips = [];
@@ -929,7 +929,7 @@ const data = await (await fetch('/api/scene3d')).json();
       // terrain par uniform (uUseDrape bascule sans recompilation — la lecon
       // [DRAPE-MAT] reglee par construction).
       terraUni.uDrape.value = drapeTex;
-      let s0 = localStorage.getItem('ui.tileSrc') || 'leak,1';
+      let s0 = localStorage.getItem('ui.tileSrc') || 'yanis,16';
       if (s0 === 'yanis') s0 = 'yanis,14'; if (s0 === 'leak') s0 = 'leak,1';
       const srcQ = s0 !== 'yanis,14' ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.7')}` : '';
       const t0x = Math.floor((16384 + x0) / MPX / 256), t1x = Math.floor((16384 + x1) / MPX / 256);
@@ -1314,7 +1314,7 @@ layers.ground.add(ground);
 // la pyramide leak,1 v3 est un composite leak-sur-yanis a bords adoucis.
 function loadGroundTiles() {
   // [TILE-SOURCES-V1] meme cle que calib; valeurs legacy migrees
-  let s0 = localStorage.getItem('ui.tileSrc') || 'yanis,14';
+  let s0 = localStorage.getItem('ui.tileSrc') || 'yanis,16';
   if (s0 === 'leak') s0 = 'leak,1';
   if (s0 === 'yanis') s0 = 'yanis,14';
   const src = s0 !== 'yanis,14'
@@ -1329,12 +1329,12 @@ function loadGroundTiles() {
   }
 }
 loadGroundTiles();
-// [BASEMAP-V16] trois sources exclusives: yanis,14 (defaut) / leak,1 / yanis,16
+// [BASEMAP-V16] trois sources exclusives: yanis,16 (defaut depuis 2026-09-13) / leak,1 / yanis,14
 {
   const chipLeak = document.getElementById('ly-leakmap');
   const chipV16 = document.getElementById('ly-v16');
   const sync = () => {
-    const s = localStorage.getItem('ui.tileSrc') || 'yanis,14';
+    const s = localStorage.getItem('ui.tileSrc') || 'yanis,16';
     chipLeak.classList.toggle('on', s.startsWith('leak'));
     chipV16.classList.toggle('on', s === 'yanis,16');
   };
