@@ -75,8 +75,16 @@ def build(b, F, cent, L, args, color):
 def main():
     ap = argparse.ArgumentParser(); ap.add_argument('buildings', nargs='+'); ap.add_argument('--out', default=None); ap.add_argument('--apply', action='store_true')
     ap.add_argument('--ring', type=float, default=25.0); ap.add_argument('--max-retreat', type=float, default=8.0); ap.add_argument('--poly', type=int, default=None)
-    ap.add_argument('--z-roof', type=float, default=None); ap.add_argument('--date', default='2026-09-13'); args = ap.parse_args()
-    F = json.load(open(os.path.join(REPO, 'gtamapdata', 'v16_footprints.json')))['polygons']; cent = np.array([p['centroid'] for p in F])
+    ap.add_argument('--z-roof', type=float, default=None); ap.add_argument('--date', default='2026-09-13')
+    ap.add_argument('--rect', type=float, nargs=4, metavar=('X0', 'Y0', 'X1', 'Y1'), default=None,
+                    help='empreinte rectangulaire imposee (monde) a la place du polygone V16, ex. fut d\'une tour quand la V16 colle deux lames')
+    args = ap.parse_args()
+    F = json.load(open(os.path.join(REPO, 'gtamapdata', 'v16_footprints.json')))['polygons']
+    if args.rect is not None:
+        x0, y0, x1, y1 = args.rect
+        F.append({'id': len(F), 'fill': 'RECT', 'cat': 'manual', 'area': abs((x1 - x0) * (y1 - y0)), 'centroid': [(x0 + x1) / 2, (y0 + y1) / 2],
+                  'ring': [[x0, y0], [x1, y0], [x1, y1], [x0, y1]]}); args.poly = len(F) - 1
+    cent = np.array([p['centroid'] for p in F])
     L = json.load(open(os.path.join(REPO, 'gtamapdata', 'landmarks.json')))
     mp = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json'); M = json.load(open(mp))
     out = {}
