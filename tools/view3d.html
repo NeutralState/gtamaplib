@@ -252,7 +252,10 @@ canvas.addEventListener('webglcontextrestored', () => {
   el.style.display = 'none';
   resize();
 });
-renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+// [LITE-3D] petites machines (Safari n'expose pas deviceMemory -> inconnu = lite): pixelRatio 1 au lieu de 2
+// (framebuffer + MSAA divises par 4 sur Retina); ?hd=1 rend l'ancien comportement.
+window.__lite3d = (() => { const q = new URLSearchParams(location.search); return q.get('lite') === '1' || (q.get('hd') !== '1' && !(navigator.deviceMemory > 8)); })();
+renderer.setPixelRatio(window.__lite3d ? 1 : Math.min(devicePixelRatio, 2));
 // [BEAUTY-V2] tone mapping cinema: les hautes lumieres roulent doucement au
 // lieu d'ecrete (glint du soleil, ciel au couchant)
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -550,7 +553,8 @@ const data = await (await fetch('/api/scene3d')).json();
       // Chrome/Edge; Safari ne l'expose pas -> plein) on part a 12 m (2.5 M sommets, ~150 Mo);
       // ?hd=1 force le 6 m, ?lite=1 force le 12 m.
       const q = new URLSearchParams(location.search);
-      const lite = q.get('lite') === '1' || (q.get('hd') !== '1' && navigator.deviceMemory && navigator.deviceMemory <= 8);
+      // deviceMemory est absent dans Safari (le navigateur d'Alexandre): inconnu = on suppose petit -> lite.
+      const lite = window.__lite3d;
       window.__terrainLite = !!lite;
       const plan = lite ? [[12, 0], [12, 1500], [24, 1500]] : [[6, 0], [6, 1500], [12, 1500]];
       for (const [stp, wait] of plan) {
@@ -1309,7 +1313,7 @@ const gctx = gcan.getContext('2d');
 gctx.fillStyle = '#101218'; gctx.fillRect(0, 0, gcan.width, gcan.height);
 const gtex = new THREE.CanvasTexture(gcan);
 gtex.colorSpace = THREE.SRGBColorSpace;
-gtex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+gtex.anisotropy = window.__lite3d ? 4 : renderer.capabilities.getMaxAnisotropy();
 const groundW = gw * TMETERS, groundH = gh * TMETERS;
 const groundCx = (tx0 * TMETERS - 16384) + groundW / 2;
 const groundCy = (16384 - ty0 * TMETERS) - groundH / 2;
