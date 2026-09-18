@@ -330,48 +330,6 @@
    ],
    "src": "transcript/known"
   },
-  "Prison Tower (1)": {
-   "xy": [
-    -2906.1,
-    -2723.0
-   ],
-   "src": "sommet V16 choisi par les cams 2026-09-06 (tooltip voisin [-2909.7, -2723.8])"
-  },
-  "Prison Tower (2)": {
-   "xy": [
-    -2744.2,
-    -2749.8
-   ],
-   "src": "git 19b772f"
-  },
-  "Prison Tower (3)": {
-   "xy": [
-    -2603.7,
-    -2834.3
-   ],
-   "src": "git 19b772f"
-  },
-  "Prison Tower (4)": {
-   "xy": [
-    -2653.2,
-    -2906.8
-   ],
-   "src": "git 19b772f"
-  },
-  "Prison Tower (5)": {
-   "xy": [
-    -2908.7,
-    -2925.3
-   ],
-   "src": "git 19b772f"
-  },
-  "Prison Tower (6)": {
-   "xy": [
-    -3010.2,
-    -2813.3
-   ],
-   "src": "git 19b772f"
-  },
   "Stephen P. Clark Government Center (BNW)": {
    "xy": [
     -905.14,
@@ -950,6 +908,56 @@
    ],
    "src": "transcript/known",
    "why": "coin de toit en retrait: cams concordantes a 1.0 m, 9.3 m a l interieur de l empreinte"
+  }
+ },
+ "released": {
+  "Prison Tower (1)": {
+   "xy": [
+    -2906.1,
+    -2723.0
+   ],
+   "date": "2026-09-18",
+   "why": "liberee a la demande d Alexandre (triangulation libre), ancien xy = coin du mur d enceinte V16"
+  },
+  "Prison Tower (2)": {
+   "xy": [
+    -2744.2,
+    -2749.8
+   ],
+   "date": "2026-09-18",
+   "why": "liberee a la demande d Alexandre (triangulation libre), ancien xy = coin du mur d enceinte V16"
+  },
+  "Prison Tower (3)": {
+   "xy": [
+    -2603.7,
+    -2834.3
+   ],
+   "date": "2026-09-18",
+   "why": "liberee a la demande d Alexandre (triangulation libre), ancien xy = coin du mur d enceinte V16"
+  },
+  "Prison Tower (4)": {
+   "xy": [
+    -2653.2,
+    -2906.8
+   ],
+   "date": "2026-09-18",
+   "why": "liberee a la demande d Alexandre (triangulation libre), ancien xy = coin du mur d enceinte V16"
+  },
+  "Prison Tower (5)": {
+   "xy": [
+    -2908.7,
+    -2925.3
+   ],
+   "date": "2026-09-18",
+   "why": "liberee a la demande d Alexandre (triangulation libre), ancien xy = coin du mur d enceinte V16"
+  },
+  "Prison Tower (6)": {
+   "xy": [
+    -3010.2,
+    -2813.3
+   ],
+   "date": "2026-09-18",
+   "why": "liberee a la demande d Alexandre (triangulation libre), ancien xy = coin du mur d enceinte V16"
   }
  }
 }
