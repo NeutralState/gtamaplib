@@ -5457,5 +5457,57 @@
   "constraint_class": "A_full_hud",
   "pose_verified": null,
   "notes": "HUD-2026 2026-09-18: pose prise telle quelle du HUD de debug (C = camera, Dir = pitch/roll/heading GTA -> yaw 360-124.8=235.2, Fov = vertical); convention verifiee: la skyline Downtown (SEFC, Marina Blue a 6-7 km) se projette a x 2870-2990 = bord droit du cadre comme dans l'image. CARTE 2026 != LEAK 2022: a cet endroit la V16/leak montrent Mount Kalaga NP / Fairyland Forest (collines 118-190 m) alors que le build 2026 y a un parc plat en bord d'eau -> categorie a part (era 2026), ne pas utiliser pour le relief ni pour les landmarks 2022; le joueur P (-231.1,834.9,3.0) tombe a 0.1 m du sol heightmap (frame commune confirmee)"
+ },
+ "Prison (Aerial) (Biplane) (A)": {
+  "id": "S3/80",
+  "player": null,
+  "xyz": [
+   -2650.0,
+   -4100.0,
+   400.0
+  ],
+  "ypr": [
+   345.0,
+   -20.0,
+   0.0
+  ],
+  "fov": [
+   70.0,
+   null
+  ],
+  "size": [
+   1913,
+   956
+  ],
+  "source": "Screenshot 3 \u2014 Prison (Aerial) (Biplane) (capture video 1913x956 avec overlay crypto; vue aerienne depuis un biplan au sud de la prison, regard vers le nord: prison en bas a gauche, chateau d'eau Homestead a gauche, canal, champs, mat WDNA FM a droite, Vice City a l'horizon droit)",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "POSITION APPROX 2026-09-18: estimation initiale a resoudre avec les clics (6 tours de la prison vues de haut, chateau d'eau, mat WDNA FM, canal); frame fournie par Alexandre pour trancher la position des Prison Towers"
+ },
+ "Prison (Aerial) (Biplane) (B)": {
+  "id": "S3/81",
+  "player": null,
+  "xyz": [
+   -2600.0,
+   -4600.0,
+   450.0
+  ],
+  "ypr": [
+   350.0,
+   -14.0,
+   0.0
+  ],
+  "fov": [
+   70.0,
+   null
+  ],
+  "size": [
+   1913,
+   956
+  ],
+  "source": "Screenshot 3 \u2014 Prison (Aerial) (Biplane) (B) (capture video 1913x956 avec overlay crypto; vue aerienne depuis un biplan au sud de la prison, regard vers le nord: prison en bas a gauche, chateau d'eau Homestead a gauche, canal, champs, mat WDNA FM a droite, Vice City a l'horizon droit) \u2014 seconde prise plus haute et plus lointaine, prison en bas au centre-gauche, mat WDNA FM a droite, Turkey Point et aeroport au fond",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "POSITION APPROX 2026-09-18: estimation initiale a resoudre avec les clics (6 tours de la prison vues de haut, chateau d'eau, mat WDNA FM, canal); frame fournie par Alexandre pour trancher la position des Prison Towers"
  }
 }
