@@ -5462,17 +5462,17 @@
   "id": "S3/80",
   "player": null,
   "xyz": [
-   -2650.0,
-   -4100.0,
-   400.0
+   -2023.71,
+   -2742.96,
+   234.6
   ],
   "ypr": [
-   345.0,
-   -20.0,
-   0.0
+   78.565,
+   -5.52,
+   2.113
   ],
   "fov": [
-   70.0,
+   65.76,
    null
   ],
   "size": [
@@ -5482,6 +5482,6 @@
   "source": "Screenshot 3 \u2014 Prison (Aerial) (Biplane) (capture video 1913x956 avec overlay crypto; vue aerienne depuis un biplan au sud de la prison, regard vers le nord: prison en bas a gauche, chateau d'eau Homestead a gauche, canal, champs, mat WDNA FM a droite, Vice City a l'horizon droit)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "POSITION APPROX 2026-09-18: estimation initiale a resoudre avec les clics (6 tours de la prison vues de haut, chateau d'eau, mat WDNA FM, canal); frame fournie par Alexandre pour trancher la position des Prison Towers"
+  "notes": "SOLVE 2026-09-18b (canal V16 + chateau d'eau + pied du mat, tours en contrainte douce): rives du canal 1-10 px, chateau d'eau 2 px, mat 34 px; la leak map confirme le canal V16 a 5-10 m pres. Depuis cette pose, les tours ouest (1,5,6) tombent 15-20 m au sud des coins V16, les tours est (3,4) sur les coins. A affiner avec l'autoroute devant la prison (clics) et les 2 autres captures aeriennes. | POSITION APPROX 2026-09-18: estimation initiale a resoudre avec les clics (6 tours de la prison vues de haut, chateau d'eau, mat WDNA FM, canal); frame fournie par Alexandre pour trancher la position des Prison Towers"
  }
 }
