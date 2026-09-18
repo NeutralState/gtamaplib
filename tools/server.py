@@ -1514,6 +1514,8 @@ class Handler(BaseHTTPRequestHandler):
                     source_type = 'Trailer'
                 elif source.startswith('Screenshot 3'):
                     source_type = 'Screenshot 3'  # [T3-S3-V1] derniers screenshots
+                elif source.startswith('Build 2026'):
+                    source_type = 'Build 2026'  # [BUILD-2026] carte 2026 (HUD debug), differente du leak 2022
                 else:
                     source_type = 'screenshots'
 
@@ -2593,6 +2595,12 @@ class Handler(BaseHTTPRequestHandler):
                 self.send_json({'snap': [round(float(_pts[_i][0]), 2), round(float(_pts[_i][1]), 2)], 'd': round(float(_d), 2), 'cat': _cat[_i]})
             else:
                 self.send_json({'snap': None, 'd': round(float(_d), 2)})
+
+        elif path == '/api/log3d':
+            # [NAN-GUARD 2026-09-18] le client 3D remonte ici les anomalies (camera NaN au zoom dans Safari)
+            # avec le contexte (dernier wheel, target, aspect...) -> tools/server.log
+            _log('LOG3D ' + unquote(qs.get('msg', [''])[0])[:2000])
+            self.send_json({'ok': True})
 
         elif path == '/api/quarantine_lm':
             # [TRIAGE-V1] action: null the xyz of a known-wrong LM (markings

@@ -5426,5 +5426,36 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "POSITION APPROX 2026-09-17: estimation initiale = position de Vice Beach (A) (T1/6, meme point de vue au-dessus de la plage) montee a 110 m; Loews Miami Beach (1957,1147) a droite du centre, roue Skyviews (34,132) a gauche; a resoudre avec les clics"
+ },
+ "The Moose Trap (Roller Coaster) (2026)": {
+  "id": "B26/1",
+  "player": [
+   -231.1,
+   834.9,
+   3.0
+  ],
+  "xyz": [
+   -2592.7,
+   6395.7,
+   71.0
+  ],
+  "ypr": [
+   235.2,
+   -16.0,
+   0.0
+  ],
+  "fov": [
+   null,
+   50.0
+  ],
+  "size": [
+   3440,
+   1440
+  ],
+  "source": "Build 2026 \u2014 The Moose Trap (parc d'attractions avec montagnes russes en bord d'eau, camera libre de debug; HUD: P:-231.1,834.9,3.0 C:-2592.7,6395.7,71.0 Dir:-16.0,-0.0,-124.8 Fov:50.0; v108-ybr, 3440x1440)",
+  "era": "2026",
+  "constraint_class": "A_full_hud",
+  "pose_verified": null,
+  "notes": "HUD-2026 2026-09-18: pose prise telle quelle du HUD de debug (C = camera, Dir = pitch/roll/heading GTA -> yaw 360-124.8=235.2, Fov = vertical); convention verifiee: la skyline Downtown (SEFC, Marina Blue a 6-7 km) se projette a x 2870-2990 = bord droit du cadre comme dans l'image. CARTE 2026 != LEAK 2022: a cet endroit la V16/leak montrent Mount Kalaga NP / Fairyland Forest (collines 118-190 m) alors que le build 2026 y a un parc plat en bord d'eau -> categorie a part (era 2026), ne pas utiliser pour le relief ni pour les landmarks 2022; le joueur P (-231.1,834.9,3.0) tombe a 0.1 m du sol heightmap (frame commune confirmee)"
  }
 }

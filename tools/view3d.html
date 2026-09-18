@@ -277,6 +277,32 @@ controls.zoomSpeed = 3.0;
 controls.panSpeed = 3.0;
 controls.rotateSpeed = 1.0;
 controls.maxPolarAngle = Math.PI * 0.495;   // jamais sous le sol
+controls.minDistance = 2;                   // [NAN-GUARD] rayon 0 -> normalize() NaN dans le zoom-vers-curseur
+// [NAN-GUARD 2026-09-18] Safari (Alexandre): apres un zoom molette la camera passe a NaN (ecran orange, badge
+// "CAM NaN"). Non reproduit dans Chromium. On memorise le dernier wheel + l'etat sain de la camera, on
+// restaure des qu'une composante devient non finie, et on remonte le contexte au serveur (tools/server.log).
+window.__lastWheel = null;
+canvas.addEventListener('wheel', ev => {
+  const r = canvas.getBoundingClientRect();
+  window.__lastWheel = { dx: ev.deltaX, dy: ev.deltaY, mode: ev.deltaMode, cx: ev.clientX, cy: ev.clientY, ctrl: ev.ctrlKey, meta: ev.metaKey,
+    rect: [r.left, r.top, r.width, r.height], client: [canvas.clientWidth, canvas.clientHeight], inner: [innerWidth, innerHeight],
+    aspect: camera.aspect, fov: camera.fov, near: camera.near, far: camera.far, dpr: renderer.getPixelRatio(),
+    pos: camera.position.toArray().map(v => +v.toFixed(2)), target: controls.target.toArray().map(v => +v.toFixed(2)), t: performance.now() };
+}, { capture: true, passive: true });
+const _nanGuard = { pos: camera.position.clone(), quat: camera.quaternion.clone(), target: controls.target.clone(), n: 0, lastReport: 0 };
+function nanGuard() {
+  const p = camera.position, q = camera.quaternion, t = controls.target;
+  const bad = ![p.x, p.y, p.z, q.x, q.y, q.z, q.w, t.x, t.y, t.z].every(Number.isFinite);
+  if (!bad) { _nanGuard.pos.copy(p); _nanGuard.quat.copy(q); _nanGuard.target.copy(t); return; }
+  _nanGuard.n++;
+  const ctx = { n: _nanGuard.n, pos: p.toArray(), quat: q.toArray(), target: t.toArray(), wheel: window.__lastWheel, ua: navigator.userAgent.slice(0, 80), lite: window.__lite3d, pov: !!povPrev };
+  p.copy(_nanGuard.pos); q.copy(_nanGuard.quat); t.copy(_nanGuard.target); camera.updateMatrixWorld(true);
+  console.warn('[NAN-GUARD] camera restauree', ctx);
+  if (performance.now() - _nanGuard.lastReport > 2000) {
+    _nanGuard.lastReport = performance.now();
+    try { fetch('/api/log3d?msg=' + encodeURIComponent(JSON.stringify(ctx))); } catch (e) {}
+  }
+}
 
 // ── [BEAUTY-V1] environnement: ciel, soleil, brume ──
 // Le rendu passe de "maquette sombre" a "monde": dome de ciel en degrade
@@ -2212,6 +2238,7 @@ renderer.setAnimationLoop(() => {
   // en POV la camera est pilotee par nous: controls.update() la re-orienterait
   // vers sa cible a chaque frame (meme controls.enabled=false) -> monde noir
   if (!povPrev) controls.update();
+  nanGuard();                                   // [NAN-GUARD] jamais un rendu avec une camera NaN
   renderer.render(scene, camera);
 });
 </script>
