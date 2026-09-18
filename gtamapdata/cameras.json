@@ -5483,5 +5483,83 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "SOLVE 2026-09-18b (canal V16 + chateau d'eau + pied du mat, tours en contrainte douce): rives du canal 1-10 px, chateau d'eau 2 px, mat 34 px; la leak map confirme le canal V16 a 5-10 m pres. Depuis cette pose, les tours ouest (1,5,6) tombent 15-20 m au sud des coins V16, les tours est (3,4) sur les coins. A affiner avec l'autoroute devant la prison (clics) et les 2 autres captures aeriennes. | POSITION APPROX 2026-09-18: estimation initiale a resoudre avec les clics (6 tours de la prison vues de haut, chateau d'eau, mat WDNA FM, canal); frame fournie par Alexandre pour trancher la position des Prison Towers"
+ },
+ "Prison (Video) f100": {
+  "id": "S3/82",
+  "player": null,
+  "xyz": [
+   -2455.8,
+   -3188.8,
+   177.4
+  ],
+  "ypr": [
+   29.36,
+   -0.09,
+   0.24
+  ],
+  "fov": [
+   70.0,
+   null
+  ],
+  "size": [
+   1920,
+   1080
+  ],
+  "source": "Screenshot 3 \u2014 Prison (Video) f100 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 a t=10.83 s, 1920x1080, overlay crypto; sequence 7.5-13.7 s = orbite de la camera autour du biplan au-dessus de la prison)",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM."
+ },
+ "Prison (Video) f140": {
+  "id": "S3/83",
+  "player": null,
+  "xyz": [
+   -2420.6,
+   -3114.4,
+   168.2
+  ],
+  "ypr": [
+   34.73,
+   0.86,
+   0.71
+  ],
+  "fov": [
+   70.0,
+   null
+  ],
+  "size": [
+   1920,
+   1080
+  ],
+  "source": "Screenshot 3 \u2014 Prison (Video) f140 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 a t=12.17 s, 1920x1080, overlay crypto; sequence 7.5-13.7 s = orbite de la camera autour du biplan au-dessus de la prison)",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM."
+ },
+ "Prison (Video) f180": {
+  "id": "S3/84",
+  "player": null,
+  "xyz": [
+   -2400.3,
+   -3038.8,
+   152.5
+  ],
+  "ypr": [
+   42.11,
+   1.39,
+   1.12
+  ],
+  "fov": [
+   70.0,
+   null
+  ],
+  "size": [
+   1920,
+   1080
+  ],
+  "source": "Screenshot 3 \u2014 Prison (Video) f180 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 a t=13.50 s, 1920x1080, overlay crypto; sequence 7.5-13.7 s = orbite de la camera autour du biplan au-dessus de la prison)",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM."
  }
 }
