@@ -39,12 +39,18 @@ L=[lm for lm in Lall if inzone(lms[lm]['xyz']) and lm not in STRUCT_MEMBERS and 
 camset=sorted({cn for lm in Lall for cn,_ in obs[lm]})
 nclk=collections.Counter(cn for lm in Lall for cn,_ in obs[lm])
 free=[c for c in camset if not locked(c) and inzone(cams[c]['xyz']) and nclk[c]>=8 and 'POSITION ALEXANDRE' not in str(cams[c].get('notes','')) and 'ROAD-LOCK' not in str(cams[c].get('notes','')) and not _cls(c).startswith('X_') and not c.endswith('(X)')]  # 2026-09-10: cams X et cams verrouillees sur la route hors variables
+# [BA-CAMS 2026-09-18] restriction optionnelle: BA_CAMS="cam1,cam2" -> seules ces cams sont variables et seuls les landmarks
+# qu'elles voient sont libres (mini-bundle cible, ex. Prison Towers: 4 cams a 0.5-3 km en desaccord de 7-16 m)
+_BA=[c.strip() for c in os.environ.get('BA_CAMS','').split(',') if c.strip()]
+if _BA:
+    free=[c for c in free if c in _BA]+[c for c in _BA if c not in free and c in camset and not locked(c) and not _cls(c).startswith('X_')]
+    free=sorted(set(free)); L=[lm for lm in L if any(cn in _BA for cn,_ in obs[lm])]
 print(f"zone: {len(Lall)} landmarks, {len(L)} libres dont {len([l for l in L if l in HARD])} ancres tooltips, {len([l for l in L if l in ZFIX])} z fixes | {len(camset)} cams, {len(free)} libres (lockees: {len([c for c in camset if locked(c)])})")
 print("cams libres:",free)
 ci={c:i for i,c in enumerate(free)}; li={lm:i for i,lm in enumerate(L)}; NC=7*len(free)
 def cam0(c): C=cams[c]; return list(C['xyz'])+list(C['ypr'])+[C['fov'][0] if C['fov'][0] else G.get_hfov(C['fov'][1],tuple(C['size']))]
 x0=np.concatenate([np.array([cam0(c) for c in free],float).ravel() if free else np.array([]), np.array([lms[lm]['xyz'] for lm in L],float).ravel()])
-POS_SIG=np.array([1e-4 if semi(c) else 25.0 for c in free]); FOV_SIG=np.array([(1e-4 if _cls(c).startswith('C_') else 0.5) for c in free]); YAW_SIG=0.5
+POS_SIG=np.array([1e-4 if semi(c) else float(os.environ.get('BA_POS_SIG','25.0')) for c in free]); FOV_SIG=np.array([(1e-4 if _cls(c).startswith('C_') else 0.5) for c in free]); YAW_SIG=0.5   # BA_POS_SIG=1e-4: positions figees
 print('cams semi (xyz fixe, ypr libre):',[c for c in free if semi(c)])
 def cam_of(x,c):
     if c in ci: v=x[7*ci[c]:7*ci[c]+7]; return cam(c,xyz=v[:3],ypr=v[3:6],hfov=v[6])

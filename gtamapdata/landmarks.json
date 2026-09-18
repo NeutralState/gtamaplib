@@ -7142,39 +7142,39 @@
   "Prison Tower (1)": {
     "xyz": [
       -2906.68,
-      -2723.58,
-      35.05
+      -2723.57,
+      34.92
     ],
     "source_cameras": [
       "Prison",
       "Grassrivers 02 (Watson Bay)"
     ],
-    "error_m": 0.166,
+    "error_m": 0.5,
     "zone": "grassrivers",
     "note": "SOMMET-V16 2026-09-06: les cams (dispersion 0.6 m) designent le sommet V16 (-2906.1,-2723.0) a 0.5 m, pas le tooltip [-2909.7, -2723.8] (3.8 m) | TOOLTIP ALEXANDRE 2026-09-03: x,y in-game (-2909.7,-2723.8), z conserve 34.70564228642219; ancien (-2898.6,-2697.2) deplace 28.8 m (biais commun ~30 m sud des 6 tours) | ",
-    "notes": "FREE-TRI 2026-09-18 (demande Alexandre: oublier les 6 xy): triangulation libre Prison + Tennis Stadium (4K) + Grassrivers 02 (+05), cam X et 'Prison Tower' (30 m, clic incoherent) exclues; ancien xy ancre (-2906.1, -2723.0) = coin du mur V16; ecart rayons moyen 0.166 m"
+    "notes": "FREE-TRI 2026-09-18 (demande Alexandre: oublier les 6 xy): triangulation libre Prison + Tennis Stadium (4K) + Grassrivers 02 (+05), cam X et 'Prison Tower' (30 m, clic incoherent) exclues; ancien xy ancre (-2906.1, -2723.0) = coin du mur V16; ecart rayons moyen 0.166 m | WTRI 2026-09-18: triangulation ponderee par la distance (sigma lateral = d x 2 px), Prison 0.1-3.1 px, Grassrivers 02/05 0.5-4.4 px, Tennis Stadium 4K 2-8 px (seul desaccord restant, cam a 2.7-3 km); un bundle (yaw/fov, positions figees) ne bouge aucune cam de plus de 0.13 deg sans casser ses autres clics -> le desaccord n'est pas dans les poses; pattern commun aux 3 cams: tours 3-4 ~6 m au nord des coins du mur V16, 2/5/6 5-7 m ouest/sud -> l'hexagone V16 est trace a la main"
   },
   "Prison Tower (2)": {
     "xyz": [
-      -2760.35,
-      -2749.22,
-      35.87
+      -2750.88,
+      -2747.44,
+      35.14
     ],
     "source_cameras": [
       "Prison",
       "Tennis Stadium (4K)",
       "Grassrivers 02 (Watson Bay)"
     ],
-    "error_m": 2.269,
+    "error_m": 4.5,
     "zone": "grassrivers",
     "note": "TOOLTIP ALEXANDRE 2026-09-03: x,y in-game (-2744.2,-2749.8), z conserve 35.9690672224168; ancien (-2735.4,-2721.5) deplace 29.6 m (biais commun ~30 m sud des 6 tours) | ",
-    "notes": "FREE-TRI 2026-09-18 (demande Alexandre: oublier les 6 xy): triangulation libre Prison + Tennis Stadium (4K) + Grassrivers 02 (+05), cam X et 'Prison Tower' (30 m, clic incoherent) exclues; ancien xy ancre (-2744.2, -2749.8) = coin du mur V16; ecart rayons moyen 2.269 m"
+    "notes": "FREE-TRI 2026-09-18 (demande Alexandre: oublier les 6 xy): triangulation libre Prison + Tennis Stadium (4K) + Grassrivers 02 (+05), cam X et 'Prison Tower' (30 m, clic incoherent) exclues; ancien xy ancre (-2744.2, -2749.8) = coin du mur V16; ecart rayons moyen 2.269 m | WTRI 2026-09-18: triangulation ponderee par la distance (sigma lateral = d x 2 px), Prison 0.1-3.1 px, Grassrivers 02/05 0.5-4.4 px, Tennis Stadium 4K 2-8 px (seul desaccord restant, cam a 2.7-3 km); un bundle (yaw/fov, positions figees) ne bouge aucune cam de plus de 0.13 deg sans casser ses autres clics -> le desaccord n'est pas dans les poses; pattern commun aux 3 cams: tours 3-4 ~6 m au nord des coins du mur V16, 2/5/6 5-7 m ouest/sud -> l'hexagone V16 est trace a la main"
   },
   "Prison Tower (3)": {
     "xyz": [
-      -2606.17,
-      -2826.52,
-      35.87
+      -2605.37,
+      -2828.47,
+      35.83
     ],
     "source_cameras": [
       "Prison",
@@ -7182,16 +7182,16 @@
       "Grassrivers 02 (Watson Bay)",
       "Grassrivers 05 (Sunrise RV Park)"
     ],
-    "error_m": 2.426,
+    "error_m": 5.0,
     "zone": "grassrivers",
     "note": "TOOLTIP ALEXANDRE 2026-09-03: x,y in-game (-2603.7,-2834.3), z conserve 36.143710923137625; ancien (-2602.5,-2804.2) deplace 30.1 m (biais commun ~30 m sud des 6 tours) | ",
-    "notes": "FREE-TRI 2026-09-18 (demande Alexandre: oublier les 6 xy): triangulation libre Prison + Tennis Stadium (4K) + Grassrivers 02 (+05), cam X et 'Prison Tower' (30 m, clic incoherent) exclues; ancien xy ancre (-2603.7, -2834.3) = coin du mur V16; ecart rayons moyen 2.426 m"
+    "notes": "FREE-TRI 2026-09-18 (demande Alexandre: oublier les 6 xy): triangulation libre Prison + Tennis Stadium (4K) + Grassrivers 02 (+05), cam X et 'Prison Tower' (30 m, clic incoherent) exclues; ancien xy ancre (-2603.7, -2834.3) = coin du mur V16; ecart rayons moyen 2.426 m | WTRI 2026-09-18: triangulation ponderee par la distance (sigma lateral = d x 2 px), Prison 0.1-3.1 px, Grassrivers 02/05 0.5-4.4 px, Tennis Stadium 4K 2-8 px (seul desaccord restant, cam a 2.7-3 km); un bundle (yaw/fov, positions figees) ne bouge aucune cam de plus de 0.13 deg sans casser ses autres clics -> le desaccord n'est pas dans les poses; pattern commun aux 3 cams: tours 3-4 ~6 m au nord des coins du mur V16, 2/5/6 5-7 m ouest/sud -> l'hexagone V16 est trace a la main"
   },
   "Prison Tower (4)": {
     "xyz": [
-      -2650.3,
-      -2898.13,
-      35.65
+      -2649.23,
+      -2900.41,
+      35.5
     ],
     "source_cameras": [
       "Prison",
@@ -7199,42 +7199,42 @@
       "Grassrivers 02 (Watson Bay)",
       "Grassrivers 05 (Sunrise RV Park)"
     ],
-    "error_m": 2.552,
+    "error_m": 5.0,
     "zone": "grassrivers",
     "note": "TOOLTIP ALEXANDRE 2026-09-03: x,y in-game (-2653.2,-2906.8), z conserve 35.99994702202953; ancien (-2644.6,-2874.4) deplace 33.6 m (biais commun ~30 m sud des 6 tours) | ",
-    "notes": "FREE-TRI 2026-09-18 (demande Alexandre: oublier les 6 xy): triangulation libre Prison + Tennis Stadium (4K) + Grassrivers 02 (+05), cam X et 'Prison Tower' (30 m, clic incoherent) exclues; ancien xy ancre (-2653.2, -2906.8) = coin du mur V16; ecart rayons moyen 2.552 m"
+    "notes": "FREE-TRI 2026-09-18 (demande Alexandre: oublier les 6 xy): triangulation libre Prison + Tennis Stadium (4K) + Grassrivers 02 (+05), cam X et 'Prison Tower' (30 m, clic incoherent) exclues; ancien xy ancre (-2653.2, -2906.8) = coin du mur V16; ecart rayons moyen 2.552 m | WTRI 2026-09-18: triangulation ponderee par la distance (sigma lateral = d x 2 px), Prison 0.1-3.1 px, Grassrivers 02/05 0.5-4.4 px, Tennis Stadium 4K 2-8 px (seul desaccord restant, cam a 2.7-3 km); un bundle (yaw/fov, positions figees) ne bouge aucune cam de plus de 0.13 deg sans casser ses autres clics -> le desaccord n'est pas dans les poses; pattern commun aux 3 cams: tours 3-4 ~6 m au nord des coins du mur V16, 2/5/6 5-7 m ouest/sud -> l'hexagone V16 est trace a la main"
   },
   "Prison Tower (5)": {
     "xyz": [
-      -2915.71,
-      -2924.08,
-      35.88
+      -2913.73,
+      -2924.2,
+      35.77
     ],
     "source_cameras": [
       "Prison",
       "Tennis Stadium (4K)",
       "Grassrivers 02 (Watson Bay)"
     ],
-    "error_m": 0.932,
+    "error_m": 2.5,
     "zone": "grassrivers",
     "note": "TOOLTIP ALEXANDRE 2026-09-03: x,y in-game (-2908.7,-2925.3), z conserve 35.38930691028371; ancien (-2891.2,-2894.5) deplace 35.4 m (biais commun ~30 m sud des 6 tours) | ",
-    "notes": "FREE-TRI 2026-09-18 (demande Alexandre: oublier les 6 xy): triangulation libre Prison + Tennis Stadium (4K) + Grassrivers 02 (+05), cam X et 'Prison Tower' (30 m, clic incoherent) exclues; ancien xy ancre (-2908.7, -2925.3) = coin du mur V16; ecart rayons moyen 0.932 m"
+    "notes": "FREE-TRI 2026-09-18 (demande Alexandre: oublier les 6 xy): triangulation libre Prison + Tennis Stadium (4K) + Grassrivers 02 (+05), cam X et 'Prison Tower' (30 m, clic incoherent) exclues; ancien xy ancre (-2908.7, -2925.3) = coin du mur V16; ecart rayons moyen 0.932 m | WTRI 2026-09-18: triangulation ponderee par la distance (sigma lateral = d x 2 px), Prison 0.1-3.1 px, Grassrivers 02/05 0.5-4.4 px, Tennis Stadium 4K 2-8 px (seul desaccord restant, cam a 2.7-3 km); un bundle (yaw/fov, positions figees) ne bouge aucune cam de plus de 0.13 deg sans casser ses autres clics -> le desaccord n'est pas dans les poses; pattern commun aux 3 cams: tours 3-4 ~6 m au nord des coins du mur V16, 2/5/6 5-7 m ouest/sud -> l'hexagone V16 est trace a la main"
   },
   "Prison Tower (6)": {
     "xyz": [
-      -3020.66,
-      -2819.12,
-      35.82
+      -3016.62,
+      -2818.92,
+      35.53
     ],
     "source_cameras": [
       "Prison",
       "Tennis Stadium (4K)",
       "Grassrivers 02 (Watson Bay)"
     ],
-    "error_m": 1.28,
+    "error_m": 3.0,
     "zone": "grassrivers",
     "note": "TOOLTIP ALEXANDRE 2026-09-03: x,y in-game (-3010.2,-2813.3), z conserve 35.40917279289679; ancien (-2992.9,-2787.9) deplace 30.7 m (biais commun ~30 m sud des 6 tours) | ",
-    "notes": "FREE-TRI 2026-09-18 (demande Alexandre: oublier les 6 xy): triangulation libre Prison + Tennis Stadium (4K) + Grassrivers 02 (+05), cam X et 'Prison Tower' (30 m, clic incoherent) exclues; ancien xy ancre (-3010.2, -2813.3) = coin du mur V16; ecart rayons moyen 1.28 m"
+    "notes": "FREE-TRI 2026-09-18 (demande Alexandre: oublier les 6 xy): triangulation libre Prison + Tennis Stadium (4K) + Grassrivers 02 (+05), cam X et 'Prison Tower' (30 m, clic incoherent) exclues; ancien xy ancre (-3010.2, -2813.3) = coin du mur V16; ecart rayons moyen 1.28 m | WTRI 2026-09-18: triangulation ponderee par la distance (sigma lateral = d x 2 px), Prison 0.1-3.1 px, Grassrivers 02/05 0.5-4.4 px, Tennis Stadium 4K 2-8 px (seul desaccord restant, cam a 2.7-3 km); un bundle (yaw/fov, positions figees) ne bouge aucune cam de plus de 0.13 deg sans casser ses autres clics -> le desaccord n'est pas dans les poses; pattern commun aux 3 cams: tours 3-4 ~6 m au nord des coins du mur V16, 2/5/6 5-7 m ouest/sud -> l'hexagone V16 est trace a la main"
   },
   "Quantum on the Bay Condominium (N) (NE)": {
     "xyz": [
