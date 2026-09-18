@@ -5348,5 +5348,83 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "SOLVE 2026-09-10f: 31 clics, tout libre (z des 4 points proches libres); xyz (-2433.3,25.0,153.1) fov 44.8, mediane 8.4 px | SOLVE 2026-09-10e: + Highway (1), Overpass (2) (leak map +5 m, z libre); xyz (-2436.1,25.2,149.1) fov 44.6, mediane 7.9 px | SOLVE 2026-09-10d: + Metro (1) et Overpass (1) (leak map corrigee +5 m, z libre) -> profondeur tenue; xyz (-2415.1,19.4,148.9) fov 44.8, mediane 8.1 px | SOLVE 2026-09-10c: 14 clics (1.6-3.8 km, 32 deg d'etendue), tout libre: xyz (-2650.8,4.5,149.6) fov 40.4, mediane 6.5 px; minimum unique (15 departs) | SOLVE 2026-09-10b: Marina Blue re-etiquete (NW->NE, NE->SE par projection); 9 clics, xy tenu au point d'Alexandre; z 148 m fov 42.9; mediane 8.5 px | SOLVE 2026-09-10a: 9 clics Downtown (2.3-2.8 km), xy tenu au point d'Alexandre (profondeur inobservable avec des cibles toutes a la meme distance), z 150 m, fov 43.6; mediane 11.8 px | 2026-09-10: yaw -14.8 / pitch +0.81 poses par Alexandre dans la vue 3D (alignement grossier Vizcayne x2 + SPC) | POSITION APPROX Alexandre 2026-09-10 (-2473.3,-9.4), z eleve (init 200 m), visee sur Vizcayne (1918 m, az 86 deg); a resoudre librement apres clics | AJOUT 2026-09-10 (fichier ~/Downloads/Sunrise over Vice City.png): pose INITIALE arbitraire (~3 km a l ouest-nord-ouest de Downtown, 220 m, visee est-sud-est, fov 50), a resoudre des que les clics sont poses (skyline Downtown/Brickell = ancres Vizcayne, SPC, One Miami, Four Seasons; echangeur = routes V16)"
+ },
+ "Kayaking in the Vice River (Extended Look)": {
+  "id": "T3/3",
+  "player": null,
+  "xyz": [
+   -1450.0,
+   -650.0,
+   0.8
+  ],
+  "ypr": [
+   300.0,
+   3.0,
+   0.0
+  ],
+  "fov": [
+   80.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) \u2014 Kayaking in the Vice River (kayak vert au ras de l'eau sur la Vice River, viaducs autoroute + metro aerien qui traversent la riviere, tours de Downtown derriere, bateau-taxi jaune a gauche; minimap en bas a gauche)",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "POSITION APPROX 2026-09-17: estimation initiale (riviere a l'ouest de Downtown, regard vers l'ENE le long de la riviere) a resoudre avec les clics; la minimap du frame donne la position sur un coude de la riviere"
+ },
+ "Parachute Jump over Vice Beach (Extended Look)": {
+  "id": "T3/4",
+  "player": null,
+  "xyz": [
+   2000.0,
+   1500.0,
+   450.0
+  ],
+  "ypr": [
+   125.0,
+   -20.0,
+   0.0
+  ],
+  "fov": [
+   75.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) \u2014 Parachute Jump over Vice Beach (vue aerienne depuis un parachute orange au-dessus de Vice Beach, skyline de Downtown au loin a l'horizon, causeway a gauche, palais des congres/hopital en bas au centre, chenaux a droite)",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "POSITION APPROX 2026-09-17: estimation initiale (au-dessus de Vice Beach, ~450 m, regard vers le SW sur Downtown) a resoudre avec les clics; le parachute cache le centre du cadre"
+ },
+ "Vice Beach Panorama (Extended Look)": {
+  "id": "T3/5",
+  "player": null,
+  "xyz": [
+   2350.0,
+   1110.0,
+   110.0
+  ],
+  "ypr": [
+   112.0,
+   -8.0,
+   0.0
+  ],
+  "fov": [
+   60.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) \u2014 Vice Beach Panorama (crepuscule, vue en hauteur depuis Vice Beach vers l'ouest: tour ronde Loews au premier plan avec helipad, hotel aux neons verts, grande roue Skyviews et Downtown au fond, enseigne ALBANY a gauche)",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "POSITION APPROX 2026-09-17: estimation initiale = position de Vice Beach (A) (T1/6, meme point de vue au-dessus de la plage) montee a 110 m; Loews Miami Beach (1957,1147) a droite du centre, roue Skyviews (34,132) a gauche; a resoudre avec les clics"
  }
 }
