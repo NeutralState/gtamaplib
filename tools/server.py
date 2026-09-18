@@ -582,9 +582,41 @@ def optimize_camera(cam_name, xyz, ypr, hfov, leak_mode=False):
     }, None
 
 
+# [CRASH-LOG 2026-09-17] le serveur mourait en silence pendant les zooms d'Alexandre (relance a la main x4,
+# aucune trace). Journal minimal dans tools/server.log: requete horodatee + RSS du process, tracebacks des
+# threads de requete, hook d'exception principal, faulthandler (segfault / kill par signal fatal).
+_LOG_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'server.log')
+def _rss_mb():
+    try:
+        import resource as _r
+        return _r.getrusage(_r.RUSAGE_SELF).ru_maxrss / (1024 * 1024)   # macOS: octets
+    except Exception:
+        return -1
+def _log(line):
+    try:
+        import datetime as _dt
+        if os.path.exists(_LOG_PATH) and os.path.getsize(_LOG_PATH) > 8_000_000:
+            os.replace(_LOG_PATH, _LOG_PATH + '.1')
+        with open(_LOG_PATH, 'a') as _f:
+            _f.write(f"{_dt.datetime.now().strftime('%H:%M:%S.%f')[:-3]} rss={_rss_mb():.0f}M {line}\n")
+    except Exception:
+        pass
+
+
 class Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):
-        pass
+        try:
+            _log(fmt % args)
+        except Exception:
+            pass
+
+    def handle(self):
+        try:
+            super().handle()
+        except Exception as _e:
+            import traceback as _tb
+            _log('EXCEPTION dans le thread de requete: ' + _tb.format_exc().replace('\n', ' | '))
+            raise
 
     def send_json(self, data, status=200):
         body = json.dumps(data).encode()
@@ -3064,6 +3096,12 @@ class Handler(BaseHTTPRequestHandler):
 
 if __name__ == '__main__':
     port = int(os.environ.get('GTAMAP_PORT', 8765))
+    import faulthandler as _fh, sys as _sys2, threading as _thr, traceback as _tb2
+    _crash_f = open(_LOG_PATH, 'a')
+    _fh.enable(file=_crash_f, all_threads=True)
+    _sys2.excepthook = lambda t, v, tb: _log('EXCEPTION principale: ' + ''.join(_tb2.format_exception(t, v, tb)).replace('\n', ' | '))
+    _thr.excepthook = lambda a: _log(f'EXCEPTION thread {a.thread.name}: ' + ''.join(_tb2.format_exception(a.exc_type, a.exc_value, a.exc_traceback)).replace('\n', ' | '))
+    _log(f'=== DEMARRAGE serveur pid={os.getpid()} python={_sys2.version.split()[0]} ===')
     # [FD-LIMIT 2026-09-14] macOS lance les shells avec 256 descripteurs (launchctl limit maxfiles);
     # au zoom, Safari ouvre des dizaines de connexions de tuiles en rafale (URLs V16 non cachees) ->
     # accept() echoue avec EMFILE, serve_forever() leve OSError et le serveur MOURAIT en silence
