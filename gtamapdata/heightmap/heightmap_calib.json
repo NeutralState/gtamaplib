@@ -13,7 +13,10 @@
   "georef_world_to_px": {
     "note": "le DDS est exactement la frame originale 1536x1748 georeferencee par rlx — aucune chaine de recalage supplementaire",
     "px_per_m": 0.083188297,
-    "zero_px": [1108.532, 938.091],
+    "zero_px": [
+      1108.532,
+      938.091
+    ],
     "formula": "u = 1108.532 + x*0.083188297 ; v_row = 938.091 - y*0.083188297"
   },
   "value_to_meters": {
@@ -24,11 +27,28 @@
     "rejected": "cams Highway (+9..14 m: joueur sur le viaduc, pas le terrain), Ocean/Boat (sur l'eau), Tennis Stadium/Metro (structures)",
     "sea_level_v": 0.4263,
     "checkpoints": {
-      "Diner (HUD 14.5)": {"v": 0.4472, "z_pred": 14.7},
-      "Car Wash (HUD 20.5)": {"v": 0.4558, "z_pred": 20.8},
-      "Motel/Starlet (HUD 66.8)": {"v": 0.5208, "z_pred": 66.7},
-      "pic Mount Ambrosia (-3434, 6367)": {"v": 0.9958, "z_pred": 402.1, "uncert_2sigma_m": 3.0, "note": "confirme le ~405 m communautaire"},
-      "fond oceanique est": {"v": 0.0518, "z_pred": -264.4}
+      "Diner (HUD 14.5)": {
+        "v": 0.4472,
+        "z_pred": 14.7
+      },
+      "Car Wash (HUD 20.5)": {
+        "v": 0.4558,
+        "z_pred": 20.8
+      },
+      "Motel/Starlet (HUD 66.8)": {
+        "v": 0.5208,
+        "z_pred": 66.7
+      },
+      "pic Mount Ambrosia (-3434, 6367)": {
+        "v": 0.9958,
+        "z_pred": 402.1,
+        "uncert_2sigma_m": 3.0,
+        "note": "confirme le ~405 m communautaire"
+      },
+      "fond oceanique est": {
+        "v": 0.0518,
+        "z_pred": -264.4
+      }
     }
   },
   "history": [
@@ -37,6 +57,14 @@
   ],
   "warnings": [
     "extrapolation au-dela de v~0.53 (z>70 m) appuyee sur aucune verite terrain HUD — incertitude ~+/-3 m a 2 sigma au pic par la stat du fit, davantage si la reponse du capteur n'est pas parfaitement lineaire",
-    "hors emprise de la frame (nord de y~11277): pas de donnees"
-  ]
+    "hors emprise de la frame (nord de y~11277): pas de donnees",
+    "2026-09-18: bandes nord/sud desormais couvertes par le patch melonhell (voir patch_2026_09_18), precision ~1.5 m"
+  ],
+  "patch_2026_09_18": {
+    "file": "gtamapdata/heightmap/GTA6HeightMap_L16_patched.dds",
+    "what": "DDS d'origine + comblement des deux bandes sans donnees (nord y 6192..10207, sud/Keys y -9027..-3629) par melonhell_2026-09-08_patched.png (Discord, meme grille 1536x1748, meme echelle u16: 941243 px d'origine inchanges, 292694 px repris du patch)",
+    "validation": "Keys: 98 landmarks au niveau du sol (-2.5<z<3) -> mediane(patch - landmark) = -0.03 m, MAD 1.45 m; House with Boat (HUD 2.8) -> 1.8; texture 5x5 mediane 1.75 m (vs 0.84 m dans le DDS d origine: source plus grossiere/bruitee). Nord: aucune verite terrain (pas de cam ni landmark), cotes et rivieres coherentes avec la leak map.",
+    "usage": "charge par tools/server.py, tools/horizon_resect.py (ground()), tools/make_terrain_hd.py; l original GTA6HeightMap_L16.dds reste la reference de calibration z=706.07v-301.01 (formule inchangee, meme codage)",
+    "caveat": "le patch est une source tierce non tracee (bounty/Discord): la traiter comme relief de rang 2 (~1.5 m) — bon pour horizons, silhouettes et sol des cams Keys, pas pour trancher a mieux que 2 m"
+  }
 }

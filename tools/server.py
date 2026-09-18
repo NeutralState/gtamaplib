@@ -1033,7 +1033,7 @@ class Handler(BaseHTTPRequestHandler):
                         })
                         return
                     # pas encore genere: retomber sur le DDS standard
-                _dds = open(os.path.join(GTAMAP_DIR, 'gtamapdata', 'heightmap', 'GTA6HeightMap_L16.dds'), 'rb').read()
+                _dds = open(os.path.join(GTAMAP_DIR, 'gtamapdata', 'heightmap', 'GTA6HeightMap_L16_patched.dds'), 'rb').read()
                 _W, _H = 1536, 1748
                 T = (_np.frombuffer(_dds[128:128 + _W * _H * 2], dtype='<u2')
                      .reshape(_H, _W).astype(_np.float32) / 65535.0)

@@ -34,7 +34,7 @@ SC, ZX, ZY = 0.083188297, 1108.532, 938.091
 
 
 def load_heightmap():
-    p = os.path.join(REPO, 'gtamapdata', 'heightmap', 'GTA6HeightMap_L16.dds')
+    p = os.path.join(REPO, 'gtamapdata', 'heightmap', 'GTA6HeightMap_L16_patched.dds')
     d = open(p, 'rb').read()
     L = np.frombuffer(d[128:128 + 1536 * 1748 * 2], dtype='<u2')
     return L.reshape(1748, 1536).astype(np.float64) / 65535.0

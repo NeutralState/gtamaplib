@@ -64,7 +64,7 @@ def catrom_up(Z, U, V):
 
 
 def main():
-    d = open(os.path.join(REPO, 'gtamapdata', 'heightmap', 'GTA6HeightMap_L16.dds'), 'rb').read()
+    d = open(os.path.join(REPO, 'gtamapdata', 'heightmap', 'GTA6HeightMap_L16_patched.dds'), 'rb').read()
     Z = (np.frombuffer(d[128:128 + 1536*1748*2], dtype='<u2')
          .reshape(1748, 1536).astype(np.float64) / 65535.0) * 706.07 - 301.01
     print('height map chargee', flush=True)
