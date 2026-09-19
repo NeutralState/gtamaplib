@@ -2210,6 +2210,26 @@ async function init() {
         line.setAttribute('stroke-linecap', 'round');
         camGroup.appendChild(line);
       }
+      // [FRUSTUM-FAR 2026-09-19] cam SELECTIONNEE: le cone est etendu jusqu'au bout de la carte (30 km)
+      // + axe optique en pointille, pour voir ou le champ "atterrit" (Alexandre: "I want to see where it lands").
+      // Les deux lignes/fill ci-dessus sont restaurees quand la cam n'est plus selectionnee.
+      {
+        const farW = frustumCornersWorld(c.xyz, yaw, hfov, 30000);
+        const farS = farW.map(([wx, wy]) => window.worldToSvg(wx, wy));
+        const axW = frustumCornersWorld(c.xyz, yaw, 0, 30000)[0];
+        const axS = window.worldToSvg(axW[0], axW[1]);
+        camGroup.dataset.nearPts = `${fcSvg[0][0]},${fcSvg[0][1]};${fcSvg[1][0]},${fcSvg[1][1]}`;
+        camGroup.dataset.farPts = `${farS[0][0]},${farS[0][1]};${farS[1][0]},${farS[1][1]}`;
+        camGroup.dataset.apex = `${sx},${sy}`;
+        const ax = document.createElementNS(SVG_NS, 'line');
+        ax.setAttribute('class', 'cam-axis');
+        ax.setAttribute('x1', String(sx)); ax.setAttribute('y1', String(sy));
+        ax.setAttribute('x2', String(axS[0])); ax.setAttribute('y2', String(axS[1]));
+        ax.setAttribute('stroke', color); ax.setAttribute('stroke-width', String(FRUSTUM_LINE_WIDTH * 0.6));
+        ax.setAttribute('stroke-dasharray', '40 30'); ax.setAttribute('opacity', '0.9');
+        ax.style.display = 'none';
+        camGroup.appendChild(ax);
+      }
 
       // Apex circle (the marker proper) — smaller, cleaner.
       const marker = document.createElementNS(SVG_NS, 'g');
@@ -2373,7 +2393,17 @@ async function init() {
   function updateMapSelectionStyle() {
     if (!window.mapOverlay) return;
     window.mapOverlay.querySelectorAll('g.cam-group').forEach(g => {
-      g.classList.toggle('selected', g.dataset.camName === mapSelectedCamName);
+      const sel = g.dataset.camName === mapSelectedCamName;
+      g.classList.toggle('selected', sel);
+      // [FRUSTUM-FAR] cone long (30 km) + axe pour la cam selectionnee, cone court sinon
+      if (!g.dataset.farPts) return;
+      const pts = (sel ? g.dataset.farPts : g.dataset.nearPts).split(';').map(p => p.split(',').map(Number));
+      const lines = g.querySelectorAll('line.cam-frustum');
+      lines.forEach((ln, i) => { ln.setAttribute('x2', String(pts[i][0])); ln.setAttribute('y2', String(pts[i][1])); });
+      const fill = g.querySelector('polygon.cam-frustum-fill');
+      if (fill) fill.setAttribute('points', `${g.dataset.apex} ${pts[0][0]},${pts[0][1]} ${pts[1][0]},${pts[1][1]}`);
+      const ax = g.querySelector('line.cam-axis');
+      if (ax) ax.style.display = sel ? '' : 'none';
     });
   }
 
