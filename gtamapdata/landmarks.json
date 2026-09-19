@@ -20563,68 +20563,68 @@
   },
   "VCIA Runway 12/30 (SE End L)": {
     "xyz": [
-      -2123.0,
-      -1508.4,
-      5.9
+      -2254.2,
+      -1435.2,
+      5.2
     ],
     "source_cameras": [],
     "error_m": 6.0,
     "zone": "vice_city",
-    "notes": "VCIA-V1 2026-09-19: coin de la piste diagonale (azimut 122/302) derive de la V16 v3 (axe -2107,-1483 -> -3589,-550, largeur ~60 m; seuil SE decale de 84 m d'apres les feux verts du frame VCIA Night); z sol heightmap; a affiner par tooltip V16 / in-game"
+    "notes": "VCIA-V2 2026-09-19: SE End = coins du pad (76 m) a la marche s=150 m, SE Threshold = coins de la piste (43 m) a la meme marche, NW End = bords a l'extremite NW; geometrie V16 v3, z heightmap; a confirmer par Alt-clic V16"
   },
   "VCIA Runway 12/30 (SE End R)": {
     "xyz": [
-      -2091.0,
-      -1457.6,
-      5.8
-    ],
-    "source_cameras": [],
-    "error_m": 6.0,
-    "zone": "vice_city",
-    "notes": "VCIA-V1 2026-09-19: coin de la piste diagonale (azimut 122/302) derive de la V16 v3 (axe -2107,-1483 -> -3589,-550, largeur ~60 m; seuil SE decale de 84 m d'apres les feux verts du frame VCIA Night); z sol heightmap; a affiner par tooltip V16 / in-game"
-  },
-  "VCIA Runway 12/30 (SE Threshold L)": {
-    "xyz": [
-      -2194.0,
-      -1463.7,
+      -2213.7,
+      -1370.9,
       5.1
     ],
     "source_cameras": [],
     "error_m": 6.0,
     "zone": "vice_city",
-    "notes": "VCIA-V1 2026-09-19: coin de la piste diagonale (azimut 122/302) derive de la V16 v3 (axe -2107,-1483 -> -3589,-550, largeur ~60 m; seuil SE decale de 84 m d'apres les feux verts du frame VCIA Night); z sol heightmap; a affiner par tooltip V16 / in-game"
+    "notes": "VCIA-V2 2026-09-19: SE End = coins du pad (76 m) a la marche s=150 m, SE Threshold = coins de la piste (43 m) a la meme marche, NW End = bords a l'extremite NW; geometrie V16 v3, z heightmap; a confirmer par Alt-clic V16"
+  },
+  "VCIA Runway 12/30 (SE Threshold L)": {
+    "xyz": [
+      -2245.4,
+      -1421.3,
+      5.2
+    ],
+    "source_cameras": [],
+    "error_m": 6.0,
+    "zone": "vice_city",
+    "notes": "VCIA-V2 2026-09-19: SE End = coins du pad (76 m) a la marche s=150 m, SE Threshold = coins de la piste (43 m) a la meme marche, NW End = bords a l'extremite NW; geometrie V16 v3, z heightmap; a confirmer par Alt-clic V16"
   },
   "VCIA Runway 12/30 (SE Threshold R)": {
     "xyz": [
-      -2162.0,
-      -1412.9,
-      5.3
+      -2222.5,
+      -1384.9,
+      5.1
     ],
     "source_cameras": [],
     "error_m": 6.0,
     "zone": "vice_city",
-    "notes": "VCIA-V1 2026-09-19: coin de la piste diagonale (azimut 122/302) derive de la V16 v3 (axe -2107,-1483 -> -3589,-550, largeur ~60 m; seuil SE decale de 84 m d'apres les feux verts du frame VCIA Night); z sol heightmap; a affiner par tooltip V16 / in-game"
+    "notes": "VCIA-V2 2026-09-19: SE End = coins du pad (76 m) a la marche s=150 m, SE Threshold = coins de la piste (43 m) a la meme marche, NW End = bords a l'extremite NW; geometrie V16 v3, z heightmap; a confirmer par Alt-clic V16"
   },
   "VCIA Runway 12/30 (NW End L)": {
     "xyz": [
-      -3605.0,
-      -575.4,
-      8.8
+      -3600.5,
+      -568.2,
+      8.6
     ],
     "source_cameras": [],
     "error_m": 6.0,
     "zone": "vice_city",
-    "notes": "VCIA-V1 2026-09-19: coin de la piste diagonale (azimut 122/302) derive de la V16 v3 (axe -2107,-1483 -> -3589,-550, largeur ~60 m; seuil SE decale de 84 m d'apres les feux verts du frame VCIA Night); z sol heightmap; a affiner par tooltip V16 / in-game"
+    "notes": "VCIA-V2 2026-09-19: SE End = coins du pad (76 m) a la marche s=150 m, SE Threshold = coins de la piste (43 m) a la meme marche, NW End = bords a l'extremite NW; geometrie V16 v3, z heightmap; a confirmer par Alt-clic V16"
   },
   "VCIA Runway 12/30 (NW End R)": {
     "xyz": [
-      -3573.0,
-      -524.6,
-      8.7
+      -3577.5,
+      -531.8,
+      8.6
     ],
     "source_cameras": [],
     "error_m": 6.0,
     "zone": "vice_city",
-    "notes": "VCIA-V1 2026-09-19: coin de la piste diagonale (azimut 122/302) derive de la V16 v3 (axe -2107,-1483 -> -3589,-550, largeur ~60 m; seuil SE decale de 84 m d'apres les feux verts du frame VCIA Night); z sol heightmap; a affiner par tooltip V16 / in-game"
+    "notes": "VCIA-V2 2026-09-19: SE End = coins du pad (76 m) a la marche s=150 m, SE Threshold = coins de la piste (43 m) a la meme marche, NW End = bords a l'extremite NW; geometrie V16 v3, z heightmap; a confirmer par Alt-clic V16"
   }
 }
