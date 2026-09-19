@@ -92,5 +92,15 @@
   ],
   "filename": "/Users/alexandreleblanc/Downloads/gtamaplib-main/maps/yanis,16_sunrise.png",
   "source": "crop V16 pour la projection de Sunrise over Vice City"
+ },
+ "yanis16_prison": {
+  "version": 16,
+  "scale": 1.0,
+  "zero": [
+   3500,
+   -2000
+  ],
+  "filename": "/Users/alexandreleblanc/Downloads/gtamaplib-main/maps/yanis,16_prison.png",
+  "source": "crop V16 pour la projection de scene des cams video de la prison"
  }
 }
