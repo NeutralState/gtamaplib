@@ -20560,5 +20560,71 @@
     "error_m": 3.0,
     "zone": "vice_city",
     "note": "2026-09-10: xy lu par Alexandre sur la leak map, corrige du decalage leak->V16 local (+5 m est); z libre dans le solve Sunrise"
+  },
+  "VCIA Runway 12/30 (SE End L)": {
+    "xyz": [
+      -2123.0,
+      -1508.4,
+      5.9
+    ],
+    "source_cameras": [],
+    "error_m": 6.0,
+    "zone": "vice_city",
+    "notes": "VCIA-V1 2026-09-19: coin de la piste diagonale (azimut 122/302) derive de la V16 v3 (axe -2107,-1483 -> -3589,-550, largeur ~60 m; seuil SE decale de 84 m d'apres les feux verts du frame VCIA Night); z sol heightmap; a affiner par tooltip V16 / in-game"
+  },
+  "VCIA Runway 12/30 (SE End R)": {
+    "xyz": [
+      -2091.0,
+      -1457.6,
+      5.8
+    ],
+    "source_cameras": [],
+    "error_m": 6.0,
+    "zone": "vice_city",
+    "notes": "VCIA-V1 2026-09-19: coin de la piste diagonale (azimut 122/302) derive de la V16 v3 (axe -2107,-1483 -> -3589,-550, largeur ~60 m; seuil SE decale de 84 m d'apres les feux verts du frame VCIA Night); z sol heightmap; a affiner par tooltip V16 / in-game"
+  },
+  "VCIA Runway 12/30 (SE Threshold L)": {
+    "xyz": [
+      -2194.0,
+      -1463.7,
+      5.1
+    ],
+    "source_cameras": [],
+    "error_m": 6.0,
+    "zone": "vice_city",
+    "notes": "VCIA-V1 2026-09-19: coin de la piste diagonale (azimut 122/302) derive de la V16 v3 (axe -2107,-1483 -> -3589,-550, largeur ~60 m; seuil SE decale de 84 m d'apres les feux verts du frame VCIA Night); z sol heightmap; a affiner par tooltip V16 / in-game"
+  },
+  "VCIA Runway 12/30 (SE Threshold R)": {
+    "xyz": [
+      -2162.0,
+      -1412.9,
+      5.3
+    ],
+    "source_cameras": [],
+    "error_m": 6.0,
+    "zone": "vice_city",
+    "notes": "VCIA-V1 2026-09-19: coin de la piste diagonale (azimut 122/302) derive de la V16 v3 (axe -2107,-1483 -> -3589,-550, largeur ~60 m; seuil SE decale de 84 m d'apres les feux verts du frame VCIA Night); z sol heightmap; a affiner par tooltip V16 / in-game"
+  },
+  "VCIA Runway 12/30 (NW End L)": {
+    "xyz": [
+      -3605.0,
+      -575.4,
+      8.8
+    ],
+    "source_cameras": [],
+    "error_m": 6.0,
+    "zone": "vice_city",
+    "notes": "VCIA-V1 2026-09-19: coin de la piste diagonale (azimut 122/302) derive de la V16 v3 (axe -2107,-1483 -> -3589,-550, largeur ~60 m; seuil SE decale de 84 m d'apres les feux verts du frame VCIA Night); z sol heightmap; a affiner par tooltip V16 / in-game"
+  },
+  "VCIA Runway 12/30 (NW End R)": {
+    "xyz": [
+      -3573.0,
+      -524.6,
+      8.7
+    ],
+    "source_cameras": [],
+    "error_m": 6.0,
+    "zone": "vice_city",
+    "notes": "VCIA-V1 2026-09-19: coin de la piste diagonale (azimut 122/302) derive de la V16 v3 (axe -2107,-1483 -> -3589,-550, largeur ~60 m; seuil SE decale de 84 m d'apres les feux verts du frame VCIA Night); z sol heightmap; a affiner par tooltip V16 / in-game"
   }
 }

@@ -5561,5 +5561,31 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "SOLVE JOINT-PRISON v5 2026-09-19: orientation de f140 imposee = alignement du relief par Alexandre apres rechargement (yaw -1.20 / pitch +0.64 sur la pose v4), position libre -> cams video deplacees de 11-13 m, points video 3.2 px, sol 5.1 px, tours <= 5.4 m | SOLVE JOINT-PRISON v4 2026-09-19: + crete lointaine (alignement des montagnes par Alexandre sur f140: yaw +1.18 / pitch +0.90) et rives/routes V16 (poids faible); les cams video se deplacent de 9-16 m / 0.8-1.25 deg, fov 89.7, tours <= 4 m | SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM."
+ },
+ "VCIA Night (Runway)": {
+  "id": "S3/85",
+  "player": null,
+  "xyz": [
+   -1799.1,
+   -1429.0,
+   170.4
+  ],
+  "ypr": [
+   94.24,
+   -14.39,
+   -8.75
+  ],
+  "fov": [
+   75.33,
+   null
+  ],
+  "size": [
+   1920,
+   1080
+  ],
+  "source": "Screenshot 3 \u2014 VCIA Night (Runway) (frame video 8305, nuit: piste diagonale 12/30 de VCIA vue depuis son extremite SE vers le NW, feux de bord, seuil vert et bout de piste rouge, terminal illumine a droite, avion au parking en bas a droite; bandes noires haut/bas)",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "SOLVE VCIA-V1 2026-09-19: pose initiale sur la geometrie V16 de la piste (bout SE 2 coins, seuil decale 2 coins, extremite NW, 2 lignes de feux de bord), rms 7.7 px, roll -8.8 (a verifier); precision ~10 m; a affiner par clics (coins du terminal, hangars, avion) et tooltips V16"
  }
 }
