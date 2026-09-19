@@ -5488,17 +5488,17 @@
   "id": "S3/82",
   "player": null,
   "xyz": [
-   -2488.83,
-   -3319.07,
-   210.57
+   -2476.58,
+   -3315.66,
+   207.26
   ],
   "ypr": [
-   28.2,
-   -5.157,
-   -0.019
+   29.428,
+   -4.858,
+   0.192
   ],
   "fov": [
-   90.196,
+   89.719,
    null
   ],
   "size": [
@@ -5508,23 +5508,23 @@
   "source": "Screenshot 3 \u2014 Prison (Video) f100 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 a t=10.83 s, 1920x1080, overlay crypto; sequence 7.5-13.7 s = orbite de la camera autour du biplan au-dessus de la prison)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM."
+  "notes": "SOLVE JOINT-PRISON v4 2026-09-19: + crete lointaine (alignement des montagnes par Alexandre sur f140: yaw +1.18 / pitch +0.90) et rives/routes V16 (poids faible); les cams video se deplacent de 9-16 m / 0.8-1.25 deg, fov 89.7, tours <= 4 m | SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM."
  },
  "Prison (Video) f140": {
   "id": "S3/83",
   "player": null,
   "xyz": [
-   -2444.52,
-   -3241.97,
-   208.84
+   -2433.61,
+   -3234.89,
+   201.81
   ],
   "ypr": [
-   33.9,
-   -4.976,
-   0.096
+   35.318,
+   -4.337,
+   0.261
   ],
   "fov": [
-   90.196,
+   89.719,
    null
   ],
   "size": [
@@ -5534,23 +5534,23 @@
   "source": "Screenshot 3 \u2014 Prison (Video) f140 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 a t=12.17 s, 1920x1080, overlay crypto; sequence 7.5-13.7 s = orbite de la camera autour du biplan au-dessus de la prison)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM."
+  "notes": "SOLVE JOINT-PRISON v4 2026-09-19: + crete lointaine (alignement des montagnes par Alexandre sur f140: yaw +1.18 / pitch +0.90) et rives/routes V16 (poids faible); les cams video se deplacent de 9-16 m / 0.8-1.25 deg, fov 89.7, tours <= 4 m | SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM."
  },
  "Prison (Video) f180": {
   "id": "S3/84",
   "player": null,
   "xyz": [
-   -2407.63,
-   -3153.9,
-   196.29
+   -2401.88,
+   -3147.74,
+   191.25
   ],
   "ypr": [
-   42.426,
-   -4.813,
-   0.631
+   43.481,
+   -4.372,
+   0.697
   ],
   "fov": [
-   90.196,
+   89.719,
    null
   ],
   "size": [
@@ -5560,6 +5560,6 @@
   "source": "Screenshot 3 \u2014 Prison (Video) f180 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 a t=13.50 s, 1920x1080, overlay crypto; sequence 7.5-13.7 s = orbite de la camera autour du biplan au-dessus de la prison)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM."
+  "notes": "SOLVE JOINT-PRISON v4 2026-09-19: + crete lointaine (alignement des montagnes par Alexandre sur f140: yaw +1.18 / pitch +0.90) et rives/routes V16 (poids faible); les cams video se deplacent de 9-16 m / 0.8-1.25 deg, fov 89.7, tours <= 4 m | SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM."
  }
 }
