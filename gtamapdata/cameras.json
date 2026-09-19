@@ -5566,17 +5566,17 @@
   "id": "S3/85",
   "player": null,
   "xyz": [
-   -1981.4,
-   -1285.6,
-   181.6
+   -1980.2,
+   -1307.2,
+   141.3
   ],
   "ypr": [
-   103.61,
-   -14.3,
-   -2.12
+   100.26,
+   -10.41,
+   -0.34
   ],
   "fov": [
-   96.86,
+   91.23,
    null
   ],
   "size": [
@@ -5586,6 +5586,6 @@
   "source": "Screenshot 3 \u2014 VCIA Night (Runway) (frame video 8305, nuit: piste diagonale 12/30 de VCIA vue depuis son extremite SE vers le NW, feux de bord, seuil vert et bout de piste rouge, terminal illumine a droite, avion au parking en bas a droite; bandes noires haut/bas)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "SOLVE VCIA-V2 2026-09-19: traces d'Alexandre (piste + pad en rouge, route en jaune, eau en bleu) contre la geometrie V16 (bords de piste 43 m, pad 76 m sur 150 m, routes, eau): bords de piste 2 px, coins du pad 18-29 px (pad V16 plus court/etroit que dans le jeu ?), routes/eau decalees de 20-40 px; hfov 97 (grand angle), roll -2; precision ~15 m. Prochaine etape: coins V16 du pad (Alt-clic) et coins du terminal. | SOLVE VCIA-V1 2026-09-19: pose initiale sur la geometrie V16 de la piste (bout SE 2 coins, seuil decale 2 coins, extremite NW, 2 lignes de feux de bord), rms 7.7 px, roll -8.8 (a verifier); precision ~10 m; a affiner par clics (coins du terminal, hangars, avion) et tooltips V16"
+  "notes": "SOLVE VCIA-V3 2026-09-19: orientation = alignement du lointain par Alexandre dans le POV (yaw -8.27 / pitch +3.93 sur la v2, tenue a 0.05 deg), position et fov libres contre la piste V16 + traces: cam descendue de 46 m (182 -> 141 m), hfov 96.9 -> 91.2, bords de piste 1.9 px; routes/eau V16 restent 40-60 px a cote des traces (decalage carte probable, comme a la prison); pad V16 (76 m x 150 m) plus petit que dans le jeu. | SOLVE VCIA-V2 2026-09-19: traces d'Alexandre (piste + pad en rouge, route en jaune, eau en bleu) contre la geometrie V16 (bords de piste 43 m, pad 76 m sur 150 m, routes, eau): bords de piste 2 px, coins du pad 18-29 px (pad V16 plus court/etroit que dans le jeu ?), routes/eau decalees de 20-40 px; hfov 97 (grand angle), roll -2; precision ~15 m. Prochaine etape: coins V16 du pad (Alt-clic) et coins du terminal. | SOLVE VCIA-V1 2026-09-19: pose initiale sur la geometrie V16 de la piste (bout SE 2 coins, seuil decale 2 coins, extremite NW, 2 lignes de feux de bord), rms 7.7 px, roll -8.8 (a verifier); precision ~10 m; a affiner par clics (coins du terminal, hangars, avion) et tooltips V16"
  }
 }
