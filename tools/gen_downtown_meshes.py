@@ -107,42 +107,43 @@ def build_simple():
 
 
 def build_citigroup():
-    ne, nw, se = lm('Citigroup Center (NE)')[:2], lm('Citigroup Center (NW)')[:2], lm('Citigroup Center (SE)')[:2]
-    sw = se + (nw - ne); poly = np.array([ne, nw, sw, se]); z0 = ground(poly)
-    return entry('Citigroup Center', extrude(poly, z0, 150.3, ring_step=4.4), '#d1d5db',
-                 'Parallelogramme sur 3 coins de toit triangules (NE/NW/SE, 4e deduit); toit 150.3; sol %.1f; la V16 (2259) ne dessine que le quart NE' % z0)
+    p = ring(2259); z0 = ground(p)
+    return entry('Citigroup Center', extrude(p, z0, 150.3, ring_step=4.4), '#d1d5db',
+                 'Empreinte V16 2259 extrudee (regle: le footprint V16 prime sur les coins triangules); toit = coins NE/NW/SE 150.3; sol %.1f; les coins triangules debordent de 10-25 m au NW/S' % z0)
 
 
 def build_infinity():
-    poly = np.array([lm('Infinity at Brickell (NE)')[:2], lm('Infinity at Brickell (NW)')[:2], lm('Infinity at Brickell (SW)')[:2], lm('Infinity at Brickell (SE)')[:2]])
-    pod = ring(1929); z0 = ground(pod)
-    E = extrude(poly, z0, 177.2, ring_step=4.3) + extrude(pod, z0, z0 + 18.0, ring_step=6.0)
-    return entry('Infinity at Brickell', E, '#67e8f9', 'Tour = quadrilatere des 4 coins de toit (177.2), en retrait/decale du podium V16 1929 (18 m ESTIME); sol %.1f' % z0)
+    p = ring(1929); z0 = ground(p)
+    E = extrude(p, z0, 177.2, ring_step=4.3)
+    h = ring(1930); E += extrude(h, 177.2, 181.0)
+    return entry('Infinity at Brickell', E, '#67e8f9', 'Empreinte V16 1929 extrudee (footprint V16 prime); toit = coins 177.2; helipad/local V16 1930 a 181 (coin NE); sol %.1f; les coins triangules NE/NW sont 15-25 m a l est du polygone' % z0)
 
 
 def build_brickell_arch():
-    W = lm('Brickell Arch (W)'); Ecorner = lm('Brickell Arch (E)')
-    yN = float((W[1] + Ecorner[1]) / 2); x0, x1 = float(W[0]), float(Ecorner[0]); depth = 34.0; H = 172.2
-    pod = ring(1965); z0 = ground(pod); Rmax = 14.0; xc = (x0 + x1) / 2; hwmax = (x1 - x0) / 2
+    """Tour = plan dessine en TRAITS dans la V16 (quadrilatere 2114 m2 a l'interieur de l'ilot 1965, extrait de la SVG),
+    arche parabolique concave sur la face sud (cote rue). Footprint V16 prime: les coins triangules E/W (106 m d'ecart)
+    debordent du plan V16 (74 m). Podium = ilot 1965 a 12 m ESTIME."""
+    T = np.array([[-753.0, -1146.3], [-747.1, -1117.9], [-808.3, -1095.5], [-823.3, -1124.3]])
+    pod = ring(1965); z0 = ground(pod); H = 172.2
+    D, A = T[3], T[0]                      # face sud, de l'ouest vers l'est
+    u = (A - D) / np.linalg.norm(A - D); L = np.linalg.norm(A - D); nrm = np.array([u[1], -u[0]])
+    if np.dot(nrm, D - T.mean(axis=0)) < 0: nrm = -nrm          # sortante (vers la rue)
+    Rmax = 14.0
     def ring_at(z):
-        s = max(0.0, (z - z0) / (H - z0)); hw = hwmax * np.sqrt(s); d = Rmax * s
-        xs = np.linspace(x0, x1, 25); north = []
-        for x in xs:
-            u = (x - xc) / hw if hw > 1e-6 else 9
-            rec = d * (1 - u * u) if abs(u) < 1 else 0.0
-            north.append([x, yN - rec])
-        return np.array(north + [[x1, yN - depth], [x0, yN - depth]])
-    E = []; zs = list(np.arange(z0, H, 5.0)) + [H]; prev = ring_at(zs[0])
-    E += loop_edges(prev, zs[0])
-    for z in zs[1:]:
-        E += loop_edges(ring_at(z), z)
-    rect = np.array([[x0, yN], [x1, yN], [x1, yN - depth], [x0, yN - depth]])
-    E += vertical_edges(rect, z0, H)
-    # arete de l'arche (ligne mediane de la face nord)
+        s = max(0.0, (z - z0) / (H - z0)); hw = (L / 2) * np.sqrt(s); d = Rmax * s
+        south = []
+        for t in np.linspace(0, 1, 25):
+            x = D + u * (t * L); uu = (t * L - L / 2) / hw if hw > 1e-6 else 9
+            rec = d * (1 - uu * uu) if abs(uu) < 1 else 0.0
+            south.append((x - nrm * rec).tolist())
+        return np.array(south + [T[1].tolist(), T[2].tolist()])
+    zs = list(np.arange(z0, H, 5.0)) + [H]; E = []
+    for z in zs: E += loop_edges(ring_at(z), z)
+    E += vertical_edges(T, z0, H)
     for za, zb in zip(zs[:-1], zs[1:]):
-        a = ring_at(za)[12]; b = ring_at(zb)[12]; E.append([[float(a[0]), float(a[1]), float(za)], [float(b[0]), float(b[1]), float(zb)]])
+        a_ = ring_at(za)[12]; b_ = ring_at(zb)[12]; E.append([[float(a_[0]), float(a_[1]), float(za)], [float(b_[0]), float(b_[1]), float(zb)]])
     E += extrude(pod, z0, z0 + 12.0, ring_step=6.0)
-    return entry('Brickell Arch', E, '#fcd34d', 'Lame %.0f x %.0f m entre les coins (W)/(E) (face nord y=%.1f), toit 172.2, arche parabolique concave sur la face nord (recess max %.0f m au sommet, ESTIME; IRL KPF 2004); podium V16 1965 a 12 m ESTIME; sol %.1f' % (x1 - x0, depth, yN, Rmax, z0))
+    return entry('Brickell Arch', E, '#fcd34d', 'Plan = quadrilatere dessine en traits dans la V16 (%.0f x %.0f m, footprint V16 prime sur les coins triangules E/W); arche parabolique concave sur la face sud (rue), recess max %.0f m au sommet ESTIME (IRL KPF 2004); toit 172.2 (coins); podium = ilot V16 1965 a 12 m ESTIME; sol %.1f' % (L, np.linalg.norm(T[1] - T[0]), Rmax, z0))
 
 
 def build_miami_tower():
