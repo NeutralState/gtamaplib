@@ -102,5 +102,15 @@
   ],
   "filename": "/Users/alexandreleblanc/Downloads/gtamaplib-main/maps/yanis,16_prison.png",
   "source": "crop V16 pour la projection de scene des cams video de la prison"
+ },
+ "yanis16_keys": {
+  "version": 16,
+  "scale": 1.0,
+  "zero": [
+   8000,
+   -4600
+  ],
+  "filename": "/Users/alexandreleblanc/Downloads/gtamaplib-main/maps/yanis,16_keys.png",
+  "source": "crop V16 pour les projections de scene autour des Keys (Key Lento, Keys, NAS Goose Key)"
  }
 }
