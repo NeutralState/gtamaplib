@@ -5379,17 +5379,17 @@
   "id": "T3/4",
   "player": null,
   "xyz": [
-   1585.29,
-   2562.73,
-   107.17
+   1596.44,
+   2537.15,
+   93.53
   ],
   "ypr": [
-   134.326,
-   8.144,
+   133.786,
+   8.701,
    -0.309
   ],
   "fov": [
-   75.257,
+   76.7,
    null
   ],
   "size": [
@@ -5399,7 +5399,7 @@
   "source": "Trailer 3 (Extended Look) \u2014 Parachute Jump over Vice Beach (vue aerienne depuis un parachute orange au-dessus de Vice Beach, skyline de Downtown au loin a l'horizon, causeway a gauche, palais des congres/hopital en bas au centre, chenaux a droite)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "EXCLUS 2026-09-20: les 7 lectures de Claude font passer RMS-M de 0.409 a 0.456 m -> exclues des metriques (elles restent visibles pour etre deplacees/validees par Alexandre); la pose reste celle du SKYLINE-FIT. | SKYLINE-FIT 2026-09-20: xy donne par Alexandre (1609.6, 2503.2, 'autour de ca'), z/orientation/fov ajustes sur 7 sommets de tours lus par Claude dans la skyline (SEFC, Four Seasons, Two Tequesta, Quantum S, Opera, 1800 Club, The Grand; +-10 px) + horizon a y=1447: residus 7-21 px, xy deplace de 64 m (prior 30 m), z 107 m, contre-plongee +8.1, hfov 75.3; precision ~20-30 m. Les 7 clics sont des lectures de Claude a verifier/deplacer; a affiner avec des clics d'Alexandre (Mount Sinai en bas, causeway a gauche, Titan America a droite). | POSITION APPROX 2026-09-17: estimation initiale (au-dessus de Vice Beach, ~450 m, regard vers le SW sur Downtown) a resoudre avec les clics; le parachute cache le centre du cadre"
+  "notes": "POV+PROCHE 2026-09-20: orientation POV d'Alexandre (yaw -0.54, pitch -0.06, hfov 76.7 sur le SKYLINE-FIT; Downtown matche, le proche moyen) + pont de la route 10 sur le chenal Nautilus/Washington Beach (790 m) lu par Claude a (450,1768): position/pitch re-solus a yaw+hfov figes -> (1596.4,2537.1,93.5), pitch 8.70; pont 12 px, tours 3-22 px. Le saut part du toit de Jade Ocean (203 m) mais la cam est ~100 m plus bas: l'horizon a y~1440 impose z~90-110 m. Position le long de la trajectoire SW encore incertaine (+-100 m): il faut des clics proches (2 bouts du pont route 10, coins de toit Sunset Harbour South RN/RS, Mount Sinai SE). | EXCLUS 2026-09-20: les 7 lectures de Claude font passer RMS-M de 0.409 a 0.456 m -> exclues des metriques (elles restent visibles pour etre deplacees/validees par Alexandre); la pose reste celle du SKYLINE-FIT. | SKYLINE-FIT 2026-09-20: xy donne par Alexandre (1609.6, 2503.2, 'autour de ca'), z/orientation/fov ajustes sur 7 sommets de tours lus par Claude dans la skyline (SEFC, Four Seasons, Two Tequesta, Quantum S, Opera, 1800 Club, The Grand; +-10 px) + horizon a y=1447: residus 7-21 px, xy deplace de 64 m (prior 30 m), z 107 m, contre-plongee +8.1, hfov 75.3; precision ~20-30 m. Les 7 clics sont des lectures de Claude a verifier/deplacer; a affiner avec des clics d'Alexandre (Mount Sinai en bas, causeway a gauche, Titan America a droite). | POSITION APPROX 2026-09-17: estimation initiale (au-dessus de Vice Beach, ~450 m, regard vers le SW sur Downtown) a resoudre avec les clics; le parachute cache le centre du cadre"
  },
  "Vice Beach Panorama (Extended Look)": {
   "id": "T3/5",
