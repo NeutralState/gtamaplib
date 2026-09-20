@@ -3618,17 +3618,17 @@
   "id": "S2/62",
   "player": null,
   "xyz": [
-   -5328.1,
-   -3439.221,
-   30.82
+   -5269.25,
+   -3420.8,
+   32.35
   ],
   "ypr": [
-   282.9709,
-   -5.8609,
-   0.0563
+   282.857,
+   -5.97,
+   0.039
   ],
   "fov": [
-   48.431,
+   49.098,
    null
   ],
   "size": [
@@ -3636,7 +3636,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Grassrivers 02 [1]",
-  "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 55 clics, 11 ancres): mediane 2.9->2.6 px, ancres 3.9->2.6, move 22.8 m | RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 55 clics): mediane 1.8->3.6 px, move 74.4 m | "
+  "notes": "RESOLVE-WT 2026-09-20: 54 clics lointains + Watson Bay Water Tower (tooltip Alexandre) en ancre laterale: move 61.7 m vers la tour, mediane 2.25 px (90% 5.5); Lamp Post (SE) 195 px, Continuum (S) et Red Billboard (Hamlet) 35 px exclus | RECAL-ANCRES 2026-09-06 (tooltips x3, 55 clics, 11 ancres): mediane 2.9->2.6 px, ancres 3.9->2.6, move 22.8 m | RESOLVE-CAM 2026-09-04 (landmarks fixes, tooltips x3, 55 clics): mediane 1.8->3.6 px, move 74.4 m | "
  },
  "Mount Kalaga National Park 02 (Helicopter) (X)": {
   "id": "S2/66",
@@ -5586,6 +5586,6 @@
   "source": "Screenshot 3 \u2014 VCIA Night (Runway) (frame video 8305, nuit: piste diagonale 12/30 de VCIA vue depuis son extremite SE vers le NW, feux de bord, seuil vert et bout de piste rouge, terminal illumine a droite, avion au parking en bas a droite; bandes noires haut/bas)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "SOLVE VCIA-V3 2026-09-19: orientation = alignement du lointain par Alexandre dans le POV (yaw -8.27 / pitch +3.93 sur la v2, tenue a 0.05 deg), position et fov libres contre la piste V16 + traces: cam descendue de 46 m (182 -> 141 m), hfov 96.9 -> 91.2, bords de piste 1.9 px; routes/eau V16 restent 40-60 px a cote des traces (decalage carte probable, comme a la prison); pad V16 (76 m x 150 m) plus petit que dans le jeu. | SOLVE VCIA-V2 2026-09-19: traces d'Alexandre (piste + pad en rouge, route en jaune, eau en bleu) contre la geometrie V16 (bords de piste 43 m, pad 76 m sur 150 m, routes, eau): bords de piste 2 px, coins du pad 18-29 px (pad V16 plus court/etroit que dans le jeu ?), routes/eau decalees de 20-40 px; hfov 97 (grand angle), roll -2; precision ~15 m. Prochaine etape: coins V16 du pad (Alt-clic) et coins du terminal. | SOLVE VCIA-V1 2026-09-19: pose initiale sur la geometrie V16 de la piste (bout SE 2 coins, seuil decale 2 coins, extremite NW, 2 lignes de feux de bord), rms 7.7 px, roll -8.8 (a verifier); precision ~10 m; a affiner par clics (coins du terminal, hangars, avion) et tooltips V16"
+  "notes": "VCIA-V4 ANNULE 2026-09-20: le point lumineux a (572,396) est 45 px trop bas pour etre le sommet (50.7 m) de la Watson Bay Water Tower a 3.6 km -> pas la tour (ou pas son sommet); pose v3 conservee | SOLVE VCIA-V4 2026-09-20: + Watson Bay Water Tower (feu au sommet a (572,396), 3.6 km) comme point, piste V16 sur les traces, orientation POV d'Alexandre en prior 0.3 deg: piste 0.7 px, tour 45.0 px, hfov 92.0 | SOLVE VCIA-V3 2026-09-19: orientation = alignement du lointain par Alexandre dans le POV (yaw -8.27 / pitch +3.93 sur la v2, tenue a 0.05 deg), position et fov libres contre la piste V16 + traces: cam descendue de 46 m (182 -> 141 m), hfov 96.9 -> 91.2, bords de piste 1.9 px; routes/eau V16 restent 40-60 px a cote des traces (decalage carte probable, comme a la prison); pad V16 (76 m x 150 m) plus petit que dans le jeu. | SOLVE VCIA-V2 2026-09-19: traces d'Alexandre (piste + pad en rouge, route en jaune, eau en bleu) contre la geometrie V16 (bords de piste 43 m, pad 76 m sur 150 m, routes, eau): bords de piste 2 px, coins du pad 18-29 px (pad V16 plus court/etroit que dans le jeu ?), routes/eau decalees de 20-40 px; hfov 97 (grand angle), roll -2; precision ~15 m. Prochaine etape: coins V16 du pad (Alt-clic) et coins du terminal. | SOLVE VCIA-V1 2026-09-19: pose initiale sur la geometrie V16 de la piste (bout SE 2 coins, seuil decale 2 coins, extremite NW, 2 lignes de feux de bord), rms 7.7 px, roll -8.8 (a verifier); precision ~10 m; a affiner par clics (coins du terminal, hangars, avion) et tooltips V16"
  }
 }
