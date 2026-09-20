@@ -16771,10 +16771,17 @@
     "zone": "rlx_markings_0713"
   },
   "Watson Bay (B)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
-    "zone": "rlx_markings_0713"
+    "xyz": [
+      -5253.5,
+      -3393.9,
+      1.7
+    ],
+    "source_cameras": [
+      "Grassrivers 02 (Watson Bay)"
+    ],
+    "error_m": 0.5,
+    "zone": "grassrivers",
+    "notes": "tooltip V16 Alexandre 2026-09-20 (ponton Watson Bay), z = sol heightmap + 1 m"
   },
   "Watson Bay (C)": {
     "xyz": null,
@@ -16801,10 +16808,17 @@
     "zone": "rlx_markings_0713"
   },
   "Watson Bay (G)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
-    "zone": "rlx_markings_0713"
+    "xyz": [
+      -5258.3,
+      -3422.3,
+      1.2
+    ],
+    "source_cameras": [
+      "Grassrivers 02 (Watson Bay)"
+    ],
+    "error_m": 0.5,
+    "zone": "grassrivers",
+    "notes": "tooltip V16 Alexandre 2026-09-20 (ponton Watson Bay), z = sol heightmap + 1 m"
   },
   "Watson Bay (H)": {
     "xyz": null,
@@ -16825,10 +16839,17 @@
     "zone": "rlx_markings_0713"
   },
   "Watson Bay (K)": {
-    "xyz": null,
-    "source_cameras": [],
-    "error_m": null,
-    "zone": "rlx_markings_0713"
+    "xyz": [
+      -5251.8,
+      -3441.1,
+      1.4
+    ],
+    "source_cameras": [
+      "Grassrivers 02 (Watson Bay)"
+    ],
+    "error_m": 0.5,
+    "zone": "grassrivers",
+    "notes": "tooltip V16 Alexandre 2026-09-20 (ponton Watson Bay), z = sol heightmap + 1 m"
   },
   "Watson Bay (L)": {
     "xyz": null,
@@ -20629,15 +20650,15 @@
   },
   "Watson Bay Water Tower": {
     "xyz": [
-      -4947.5,
-      -3264.2,
-      50.7
+      -4950.5,
+      -3258.0,
+      43.8
     ],
     "source_cameras": [
       "Grassrivers 02 (Watson Bay)"
     ],
-    "error_m": 1.5,
+    "error_m": 2.0,
     "zone": "grassrivers",
-    "notes": "WATSON-WT 2026-09-20: xy = tooltip V16/in-game d'Alexandre (-4947.5,-3264.2), z = sommet du reservoir sur le rayon de Grassrivers 02 re-solue avec cette ancre (0.9 m lateral, 358 m); reservoir 43.8-50.7 m, sol 2.8 m"
+    "notes": "WATSON-WT v2 2026-09-20: G02 fixee par 3 pontons tooltips (B/G/K a 11-31 m, residus < 0.5 m) + 54 clics lointains (2.5 px): le rayon du sommet passe a 6.9 m du cercle V16 (-4947.5,-3264.2) -> tour posee sur le rayon a la meme distance (6.9 m du tooltip); z sommet 43.8, bas du reservoir 36.0"
   }
 }
