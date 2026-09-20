@@ -64,14 +64,14 @@ def build():
     # Vizcayne
     p = ring(2435); z0 = ground(p)
     E = extrude(p, z0, z0 + 25.0, ring_step=4.2)
-    out['Vizcayne (Podium)'] = {'color': '#c9a0dc', 'world_edges': E,
+    out['Vizcayne (Podium)'] = {'color': '#4ade80', 'world_edges': E,
         'note': 'Podium = ilot V16 2435 (Everglades Plaza + parking, etages 2-7 IRL); hauteur 25 m ESTIMEE (aucune cam nette: dans Shitzu Squalo 01 les arcades roses devant sont la causeway); anneaux tous les 4.2 m; sol %.1f' % z0,
         '_credit': 'gen_podiums.py 2026-09-20'}
     # Four Seasons
     p = ring(1939); z0 = ground(p)
     E = extrude(p, z0, z0 + 32.0, ring_step=4.6)
     q = ring(1955); E += extrude(q, ground(q), ground(q) + 32.0, ring_step=4.6)
-    out['Four Seasons (Podium)'] = {'color': '#d9b38c', 'world_edges': E,
+    out['Four Seasons (Podium)'] = {'color': '#60a5fa', 'world_edges': E,
         'note': 'Socle = V16 1939 (terrasse piscine, 7e etage IRL) + 1955 (aile ouest); hauteur 32 m lue dans Tennis Stadium (4K) (terrasse aux palmiers a +31..+35 m avec les anneaux-guides, 7e etage IRL); sol %.1f' % z0,
         '_credit': 'gen_podiums.py 2026-09-20'}
     # Stephen P. Clark
@@ -81,7 +81,7 @@ def build():
     E += extrude(s, zs, zs + 18.0, ring_step=6.0)
     o = ring(2407); zo = ground(o); c = ring(2410)
     E += extrude(o, zo, zo + 12.0, ring_step=3.0) + extrude(c, zo, zo + 12.0) + helix(o, zo, zo + 12.0, 2)
-    out['Stephen P. Clark (Podium)'] = {'color': '#b8c4d6', 'world_edges': E,
+    out['Stephen P. Clark (Podium)'] = {'color': '#fb923c', 'world_edges': E,
         'note': 'Socle nord = V16 2413, 14 m ESTIME; station Metrorail = V16 3857, 18 m ESTIME (station aerienne dans le batiment IRL); rampe helicoidale = octogones V16 2407/2410, 12 m ESTIME (2 tours); aucune cam nette a < 700 m: a affiner quand une frame le montrera',
         '_credit': 'gen_podiums.py 2026-09-20'}
     for v in out.values():
