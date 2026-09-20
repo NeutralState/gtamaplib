@@ -101,61 +101,55 @@ def one_miami():
 
 
 def sefc():
+    """Couronne ajustee sur les silhouettes (scratchpad sefc_fit5.py, 2026-09-20): lectures L/R a 6 hauteurs
+    dans Vice City 10, Port Vice City (A), Skyline, Sunrise, Shitzu Squalo 01 -> rms 4.9 px.
+    Le plan V16 2267 est translate de (dx,dy) et reduit (l'empreinte au sol depasse le fut de ~7 m au sud),
+    puis 4 pans de retrait lineaires (azimut de la normale sortante, retrait total au toit, z de depart)."""
     tower = ring(2267)
+    cen = tower.mean(axis=0)
+    DX, DY, SC = 0.5, 7.0, 0.943
+    CUTS = [(69.0, 28.9, 187.0), (143.0, 15.6, 185.0), (30.0, 13.2, 200.0), (233.0, 25.2, 233.0)]
+    base = (tower - cen) * SC + cen + [DX, DY]
+    c = base.mean(axis=0)
     z0 = ground(tower)
     z_roof = 246.5
-    z_set = 192.0                                 # 43e etage sur 55
-    # Gradins des deux cotes (vu dans Vice City 10 depuis le SE: pyramide a gradins symetrique,
-    # toit = 1/3 de la largeur NE-SW; Sunrise depuis l'ouest: crete presque pleine longueur NW-SE;
-    # Port Vice City (A) depuis l'ENE: sommet retreci). Les faces NE (scie) et SW reculent
-    # perpendiculairement a la ligne des dents, en 12 paliers, de FRAC_NE / FRAC_SW de la profondeur.
-    p23 = tower[23]; p3 = tower[3]
-    t = p3 - p23; t /= np.linalg.norm(t)              # le long des dents (NW -> SE)
-    n = np.array([t[1], -t[0]])                       # perpendiculaire
-    if np.dot(n, p3 - tower.mean(axis=0)) < 0:
-        n = -n                                         # pointe vers l'exterieur NE
-    proj = (tower - p23) @ n
-    depth = proj.max() - proj.min()
-    # fractions ajustees (scratchpad sefc_crownfit.py) sur l'etendue du bloc sommital lue dans
-    # Vice City 10, Port Vice City (A), Sunrise et Skyline (rms 5 px): les 4 faces reculent.
-    frac_ne = float(os.environ.get('FRAC_NE', '0.24'))
-    frac_sw = float(os.environ.get('FRAC_SW', '0.48'))
-    frac_se = float(os.environ.get('FRAC_SE', '0.45'))
-    frac_nw = float(os.environ.get('FRAC_NW', '0.36'))
-    pt = (tower - p23) @ t
-    depth_t = pt.max() - pt.min()
-    edges = []
-    floor = (z_roof - z0) / 55.0
-    edges += extrude(tower, z0, z_set, ring_step=floor * 2)
-    n_steps = 12
-    prev = tower.tolist()
-    for k in range(1, n_steps + 1):
-        z_lo = z_set + (k - 1) * (z_roof - z_set) / n_steps
-        z_hi = z_set + k * (z_roof - z_set) / n_steps
-        d_ne = proj.max() - depth * frac_ne * k / n_steps
-        d_sw = proj.min() + depth * frac_sw * k / n_steps
-        cut = clip_halfplane(prev, p23 + n * d_ne, n)          # retire au-dela de d_ne cote NE
-        cut = clip_halfplane(cut, p23 + n * d_sw, -n)          # retire en-deca de d_sw cote SW
-        cut = clip_halfplane(cut, p23 + t * (pt.max() - depth_t * frac_se * k / n_steps), t)    # face SE
-        cut = clip_halfplane(cut, p23 + t * (pt.min() + depth_t * frac_nw * k / n_steps), -t)   # face NW
-        if len(cut) < 3:
+    floor = 3.6
+    def plan_at(z):
+        cut = base.tolist()
+        for az, D, zs in CUTS:
+            if z <= zs:
+                continue
+            f = min(1.0, (z - zs) / max(1.0, z_roof - zs))
+            n = np.array([np.sin(np.radians(az)), np.cos(np.radians(az))])
+            pmax = ((base - c) @ n).max()
+            cut = clip_halfplane(cut, c + n * (pmax - D * f), n)
+            if len(cut) < 3:
+                return None
+        return cut
+    z_set = min(cs[2] for cs in CUTS)
+    edges = extrude(base, z0, z_set, ring_step=floor * 2)
+    prev = base.tolist(); z = z_set
+    while z + floor <= z_roof + 0.01:
+        cut = plan_at(z + floor)
+        if cut is None:
             break
-        edges += loop_edges(prev, z_lo) + loop_edges(cut, z_hi)
-        edges += vertical_edges(cut, z_lo, z_hi)
-        prev = cut
+        edges += loop_edges(prev, z) + loop_edges(cut, z + floor) + vertical_edges(cut, z, z + floor)
+        prev = cut; z += floor
     edges += loop_edges(prev, z_roof)
-    # mat(s) au landmark (A)
+    # bloc technique sommital (Sunrise/Skyline: ~26 x 14 m, 4 m) centre sur le toit restant, et mats au landmark (A)
+    P = np.array(prev); pc = P.mean(axis=0)
+    cap = np.array([pc + [-13, -7], pc + [13, -7], pc + [13, 7], pc + [-13, 7]])
+    edges += extrude(cap, z_roof, z_roof + 4.0)
     A = LMS['Southeast Financial Center (A)']['xyz']
-    edges += [[[A[0], A[1], z_roof], [A[0], A[1], float(A[2])]]]
-    edges += [[[A[0] + 6.0, A[1] - 2.0, z_roof], [A[0] + 6.0, A[1] - 2.0, float(A[2]) - 4.0]]]
-    # annexe
+    edges += [[[A[0], A[1], z_roof + 4.0], [A[0], A[1], float(A[2])]]]
+    edges += [[[A[0] + 6.0, A[1] - 2.0, z_roof + 4.0], [A[0] + 6.0, A[1] - 2.0, float(A[2]) - 4.0]]]
     ann = ring(2268)
     za = ground(ann)
     edges += extrude(ann, za, za + 58.0, ring_step=(58.0 / 15))
     return {'Southeast Financial Center': {
         'color': '#d9d9e6', 'world_edges': edges,
-        'note': 'Empreinte V16 2267 (dents de scie NE, encoche en V ouest, encoches SE = plan IRL SOM 1984); toit %.1f m; setbacks a partir de z %.0f (43e/55e etage): pyramide a gradins sur les 4 faces en 12 paliers (retraits NE 24 %% / SW 48 %% / SE 45 %% / NW 36 %% ajustes sur le bloc sommital dans 4 cams, rms 5 px; damier de terrasses de Vice City 10, sommet retreci dans Port Vice City A, crete pleine longueur dans Sunrise); mats jusqu a %.1f m; annexe = V16 2268, 58 m ESTIME (15 etages IRL)' % (z_roof, z_set, A[2]),
-        '_credit': 'gen_onemiami_sefc_mesh.py 2026-09-20 (V16 + landmarks multi-cams + IRL)'}}
+        'note': 'Fut = empreinte V16 2267 (scie NE, encoche V ouest) translatee de (%.1f,%.1f) m et reduite a %.3f (le fut est plus etroit que l empreinte au sol, silhouettes de 5 cams); toit %.1f m; couronne = 4 pans de retrait lineaires par etage de 3.6 m: E az 69 28.9 m des z 187, S az 143 15.6 m des z 185, N az 30 13.2 m des z 200, W az 233 25.2 m des z 233 (ajustes sur les silhouettes L/R a 6 hauteurs dans Vice City 10 / Port Vice City A / Skyline / Sunrise / Shitzu Squalo 01, rms 4.9 px); bloc technique 26x14x4 m; mats jusqu a %.1f m; annexe = V16 2268, 58 m ESTIME (15 etages IRL)' % (DX, DY, SC, z_roof, A[2]),
+        '_credit': 'gen_onemiami_sefc_mesh.py 2026-09-20 v2 (silhouettes multi-cams; v1 a pyramide 4 faces refusee par Alexandre)'}}
 
 
 if __name__ == '__main__':
