@@ -278,6 +278,9 @@ controls.panSpeed = 3.0;
 controls.rotateSpeed = 1.0;
 controls.maxPolarAngle = Math.PI * 0.495;   // jamais sous le sol
 controls.minDistance = 2;                   // [NAN-GUARD] rayon 0 -> normalize() NaN dans le zoom-vers-curseur
+controls.maxDistance = 30000;               // [ZOOM-OUT-CAP 2026-09-20] sans borne, 30 crans de molette (zoomSpeed 3, zoom vers le
+                                            // curseur) envoyaient la camera a 900 km: carte reduite a un point ("vue explosee"),
+                                            // puis NaN par perte de precision sous Safari (deltas 10x plus grands)
 // [NAN-GUARD 2026-09-18] Safari (Alexandre): apres un zoom molette la camera passe a NaN (ecran orange, badge
 // "CAM NaN"). Non reproduit dans Chromium. On memorise le dernier wheel + l'etat sain de la camera, on
 // restaure des qu'une composante devient non finie, et on remonte le contexte au serveur (tools/server.log).
