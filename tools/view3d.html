@@ -279,7 +279,7 @@ controls.panSpeed = 3.0;
 controls.rotateSpeed = 1.0;
 controls.maxPolarAngle = Math.PI * 0.495;   // jamais sous le sol
 controls.minDistance = 12;                  // [NAN-GUARD] rayon 0 -> normalize() NaN dans le zoom-vers-curseur; 12 m = camSanity
-controls.maxDistance = 30000;               // [ZOOM-OUT-CAP 2026-09-20] sans borne, 30 crans de molette (zoomSpeed 3, zoom vers le
+controls.maxDistance = 16000;               // [ZOOM-OUT-CAP 2026-09-20] sans borne, 30 crans de molette (zoomSpeed 3, zoom vers le
                                             // curseur) envoyaient la camera a 900 km: carte reduite a un point ("vue explosee"),
                                             // puis NaN par perte de precision sous Safari (deltas 10x plus grands)
 // [NAN-GUARD 2026-09-18] Safari (Alexandre): apres un zoom molette la camera passe a NaN (ecran orange, badge
@@ -291,7 +291,7 @@ window.__lastWheel = null;
 // au ras du sol en une fraction de seconde. On borne chaque evenement a |dy| 40 et on plafonne le cumul a 120 par 100 ms
 // (~x1.13 par 100 ms au maximum) en re-emettant un evenement synthetique (marque) que OrbitControls consomme.
 (() => {
-  const LIM = 40, BUDGET = 120; let winT = 0, acc = 0;
+  const LIM = 40, BUDGET = 80; let winT = 0, acc = 0;
   canvas.addEventListener('wheel', ev => {
     if (ev.__tamed) return;
     const now = performance.now(); if (now - winT > 100) { winT = now; acc = 0; }
@@ -299,10 +299,26 @@ window.__lastWheel = null;
     const dy = Math.max(-LIM, Math.min(LIM, ev.deltaY)) * (ev.deltaMode === 1 ? 16 : ev.deltaMode === 2 ? 100 : 1);
     if (acc + Math.abs(dy) > BUDGET) return;          // rafale trop dense: on avale
     acc += Math.abs(dy);
+    // [ZOOM-TO-CURSOR-GATE 2026-09-22] telemetrie 19:52: depuis la vue d'ensemble (30 km) un cran vers l'horizon a
+    // deplace la camera de 29 km et l'a posee au sol (z 31) a 20 km de la. Le zoom-vers-curseur avance d'une fraction de
+    // la distance courante LE LONG DU RAYON DU CURSEUR: si ce rayon ne touche pas le sol a une distance raisonnable
+    // (< 2.5 x la distance a la cible), on zoome vers la cible a la place (zoomToCursor coupe pour cet evenement).
+    let toCursor = false;
+    try {
+      const r = canvas.getBoundingClientRect();
+      _gateRay.setFromCamera({ x: ((ev.clientX - r.left) / r.width) * 2 - 1, y: -((ev.clientY - r.top) / r.height) * 2 + 1 }, camera);
+      _gatePlane.constant = -controls.target.z;
+      const hit = _gateRay.ray.intersectPlane(_gatePlane, _gateHit);
+      const cur = camera.position.distanceTo(controls.target);
+      toCursor = !!hit && camera.position.distanceTo(_gateHit) < 2.5 * cur;
+    } catch (e) { toCursor = false; }
+    controls.zoomToCursor = toCursor;
     const e2 = new WheelEvent('wheel', { deltaY: dy, deltaX: 0, deltaMode: 0, clientX: ev.clientX, clientY: ev.clientY, ctrlKey: ev.ctrlKey, metaKey: ev.metaKey, bubbles: true, cancelable: true });
     e2.__tamed = true; canvas.dispatchEvent(e2);
+    controls.zoomToCursor = true;
   }, { capture: true, passive: false });
 })();
+const _gateRay = new THREE.Raycaster(), _gatePlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), _gateHit = new THREE.Vector3();
 canvas.addEventListener('wheel', ev => {
   if (!ev.__tamed) return;
   const r = canvas.getBoundingClientRect();
