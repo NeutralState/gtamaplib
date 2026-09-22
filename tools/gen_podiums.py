@@ -84,6 +84,18 @@ def build():
     out['Stephen P. Clark (Podium)'] = {'color': '#fb923c', 'world_edges': E,
         'note': 'Socle nord = V16 2413, 14 m ESTIME; station Metrorail = V16 3857, 18 m ESTIME (station aerienne dans le batiment IRL); rampe helicoidale = octogones V16 2407/2410, 12 m ESTIME (2 tours); aucune cam nette a < 700 m: a affiner quand une frame le montrera',
         '_credit': 'gen_podiums.py 2026-09-20'}
+    # Pegassi Towers: terrasse courbe autour des deux tours (VC10: le bord de la terrasse tombe sur l'anneau +8 m)
+    E = []
+    for i in (3099, 3097):
+        r = ring(i); z0 = ground(r); E += extrude(r, z0, z0 + 9.0, ring_step=4.5)
+    out['Pegassi Towers (Podium)'] = {'color': '#f472b6', 'world_edges': E,
+        'note': 'Terrasse/podium = polygones V16 3099 (autour de Three Tequesta) + 3097 (autour de Two); hauteur 9 m lue dans Vice City 10 (bord de la terrasse sur l anneau-guide +8 m)',
+        '_credit': 'gen_podiums.py 2026-09-22'}
+    # Marina Blue: ilot V16 2562 (88 x 77 m); aucune cam nette sur la base (Convertible: habitacle, Strip Club: nuit)
+    r = ring(2562); z0 = ground(r)
+    out['Marina Blue (Podium)'] = {'color': '#38bdf8', 'world_edges': extrude(r, z0, z0 + 20.0, ring_step=5.0),
+        'note': 'Podium = ilot V16 2562; hauteur 20 m ESTIMEE (pedestal parking IRL ~6 niveaux; aucune cam nette sur la base: a mesurer quand une frame le montrera)',
+        '_credit': 'gen_podiums.py 2026-09-22'}
     for v in out.values():
         v['world_edges'] = [[[round(c, 2) for c in pt] for pt in e] for e in v['world_edges']]
     return out
