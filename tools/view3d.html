@@ -246,6 +246,7 @@ try {
 canvas.addEventListener('webglcontextlost', ev => {
   ev.preventDefault();   // permet la restauration automatique par three.js
   showErr('WebGL context lost (too many tabs/contexts) — attempting recovery...');
+  try { fetch('/api/log3d?msg=' + encodeURIComponent(JSON.stringify({ event: 'contextlost', ua: navigator.userAgent.slice(0, 80), mem: (performance.memory || {}).usedJSHeapSize }))); } catch (e) {}
 });
 canvas.addEventListener('webglcontextrestored', () => {
   const el = document.getElementById('jserr');
@@ -1511,6 +1512,27 @@ loadGroundTiles();
 camera.position.set(ctr.x + span * 0.30, ctr.y - span * 0.40, span * 0.28);
 controls.target.copy(ctr);
 sceneSpan = span;   // [BEAUTY-V1] la brume se calibre sur le vrai span
+// [ZOOM-TELEMETRY 2026-09-22] « encore explosé » sans aucun NaN dans le journal: on ne sait pas a quoi ressemble
+// l'etat casse. Apres chaque rafale de molette (500 ms de calme) on envoie l'etat complet de la camera + terrain sous
+// la camera + memoire; et la touche R remet la vue d'ensemble (sortie de secours).
+(() => {
+  let tmr = 0;
+  const home = { pos: camera.position.clone(), target: controls.target.clone() };
+  window.__resetView = () => { camera.position.copy(home.pos); controls.target.copy(home.target); camera.lookAt(controls.target); controls.update(); };
+  addEventListener('keydown', ev => { if ((ev.key === 'r' || ev.key === 'R') && !(ev.target && /INPUT|TEXTAREA/.test(ev.target.tagName))) window.__resetView(); });
+  canvas.addEventListener('wheel', () => {
+    clearTimeout(tmr);
+    tmr = setTimeout(() => {
+      const p = camera.position, t = controls.target;
+      const gz = terrainZAt(p.x, p.y);
+      const ctx = { event: 'wheel_end', pos: p.toArray().map(v => +v.toFixed(1)), target: t.toArray().map(v => +v.toFixed(1)),
+        dist: +p.distanceTo(t).toFixed(1), terrain_under_cam: gz === null ? null : +gz.toFixed(1), fov: camera.fov, near: camera.near, far: camera.far,
+        polar: +controls.getPolarAngle().toFixed(3), lastWheel: window.__lastWheel && { dy: window.__lastWheel.dy, mode: window.__lastWheel.mode, ctrl: window.__lastWheel.ctrl },
+        gl: !!(renderer.getContext() && !renderer.getContext().isContextLost()), mem: (performance.memory || {}).usedJSHeapSize, lite: window.__lite3d, pov: !!povPrev, ua: navigator.userAgent.slice(0, 60) };
+      try { fetch('/api/log3d?msg=' + encodeURIComponent(JSON.stringify(ctx))); } catch (e) {}
+    }, 500);
+  }, { passive: true });
+})();
 applyEnv();
 
 // ── [VIEW3D-RAYS] rayons d'observation au hover d'une cam ──
