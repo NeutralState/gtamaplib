@@ -274,7 +274,7 @@ controls.enableDamping = true;
 controls.dampingFactor = 0.08;
 controls.zoomToCursor = true;
 controls.screenSpacePanning = false;
-controls.zoomSpeed = 3.0;
+controls.zoomSpeed = 2.0;                    // [WHEEL-TAME] 3.0 -> 2.0
 controls.panSpeed = 3.0;
 controls.rotateSpeed = 1.0;
 controls.maxPolarAngle = Math.PI * 0.495;   // jamais sous le sol
@@ -286,7 +286,25 @@ controls.maxDistance = 30000;               // [ZOOM-OUT-CAP 2026-09-20] sans bo
 // "CAM NaN"). Non reproduit dans Chromium. On memorise le dernier wheel + l'etat sain de la camera, on
 // restaure des qu'une composante devient non finie, et on remonte le contexte au serveur (tools/server.log).
 window.__lastWheel = null;
+// [WHEEL-TAME 2026-09-22] la vraie plainte « le zoom explose »: sous Safari/trackpad une pichenette envoie des dizaines
+// d'evenements a deltaY 60..260 (telemetrie wheel_end: dy 87, 58, 262) -> avec zoomSpeed 3 la camera part a 30 km ou
+// au ras du sol en une fraction de seconde. On borne chaque evenement a |dy| 40 et on plafonne le cumul a 120 par 100 ms
+// (~x1.13 par 100 ms au maximum) en re-emettant un evenement synthetique (marque) que OrbitControls consomme.
+(() => {
+  const LIM = 40, BUDGET = 120; let winT = 0, acc = 0;
+  canvas.addEventListener('wheel', ev => {
+    if (ev.__tamed) return;
+    const now = performance.now(); if (now - winT > 100) { winT = now; acc = 0; }
+    ev.stopImmediatePropagation(); ev.preventDefault();
+    const dy = Math.max(-LIM, Math.min(LIM, ev.deltaY)) * (ev.deltaMode === 1 ? 16 : ev.deltaMode === 2 ? 100 : 1);
+    if (acc + Math.abs(dy) > BUDGET) return;          // rafale trop dense: on avale
+    acc += Math.abs(dy);
+    const e2 = new WheelEvent('wheel', { deltaY: dy, deltaX: 0, deltaMode: 0, clientX: ev.clientX, clientY: ev.clientY, ctrlKey: ev.ctrlKey, metaKey: ev.metaKey, bubbles: true, cancelable: true });
+    e2.__tamed = true; canvas.dispatchEvent(e2);
+  }, { capture: true, passive: false });
+})();
 canvas.addEventListener('wheel', ev => {
+  if (!ev.__tamed) return;
   const r = canvas.getBoundingClientRect();
   window.__lastWheel = { dx: ev.deltaX, dy: ev.deltaY, mode: ev.deltaMode, cx: ev.clientX, cy: ev.clientY, ctrl: ev.ctrlKey, meta: ev.metaKey,
     rect: [r.left, r.top, r.width, r.height], client: [canvas.clientWidth, canvas.clientHeight], inner: [innerWidth, innerHeight],
