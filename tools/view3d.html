@@ -277,7 +277,7 @@ controls.zoomSpeed = 3.0;
 controls.panSpeed = 3.0;
 controls.rotateSpeed = 1.0;
 controls.maxPolarAngle = Math.PI * 0.495;   // jamais sous le sol
-controls.minDistance = 2;                   // [NAN-GUARD] rayon 0 -> normalize() NaN dans le zoom-vers-curseur
+controls.minDistance = 12;                  // [NAN-GUARD] rayon 0 -> normalize() NaN dans le zoom-vers-curseur; 12 m = camSanity
 controls.maxDistance = 30000;               // [ZOOM-OUT-CAP 2026-09-20] sans borne, 30 crans de molette (zoomSpeed 3, zoom vers le
                                             // curseur) envoyaient la camera a 900 km: carte reduite a un point ("vue explosee"),
                                             // puis NaN par perte de precision sous Safari (deltas 10x plus grands)
@@ -292,6 +292,28 @@ canvas.addEventListener('wheel', ev => {
     aspect: camera.aspect, fov: camera.fov, near: camera.near, far: camera.far, dpr: renderer.getPixelRatio(),
     pos: camera.position.toArray().map(v => +v.toFixed(2)), target: controls.target.toArray().map(v => +v.toFixed(2)), t: performance.now() };
 }, { capture: true, passive: true });
+// [ZOOM-IN-CAP 2026-09-22] deuxieme cause du "zoom explose" (telemetrie: pos z 6.73 pour une cible a z 6.7, distance 2 m):
+// le zoom-vers-curseur fait glisser la camera le long du rayon du curseur jusqu'au plan de la cible; a cette hauteur
+// l'intersection rayon/plan qui recalcule la cible degenere (cible a l'infini / NaN) et la garde NaN restaure un etat
+// deja au ras du sol -> tout re-casse a chaque frame. Apres chaque controls.update(): distance >= 12 m et camera au
+// moins 6 m au-dessus de la cible et du terrain (grille __hgrid).
+const _tmpDir = new THREE.Vector3();
+function terrainZAt(x, y) {
+  const g = window.__hgrid; if (!g) return null;
+  const i = Math.round((x - g.x0) / g.step), j = Math.round((y - g.y0) / g.step);
+  if (i < 0 || j < 0 || i >= g.nx || j >= g.ny) return null;
+  const z = g.Z[j * g.nx + i]; return Number.isFinite(z) ? z : null;
+}
+function camSanity() {
+  const p = camera.position, t = controls.target;
+  if (![p.x, p.y, p.z, t.x, t.y, t.z].every(Number.isFinite)) return;   // laisse nanGuard gerer
+  const floorT = t.z + 6, gz = terrainZAt(p.x, p.y), floorG = gz === null ? -Infinity : gz + 6;
+  const zmin = Math.max(floorT, floorG);
+  if (p.z < zmin) p.z = zmin;
+  _tmpDir.subVectors(p, t); const d = _tmpDir.length();
+  if (d < 12) { if (d < 1e-3) _tmpDir.set(0, -1, 0.7); _tmpDir.normalize().multiplyScalar(12); p.copy(t).add(_tmpDir); }
+  if (t.distanceTo(p) > 60000) { _tmpDir.set(0, 0, -1).applyQuaternion(camera.quaternion); t.copy(p).addScaledVector(_tmpDir, 200); }
+}
 const _nanGuard = { pos: camera.position.clone(), quat: camera.quaternion.clone(), target: controls.target.clone(), n: 0, lastReport: 0 };
 function nanGuard() {
   const p = camera.position, q = camera.quaternion, t = controls.target;
@@ -299,7 +321,8 @@ function nanGuard() {
   if (!bad) { _nanGuard.pos.copy(p); _nanGuard.quat.copy(q); _nanGuard.target.copy(t); return; }
   _nanGuard.n++;
   const ctx = { n: _nanGuard.n, pos: p.toArray(), quat: q.toArray(), target: t.toArray(), wheel: window.__lastWheel, ua: navigator.userAgent.slice(0, 80), lite: window.__lite3d, pov: !!povPrev };
-  p.copy(_nanGuard.pos); q.copy(_nanGuard.quat); t.copy(_nanGuard.target); camera.updateMatrixWorld(true);
+  p.copy(_nanGuard.pos); q.copy(_nanGuard.quat); t.copy(_nanGuard.target);
+  p.z = Math.max(p.z, t.z + 40); camSanity(); camera.lookAt(t); camera.updateMatrixWorld(true);   // [ZOOM-IN-CAP] restaurer AU-DESSUS, pas au ras
   console.warn('[NAN-GUARD] camera restauree', ctx);
   if (performance.now() - _nanGuard.lastReport > 2000) {
     _nanGuard.lastReport = performance.now();
@@ -2241,6 +2264,7 @@ renderer.setAnimationLoop(() => {
   // en POV la camera est pilotee par nous: controls.update() la re-orienterait
   // vers sa cible a chaque frame (meme controls.enabled=false) -> monde noir
   if (!povPrev) controls.update();
+  if (!povPrev) camSanity();                    // [ZOOM-IN-CAP] jamais la camera au ras de la cible / sous le sol
   nanGuard();                                   // [NAN-GUARD] jamais un rendu avec une camera NaN
   renderer.render(scene, camera);
 });
