@@ -1873,6 +1873,15 @@ function exitPOV() {
   povFrame.src = '';
   const md2 = document.getElementById('pov-marks');
   md2.style.display = 'none'; md2.innerHTML = '';
+  // [POV-EXIT-TELEMETRY 2026-09-22] « des que je sors d'une cam en mode libre c'est explose »: etat immediat + 1.5 s apres
+  controls.update(); camSanity();
+  const snap = tag => ({ event: tag, pos: camera.position.toArray().map(v => +v.toFixed(1)), target: controls.target.toArray().map(v => +v.toFixed(1)),
+    dist: +camera.position.distanceTo(controls.target).toFixed(1), fov: camera.fov, near: camera.near, far: camera.far, aspect: +camera.aspect.toFixed(3),
+    zoom: camera.zoom, viewOffset: !!(camera.view && camera.view.enabled), up: camera.up.toArray(), polar: +controls.getPolarAngle().toFixed(3),
+    quatFinite: camera.quaternion.toArray().every(Number.isFinite), gl: !!(renderer.getContext() && !renderer.getContext().isContextLost()),
+    canvas: [renderer.domElement.width, renderer.domElement.height], inner: [innerWidth, innerHeight], ua: navigator.userAgent.slice(0, 60) });
+  const send = o => { try { fetch('/api/log3d?msg=' + encodeURIComponent(JSON.stringify(o))); } catch (e) {} };
+  send(snap('pov_exit')); setTimeout(() => send(snap('pov_exit+1.5s')), 1500);
 }
 povAlpha.addEventListener('input', () => { povFrame.style.opacity = povAlpha.value / 100; });
 // [FINE-SLIDERS] molette SUR un slider de pose = increments fins et precis
