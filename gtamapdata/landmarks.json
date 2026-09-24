@@ -20745,5 +20745,27 @@
     "error_m": 0.5,
     "zone": "hamlet",
     "notes": "TOOLTIP V16 Alexandre 2026-09-24 (intersection route 82), z heightmap; ancre video biplan"
+  },
+  "Canal Bridge (1)": {
+    "xyz": [
+      -3161.8,
+      -2380.9,
+      1.63
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "hamlet",
+    "notes": "TOOLTIP V16 Alexandre 2026-09-24 (pont sur le canal), z heightmap; ancre video biplan"
+  },
+  "Hamlet Interchange (1)": {
+    "xyz": [
+      -2258.8,
+      -2936.9,
+      1.84
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "hamlet",
+    "notes": "TOOLTIP V16 Alexandre 2026-09-24 (echangeur autoroute), z heightmap; ancre video biplan"
   }
 }

@@ -5603,21 +5603,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -2757.27,
-   -3640.86,
-   185.37
+   -2754.67,
+   -3637.66,
+   185.47
   ],
   "ypr": [
-   4.626,
-   1.447,
-   1.327
+   4.749,
+   1.432,
+   1.75
   ],
   "fov": [
-   106.183,
+   106.705,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v091 (video biplan t=3.03 s, POV depuis l aile: Hamlet, mat WDNA, chateau d eau Homestead, skyline Downtown)",
-  "notes": "SOLVE 2026-09-24: 11 clics d Alexandre (tours 1/5/6, chateau d eau, mat WDNA, Four Seasons SE/SW, 4 intersections tooltip Hamlet) fov libre -> hfov 106.2, rms 11.2 px; ancre du plan A (frames 0-91) pour l orthophoto | POSITION APPROX 2026-09-24: pose provisoire (odometrie/PnP) a verrouiller par les clics d Alexandre pour l orthophoto; fov incertain",
+  "notes": "SOLVE 2026-09-24b: + Hamlet Interchange (1) (tooltip, cote droit), 12 clics, hfov 106.7, rms 12.9 | SOLVE 2026-09-24: 11 clics d Alexandre (tours 1/5/6, chateau d eau, mat WDNA, Four Seasons SE/SW, 4 intersections tooltip Hamlet) fov libre -> hfov 106.2, rms 11.2 px; ancre du plan A (frames 0-91) pour l orthophoto | POSITION APPROX 2026-09-24: pose provisoire (odometrie/PnP) a verrouiller par les clics d Alexandre pour l orthophoto; fov incertain",
   "id": "S3/86"
  },
  "Prison (Video) v250": {
@@ -5657,21 +5657,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -2279.24,
-   -2832.07,
-   158.84
+   -2163.0,
+   -2847.85,
+   193.42
   ],
   "ypr": [
-   68.059,
-   2.181,
-   -0.808
+   72.874,
+   -3.138,
+   1.212
   ],
   "fov": [
-   89.677,
+   70.086,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v600 (video biplan t=20.0 s, chase-cam: bassins et echangeur a l est de la prison, Southside au fond)",
-  "notes": "POSITION APPROX 2026-09-24: pose odometrie (derive possible 10-20 m, 6.5 s apres la derniere ancre 405); a verrouiller par des tooltips (coins de bassins, intersections cote est)",
+  "notes": "SOLVE 2026-09-24: 8 clics (Canal Bridge (1) tooltip + landmarks; WDNA FM exclu, quasi hors champ), fov libre -> hfov 70.1, rms 3.9 px | POSITION APPROX 2026-09-24: pose odometrie (derive possible 10-20 m, 6.5 s apres la derniere ancre 405); a verrouiller par des tooltips (coins de bassins, intersections cote est)",
   "id": "S3/88"
  }
 }
