@@ -5684,21 +5684,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -2682.2,
-   -3515.8,
-   188.3
+   -2719.22,
+   -3491.05,
+   179.24
   ],
   "ypr": [
-   91.28,
-   -10.44,
-   -3.92
+   106.209,
+   -5.258,
+   1.815
   ],
   "fov": [
-   64.2,
+   85.034,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v160 (video biplan t=5.3 s, chase-cam vers le SW: Grassrivers, zone industrielle au premier plan a droite)",
-  "notes": "POSITION APPROX 2026-09-24: pose odometrie (frame 160, ancre(s) 250; fov estime par la VO, derive possible 10-30 m); cam provisoire pour les tooltips/clics d Alexandre",
+  "notes": "SOLVE 2026-09-24: 4 tooltips d Alexandre (Dirt Middle (1-2), Grassrivers Bridge (1), Watson Bay Bridge (1)) + horizon mer lu sur la frame (y=466, roulis ~0), fov libre -> hfov 85.0, rms 4.3 px; Dirt (1) exclu (predit 53 px plus haut que le clic, quelle que soit la config: lot conteneurs different du petit circuit V16 ou coin ambigu); pose a 4 points quasi alignes N-S + 1 point profond: fov/distance encore fragiles (+-10 deg / +-60 m) | POSITION APPROX 2026-09-24: pose odometrie (frame 160, ancre(s) 250; fov estime par la VO, derive possible 10-30 m); cam provisoire pour les tooltips/clics d Alexandre",
   "id": "S3/89"
  },
  "Prison (Video) v500": {
