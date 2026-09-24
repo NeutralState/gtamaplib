@@ -5727,5 +5727,32 @@
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v500 (video biplan t=16.7 s, chase-cam vers le WNW: prison, canal, chateau d eau Homestead a gauche)",
   "notes": "SOLVE 2026-09-24: 8 clics d Alexandre (6 tours, chateau d eau Homestead, Canal Bridge (1) tooltip), fov libre -> hfov 76.0, rms 3.0 px; deplacement de 26 m vs la pose odometrie (fondu 405/600) | POSITION APPROX 2026-09-24: pose odometrie (frame 500, ancre(s) 405 et 600 (fondu); fov estime par la VO, derive possible 10-30 m); cam provisoire pour les tooltips/clics d Alexandre",
   "id": "S3/90"
+ },
+ "Prison (Video) v680": {
+  "player": null,
+  "size": [
+   1920,
+   1080
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "era": "2026",
+  "xyz": [
+   -2065.21,
+   -2721.78,
+   191.1
+  ],
+  "ypr": [
+   80.763,
+   -2.315,
+   1.084
+  ],
+  "fov": [
+   68.439,
+   null
+  ],
+  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v680 (video biplan t=22.7 s, chase-cam vers l est: bassins/reservoirs, echangeur, Southside au fond)",
+  "notes": "POSITION APPROX 2026-09-24: pose odometrie depuis v600 (80 frames, derive possible 10-20 m, fov VO); cam provisoire pour les tooltips d Alexandre cote est (coins de bassins, intersections)",
+  "id": "S3/91"
  }
 }
