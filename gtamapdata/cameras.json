@@ -5711,21 +5711,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -2290.4,
-   -3006.0,
-   193.9
+   -2267.23,
+   -3014.98,
+   201.9
   ],
   "ypr": [
-   57.49,
-   -3.1,
-   0.74
+   58.277,
+   -3.925,
+   0.897
   ],
   "fov": [
-   79.7,
+   76.028,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v500 (video biplan t=16.7 s, chase-cam vers le WNW: prison, canal, chateau d eau Homestead a gauche)",
-  "notes": "POSITION APPROX 2026-09-24: pose odometrie (frame 500, ancre(s) 405 et 600 (fondu); fov estime par la VO, derive possible 10-30 m); cam provisoire pour les tooltips/clics d Alexandre",
+  "notes": "SOLVE 2026-09-24: 8 clics d Alexandre (6 tours, chateau d eau Homestead, Canal Bridge (1) tooltip), fov libre -> hfov 76.0, rms 3.0 px; deplacement de 26 m vs la pose odometrie (fondu 405/600) | POSITION APPROX 2026-09-24: pose odometrie (frame 500, ancre(s) 405 et 600 (fondu); fov estime par la VO, derive possible 10-30 m); cam provisoire pour les tooltips/clics d Alexandre",
   "id": "S3/90"
  }
 }

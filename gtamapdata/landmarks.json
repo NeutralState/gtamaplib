@@ -20767,5 +20767,55 @@
     "error_m": 0.5,
     "zone": "hamlet",
     "notes": "TOOLTIP V16 Alexandre 2026-09-24 (echangeur autoroute), z heightmap; ancre video biplan"
+  },
+  "Dirt (1)": {
+    "xyz": [
+      -3135.9,
+      -3518.6,
+      7.94
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "grassrivers",
+    "notes": "TOOLTIP V16 Alexandre 2026-09-24 (chemin de terre), z heightmap; ancre video biplan plan B (v160)"
+  },
+  "Dirt Middle (2)": {
+    "xyz": [
+      -3101.5,
+      -3308.6,
+      5.78
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "grassrivers",
+    "notes": "TOOLTIP V16 Alexandre 2026-09-24 (milieu du chemin de terre), z heightmap; ancre video biplan plan B (v160)"
+  },
+  "Dirt Middle (1)": {
+    "xyz": [
+      -3065.5,
+      -3403.5,
+      5.93
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "grassrivers",
+    "notes": "TOOLTIP V16 Alexandre 2026-09-24 (milieu du chemin de terre), z heightmap; ancre video biplan plan B (v160)"
+  },
+  "Grassiriver Bridge (1)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown"
+  },
+  "Grassrivers Bridge (1)": {
+    "xyz": [
+      -3118.6,
+      -3679.3,
+      1.09
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "grassrivers",
+    "notes": "TOOLTIP V16 Alexandre 2026-09-24 (pont Grassrivers), z heightmap; ancre video biplan plan B (v160)"
   }
 }
