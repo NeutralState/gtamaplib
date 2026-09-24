@@ -5630,21 +5630,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -2597.7,
-   -3316.13,
-   168.91
+   -2603.17,
+   -3306.67,
+   215.39
   ],
   "ypr": [
-   11.098,
-   -3.344,
-   0.961
+   12.09,
+   -9.489,
+   -0.628
   ],
   "fov": [
    89.677,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v250 (video biplan t=8.33 s, chase-cam: prison en bas a gauche, chateau d eau, mat WDNA, echangeur)",
-  "notes": "POSITION APPROX 2026-09-24: pose provisoire (odometrie/PnP) a verrouiller par les clics d Alexandre pour l orthophoto; fov incertain",
+  "notes": "SOLVE 2026-09-24: 8 clics d Alexandre (6 tours, chateau d eau, mat WDNA), fov 89.677 (chase-cam), rms 33.3 px; ancre du plan B (frames 92-312) | POSITION APPROX 2026-09-24: pose provisoire (odometrie/PnP) a verrouiller par les clics d Alexandre pour l orthophoto; fov incertain",
   "id": "S3/87"
  }
 }
