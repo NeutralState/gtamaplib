@@ -5765,21 +5765,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -2554.09,
-   -3339.87,
-   197.69
+   -2536.94,
+   -3332.4,
+   185.53
   ],
   "ypr": [
-   334.76,
-   -1.663,
-   -0.372
+   336.316,
+   -1.406,
+   0.733
   ],
   "fov": [
-   83.278,
+   82.11,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v310 (video biplan t=10.3 s, chase-cam vers le nord: prison a gauche, echangeur 61 et bassins/reservoirs a droite, fin du plan B)",
-  "notes": "POSITION APPROX 2026-09-24: pose odometrie depuis v250 (60 frames, derive possible 5-15 m, fov VO); cam provisoire pour les tooltips d Alexandre: bassins (a ~1 km, x 1400-1600 y ~760), echangeur 61, prison",
+  "notes": "SOLVE 2026-09-24: 14 clics d Alexandre (WDNA FM, Four Seasons SW/SE, Prison Tower (3), 10 coins de bassins tooltips), fov libre -> hfov 82.1, rms 7.5 px (landmarks 2.5-3.4 px, bassins 4-13 px); exclus: Bassin (1) (59 px horizontal, autre coin?), Hamlet Interchange (1) (60 px vertical: pont sureleve, ancre au sol), Bassin (7) (23 px) | POSITION APPROX 2026-09-24: pose odometrie depuis v250 (60 frames, derive possible 5-15 m, fov VO); cam provisoire pour les tooltips d Alexandre: bassins (a ~1 km, x 1400-1600 y ~760), echangeur 61, prison",
   "id": "S3/92"
  }
 }
