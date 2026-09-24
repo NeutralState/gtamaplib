@@ -5646,5 +5646,32 @@
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v250 (video biplan t=8.33 s, chase-cam: prison en bas a gauche, chateau d eau, mat WDNA, echangeur)",
   "notes": "SOLVE 2026-09-24b: 9 clics (6 tours, chateau d eau, mat, tooltip 82 Intersection (1)), fov LIBRE -> hfov 74.1 (la chase-cam zoome pendant le plan: 89.7 a la frame 325), rms 7.2 px | SOLVE 2026-09-24: 8 clics d Alexandre (6 tours, chateau d eau, mat WDNA), fov 89.677 (chase-cam), rms 33.3 px; ancre du plan B (frames 92-312) | POSITION APPROX 2026-09-24: pose provisoire (odometrie/PnP) a verrouiller par les clics d Alexandre pour l orthophoto; fov incertain",
   "id": "S3/87"
+ },
+ "Prison (Video) v600": {
+  "player": null,
+  "size": [
+   1920,
+   1080
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "era": "2026",
+  "xyz": [
+   -2279.24,
+   -2832.07,
+   158.84
+  ],
+  "ypr": [
+   68.059,
+   2.181,
+   -0.808
+  ],
+  "fov": [
+   89.677,
+   null
+  ],
+  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v600 (video biplan t=20.0 s, chase-cam: bassins et echangeur a l est de la prison, Southside au fond)",
+  "notes": "POSITION APPROX 2026-09-24: pose odometrie (derive possible 10-20 m, 6.5 s apres la derniere ancre 405); a verrouiller par des tooltips (coins de bassins, intersections cote est)",
+  "id": "S3/88"
  }
 }
