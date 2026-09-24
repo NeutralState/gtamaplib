@@ -5603,21 +5603,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -2538.04,
-   -3671.95,
-   197.26
+   -2757.27,
+   -3640.86,
+   185.37
   ],
   "ypr": [
-   16.676,
-   4.001,
-   4.125
+   4.626,
+   1.447,
+   1.327
   ],
   "fov": [
-   116.339,
+   106.183,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v091 (video biplan t=3.03 s, POV depuis l aile: Hamlet, mat WDNA, chateau d eau Homestead, skyline Downtown)",
-  "notes": "POSITION APPROX 2026-09-24: pose provisoire (odometrie/PnP) a verrouiller par les clics d Alexandre pour l orthophoto; fov incertain",
+  "notes": "SOLVE 2026-09-24: 11 clics d Alexandre (tours 1/5/6, chateau d eau, mat WDNA, Four Seasons SE/SW, 4 intersections tooltip Hamlet) fov libre -> hfov 106.2, rms 11.2 px; ancre du plan A (frames 0-91) pour l orthophoto | POSITION APPROX 2026-09-24: pose provisoire (odometrie/PnP) a verrouiller par les clics d Alexandre pour l orthophoto; fov incertain",
   "id": "S3/86"
  },
  "Prison (Video) v250": {

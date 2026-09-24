@@ -20690,5 +20690,49 @@
     "source_cameras": [],
     "error_m": null,
     "zone": "unknown"
+  },
+  "Hamlet Intersection (1)": {
+    "xyz": [
+      -2553.8,
+      -3203.0,
+      9.46
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "hamlet",
+    "notes": "TOOLTIP V16 Alexandre 2026-09-24 (intersection de routes, Hamlet), xy = tooltip, z = heightmap; ancre pour la video biplan"
+  },
+  "Hamlet Intersection (2)": {
+    "xyz": [
+      -2561.1,
+      -3300.8,
+      9.92
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "hamlet",
+    "notes": "TOOLTIP V16 Alexandre 2026-09-24 (intersection de routes, Hamlet), xy = tooltip, z = heightmap; ancre pour la video biplan"
+  },
+  "Hamlet Intersection (3)": {
+    "xyz": [
+      -2764.8,
+      -3285.0,
+      4.68
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "hamlet",
+    "notes": "TOOLTIP V16 Alexandre 2026-09-24 (intersection de routes, Hamlet), xy = tooltip, z = heightmap; ancre pour la video biplan"
+  },
+  "Hamlet Intersection (4)": {
+    "xyz": [
+      -2756.5,
+      -3182.5,
+      6.03
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "hamlet",
+    "notes": "TOOLTIP V16 Alexandre 2026-09-24 (intersection de routes, Hamlet), xy = tooltip, z = heightmap; ancre pour la video biplan"
   }
 }
