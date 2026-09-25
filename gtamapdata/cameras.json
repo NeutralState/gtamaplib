@@ -5846,21 +5846,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -1365.78,
-   -1663.65,
-   207.16
+   -1320.93,
+   -1605.58,
+   203.17
   ],
   "ypr": [
-   287.687,
-   3.497,
-   -0.909
+   280.457,
+   4.475,
+   -1.016
   ],
   "fov": [
-   106.7,
+   120.557,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1380 (video biplan t=46 s, chase-cam entre les tours de Brickell)",
-  "notes": "SOLVE 2026-09-25: 6 clics (Four Seasons x3, SEFC, Infinity x2 = 3 points distincts), fov FIXE 106.7 (meme camera POV aile que v091) -> rms 7.7 px (hfov 106.7); fov libre donnerait 120.6 mais non contraint; Three Tequesta cliques hors image exclus | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
+  "notes": "SOLVE 2026-09-25 (corrige): fov LIBRE -> hfov 120.6, rms 4.0 px (aile droite, meme camera que v0770 ~126) | SOLVE 2026-09-25: 6 clics (Four Seasons x3, SEFC, Infinity x2 = 3 points distincts), fov FIXE 106.7 (meme camera POV aile que v091) -> rms 7.7 px (hfov 106.7); fov libre donnerait 120.6 mais non contraint; Three Tequesta cliques hors image exclus | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/95"
  },
  "Biplane (Video) v1980": {
@@ -5954,21 +5954,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -1967.24,
-   -2540.42,
-   175.58
+   -1887.36,
+   -2444.31,
+   206.19
   ],
   "ypr": [
-   286.457,
-   0.174,
-   -0.322
+   276.003,
+   -1.334,
+   -0.72
   ],
   "fov": [
-   106.7,
+   126.017,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0770 (video biplan t=25.7 s, POV aile droite: Southside et l autoroute en bas a gauche, Downtown a l horizon, plan 701-843)",
-  "notes": "SOLVE 2026-09-25: 8 clics d Alexandre (Park Grove x3, Four Seasons x2, Infinity x2, SEFC), fov FIXE 106.7 (POV aile) -> rms 4.0 px; coherent a 58 m avec l interpolation des chaines VO 700/844 (fov libre donnerait 126 et 180 m d ecart, non retenu) | POSITION APPROX 2026-09-25: position extrapolee de la chaine VO (frame 700 + cap), cap devine, fov 106.7 suppose (POV aile comme v091); cam provisoire pour les clics d Alexandre (tours Downtown + tooltips Southside/autoroute) -> comble le trou Southside entre les frames 700 et 844",
+  "notes": "SOLVE 2026-09-25 (corrige): fov LIBRE -> hfov 126.0, rms 2.9 px; verifie par superposition des routes/autoroute V16 au sol sur la frame (le fov 106.7 de l aile gauche ne colle pas: la camera de l aile droite est plus large) | SOLVE 2026-09-25: 8 clics d Alexandre (Park Grove x3, Four Seasons x2, Infinity x2, SEFC), fov FIXE 106.7 (POV aile) -> rms 4.0 px; coherent a 58 m avec l interpolation des chaines VO 700/844 (fov libre donnerait 126 et 180 m d ecart, non retenu) | POSITION APPROX 2026-09-25: position extrapolee de la chaine VO (frame 700 + cap), cap devine, fov 106.7 suppose (POV aile comme v091); cam provisoire pour les clics d Alexandre (tours Downtown + tooltips Southside/autoroute) -> comble le trou Southside entre les frames 700 et 844",
   "id": "S3/99"
  }
 }
