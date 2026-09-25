@@ -31,7 +31,7 @@ def frame_mask(k, img):
     """masque par frame: HUD suivi (hud_track.json, elements mobiles), avion (bleu/jaune vif dilate), bande basse, aile (plan A)."""
     if HUD is None: m = MASK.copy()
     else:
-        m = np.ones((H, W), bool); m[int(0.96 * H):, :] = False
+        m = np.ones((H, W), bool); m[:64, :] = False; m[1016:, :] = False    # letterbox: bandes noires 0-59 et 1020-1079 (mesurees), + marge
         kk = min(HUD, key=lambda q: abs(q - k))
         for n, (x, y, w, h, s) in HUD[kk].items():
             if s > 0.45 and n in ('mascot', 'qr'): m[max(0, y - 14):y + h + 14, max(0, x - 14):x + w + 14] = False

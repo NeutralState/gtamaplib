@@ -37,3 +37,6 @@ Resultats livres dans `~/Downloads/ortho_biplan_v*`. Voir la memoire `ortho-airp
 - Echangeur 61/82 : accord V16 des bords d'autoroute 0.59 → 0.84. Trous noirs = sol sous/derriere le tablier (jamais vu) : la V16 apparait dans la version sur la map.
 
 - `onmap.py` : `INPAINT_M=14` remplit par inpainting les trous dont la demi-largeur est < 14 m (sol sous les tabliers, slivers) avant la composition; les grands trous restent en V16.
+
+- Letterbox : la video a des bandes noires de 60 px en haut ET en bas (lignes 0-59, 1020-1079). Non masquees en haut, elles se projetaient en bande sombre le long du bord lointain de chaque frame (toutes les versions <= v23). `frame_mask` masque desormais 0-63 et 1016+.
+- Fov des cams d aile : 106.7 pour les DEUX ailes (verifie avec les Points 1-4 au sol a 1-1.9 km + intersections + tours). Deux groupes de points ne suffisent pas a fixer un fov: il en faut trois (sol proche, sol moyen/lointain, sommets).
