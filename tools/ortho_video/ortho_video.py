@@ -47,6 +47,7 @@ def frame_mask(k, img):
     if k < 92: m &= ~WING
     if 701 <= k <= 843: m &= ~WING2
     if 1300 <= k <= 1500: m &= ~WING3
+    elif k >= 844: m[460:730, 760:1280] = False   # chase-cam apres Southside (844-930): avion plus a droite (aile jaune jusqu'a x~1220)
     else: m[420:700, 380:1060] = False      # boite fixe de l'avion (chase-cam plans B/C: bbox mesuree sur 94/110/140/160/200/330/500/650), la couleur seule rate les ailes dans la brume
     return m
 def footprint(xyz, ypr, k_fp):
@@ -123,8 +124,9 @@ def samples(k):
     # bords doux: roll-off sur 150 m avant dmax et sur 0.04 d'incidence au-dessus de GRAZ (sinon arcs/coupures nettes)
     g0 = float(os.environ.get("GRAZ", "0.10"))
     wgt *= np.clip((dmk - dist[idx]) / 150.0, 0, 1).astype(np.float32) * np.clip((graz[idx] - g0) / 0.04, 0, 1).astype(np.float32)
+    wgt *= feath[pyi[idx], pxi[idx]].astype(np.float32)               # fondu AVANT la puissance: transition progressive entre frames
     wgt = (wgt / 1e-4) ** float(os.environ.get("WPOW", "1.0"))    # normalise (evite le sous-depassement float32 pour WPOW>2)
-    wgt *= feath[pyi[idx], pxi[idx]].astype(np.float32) * frame_mask.wm[pyi[idx], pxi[idx]]    # WPOW>1 = la meilleure vue domine (plus net, moins de fantomes)
+    wgt *= frame_mask.wm[pyi[idx], pxi[idx]]    # WPOW>1 = la meilleure vue domine (plus net, moins de fantomes)
     ii, jj = np.unravel_index(idx, Xg.shape); ii += r0; jj += c0
     return ii, jj, col, wgt
 keys = sorted(fps)
