@@ -17,3 +17,8 @@ Resultats livres dans `~/Downloads/ortho_biplan_v*`. Voir la memoire `ortho-airp
 - `tracks.py <a> <b> <out.npz>` : pistes KLT par plan (memes masques que vo.py).
 - `ba.py <out.json> <poses.json...> --tracks tr*.npz` : ajustement de faisceaux terrain-contraint (poses + fov par frame, points 3D a z libre avec prior sol, ancres = clics des cams video, priors de continuite; frames ancrees quasi figees). Env: `MAXOBS`, `NFEV`, `SIG_PX`, `SIG_A`, `SAT`, `PRI_*`. Robustesse des pistes par saturation tanh (pas la loss scipy, qui affaiblirait les ancres).
 - Rendu final recommande : `DSM=1 DSM_DEFAULT_H=0 GRAZ=0.12 WPOW=4 KEEP=0.35 ortho_video.py 0.5 2 1100 out.png ba_all.json` (poids normalises avant la puissance).
+
+## Hauteurs des batiments depuis la video (2026-09-25)
+- `heights.py <poses.json> <x0> <x1> <y0> <y1> <out.json> [--debug N]` (env `FRAMES=a,b`, `HMAX`, `DMAX`, `GRAZMIN`, `MINAREA`) : pour chaque silhouette V16 (gris 176) de l'emprise, balaie h et maximise l'energie de contour du toit projete + l'effet de marche des aretes verticales, somme sur les frames qui voient toute l'empreinte hors masque. Valide sur les tours isolees (Infinity 174/176 m, Icon 187/180, Four Seasons 254/262); bruite sur les batiments bas a 400-900 m; echoue quand plusieurs tours se superposent.
+- `ortho_video.py` lit `HEIGHTS=fichier.json,...` (+ `HCONF`) via `dsm.build_dsm_est` : toits et murs des batiments estimes.
+- Lecon fov (plans POV aile) : sans points au sol PROCHES (< 500 m), altitude/tangage/fov se compensent (106.7, 126 et 143 trouves successivement pour la meme camera); 2 tooltips d'intersections a 250 m ont fixe hfov = 88.8, confirme par une 2e cam (v0820) resolue independamment a 12 m de la VO.

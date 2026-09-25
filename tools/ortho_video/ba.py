@@ -24,7 +24,7 @@ def same_shot(a, b): return not any(a < c <= b for c in CUTS)
 # ---- ancres (clics)
 CAMFRAME = {'Prison (Video) v091 (Wing)': 91, 'Prison (Video) v160': 160, 'Prison (Video) v250': 250, 'Prison (Video) v310': 310,
             'Prison (Video) f100': 325, 'Prison (Video) f140': 365, 'Prison (Video) f180': 405, 'Prison (Video) v500': 500, 'Prison (Video) v600': 600,
-            'Prison (Video) v680': 680, 'Biplane (Video) v0770': 770, 'Biplane (Video) v0900': 900}
+            'Prison (Video) v680': 680, 'Biplane (Video) v0770': 770, 'Biplane (Video) v0820': 820, 'Biplane (Video) v0900': 900}
 PX = json.load(open(R_ + 'pixels.json')); LM = json.load(open(R_ + 'landmarks.json')); EX = json.load(open(R_ + 'excluded_markings.json'))
 A_f, A_X, A_p = [], [], []
 for cam, k in CAMFRAME.items():

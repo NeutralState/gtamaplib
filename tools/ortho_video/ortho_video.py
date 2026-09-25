@@ -78,6 +78,9 @@ if USE_DSM:
     if os.environ.get('DSM_V16', '1') == '1':
         D2, W2 = _dsm.build_dsm_v16(xs, ys, res, HR.ground, float(os.environ.get('DSM_DEFAULT_H', '12')))
         DSM = np.maximum(DSM, D2); WALLS = np.concatenate([WALLS, W2]) if len(W2) else WALLS
+    if os.environ.get('HEIGHTS'):
+        D3, W3 = _dsm.build_dsm_est(xs, ys, res, HR.ground, os.environ['HEIGHTS'].split(','), float(os.environ.get('HCONF', '2.5')))
+        DSM = np.maximum(DSM, D3); WALLS = np.concatenate([WALLS, W3]) if len(W3) else WALLS
     print('DSM: %d cellules batiments, %d points murs' % (int(np.isfinite(DSM).sum()), len(WALLS)), flush=True)
 acc = np.zeros((GH, GW, 3), np.float32); wsum = np.zeros((GH, GW), np.float32); cnt = np.zeros((GH, GW), np.uint16); maxw = np.zeros((GH, GW), np.float32)
 def samples(k):

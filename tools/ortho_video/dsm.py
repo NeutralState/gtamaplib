@@ -84,3 +84,23 @@ def build_dsm_v16(xs, ys, res, ground_fn, default_h=12.0, min_area=30):
     walls = np.concatenate(walls) if walls else np.zeros((0, 3))
     print('DSM V16: %d batiments, %d avec hauteur landmark' % (nb, int((Hm > 0).sum() - (np.array([not (comp_of_lm == i).any() for i in range(n)])[Hm > 0]).sum())), flush=True)
     return dsm, walls
+
+
+# ---- hauteurs estimees depuis la video (heights.py) : env HEIGHTS=fichier1.json,fichier2.json ; HCONF = confiance minimale
+def build_dsm_est(xs, ys, res, ground_fn, files, hconf=2.5):
+    import os
+    GW, GH = len(xs), len(ys); X0, Y1 = xs[0], ys[0]; dsm = np.full((GH, GW), -np.inf, np.float32); walls = []; nb = 0
+    for f in files:
+        if not os.path.exists(f): continue
+        for k, r in json.load(open(f)).items():
+            if r['conf'] < hconf or r['h'] < 3: continue
+            poly = np.array(r['poly'], float); g = float(ground_fn(np.array([r['cx']]), np.array([r['cy']]))[0]); z = g + r['h']
+            pix = np.c_[(poly[:, 0] - X0) / res, (Y1 - poly[:, 1]) / res].astype(np.int32)
+            if pix[:, 0].max() < 0 or pix[:, 1].max() < 0 or pix[:, 0].min() >= GW or pix[:, 1].min() >= GH: continue
+            layer = np.zeros((GH, GW), np.uint8); cv2.fillPoly(layer, [pix], 1); dsm[layer > 0] = np.maximum(dsm[layer > 0], z); nb += 1
+            per = np.r_[poly, poly[:1]]; hz = np.arange(g, z, 1.0)
+            for a, b_ in zip(per[:-1], per[1:]):
+                L = np.linalg.norm(b_ - a); m_ = max(2, int(L / 1.0)); seg = a[None, :] + (b_ - a)[None, :] * np.linspace(0, 1, m_)[:, None]
+                walls.append(np.c_[np.repeat(seg, len(hz), axis=0), np.tile(hz, len(seg))])
+    walls = np.concatenate(walls) if walls else np.zeros((0, 3)); print('DSM estime (video): %d batiments' % nb, flush=True)
+    return dsm, walls
