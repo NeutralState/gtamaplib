@@ -5943,5 +5943,32 @@
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v3000 (video biplan t=100 s, POV haut au-dessus de Downtown)",
   "notes": "POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/98"
+ },
+ "Biplane (Video) v0770": {
+  "player": null,
+  "size": [
+   1920,
+   1080
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "era": "2026",
+  "xyz": [
+   -1996.0,
+   -2634.0,
+   190.0
+  ],
+  "ypr": [
+   295.0,
+   -8.0,
+   0.0
+  ],
+  "fov": [
+   106.7,
+   null
+  ],
+  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0770 (video biplan t=25.7 s, POV aile droite: Southside et l autoroute en bas a gauche, Downtown a l horizon, plan 701-843)",
+  "notes": "POSITION APPROX 2026-09-25: position extrapolee de la chaine VO (frame 700 + cap), cap devine, fov 106.7 suppose (POV aile comme v091); cam provisoire pour les clics d Alexandre (tours Downtown + tooltips Southside/autoroute) -> comble le trou Southside entre les frames 700 et 844",
+  "id": "S3/99"
  }
 }
