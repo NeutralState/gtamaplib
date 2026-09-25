@@ -15077,10 +15077,15 @@
     "note": "BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 6.1 m | BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.1 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.6 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.6 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.8 m | BA-DOWNTOWN-6b 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 3.8 m | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees): deplace 1.1 m | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c3"
   },
   "Quantum on the Bay South (SE)": {
-    "xyz": null,
+    "xyz": [
+      -384.518,
+      1117.321,
+      204.911
+    ],
     "source_cameras": [],
-    "error_m": null,
-    "zone": "unknown"
+    "error_m": 3.0,
+    "zone": "edgewater",
+    "notes": "ALIAS 2026-09-25 de Quantum on the Bay Condominium (S) (SE) (meme coin, nom cree dans calib); a fusionner"
   },
   "Two Tequesta Point (SW)": {
     "xyz": null,
@@ -21026,5 +21031,16 @@
     "error_m": 0.5,
     "zone": "coconut_grove",
     "notes": "TOOLTIP V16 Alexandre 2026-09-25 (point au sol, Coconut Grove / baie), z heightmap; ancre video biplan"
+  },
+  "Citigroup Center (SW)": {
+    "xyz": [
+      -420.71,
+      -517.49,
+      150.34
+    ],
+    "source_cameras": [],
+    "error_m": 3.0,
+    "zone": "downtown",
+    "notes": "DERIVE 2026-09-25: 4e coin du toit = NW + (SE - NE), parallelogramme des 3 coins triangules; a confirmer"
   }
 }

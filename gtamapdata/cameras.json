@@ -5873,21 +5873,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -1000,
-   -1100,
-   300
+   -1046.42,
+   -1210.0,
+   274.89
   ],
   "ypr": [
-   20,
-   -20,
-   0
+   -16.479,
+   -3.389,
+   0.173
   ],
   "fov": [
-   80.0,
+   67.911,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1980 (video biplan t=66 s, POV haut au-dessus de Downtown, echangeurs)",
-  "notes": "POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
+  "notes": "SOLVE 2026-09-25: 6 clics (SPC S, SEFC, Akoya, Citigroup x3 dont SW derive), fov libre -> hfov 67.9, rms 2.9 px (solve multi-depart) | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/96"
  },
  "Biplane (Video) v2580": {
@@ -5900,21 +5900,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -700,
-   -900,
-   200
+   -782.47,
+   -27.01,
+   180.25
   ],
   "ypr": [
-   40,
-   -10,
-   0
+   309.462,
+   -4.158,
+   0.146
   ],
   "fov": [
-   80.0,
+   84.268,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2580 (video biplan t=86 s, chase-cam tours et front de mer)",
-  "notes": "POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
+  "notes": "SOLVE 2026-09-25: 10 clics (roue, Hard Rock, Vizcayne S x3, Marina Blue x3, Loft Downtown II, Opera Tower); Akoya exclu (44 px), fov libre -> hfov 84.3, rms 9.6 px (solve multi-depart) | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/97"
  },
  "Biplane (Video) v3000": {
@@ -5927,21 +5927,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -800,
-   -800,
-   300
+   -665.42,
+   761.03,
+   171.72
   ],
   "ypr": [
-   60,
-   -20,
-   0
+   334.252,
+   -6.823,
+   0.084
   ],
   "fov": [
-   80.0,
+   87.942,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v3000 (video biplan t=100 s, POV haut au-dessus de Downtown)",
-  "notes": "POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
+  "notes": "SOLVE 2026-09-25: 5 clics (Opera Tower, Akoya, Quantum N/S, 1800 Club), fov libre -> hfov 87.9, rms 5.2 px (solve multi-depart) | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/98"
  },
  "Biplane (Video) v0770": {
