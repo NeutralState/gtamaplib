@@ -5970,5 +5970,32 @@
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0770 (video biplan t=25.7 s, POV aile droite: Southside et l autoroute en bas a gauche, Downtown a l horizon, plan 701-843)",
   "notes": "SOLVE 2026-09-25 (corrige): fov LIBRE -> hfov 126.0, rms 2.9 px; verifie par superposition des routes/autoroute V16 au sol sur la frame (le fov 106.7 de l aile gauche ne colle pas: la camera de l aile droite est plus large) | SOLVE 2026-09-25: 8 clics d Alexandre (Park Grove x3, Four Seasons x2, Infinity x2, SEFC), fov FIXE 106.7 (POV aile) -> rms 4.0 px; coherent a 58 m avec l interpolation des chaines VO 700/844 (fov libre donnerait 126 et 180 m d ecart, non retenu) | POSITION APPROX 2026-09-25: position extrapolee de la chaine VO (frame 700 + cap), cap devine, fov 106.7 suppose (POV aile comme v091); cam provisoire pour les clics d Alexandre (tours Downtown + tooltips Southside/autoroute) -> comble le trou Southside entre les frames 700 et 844",
   "id": "S3/99"
+ },
+ "Biplane (Video) v0820": {
+  "player": null,
+  "size": [
+   1920,
+   1080
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "era": "2026",
+  "xyz": [
+   -1917.61,
+   -2468.15,
+   176.23
+  ],
+  "ypr": [
+   286.982,
+   0.327,
+   -0.257
+  ],
+  "fov": [
+   106.125,
+   null
+  ],
+  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0820 (video biplan t=27.3 s, POV aile droite, plan 701-843: Southside au premier plan)",
+  "notes": "POSITION APPROX 2026-09-25: pose VO depuis v0770 (fov libre 126), cam provisoire pour les tooltips d intersections de Southside d Alexandre",
+  "id": "S3/100"
  }
 }
