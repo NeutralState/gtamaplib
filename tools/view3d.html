@@ -214,7 +214,6 @@ import * as THREE from 'three';
 // [VIEW3D-TAB] en iframe (onglet 3D de calib), le lien "← calib" est
 // redondant et ouvrirait l'app dans l'app — on le masque.
 // (HUD v2: plus de lien calib — rien a masquer en iframe)
-import { MapControls } from '/threejs/MapControls.js';
 
 const TIER_COLORS = { anchor: 0xa78bfa, high: 0x4ade80, medium: 0xfbbf24,
                       low: 0xfb923c, unverified: 0x6b7280 };
@@ -267,66 +266,182 @@ scene.background = new THREE.Color(0x0a0a0c);   // remplace par applyEnv() des l
 // Monde z-up (convention gtamaplib)
 const camera = new THREE.PerspectiveCamera(55, 1, 1, 50000);
 camera.up.set(0, 0, 1);
-// [VIEW3D-V2] MapControls: drag = pan (feel d'app de carte), clic droit =
-// orbite, zoom vers le curseur, double-clic = recentrer la cible au sol.
-const controls = new MapControls(camera, canvas);
-controls.enableDamping = true;
-controls.dampingFactor = 0.08;
-controls.zoomToCursor = true;
-controls.screenSpacePanning = false;
-controls.zoomSpeed = 2.0;                    // [WHEEL-TAME] 3.0 -> 2.0
-controls.panSpeed = 3.0;
-controls.rotateSpeed = 1.0;
-controls.maxPolarAngle = Math.PI * 0.495;   // jamais sous le sol
-controls.minDistance = 12;                  // [NAN-GUARD] rayon 0 -> normalize() NaN dans le zoom-vers-curseur; 12 m = camSanity
-controls.maxDistance = 16000;               // [ZOOM-OUT-CAP 2026-09-20] sans borne, 30 crans de molette (zoomSpeed 3, zoom vers le
-                                            // curseur) envoyaient la camera a 900 km: carte reduite a un point ("vue explosee"),
-                                            // puis NaN par perte de precision sous Safari (deltas 10x plus grands)
-// [NAN-GUARD 2026-09-18] Safari (Alexandre): apres un zoom molette la camera passe a NaN (ecran orange, badge
-// "CAM NaN"). Non reproduit dans Chromium. On memorise le dernier wheel + l'etat sain de la camera, on
-// restaure des qu'une composante devient non finie, et on remonte le contexte au serveur (tools/server.log).
-window.__lastWheel = null;
-// [WHEEL-TAME 2026-09-22] la vraie plainte « le zoom explose »: sous Safari/trackpad une pichenette envoie des dizaines
-// d'evenements a deltaY 60..260 (telemetrie wheel_end: dy 87, 58, 262) -> avec zoomSpeed 3 la camera part a 30 km ou
-// au ras du sol en une fraction de seconde. On borne chaque evenement a |dy| 40 et on plafonne le cumul a 120 par 100 ms
-// (~x1.13 par 100 ms au maximum) en re-emettant un evenement synthetique (marque) que OrbitControls consomme.
-(() => {
-  const LIM = 40, BUDGET = 80; let winT = 0, acc = 0;
-  canvas.addEventListener('wheel', ev => {
-    if (ev.__tamed) return;
-    const now = performance.now(); if (now - winT > 100) { winT = now; acc = 0; }
-    ev.stopImmediatePropagation(); ev.preventDefault();
-    const dy = Math.max(-LIM, Math.min(LIM, ev.deltaY)) * (ev.deltaMode === 1 ? 16 : ev.deltaMode === 2 ? 100 : 1);
-    if (acc + Math.abs(dy) > BUDGET) return;          // rafale trop dense: on avale
-    acc += Math.abs(dy);
-    // [ZOOM-TO-CURSOR-GATE 2026-09-22] telemetrie 19:52: depuis la vue d'ensemble (30 km) un cran vers l'horizon a
-    // deplace la camera de 29 km et l'a posee au sol (z 31) a 20 km de la. Le zoom-vers-curseur avance d'une fraction de
-    // la distance courante LE LONG DU RAYON DU CURSEUR: si ce rayon ne touche pas le sol a une distance raisonnable
-    // (< 2.5 x la distance a la cible), on zoome vers la cible a la place (zoomToCursor coupe pour cet evenement).
-    let toCursor = false;
-    try {
-      const r = canvas.getBoundingClientRect();
-      _gateRay.setFromCamera({ x: ((ev.clientX - r.left) / r.width) * 2 - 1, y: -((ev.clientY - r.top) / r.height) * 2 + 1 }, camera);
-      _gatePlane.constant = -controls.target.z;
-      const hit = _gateRay.ray.intersectPlane(_gatePlane, _gateHit);
-      const cur = camera.position.distanceTo(controls.target);
-      toCursor = !!hit && camera.position.distanceTo(_gateHit) < 2.5 * cur;
-    } catch (e) { toCursor = false; }
-    controls.zoomToCursor = toCursor;
-    const e2 = new WheelEvent('wheel', { deltaY: dy, deltaX: 0, deltaMode: 0, clientX: ev.clientX, clientY: ev.clientY, ctrlKey: ev.ctrlKey, metaKey: ev.metaKey, bubbles: true, cancelable: true });
-    e2.__tamed = true; canvas.dispatchEvent(e2);
-    controls.zoomToCursor = true;
-  }, { capture: true, passive: false });
-})();
-const _gateRay = new THREE.Raycaster(), _gatePlane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0), _gateHit = new THREE.Vector3();
-canvas.addEventListener('wheel', ev => {
-  if (!ev.__tamed) return;
-  const r = canvas.getBoundingClientRect();
-  window.__lastWheel = { dx: ev.deltaX, dy: ev.deltaY, mode: ev.deltaMode, cx: ev.clientX, cy: ev.clientY, ctrl: ev.ctrlKey, meta: ev.metaKey,
-    rect: [r.left, r.top, r.width, r.height], client: [canvas.clientWidth, canvas.clientHeight], inner: [innerWidth, innerHeight],
-    aspect: camera.aspect, fov: camera.fov, near: camera.near, far: camera.far, dpr: renderer.getPixelRatio(),
-    pos: camera.position.toArray().map(v => +v.toFixed(2)), target: controls.target.toArray().map(v => +v.toFixed(2)), t: performance.now() };
-}, { capture: true, passive: true });
+// ── [NAV-V3 2026-09-26] navigation reecrite de zero (remplace MapControls + WHEEL-TAME + gates) ──
+// Modele "carte": la souris manipule un POINT AU SOL sous le curseur.
+//   glisser (gauche)          = tirer la carte: le point saisi reste sous le curseur
+//   glisser (droit / Ctrl/Cmd) = orbiter autour du point sous le curseur
+//   molette / pincer          = zoomer vers le point sous le curseur (borne par evenement: pas de rafale qui explose)
+//   double-clic               = recentrer la cible ; R = vue d'ensemble ; ZQSD/WASD/fleches = deplacer, A/E = tourner
+// Toute entree modifie un etat DESIRE borne (hauteur >= 6 m au-dessus du sol, distance 8 m..40 km, inclinaison 4..89 deg),
+// la camera y glisse avec amortissement. Aucune dependance a l'ordre des evenements, aucun NaN possible par construction.
+class GroundControls {
+  constructor(camera, dom) {
+    this.camera = camera; this.dom = dom; this.enabled = true;
+    this.target = new THREE.Vector3();          // point regarde (compat: controls.target)
+    this.minDistance = 8; this.maxDistance = 40000; this.minAboveGround = 6;
+    this.minPolar = 0.07; this.maxPolar = Math.PI * 0.49;   // 4 deg .. 88 deg depuis la verticale
+    this.damping = 0.22;
+    this._desPos = new THREE.Vector3(); this._desTgt = new THREE.Vector3(); this._dirty = false;
+    this._ray = new THREE.Raycaster(); this._plane = new THREE.Plane(new THREE.Vector3(0, 0, 1), 0);
+    this._drag = null; this._ptrs = new Map(); this._keys = new Set(); this._pinch = null;
+    const opt = { passive: false };
+    dom.addEventListener('pointerdown', e => this._down(e));
+    addEventListener('pointermove', e => this._move(e));
+    addEventListener('pointerup', e => this._up(e)); addEventListener('pointercancel', e => this._up(e));
+    dom.addEventListener('wheel', e => this._wheel(e), opt);
+    dom.addEventListener('contextmenu', e => e.preventDefault());
+    addEventListener('keydown', e => { if (!/INPUT|TEXTAREA|SELECT/.test((e.target && e.target.tagName) || '')) this._keys.add(e.code); });
+    addEventListener('keyup', e => this._keys.delete(e.code));
+    addEventListener('blur', () => this._keys.clear());
+  }
+  // ── geometrie ──
+  _ndc(e) { const r = this.dom.getBoundingClientRect(); return { x: ((e.clientX - r.left) / r.width) * 2 - 1, y: -((e.clientY - r.top) / r.height) * 2 + 1 }; }
+  _groundZ(x, y) { const z = terrainZAt(x, y); return z === null ? 0 : Math.max(z, 0); }
+  groundHit(ndc, pos, quat) {
+    // intersection rayon/terrain: plan z = zsol itere 3 fois (la grille est lisse) ; null si le rayon vise le ciel
+    const cam = this.camera;
+    this._ray.setFromCamera(ndc, cam);
+    if (pos) { this._ray.ray.origin.copy(pos); }
+    const o = this._ray.ray.origin, d = this._ray.ray.direction;
+    let z = Math.min(o.z - 1, this.target.z), hit = new THREE.Vector3();
+    for (let i = 0; i < 3; i++) {
+      this._plane.constant = -z;
+      if (!this._ray.ray.intersectPlane(this._plane, hit)) return null;
+      if (hit.distanceTo(o) > 200000) return null;
+      z = this._groundZ(hit.x, hit.y);
+    }
+    return hit;
+  }
+  _sync() { this._desPos.copy(this.camera.position); this._desTgt.copy(this.target); }
+  _clamp() {
+    const p = this._desPos, t = this._desTgt;
+    if (![p.x, p.y, p.z, t.x, t.y, t.z].every(Number.isFinite)) { this._sync(); return; }
+    // cible au sol (jamais en l'air ni sous le terrain)
+    t.z = this._groundZ(t.x, t.y);
+    const off = p.clone().sub(t); let d = off.length();
+    if (d < 1e-3) { off.set(0, -1, 1); d = off.length(); }
+    // inclinaison
+    const polar = Math.acos(Math.max(-1, Math.min(1, off.z / d)));
+    const pc = Math.max(this.minPolar, Math.min(this.maxPolar, polar));
+    if (pc !== polar) { const h = Math.hypot(off.x, off.y) || 1e-6, sinp = Math.sin(pc); off.x *= d * sinp / h; off.y *= d * sinp / h; off.z = d * Math.cos(pc); }
+    d = Math.max(this.minDistance, Math.min(this.maxDistance, d)); off.setLength(d);
+    p.copy(t).add(off);
+    const floor = this._groundZ(p.x, p.y) + this.minAboveGround;
+    if (p.z < floor) p.z = floor;
+  }
+  _commit() { this._clamp(); this._dirty = true; }
+  // ── souris / touch ──
+  _down(e) {
+    if (!this.enabled) return;
+    this._ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (this._ptrs.size === 2) {                     // pincer: zoom + rotation a deux doigts
+      const [a, b] = [...this._ptrs.values()];
+      this._pinch = { d: Math.hypot(b.x - a.x, b.y - a.y), ang: Math.atan2(b.y - a.y, b.x - a.x), mid: { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 } };
+      this._drag = null; return;
+    }
+    if (e.button !== 0 && e.button !== 2) return;
+    this._sync();
+    const ndc = this._ndc(e), g = this.groundHit(ndc);
+    const mode = (e.button === 2 || e.ctrlKey || e.metaKey) ? 'orbit' : 'pan';
+    this._drag = { mode, x: e.clientX, y: e.clientY, grab: g, pivot: g ? g.clone() : this._desTgt.clone(), planeZ: g ? g.z : this._desTgt.z };
+    if (mode === 'orbit') { this._desTgt.copy(this._drag.pivot); this._commit(); }
+    try { this.dom.setPointerCapture(e.pointerId); } catch (_) {}
+  }
+  _move(e) {
+    if (!this.enabled) return;
+    if (this._ptrs.has(e.pointerId)) this._ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (this._pinch && this._ptrs.size === 2) {
+      const [a, b] = [...this._ptrs.values()]; const d = Math.hypot(b.x - a.x, b.y - a.y), ang = Math.atan2(b.y - a.y, b.x - a.x);
+      const mid = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+      this._zoomAt(this._ndc({ clientX: mid.x, clientY: mid.y }), this._pinch.d / Math.max(1, d));
+      this._rotate(-(ang - this._pinch.ang), 0);
+      this._panPx(mid.x - this._pinch.mid.x, mid.y - this._pinch.mid.y);
+      this._pinch = { d, ang, mid }; return;
+    }
+    const D = this._drag; if (!D) return;
+    const dx = e.clientX - D.x, dy = e.clientY - D.y; D.x = e.clientX; D.y = e.clientY;
+    if (D.mode === 'orbit') { const r = this.dom.getBoundingClientRect(); this._rotate(dx / r.width * Math.PI * 1.6, dy / r.height * Math.PI * 0.9); return; }
+    // pan: le point saisi reste sous le curseur (intersection avec le plan du point saisi)
+    if (D.grab) {
+      this._ray.setFromCamera(this._ndc(e), this.camera); this._ray.ray.origin.copy(this._desPos);
+      this._plane.constant = -D.planeZ; const h = new THREE.Vector3();
+      if (this._ray.ray.intersectPlane(this._plane, h) && h.distanceTo(this._desPos) < 6 * this._desPos.distanceTo(this._desTgt) + 2000) {
+        const mv = D.grab.clone().sub(h); mv.z = 0; this._desPos.add(mv); this._desTgt.add(mv); this._commit(); return;
+      }
+    }
+    this._panPx(dx, dy);
+  }
+  _up(e) {
+    this._ptrs.delete(e.pointerId); if (this._ptrs.size < 2) this._pinch = null;
+    if (this._ptrs.size === 0) this._drag = null;
+    try { this.dom.releasePointerCapture(e.pointerId); } catch (_) {}
+  }
+  _panPx(dx, dy) {                                   // pan ecran (secours quand le curseur vise le ciel, clavier, pincer)
+    const r = this.dom.getBoundingClientRect(); const dist = this._desPos.distanceTo(this._desTgt);
+    const k = 2 * dist * Math.tan(THREE.MathUtils.degToRad(this.camera.fov) / 2) / r.height;
+    const fwd = new THREE.Vector3(0, 0, -1).applyQuaternion(this.camera.quaternion); fwd.z = 0; if (fwd.length() < 1e-4) fwd.set(0, 1, 0); fwd.normalize();
+    const right = new THREE.Vector3(fwd.y, -fwd.x, 0);
+    const mv = right.multiplyScalar(-dx * k).add(fwd.multiplyScalar(dy * k));
+    this._desPos.add(mv); this._desTgt.add(mv); this._commit();
+  }
+  _rotate(dyaw, dpitch) {
+    const off = this._desPos.clone().sub(this._desTgt); const d = off.length() || 1;
+    let polar = Math.acos(Math.max(-1, Math.min(1, off.z / d))), az = Math.atan2(off.x, off.y);
+    az -= dyaw; polar = Math.max(this.minPolar, Math.min(this.maxPolar, polar + dpitch));
+    off.set(Math.sin(az) * Math.sin(polar), Math.cos(az) * Math.sin(polar), Math.cos(polar)).multiplyScalar(d);
+    this._desPos.copy(this._desTgt).add(off); this._commit();
+  }
+  _zoomAt(ndc, f) {                                   // f < 1 = se rapprocher ; le point vise reste sous le curseur
+    const P = this.groundHit(ndc, this._desPos) || this._desTgt.clone();
+    const np = P.clone().add(this._desPos.clone().sub(P).multiplyScalar(f));
+    const nt = P.clone().add(this._desTgt.clone().sub(P).multiplyScalar(f));
+    const d = np.distanceTo(nt);
+    if (d < this.minDistance * 0.9 && f < 1) return;
+    if (d > this.maxDistance && f > 1) return;
+    this._desPos.copy(np); this._desTgt.copy(nt); this._commit();
+  }
+  _wheel(e) {
+    if (!this.enabled) return;
+    e.preventDefault();
+    let dy = e.deltaY * (e.deltaMode === 1 ? 16 : e.deltaMode === 2 ? 100 : 1);
+    dy = Math.max(-60, Math.min(60, dy));            // une rafale Safari/trackpad ne peut pas depasser x1.27 par evenement
+    if (e.ctrlKey && Math.abs(dy) < 60) dy *= 2;    // pincer trackpad (ctrl+wheel) : deltas plus fins
+    if (!this._dirty) this._sync();
+    this._zoomAt(this._ndc(e), Math.exp(dy * 0.004));
+  }
+  _keysStep(dt) {
+    if (!this.enabled || !this._keys.size) return;
+    if (!this._dirty) this._sync();
+    const K = this._keys, fast = K.has('ShiftLeft') || K.has('ShiftRight') ? 3 : 1;
+    const dist = this._desPos.distanceTo(this._desTgt), v = dist * 0.9 * fast * dt;   // ecran par seconde
+    const fwd = new THREE.Vector3(0, 0, -1).applyQuaternion(this.camera.quaternion); fwd.z = 0; if (fwd.length() < 1e-4) fwd.set(0, 1, 0); fwd.normalize();
+    const right = new THREE.Vector3(fwd.y, -fwd.x, 0); const mv = new THREE.Vector3();
+    if (K.has('KeyW') || K.has('KeyZ') || K.has('ArrowUp')) mv.add(fwd);
+    if (K.has('KeyS') || K.has('ArrowDown')) mv.sub(fwd);
+    if (K.has('KeyD') || K.has('ArrowRight')) mv.add(right);
+    if (K.has('KeyA') && !K.has('KeyQ') || K.has('KeyQ') && !K.has('KeyA') || K.has('ArrowLeft')) mv.sub(right);
+    if (mv.lengthSq()) { mv.setLength(v); this._desPos.add(mv); this._desTgt.add(mv); this._commit(); }
+    if (K.has('KeyE')) this._rotate(1.2 * dt, 0);
+    if (K.has('KeyR') && false) {}
+    if (K.has('PageUp')) this._zoomAt({ x: 0, y: 0 }, Math.exp(-1.5 * dt));
+    if (K.has('PageDown')) this._zoomAt({ x: 0, y: 0 }, Math.exp(1.5 * dt));
+  }
+  getPolarAngle() { const off = this.camera.position.clone().sub(this.target); return Math.acos(Math.max(-1, Math.min(1, off.z / (off.length() || 1)))); }
+  update(dt) {
+    if (!this.enabled) { this._dirty = false; return; }
+    this._keysStep(dt || 1 / 60);
+    if (this._dirty) {
+      const k = this.damping;
+      this.camera.position.lerp(this._desPos, k); this.target.lerp(this._desTgt, k);
+      if (this.camera.position.distanceTo(this._desPos) < 0.02 && this.target.distanceTo(this._desTgt) < 0.02) {
+        this.camera.position.copy(this._desPos); this.target.copy(this._desTgt); this._dirty = false;
+      }
+    }
+    this.camera.lookAt(this.target);
+  }
+}
+const controls = new GroundControls(camera, canvas);
+window.__lastWheel = null;                        // (telemetrie historique)
 // [ZOOM-IN-CAP 2026-09-22] deuxieme cause du "zoom explose" (telemetrie: pos z 6.73 pour une cible a z 6.7, distance 2 m):
 // le zoom-vers-curseur fait glisser la camera le long du rayon du curseur jusqu'au plan de la cible; a cette hauteur
 // l'intersection rayon/plan qui recalcule la cible degenere (cible a l'infini / NaN) et la garde NaN restaure un etat
@@ -419,6 +534,7 @@ const seaUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uTerrBounds: { value: new THREE.Vector4(-1e7, -1e7, 1e7, 1e7) },  // x0,y0,x1,y1 du crop terrain
   uDepth:    { value: null },   // [SEA-DEPTH-V1] profondeur d'eau bakee (rivages)
   uNight:    { value: 0 },
+  uMapSea:   { value: 0 },      // [MAP-COLORS-V1] 1 = eau aux couleurs de la map (drape)
 }]);
 const skyUni = {
   uZenith:   { value: new THREE.Vector3() },
@@ -510,8 +626,9 @@ function applyEnv() {
   const fogC = new THREE.Color(hor[0], hor[1], hor[2]);   // deja lineaire
   if (!scene.fog) scene.fog = new THREE.Fog(fogC.clone(), 1e6, 2e6);
   scene.fog.color.copy(fogC);
-  scene.fog.near = sceneSpan * (2.2 - 1.9 * h);
-  scene.fog.far  = sceneSpan * (7.0 - 5.2 * h);
+  const fk = window.__drapeOn ? 1.8 : 1.0;                 // [MAP-COLORS-V1] brume plus legere sur la map drapee
+  scene.fog.near = sceneSpan * (2.2 - 1.9 * h) * fk;
+  scene.fog.far  = sceneSpan * (7.0 - 5.2 * h) * fk;
   scene.background = fogC;
   localStorage.setItem('ui.env3d', JSON.stringify(ENV));
   if (window.__bakeShadows) window.__bakeShadows();   // le soleil a bouge -> re-cuire
@@ -922,7 +1039,7 @@ const data = await (await fetch('/api/scene3d')).json();
           // [BEAUTY-V2] grain de detail pres de la camera (le drape 4 m/px et
           // la palette gagnent une texture quand on s'approche)
           float dcam = length(cameraPosition - vPos);
-          base *= 1.0 + (vnoise(vPos.xy * 0.9) - 0.5) * 0.16
+          base *= 1.0 + (vnoise(vPos.xy * 0.9) - 0.5) * 0.16 * (1.0 - uUseDrape)
                         * (1.0 - smoothstep(300.0, 2500.0, dcam));
           // [SHADOWS-V1] ombres portees du relief (carte cuite en JS, memes
           // UVs planaires que le drape)
@@ -937,8 +1054,10 @@ const data = await (await fetch('/api/scene3d')).json();
           float diff = max(dot(n, uSunDir), 0.0) * sh * (1.0 - cl);
           float back = max(dot(n, normalize(vec3(-uSunDir.x, -uSunDir.y, 0.4))), 0.0);
           float amb  = 0.34 + 0.24 * clamp(n.z, 0.0, 1.0);
-          // en drape la map reste lisible (plancher de lumiere plus haut)
-          float lum = uUseDrape > 0.5 ? (0.55 + 0.62 * diff + 0.08 * back)
+          // [MAP-COLORS-V1 2026-09-26] en drape, la map garde SES couleurs (quasi sans eclairage, sans nuages,
+          // sans tone mapping — cf. toneMapped=false) : un leger modele pour lire le relief, c'est tout
+          float diffD = max(dot(n, uSunDir), 0.0) * sh;
+          float lum = uUseDrape > 0.5 ? (0.90 + 0.14 * diffD)
                                       : (amb + 1.00 * diff + 0.12 * back);
           // [NIGHT-V1] la nuit: lumiere effondree, teinte clair-de-lune
           lum *= 1.0 - 0.80 * uNight;
@@ -1073,7 +1192,7 @@ const data = await (await fetch('/api/scene3d')).json();
       fragmentShader: `
         varying vec3 vPos;
         uniform vec3 uSunDir, uHorizon, uZenith, uSunColor;
-        uniform float uTime, uNight;
+        uniform float uTime, uNight, uMapSea;
         uniform vec4 uTerrBounds;
         uniform sampler2D uDepth;
         #include <common>
@@ -1105,8 +1224,9 @@ const data = await (await fetch('/api/scene3d')).json();
           vec3 V = normalize(cameraPosition - vPos);
           float fres = pow(1.0 - max(dot(n, V), 0.0), 3.0);
           vec3 skyRefl = mix(uZenith, uHorizon, 0.65);
-          vec3 deep = srgb(vec3(0.05, 0.19, 0.28));
-          vec3 col = mix(deep, skyRefl, 0.22 + 0.58 * fres);
+          // [MAP-COLORS-V1] en drape: le bleu de la V16 (49,150,202), a peine module par le ciel
+          vec3 deep = mix(srgb(vec3(0.05, 0.19, 0.28)), srgb(vec3(0.19, 0.59, 0.79)), uMapSea);
+          vec3 col = mix(deep, skyRefl, mix(0.22 + 0.58 * fres, 0.06 + 0.22 * fres, uMapSea));
           vec3 H = normalize(V + uSunDir);
           float spec = pow(max(dot(n, H), 0.0), 340.0) * 2.0
                      + pow(max(dot(n, H), 0.0), 60.0) * 0.22;
@@ -1127,7 +1247,7 @@ const data = await (await fetch('/api/scene3d')).json();
           // le bleu profond domine en vue plongeante; le ciel (chaud au
           // couchant) ne gagne qu'en incidence rasante — sinon tout l'ocean
           // lointain virait boue au soleil bas
-          col = mix(col, mix(deep * 0.72, skyRefl, 0.12 + 0.50 * fres), farBlend);
+          col = mix(col, mix(deep * mix(0.72, 0.96, uMapSea), skyRefl, mix(0.12 + 0.50 * fres, 0.04 + 0.16 * fres, uMapSea)), farBlend);
           // ── [SEA-DEPTH-V1] rivages: profondeur d'eau bakee -> degrade
           // turquoise + transparence accrue sur les hauts-fonds + ECUME
           // animee qui leche la ligne de cote (bande 0..1.3 m) ──
@@ -1135,14 +1255,14 @@ const data = await (await fetch('/api/scene3d')).json();
           float inb = step(0.0, duv.x) * step(duv.x, 1.0) * step(0.0, duv.y) * step(duv.y, 1.0);
           float wdepth = mix(63.75, texture2D(uDepth, clamp(duv, 0.0, 1.0)).r * 63.75, inb);
           float shal = (1.0 - smoothstep(0.0, 12.0, wdepth)) * (1.0 - farBlend);
-          col = mix(col, srgb(vec3(0.30, 0.66, 0.62)), shal * 0.40);
+          col = mix(col, mix(srgb(vec3(0.30, 0.66, 0.62)), srgb(vec3(0.42, 0.76, 0.86)), uMapSea), shal * 0.40);
           float band = 1.0 - smoothstep(0.10, 1.3, wdepth);
           float fo = vn2(p * 0.06 + vec2(0.0, t * 0.18)) * 0.6
                    + vn2(p * 0.21 - vec2(t * 0.12, 0.0)) * 0.4;
           float foam = smoothstep(0.52, 0.72, fo + band * 0.18) * band * (1.0 - farBlend);
           col = mix(col, vec3(0.92), foam * 0.75 * (1.0 - 0.6 * uNight));
           col *= mix(1.0, 0.45, uNight);             // [NIGHT-V1] mer nocturne
-          float aBase = (0.62 + 0.30 * fres) * mix(1.0, 0.55, shal);
+          float aBase = mix((0.62 + 0.30 * fres) * mix(1.0, 0.55, shal), (0.90 + 0.08 * fres) * mix(1.0, 0.80, shal), uMapSea);
           float a = max(mix(aBase, 1.0, farBlend), foam * 0.85);
           gl_FragColor = vec4(col, a);
           #include <fog_fragment>
@@ -1160,6 +1280,11 @@ const data = await (await fetch('/api/scene3d')).json();
       const setDrape = on => {
         if (on && !drapeTex) buildDrape();
         terraUni.uUseDrape.value = on ? 1 : 0;   // uniform: zero recompilation
+        // [MAP-COLORS-V1] en drape: pas de tone mapping (ACES grisait/assombrissait la map) et eau couleur map
+        if (mat.toneMapped !== !on) { mat.toneMapped = !on; mat.needsUpdate = true; }
+        if (sea.material.toneMapped !== !on) { sea.material.toneMapped = !on; sea.material.needsUpdate = true; }
+        seaUni.uMapSea.value = on ? 1 : 0;
+        window.__drapeOn = !!on; applyEnv();
         // [BEAUTY-V1] la mer 3D reste visible en drape: l'eau plate de la map
         // sous la surface animee (le voile bleu d'antan venait d'une
         // recompilation qui cassait le depth write — resolu par construction)
@@ -2328,7 +2453,7 @@ renderer.setAnimationLoop(() => {
   skyUni.uTime.value = _tSec;                   // derive des nuages
   // en POV la camera est pilotee par nous: controls.update() la re-orienterait
   // vers sa cible a chaque frame (meme controls.enabled=false) -> monde noir
-  if (!povPrev) controls.update();
+  if (!povPrev) controls.update(_dt);
   if (!povPrev) camSanity();                    // [ZOOM-IN-CAP] jamais la camera au ras de la cible / sous le sol
   nanGuard();                                   // [NAN-GUARD] jamais un rendu avec une camera NaN
   renderer.render(scene, camera);
