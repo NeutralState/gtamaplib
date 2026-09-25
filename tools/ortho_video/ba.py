@@ -62,7 +62,7 @@ for t in range(NT):
     d = R.from_quat(G.get_q(list(pose[3:6]))).apply([ndx * tanh, 1.0, -ndy * tanv]); d /= np.linalg.norm(d)
     g = ray_ground(pose[:3], d)
     if g is not None: X0[t] = g; okT[t] = True
-sel = okT[O_t]; O_f, O_t, O_p = O_f[sel], O_t[sel], O_p[sel]; tid, O_t = np.unique(O_t, return_inverse=True); X0 = X0[tid]; NT = len(tid)
+sel = okT[O_t]; O_f, O_t, O_p = O_f[sel], O_t[sel], O_p[sel]; TID_ORIG = tid; tid, O_t = np.unique(O_t, return_inverse=True); X0 = X0[tid]; NT = len(tid); ORIG_IDS = TID_ORIG[tid]
 print('pistes initialisees: %d, obs %d' % (NT, len(O_f)))
 # ---- projection vectorisee
 def project(Pf, Xw):
@@ -84,13 +84,17 @@ Z0 = HR.ground(X0[:, 0], X0[:, 1]) + 1.0; X0 = np.c_[X0, Z0]
 ANCHORED = np.zeros(NF, bool); ANCHORED[np.unique(A_f)] = True
 SIG_PX, SIG_A = float(os.environ.get('SIG_PX', '2.0')), float(os.environ.get('SIG_A', '0.15'))
 PRI_POS, PRI_ANG, PRI_FOV = float(os.environ.get('PRI_POS', '10')), float(os.environ.get('PRI_ANG', '1.0')), float(os.environ.get('PRI_FOV', '1.0'))
+SAT = float(os.environ.get('SAT', '6.0')); SAT_BRIDGE = float(os.environ.get('SAT_BRIDGE', '80.0'))
+IS_BRIDGE = ORIG_IDS[O_t] >= 1000000
+SATV = np.where(IS_BRIDGE, SAT_BRIDGE, SAT)[:, None].astype(float)
+print('pistes pont: %d obs' % int(IS_BRIDGE.sum()), flush=True)
 def residuals(v):
     Pf, Xt = unpack(v)
     # rotations par frame (une fois), puis indexation
     quats = np.array([G.get_q(list(p[3:6])) for p in Pf]); rot_all = R.from_quat(quats)
     Xw = Xt[O_t]
     px, py, front = project_rot(Pf[O_f], rot_all[O_f], Xw)
-    r_obs = np.c_[px - O_p[:, 0], py - O_p[:, 1]]; r_obs[~front] = 200.0; SAT = float(os.environ.get('SAT', '6.0')); r_obs = SAT * np.tanh(r_obs.ravel() / SAT) / SIG_PX   # saturation douce des aberrants (perte lineaire ailleurs)
+    r_obs = np.c_[px - O_p[:, 0], py - O_p[:, 1]]; r_obs[~front] = 200.0; r_obs = SATV * np.tanh(r_obs / SATV) / SIG_PX; r_obs = r_obs.ravel()   # saturation douce des aberrants (perte lineaire ailleurs)
     ax, ay, af = project_rot(Pf[A_f], rot_all[A_f], A_X); r_anc = np.c_[ax - A_p[:, 0], ay - A_p[:, 1]]; r_anc[~af] = 200.0; r_anc = r_anc.ravel() / SIG_A
     # priors
     pr = []
@@ -103,7 +107,7 @@ def residuals(v):
             ang = Pf[i + 1, 3:6] - 2 * Pf[i, 3:6] + Pf[i - 1, 3:6]; ang = (ang + 180) % 360 - 180; pr += list(ang / (0.08 * SUB * SUB))
     pr += list(((Pf[:, 5] + 180) % 360 - 180) / 1.0)                                   # roulis ~0 (faible)
     dp = Pf - P0; dp[:, 3:6] = (dp[:, 3:6] + 180) % 360 - 180
-    wpos = np.where(ANCHORED, 0.05, PRI_POS)[:, None]; wang = np.where(ANCHORED, 0.005, PRI_ANG)[:, None]; wfov = np.where(ANCHORED, 0.005, PRI_FOV)
+    wpos = np.where(ANCHORED, float(os.environ.get('ANC_POS', '0.05')), PRI_POS)[:, None]; wang = np.where(ANCHORED, float(os.environ.get('ANC_ANG', '0.005')), PRI_ANG)[:, None]; wfov = np.where(ANCHORED, float(os.environ.get('ANC_FOV', '0.005')), PRI_FOV)
     pr += list((dp[:, :3] / wpos).ravel()) + list((dp[:, 3:6] / wang).ravel()) + list(dp[:, 6] / wfov)   # prior vers l'init; frames ancrees quasi figees
     pr += list((Xt[:, 2] - HR.ground(Xt[:, 0], Xt[:, 1]) - 1.0) / PRI_Z)                                     # z des points ~ sol (arbres/batiments toleres)
     return np.r_[r_obs, r_anc, np.array(pr)]
