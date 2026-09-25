@@ -42,3 +42,8 @@ Resultats livres dans `~/Downloads/ortho_biplan_v*`. Voir la memoire `ortho-airp
 - Fov des cams d aile : 106.7 pour les DEUX ailes (verifie avec les Points 1-4 au sol a 1-1.9 km + intersections + tours). Deux groupes de points ne suffisent pas a fixer un fov: il en faut trois (sol proche, sol moyen/lointain, sommets).
 
 - `robust_solve.py <cam> [fixfov]` : solve multi-depart (yaw x distance x altitude x fov, 216 departs) + retrait iteratif des clics > 25 px. Indispensable pour une cam sans pose initiale credible (v2580 tombait a fov 180 avec un seul depart).
+
+## Mosaique continue (2026-09-26)
+- `tallmask.py <patch> <meta> <poses> <out> [HT] [heights,...]` : enleve emprise + trainee projetee de tout batiment >= HT m (landmarks/meshs/hauteurs estimees dans les silhouettes V16).
+- `mosaic.py <out.jpg> <marge> a.png a.json [b.png b.json ...]` : mosaique multi-orthos sur la V16, premiere = prioritaire, inpainting des petits trous.
+- Downtown : seules les parties basses vues quasi au nadir (GRAZ 0.22, dmax 700, HT 15, eau retiree) sont gardees; le coeur (v1980) et Brickell (v1380) sont entierement hauts -> exclus. Resultat = satmap_v27.

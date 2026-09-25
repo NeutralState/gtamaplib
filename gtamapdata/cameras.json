@@ -5846,21 +5846,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -1320.93,
-   -1605.58,
-   203.17
+   -1365.78,
+   -1663.65,
+   207.16
   ],
   "ypr": [
-   280.457,
-   4.475,
-   -1.016
+   287.687,
+   3.497,
+   -0.909
   ],
   "fov": [
-   120.557,
+   106.7,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1380 (video biplan t=46 s, chase-cam entre les tours de Brickell)",
-  "notes": "SOLVE 2026-09-25 (corrige): fov LIBRE -> hfov 120.6, rms 4.0 px (aile droite, meme camera que v0770 ~126) | SOLVE 2026-09-25: 6 clics (Four Seasons x3, SEFC, Infinity x2 = 3 points distincts), fov FIXE 106.7 (meme camera POV aile que v091) -> rms 7.7 px (hfov 106.7); fov libre donnerait 120.6 mais non contraint; Three Tequesta cliques hors image exclus | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
+  "notes": "SOLVE 2026-09-26: fov FIXE 106.7 (camera aile droite, = v0770/v0820), rms 7.7 px | SOLVE 2026-09-25 (corrige): fov LIBRE -> hfov 120.6, rms 4.0 px (aile droite, meme camera que v0770 ~126) | SOLVE 2026-09-25: 6 clics (Four Seasons x3, SEFC, Infinity x2 = 3 points distincts), fov FIXE 106.7 (meme camera POV aile que v091) -> rms 7.7 px (hfov 106.7); fov libre donnerait 120.6 mais non contraint; Three Tequesta cliques hors image exclus | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/95"
  },
  "Biplane (Video) v1980": {
