@@ -35,3 +35,5 @@ Resultats livres dans `~/Downloads/ortho_biplan_v*`. Voir la memoire `ortho-airp
 - Cause des « autoroutes en bouillie » : les viaducs (6-15 m) sont au sol dans le heightmap → decales de 30-60 m et etires en incidence rasante. Identique dans toutes les versions ≤ v21.
 - `heights.py` avec `LAYER=114,114,114 CHUNK=40 HMIN=0 HMAX=18 HSTEP=0.5` : hauteur par troncon de 40 m de la couche autoroute V16; `smooth_heights.py` (lissage le long du reseau, lam 0.6, voisins < 60 m); `dsm.build_dsm_est` : toits lisses (`DSM_SMOOTH_M=15`), murs sur le contour exterieur de l'union seulement, sans les 2 m du haut.
 - Echangeur 61/82 : accord V16 des bords d'autoroute 0.59 → 0.84. Trous noirs = sol sous/derriere le tablier (jamais vu) : la V16 apparait dans la version sur la map.
+
+- `onmap.py` : `INPAINT_M=14` remplit par inpainting les trous dont la demi-largeur est < 14 m (sol sous les tabliers, slivers) avant la composition; les grands trous restent en V16.
