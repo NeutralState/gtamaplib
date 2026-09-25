@@ -12,3 +12,8 @@ Pipeline scratchpad versionne tel quel (2026-09-25). Chemins absolus vers le rep
 - `dt_overlay.py`, `dt_grid.py` : superposition des meshs/landmarks sur une frame pour identifier les tours.
 
 Resultats livres dans `~/Downloads/ortho_biplan_v*`. Voir la memoire `ortho-airplane-video`.
+
+## Bundle global (2026-09-25)
+- `tracks.py <a> <b> <out.npz>` : pistes KLT par plan (memes masques que vo.py).
+- `ba.py <out.json> <poses.json...> --tracks tr*.npz` : ajustement de faisceaux terrain-contraint (poses + fov par frame, points 3D a z libre avec prior sol, ancres = clics des cams video, priors de continuite; frames ancrees quasi figees). Env: `MAXOBS`, `NFEV`, `SIG_PX`, `SIG_A`, `SAT`, `PRI_*`. Robustesse des pistes par saturation tanh (pas la loss scipy, qui affaiblirait les ancres).
+- Rendu final recommande : `DSM=1 DSM_DEFAULT_H=0 GRAZ=0.12 WPOW=4 KEEP=0.35 ortho_video.py 0.5 2 1100 out.png ba_all.json` (poids normalises avant la puissance).
