@@ -40,3 +40,5 @@ Resultats livres dans `~/Downloads/ortho_biplan_v*`. Voir la memoire `ortho-airp
 
 - Letterbox : la video a des bandes noires de 60 px en haut ET en bas (lignes 0-59, 1020-1079). Non masquees en haut, elles se projetaient en bande sombre le long du bord lointain de chaque frame (toutes les versions <= v23). `frame_mask` masque desormais 0-63 et 1016+.
 - Fov des cams d aile : 106.7 pour les DEUX ailes (verifie avec les Points 1-4 au sol a 1-1.9 km + intersections + tours). Deux groupes de points ne suffisent pas a fixer un fov: il en faut trois (sol proche, sol moyen/lointain, sommets).
+
+- `robust_solve.py <cam> [fixfov]` : solve multi-depart (yaw x distance x altitude x fov, 216 departs) + retrait iteratif des clics > 25 px. Indispensable pour une cam sans pose initiale credible (v2580 tombait a fov 180 avec un seul depart).

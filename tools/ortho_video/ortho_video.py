@@ -47,6 +47,7 @@ def frame_mask(k, img):
     if k < 92: m &= ~WING
     if 701 <= k <= 843: m &= ~WING2
     if 1300 <= k <= 1500: m &= ~WING3
+    elif k >= 1900: m[400:730, 600:1360] = False   # segment Downtown: avion plus etale (1980/2580/3000)
     elif k >= 844: m[460:730, 760:1280] = False   # chase-cam apres Southside (844-930): avion plus a droite (aile jaune jusqu'a x~1220)
     else: m[420:700, 380:1060] = False      # boite fixe de l'avion (chase-cam plans B/C: bbox mesuree sur 94/110/140/160/200/330/500/650), la couleur seule rate les ailes dans la brume
     return m
