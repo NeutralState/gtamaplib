@@ -124,8 +124,10 @@ def samples(k):
     # bords doux: roll-off sur 150 m avant dmax et sur 0.04 d'incidence au-dessus de GRAZ (sinon arcs/coupures nettes)
     g0 = float(os.environ.get("GRAZ", "0.10"))
     wgt *= np.clip((dmk - dist[idx]) / 150.0, 0, 1).astype(np.float32) * np.clip((graz[idx] - g0) / 0.04, 0, 1).astype(np.float32)
-    wgt *= feath[pyi[idx], pxi[idx]].astype(np.float32)               # fondu AVANT la puissance: transition progressive entre frames
     wgt = (wgt / 1e-4) ** float(os.environ.get("WPOW", "1.0"))    # normalise (evite le sous-depassement float32 pour WPOW>2)
+    fe = feath[pyi[idx], pxi[idx]].astype(np.float32)
+    if os.environ.get('FEATHER_BEFORE', '0') == '1': wgt = wgt * fe ** float(os.environ.get("WPOW", "1.0"))   # transition large (risque de fantomes)
+    else: wgt = wgt * fe                                                   # defaut: transition courte, pas de double image
     wgt *= frame_mask.wm[pyi[idx], pxi[idx]]    # WPOW>1 = la meilleure vue domine (plus net, moins de fantomes)
     ii, jj = np.unravel_index(idx, Xg.shape); ii += r0; jj += c0
     return ii, jj, col, wgt

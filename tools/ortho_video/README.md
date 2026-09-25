@@ -26,3 +26,7 @@ Resultats livres dans `~/Downloads/ortho_biplan_v*`. Voir la memoire `ortho-airp
 ## Pistes de pont entre plans (2026-09-25)
 - `bridge_tracks.py <ka> <kb> <out.npz>` : SIFT entre la derniere frame d'un plan et la premiere du suivant (masques), inliers F, prolonges par KLT de part et d'autre; ids >= 10^6 (reconnus par ba.py comme pistes de pont, non saturees: `SAT_BRIDGE`).
 - Bundle final : `ANC_POS=20 ANC_ANG=0.5 ANC_FOV=0.5 SAT_BRIDGE=80 ba.py ... --tracks tr_*.npz tr_bridge*.npz`. Ancres souples obligatoires: une cam cliquee sans point proche (v0900) est degeneree le long de son axe (16 m/deg de fov a residus quasi constants); figee, elle bloque toute la chaine (doublons de batiments a Southside, 70-100 m). Avec les pistes de pont, l'ecart entre chaines mesure par correlation de phase passe de ~70 m a 0.3 m sans degrader aucune ancre.
+
+## Controle d'accord avec la V16 (2026-09-25)
+- `v16fit.py <ortho_graded.png> <meta.json> <out.jpg> <cx> <cy> <half>` : contours V16 dessines sur l'ortho + score (fraction des bords de route/batiment V16 tombant sur un bord fort de l'ortho). A passer sur prison / Southside / Hamlet avant chaque livraison; la V16 est la verite (calquee sur la leak).
+- Regle bundle : cams ancrees sur tooltips = DURES; seules les cams degenerees (pas de point < 500 m) passent en `SOFT_FRAMES`. Ancres souples partout (v20) = derive de 6-30 m par rapport a la V16.

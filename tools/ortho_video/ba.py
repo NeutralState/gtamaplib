@@ -82,6 +82,9 @@ def unpack(v): return v[:NF * 7].reshape(NF, 7), v[NF * 7:].reshape(NT, 3)
 PRI_Z = float(os.environ.get('PRI_Z', '6.0'))
 Z0 = HR.ground(X0[:, 0], X0[:, 1]) + 1.0; X0 = np.c_[X0, Z0]
 ANCHORED = np.zeros(NF, bool); ANCHORED[np.unique(A_f)] = True
+SOFT = set(int(x) for x in os.environ.get('SOFT_FRAMES', '').split(',') if x)   # frames ancrees mais degenerees (pas de point proche): prior souple
+HARD = np.array([ANCHORED[i] and frames[i] not in SOFT for i in range(NF)]); SOFTA = np.array([ANCHORED[i] and frames[i] in SOFT for i in range(NF)])
+print('frames ancrees dures:', [frames[i] for i in range(NF) if HARD[i]], 'souples:', sorted(SOFT), flush=True)
 SIG_PX, SIG_A = float(os.environ.get('SIG_PX', '2.0')), float(os.environ.get('SIG_A', '0.15'))
 PRI_POS, PRI_ANG, PRI_FOV = float(os.environ.get('PRI_POS', '10')), float(os.environ.get('PRI_ANG', '1.0')), float(os.environ.get('PRI_FOV', '1.0'))
 SAT = float(os.environ.get('SAT', '6.0')); SAT_BRIDGE = float(os.environ.get('SAT_BRIDGE', '80.0'))
@@ -107,7 +110,7 @@ def residuals(v):
             ang = Pf[i + 1, 3:6] - 2 * Pf[i, 3:6] + Pf[i - 1, 3:6]; ang = (ang + 180) % 360 - 180; pr += list(ang / (0.08 * SUB * SUB))
     pr += list(((Pf[:, 5] + 180) % 360 - 180) / 1.0)                                   # roulis ~0 (faible)
     dp = Pf - P0; dp[:, 3:6] = (dp[:, 3:6] + 180) % 360 - 180
-    wpos = np.where(ANCHORED, float(os.environ.get('ANC_POS', '0.05')), PRI_POS)[:, None]; wang = np.where(ANCHORED, float(os.environ.get('ANC_ANG', '0.005')), PRI_ANG)[:, None]; wfov = np.where(ANCHORED, float(os.environ.get('ANC_FOV', '0.005')), PRI_FOV)
+    wpos = np.where(HARD, 0.05, np.where(SOFTA, float(os.environ.get('ANC_POS', '20')), PRI_POS))[:, None]; wang = np.where(HARD, 0.005, np.where(SOFTA, float(os.environ.get('ANC_ANG', '0.5')), PRI_ANG))[:, None]; wfov = np.where(HARD, 0.005, np.where(SOFTA, float(os.environ.get('ANC_FOV', '0.5')), PRI_FOV))
     pr += list((dp[:, :3] / wpos).ravel()) + list((dp[:, 3:6] / wang).ravel()) + list(dp[:, 6] / wfov)   # prior vers l'init; frames ancrees quasi figees
     pr += list((Xt[:, 2] - HR.ground(Xt[:, 0], Xt[:, 1]) - 1.0) / PRI_Z)                                     # z des points ~ sol (arbres/batiments toleres)
     return np.r_[r_obs, r_anc, np.array(pr)]
