@@ -20960,5 +20960,27 @@
     "error_m": 0.5,
     "zone": "hamlet",
     "notes": "TOOLTIP V16 Alexandre 2026-09-24 (coin de bassin/reservoir a l est de l echangeur 61), z heightmap; ancre video biplan (v310)"
+  },
+  "Southside Intersection (1)": {
+    "xyz": [
+      -1611.1,
+      -2337.1,
+      4.9
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "southside",
+    "notes": "TOOLTIP V16 Alexandre 2026-09-25 (intersection de rues Southside), z heightmap; ancre video biplan plan aile 701-843"
+  },
+  "Southside Intersection (2)": {
+    "xyz": [
+      -1649.9,
+      -2472.8,
+      3.63
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "southside",
+    "notes": "TOOLTIP V16 Alexandre 2026-09-25 (intersection de rues Southside), z heightmap; ancre video biplan plan aile 701-843"
   }
 }
