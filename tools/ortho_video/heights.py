@@ -10,7 +10,7 @@ sys.path.insert(0, '/private/tmp/claude-501/-Users-alexandreleblanc-Downloads-gt
 from scipy.spatial.transform import Rotation as R
 poses_f, x0, x1, y0, y1, out = sys.argv[1], float(sys.argv[2]), float(sys.argv[3]), float(sys.argv[4]), float(sys.argv[5]), sys.argv[6]
 DEBUG = int(sys.argv[sys.argv.index('--debug') + 1]) if '--debug' in sys.argv else 0
-W, H = 1920, 1080; HMAX = float(os.environ.get('HMAX', '120')); GRAZMIN = float(os.environ.get('GRAZMIN', '0.12')); FR = os.environ.get('FRAMES'); MINAREA = float(os.environ.get('MINAREA', '150')); DMAX = float(os.environ.get('DMAX', '1000'))
+W, H = 1920, 1080; HMAX = float(os.environ.get('HMAX', '120')); LAYER = tuple(int(a) for a in os.environ.get('LAYER', '176,176,176').split(',')); CHUNK = float(os.environ.get('CHUNK', '0')); HSTEP = float(os.environ.get('HSTEP', '1.0')); HMIN = float(os.environ.get('HMIN', '2.0')); GRAZMIN = float(os.environ.get('GRAZMIN', '0.12')); FR = os.environ.get('FRAMES'); MINAREA = float(os.environ.get('MINAREA', '150')); DMAX = float(os.environ.get('DMAX', '1000'))
 poses = {int(k): v for k, v in json.load(open(poses_f)).items()}
 if FR: a_, b_ = [int(x) for x in FR.split(',')]; poses = {k: v for k, v in poses.items() if a_ <= k <= b_}
 frames = sorted(poses)
@@ -22,9 +22,17 @@ def proj(k, X):
 # ---- silhouettes V16
 V = cv2.imread('/Users/alexandreleblanc/Downloads/gtamaplib-main/maps/yanis,16svg.png')
 u0, v0 = int(x0 + 16991), int(11008 - y1); u1, v1 = int(x1 + 16991), int(11008 - y0)
-crop = V[v0:v1, u0:u1]; mask = np.all(crop == (176, 176, 176), axis=2).astype(np.uint8)
+crop = V[v0:v1, u0:u1]; mask = np.all(crop == LAYER, axis=2).astype(np.uint8)
 n, lab, st, cen = cv2.connectedComponentsWithStats(mask, 8)
-cnts, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+if CHUNK > 0:   # decoupage en cellules de CHUNK m (rampes d'autoroute: hauteur variable le long du trace)
+    pieces = []
+    for cy_ in range(0, mask.shape[0], int(CHUNK)):
+        for cx_ in range(0, mask.shape[1], int(CHUNK)):
+            sub = np.zeros_like(mask); sub[cy_:cy_ + int(CHUNK), cx_:cx_ + int(CHUNK)] = mask[cy_:cy_ + int(CHUNK), cx_:cx_ + int(CHUNK)]
+            cs, _ = cv2.findContours(sub, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE); pieces += cs
+    cnts = pieces
+else:
+    cnts, _ = cv2.findContours(mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
 builds = []
 for c in cnts:
     a = cv2.contourArea(c)
@@ -77,7 +85,7 @@ def score_frame(k, poly, g0, hs):
         step[i] = (elo - ehi) if (elo is not None and ehi is not None) else 0.0
     z = lambda a: (a - a.mean()) / (a.std() + 1e-6)
     return z(roof) + z(step)
-hs = np.arange(2.0, HMAX + 0.01, 1.0); results = {}; dbg = []
+hs = np.arange(HMIN, HMAX + 0.01, HSTEP); results = {}; dbg = []
 for bi, b in enumerate(builds):
     g0 = float(HR.ground(np.array([b['cx']]), np.array([b['cy']]))[0]); C = np.array([b['cx'], b['cy'], g0])
     cand = []
@@ -99,7 +107,7 @@ for bi, b in enumerate(builds):
         sc = (sc - sc.mean()) / (sc.std() + 1e-6); tot += sc; used += 1
     if used < 2: continue
     tot /= used; i = int(np.argmax(tot)); h = float(hs[i]); conf = float((tot[i] - np.median(tot)) / (tot.std() + 1e-6))
-    results[str(bi)] = dict(cx=b['cx'], cy=b['cy'], area=b['area'], h=h, conf=round(conf, 2), nframes=used, poly=b['poly'].round(1).tolist())
+    results[str(bi)] = dict(cx=b['cx'], cy=b['cy'], area=b['area'], h=h, conf=round(conf, 2), nframes=used, poly=b['poly'].round(1).tolist(), scores=np.round(tot, 3).tolist(), hs=hs.round(2).tolist())
     if DEBUG and len(dbg) < DEBUG: dbg.append((bi, cand[0], h, conf))
     if bi % 25 == 0: print('  %d/%d  h=%.0f conf=%.1f (%d frames)' % (bi, len(builds), h, conf, used), flush=True)
 json.dump(results, open(out, 'w')); hsv = np.array([r['h'] for r in results.values()]); cf = np.array([r['conf'] for r in results.values()])

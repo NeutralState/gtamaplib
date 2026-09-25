@@ -88,19 +88,36 @@ def build_dsm_v16(xs, ys, res, ground_fn, default_h=12.0, min_area=30):
 
 # ---- hauteurs estimees depuis la video (heights.py) : env HEIGHTS=fichier1.json,fichier2.json ; HCONF = confiance minimale
 def build_dsm_est(xs, ys, res, ground_fn, files, hconf=2.5):
+    """toits = polygones estimes a z = sol + h ; murs = contour EXTERIEUR de l'union des polygones d'un meme fichier
+    (les troncons d'autoroute adjacents ne creent pas de murs internes), hauteur du mur = celle du troncon le plus proche."""
     import os
     GW, GH = len(xs), len(ys); X0, Y1 = xs[0], ys[0]; dsm = np.full((GH, GW), -np.inf, np.float32); walls = []; nb = 0
     for f in files:
         if not os.path.exists(f): continue
+        lab = np.zeros((GH, GW), np.int32); hz = {}; gz = {}
         for k, r in json.load(open(f)).items():
             if r['conf'] < hconf or r['h'] < 3: continue
             poly = np.array(r['poly'], float); g = float(ground_fn(np.array([r['cx']]), np.array([r['cy']]))[0]); z = g + r['h']
             pix = np.c_[(poly[:, 0] - X0) / res, (Y1 - poly[:, 1]) / res].astype(np.int32)
             if pix[:, 0].max() < 0 or pix[:, 1].max() < 0 or pix[:, 0].min() >= GW or pix[:, 1].min() >= GH: continue
-            layer = np.zeros((GH, GW), np.uint8); cv2.fillPoly(layer, [pix], 1); dsm[layer > 0] = np.maximum(dsm[layer > 0], z); nb += 1
-            per = np.r_[poly, poly[:1]]; hz = np.arange(g, z, 1.0)
-            for a, b_ in zip(per[:-1], per[1:]):
-                L = np.linalg.norm(b_ - a); m_ = max(2, int(L / 1.0)); seg = a[None, :] + (b_ - a)[None, :] * np.linspace(0, 1, m_)[:, None]
-                walls.append(np.c_[np.repeat(seg, len(hz), axis=0), np.tile(hz, len(seg))])
-    walls = np.concatenate(walls) if walls else np.zeros((0, 3)); print('DSM estime (video): %d batiments' % nb, flush=True)
+            idx = nb + 1; layer = np.zeros((GH, GW), np.uint8); cv2.fillPoly(layer, [pix], 1)
+            sel = layer > 0; dsm[sel] = np.maximum(dsm[sel], z); lab[sel] = idx; hz[idx] = z; gz[idx] = g; nb += 1
+        if not hz: continue
+        # lissage des cotes de toit a l'interieur de l'union (supprime les marches entre troncons: sinon slivers noirs au z-buffer)
+        union = (lab > 0).astype(np.uint8); sig = float(os.environ.get('DSM_SMOOTH_M', '15')) / res
+        if sig > 0:
+            zf = np.where(lab > 0, dsm, 0).astype(np.float32); num = cv2.GaussianBlur(zf, (0, 0), sig); den = cv2.GaussianBlur(union.astype(np.float32), (0, 0), sig)
+            zs_ = np.where(den > 1e-3, num / np.maximum(den, 1e-3), 0); dsm[lab > 0] = zs_[lab > 0]
+            for i in list(hz): hz[i] = float(np.median(dsm[lab == i])) if (lab == i).any() else hz[i]
+        labd = cv2.dilate(lab.astype(np.float32), np.ones((5, 5), np.uint8)).astype(np.int32)
+        cnts, _ = cv2.findContours(union, cv2.RETR_LIST, cv2.CHAIN_APPROX_NONE)
+        for c in cnts:
+            c = c.reshape(-1, 2)
+            if len(c) < 8: continue
+            for (px, py) in c[::2]:
+                i = int(labd[py, px]) or int(lab[py, px])
+                if i <= 0 or i not in hz: continue
+                wx, wy = X0 + px * res, Y1 - py * res; zs = np.arange(gz[i], hz[i] - 2.0, 1.0)   # sans les 2 m du haut: le tablier ne doit pas s'auto-occulter
+                if len(zs): walls.append(np.c_[np.full(len(zs), wx), np.full(len(zs), wy), zs])
+    walls = np.concatenate(walls) if walls else np.zeros((0, 3)); print('DSM estime (video): %d polygones, %d points murs' % (nb, len(walls)), flush=True)
     return dsm, walls

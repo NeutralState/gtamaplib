@@ -30,3 +30,8 @@ Resultats livres dans `~/Downloads/ortho_biplan_v*`. Voir la memoire `ortho-airp
 ## Controle d'accord avec la V16 (2026-09-25)
 - `v16fit.py <ortho_graded.png> <meta.json> <out.jpg> <cx> <cy> <half>` : contours V16 dessines sur l'ortho + score (fraction des bords de route/batiment V16 tombant sur un bord fort de l'ortho). A passer sur prison / Southside / Hamlet avant chaque livraison; la V16 est la verite (calquee sur la leak).
 - Regle bundle : cams ancrees sur tooltips = DURES; seules les cams degenerees (pas de point < 500 m) passent en `SOFT_FRAMES`. Ancres souples partout (v20) = derive de 6-30 m par rapport a la V16.
+
+## Autoroutes surelevees (2026-09-25 soir)
+- Cause des « autoroutes en bouillie » : les viaducs (6-15 m) sont au sol dans le heightmap → decales de 30-60 m et etires en incidence rasante. Identique dans toutes les versions ≤ v21.
+- `heights.py` avec `LAYER=114,114,114 CHUNK=40 HMIN=0 HMAX=18 HSTEP=0.5` : hauteur par troncon de 40 m de la couche autoroute V16; `smooth_heights.py` (lissage le long du reseau, lam 0.6, voisins < 60 m); `dsm.build_dsm_est` : toits lisses (`DSM_SMOOTH_M=15`), murs sur le contour exterieur de l'union seulement, sans les 2 m du haut.
+- Echangeur 61/82 : accord V16 des bords d'autoroute 0.59 → 0.84. Trous noirs = sol sous/derriere le tablier (jamais vu) : la V16 apparait dans la version sur la map.
