@@ -5792,21 +5792,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -2100.3,
-   -2608.1,
-   196.9
+   -1868.55,
+   -2372.77,
+   187.8
   ],
   "ypr": [
-   303.37,
-   -3.32,
-   0.0
+   300.624,
+   -3.75,
+   -0.221
   ],
   "fov": [
-   80.0,
+   91.207,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0900 (video biplan t=30 s, chase-cam en approche de Downtown, baie a droite)",
-  "notes": "POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
+  "notes": "SOLVE 2026-09-25: 12 clics d Alexandre (Four Seasons x3, SEFC, Two/Three Tequesta, Asia Brickell Key, Park Grove x3, Infinity x2), fov libre -> hfov 91.2, rms 5.0 px | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/93"
  },
  "Biplane (Video) v1080": {
@@ -5819,21 +5819,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -1142.8,
-   231.5,
-   220.0
+   -1965.05,
+   -2295.93,
+   188.46
   ],
   "ypr": [
-   154.39,
-   -5.01,
-   0.0
+   290.952,
+   -0.712,
+   -0.16
   ],
   "fov": [
-   80.0,
+   47.819,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1080 (video biplan t=36 s, chase-cam au-dessus de la baie: marinas, iles, Downtown a gauche)",
-  "notes": "POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
+  "notes": "SOLVE 2026-09-25: 5 clics en 2 grappes (Four Seasons x2, Park Grove x3), fov libre -> hfov 47.8, rms 1.4 px; FOV NON CONTRAINT (2 grappes): a fov 80 la cam recule de 300 m; il faut 1-2 tours distinctes de plus | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/94"
  },
  "Biplane (Video) v1380": {
@@ -5846,21 +5846,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -1409.6,
-   -1682.4,
-   223.0
+   -1365.78,
+   -1663.65,
+   207.16
   ],
   "ypr": [
-   286.83,
-   1.72,
-   0.0
+   287.687,
+   3.497,
+   -0.909
   ],
   "fov": [
    106.7,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1380 (video biplan t=46 s, chase-cam entre les tours de Brickell)",
-  "notes": "POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
+  "notes": "SOLVE 2026-09-25: 6 clics (Four Seasons x3, SEFC, Infinity x2 = 3 points distincts), fov FIXE 106.7 (meme camera POV aile que v091) -> rms 7.7 px (hfov 106.7); fov libre donnerait 120.6 mais non contraint; Three Tequesta cliques hors image exclus | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/95"
  },
  "Biplane (Video) v1980": {
