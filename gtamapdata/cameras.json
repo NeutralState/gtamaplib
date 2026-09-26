@@ -5997,5 +5997,32 @@
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0820 (video biplan t=27.3 s, POV aile droite, plan 701-843: Southside au premier plan)",
   "notes": "SOLVE 2026-09-25 (v4): 12 clics, fov FIXE 106.7 (meme camera que v0770): rms 9.5 px | SOLVE 2026-09-25: 9 clics d Alexandre (Southside Intersection (1) tooltip, Park Grove x2, Four Seasons x2, Infinity x2, SEFC, SPC), fov FIXE 88.8 (= v0770, meme camera aile droite) -> rms 7.8 px; la VO depuis v0770 arrive a 12 m de cette pose (validation independante) | POSITION APPROX 2026-09-25: pose VO depuis v0770 (fov libre 126), cam provisoire pour les tooltips d intersections de Southside d Alexandre",
   "id": "S3/100"
+ },
+ "Biplane Night (Vice Beach)": {
+  "player": null,
+  "size": [
+   2000,
+   1066
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "era": "2026",
+  "xyz": [
+   1358.2,
+   2212.6,
+   160.0
+  ],
+  "ypr": [
+   257.93,
+   -9.734,
+   0.0
+  ],
+  "fov": [
+   84.268,
+   null
+  ],
+  "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Vice Beach) (capture video nuit avec overlay crypto, 2000x1066 apres retrait du letterbox; chase-cam derriere un biplan jaune au-dessus de Vice Beach nord, regard vers l'est: Blue Diamond et Green Diamond (sommets pyramidaux eclaires), Jade Ocean a gauche, canal au premier plan, mer au fond)",
+  "notes": "AJOUT 2026-09-26 (Alexandre): POSE PROVISOIRE - ajustee sur les 2 sommets pyramidaux (Blue Diamond a droite, Green Diamond a gauche) avec altitude 160 m, roulis 0 et fov 84.3 (autres frames biplan) FIXES; distance le long de la visee non contrainte. A raffiner avec les clics d Alexandre (la grande tour a eclairage rouge a gauche n est probablement PAS Jade Ocean: fit incoherent)",
+  "id": "S3/101"
  }
 }
