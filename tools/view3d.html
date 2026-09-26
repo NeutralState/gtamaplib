@@ -535,6 +535,7 @@ const seaUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uDepth:    { value: null },   // [SEA-DEPTH-V1] profondeur d'eau bakee (rivages)
   uNight:    { value: 0 },
   uMapSea:   { value: 0 },      // [MAP-COLORS-V1] 1 = eau aux couleurs de la map (drape)
+  uDrape:    { value: null },   // [MAP-COLORS-V2] la mer lit la map: dessinee seulement la ou la map est bleue
 }]);
 const skyUni = {
   uZenith:   { value: new THREE.Vector3() },
@@ -993,6 +994,9 @@ const data = await (await fetch('/api/scene3d')).json();
           vec3 base;
           if (uUseDrape > 0.5) {
             base = texture2D(uDrape, vUv).rgb;
+            // [MAP-COLORS-V2 2026-09-26] la map telle quelle: plus de remplacement de l'eau par le fond marin (c'etait
+            // le halo sombre des rivages), la mer 3D ne se dessine que la ou la map est bleue (cf. shader mer)
+          } else if (false) {
             // [DRAPE-WATER-V2] l'eau de la MAP est detectee par sa couleur
             // (bleu dominant) et remplacee par le fond marin procedural — y
             // compris le halo bleu qui debordait sur les rives (decoupage
@@ -1035,7 +1039,7 @@ const data = await (await fetch('/api/scene3d')).json();
           // ABYSSALE directe (min -30: a -2 le rebord dessinait un liseret
           // turquoise le long de tout le rectangle)
           base = mix(base, seabedColor(min(vPos.z, -30.0), vPos.xy),
-                     1.0 - smoothstep(250.0, 650.0, dEdge));
+                     (1.0 - smoothstep(250.0, 650.0, dEdge)) * (1.0 - uUseDrape));
           // [BEAUTY-V2] grain de detail pres de la camera (le drape 4 m/px et
           // la palette gagnent une texture quand on s'approche)
           float dcam = length(cameraPosition - vPos);
@@ -1043,7 +1047,7 @@ const data = await (await fetch('/api/scene3d')).json();
                         * (1.0 - smoothstep(300.0, 2500.0, dcam));
           // [SHADOWS-V1] ombres portees du relief (carte cuite en JS, memes
           // UVs planaires que le drape)
-          float sh = mix(1.0, texture2D(uShadow, vUv).r, uShadowOn);
+          float sh = mix(1.0, texture2D(uShadow, vUv).r, uShadowOn * (1.0 - uUseDrape));   // [MAP-COLORS-V2] pas d'ombres sur la map
           // ombres de nuages qui derivent (meme monde que le ciel)
           float cl = 0.0;
           if (uClouds > 0.5) {
@@ -1080,7 +1084,7 @@ const data = await (await fetch('/api/scene3d')).json();
             // gate par la pente: sur les flats fabriques a z~0.5 l'ecume
             // peignait des bandes moirees sur des km — une vraie cote a du relief
             float shore = (1.0 - smoothstep(0.0, 1.5, abs(vPos.z - 0.2)))
-                          * smoothstep(0.003, 0.012, slope);
+                          * smoothstep(0.003, 0.012, slope) * (1.0 - uUseDrape);   // [MAP-COLORS-V2] pas d'ecume sur la map
             if (shore > 0.01) {
               float ph = vnoise(vPos.xy * 0.008) * 12.0;
               float fo = vnoise(vPos.xy * 0.06 + vec2(0.0, uTime * 0.12))
@@ -1091,7 +1095,7 @@ const data = await (await fetch('/api/scene3d')).json();
           // fond marin pres des bords du crop OU hors zone mesuree du DDS:
           // fondu vers l'abysse — ni la couture du crop ni les plateaux de
           // bathymetrie INFEREE (extension nord) ne se dessinent dans l'ocean
-          if (vPos.z < 0.0) {
+          if (vPos.z < 0.0 && uUseDrape < 0.5) {
             float dMeas = min(min(vPos.x - uMeasBounds.x, uMeasBounds.z - vPos.x),
                               min(vPos.y - uMeasBounds.y, uMeasBounds.w - vPos.y));
             float fade = max(1.0 - smoothstep(0.0, 3000.0, dEdge),
@@ -1142,7 +1146,8 @@ const data = await (await fetch('/api/scene3d')).json();
       // flipY=TRUE pour que v=1 lise la rangee 0. (flipY=false = map en
       // miroir N-S — "le drap est completement brise", Alexandre avait raison)
       drapeTex.flipY = true;
-      drapeTex.anisotropy = 4;                       // 16 = trop cher sur petites machines
+      drapeTex.anisotropy = 8;                       // [MAP-COLORS-V2] 4 -> 8: moins de scintillement des gris urbains en vue rasante
+      drapeTex.minFilter = THREE.LinearMipmapLinearFilter; drapeTex.magFilter = THREE.LinearFilter; drapeTex.generateMipmaps = true;
       // [BEAUTY-V1] plus de second materiau: la texture entre dans le shader
       // terrain par uniform (uUseDrape bascule sans recompilation — la lecon
       // [DRAPE-MAT] reglee par construction).
@@ -1194,7 +1199,7 @@ const data = await (await fetch('/api/scene3d')).json();
         uniform vec3 uSunDir, uHorizon, uZenith, uSunColor;
         uniform float uTime, uNight, uMapSea;
         uniform vec4 uTerrBounds;
-        uniform sampler2D uDepth;
+        uniform sampler2D uDepth, uDrape;
         #include <common>
         #include <logdepthbuf_pars_fragment>
         #include <fog_pars_fragment>
@@ -1210,6 +1215,13 @@ const data = await (await fetch('/api/scene3d')).json();
           #include <logdepthbuf_fragment>
           vec2 p = vPos.xy; float t = uTime;
           float dist = length(cameraPosition - vPos);
+          // [MAP-COLORS-V2] mode map: la mer n'existe que la ou la MAP est bleue (eau), elle prend la couleur de la map ;
+          // ailleurs (ponts, causeways, rives, terre) on ne dessine rien -> la map drapee reste visible, plus de halo
+          vec2 muv = (vPos.xy - uTerrBounds.xy) / (uTerrBounds.zw - uTerrBounds.xy);
+          float minb = step(0.0, muv.x) * step(muv.x, 1.0) * step(0.0, muv.y) * step(muv.y, 1.0);
+          vec3 mapc = texture2D(uDrape, clamp(muv, 0.0, 1.0)).rgb;
+          float mapWater = mix(1.0, smoothstep(0.03, 0.10, mapc.b - max(mapc.r, mapc.g)), minb);
+          if (uMapSea > 0.5 && mapWater < 0.02) discard;
           // les vagues s'eteignent avec la distance: sans ca, les sinus
           // sous-pixel produisent un moire en grille sur tout l'ocean
           float att = 1.0 / (1.0 + dist * 0.002 + dist * dist * 3.5e-7);
@@ -1225,8 +1237,9 @@ const data = await (await fetch('/api/scene3d')).json();
           float fres = pow(1.0 - max(dot(n, V), 0.0), 3.0);
           vec3 skyRefl = mix(uZenith, uHorizon, 0.65);
           // [MAP-COLORS-V1] en drape: le bleu de la V16 (49,150,202), a peine module par le ciel
-          vec3 deep = mix(srgb(vec3(0.05, 0.19, 0.28)), srgb(vec3(0.19, 0.59, 0.79)), uMapSea);
-          vec3 col = mix(deep, skyRefl, mix(0.22 + 0.58 * fres, 0.06 + 0.22 * fres, uMapSea));
+          vec3 mapBlue = mix(srgb(vec3(0.19, 0.59, 0.79)), mapc, minb);   // mapc deja lineaire (texture sRGB)
+          vec3 deep = mix(srgb(vec3(0.05, 0.19, 0.28)), mapBlue, uMapSea);
+          vec3 col = mix(deep, skyRefl, mix(0.22 + 0.58 * fres, 0.03 + 0.10 * fres, uMapSea));
           vec3 H = normalize(V + uSunDir);
           float spec = pow(max(dot(n, H), 0.0), 340.0) * 2.0
                      + pow(max(dot(n, H), 0.0), 60.0) * 0.22;
@@ -1247,7 +1260,7 @@ const data = await (await fetch('/api/scene3d')).json();
           // le bleu profond domine en vue plongeante; le ciel (chaud au
           // couchant) ne gagne qu'en incidence rasante — sinon tout l'ocean
           // lointain virait boue au soleil bas
-          col = mix(col, mix(deep * mix(0.72, 0.96, uMapSea), skyRefl, mix(0.12 + 0.50 * fres, 0.04 + 0.16 * fres, uMapSea)), farBlend);
+          col = mix(col, mix(deep * mix(0.72, 1.0, uMapSea), skyRefl, mix(0.12 + 0.50 * fres, 0.03 + 0.08 * fres, uMapSea)), farBlend);
           // ── [SEA-DEPTH-V1] rivages: profondeur d'eau bakee -> degrade
           // turquoise + transparence accrue sur les hauts-fonds + ECUME
           // animee qui leche la ligne de cote (bande 0..1.3 m) ──
@@ -1255,15 +1268,16 @@ const data = await (await fetch('/api/scene3d')).json();
           float inb = step(0.0, duv.x) * step(duv.x, 1.0) * step(0.0, duv.y) * step(duv.y, 1.0);
           float wdepth = mix(63.75, texture2D(uDepth, clamp(duv, 0.0, 1.0)).r * 63.75, inb);
           float shal = (1.0 - smoothstep(0.0, 12.0, wdepth)) * (1.0 - farBlend);
-          col = mix(col, mix(srgb(vec3(0.30, 0.66, 0.62)), srgb(vec3(0.42, 0.76, 0.86)), uMapSea), shal * 0.40);
+          col = mix(col, mix(srgb(vec3(0.30, 0.66, 0.62)), mapBlue * 1.08, uMapSea), shal * 0.40);
           float band = 1.0 - smoothstep(0.10, 1.3, wdepth);
           float fo = vn2(p * 0.06 + vec2(0.0, t * 0.18)) * 0.6
                    + vn2(p * 0.21 - vec2(t * 0.12, 0.0)) * 0.4;
           float foam = smoothstep(0.52, 0.72, fo + band * 0.18) * band * (1.0 - farBlend);
-          col = mix(col, vec3(0.92), foam * 0.75 * (1.0 - 0.6 * uNight));
+          col = mix(col, vec3(0.92), foam * 0.75 * (1.0 - 0.6 * uNight) * (1.0 - uMapSea));
           col *= mix(1.0, 0.45, uNight);             // [NIGHT-V1] mer nocturne
-          float aBase = mix((0.62 + 0.30 * fres) * mix(1.0, 0.55, shal), (0.90 + 0.08 * fres) * mix(1.0, 0.80, shal), uMapSea);
-          float a = max(mix(aBase, 1.0, farBlend), foam * 0.85);
+          float aBase = mix((0.62 + 0.30 * fres) * mix(1.0, 0.55, shal), 0.97, uMapSea);
+          float a = max(mix(aBase, 1.0, farBlend), foam * 0.85 * (1.0 - uMapSea));
+          a *= mix(1.0, mapWater, uMapSea);
           gl_FragColor = vec4(col, a);
           #include <fog_fragment>
           #include <tonemapping_fragment>
@@ -1284,6 +1298,7 @@ const data = await (await fetch('/api/scene3d')).json();
         if (mat.toneMapped !== !on) { mat.toneMapped = !on; mat.needsUpdate = true; }
         if (sea.material.toneMapped !== !on) { sea.material.toneMapped = !on; sea.material.needsUpdate = true; }
         seaUni.uMapSea.value = on ? 1 : 0;
+        seaUni.uDrape.value = drapeTex;
         window.__drapeOn = !!on; applyEnv();
         // [BEAUTY-V1] la mer 3D reste visible en drape: l'eau plate de la map
         // sous la surface animee (le voile bleu d'antan venait d'une
