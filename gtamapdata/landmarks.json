@@ -21089,5 +21089,27 @@
     "error_m": 3.0,
     "zone": "downtown",
     "notes": "DERIVE 2026-09-25: 4e coin du toit = NW + (SE - NE), parallelogramme des 3 coins triangules; a confirmer"
+  },
+  "Vice Beach Bridge (1)": {
+    "xyz": [
+      1773.4,
+      1775.7,
+      5.2
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown",
+    "note": "TOOLTIP xy Alexandre 2026-09-26; z = tablier, lu sur le rayon de Biplane Night (Vice Beach) (une seule vue)"
+  },
+  "Vice Beach Intersection (1)": {
+    "xyz": [
+      1624.3,
+      1776.9,
+      3.1
+    ],
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown",
+    "note": "TOOLTIP xy Alexandre 2026-09-26; z = sol heightmap (intersection au sol)"
   }
 }

@@ -6008,21 +6008,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   1358.2,
-   2212.6,
-   160.0
+   1663.24,
+   1548.33,
+   112.71
   ],
   "ypr": [
-   257.93,
-   -9.734,
-   0.0
+   346.447,
+   -4.226,
+   0.141
   ],
   "fov": [
-   84.268,
+   81.707,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Vice Beach) (capture video nuit avec overlay crypto, 2000x1066 apres retrait du letterbox; chase-cam derriere un biplan jaune au-dessus de Vice Beach nord, regard vers l'est: Blue Diamond et Green Diamond (sommets pyramidaux eclaires), Jade Ocean a gauche, canal au premier plan, mer au fond)",
-  "notes": "AJOUT 2026-09-26 (Alexandre): POSE PROVISOIRE - ajustee sur les 2 sommets pyramidaux (Blue Diamond a droite, Green Diamond a gauche) avec altitude 160 m, roulis 0 et fov 84.3 (autres frames biplan) FIXES; distance le long de la visee non contrainte. A raffiner avec les clics d Alexandre (la grande tour a eclairage rouge a gauche n est probablement PAS Jade Ocean: fit incoherent)",
+  "notes": "SOLVE 2026-09-26: 7 clics d Alexandre (Green/Blue Diamond, Tresor Tower, Jade Ocean, Akoya, Vice Beach Bridge (1), Vice Beach Intersection (1) - ces 2 derniers = tooltips), xyz+ypr+fov libres: residus 1-9 px (pont 36 px avant correction du tablier), hfov 81.7; camera au sud des points, regard NNE | AJOUT 2026-09-26 (Alexandre): POSE PROVISOIRE - ajustee sur les 2 sommets pyramidaux (Blue Diamond a droite, Green Diamond a gauche) avec altitude 160 m, roulis 0 et fov 84.3 (autres frames biplan) FIXES; distance le long de la visee non contrainte. A raffiner avec les clics d Alexandre (la grande tour a eclairage rouge a gauche n est probablement PAS Jade Ocean: fit incoherent)",
   "id": "S3/101"
  }
 }
