@@ -4682,9 +4682,9 @@
   },
   "1500 Sonora Ave (Tank)": {
     "xyz": [
-      -3002.73,
-      3606.37,
-      37.84
+      -2966.62,
+      3718.19,
+      44.56
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4693,7 +4693,8 @@
     ],
     "error_m": 2.06,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.1 m, parallaxe 87 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.1 m, parallaxe 87 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 3.05 m, parallaxe 24.2 deg; ancien [-3002.73, 3606.37, 37.84] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Easy Hill": {
     "xyz": [
@@ -4749,9 +4750,9 @@
   },
   "USSM Smokestack (4)": {
     "xyz": [
-      -2933.45,
-      3485.09,
-      98.37
+      -2892.9,
+      3635.74,
+      99.89
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4760,13 +4761,14 @@
     ],
     "error_m": 4.05,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 4.1 m, parallaxe 86 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 4.1 m, parallaxe 86 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.82 m, parallaxe 14.9 deg; ancien [-2933.45, 3485.09, 98.37] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "USSM Smokestack (5)": {
     "xyz": [
-      -2970.75,
-      3462.88,
-      79.1
+      -2928.33,
+      3609.89,
+      82.99
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4775,13 +4777,14 @@
     ],
     "error_m": 2.95,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.0 m, parallaxe 84 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.0 m, parallaxe 84 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.83 m, parallaxe 15.6 deg; ancien [-2970.75, 3462.88, 79.1] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "USSM Smokestack (6)": {
     "xyz": [
-      -2977.88,
-      3465.47,
-      83.6
+      -2936.2,
+      3608.46,
+      86.86
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4790,13 +4793,14 @@
     ],
     "error_m": 2.71,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.7 m, parallaxe 84 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.7 m, parallaxe 84 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.94 m, parallaxe 16.0 deg; ancien [-2977.88, 3465.47, 83.6] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "USSM Smokestack (7)": {
     "xyz": [
-      -3005.7,
-      3467.97,
-      97.21
+      -2964.53,
+      3602.25,
+      99.47
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4805,13 +4809,14 @@
     ],
     "error_m": 3.66,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.7 m, parallaxe 83 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.7 m, parallaxe 83 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.56 m, parallaxe 17.5 deg; ancien [-3005.7, 3467.97, 97.21] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "USSM Smokestack (8)": {
     "xyz": [
-      -3063.97,
-      3539.04,
-      45.73
+      -3026.56,
+      3646.97,
+      52.63
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4820,13 +4825,14 @@
     ],
     "error_m": 2.27,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.3 m, parallaxe 83 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.3 m, parallaxe 83 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 2.68 m, parallaxe 22.6 deg; ancien [-3063.97, 3539.04, 45.73] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "USSM Smokestack (9)": {
     "xyz": [
-      -3070.82,
-      3541.95,
-      56.13
+      -3033.1,
+      3649.05,
+      61.89
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4835,20 +4841,22 @@
     ],
     "error_m": 1.9,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.9 m, parallaxe 83 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.9 m, parallaxe 83 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 2.59 m, parallaxe 23.1 deg; ancien [-3070.82, 3541.95, 56.13] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "1500 Sonora Ave (Silo)": {
     "xyz": [
-      -2738.9923519806293,
-      3792.6909873864392,
-      61.627436412622664
+      -2701.11,
+      3887.28,
+      65.29
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia Postcard (X)"
     ],
     "error_m": 19.471,
-    "zone": "ambrosia"
+    "zone": "ambrosia",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.02 m, parallaxe 6.5 deg; ancien [-2738.9923519806293, 3792.6909873864392, 61.627436412622664] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "USSM Smokestack (1)": {
     "xyz": [
@@ -4865,9 +4873,9 @@
   },
   "USSM Smokestack (10)": {
     "xyz": [
-      -2985.7,
-      3675.8,
-      60.83
+      -2945.26,
+      3793.46,
+      64.52
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4875,13 +4883,14 @@
     ],
     "error_m": 0.08,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.1 m, parallaxe 33 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.1 m, parallaxe 33 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 1.58 m, parallaxe 29.2 deg; ancien [-2985.7, 3675.8, 60.83] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "USSM Smokestack (11)": {
     "xyz": [
-      -2988.9,
-      3682.3,
-      49.07
+      -2948.55,
+      3798.95,
+      53.84
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4889,7 +4898,8 @@
     ],
     "error_m": 0.25,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.2 m, parallaxe 34 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.2 m, parallaxe 34 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 2.15 m, parallaxe 29.8 deg; ancien [-2988.9, 3682.3, 49.07] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "USSM Smokestack (2)": {
     "xyz": [
@@ -8309,42 +8319,45 @@
   },
   "1500 Sonora Ave (Silo) (L)": {
     "xyz": [
-      -2709.611,
-      3806.358,
-      64.08
+      -2695.23,
+      3882.5,
+      65.3
     ],
     "source_cameras": [
       "Ambrosia Postcard (X)",
       "Ambrosia 02 (Panorama)"
     ],
     "error_m": null,
-    "zone": "ambrosia"
+    "zone": "ambrosia",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.07 m, parallaxe 4.7 deg; ancien [-2709.611, 3806.358, 64.08] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "1500 Sonora Ave (Silo) (N)": {
     "xyz": [
-      -2713.468,
-      3823.97,
-      55.316
+      -2699.41,
+      3895.44,
+      56.85
     ],
     "source_cameras": [],
     "error_m": null,
-    "zone": "ambrosia"
+    "zone": "ambrosia",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.07 m, parallaxe 6.4 deg; ancien [-2713.468, 3823.97, 55.316] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "1500 Sonora Ave (Silo) (R)": {
     "xyz": [
-      -2722.013,
-      3817.153,
-      64.102
+      -2707.0,
+      3891.84,
+      65.28
     ],
     "source_cameras": [],
     "error_m": null,
-    "zone": "ambrosia"
+    "zone": "ambrosia",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.03 m, parallaxe 8.4 deg; ancien [-2722.013, 3817.153, 64.102] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "1500 Sonora Ave (Tank) (L)": {
     "xyz": [
-      -2990.08,
-      3583.45,
-      37.83
+      -2947.55,
+      3710.85,
+      44.82
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -8353,13 +8366,14 @@
     ],
     "error_m": 1.04,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.0 m, parallaxe 87 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.0 m, parallaxe 87 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 3.08 m, parallaxe 22.5 deg; ancien [-2990.08, 3583.45, 37.83] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "1500 Sonora Ave (Tank) (R)": {
     "xyz": [
-      -3006.13,
-      3629.07,
-      37.77
+      -2985.43,
+      3726.21,
+      44.53
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
@@ -8367,7 +8381,8 @@
     ],
     "error_m": 1.39,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.4 m, parallaxe 58 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.4 m, parallaxe 58 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 2.79 m, parallaxe 25.8 deg; ancien [-3006.13, 3629.07, 37.77] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Industrial Building (Ambrosia)": {
     "xyz": [
@@ -8384,9 +8399,9 @@
   },
   "US Sugar Mill (Factory) (R)": {
     "xyz": [
-      -3038.52,
-      3279.6,
-      69.97
+      -2984.88,
+      3460.7,
+      74.97
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -8395,13 +8410,14 @@
     ],
     "error_m": 1.76,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.8 m, parallaxe 76 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.8 m, parallaxe 76 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 2.73 m, parallaxe 12.6 deg; ancien [-3038.52, 3279.6, 69.97] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "White Silos (W)": {
     "xyz": [
-      -2890.85,
-      3494.64,
-      32.59
+      -2846.03,
+      3669.49,
+      41.88
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -8409,7 +8425,8 @@
     ],
     "error_m": 0.62,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 12 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 12 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 3.34 m, parallaxe 12.5 deg; ancien [-2890.85, 3494.64, 32.59] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Wheelabrator South Broward (3B)": {
     "xyz": [
@@ -13179,11 +13196,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2711.349,
-      3819.173,
-      57.281
+      -2697.21,
+      3891.96,
+      58.78
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.08 m, parallaxe 5.5 deg; ancien [-2711.349, 3819.173, 57.281] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Canal A (Ambrosia) (2)": {
     "author": "rlx",
@@ -13197,11 +13215,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2718.926,
-      3821.775,
-      58.829
+      -2704.32,
+      3894.9,
+      60.25
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.05 m, parallaxe 7.7 deg; ancien [-2718.926, 3821.775, 58.829] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Path A (Ambrosia) (1)": {
     "author": "rlx",
@@ -13267,11 +13286,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2716.911,
-      3818.372,
-      58.762
+      -2702.22,
+      3892.59,
+      60.22
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.05 m, parallaxe 6.9 deg; ancien [-2716.911, 3818.372, 58.762] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Train Signal (Ambrosia) (1W)": {
     "author": "rlx",
@@ -13440,11 +13460,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2710.276,
-      3816.942,
-      58.804
+      -2695.97,
+      3890.91,
+      60.25
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.04 m, parallaxe 5.1 deg; ancien [-2710.276, 3816.942, 58.804] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Path A (Ambrosia) (2)": {
     "author": "rlx",
@@ -13526,11 +13547,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2720.453,
-      3819.829,
-      57.263
+      -2705.6,
+      3893.89,
+      58.81
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.02 m, parallaxe 7.9 deg; ancien [-2720.453, 3819.829, 57.263] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Jason's House (Window 3) (BN)": {
     "author": "rlx",
@@ -13598,11 +13620,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2719.052,
-      3821.316,
-      62.25
+      -2704.45,
+      3894.43,
+      63.5
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.05 m, parallaxe 7.8 deg; ancien [-2719.052, 3821.316, 62.25] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Jason's House (Window 5) (TN)": {
     "author": "rlx",
@@ -13668,12 +13691,13 @@
       "Ambrosia Postcard (X)"
     ],
     "xyz": [
-      -2729.81,
-      3748.37,
-      25.1
+      -2701.96,
+      3885.63,
+      30.78
     ],
     "zone": null,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.5 m, parallaxe 10 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.5 m, parallaxe 10 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.73 m, parallaxe 9.4 deg; ancien [-2729.81, 3748.37, 25.1] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Jason's House (Window 4) (BN)": {
     "author": "rlx",
@@ -13779,22 +13803,24 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2711.547,
-      3804.419,
-      60.509
+      -2695.66,
+      3886.95,
+      62.01
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.03 m, parallaxe 4.8 deg; ancien [-2711.547, 3804.419, 60.509] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "STR04": {
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2713.715,
-      3822.88,
-      55.183
+      -2699.42,
+      3895.42,
+      56.76
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.02 m, parallaxe 6.4 deg; ancien [-2713.715, 3822.88, 55.183] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Train Signal (Ambrosia) (1E)": {
     "author": "rlx",
@@ -13808,11 +13834,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2710.803,
-      3807.971,
-      57.036
+      -2695.47,
+      3887.68,
+      58.75
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.04 m, parallaxe 4.6 deg; ancien [-2710.803, 3807.971, 57.036] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Ambrosia Main St (Z)": {
     "author": "rlx",
@@ -13926,11 +13953,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2858.468,
-      3554.417,
-      34.924
+      -2829.16,
+      3673.17,
+      42.11
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 3.50 m, parallaxe 11.2 deg; ancien [-2858.468, 3554.417, 34.924] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Jason's House (Front Door) (TW)": {
     "author": "rlx",
@@ -14139,12 +14167,13 @@
       "Ambrosia Postcard (X)"
     ],
     "xyz": [
-      -2880.74,
-      3491.46,
-      32.37
+      -2835.3,
+      3673.02,
+      41.9
     ],
     "zone": null,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 11 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 11 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 3.36 m, parallaxe 11.7 deg; ancien [-2880.74, 3491.46, 32.37] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Jason's House (Pillar 1) (BNE)": {
     "author": "rlx",
@@ -14186,11 +14215,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2712.09,
-      3823.368,
-      58.889
+      -2698.24,
+      3894.24,
+      60.25
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.09 m, parallaxe 6.0 deg; ancien [-2712.09, 3823.368, 58.889] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Jason's House (Basketball Hoop) (BN)": {
     "author": "rlx",
@@ -14212,11 +14242,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2711.692,
-      3817.665,
-      60.708
+      -2697.38,
+      3891.3,
+      62.05
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.05 m, parallaxe 5.6 deg; ancien [-2711.692, 3817.665, 60.708] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Jason's House (Pillar 9) (BSE)": {
     "author": "rlx",
@@ -14493,11 +14524,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2714.372,
-      3821.402,
-      57.316
+      -2700.11,
+      3893.93,
+      58.8
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.07 m, parallaxe 6.4 deg; ancien [-2714.372, 3821.402, 57.316] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "US Sugar Mill (Office) (B)": {
     "author": "rlx",
@@ -14554,12 +14586,13 @@
       "Ambrosia Postcard (X)"
     ],
     "xyz": [
-      -2901.92,
-      3494.11,
-      32.2
+      -2857.43,
+      3663.79,
+      41.42
     ],
     "zone": null,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 12 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 12 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 3.38 m, parallaxe 13.1 deg; ancien [-2901.92, 3494.11, 32.2] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Jason's House (Window 4) (BS)": {
     "author": "rlx",
@@ -14581,11 +14614,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2714.608,
-      3820.438,
-      60.703
+      -2700.29,
+      3893.25,
+      62.03
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.09 m, parallaxe 6.5 deg; ancien [-2714.608, 3820.438, 60.703] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Route 35 (G)": {
     "author": "rlx",
@@ -14613,11 +14647,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2718.267,
-      3819.399,
-      60.686
+      -2703.58,
+      3893.24,
+      62.03
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.06 m, parallaxe 7.4 deg; ancien [-2718.267, 3819.399, 60.686] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Route 35 (I)": {
     "author": "rlx",
@@ -14775,22 +14810,24 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2711.992,
-      3813.864,
-      54.931
+      -2697.1,
+      3890.45,
+      56.69
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.03 m, parallaxe 5.3 deg; ancien [-2711.992, 3813.864, 54.931] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "STR05": {
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2717.107,
-      3823.182,
-      55.197
+      -2702.55,
+      3896.22,
+      56.79
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.07 m, parallaxe 7.3 deg; ancien [-2717.107, 3823.182, 55.197] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Route 35 (Y)": {
     "author": "rlx",
@@ -14804,11 +14841,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2718.113,
-      3819.981,
-      57.275
+      -2703.43,
+      3893.76,
+      58.8
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.04 m, parallaxe 7.3 deg; ancien [-2718.113, 3819.981, 57.275] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Dark Billboard (Ambrosia) (TW)": {
     "author": "rlx",
@@ -14866,11 +14904,12 @@
     "error_m": null,
     "source_cameras": [],
     "xyz": [
-      -2720.577,
-      3819.384,
-      60.692
+      -2705.72,
+      3893.46,
+      62.04
     ],
-    "zone": null
+    "zone": null,
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.03 m, parallaxe 8.0 deg; ancien [-2720.577, 3819.384, 60.692] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Jason's House (Pillar 5) (TSW)": {
     "author": "rlx",
@@ -16750,9 +16789,9 @@
   },
   "Factory D (Ambrosia) (NW)": {
     "xyz": [
-      -3209.48,
-      3529.5,
-      37.9
+      -3174.15,
+      3612.62,
+      44.92
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -16761,7 +16800,8 @@
     ],
     "error_m": 1.67,
     "zone": "rlx_markings_0713",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.7 m, parallaxe 78 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.7 m, parallaxe 78 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 3.70 m, parallaxe 25.9 deg; ancien [-3209.48, 3529.5, 37.9] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Road E (Ambrosia)": {
     "xyz": null,
@@ -17638,9 +17678,9 @@
   },
   "US Sugar Mill (Factory) (A)": {
     "xyz": [
-      -3038.07,
-      3279.77,
-      100.5
+      -2986.48,
+      3456.06,
+      103.08
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -17650,13 +17690,14 @@
     "error_m": 6.84,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 6.8 m, parallaxe 76 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 6.8 m, parallaxe 76 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 2.75 m, parallaxe 12.8 deg; ancien [-3038.07, 3279.77, 100.5] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "US Sugar Mill (Factory) (AC)": {
     "xyz": [
-      -3037.94,
-      3279.84,
-      91.0
+      -2984.04,
+      3461.65,
+      93.64
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -17666,13 +17707,14 @@
     "error_m": 2.95,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.9 m, parallaxe 76 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.9 m, parallaxe 76 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 0.28 m, parallaxe 12.7 deg; ancien [-3037.94, 3279.84, 91.0] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "US Sugar Mill (Factory) (NW)": {
     "xyz": [
-      -3044.32,
-      3311.74,
-      69.55
+      -2992.14,
+      3481.67,
+      74.63
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -17682,7 +17724,8 @@
     "error_m": 1.19,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.2 m, parallaxe 76 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.2 m, parallaxe 76 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 2.73 m, parallaxe 13.6 deg; ancien [-3044.32, 3311.74, 69.55] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "US Sugar Mill (Factory) (R2)": {
     "xyz": null,
@@ -17693,9 +17736,9 @@
   },
   "US Sugar Mill (Factory) (SE)": {
     "xyz": [
-      -3024.22,
-      3267.58,
-      69.68
+      -2968.47,
+      3461.51,
+      74.81
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -17705,7 +17748,8 @@
     "error_m": 1.9,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.9 m, parallaxe 76 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.9 m, parallaxe 76 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 2.49 m, parallaxe 11.9 deg; ancien [-3024.22, 3267.58, 69.68] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "Wheelabrator South Broward (5)": {
     "xyz": null,
@@ -19410,9 +19454,9 @@
   },
   "1500 Sonora Ave (Tank) (A)": {
     "xyz": [
-      -3002.64,
-      3606.28,
-      37.84
+      -2966.79,
+      3717.69,
+      44.54
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -19420,13 +19464,14 @@
       "Ambrosia Postcard (X)"
     ],
     "error_m": 2.18,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.2 m, parallaxe 87 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.2 m, parallaxe 87 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 3.05 m, parallaxe 24.1 deg; ancien [-3002.64, 3606.28, 37.84] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "1500 Sonora Ave (Tank) (A) (L)": {
     "xyz": [
-      -2990.08,
-      3583.45,
-      37.83
+      -2947.55,
+      3710.85,
+      44.82
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -19434,13 +19479,14 @@
       "Ambrosia Postcard (X)"
     ],
     "error_m": 1.04,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.0 m, parallaxe 87 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.0 m, parallaxe 87 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 3.08 m, parallaxe 22.5 deg; ancien [-2990.08, 3583.45, 37.83] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "1500 Sonora Ave (Tank) (A) (R)": {
     "xyz": [
-      -3014.9,
-      3628.86,
-      37.83
+      -2985.77,
+      3725.87,
+      44.3
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -19448,7 +19494,8 @@
       "Ambrosia Postcard (X)"
     ],
     "error_m": 5.73,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 5.7 m, parallaxe 87 deg"
+    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 5.7 m, parallaxe 87 deg",
+    "note": "V16-RESECT 2026-09-26: re-triangule Ambrosia 02 (Panorama, VERIFIED) x Ambrosia Postcard (pose V16-RESECT), gap 3.01 m, parallaxe 25.8 deg; ancien [-3014.9, 3628.86, 37.83] (zone glissee ~130 m au sud le long du rayon de Panorama) | "
   },
   "3001 Gordon Hwy (Water Tower)": {
     "xyz": [
