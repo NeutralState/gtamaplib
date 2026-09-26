@@ -1516,7 +1516,10 @@ if (meshVerts.length) {
     vertexColors: true, transparent: true, opacity: 0.35,
     depthTest: false, depthWrite: false, blending: THREE.AdditiveBlending }));
   mhalo.renderOrder = 11;
-  mhalo.scale.setScalar(1.0015);
+  // [MESH-DOUBLE-FIX 2026-09-26] plus de scale 1.0015: il s'appliquait autour de
+  // l'ORIGINE du monde, donc le halo etait decale de 0.15 % de la distance
+  // (6 m au chateau d'eau de Homestead, 2 m a Brickell) = « deux meshs l'un
+  // sur l'autre ». Le halo additif reste exactement sur les aretes.
   layers.meshes.add(mhalo);
 }
 
