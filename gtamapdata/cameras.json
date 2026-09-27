@@ -6051,5 +6051,32 @@
   "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Video) Last (derniere frame de GTA_6_plane_NIGHT_upload.ee_mirror_1.mp4, t=109 s, 1920x960 apres retrait du letterbox; POV aile du biplan au-dessus de la plage de Vice Beach nord, regard vers le nord: Jade Ocean, Green/Blue Diamond (pyramides) et hotels a gauche, plage et mer a droite)",
   "notes": "SOLVE 2026-09-26: 6 clics d Alexandre (Green/Blue Diamond, Jade Ocean, Akoya, Tresor Tower, Vice Beach Point (1) tooltip), xyz+ypr+fov libres: residus 4-17 px, hfov 106.6 (POV aile) | POSE PROVISOIRE 2026-09-26: 3 sommets (pyramide droite = Blue Diamond, gauche = Green Diamond, Jade Ocean) avec fov 81.7 fixe (meme video que Biplane Night (Vice Beach)); 3 points pour 6 inconnues = juste determine, residus 2-7 px NON significatifs -> a confirmer par des clics (sol, plage, hotels) | AJOUT 2026-09-26 (Alexandre): pose provisoire sur 3 sommets (Jade Ocean, 2 pyramides), fov = Biplane Night (Vice Beach) (meme video)",
   "id": "S3/102"
+ },
+ "Biplane Night (Video) v086": {
+  "player": null,
+  "size": [
+   1920,
+   960
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "era": "2026",
+  "xyz": [
+   1550.0,
+   1500.0,
+   150.0
+  ],
+  "ypr": [
+   45.0,
+   -8.0,
+   0.0
+  ],
+  "fov": [
+   81.707,
+   null
+  ],
+  "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Video) v086 (GTA_6_plane_NIGHT_upload.ee_mirror_1.mp4 a t=86 s (1:26), letterbox retire; chase-cam derriere le biplan au-dessus des iles de la baie (Bay Harbor / Indian Creek), regard vers le NW: tours blanches a gauche, iles residentielles au premier plan, zone portuaire eclairee a l horizon)",
+  "notes": "AJOUT 2026-09-26 (Alexandre): POSE DEVINEE (a la louche) pour les clics; la grue du port (Waning Sands) serait visible a l horizon",
+  "id": "S3/103"
  }
 }
