@@ -2759,17 +2759,17 @@
   "id": "T1/36",
   "player": null,
   "xyz": [
-   -504.1,
-   4115.3,
-   12.0
+   -532.1,
+   4106.6,
+   13.7
   ],
   "ypr": [
-   345.0,
-   6.0,
-   1.0
+   14.187,
+   6.36,
+   0.0
   ],
   "fov": [
-   58.0,
+   60.0,
    null
   ],
   "size": [
@@ -2777,7 +2777,7 @@
    2160
   ],
   "source": "Trailer 1 [1876]",
-  "notes": "POSITION 2026-09-26: coordonnees du jeu donnees par Alexandre (X -504.1 Y 4115.3 Z 10.4 = sol) + 1.6 m (cabine de camion); orientation encore provisoire (ypr/fov a la main): House #2 (corrige) et la grue ne donnent pas d orientation coherente"
+  "notes": "POSITION 2026-09-26: coordonnees du jeu (Alexandre) X -532.1 Y 4106.6 Z 12.1 (sol) + 1.6 m cabine. ORIENTATION PROVISOIRE: cap sur la grue (xy triangule de nuit), tangage sur House #2, roulis 0, hfov 60 suppose; House #2 ne colle pas en horizontal (grue ou clic de maison a revoir)"
  },
  "U-Turn (NW)": {
   "id": "T1/44",
