@@ -6024,5 +6024,32 @@
   "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Vice Beach) (capture video nuit avec overlay crypto, 2000x1066 apres retrait du letterbox; chase-cam derriere un biplan jaune au-dessus de Vice Beach nord, regard vers l'est: Blue Diamond et Green Diamond (sommets pyramidaux eclaires), Jade Ocean a gauche, canal au premier plan, mer au fond)",
   "notes": "SOLVE 2026-09-26: 7 clics d Alexandre (Green/Blue Diamond, Tresor Tower, Jade Ocean, Akoya, Vice Beach Bridge (1), Vice Beach Intersection (1) - ces 2 derniers = tooltips), xyz+ypr+fov libres: residus 1-9 px (pont 36 px avant correction du tablier), hfov 81.7; camera au sud des points, regard NNE | AJOUT 2026-09-26 (Alexandre): POSE PROVISOIRE - ajustee sur les 2 sommets pyramidaux (Blue Diamond a droite, Green Diamond a gauche) avec altitude 160 m, roulis 0 et fov 84.3 (autres frames biplan) FIXES; distance le long de la visee non contrainte. A raffiner avec les clics d Alexandre (la grande tour a eclairage rouge a gauche n est probablement PAS Jade Ocean: fit incoherent)",
   "id": "S3/101"
+ },
+ "Biplane Night (Video) Last": {
+  "player": null,
+  "size": [
+   1920,
+   960
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "era": "2026",
+  "xyz": [
+   1925.72,
+   1757.77,
+   99.2
+  ],
+  "ypr": [
+   -8.343,
+   7.0,
+   -3.889
+  ],
+  "fov": [
+   81.707,
+   null
+  ],
+  "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Video) Last (derniere frame de GTA_6_plane_NIGHT_upload.ee_mirror_1.mp4, t=109 s, 1920x960 apres retrait du letterbox; POV aile du biplan au-dessus de la plage de Vice Beach nord, regard vers le nord: Jade Ocean, Green/Blue Diamond (pyramides) et hotels a gauche, plage et mer a droite)",
+  "notes": "POSE PROVISOIRE 2026-09-26: 3 sommets (pyramide droite = Blue Diamond, gauche = Green Diamond, Jade Ocean) avec fov 81.7 fixe (meme video que Biplane Night (Vice Beach)); 3 points pour 6 inconnues = juste determine, residus 2-7 px NON significatifs -> a confirmer par des clics (sol, plage, hotels) | AJOUT 2026-09-26 (Alexandre): pose provisoire sur 3 sommets (Jade Ocean, 2 pyramides), fov = Biplane Night (Vice Beach) (meme video)",
+  "id": "S3/102"
  }
 }
