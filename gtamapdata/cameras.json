@@ -2759,9 +2759,9 @@
   "id": "T1/36",
   "player": null,
   "xyz": [
-   -505.4,
-   4122.6,
-   32.0
+   -504.1,
+   4115.3,
+   12.0
   ],
   "ypr": [
    345.0,
@@ -2776,7 +2776,8 @@
    3840,
    2160
   ],
-  "source": "Trailer 1 [1876]"
+  "source": "Trailer 1 [1876]",
+  "notes": "POSITION 2026-09-26: coordonnees du jeu donnees par Alexandre (X -504.1 Y 4115.3 Z 10.4 = sol) + 1.6 m (cabine de camion); orientation encore provisoire (ypr/fov a la main): House #2 (corrige) et la grue ne donnent pas d orientation coherente"
  },
  "U-Turn (NW)": {
   "id": "T1/44",

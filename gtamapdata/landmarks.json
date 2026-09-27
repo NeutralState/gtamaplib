@@ -19171,16 +19171,17 @@
   },
   "House #2 (Waning Sands)": {
     "xyz": [
-      -920.73,
-      4060.49,
-      28.02
+      -479.8,
+      4277.7,
+      4.82
     ],
     "source_cameras": [
       "Waning Sands (B)",
       "Waning Sands (C)"
     ],
     "error_m": 2.0,
-    "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.8 m, angle max 6.0 deg"
+    "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.8 m, angle max 6.0 deg",
+    "note": "TOOLTIP xy Alexandre 2026-09-26 (corrige 2x; ancien (-920.7,4060.5,28.0)); z = sol heightmap"
   },
   "KC03": {
     "xyz": [
