@@ -6095,16 +6095,16 @@
    33.2
   ],
   "ypr": [
-   191.0,
-   -1.0,
+   182.87,
+   -4.34,
    0.0
   ],
   "fov": [
-   60.0,
+   47.0,
    null
   ],
   "source": "Screenshot \u2014 Throwing Stuff from an Overpass (deux personnages sur un viaduc d'autoroute; au loin a droite la raffinerie Allied Crystal avec cheminees et chateau d'eau, panneau Ambrosia Raceway Park, skyline de Vice City a gauche a l'horizon)",
-  "notes": "POSITION PRELIMINAIRE 2026-09-28: coordonnees du jeu (Alexandre) X -2740.1 Y 5199.8 Z 31.5 (tablier du viaduc) + 1.7 m (personnage debout); cap oriente pour mettre Allied a droite (x~1400), tangage 0, fov 60 supposes; a resoudre avec des clics",
+  "notes": "POSE 2026-09-28: position du jeu (Alexandre, viaduc + 1.7 m); orientation alignee par Alexandre au POV (silo drapeau aligne sur Downtown): dyaw -8.13, dpitch -3.34 sur la pose preliminaire -> ypr 182.87/-4.34/0, hfov 47; le silo projete tombe a ~10 px de son clic. Les clics Billboard with Oval Motif #1 ne correspondent pas a ce landmark (proportions 3.0 vs 1.65) -> exclus",
   "id": "S2/86"
  }
 }
