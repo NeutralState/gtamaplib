@@ -6080,5 +6080,31 @@
   "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Video) v086 (GTA_6_plane_NIGHT_upload.ee_mirror_1.mp4 a t=86 s (1:26), letterbox retire; chase-cam derriere le biplan au-dessus des Venetian Islands, regard vers le nord: 1000 Venetian Way a gauche, iles residentielles au premier plan, zone portuaire eclairee a l horizon)",
   "notes": "SOLVE V3 2026-09-26: 9 tooltips d Alexandre Venetian (1)-(3),(5)-(10), residus 1-27 px (nuit), hfov 71.7, roulis 0; horizon heightmap juste au-dessus des lumieres, meshs lointains (Ambrosia) sur l horizon. La V2 contrainte par la bande de lumieres etait fausse (la bande n est pas l horizon du terrain). Venetian (4) exclu (clic incoherent) | SOLVE 2026-09-26: tooltips Venetian (1),(2),(3),(5) d Alexandre, xyz+ypr+fov libres: residus 0.5-5 px, hfov 71.8; Venetian (4) exclu (son clic tombe a (650,1308), 220 m du tooltip (445,1232): clic ou tooltip a verifier) | POSE ALIGNEE 2026-09-26 sur 1000 Venetian Way (identifie par Alexandre): coin de toit SW (landmark), coin de toit E (V16 s24), pied SW; fov 81.7 fixe; 3 points = juste determine -> provisoire, le mesh 1000 Venetian Way tombe sur la tour; en attente des tooltips d Alexandre | AJOUT 2026-09-26 (Alexandre): POSE DEVINEE (a la louche) pour les clics; la grue du port (Waning Sands) serait visible a l horizon",
   "id": "S3/103"
+ },
+ "Throwing Stuff from an Overpass": {
+  "player": null,
+  "size": [
+   2000,
+   1125
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "xyz": [
+   -2350.0,
+   3500.0,
+   18.0
+  ],
+  "ypr": [
+   110.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   60.0,
+   null
+  ],
+  "source": "Screenshot \u2014 Throwing Stuff from an Overpass (deux personnages sur un viaduc d'autoroute; au loin a droite la raffinerie Allied Crystal avec cheminees et chateau d'eau, panneau Ambrosia Raceway Park, skyline de Vice City a gauche a l'horizon)",
+  "notes": "AJOUT 2026-09-28 (Alexandre): POSE DEVINEE a la louche (viaduc a l est d Ambrosia, regard vers l ouest-sud-ouest) pour les clics; a resoudre",
+  "id": "S2/86"
  }
 }
