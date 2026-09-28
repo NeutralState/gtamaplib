@@ -6090,13 +6090,13 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "xyz": [
-   -2350.0,
-   3500.0,
-   18.0
+   -2740.1,
+   5199.8,
+   33.2
   ],
   "ypr": [
-   110.0,
-   0.0,
+   191.0,
+   -1.0,
    0.0
   ],
   "fov": [
@@ -6104,7 +6104,7 @@
    null
   ],
   "source": "Screenshot \u2014 Throwing Stuff from an Overpass (deux personnages sur un viaduc d'autoroute; au loin a droite la raffinerie Allied Crystal avec cheminees et chateau d'eau, panneau Ambrosia Raceway Park, skyline de Vice City a gauche a l'horizon)",
-  "notes": "AJOUT 2026-09-28 (Alexandre): POSE DEVINEE a la louche (viaduc a l est d Ambrosia, regard vers l ouest-sud-ouest) pour les clics; a resoudre",
+  "notes": "POSITION PRELIMINAIRE 2026-09-28: coordonnees du jeu (Alexandre) X -2740.1 Y 5199.8 Z 31.5 (tablier du viaduc) + 1.7 m (personnage debout); cap oriente pour mettre Allied a droite (x~1400), tangage 0, fov 60 supposes; a resoudre avec des clics",
   "id": "S2/86"
  }
 }
