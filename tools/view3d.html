@@ -1067,16 +1067,21 @@ const data = await (await fetch('/api/scene3d')).json();
           lum *= 1.0 - 0.80 * uNight;
           vec3 lit = base * lum;
           lit *= mix(vec3(1.0), vec3(0.60, 0.68, 0.98), uNight);
-          // city lights: les pixels URBAINS de la map (gris neutre) s'allument
-          // en fenetres chaudes, motif de bruit pour l'irregularite
+          // city lights: les pixels URBAINS de la map (gris neutre) s'allument.
+          // [NIGHT-V2 2026-09-28] l'ancien bruit continu (cellules 2-8 m) faisait
+          // des taches beiges baveuses: remplace par des points lumineux isoles
+          // (1 cellule de 14 m sur 5, point de ~1.5 m) + un voile orange tres doux
           if (uNight > 0.02 && uUseDrape > 0.5 && vPos.z > 0.2) {
             vec3 mc = texture2D(uDrape, vUv).rgb;
             float m2 = max(mc.r, max(mc.g, mc.b)), n2 = min(mc.r, min(mc.g, mc.b));
             float urban = smoothstep(0.35, 0.50, m2)
                         * (1.0 - smoothstep(0.10, 0.20, m2 - n2));
-            float win = smoothstep(0.66, 0.80, vnoise(vPos.xy * 0.55)) * 0.75
-                      + smoothstep(0.72, 0.86, vnoise(vPos.xy * 0.13 + vec2(7.0))) * 0.45;
-            lit += vec3(1.0, 0.72, 0.40) * urban * win * uNight * 0.60;
+            vec2 g = vPos.xy / 14.0, ci = floor(g), fr = fract(g);
+            float on = step(0.80, hash2(ci));
+            vec2 pc = vec2(hash2(ci + 3.1), hash2(ci + 7.7)) * 0.7 + 0.15;
+            float pt = on * (1.0 - smoothstep(0.03, 0.11, length(fr - pc)));
+            float fade = 1.0 - smoothstep(1500.0, 6000.0, dcam);   // au loin: seulement le voile
+            lit += vec3(1.0, 0.74, 0.45) * urban * uNight * (pt * 0.85 * fade + 0.05);
           }
           // [BEAUTY-V2] ecume animee sur la ligne de cote (bande z ~ 0.2 m):
           // des langues blanches qui respirent au rythme des vagues
