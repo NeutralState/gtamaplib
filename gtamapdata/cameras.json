@@ -3771,17 +3771,17 @@
   "id": "S2/74",
   "player": null,
   "xyz": [
-   -2630.253,
-   4066.779,
-   64.153
+   -2659.67,
+   4057.47,
+   62.83
   ],
   "ypr": [
-   145.4976,
-   -0.7218,
-   0.1799
+   149.694,
+   -1.755,
+   0.162
   ],
   "fov": [
-   39.6485,
+   49.02,
    null
   ],
   "size": [
@@ -3789,7 +3789,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Ambrosia Postcard [?]",
-  "note": "V16-RESECT-V3 2026-09-26: ajustement joint (tools/v16_resect.py + scratch joint3): tangentes des 3 reservoirs Sonora (centres LIBRES, les batiments V16 de la zone sont des dessins communautaires: la leak map n y a que les routes), tangentes du silo drapeau vues par Postcard ET Panorama (VERIFIED), ligne d arbres, et 7 points de bordure de la route d acces (leak map) -> residus 0.1-2 px / 1-2 m; stable quel que soit le poids donne aux reservoirs V16. | verdict Alexandre 2026-08-23: pose HORRIBLE \u2014 a refaire | POSE-EDIT: ajustee a la main par Alexandre dans l UI",
+  "note": "POSTCARD-V4 2026-09-28: UNE pose coherente proche+lointain: 19 points Allied independants (Fires V3 + Throwing + Panorama) a 1-7 px + 7 bordures de la route d acces a 0.4-5 m une fois les routes V16 recalees sur la leak map (V16 decalee de ~15-20 m au SE sous Allied: meilleur alignement V16->leak (-10..-16, +12..+24) m). La V3 etait calee sur les routes V16 non recalees -> 4-5 deg d erreur au loin. Essais de decalage: pose stable a +-7 m / 0.2 deg. Ancienne: V3 xyz [-2630.253, 4066.779, 64.153] ypr [145.4976, -0.7218, 0.1799] hfov 39.6485 (cameras.json.bak_postcard_0928) | V16-RESECT-V3 2026-09-26: ajustement joint (tools/v16_resect.py + scratch joint3): tangentes des 3 reservoirs Sonora (centres LIBRES, les batiments V16 de la zone sont des dessins communautaires: la leak map n y a que les routes), tangentes du silo drapeau vues par Postcard ET Panorama (VERIFIED), ligne d arbres, et 7 points de bordure de la route d acces (leak map) -> residus 0.1-2 px / 1-2 m; stable quel que soit le poids donne aux reservoirs V16. | verdict Alexandre 2026-08-23: pose HORRIBLE \u2014 a refaire | POSE-EDIT: ajustee a la main par Alexandre dans l UI",
   "notes": "PRELIMINAIRE (2026-08-25) \u2014 resection sur 21 ancres FRAICHES triangulees Panorama(SOLVED) x Fires(lignes-verite), parallaxes 42-89 deg, croisements sub-metriques (Sonora 0.1-0.6 m, USSM 0.9-3.5 m). Mediane 6.7 arcmin, deplacement 68 m vs ancienne pose. A raffiner au POV (sliders) + tooltips map de la liste de courses."
  },
  "Grassrivers Postcard (X)": {

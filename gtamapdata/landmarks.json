@@ -4846,9 +4846,9 @@
   },
   "1500 Sonora Ave (Silo)": {
     "xyz": [
-      -2701.6,
-      3884.64,
-      68.09
+      -2701.73,
+      3887.49,
+      64.82
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4858,7 +4858,7 @@
     "error_m": 19.471,
     "zone": "ambrosia",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 1.43 m, parallaxe 10.5 deg; V1 [-2701.1, 3887.3, 65.3] | ",
-    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 0.42 deg); 3 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.10 deg; deplacement 3 m | "
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 + Postcard V4 (erreur avant 1.07 deg); 3 cams, Postcard V4; residus <= 0.08 deg; deplacement 4 m | DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 0.42 deg); 3 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.10 deg; deplacement 3 m | "
   },
   "USSM Smokestack (1)": {
     "xyz": [
@@ -13661,16 +13661,16 @@
       "Ambrosia Postcard (X)"
     ],
     "xyz": [
-      -3975.33,
-      2960.0,
-      72.57
+      -3976.35,
+      2960.1,
+      72.42
     ],
     "zone": "ambrosia",
     "depth_caveat": "profondeur: le solve 3-cams (Panorama/Fires/Postcard) est auto-coherent a ~2m perp. Le rayon Kalaga sous la pose rlx du 2026-07-26 tombe a 60px/20m perp \u2014 il CONFIRME l identification (la silhouette a tete renflee est visible au clic) mais sa pose hand-tuned (~1 deg) est trop grossiere pour re-trianguler avec. Le jour ou Kalaga est resolue par resection (les ancres Starlet sont cliquables), ce rayon devient le temoin de profondeur definitif.",
     "aliases": [
       "Sebring Water Tower"
     ],
-    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 0.89 deg); 3 cams (sans Mount Kalaga N, incoherente), Postcard pose lointain au-dela de 250 m; residus <= 0.06 deg; deplacement 35 m | FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.6 m, parallaxe max 51 deg \u2014 remplace le harvest circulaire pre-poses"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 + Postcard V4 (erreur avant 0.88 deg); 3 cams (sans Mount Kalaga N, incoherente), Postcard V4; residus <= 0.07 deg; deplacement 1 m | DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 0.89 deg); 3 cams (sans Mount Kalaga N, incoherente), Postcard pose lointain au-dela de 250 m; residus <= 0.06 deg; deplacement 35 m | FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.6 m, parallaxe max 51 deg \u2014 remplace le harvest circulaire pre-poses"
   },
   "Canal B (Ambrosia) (2)": {
     "author": "rlx",
@@ -17646,7 +17646,7 @@
     ],
     "error_m": 1.62,
     "zone": "port_gellhorn",
-    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 7.31 deg); 2 cams (sans Port Gellhorn , incoherente), Postcard pose lointain au-dela de 250 m; residus <= 0.04 deg; deplacement 16 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.6 m, parallaxe 81 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 + Postcard V4 (erreur avant 8.32 deg); 2 cams (sans Port Gellhorn , incoherente), Postcard V4; residus <= 0.04 deg; deplacement 0 m | DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 7.31 deg); 2 cams (sans Port Gellhorn , incoherente), Postcard pose lointain au-dela de 250 m; residus <= 0.04 deg; deplacement 16 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.6 m, parallaxe 81 deg"
   },
   "Radio Tower near Intersection 2": {
     "xyz": null,
@@ -19509,9 +19509,9 @@
   },
   "3400 Transmitter Rd": {
     "xyz": [
-      -3975.51,
-      2960.02,
-      72.57
+      -3976.55,
+      2960.11,
+      72.42
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -19519,13 +19519,13 @@
       "Ambrosia Postcard (X)"
     ],
     "error_m": 1.56,
-    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 0.91 deg); 3 cams (sans Mount Kalaga N, incoherente), Postcard pose lointain au-dela de 250 m; residus <= 0.06 deg; deplacement 35 m | FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.6 m, parallaxe max 51 deg \u2014 remplace le harvest circulaire pre-poses"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 + Postcard V4 (erreur avant 0.90 deg); 3 cams (sans Mount Kalaga N, incoherente), Postcard V4; residus <= 0.08 deg; deplacement 1 m | DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 0.91 deg); 3 cams (sans Mount Kalaga N, incoherente), Postcard pose lointain au-dela de 250 m; residus <= 0.06 deg; deplacement 35 m | FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.6 m, parallaxe max 51 deg \u2014 remplace le harvest circulaire pre-poses"
   },
   "3400 Transmitter Rd (B)": {
     "xyz": [
-      -3975.09,
-      2960.2,
-      54.25
+      -3976.15,
+      2960.29,
+      54.08
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -19533,7 +19533,7 @@
       "Ambrosia Postcard (X)"
     ],
     "error_m": 2.26,
-    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 0.86 deg); 3 cams (sans Mount Kalaga N, incoherente), Postcard pose lointain au-dela de 250 m; residus <= 0.06 deg; deplacement 35 m | FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 2.3 m, parallaxe max 51 deg \u2014 remplace le harvest circulaire pre-poses"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 + Postcard V4 (erreur avant 0.86 deg); 3 cams (sans Mount Kalaga N, incoherente), Postcard V4; residus <= 0.08 deg; deplacement 1 m | DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 0.86 deg); 3 cams (sans Mount Kalaga N, incoherente), Postcard pose lointain au-dela de 250 m; residus <= 0.06 deg; deplacement 35 m | FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 2.3 m, parallaxe max 51 deg \u2014 remplace le harvest circulaire pre-poses"
   },
   "Ambrosia Canal (A)": {
     "xyz": [
