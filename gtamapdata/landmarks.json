@@ -19587,19 +19587,6 @@
     "error_m": 0.45,
     "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 3.26 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.00 deg; deplacement 130 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.5 m, parallaxe 27 deg"
   },
-  "Interstate Hill": {
-    "xyz": [
-      -5602.448064055661,
-      3134.1116769787955,
-      107.64778057489413
-    ],
-    "source_cameras": [
-      "Ambrosia 04 (Fires)",
-      "Mount Kalaga National Park 02 (Helicopter) (X)"
-    ],
-    "error_m": 1.343,
-    "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 2.6 m, angle max 41.8 deg"
-  },
   "Lamppost near Starlet Motel": {
     "xyz": [
       -5329.54,
@@ -19613,19 +19600,6 @@
     ],
     "error_m": 3.9,
     "method": "PGH-BA-V1: solve joint zone Port Gellhorn (3 cams, leak figees)"
-  },
-  "Starlet Hill": {
-    "xyz": [
-      -5417.589030699643,
-      3479.712361774354,
-      111.63600342897136
-    ],
-    "source_cameras": [
-      "Ambrosia 04 (Fires)",
-      "Mount Kalaga National Park 02 (Helicopter) (X)"
-    ],
-    "error_m": 1.395,
-    "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.8 m, angle max 44.3 deg"
   },
   "Starlet Motel (P1N)": {
     "xyz": [
@@ -19704,19 +19678,6 @@
     ],
     "error_m": 4.331,
     "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 3.1 m, angle max 18.4 deg"
-  },
-  "Tree near Port Gellhorn": {
-    "xyz": [
-      -5264.500691473089,
-      3770.367970819265,
-      113.61887130348026
-    ],
-    "source_cameras": [
-      "Ambrosia 04 (Fires)",
-      "Mount Kalaga National Park 02 (Helicopter) (X)"
-    ],
-    "error_m": 11.978,
-    "method": "ANCHOR-HARVEST-V1: triangulation 3 cams, perp med 34.8 m, angle max 80.3 deg"
   },
   "Trees near Wheelabrator": {
     "xyz": [
@@ -19952,20 +19913,6 @@
     ],
     "error_m": 0.5,
     "note": "ILOTS 2026-09-02 (decision Alexandre): pylones places sur les deux ilots de protection visibles sur la LEAK MAP (carte du jeu) et la V16, symetriques autour du milieu du pont. Sommet 110.5 et tablier 28.8 identiques N/S, solves depuis Hank (4 clics, residus [3.1, 4.3, 5.0, 5.6] px). Contre-indice conserve: les 3 cams Diner voient un mat au milieu du pont (-6723.5,4562.8), yaw tenu a 1-2 deg, parallaxe 470-720 m; il est garde comme 'Mat non identifie (Bocamar mi-travee)'. Backups *.bak_islets_0902."
-  },
-  "Trees on Knoll (BB)": {
-    "xyz": [
-      -3743.5,
-      3784.5,
-      69.0
-    ],
-    "error_m": 25.0,
-    "source_cameras": [
-      "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)",
-      "Mount Kalaga National Park 02 (Helicopter) (X)"
-    ],
-    "method": "TRIPLE-RAYON (2026-08-25): l'objet reellement clique sous le nom 'BB Hill' dans les 3 frames \u2014 bouquet d'arbres sur butte (+22 m au-dessus du sol 46.5), croisements par paires 0.4-7.9 m autour de (-3740, 3790). La VRAIE BB Hill (map) est hors cadre de Panorama et Fires \u2014 deux entites distinctes portaient le meme nom. Position = moyenne des 2 paires serrees (A02xA04 1.9 m, A04xK02 0.4 m); scatter des clics sur le bosquet ~25 m."
   },
   "536 Richard Jackson Blvd (RNW)": {
     "xyz": [
