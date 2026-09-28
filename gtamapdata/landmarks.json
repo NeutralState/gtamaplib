@@ -4683,9 +4683,9 @@
   },
   "1500 Sonora Ave (Tank)": {
     "xyz": [
-      -2958.19,
-      3742.93,
-      42.11
+      -2958.26,
+      3742.74,
+      42.14
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4693,7 +4693,7 @@
     ],
     "error_m": 0.13,
     "zone": "ambrosia",
-    "method": "FIRES-V3-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Fires V3 (BA Panorama+Throwing fixes); perp max 0.1 m, parallaxe 85 deg, residus <= 0.00 deg (ponderation angulaire)",
+    "method": "SONORA-SIL 2026-09-28: centre de la cuve A au niveau du bord superieur, ajuste sur les silhouettes Panorama + Fires V3 + Postcard (pose lointain), r 20.0 m",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 4.84 m, parallaxe 26.2 deg; V1 [-2966.6, 3718.2, 44.6] | "
   },
   "Easy Hill": {
@@ -19449,16 +19449,16 @@
   },
   "1500 Sonora Ave (Tank) (A)": {
     "xyz": [
-      -2958.19,
-      3742.93,
-      42.11
+      -2958.26,
+      3742.74,
+      42.14
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)"
     ],
     "error_m": 0.13,
-    "method": "FIRES-V3-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Fires V3 (BA Panorama+Throwing fixes); perp max 0.1 m, parallaxe 85 deg, residus <= 0.00 deg (ponderation angulaire)",
+    "method": "SONORA-SIL 2026-09-28: centre de la cuve A au niveau du bord superieur, ajuste sur les silhouettes Panorama + Fires V3 + Postcard (pose lointain), r 20.0 m",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 4.84 m, parallaxe 26.2 deg; V1 [-2966.8, 3717.7, 44.5] | "
   },
   "1500 Sonora Ave (Tank) (A) (L)": {
