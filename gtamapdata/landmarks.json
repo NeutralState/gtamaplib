@@ -4739,9 +4739,9 @@
   },
   "US Sugar Mill (Factory)": {
     "xyz": [
-      -3036.25,
-      3280.3,
-      97.54
+      -2997.94,
+      3415.64,
+      99.41
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
@@ -4749,7 +4749,7 @@
     ],
     "error_m": 1.23,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.2 m, parallaxe 63 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 5.45 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.01 deg; deplacement 141 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.2 m, parallaxe 63 deg"
   },
   "USSM Smokestack (4)": {
     "xyz": [
@@ -4846,17 +4846,19 @@
   },
   "1500 Sonora Ave (Silo)": {
     "xyz": [
-      -2700.78,
-      3887.52,
-      66.68
+      -2701.6,
+      3884.64,
+      68.09
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia Postcard (X)",
+      "Throwing Stuff from an Overpass"
     ],
     "error_m": 19.471,
     "zone": "ambrosia",
-    "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 1.43 m, parallaxe 10.5 deg; V1 [-2701.1, 3887.3, 65.3] | "
+    "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 1.43 m, parallaxe 10.5 deg; V1 [-2701.1, 3887.3, 65.3] | ",
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 0.42 deg); 3 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.10 deg; deplacement 3 m | "
   },
   "USSM Smokestack (1)": {
     "xyz": [
@@ -4874,9 +4876,9 @@
   },
   "USSM Smokestack (10)": {
     "xyz": [
-      -2942.12,
-      3802.46,
-      65.96
+      -2936.53,
+      3819.28,
+      62.85
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4884,14 +4886,14 @@
     ],
     "error_m": 0.08,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.1 m, parallaxe 33 deg",
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 1.49 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.02 deg; deplacement 18 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.1 m, parallaxe 33 deg",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 2.86 m, parallaxe 30.8 deg; V1 [-2945.3, 3793.5, 64.5] | "
   },
   "USSM Smokestack (11)": {
     "xyz": [
-      -2945.66,
-      3807.24,
-      55.61
+      -2939.44,
+      3825.41,
+      52.39
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -4899,7 +4901,7 @@
     ],
     "error_m": 0.25,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.2 m, parallaxe 34 deg",
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 1.67 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.00 deg; deplacement 19 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.2 m, parallaxe 34 deg",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 3.72 m, parallaxe 31.5 deg; V1 [-2948.6, 3798.9, 53.8] | "
   },
   "USSM Smokestack (2)": {
@@ -4918,9 +4920,9 @@
   },
   "USSM Smokestack (3)": {
     "xyz": [
-      -2975.26,
-      3009.9,
-      38.38
+      -2948.13,
+      3133.52,
+      40.07
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
@@ -4928,7 +4930,7 @@
     ],
     "error_m": 3.05,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.1 m, parallaxe 63 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 4.36 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.00 deg; deplacement 127 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.1 m, parallaxe 63 deg"
   },
   "1000 Venetian Way (4)": {
     "xyz": [
@@ -8401,9 +8403,9 @@
   },
   "US Sugar Mill (Factory) (R)": {
     "xyz": [
-      -2956.36,
-      3555.42,
-      75.2
+      -2998.02,
+      3415.51,
+      72.03
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -8412,14 +8414,14 @@
     ],
     "error_m": 1.76,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.8 m, parallaxe 76 deg",
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 6.38 deg); 3 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.03 deg; deplacement 146 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.8 m, parallaxe 76 deg",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 2.06 m, parallaxe 15.7 deg; V1 [-2984.9, 3460.7, 75.0] | "
   },
   "White Silos (W)": {
     "xyz": [
-      -2833.05,
-      3719.83,
-      45.38
+      -2852.0,
+      3645.36,
+      36.88
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -8427,7 +8429,7 @@
     ],
     "error_m": 0.62,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 12 deg",
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 2.12 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.03 deg; deplacement 77 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 12 deg",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 5.30 m, parallaxe 15.9 deg; V1 [-2846.0, 3669.5, 41.9] | "
   },
   "Wheelabrator South Broward (3B)": {
@@ -13133,15 +13135,15 @@
       "Ambrosia Postcard (X)"
     ],
     "xyz": [
-      -3999.4,
-      2920.15,
-      54.17
+      -3975.09,
+      2960.2,
+      54.22
     ],
     "zone": "ambrosia",
     "aliases": [
       "Sebring Water Tower (B)"
     ],
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 4.6 m, parallaxe 49 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 0.72 deg); 3 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.06 deg; deplacement 47 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 4.6 m, parallaxe 49 deg"
   },
   "Jason's House (Pillar 8) (TNE)": {
     "author": "rlx",
@@ -13659,16 +13661,16 @@
       "Ambrosia Postcard (X)"
     ],
     "xyz": [
-      -3991.97,
-      2928.97,
-      71.31
+      -3975.33,
+      2960.0,
+      72.57
     ],
     "zone": "ambrosia",
     "depth_caveat": "profondeur: le solve 3-cams (Panorama/Fires/Postcard) est auto-coherent a ~2m perp. Le rayon Kalaga sous la pose rlx du 2026-07-26 tombe a 60px/20m perp \u2014 il CONFIRME l identification (la silhouette a tete renflee est visible au clic) mais sa pose hand-tuned (~1 deg) est trop grossiere pour re-trianguler avec. Le jour ou Kalaga est resolue par resection (les ancres Starlet sont cliquables), ce rayon devient le temoin de profondeur definitif.",
     "aliases": [
       "Sebring Water Tower"
     ],
-    "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.6 m, parallaxe max 51 deg \u2014 remplace le harvest circulaire pre-poses"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 0.89 deg); 3 cams (sans Mount Kalaga N, incoherente), Postcard pose lointain au-dela de 250 m; residus <= 0.06 deg; deplacement 35 m | FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.6 m, parallaxe max 51 deg \u2014 remplace le harvest circulaire pre-poses"
   },
   "Canal B (Ambrosia) (2)": {
     "author": "rlx",
@@ -13692,12 +13694,12 @@
       "Ambrosia Postcard (X)"
     ],
     "xyz": [
-      -2704.14,
-      3877.65,
-      31.86
+      -2703.99,
+      3880.99,
+      34.24
     ],
     "zone": null,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.5 m, parallaxe 10 deg",
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 0.63 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.16 deg; deplacement 4 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.5 m, parallaxe 10 deg",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 2.22 m, parallaxe 12.2 deg; V1 [-2702.0, 3885.6, 30.8] | "
   },
   "Jason's House (Window 4) (BN)": {
@@ -14167,12 +14169,12 @@
       "Ambrosia Postcard (X)"
     ],
     "xyz": [
-      -2822.08,
-      3725.46,
-      45.48
+      -2842.73,
+      3642.35,
+      36.66
     ],
     "zone": null,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 11 deg",
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 2.22 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.03 deg; deplacement 86 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 11 deg",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 5.32 m, parallaxe 15.2 deg; V1 [-2835.3, 3673.0, 41.9] | "
   },
   "Jason's House (Pillar 1) (BNE)": {
@@ -14586,12 +14588,12 @@
       "Ambrosia Postcard (X)"
     ],
     "xyz": [
-      -2844.46,
-      3712.96,
-      44.9
+      -2862.26,
+      3644.54,
+      36.52
     ],
     "zone": null,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 12 deg",
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 2.04 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.03 deg; deplacement 71 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.6 m, parallaxe 12 deg",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 5.34 m, parallaxe 16.4 deg; V1 [-2857.4, 3663.8, 41.4] | "
   },
   "Jason's House (Window 4) (BS)": {
@@ -16760,9 +16762,9 @@
   },
   "Factory A (Ambrosia) (S)": {
     "xyz": [
-      -2995.6,
-      3387.16,
-      44.15
+      -2955.89,
+      3527.33,
+      47.63
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
@@ -16770,13 +16772,13 @@
     ],
     "error_m": 0.3,
     "zone": "rlx_markings_0713",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.3 m, parallaxe 67 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 6.26 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.01 deg; deplacement 146 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.3 m, parallaxe 67 deg"
   },
   "Factory A (Ambrosia) (N)": {
     "xyz": [
-      -2987.21,
-      3416.47,
-      43.7
+      -2947.34,
+      3557.17,
+      47.18
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
@@ -16784,7 +16786,7 @@
     ],
     "error_m": 0.4,
     "zone": "rlx_markings_0713",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.4 m, parallaxe 67 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 6.46 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.01 deg; deplacement 146 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.4 m, parallaxe 67 deg"
   },
   "Factory D (Ambrosia) (NW)": {
     "xyz": [
@@ -17634,17 +17636,17 @@
   },
   "Billboard near Intersection (TN)": {
     "xyz": [
-      -5291.75,
-      3310.14,
-      90.82
+      -5294.77,
+      3294.72,
+      89.67
     ],
     "source_cameras": [
-      "Mount Kalaga National Park 04 (Mountain Pass) (X)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Mount Kalaga National Park 04 (Mountain Pass) (X)"
     ],
     "error_m": 1.62,
     "zone": "port_gellhorn",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.6 m, parallaxe 81 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 7.31 deg); 2 cams (sans Port Gellhorn , incoherente), Postcard pose lointain au-dela de 250 m; residus <= 0.04 deg; deplacement 16 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.6 m, parallaxe 81 deg"
   },
   "Radio Tower near Intersection 2": {
     "xyz": null,
@@ -17762,9 +17764,9 @@
   },
   "Wheelabrator South Broward (R)": {
     "xyz": [
-      -2394.285,
-      2615.01,
-      58.311
+      -2394.86,
+      2697.99,
+      55.71
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -17773,14 +17775,14 @@
     "error_m": 1.95,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.0 m, parallaxe 50 deg",
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 3.83 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.00 deg; deplacement 83 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.0 m, parallaxe 50 deg",
     "note": "BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.6 m | "
   },
   "Billboard (South Ambrosia) (TE)": {
     "xyz": [
-      -2921.41,
-      2646.4,
-      41.3
+      -2909.7,
+      2719.15,
+      41.45
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
@@ -17789,7 +17791,7 @@
     "error_m": 1.86,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.9 m, parallaxe 55 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 2.16 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.15 deg; deplacement 74 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.9 m, parallaxe 55 deg"
   },
   "Building A (Ambrosia) (NW)": {
     "xyz": null,
@@ -17822,9 +17824,9 @@
   },
   "Industrial Building 2 (Ambrosia) (TE)": {
     "xyz": [
-      -2754.52,
-      3303.82,
-      33.44
+      -2727.26,
+      3458.26,
+      36.01
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
@@ -17833,7 +17835,7 @@
     "error_m": 3.07,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.1 m, parallaxe 88 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 8.01 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.16 deg; deplacement 157 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.1 m, parallaxe 88 deg"
   },
   "Road E (Ambrosia) (1)": {
     "xyz": null,
@@ -17865,9 +17867,9 @@
   },
   "US Sugar Mill (Factory) (P2)": {
     "xyz": [
-      -3036.38,
-      3328.84,
-      63.02
+      -2996.39,
+      3465.72,
+      65.69
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
@@ -17876,13 +17878,13 @@
     "error_m": 0.01,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.0 m, parallaxe 64 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 5.69 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.00 deg; deplacement 143 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.0 m, parallaxe 64 deg"
   },
   "US Sugar Mill (Factory) (P3)": {
     "xyz": [
-      -3035.59,
-      3338.07,
-      62.95
+      -2995.4,
+      3475.14,
+      65.64
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
@@ -17891,7 +17893,7 @@
     "error_m": 0.03,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.0 m, parallaxe 64 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 5.74 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.00 deg; deplacement 143 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.0 m, parallaxe 64 deg"
   },
   "1500 Sonora Ave (Silo) (BR)": {
     "xyz": null,
@@ -17902,9 +17904,9 @@
   },
   "Billboard (South Ambrosia) (TW)": {
     "xyz": [
-      -2932.12,
-      2650.77,
-      41.37
+      -2920.37,
+      2723.66,
+      41.56
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
@@ -17913,7 +17915,7 @@
     "error_m": 1.79,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.8 m, parallaxe 55 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 2.16 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.15 deg; deplacement 74 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.8 m, parallaxe 55 deg"
   },
   "Guard Booth (Ambrosia) (E)": {
     "xyz": null,
@@ -19507,9 +19509,9 @@
   },
   "3400 Transmitter Rd": {
     "xyz": [
-      -3992.04,
-      2929.02,
-      71.31
+      -3975.51,
+      2960.02,
+      72.57
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -19517,13 +19519,13 @@
       "Ambrosia Postcard (X)"
     ],
     "error_m": 1.56,
-    "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.6 m, parallaxe max 51 deg \u2014 remplace le harvest circulaire pre-poses"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 0.91 deg); 3 cams (sans Mount Kalaga N, incoherente), Postcard pose lointain au-dela de 250 m; residus <= 0.06 deg; deplacement 35 m | FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 1.6 m, parallaxe max 51 deg \u2014 remplace le harvest circulaire pre-poses"
   },
   "3400 Transmitter Rd (B)": {
     "xyz": [
-      -3991.59,
-      2929.16,
-      53.28
+      -3975.09,
+      2960.2,
+      54.25
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -19531,7 +19533,7 @@
       "Ambrosia Postcard (X)"
     ],
     "error_m": 2.26,
-    "method": "FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 2.3 m, parallaxe max 51 deg \u2014 remplace le harvest circulaire pre-poses"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 0.86 deg); 3 cams (sans Mount Kalaga N, incoherente), Postcard pose lointain au-dela de 250 m; residus <= 0.06 deg; deplacement 35 m | FACTORY-RETRI-V1 (2026-08-25): triangulation 3 cams (Panorama SOLVED + Fires lignes-verite + Postcard prelim), perp max 2.3 m, parallaxe max 51 deg \u2014 remplace le harvest circulaire pre-poses"
   },
   "Ambrosia Canal (A)": {
     "xyz": [
@@ -19574,16 +19576,16 @@
   },
   "Conveyor near Pile (T)": {
     "xyz": [
-      -3405.75,
-      3393.57,
-      18.54
+      -3346.79,
+      3509.61,
+      23.38
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia Postcard (X)"
     ],
     "error_m": 0.45,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.5 m, parallaxe 27 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 3.26 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.00 deg; deplacement 130 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.5 m, parallaxe 27 deg"
   },
   "Interstate Hill": {
     "xyz": [
@@ -19746,29 +19748,29 @@
   },
   "Warehouse 4 (Ambrosia) (C)": {
     "xyz": [
-      -3000.45,
-      3138.84,
-      33.03
+      -2967.73,
+      3270.94,
+      35.38
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
     "error_m": 2.63,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.6 m, parallaxe 64 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 4.96 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.00 deg; deplacement 136 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.6 m, parallaxe 64 deg"
   },
   "Warehouse 4 (Ambrosia) (T)": {
     "xyz": [
-      -3007.17,
-      3087.88,
-      34.77
+      -2976.18,
+      3216.02,
+      36.93
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
     "error_m": 2.49,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.5 m, parallaxe 63 deg"
+    "method": "DEPS-RETRI 2026-09-28: re-triangule apres Fires V3 (erreur avant 4.64 deg); 2 cams, Postcard pose lointain au-dela de 250 m; residus <= 0.02 deg; deplacement 132 m | FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.5 m, parallaxe 63 deg"
   },
   "Wheelabrator South Broward (5B)": {
     "xyz": [
