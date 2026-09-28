@@ -6090,21 +6090,21 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "xyz": [
-   -2740.1,
-   5199.8,
-   33.2
+   -2773.03,
+   5258.1,
+   34.15
   ],
   "ypr": [
-   182.91,
-   -4.39,
-   0.0
+   184.546,
+   -3.947,
+   0.243
   ],
   "fov": [
-   47.0,
+   43.321,
    null
   ],
   "source": "Screenshot \u2014 Throwing Stuff from an Overpass (deux personnages sur un viaduc d'autoroute; au loin a droite la raffinerie Allied Crystal avec cheminees et chateau d'eau, panneau Ambrosia Raceway Park, skyline de Vice City a gauche a l'horizon)",
-  "notes": "POSE 2026-09-28: position du jeu (Alexandre, viaduc + 1.7 m); orientation alignee par Alexandre au POV (silo drapeau aligne sur Downtown): dyaw -8.13+0.04, dpitch -3.34-0.05 (Four Seasons cale) sur la pose preliminaire -> ypr 182.91/-4.39/0, hfov 47; le silo projete tombe a ~10 px de son clic. Les clics Billboard with Oval Motif #1 ne correspondent pas a ce landmark (proportions 3.0 vs 1.65) -> exclus",
+  "notes": "SOLVE 2026-09-28: 14 clics d Alexandre (Downtown: SEFC, Vizcayne S x4, One Miami W/E; panneaux Oval Motif #1 x5 et Irregular Shape x2), xyz+ypr+fov libres: residus 0.2-2 px, hfov 43.3; a 67 m de la position preliminaire du jeu. Les points Allied (silo, cheminee 4, usine) tombent tous ~30 px a droite = landmarks Allied decales ~15-18 m | POSE 2026-09-28: position du jeu (Alexandre, viaduc + 1.7 m); orientation alignee par Alexandre au POV (silo drapeau aligne sur Downtown): dyaw -8.13+0.04, dpitch -3.34-0.05 (Four Seasons cale) sur la pose preliminaire -> ypr 182.91/-4.39/0, hfov 47; le silo projete tombe a ~10 px de son clic. Les clics Billboard with Oval Motif #1 ne correspondent pas a ce landmark (proportions 3.0 vs 1.65) -> exclus",
   "id": "S2/86"
  }
 }
