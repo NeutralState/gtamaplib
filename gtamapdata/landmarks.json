@@ -2912,16 +2912,17 @@
   },
   "Wheelabrator South Broward (W)": {
     "xyz": [
-      -2448.8579744611916,
-      2509.4175523099184,
-      51.5046625992472
+      -2431.66,
+      2610.35,
+      55.47
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.484,
-    "zone": "ambrosia"
+    "error_m": 4.59,
+    "zone": "ambrosia",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Fires re-posee sur Throwing; perp max 4.6 m, parallaxe 36 deg, residus <= 0.03 deg (ponderation angulaire)"
   },
   "102180 Overseas Hwy": {
     "xyz": [
@@ -4682,18 +4683,17 @@
   },
   "1500 Sonora Ave (Tank)": {
     "xyz": [
-      -2960.29,
-      3736.79,
-      46.91
+      -2966.77,
+      3680.61,
+      41.46
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia 04 (Fires)"
     ],
-    "error_m": 2.06,
+    "error_m": 0.93,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.1 m, parallaxe 87 deg",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 0.9 m, parallaxe 86 deg, residus <= 0.03 deg (ponderation angulaire)",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 4.84 m, parallaxe 26.2 deg; V1 [-2966.6, 3718.2, 44.6] | "
   },
   "Easy Hill": {
@@ -4712,27 +4712,30 @@
   },
   "Radio Tower (Ambrosia)": {
     "xyz": [
-      -2075.2506982098016,
-      3178.00767544295,
-      140.1511050211689
+      -2033.65,
+      3234.75,
+      119.74
     ],
     "source_cameras": [
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Throwing Stuff from an Overpass"
     ],
-    "error_m": null,
-    "zone": "ambrosia"
+    "error_m": 0.19,
+    "zone": "ambrosia",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Fires re-posee sur Throwing; perp max 0.2 m, parallaxe 85 deg, residus <= 0.02 deg (ponderation angulaire)"
   },
   "Radio Tower (Ambrosia) (B)": {
     "xyz": [
-      -2076.059564581837,
-      3177.2588854192913,
-      -7.431041940135632
+      -2033.65,
+      3234.75,
+      20.02
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)"
     ],
     "error_m": null,
-    "zone": "ambrosia"
+    "zone": "ambrosia",
+    "method": "FIRES-V2-RETRI (2026-09-28): base au sol (heightmap) sous le sommet triangule Throwing x Fires"
   },
   "US Sugar Mill (Factory)": {
     "xyz": [
@@ -4750,98 +4753,95 @@
   },
   "USSM Smokestack (4)": {
     "xyz": [
-      -2879.5,
-      3684.43,
-      98.31
+      -2900.97,
+      3560.32,
+      99.84
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Throwing Stuff from an Overpass"
     ],
-    "error_m": 4.05,
+    "error_m": 1.33,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 4.1 m, parallaxe 86 deg",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 3 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 1.3 m, parallaxe 85 deg, residus <= 0.04 deg (ponderation angulaire)",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 2.10 m, parallaxe 17.9 deg; V1 [-2892.9, 3635.7, 99.9] | "
   },
   "USSM Smokestack (5)": {
     "xyz": [
-      -2913.42,
-      3660.48,
-      82.85
+      -2936.89,
+      3536.63,
+      81.08
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia 04 (Fires)"
     ],
-    "error_m": 2.95,
+    "error_m": 0.81,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.0 m, parallaxe 84 deg",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 0.8 m, parallaxe 83 deg, residus <= 0.02 deg (ponderation angulaire)",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 0.47 m, parallaxe 18.5 deg; V1 [-2928.3, 3609.9, 83.0] | "
   },
   "USSM Smokestack (6)": {
     "xyz": [
-      -2921.54,
-      3657.63,
-      86.42
+      -2943.95,
+      3539.0,
+      85.66
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia 04 (Fires)"
     ],
-    "error_m": 2.71,
+    "error_m": 0.16,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.7 m, parallaxe 84 deg",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 0.2 m, parallaxe 82 deg, residus <= 0.00 deg (ponderation angulaire)",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 0.38 m, parallaxe 18.9 deg; V1 [-2936.2, 3608.5, 86.9] | "
   },
   "USSM Smokestack (7)": {
     "xyz": [
-      -2950.47,
-      3647.48,
-      98.17
+      -2970.89,
+      3540.22,
+      98.35
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Throwing Stuff from an Overpass"
     ],
-    "error_m": 3.66,
+    "error_m": 0.9,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.7 m, parallaxe 83 deg",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 3 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 0.9 m, parallaxe 89 deg, residus <= 0.03 deg (ponderation angulaire)",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 0.52 m, parallaxe 20.1 deg; V1 [-2964.5, 3602.2, 99.5] | "
   },
   "USSM Smokestack (8)": {
     "xyz": [
-      -3016.53,
-      3674.68,
-      54.73
+      -3026.49,
+      3610.48,
+      48.67
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia 04 (Fires)"
     ],
-    "error_m": 2.27,
+    "error_m": 0.54,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.3 m, parallaxe 83 deg",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 0.5 m, parallaxe 82 deg, residus <= 0.02 deg (ponderation angulaire)",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 4.13 m, parallaxe 24.7 deg; V1 [-3026.6, 3647.0, 52.6] | "
   },
   "USSM Smokestack (9)": {
     "xyz": [
-      -3023.28,
-      3675.84,
-      63.45
+      -3032.63,
+      3612.94,
+      58.77
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Throwing Stuff from an Overpass"
     ],
-    "error_m": 1.9,
+    "error_m": 0.7,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.9 m, parallaxe 83 deg",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 3 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 0.7 m, parallaxe 89 deg, residus <= 0.02 deg (ponderation angulaire)",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 3.67 m, parallaxe 25.1 deg; V1 [-3033.1, 3649.1, 61.9] | "
   },
   "1500 Sonora Ave (Silo)": {
@@ -4860,16 +4860,17 @@
   },
   "USSM Smokestack (1)": {
     "xyz": [
-      -2735.528,
-      3632.342,
-      60.66
+      -2716.5,
+      3672.64,
+      61.33
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia Postcard (X)"
+      "Throwing Stuff from an Overpass"
     ],
-    "error_m": null,
-    "zone": "ambrosia"
+    "error_m": 0.12,
+    "zone": "ambrosia",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 0.1 m, parallaxe 12 deg, residus <= 0.00 deg (ponderation angulaire)"
   },
   "USSM Smokestack (10)": {
     "xyz": [
@@ -4903,16 +4904,17 @@
   },
   "USSM Smokestack (2)": {
     "xyz": [
-      -2737.14,
-      3656.006,
-      50.12
+      -2723.04,
+      3669.13,
+      50.3
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia Postcard (X)"
+      "Throwing Stuff from an Overpass"
     ],
-    "error_m": null,
-    "zone": "ambrosia"
+    "error_m": 0.23,
+    "zone": "ambrosia",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 0.2 m, parallaxe 12 deg, residus <= 0.01 deg (ponderation angulaire)"
   },
   "USSM Smokestack (3)": {
     "xyz": [
@@ -8430,17 +8432,17 @@
   },
   "Wheelabrator South Broward (3B)": {
     "xyz": [
-      -2430.585,
-      2602.615,
-      50.932
+      -2430.48,
+      2611.15,
+      47.78
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)"
     ],
-    "error_m": 2.67,
+    "error_m": 1.56,
     "zone": "ambrosia",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.7 m, parallaxe 51 deg",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Fires re-posee sur Throwing; perp max 1.6 m, parallaxe 47 deg, residus <= 0.03 deg (ponderation angulaire)",
     "note": "BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.2 m | "
   },
   "Billboard (South Ambrosia)": {
@@ -13394,19 +13396,18 @@
   },
   "Dark Billboard (Ambrosia) (TE)": {
     "author": "rlx",
-    "error_m": 2.65,
+    "error_m": 1.36,
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia 04 (Fires)"
     ],
     "xyz": [
-      -2781.72,
-      2975.72,
-      49.36
+      -2772.64,
+      3032.84,
+      51.28
     ],
     "zone": null,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.7 m, parallaxe 72 deg"
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Fires re-posee sur Throwing; perp max 1.4 m, parallaxe 66 deg, residus <= 0.03 deg (ponderation angulaire)"
   },
   "Train Signal (Ambrosia) (4W)": {
     "author": "rlx",
@@ -14081,19 +14082,18 @@
   },
   "White Silos (E) (NE)": {
     "author": "rlx",
-    "error_m": 0.89,
+    "error_m": 2.39,
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia 04 (Fires)"
     ],
     "xyz": [
-      -2848.34,
-      3496.06,
-      33.15
+      -2817.04,
+      3574.91,
+      37.53
     ],
     "zone": null,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 0.9 m, parallaxe 90 deg"
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 2.4 m, parallaxe 88 deg, residus <= 0.07 deg (ponderation angulaire)"
   },
   "Road C (Ambrosia) (1)": {
     "author": "rlx",
@@ -14850,19 +14850,18 @@
   },
   "Dark Billboard (Ambrosia) (TW)": {
     "author": "rlx",
-    "error_m": 2.49,
+    "error_m": 1.14,
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia 04 (Fires)"
     ],
     "xyz": [
-      -2802.52,
-      2986.33,
-      49.26
+      -2792.41,
+      3043.94,
+      51.09
     ],
     "zone": null,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.5 m, parallaxe 71 deg"
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Fires re-posee sur Throwing; perp max 1.1 m, parallaxe 66 deg, residus <= 0.03 deg (ponderation angulaire)"
   },
   "Jason's House (Pillar 4) (BSW)": {
     "author": "rlx",
@@ -16789,18 +16788,17 @@
   },
   "Factory D (Ambrosia) (NW)": {
     "xyz": [
-      -3163.24,
-      3637.42,
-      47.34
+      -3167.74,
+      3595.26,
+      41.03
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia 04 (Fires)"
     ],
-    "error_m": 1.67,
+    "error_m": 0.17,
     "zone": "rlx_markings_0713",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.7 m, parallaxe 78 deg",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 0.2 m, parallaxe 76 deg, residus <= 0.00 deg (ponderation angulaire)",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 5.43 m, parallaxe 27.4 deg; V1 [-3174.2, 3612.6, 44.9] | "
   },
   "Road E (Ambrosia)": {
@@ -17678,53 +17676,51 @@
   },
   "US Sugar Mill (Factory) (A)": {
     "xyz": [
-      -2957.71,
-      3551.67,
-      100.24
+      -3004.95,
+      3346.88,
+      99.61
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Throwing Stuff from an Overpass"
     ],
-    "error_m": 6.84,
+    "error_m": 7.1,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 6.8 m, parallaxe 76 deg",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 3 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 7.1 m, parallaxe 83 deg, residus <= 0.18 deg (ponderation angulaire)",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 4.76 m, parallaxe 15.9 deg; V1 [-2986.5, 3456.1, 103.1] | "
   },
   "US Sugar Mill (Factory) (AC)": {
     "xyz": [
-      -2956.0,
-      3555.28,
-      91.78
+      -3004.06,
+      3347.04,
+      92.14
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia 04 (Fires)"
     ],
-    "error_m": 2.95,
+    "error_m": 1.47,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.9 m, parallaxe 76 deg",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 1.5 m, parallaxe 74 deg, residus <= 0.04 deg (ponderation angulaire)",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 1.41 m, parallaxe 15.8 deg; V1 [-2984.0, 3461.7, 93.6] | "
   },
   "US Sugar Mill (Factory) (NW)": {
     "xyz": [
-      -2966.43,
-      3564.97,
-      74.97
+      -3009.58,
+      3379.75,
+      71.43
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia 04 (Fires)"
     ],
-    "error_m": 1.19,
+    "error_m": 0.41,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.2 m, parallaxe 76 deg",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 0.4 m, parallaxe 75 deg, residus <= 0.01 deg (ponderation angulaire)",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 2.27 m, parallaxe 16.6 deg; V1 [-2992.1, 3481.7, 74.6] | "
   },
   "US Sugar Mill (Factory) (R2)": {
@@ -17736,19 +17732,18 @@
   },
   "US Sugar Mill (Factory) (SE)": {
     "xyz": [
-      -2939.12,
-      3561.83,
-      75.02
+      -2991.28,
+      3335.22,
+      71.41
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia 04 (Fires)"
     ],
-    "error_m": 1.9,
+    "error_m": 0.16,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 1.9 m, parallaxe 76 deg",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 0.2 m, parallaxe 74 deg, residus <= 0.00 deg (ponderation angulaire)",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 1.76 m, parallaxe 15.1 deg; V1 [-2968.5, 3461.5, 74.8] | "
   },
   "Wheelabrator South Broward (5)": {
@@ -17812,19 +17807,18 @@
   },
   "Industrial Building 1 (Ambrosia)": {
     "xyz": [
-      -2779.84,
-      3263.1,
-      42.28
+      -2765.8,
+      3339.75,
+      45.84
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia 04 (Fires)"
     ],
-    "error_m": 2.03,
+    "error_m": 2.36,
     "zone": "ambrosia",
     "author": "rlx",
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.0 m, parallaxe 84 deg"
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Fires re-posee sur Throwing; perp max 2.4 m, parallaxe 80 deg, residus <= 0.06 deg (ponderation angulaire)"
   },
   "Industrial Building 2 (Ambrosia) (TE)": {
     "xyz": [
@@ -19455,17 +19449,16 @@
   },
   "1500 Sonora Ave (Tank) (A)": {
     "xyz": [
-      -2960.43,
-      3736.37,
-      46.89
+      -2966.77,
+      3680.61,
+      41.46
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)",
-      "Ambrosia Postcard (X)"
+      "Ambrosia 04 (Fires)"
     ],
-    "error_m": 2.18,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 3 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.2 m, parallaxe 87 deg",
+    "error_m": 0.93,
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Panorama corrigee de -27.5 px (0.36 deg, biais calibre sur S4/S7/S9 zone Allied: Pan+Throwing = Fires+Throwing a 1-4 m), Fires re-posee sur Throwing; perp max 0.9 m, parallaxe 86 deg, residus <= 0.03 deg (ponderation angulaire)",
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 4.84 m, parallaxe 26.2 deg; V1 [-2966.8, 3717.7, 44.5] | "
   },
   "1500 Sonora Ave (Tank) (A) (L)": {
@@ -19725,16 +19718,16 @@
   },
   "Trees near Wheelabrator": {
     "xyz": [
-      -2291.219,
-      2732.031,
-      49.217
+      -2292.42,
+      2758.15,
+      47.36
     ],
-    "error_m": 3.23,
+    "error_m": 3.76,
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)"
     ],
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 3.2 m, parallaxe 54 deg",
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Fires re-posee sur Throwing; perp max 3.8 m, parallaxe 51 deg, residus <= 0.08 deg (ponderation angulaire)",
     "note": "BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.9 m | "
   },
   "Unknown Building (North Port Gellhorn) (T)": {
@@ -19779,30 +19772,31 @@
   },
   "Wheelabrator South Broward (5B)": {
     "xyz": [
-      -2430.585,
-      2602.615,
-      50.932
+      -2430.48,
+      2611.15,
+      47.78
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
       "Ambrosia 04 (Fires)"
     ],
-    "error_m": 2.67,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.7 m, parallaxe 51 deg",
+    "error_m": 1.56,
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 2 cams sans Postcard (champ lointain faux de 4-5 deg), Fires re-posee sur Throwing; perp max 1.6 m, parallaxe 47 deg, residus <= 0.03 deg (ponderation angulaire)",
     "note": "BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 2.2 m | "
   },
   "Wheelabrator South Broward (NW)": {
     "xyz": [
-      -2430.845,
-      2602.666,
-      57.602
+      -2430.71,
+      2611.22,
+      55.29
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
-      "Ambrosia 04 (Fires)"
+      "Ambrosia 04 (Fires)",
+      "Leonida Keys 01 (Airplane) (X)"
     ],
-    "error_m": 2.12,
-    "method": "FACTORY-RETRI-V2 (2026-08-25): triangulation 2 cams de confiance (poses finales de la campagne lignes-verite), perp max 2.1 m, parallaxe 51 deg",
+    "error_m": 4.78,
+    "method": "FIRES-V2-RETRI (2026-09-28): triangulation 3 cams sans Postcard (champ lointain faux de 4-5 deg), Fires re-posee sur Throwing; perp max 4.8 m, parallaxe 47 deg, residus <= 0.03 deg (ponderation angulaire)",
     "note": "BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes): deplace 1.7 m | "
   },
   "Billboard near Intersection (BC)": {
@@ -21245,5 +21239,11 @@
     "error_m": null,
     "zone": "unknown",
     "note": "TOOLTIP xy Alexandre 2026-09-26; z = sol heightmap"
+  },
+  "Very Tall Water Tower": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown"
   }
 }
