@@ -17788,7 +17788,6 @@
       41.45
     ],
     "source_cameras": [
-      "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
     "error_m": 1.86,
@@ -17912,7 +17911,6 @@
       41.56
     ],
     "source_cameras": [
-      "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
     "error_m": 1.79,
@@ -21205,5 +21203,82 @@
     "error_m": null,
     "zone": "unknown",
     "method": "FIRES-V3 2026-09-28: triangulation Panorama x Throwing (sommet de la cuve), parallaxe 14 deg -> profondeur +/- ~20-30 m, residus <= 3.5 arcmin"
+  },
+  "Warehouse 1410 (Ambrosia) (A)": {
+    "xyz": [
+      -2776.51,
+      3892.13,
+      26.0
+    ],
+    "source_cameras": [
+      "Ambrosia Postcard (X)"
+    ],
+    "error_m": null,
+    "zone": "ambrosia",
+    "method": "W1410-PC 2026-09-28: rayon Postcard V4 x plan de gouttiere z 26 (hypothese, +-10 m le long du rayon)"
+  },
+  "Warehouse 1410 (Ambrosia) (B)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown"
+  },
+  "Warehouse 1410 (Ambrosia) (C)": {
+    "xyz": [
+      -2801.39,
+      3879.3,
+      26.0
+    ],
+    "source_cameras": [
+      "Ambrosia Postcard (X)"
+    ],
+    "error_m": null,
+    "zone": "ambrosia",
+    "method": "W1410-PC 2026-09-28: rayon Postcard V4 x plan de gouttiere z 26 (hypothese, +-10 m le long du rayon)"
+  },
+  "Warehouse 1410 (Ambrosia) (D)": {
+    "xyz": [
+      -2747.02,
+      3828.84,
+      26.0
+    ],
+    "source_cameras": [
+      "Ambrosia Postcard (X)"
+    ],
+    "error_m": null,
+    "zone": "ambrosia",
+    "method": "W1410-PC 2026-09-28: rayon Postcard V4 x plan de gouttiere z 26 (hypothese, +-10 m le long du rayon)"
+  },
+  "Warehouse 1410 (Ambrosia) (E)": {
+    "xyz": [
+      -2810.3,
+      3868.29,
+      26.0
+    ],
+    "source_cameras": [
+      "Ambrosia Postcard (X)"
+    ],
+    "error_m": null,
+    "zone": "ambrosia",
+    "method": "W1410-PC 2026-09-28: rayon Postcard V4 x plan de gouttiere z 26 (hypothese, +-10 m le long du rayon)"
+  },
+  "Warehouse 1410 (Ambrosia) (F)": {
+    "xyz": null,
+    "source_cameras": [],
+    "error_m": null,
+    "zone": "unknown"
+  },
+  "Warehouse 1410 (Ambrosia) (G)": {
+    "xyz": [
+      -2840.77,
+      3852.94,
+      26.0
+    ],
+    "source_cameras": [
+      "Ambrosia Postcard (X)"
+    ],
+    "error_m": null,
+    "zone": "ambrosia",
+    "method": "W1410-PC 2026-09-28: rayon Postcard V4 x plan de gouttiere z 26 (hypothese, +-10 m le long du rayon)"
   }
 }
