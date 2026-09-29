@@ -6107,5 +6107,31 @@
   "source": "Screenshot \u2014 Throwing Stuff from an Overpass (deux personnages sur un viaduc d'autoroute; au loin a droite la raffinerie Allied Crystal avec cheminees et chateau d'eau, panneau Ambrosia Raceway Park, skyline de Vice City a gauche a l'horizon)",
   "notes": "SOLVE V2 2026-09-28: 17 clics (Downtown dont Four Seasons x3, SEFC, Vizcayne S x4, One Miami W/E; panneaux Oval Motif #1 x5, Irregular Shape x2), residus <= 4 px, hfov 46.3 (Alexandre: 47 au POV); a 17 m de la position du jeu | POSE 2026-09-28: position du jeu (Alexandre, viaduc + 1.7 m); orientation alignee par Alexandre au POV (silo drapeau aligne sur Downtown): dyaw -8.13+0.04, dpitch -3.34-0.05 (Four Seasons cale) sur la pose preliminaire -> ypr 182.91/-4.39/0, hfov 47; le silo projete tombe a ~10 px de son clic. Les clics Billboard with Oval Motif #1 ne correspondent pas a ce landmark (proportions 3.0 vs 1.65) -> exclus",
   "id": "S2/86"
+ },
+ "Water Tower [Gameinformer]": {
+  "id": "S/WaterTowerGameinformer",
+  "player": null,
+  "size": [
+   1920,
+   1080
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "xyz": [
+   -4300.2,
+   3242.1,
+   55.99
+  ],
+  "ypr": [
+   237.793,
+   -2.701,
+   0.0
+  ],
+  "fov": [
+   38.084,
+   null
+  ],
+  "source": "Screenshot Game Informer \u2014 Water Tower (verger d'agrumes, cueilleurs, pickup Tucker's Citrus Farms, avion d'epandage; chateau d'eau en boule sur colonne au loin, skyline de Vice City a l'horizon)",
+  "note": "POSE PRELIMINAIRE 2026-09-29: position = tooltip d Alexandre (-4300.2, 3242.1), z = sol heightmap 54.3 + 1.7 (tooltip Z 53.0); orientation et hfov devines pour viser le chateau d eau = Daytona Beach Water Tower (3400 Transmitter Rd, 429 m, az 131) (boule u~1390 v 300-420); a resoudre avec des clics"
  }
 }
