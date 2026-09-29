@@ -8454,7 +8454,6 @@
       44.72
     ],
     "source_cameras": [
-      "Ambrosia 04 (Fires)",
       "Ambrosia Postcard (X)"
     ],
     "error_m": 1.67,
@@ -13954,14 +13953,18 @@
   "White Silos (E) (NW)": {
     "author": "rlx",
     "error_m": null,
-    "source_cameras": [],
+    "source_cameras": [
+      "Ambrosia 02 (Panorama)",
+      "Ambrosia Postcard (X)"
+    ],
     "xyz": [
-      -2815.57,
-      3727.87,
-      45.74
+      -2838.1,
+      3636.1,
+      36.8
     ],
     "zone": null,
-    "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 5.44 m, parallaxe 14.7 deg; V1 [-2829.2, 3673.2, 42.1] | "
+    "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 5.44 m, parallaxe 14.7 deg; V1 [-2829.2, 3673.2, 42.1] | ",
+    "method": "POSTCARD-V4 2026-09-28: re-triangule Panorama x Postcard V4 (0.02/0.01 deg); l ancien xyz (-2815.6, 3727.9) sans provenance etait perime (84 m de (NE))"
   },
   "Jason's House (Front Door) (TW)": {
     "author": "rlx",
