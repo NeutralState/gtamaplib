@@ -26,6 +26,33 @@ SPEC = {
         'src': 'sommet LM 202.9 (2 LMs); gradins -6/-12 m et tambour +4 m ESTIMES d apres le chanfrein de la couronne vu dans Biplane Night. '
                'Largeur du fut verifiee dans Beach et Biplane Night (93 vs 90 px, 132 vs 130 px); DISCORDANCE: les deux vues placent la tour '
                '13 m a l ouest / 4 m au sud du polygone V16 (residu 2 px) -> garde sur la V16, a arbitrer'},
+    # 1500 Ocean Dr (V16 3335): tour courbe a bout arrondi (region 4) sur podium a facade a persiennes (region 1),
+    # lame rose a bow-windows octogonaux (region 2), immeuble ouest (0) + tourelle hexagonale (3). Comme l'IRL.
+    '1500 Ocean Dr': {'poly': 3335, 'color': '#f9a8d4', 'groups': [([4], 63.8), ([2], 62.3), ([1], 21.0), ([0], 34.0), ([3], 36.0)],
+        'src': 'tour 63.8 (LM) et lame rose 62.3 (3 LMs S/SE/NW/SW); podium 21 m LU dans Vice Beach (B) (echelles aux coins); '
+               'immeuble ouest 34 m LU (toit a gradins blanc derriere la lame, Vice Beach (B)), tourelle hexagonale 36 m ESTIMEE. Note: Vice Beach (B) montre tout le complexe ~10-15 m au NO de la V16 (pose de la cam non verifiee, la tour Jade Ocean est decalee dans une autre direction -> pas un decalage V16)'},
+    # --- Vice Beach, plus hautes tours (2026-09-30, demande Alexandre). Hauteur de la region qui contient le LM = LM;
+    # les autres volumes ESTIMES (proportions IRL); les traits V16 donnent la forme (arrondis, ailes, gradins).
+    'Blue Diamond': {'poly': 3575, 'color': '#60a5fa', 'groups': [([4], 146.0), ([0], 25.0), ([1, 6], 20.0), ([2, 3, 5, 7], 25.0)],
+        'pyramid': ([2, 3, 5, 7], 10.0), 'src': 'lame (region V16 4) = LM 146; bloc carre a verriere pyramidale (X de la V16) 25 m + 10, ailes 20 m ESTIMES'},
+    'Green Diamond': {'poly': 3576, 'color': '#4ade80', 'groups': [([7], 145.0), ([0], 25.0), ([1, 5], 20.0), ([2, 3, 4, 6], 25.0)],
+        'pyramid': ([2, 3, 4, 6], 10.0), 'src': 'lame (region V16 7) = LM 145 (LM a 2 m du bord); bloc carre a verriere pyramidale 25 m + 10, ailes 20 m ESTIMES'},
+    'Icon at South Beach': {'poly': 3251, 'color': '#f472b6', 'groups': [([0], 142.0), ([1], 147.0), ([2], 110.0)],
+        'src': 'tour (region 0) = LM 142; couronne (region 1) +5 m et aile courbe (region 2) 110 m ESTIMES'},
+    'Murano Grande': {'poly': 3233, 'color': '#fb923c', 'groups': [([1], 139.0), ([2], 133.0), ([4], 127.0), ([3], 12.0), ([0], 30.0)],
+        'src': 'tour courbe en 3 segments V16 (1,2,4): 139 (LM) puis gradins 133/127 ESTIMES; podium 12 et bloc 0 30 m ESTIMES'},
+    'Tresor Tower': {'poly': 3573, 'color': '#c084fc', 'groups': [([3, 1], 120.0), ([2], 100.0), ([0], 12.0)],
+        'src': 'fut rond + lame (regions 3,1) = LM 120; aile est 100 m et podium 12 m ESTIMES'},
+    'Flamingo South Beach': {'poly': 3400, 'color': '#fda4af', 'groups': [([2], 111.0), ([0], 51.0), ([1], 52.0), ([3], 62.0)],
+        'src': 'hauteurs par region = LMs contenus (T* 111, NENE/NERNE 51-55, NWNE 52, SDS/SRSW 59-64): toutes MESUREES'},
+    'The Waverly South Beach': {'poly': 3302, 'color': '#fde68a', 'groups': [([0], 113.0), ([1], 107.0)],
+        'src': 'lame sud = LM (SE) 113; lame nord 107 = LM (NW) (35 m hors empreinte: attribution ESTIMEE)'},
+    'The Ritz-Carlton Bal Harbour': {'poly': 3588, 'color': '#e5e7eb', 'groups': [([0, 1, 3], 104.0), ([2], 108.0), ([4, 5], 30.0)],
+        'src': 'lame courbe (regions 0,1,3) = LM 104; edicule 108 et ailes basses courbes 30 m ESTIMES'},
+    'Apogee Condominium': {'poly': 3228, 'color': '#a5b4fc', 'groups': [([0], 93.0), ([1], 15.0)],
+        'src': 'tour (region 0) = LM 93; podium (region 1) 15 m ESTIME'},
+    'Akoya Condominium': {'poly': 3586, 'color': '#99f6e4', 'groups': [([0], 145.0)],
+        'src': 'plan cruciforme V16 = LM 145'},
 }
 
 
@@ -61,6 +88,9 @@ def build(names=None):
             rr = R[i]['ring']; ring(rr, z); ring(rr, z + 1.2)
             if z > zmin:
                 for p in rr: seg([*p, zmin], [*p, z + 1.2])
+        if S.get('pyramid'):
+            ids, ah = S['pyramid']; zb = max(H[i] for i in ids); Up = union_ring([R[i] for i in ids]); ap = np.mean(Up, 0)
+            for p in Up: seg([*p, zb], [*ap, zb + ah])
         if S.get('drum'):
             ids, dh = S['drum']; ztop = max(H[i] for i in ids)
             Ud = union_ring([R[i] for i in ids]); ring(Ud, ztop + dh)
