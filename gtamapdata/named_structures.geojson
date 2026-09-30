@@ -14654,6 +14654,47 @@
      ]
     ]
    }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Skyviews Miami Observation Wheel",
+    "height_top_m": 68.9,
+    "z_base_m": 0.0,
+    "color": "#f5f5f4",
+    "note": "WHEEL-V2 2026-09-30 (demande Alexandre): socle = polygone V16 2432; moyeu (31.3, 132.5, 36.0), rayon de jante 32.9 m, azimut du plan 61.1 deg AJUSTES sur le contour de la jante + moyeu dans 4 cams (Shoreline, Vice City 08, Port VC A, Megamundo; residus <= 11 px); coherent avec le socle V16 (64 deg) ",
+    "kind": "building",
+    "v16_polygon_id": 2432,
+    "footprint_source": "v16",
+    "footprint_area_m2": 1116.0
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       37.3,
+       164.8
+      ],
+      [
+       3.7,
+       95.8
+      ],
+      [
+       16.6,
+       89.3
+      ],
+      [
+       50.6,
+       159.0
+      ],
+      [
+       37.3,
+       164.8
+      ]
+     ]
+    ]
+   }
   }
  ]
 }
