@@ -112,5 +112,15 @@
   ],
   "filename": "/Users/alexandreleblanc/Downloads/gtamaplib-main/maps/yanis,16_keys.png",
   "source": "crop V16 pour les projections de scene autour des Keys (Key Lento, Keys, NAS Goose Key)"
+ },
+ "yanis16_thunder": {
+  "version": 16,
+  "scale": 1.0,
+  "zero": [
+   3300,
+   -3200
+  ],
+  "filename": "/Users/alexandreleblanc/Downloads/gtamaplib-main/maps/yanis,16_thunder.png",
+  "source": "crop V16 pour la projection de scene de Thunderstorm [Gameinformer] (Lake Surprise -> Turkey Point)"
  }
 }
