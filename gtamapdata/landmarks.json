@@ -4019,489 +4019,529 @@
   },
   "Island W (N)": {
     "xyz": [
-      -3698.203056774817,
-      -6040.81663063657,
+      -3714.1,
+      -6075.29,
       0.0
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Keys",
+      "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": 2.225,
     "zone": "leonida_keys",
     "z_constraint": {
       "type": "fixed",
       "value": 0.0
-    }
+    },
+    "method": "KEYS-RETRI 2026-09-30: re-triangule (z fixe 0, contrainte) apres KEYS-REPOSE (erreur avant 0.52 deg); 2 cams; residus <= 0.03 deg; deplacement 39 m | "
   },
   "New Bahia Honda Bridge (10B)": {
     "xyz": [
-      -5141.051312445589,
-      -7144.501514811474,
-      -9.020440719502721
+      -5330.6,
+      -7101.41,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (11B)": {
     "xyz": [
-      -5160.898764815973,
-      -7137.252711695115,
-      -9.353441376922092
+      -5354.27,
+      -7093.53,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (12B)": {
     "xyz": [
-      -5182.150965971404,
-      -7127.913257616449,
-      -9.679977309119161
+      -5379.34,
+      -7083.58,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (13B)": {
     "xyz": [
-      -5201.7788812993895,
-      -7120.7459972087345,
-      -9.997743874090052
+      -5402.57,
+      -7075.83,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (14B)": {
     "xyz": [
-      -5220.944411501322,
-      -7113.462316191896,
-      -10.298558972463333
+      -5425.14,
+      -7068.01,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (15B)": {
     "xyz": [
-      -5224.253040938775,
-      -7106.421930046237,
-      -13.709363983505414
+      -5447.96,
+      -7060.08,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (16B)": {
     "xyz": [
-      -5266.859757973669,
-      -7098.74763764584,
-      -10.016491429360723
+      -5473.51,
+      -7052.25,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (17B)": {
     "xyz": [
-      -5305.1158972061785,
-      -7091.560655104216,
-      -6.447220384423193
+      -5495.74,
+      -7044.77,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (18B)": {
     "xyz": [
-      -5306.402996252575,
-      -7084.4348434429985,
-      -10.750315846680838
+      -5520.54,
+      -7036.85,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (19B)": {
     "xyz": [
-      -5309.501955259611,
-      -7077.295510860943,
-      -14.535683194228236
+      -5543.73,
+      -7029.21,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (1B)": {
     "xyz": [
-      -4931.006604092972,
-      -7211.249448611971,
-      -10.89523093856283
+      -5115.28,
+      -7171.89,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (20B)": {
     "xyz": [
-      -5345.052836265799,
-      -7069.56962946954,
-      -12.331092496565166
+      -5570.7,
+      -7020.92,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (21B)": {
     "xyz": [
-      -5363.149738408768,
-      -7062.300666026138,
-      -12.605315785264091
+      -5591.62,
+      -7013.26,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (22B)": {
     "xyz": [
-      -5384.080747190394,
-      -7055.051408337473,
-      -12.982433969614469
+      -5616.1,
+      -7005.55,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (23B)": {
     "xyz": [
-      -5376.798170387324,
-      -7046.710948843762,
-      -19.54965560173967
+      -5639.74,
+      -6997.58,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (27B)": {
     "xyz": [
-      -5485.061883723733,
-      -7020.019012153942,
-      -15.081792896038474
+      -5734.54,
+      -6968.58,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (28B)": {
     "xyz": [
-      -5505.661051164713,
-      -7012.369698751556,
-      -15.563238882256673
+      -5758.7,
+      -6960.63,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (29B)": {
     "xyz": [
-      -5526.218751992841,
-      -7005.0500221772445,
-      -16.098703468787516
+      -5782.97,
+      -6953.03,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (2B)": {
     "xyz": [
-      -4952.015009139734,
-      -7204.14114618748,
-      -11.438591598508925
+      -5141.66,
+      -7163.97,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (30B)": {
     "xyz": [
-      -5520.698437903569,
-      -6995.310802709435,
-      -23.53946813823635
+      -5807.31,
+      -6945.33,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (31B)": {
     "xyz": [
-      -5566.606719297305,
-      -6989.928654386435,
-      -17.231387743186534
+      -5830.69,
+      -6937.5,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (32B)": {
     "xyz": [
-      -5555.818509781538,
-      -6979.800210028916,
-      -26.254614853314937
+      -5854.02,
+      -6930.48,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (33B)": {
     "xyz": [
-      -5580.785342649998,
-      -6974.059863096683,
-      -26.531202034187665
+      -5880.78,
+      -6924.5,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (34B)": {
     "xyz": [
-      -5598.538940520351,
-      -6968.5226230476355,
-      -27.59501906376258
+      -5902.85,
+      -6919.17,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (35B)": {
     "xyz": [
-      -5621.528772459375,
-      -6964.8359905771395,
-      -28.251890110159092
+      -5928.8,
+      -6915.28,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (36B)": {
     "xyz": [
-      -5642.940795385878,
-      -6961.895462774414,
-      -29.255307739246476
+      -5954.19,
+      -6912.24,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (37B)": {
     "xyz": [
-      -5665.938147707444,
-      -6960.702990012814,
-      -31.61165951026588
+      -5985.44,
+      -6911.2,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (38B)": {
     "xyz": [
-      -5685.107474739392,
-      -6959.385095550573,
-      -33.233285010522984
+      -6010.01,
+      -6909.94,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (39B)": {
     "xyz": [
-      -5697.779322943889,
-      -6957.4558458301135,
-      -35.43272590552521
+      -6029.45,
+      -6908.53,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (3B)": {
     "xyz": [
-      -4970.1431073406575,
-      -7197.012375614124,
-      -11.981172365024158
+      -5164.82,
+      -7156.15,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (4B)": {
     "xyz": [
-      -4989.924122128751,
-      -7189.9018759582705,
-      -12.546898675945208
+      -5189.82,
+      -7148.32,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (5B)": {
     "xyz": [
-      -5006.970725290457,
-      -7182.748025969494,
-      -13.114993516693376
+      -5211.79,
+      -7140.55,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (6B)": {
     "xyz": [
-      -5060.038196876226,
-      -7173.290656264061,
-      -7.632067089109595
+      -5233.22,
+      -7132.97,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (7B)": {
     "xyz": [
-      -5080.172286412798,
-      -7166.019968558506,
-      -7.978874861863238
+      -5257.52,
+      -7124.98,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (8B)": {
     "xyz": [
-      -5100.690998303987,
-      -7158.890930707264,
-      -8.332085265734507
+      -5282.23,
+      -7117.14,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "New Bahia Honda Bridge (9B)": {
     "xyz": [
-      -5120.707137536012,
-      -7151.618514690204,
-      -8.67343606051625
+      -5306.24,
+      -7109.19,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh New Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (1B)": {
     "xyz": [
-      -5287.531757416037,
-      -7295.015257792107,
-      -10.901295413148318
+      -5505.65,
+      -7244.63,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (21B)": {
     "xyz": [
-      -5854.949363712844,
-      -7066.83124968389,
-      11.815492285073068
+      -6056.38,
+      -6992.06,
+      0.0
     ],
     "source_cameras": [
       "Keys"
     ],
     "error_m": null,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Unnamed Building #1 (Blimp Key)": {
     "xyz": [
-      -4260.400544258374,
-      -6840.867982906999,
-      8.748006706604624
+      -4257.31,
+      -6822.42,
+      7.19
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Keys",
+      "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": 2.87,
-    "zone": "leonida_keys"
+    "zone": "leonida_keys",
+    "method": "KEYS-RETRI 2026-09-30: re-triangule apres KEYS-REPOSE (erreur avant 0.39 deg); 2 cams; residus <= 0.07 deg; deplacement 19 m | "
   },
   "Vake Island (E)": {
     "xyz": [
@@ -13113,16 +13153,15 @@
     "source_cameras": [
       "Keys",
       "Leonida Keys 01 (Airplane) (X)",
-      "Leonida Keys 05 (Boats)",
-      "Crest Kayak"
+      "Leonida Keys 05 (Boats)"
     ],
     "xyz": [
-      -3816.64,
-      -7020.48,
-      23.2
+      -3800.48,
+      -7014.38,
+      19.33
     ],
     "zone": null,
-    "method": "ANCHOR-HARVEST-V1: triangulation 4 cams, perp med 8.9 m, angle max 46.0 deg"
+    "method": "KEYS-RETRI 2026-09-30: re-triangule apres KEYS-REPOSE (erreur avant 0.59 deg); 3 cams (sans Crest Kayak, incoherente); residus <= 0.07 deg; deplacement 18 m | ANCHOR-HARVEST-V1: triangulation 4 cams, perp med 8.9 m, angle max 46.0 deg"
   },
   "Vice River (D)": {
     "author": "rlx",
@@ -15363,17 +15402,18 @@
   },
   "Grassrivers River Mouth (W)": {
     "xyz": [
-      -3104.4689623868667,
-      -5220.995346107264,
-      -5.403267647526614
+      -3193.18,
+      -5382.9,
+      0.24
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Keys",
+      "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": 1.834,
     "zone": "grassrivers",
-    "author": "rlx"
+    "author": "rlx",
+    "method": "KEYS-RETRI 2026-09-30: re-triangule apres KEYS-REPOSE (erreur avant 1.73 deg); 2 cams; residus <= 0.05 deg; deplacement 185 m | "
   },
   "Grassrivers River Mouth (E)": {
     "xyz": null,
@@ -15955,16 +15995,17 @@
   },
   "Island V (N)": {
     "xyz": [
-      -3775.751496015412,
-      -5687.79546272757,
-      1.897619038872453
+      -3793.08,
+      -5739.01,
+      3.52
     ],
     "source_cameras": [
-      "Leonida Keys 01 (Airplane) (X)",
-      "Keys"
+      "Keys",
+      "Leonida Keys 01 (Airplane) (X)"
     ],
     "error_m": 0.825,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-RETRI 2026-09-30: re-triangule apres KEYS-REPOSE (erreur avant 0.76 deg); 2 cams; residus <= 0.02 deg; deplacement 54 m | "
   },
   "Island W (S)": {
     "xyz": [
@@ -16001,16 +16042,30 @@
     "note": "LINE-TOOLTIP 2026-09-04 (Alexandre: 'Blimp road est sur cette ligne', (-4351.7,-7001.4)-(-4347.6,-7111.3)): point = rayon Keys \u2229 plan vertical de la ligne, z=0; etait a 25.9 m | "
   },
   "Old Bahia Honda Bridge (20B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -6029.02,
+      -7003.66,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (19B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -6010.64,
+      -7012.93,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (Barrier) (SW)": {
     "xyz": null,
@@ -16019,22 +16074,43 @@
     "zone": "rlx_markings_0713"
   },
   "Old Bahia Honda Bridge (18B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5993.68,
+      -7021.4,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (17B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5971.37,
+      -7030.33,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (16B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5952.58,
+      -7039.21,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Seven Mile Bridge (22B)": {
     "xyz": null,
@@ -16064,58 +16140,121 @@
     "note": "LINE-TOOLTIP 2026-09-04 (Alexandre: 'Blimp road est sur cette ligne', (-4351.7,-7001.4)-(-4347.6,-7111.3)): point = rayon Keys \u2229 plan vertical de la ligne, z=0; etait a 19.7 m | "
   },
   "Old Bahia Honda Bridge (15B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5932.69,
+      -7048.06,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (14B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5912.83,
+      -7056.81,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (13B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5892.18,
+      -7065.8,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (12B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5871.6,
+      -7074.78,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (11B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5852.99,
+      -7083.47,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (10B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5834.74,
+      -7091.6,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (9B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5815.8,
+      -7100.91,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (8B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5795.75,
+      -7109.8,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (7B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5777.63,
+      -7118.49,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Blimp Inlet (A)": {
     "xyz": [
@@ -16138,10 +16277,17 @@
     "zone": "rlx_markings_0713"
   },
   "Old Bahia Honda Bridge (6B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5731.58,
+      -7139.35,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Blimp Key (E)": {
     "xyz": null,
@@ -16160,16 +16306,30 @@
     "zone": "rlx_markings_0713"
   },
   "Old Bahia Honda Bridge (5B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5685.52,
+      -7160.43,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (4B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5643.18,
+      -7180.84,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Old Bahia Honda Bridge (Barrier) (NE)": {
     "xyz": null,
@@ -16188,10 +16348,17 @@
     "zone": "rlx_markings_0713"
   },
   "Old Bahia Honda Bridge (3B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5592.99,
+      -7202.9,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Blimp Inlet (E)": {
     "xyz": [
@@ -16204,10 +16371,17 @@
     "zone": "rlx_markings_0713"
   },
   "Old Bahia Honda Bridge (2B)": {
-    "xyz": null,
-    "source_cameras": [],
+    "xyz": [
+      -5548.78,
+      -7223.7,
+      0.0
+    ],
+    "source_cameras": [
+      "Keys"
+    ],
     "error_m": null,
-    "zone": "rlx_markings_0713"
+    "zone": "rlx_markings_0713",
+    "method": "KEYS-Z0 2026-09-30: pied de pile a l eau = rayon Keys (KEYS-REPOSE-V2) x z=0 (mono-cam; controle: sous le tablier du mesh Old Bahia Honda Bridge)"
   },
   "Blimp Key (D)": {
     "xyz": null,
@@ -16239,9 +16413,9 @@
   },
   "Old Bahia Honda Bridge (Barrier) (SE)": {
     "xyz": [
-      -5554.692615952721,
-      -7292.421209248331,
-      46.52066027403023
+      -5563.24,
+      -7292.23,
+      17.79
     ],
     "source_cameras": [
       "Grassrivers Postcard (X)",
@@ -16249,7 +16423,7 @@
     ],
     "error_m": 36.191,
     "zone": "rlx_markings_0713",
-    "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 22.8 m, angle max 71.4 deg"
+    "method": "KEYS-RETRI 2026-09-30: re-triangule apres KEYS-REPOSE (erreur avant 1.24 deg); 2 cams; residus <= 0.17 deg; deplacement 30 m | ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 22.8 m, angle max 71.4 deg"
   },
   "Blimp Key (C)": {
     "xyz": null,

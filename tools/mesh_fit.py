@@ -38,6 +38,8 @@ THIN_PX = 14                 # objets fins (cheminees, treillis): pas de test fe
 HIDDEN = set()                # meshes caches declares a la main (cameras.json: hidden_meshes)
 MEASURABLE_CS = 5.0          # distance moyenne au bord (decale) au-dela de laquelle un mesh n'est pas jugeable
 SIL = True                   # contour exterieur (silhouette) seulement
+import re
+LONG = re.compile(r'Bridge|Viaduct|Causeway', re.I)   # [KEYS-BRIDGES-V1] objets longs et fins: aretes reelles, pas d'enveloppe
 DIRS = [(np.cos(a), np.sin(a)) for a in np.linspace(0, 2 * np.pi, 8, endpoint=False)]
 
 
@@ -72,6 +74,16 @@ def _band_masks(ctx, meshes_vis):
     depth = np.full((ctx.H, ctx.W), np.inf, np.float32); own = {}
     cam = np.asarray(ctx.cam.xyz, float)
     for name, e in meshes_vis.items():
+        if LONG.search(name):                                 # pont: enveloppes par troncons (pas de corde au-dessus de l'eau)
+            m = Image.new('L', (ctx.W, ctx.H), 0); dr = ImageDraw.Draw(m); dist = []
+            for sel in _chunks(e):
+                pr = _project_pts(ctx, sel)
+                if len(pr) < 2: continue
+                A = np.array([p for ab in pr for p in ab])
+                try: dr.polygon([tuple(map(float, p)) for p in A[ConvexHull(A).vertices]], fill=1)
+                except Exception: continue
+            mk = np.asarray(m, bool); d = float(np.linalg.norm(np.asarray(e, float).reshape(-1, 3).mean(0) - cam))
+            own[name] = 0.0; depth[mk] = np.minimum(depth[mk], d); continue
         E = np.asarray(e, float); z = E[..., 2]; zmin, zmax = z.min(), z.max()
         nb = max(1, min(12, int((zmax - zmin) / 6)))
         dist = float(np.linalg.norm(E.reshape(-1, 3).mean(0) - cam))
@@ -90,7 +102,47 @@ def _band_masks(ctx, meshes_vis):
     return depth, own
 
 
+def _chunks(edges, L=30.0):
+    """decoupe un mesh long en troncons de L m le long de son axe principal (xy)."""
+    E = np.asarray(edges, float); M = E.mean(1)[:, :2]; c = M.mean(0)
+    u = np.linalg.svd(M - c, full_matrices=False)[2][0]; t = (M - c) @ u
+    k = np.floor((t - t.min()) / L).astype(int)
+    return [[edges[i] for i in np.nonzero(k == j)[0]] for j in range(k.max() + 1) if (k == j).any()]
+
+
+def _samples_long(ctx, edges):
+    """contour d'un pont: bord des enveloppes par troncon, sans les coutures (points interieurs au troncon voisin)."""
+    from scipy.spatial import ConvexHull
+    def inside(hv, pts, m=1.5):   # enveloppe convexe (sens trigo de ConvexHull): dedans a plus de m px du bord
+        a = hv; b = np.roll(hv, -1, 0); e = b - a; ln = np.hypot(e[:, 0], e[:, 1]) + 1e-9
+        cr = (e[None, :, 0] * (pts[:, None, 1] - a[None, :, 1]) - e[None, :, 1] * (pts[:, None, 0] - a[None, :, 0])) / ln[None]
+        return (cr > m).all(1)
+    H = []
+    for sel in _chunks(edges):
+        pr = _project_pts(ctx, sel)
+        if len(pr) < 2: continue
+        A = np.array([p for ab in pr for p in ab])
+        try: H.append(A[ConvexHull(A).vertices])
+        except Exception: continue
+    P = []
+    for i, hv in enumerate(H):
+        pts = []
+        for j in range(len(hv)):
+            pa, pb = hv[j], hv[(j + 1) % len(hv)]; Lg = float(np.hypot(*(pb - pa)))
+            if Lg < 6: continue
+            tt = (pb - pa) / Lg; pts += [pa + tt * s_ for s_ in np.arange(1, Lg - 1, STEP)]
+        if not pts: continue
+        pts = np.array(pts); keep = np.ones(len(pts), bool)
+        for j in (i - 1, i + 1):
+            if 0 <= j < len(H): keep &= ~inside(H[j], pts)
+        P += list(pts[keep])
+    return P
+
+
 def _samples(ctx, edges, name, hulls):
+    if LONG.search(name):
+        P = _samples_long(ctx, edges)
+        return _clip_occ(ctx, np.array(P) if P else np.zeros((0, 2)), name, hulls)
     proj = _project_pts(ctx, edges); P = []
     if SIL:
         from scipy.spatial import ConvexHull
@@ -103,8 +155,11 @@ def _samples(ctx, edges, name, hulls):
         if L < 6: continue
         t = (pb - pa) / L
         for s in np.arange(1, L - 1, STEP): P.append(pa + t * s)
-    if not P: return np.zeros((0, 2))
-    P = np.array(P)
+    return _clip_occ(ctx, np.array(P) if P else np.zeros((0, 2)), name, hulls)
+
+
+def _clip_occ(ctx, P, name, hulls):
+    if not len(P): return np.zeros((0, 2))
     m = (P[:, 0] > 8) & (P[:, 0] < ctx.W - 9) & (P[:, 1] > 8) & (P[:, 1] < ctx.H - 9)
     P = P[m]
     if hulls is not None and len(P):
@@ -151,6 +206,9 @@ def _visible(ctx, meshes):
     for name, v in meshes.items():
         e = v.get('world_edges') or []
         if not e or np.hypot(e[0][0][0] - cx, e[0][0][1] - cy) < 25: continue
+        if LONG.search(name):      # ponts: a plus de 6 km ils sont caches par le decor (arbres, iles) que les meshes ne modelisent pas
+            E_ = np.asarray(e, float).reshape(-1, 3)
+            if np.hypot(E_[:, 0] - cx, E_[:, 1] - cy).min() > 6000: continue
         pr = _project_pts(ctx, e)
         if len(pr) < 3: continue
         A = np.array([p for ab in pr for p in ab])
@@ -187,7 +245,8 @@ def evaluate(cam_name, state=None, meshes=None):
         if hidden:                  # cache (arbres nets ou liste hidden_meshes de la cam): ni dessin, ni etiquette, ni score
             per[name] = {'score': None, 'visible': False, 'hidden': hidden, 'foliage': fol, 'gain': round(g, 3), 'n': int(len(P)), 'color': meshes[name].get('color', '#facc15')}
             continue
-        if c0 > MEASURABLE_CS and cs > MEASURABLE_CS:   # brume/contre-jour: dessine mais non mesure (—)
+        if (c0 > MEASURABLE_CS and cs > MEASURABLE_CS) or LONG.search(name):   # brume/contre-jour, ou pont (un tablier long ne se
+            # localise que perpendiculairement a son axe: le contraste par decalage ne le mesure pas): dessine mais non mesure (—)
             per[name] = {'score': None, 'visible': True, 'hidden': None, 'foliage': fol, 'gain': round(g, 3), 'n': int(len(P)), 'color': meshes[name].get('color', '#facc15')}
             continue
         GW.append((g, len(P)))
@@ -202,7 +261,7 @@ def evaluate(cam_name, state=None, meshes=None):
 def compute(cam_name, use_cache=True):
     cams = json.load(open(CAMS)); c = cams.get(cam_name)
     if not c or c.get('xyz') is None or not os.path.exists(os.path.join(REPO, 'frames', cam_name + '.png')): return None
-    key = hashlib.md5(json.dumps([os.path.getmtime(os.path.join(THIS, 'generated', 'seg_veg', cam_name.replace('/', '_') + '.png')) if os.path.exists(os.path.join(THIS, 'generated', 'seg_veg', cam_name.replace('/', '_') + '.png')) else 0, c.get('xyz'), c.get('ypr'), c.get('fov'), c.get('hidden_meshes'), os.path.getmtime(MESHES), 'v6seg4']).encode()).hexdigest()
+    key = hashlib.md5(json.dumps([os.path.getmtime(os.path.join(THIS, 'generated', 'seg_veg', cam_name.replace('/', '_') + '.png')) if os.path.exists(os.path.join(THIS, 'generated', 'seg_veg', cam_name.replace('/', '_') + '.png')) else 0, c.get('xyz'), c.get('ypr'), c.get('fov'), c.get('hidden_meshes'), os.path.getmtime(MESHES), 'v7long2']).encode()).hexdigest()
     os.makedirs(CACHE, exist_ok=True); cp = os.path.join(CACHE, cam_name.replace('/', '_') + '.json')
     if use_cache and os.path.exists(cp):
         try:
