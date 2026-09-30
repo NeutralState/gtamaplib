@@ -16765,10 +16765,10 @@
    "type": "Feature",
    "properties": {
     "name": "Jade Ocean Condos",
-    "height_top_m": 202.8,
+    "height_top_m": 206.9,
     "z_base_m": 2.7,
-    "color": "#f97316",
-    "note": "FOOTPRINT-MESH-V1 2026-09-30: extrusion de l'empreinte V16 (polygone 3584, 33 sommets, 2889 m2), sol 2.7 (heightmap), toit 202.8 (mediane de 2 coins), coins a 4.6 m du bord (mediane); anneaux tous les 25.0 m",
+    "color": "#34d399",
+    "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3584 (23 regions, tools/v16_tiers.py); sommet LM 202.9 (2 LMs); gradins -6/-12 m et tambour +4 m ESTIMES d apres le chanfrein de la couronne vu dans Biplane Night. Largeur du fut verifiee dans Beach et Biplane Night (93 vs 90 px,",
     "kind": "building",
     "v16_polygon_id": 3584,
     "footprint_source": "v16",
