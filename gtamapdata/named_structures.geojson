@@ -14695,6 +14695,293 @@
      ]
     ]
    }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Prison (Buildings)",
+    "height_top_m": 30.0,
+    "z_base_m": 11.8,
+    "color": "#fca5a5",
+    "note": "PRISON-V1 2026-09-30 (demande Alexandre): plan V16 (batiments 940-963, tours 964-981); hauteurs lues dans Prison (Aerial) (Biplane) recale sur les 6 tours (rms 5 px): blocs cellulaires 6-8 m a l egout + toit a deux pans, bloc blanc central 18 m, entrepot blanc nord 13 m, bloc est 12 m; petits batime",
+    "kind": "building",
+    "v16_polygon_id": null,
+    "footprint_source": "mesh_base",
+    "footprint_area_m2": 59234.0
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -2863.1,
+       -2737.3
+      ],
+      [
+       -2947.8,
+       -2782.1
+      ],
+      [
+       -2961.0,
+       -2803.3
+      ],
+      [
+       -2989.6,
+       -2856.6
+      ],
+      [
+       -2928.0,
+       -2912.4
+      ],
+      [
+       -2915.3,
+       -2921.8
+      ],
+      [
+       -2632.2,
+       -2970.4
+      ],
+      [
+       -2594.7,
+       -2961.3
+      ],
+      [
+       -2596.6,
+       -2953.7
+      ],
+      [
+       -2598.6,
+       -2946.0
+      ],
+      [
+       -2626.1,
+       -2853.7
+      ],
+      [
+       -2659.8,
+       -2826.4
+      ],
+      [
+       -2671.7,
+       -2818.0
+      ],
+      [
+       -2781.9,
+       -2740.3
+      ],
+      [
+       -2863.1,
+       -2737.3
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Prison Towers",
+    "height_top_m": 38.3,
+    "z_base_m": 11.8,
+    "color": "#e5e7eb",
+    "note": "PRISON-V1 2026-09-30 (demande Alexandre): plan V16 (batiments 940-963, tours 964-981); hauteurs lues dans Prison (Aerial) (Biplane) recale sur les 6 tours (rms 5 px): blocs cellulaires 6-8 m a l egout + toit a deux pans, bloc blanc central 18 m, entrepot blanc nord 13 m, bloc est 12 m; petits batime",
+    "kind": "building",
+    "v16_polygon_id": null,
+    "footprint_source": "mesh_base",
+    "footprint_area_m2": 58610.0
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -2739.35,
+       -2758.8
+      ],
+      [
+       -2895.75,
+       -2729.19
+      ],
+      [
+       -2897.31,
+       -2729.19
+      ],
+      [
+       -2898.71,
+       -2729.87
+      ],
+      [
+       -3025.12,
+       -2821.05
+      ],
+      [
+       -3026.08,
+       -2822.26
+      ],
+      [
+       -3026.43,
+       -2823.77
+      ],
+      [
+       -3026.08,
+       -2825.28
+      ],
+      [
+       -3025.12,
+       -2826.49
+      ],
+      [
+       -2910.86,
+       -2935.92
+      ],
+      [
+       -2909.46,
+       -2936.6
+      ],
+      [
+       -2907.92,
+       -2936.6
+      ],
+      [
+       -2656.62,
+       -2920.95
+      ],
+      [
+       -2655.22,
+       -2920.28
+      ],
+      [
+       -2654.26,
+       -2919.07
+      ],
+      [
+       -2601.57,
+       -2847.71
+      ],
+      [
+       -2601.22,
+       -2846.19
+      ],
+      [
+       -2601.57,
+       -2844.67
+      ],
+      [
+       -2602.54,
+       -2843.46
+      ],
+      [
+       -2737.95,
+       -2759.47
+      ],
+      [
+       -2739.35,
+       -2758.8
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Prison Fence",
+    "height_top_m": 16.8,
+    "z_base_m": 10.9,
+    "color": "#a3a3a3",
+    "note": "PRISON-V1 2026-09-30 (demande Alexandre): plan V16 (batiments 940-963, tours 964-981); hauteurs lues dans Prison (Aerial) (Biplane) recale sur les 6 tours (rms 5 px): blocs cellulaires 6-8 m a l egout + toit a deux pans, bloc blanc central 18 m, entrepot blanc nord 13 m, bloc est 12 m; petits batime",
+    "kind": "building",
+    "v16_polygon_id": null,
+    "footprint_source": "mesh_base",
+    "footprint_area_m2": 60362.0
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -3029.94,
+       -2823.38
+      ],
+      [
+       -2971.87,
+       -2880.69
+      ],
+      [
+       -2931.22,
+       -2920.8
+      ],
+      [
+       -2913.79,
+       -2937.99
+      ],
+      [
+       -2897.39,
+       -2936.93
+      ],
+      [
+       -2864.57,
+       -2934.8
+      ],
+      [
+       -2708.69,
+       -2924.68
+      ],
+      [
+       -2651.26,
+       -2920.95
+      ],
+      [
+       -2607.46,
+       -2860.08
+      ],
+      [
+       -2597.73,
+       -2846.55
+      ],
+      [
+       -2625.28,
+       -2828.63
+      ],
+      [
+       -2673.5,
+       -2797.27
+      ],
+      [
+       -2728.61,
+       -2761.43
+      ],
+      [
+       -2735.5,
+       -2756.95
+      ],
+      [
+       -2790.73,
+       -2747.08
+      ],
+      [
+       -2869.61,
+       -2732.99
+      ],
+      [
+       -2901.17,
+       -2727.36
+      ],
+      [
+       -2920.49,
+       -2741.76
+      ],
+      [
+       -2997.75,
+       -2799.37
+      ],
+      [
+       -3029.94,
+       -2823.38
+      ]
+     ]
+    ]
+   }
   }
  ]
 }

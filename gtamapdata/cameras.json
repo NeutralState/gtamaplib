@@ -5466,17 +5466,17 @@
   "id": "S3/80",
   "player": null,
   "xyz": [
-   -2023.71,
-   -2742.96,
-   234.6
+   -2099.12,
+   -2751.34,
+   175.54
   ],
   "ypr": [
-   78.565,
-   -5.52,
-   2.113
+   78.557,
+   -1.474,
+   1.852
   ],
   "fov": [
-   65.76,
+   72.076,
    null
   ],
   "size": [
@@ -5487,7 +5487,8 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | SOLVE 2026-09-18b (canal V16 + chateau d'eau + pied du mat, tours en contrainte douce): rives du canal 1-10 px, chateau d'eau 2 px, mat 34 px; la leak map confirme le canal V16 a 5-10 m pres. Depuis cette pose, les tours ouest (1,5,6) tombent 15-20 m au sud des coins V16, les tours est (3,4) sur les coins. A affiner avec l'autoroute devant la prison (clics) et les 2 autres captures aeriennes. | POSITION APPROX 2026-09-18: estimation initiale a resoudre avec les clics (6 tours de la prison vues de haut, chateau d'eau, mat WDNA FM, canal); frame fournie par Alexandre pour trancher la position des Prison Towers",
-  "era": "2026"
+  "era": "2026",
+  "note": "PRISON-V1 2026-09-30: pose recalee sur les 6 tours (sommet = LM Prison Tower n, pied = sol sous le polygone V16 de la tour, lus dans l image) + chateau d eau Homestead: rms 5.2 px (etait 23 px sur les clics). Pose precedente [[-2023.71, -2742.96, 234.6], [78.565, -5.52, 2.113], 65.76] | "
  },
  "Prison (Video) f100": {
   "id": "S3/82",
