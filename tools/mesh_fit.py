@@ -33,6 +33,9 @@ MIN_PROJ_PX = 18
 STEP = 2.0
 CAP = 8.0                    # distance max comptee (px)
 SHIFT = 5.0                  # decalage de reference (px)
+FOLIAGE_MAX = 0.70           # >70 % de l'empreinte couverte de feuillage = cache derriere des arbres
+THIN_PX = 30                 # objets fins (cheminees, treillis): pas de test feuillage (leur structure est texturee)
+HIDDEN = set()                # meshes caches declares a la main (cameras.json: hidden_meshes)
 MEASURABLE_CS = 5.0          # distance moyenne au bord (decale) au-dela de laquelle un mesh n'est pas jugeable
 SIL = True                   # contour exterieur (silhouette) seulement
 DIRS = [(np.cos(a), np.sin(a)) for a in np.linspace(0, 2 * np.pi, 8, endpoint=False)]
@@ -46,8 +49,14 @@ class _Ctx:
         self.H, self.W = img.shape
         g = ndimage.gaussian_filter(img, 1.2)
         gm = np.hypot(ndimage.sobel(g, 0), ndimage.sobel(g, 1))
-        edges = gm > np.percentile(gm, 88)
+        # bords normalises par le contraste local: un contour doux dans la brume compte autant
+        # qu'un contour net au premier plan (sinon les meshes lointains n'ont 'aucun bord')
+        gn = gm / (ndimage.gaussian_filter(gm, 25) + 0.5 * np.median(gm) + 1e-6)
+        edges = (gn > np.percentile(gn, 85)) & (gm > np.percentile(gm, 20))
         self.dist = ndimage.distance_transform_edt(~edges)
+        hp = img - ndimage.gaussian_filter(img, 2)          # texture fine (feuillage) pour la visibilite
+        self.tex = np.sqrt(np.maximum(ndimage.uniform_filter(hp ** 2, 7), 0))
+        self.tex_thr = np.percentile(self.tex, 70)
 
 
 def _samples(ctx, edges, name, hulls):
@@ -73,6 +82,21 @@ def _samples(ctx, edges, name, hulls):
             if b2 == name or d2 >= d0 or not len(P): continue
             P = P[~(_signed_dist_hull(eq, P) < -1.0)]
     return P
+
+
+def _foliage(ctx, edges):
+    """part de l'empreinte ecran du mesh couverte de texture fine (arbres devant). None si objet fin."""
+    from scipy.spatial import ConvexHull
+    from PIL import ImageDraw
+    pr = _project_pts(ctx, edges)
+    A = np.array([p for ab in pr for p in ab])
+    w, h = np.ptp(A[:, 0]), np.ptp(A[:, 1])
+    if w < THIN_PX and h > 3 * w: return None     # haut et mince (cheminee, treillis): sa propre structure est texturee
+    try: hv = A[ConvexHull(A).vertices]
+    except Exception: return None
+    m = Image.new('L', (ctx.W, ctx.H), 0); ImageDraw.Draw(m).polygon([tuple(map(float, p)) for p in hv], fill=1)
+    m = np.asarray(m, bool)
+    return float((ctx.tex[m] > ctx.tex_thr).mean()) if m.sum() >= 50 else None
 
 
 def _cost(ctx, P, dx=0.0, dy=0.0):
@@ -110,6 +134,8 @@ def _to_score(g, full=0.06):
 
 def evaluate(cam_name, state=None, meshes=None):
     meshes = meshes or json.load(open(MESHES))
+    global HIDDEN
+    HIDDEN = set(json.load(open(CAMS)).get(cam_name, {}).get('hidden_meshes') or [])
     ctx = _Ctx(cam_name, state)
     vis = _visible(ctx, meshes); hulls = build_hulls(ctx, vis)
     per = {}; Ps = []; GW = []
@@ -118,22 +144,27 @@ def evaluate(cam_name, state=None, meshes=None):
         if len(P) < 15: continue
         wpx = min(np.ptp(P[:, 0]), np.ptp(P[:, 1]))          # objets fins (cheminees): decalage < demi-largeur
         g, c0, cs = _gain(ctx, P, float(np.clip(0.3 * wpx, 1.5, SHIFT)))
-        if cs > MEASURABLE_CS:      # aucun bord net autour (brume, contre-jour, treillis): non mesurable
-            per[name] = {'score': None, 'gain': round(g, 3), 'n': int(len(P)), 'color': meshes[name].get('color', '#facc15')}
+        fol = _foliage(ctx, e)
+        hidden = 'manuel' if name in HIDDEN else ('arbres' if (fol is not None and fol > FOLIAGE_MAX) else None)
+        if hidden:                  # cache (arbres nets ou liste hidden_meshes de la cam): ni dessin, ni etiquette, ni score
+            per[name] = {'score': None, 'visible': False, 'hidden': hidden, 'foliage': fol, 'gain': round(g, 3), 'n': int(len(P)), 'color': meshes[name].get('color', '#facc15')}
+            continue
+        if c0 > MEASURABLE_CS and cs > MEASURABLE_CS:   # brume/contre-jour: dessine mais non mesure (—)
+            per[name] = {'score': None, 'visible': True, 'hidden': None, 'foliage': fol, 'gain': round(g, 3), 'n': int(len(P)), 'color': meshes[name].get('color', '#facc15')}
             continue
         GW.append((g, len(P)))
-        per[name] = {'score': _to_score(g, 0.20), 'gain': round(g, 3), 'n': int(len(P)), 'color': meshes[name].get('color', '#facc15')}
+        per[name] = {'visible': True, 'foliage': fol, 'score': _to_score(g, 0.20), 'gain': round(g, 3), 'n': int(len(P)), 'color': meshes[name].get('color', '#facc15')}
         Ps.append(P)
     tot = None
     if GW:   # moyenne des gains par mesh ponderee par les points (monotone avec l'erreur de pose, teste 2026-09-29)
         g = float(np.average([x[0] for x in GW], weights=[x[1] for x in GW])); tot = _to_score(g, 0.15)
-    return {'score': tot, 'n_meshes': len(per), 'n_measured': len(Ps), 'buildings': per}
+    return {'score': tot, 'n_meshes': sum(1 for v in per.values() if v.get('visible')), 'n_measured': len(Ps), 'buildings': per}
 
 
 def compute(cam_name, use_cache=True):
     cams = json.load(open(CAMS)); c = cams.get(cam_name)
     if not c or c.get('xyz') is None or not os.path.exists(os.path.join(REPO, 'frames', cam_name + '.png')): return None
-    key = hashlib.md5(json.dumps([c.get('xyz'), c.get('ypr'), c.get('fov'), os.path.getmtime(MESHES), 'v2w']).encode()).hexdigest()
+    key = hashlib.md5(json.dumps([c.get('xyz'), c.get('ypr'), c.get('fov'), c.get('hidden_meshes'), os.path.getmtime(MESHES), 'v4']).encode()).hexdigest()
     os.makedirs(CACHE, exist_ok=True); cp = os.path.join(CACHE, cam_name.replace('/', '_') + '.json')
     if use_cache and os.path.exists(cp):
         try:
@@ -155,4 +186,4 @@ if __name__ == '__main__':
     else:
         d = compute(name, use_cache=False)
         print('score', d['score'], 'meshes', d['n_meshes'])
-        for b, v in sorted(d['buildings'].items(), key=lambda kv: -kv[1]['n']): print('   %-40s %3s  (%d pts)' % (b[:40], '-' if v['score'] is None else v['score'], v['n']))
+        for b, v in sorted(d['buildings'].items(), key=lambda kv: -kv[1]['n']): print('   %-40s %3s  (%d pts)%s' % (b[:40], '-' if v['score'] is None else v['score'], v['n'], '' if v.get('visible') else '  CACHE (%s)' % v.get('hidden')))

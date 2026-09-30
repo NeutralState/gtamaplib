@@ -88,7 +88,7 @@ def _glass(base, box, radius, tint=(14, 16, 24), alpha=190):
 
 def _pick_tags(tags, per, k=12):
     # seulement les meshes bien visibles (assez de silhouette non occultee), sans podiums/annexes
-    t = [x for x in tags if per[x[2]]['n'] >= 40 and not any(w in x[2] for w in ('(Podium)', '(Annex)', '(Cables)'))]
+    t = [x for x in tags if per[x[2]].get('visible') and per[x[2]]['n'] >= 40 and not any(w in x[2] for w in ('(Podium)', '(Annex)', '(Cables)'))]
     return sorted(t, key=lambda x: -per[x[2]]['n'])[:k]
 
 
@@ -129,6 +129,7 @@ def render_camera(cam_name, show_meshes=True):
         for name, v in M.items():
             e = v.get('world_edges') or []
             if not e or math.hypot(e[0][0][0] - cx, e[0][0][1] - cy) < 25: continue
+            if not per.get(name, {}).get('visible'): continue       # cache (arbres/brume) ou hors jugement: pas affiche
             col = _hex(v.get('color', '#facc15')); pts = []
             for a, b in e:
                 pa, pb = cam.get_pixel(list(a)), cam.get_pixel(list(b))
@@ -154,7 +155,7 @@ def render_camera(cam_name, show_meshes=True):
         d.line([(x, ytop - 2), (x, by + h)], fill=col + (200,), width=max(1, int(1.5 * s)))
         d.ellipse([x - 3 * s, ytop - 3 * s, x + 3 * s, ytop + 3 * s], fill=col + (255,))
         _pill(d, (bx, by), label, col, fL, dot=_score_col(sc), pad=(int(9 * s), int(6 * s)), alpha=225)
-    img = _info_card(img, cam_name, c, fit.get('score'), len(per), s)
+    img = _info_card(img, cam_name, c, fit.get('score'), fit.get('n_meshes', len(per)), s)
     buf = io.BytesIO(); img.convert('RGB').save(buf, 'PNG'); return buf.getvalue()
 
 
@@ -164,7 +165,7 @@ def render_map(cam_name, tiles_fn, OUT=1600):
     fit = mesh_fit.compute(cam_name) or {'score': None, 'buildings': {}}; per = fit.get('buildings', {})
     # etendue: meshes visibles dans la frame
     ds = []
-    for name in per:
+    for name in [k for k, v in per.items() if v.get('visible')]:
         e = M[name]['world_edges']; P = np.array(e).reshape(-1, 3)[:, :2]; ds.append(np.hypot(*(P.mean(0) - [cx, cy])))
     Rm = max(300.0, min(float(np.percentile(ds, 85)) if ds else 300.0, 12000.0)) * 1.18
     try:
@@ -193,13 +194,13 @@ def render_map(cam_name, tiles_fn, OUT=1600):
         if not e: continue
         P = np.array(e).reshape(-1, 3); c2 = P[:, :2].mean(0)
         if abs(c2[0] - cx) > Rm or abs(c2[1] - cy) > Rm: continue
-        vis = name in per; col = _hex(v.get('color', '#facc15')); zb = P[:, 2].min()
+        vis = bool(per.get(name, {}).get('visible')); col = _hex(v.get('color', '#facc15')); zb = P[:, 2].min()
         for a, b in e:
             if abs(a[2] - b[2]) < 0.1 and a[2] < zb + 1.0:
                 d.line([w2c(*a[:2]), w2c(*b[:2])], fill=col + ((255,) if vis else (70,)), width=max(1, int((2.2 if vis else 1) * s)))
         if vis: tags.append((w2c(*c2), name, col, per[name]['score']))
     img = Image.alpha_composite(img, ov); d = ImageDraw.Draw(img); fL = _font(int(14 * s), True); placed = []
-    tags = [t for t in tags if per[t[1]]['n'] >= 40 and not any(w in t[1] for w in ('(Podium)', '(Annex)', '(Cables)'))]
+    tags = [t for t in tags if per[t[1]].get('visible') and per[t[1]]['n'] >= 40 and not any(w in t[1] for w in ('(Podium)', '(Annex)', '(Cables)'))]
     tags = sorted(tags, key=lambda t: -per[t[1]]['n'])[:14]
     for (px, py), name, col, sc in sorted(tags, key=lambda t: t[0][1]):
         label = '%s  %s' % (name.replace(' (Ambrosia)', ''), '—' if sc is None else sc); bb = fL.getbbox(label)
@@ -221,7 +222,7 @@ def render_map(cam_name, tiles_fn, OUT=1600):
     nx, ny = 52 * s, 60 * s
     d.polygon([(nx, ny - 26 * s), (nx - 12 * s, ny + 10 * s), (nx, ny + 3 * s), (nx + 12 * s, ny + 10 * s)], fill=(255, 255, 255, 235))
     d.text((nx - 6 * s, ny + 14 * s), 'N', fill=(255, 255, 255, 235), font=fS)
-    img = _info_card(img, cam_name, c, fit.get('score'), len(per), s * 0.9)
+    img = _info_card(img, cam_name, c, fit.get('score'), fit.get('n_meshes', len(per)), s * 0.9)
     buf = io.BytesIO(); img.convert('RGB').save(buf, 'PNG'); return buf.getvalue()
 
 
