@@ -97,9 +97,12 @@ def name_of(c, used):
 
 
 def build():
+    # [VC-BRIDGES-V3 2026-09-30] Alexandre: « y en a que tu as juste construits sans te baser sur ce qu'on voit » ->
+    # seuls les ponts MESURES dans une image sont emis (CREST); les autres (hauteur estimee IRL) sont retires.
     out, used = {}, set()
     for b in sorted(extract(), key=lambda b: -b['area']):
         nm = name_of(b['c'], used); used.add(nm)
+        if nm not in CREST: continue
         Lg = b['length']; hw = min(b['width'], 40) / 2
         irl = next((h for key, h in IRL.items() if nm.startswith(key)), None)
         crest = CREST.get(nm) or (CREST['I-404 Causeway Bridge (Downtown)'] if nm.startswith(FLAT) else (irl or next(h for lmin, h in EST if Lg >= lmin)))

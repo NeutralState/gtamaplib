@@ -33,10 +33,11 @@ SPEC = {
                'immeuble ouest 34 m LU (toit a gradins blanc derriere la lame, Vice Beach (B)), tourelle hexagonale 36 m ESTIMEE. Note: Vice Beach (B) montre tout le complexe ~10-15 m au NO de la V16 (pose de la cam non verifiee, la tour Jade Ocean est decalee dans une autre direction -> pas un decalage V16)'},
     # --- Vice Beach, plus hautes tours (2026-09-30, demande Alexandre). Hauteur de la region qui contient le LM = LM;
     # les autres volumes ESTIMES (proportions IRL); les traits V16 donnent la forme (arrondis, ailes, gradins).
-    'Blue Diamond': {'poly': 3575, 'color': '#60a5fa', 'groups': [([4], 146.0), ([0], 25.0), ([1, 6], 20.0), ([2, 3, 5, 7], 25.0)],
-        'pyramid': ([2, 3, 5, 7], 10.0), 'src': 'lame (region V16 4) = LM 146; bloc carre a verriere pyramidale (X de la V16) 25 m + 10, ailes 20 m ESTIMES'},
-    'Green Diamond': {'poly': 3576, 'color': '#4ade80', 'groups': [([7], 145.0), ([0], 25.0), ([1, 5], 20.0), ([2, 3, 4, 6], 25.0)],
-        'pyramid': ([2, 3, 4, 6], 10.0), 'src': 'lame (region V16 7) = LM 145 (LM a 2 m du bord); bloc carre a verriere pyramidale 25 m + 10, ailes 20 m ESTIMES'},
+    # CORRIGE (Alexandre): la tour = le carre a verriere pyramidale (X de la V16) + ses ailes; le grand polygone = le podium bas
+    'Blue Diamond': {'poly': 3575, 'color': '#60a5fa', 'groups': [([2, 3, 5, 7], 126.0), ([0], 40.0), ([1], 40.0), ([6], 40.0), ([4], 14.0)], 'core_scale': ([2, 3, 5, 7], 1.35),
+        'pyramid': ([2, 3, 5, 7], 14.0), 'src': 'tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 63 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (le LM 146 = pointe lumineuse, 6 m au-dessus de la pyramide lue); tour ~30 px a l est de la V16 dans cette vue (garde sur la V16), ailes basses 40 m ESTIMEES (Venetian Islands: fut etroit), verriere pyramidale +14 m (vue dans Biplane Night (Video) Last); podium (region 4) 14 m ESTIME'},
+    'Green Diamond': {'poly': 3576, 'color': '#4ade80', 'groups': [([2, 3, 4, 6], 126.0), ([0], 40.0), ([1], 40.0), ([5], 40.0), ([7], 14.0)], 'core_scale': ([2, 3, 4, 6], 1.35),
+        'pyramid': ([2, 3, 4, 6], 14.0), 'src': 'tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 60 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (LM 145 = pointe); tour ~30 px a l est de la V16 dans cette vue (garde sur la V16), ailes basses 40 m ESTIMEES (Venetian Islands: fut etroit), verriere pyramidale +14 m (vue dans Biplane Night (Video) Last); podium (region 7) 14 m ESTIME'},
     'Icon at South Beach': {'poly': 3251, 'color': '#f472b6', 'groups': [([0], 142.0), ([1], 147.0), ([2], 110.0)],
         'src': 'tour (region 0) = LM 142; couronne (region 1) +5 m et aile courbe (region 2) 110 m ESTIMES'},
     'Murano Grande': {'poly': 3233, 'color': '#fb923c', 'groups': [([1], 139.0), ([2], 133.0), ([4], 127.0), ([3], 12.0), ([0], 30.0)],
@@ -72,6 +73,9 @@ def build(names=None):
     for name, S in SPEC.items():
         if names and name not in names: continue
         R = {r['id']: r for r in VT.regions(S['poly'])}; E = []
+        if S.get('core_scale'):
+            ids, sc = S['core_scale']; cc = np.mean(np.vstack([np.array(R[i]['ring']) for i in ids]), 0)
+            for i in ids: R[i] = dict(R[i], ring=[list(cc + (np.array(p) - cc) * sc) for p in R[i]['ring']])
         def seg(a, b): E.append([[round(float(v), 2) for v in a], [round(float(v), 2) for v in b]])
         def ring(pts, z):
             for i in range(len(pts)): seg([*pts[i], z], [*pts[(i + 1) % len(pts)], z])
