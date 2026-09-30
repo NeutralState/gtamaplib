@@ -6123,15 +6123,15 @@
    43.34
   ],
   "ypr": [
-   250.24,
-   -0.922,
-   0.0
+   250.022,
+   -0.692,
+   0.676
   ],
   "fov": [
-   39.097,
+   38.009,
    null
   ],
   "source": "Screenshot Game Informer \u2014 Water Tower (verger d'agrumes, cueilleurs, pickup Tucker's Citrus Farms, avion d'epandage; chateau d'eau en boule sur colonne au loin, skyline de Vice City a l'horizon)",
-  "note": "SOLVE 2026-09-29: position resolue (91 m du tooltip de zone): chateau d eau Daytona (LM 3 cams Panorama/Fires/Postcard, 0.07 deg) = centre de la boule (1390, 364) + diametre 121 px, + Marquis Miami (NW) + orientation POV d Alexandre (Downtown aligne) comme depart; z sol + 1.7. Pose precedente ([-4300.2, 3242.1, 55.99], [249.013, -1.101, 0.0], 38.7) | POV 2026-09-29 (Alexandre, 2e reglage): dyaw -0.56, dpitch +0.09, hfov 38.7 | POV 2026-09-29 (Alexandre): dyaw +11.78, dpitch +1.51, hfov 40.6 sur la pose preliminaire | POSE PRELIMINAIRE 2026-09-29: position = tooltip d Alexandre (-4300.2, 3242.1), z = sol heightmap 54.3 + 1.7 (tooltip Z 53.0); orientation et hfov devines pour viser le chateau d eau = Daytona Beach Water Tower (3400 Transmitter Rd, 429 m, az 131) (boule u~1390 v 300-420); a resoudre avec des clics"
+  "note": "REFINE 2026-09-29: roll 0.68 deg revele par la derive lineaire des hauts de tours (Quantum -4.6 / Opera -1.4 / Marquis +0.2 px); ajustement yaw/pitch/roll/hfov sur 7 bords de silhouettes (Opera, Quantum S, Marquis) + boule du chateau d eau: RMS 2.7 -> 1.0 px | SOLVE 2026-09-29: position resolue (91 m du tooltip de zone): chateau d eau Daytona (LM 3 cams Panorama/Fires/Postcard, 0.07 deg) = centre de la boule (1390, 364) + diametre 121 px, + Marquis Miami (NW) + orientation POV d Alexandre (Downtown aligne) comme depart; z sol + 1.7. Pose precedente ([-4300.2, 3242.1, 55.99], [249.013, -1.101, 0.0], 38.7) | POV 2026-09-29 (Alexandre, 2e reglage): dyaw -0.56, dpitch +0.09, hfov 38.7 | POV 2026-09-29 (Alexandre): dyaw +11.78, dpitch +1.51, hfov 40.6 sur la pose preliminaire | POSE PRELIMINAIRE 2026-09-29: position = tooltip d Alexandre (-4300.2, 3242.1), z = sol heightmap 54.3 + 1.7 (tooltip Z 53.0); orientation et hfov devines pour viser le chateau d eau = Daytona Beach Water Tower (3400 Transmitter Rd, 429 m, az 131) (boule u~1390 v 300-420); a resoudre avec des clics"
  }
 }
