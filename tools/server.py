@@ -1683,6 +1683,19 @@ class Handler(BaseHTTPRequestHandler):
 
         elif path == '/api/export_validation':
             cam_name = unquote(qs.get('cam', [''])[0])
+            # [EXPORT-V2 2026-09-29] rendu moderne (meshes + etiquettes + score MESH FIT, zero clic);
+            # &style=classic pour l'ancien rendu
+            if cam_name in md.cameras and qs.get('style',[''])[0] != 'classic':
+                try:
+                    import export_render as _er, importlib as _il; _il.reload(_er)
+                    data = _er.render_camera(cam_name, show_meshes=qs.get('meshes',['1'])[0]!='0')
+                    self.send_response(200)
+                    self.send_header('Content-Type','image/png')
+                    self.send_header('Content-Disposition','attachment; filename="'+cam_name+' validation.png"')
+                    self.send_header('Content-Length',str(len(data)))
+                    self.end_headers(); self.wfile.write(data); return
+                except Exception as _e:
+                    import traceback; traceback.print_exc()
             if cam_name not in md.cameras:
                 self.send_json({'error': 'invalid cam'}, 400); return
             try:
@@ -1822,6 +1835,19 @@ class Handler(BaseHTTPRequestHandler):
 
         elif path == '/api/export_map_validation':
             cam_name = unquote(qs.get('cam', [''])[0])
+            # [EXPORT-V2 2026-09-29] rendu moderne (meshes + etiquettes + score MESH FIT, zero clic);
+            # &style=classic pour l'ancien rendu
+            if cam_name in md.cameras and qs.get('style',[''])[0] != 'classic':
+                try:
+                    import export_render as _er, importlib as _il; _il.reload(_er)
+                    data = _er.render_map(cam_name, _render_tiles_region)
+                    self.send_response(200)
+                    self.send_header('Content-Type','image/png')
+                    self.send_header('Content-Disposition','attachment; filename="'+cam_name+' map.png"')
+                    self.send_header('Content-Length',str(len(data)))
+                    self.end_headers(); self.wfile.write(data); return
+                except Exception as _e:
+                    import traceback; traceback.print_exc()
             if cam_name not in md.cameras:
                 self.send_json({'error': 'invalid cam'}, 400); return
             try:
