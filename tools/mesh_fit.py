@@ -255,9 +255,9 @@ def _visible(ctx, meshes):
     for name, v in meshes.items():
         e = v.get('world_edges') or []
         if not e or np.hypot(e[0][0][0] - cx, e[0][0][1] - cy) < 25: continue
-        if LONG.search(name):      # ponts: a plus de 6 km ils sont caches par le decor (arbres, iles) que les meshes ne modelisent pas
+        if LONG.search(name):      # ponts: a plus de 4 km ils sont caches par le decor (arbres, iles) que les meshes ne modelisent pas
             E_ = np.asarray(e, float).reshape(-1, 3)
-            if np.hypot(E_[:, 0] - cx, E_[:, 1] - cy).min() > 6000: continue
+            if np.hypot(E_[:, 0] - cx, E_[:, 1] - cy).min() > 4000: continue
         pr = _project_pts(ctx, e)
         if len(pr) < 3: continue
         A = np.array([p for ab in pr for p in ab])
