@@ -31,7 +31,20 @@ NAMES = [((-98, 1080), 'Rialto Causeway Bridge (W)'), ((1250, 1460), 'Rialto Cau
          ((401, 3007), 'Leaf Links Bridge (W)'), ((-1191, 1604), 'Vice River Bridge (N)'), ((-1234, -281), 'Little Cuba Bridge'),
          ((-494, -671), 'Vice River Bridge (Mouth)'), ((-1070, -604), 'Vice River Bridge (Salton)')]
 CREST = {'I-404 Causeway Bridge (Downtown)': 20.6}   # nom -> haut du tablier MESURE (m): dessous 17-19 m sur 3 piles dans Shoreline [Gameinformer]
-FLAT = ('I-404', 'I-397')
+FLAT = ('I-404 Causeway Bridge (Downtown)', 'I-404 Causeway Bridge (Watson)', 'I-397')
+# [VC-BRIDGES-V2 2026-09-30] hauteurs ESTIMEES d'apres le pont IRL correspondant (aucune cam ne voit ces ponts de pres:
+# verifie dans 12 cams candidates, tous occultes ou trop loin): haut du tablier au milieu (m)
+IRL = {'Rialto Causeway Bridge': 6.0,          # Venetian Causeway: ponts bas + basculants
+       'I-404 Causeway Bridge (Fisher': 10.0,   # MacArthur Causeway, troncons est (bas)
+       'I-404 Causeway Bridge (Vice Beach)': 10.0,
+       'Nautilus Causeway Bridge (W)': 18.0,    # Julia Tuttle Causeway: pont haut cote ouest
+       'Nautilus Causeway Bridge (E)': 8.0,
+       'Catalan Causeway Bridge': 24.0,         # Rickenbacker: William Powell Bridge
+       'Gloriana Key Bridge': 8.0,              # Bear Cut
+       'Tequesta Retreat Bridge': 5.0,          # Brickell Key bridge
+       'Starfish Island Bridge': 4.0,           # Star Island
+       'Leaf Links Bridge': 5.0,                # Indian Creek
+       'Vice River Bridge': 6.0, 'Little Cuba Bridge': 6.0}   # Miami River: basculants bas
 PIERS_XY = {'I-404 Causeway Bridge (Downtown)': [(-42.9, 551.3), (-94.2, 558.5), (-158.1, 562.3)]}   # piles mesurees (Shoreline, rayon x z=0)   # autoroutes: viaducs en hauteur sur toute la traversee (vu dans Shoreline), pas de rampe dans le troncon V16
 EST = [(250, 20.0), (120, 10.0), (0, 5.0)]      # longueur min -> haut du tablier ESTIME
 
@@ -88,7 +101,8 @@ def build():
     for b in sorted(extract(), key=lambda b: -b['area']):
         nm = name_of(b['c'], used); used.add(nm)
         Lg = b['length']; hw = min(b['width'], 40) / 2
-        crest = CREST.get(nm) or (CREST['I-404 Causeway Bridge (Downtown)'] if nm.startswith(FLAT) else next(h for lmin, h in EST if Lg >= lmin))
+        irl = next((h for key, h in IRL.items() if nm.startswith(key)), None)
+        crest = CREST.get(nm) or (CREST['I-404 Causeway Bridge (Downtown)'] if nm.startswith(FLAT) else (irl or next(h for lmin, h in EST if Lg >= lmin)))
         br = Bridge(poly=b['axis']); S = br.S[-1]
         if nm.startswith(FLAT): zb = lambda s, crest=crest: crest - 1.8
         else: zb = lambda s, crest=crest, S=S: 1.5 + (crest - 1.5) * (1 - (2 * s / S - 1) ** 2) - 1.8   # dessous du tablier
@@ -104,7 +118,7 @@ def build():
         out[nm] = {'color': '#cbd5e1', 'world_edges': br.E, '_credit': 'Alexandre Leblanc (V16) + Claude Opus 5.5',
                    'note': 'VC-BRIDGES-V1 2026-09-30: plan V16 (troncon de chaussee au-dessus de l eau, axe polyligne, largeur %.0f m, '
                            'longueur %.0f m); haut du tablier %s %.0f m %s.'
-                           % (2 * hw, Lg, 'MESURE' if nm in CREST else ('repris du pont I-404 mesure' if nm.startswith(FLAT) else 'ESTIME (classe de longueur, IRL)'), crest,
+                           % (2 * hw, Lg, 'MESURE' if nm in CREST else ('repris du pont I-404 mesure' if nm.startswith(FLAT) else ('ESTIME d apres le pont IRL' if irl else 'ESTIME (classe de longueur)')), crest,
                               'constant (viaduc autoroutier)' if nm.startswith(FLAT) else 'au milieu, 1.5 m aux culees (profil parabolique)')}
     return out
 
