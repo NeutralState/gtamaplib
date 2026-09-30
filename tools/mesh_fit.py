@@ -39,6 +39,7 @@ HIDDEN = set()                # meshes caches declares a la main (cameras.json: 
 EVID_ALL, EVID_TOP, EVID_REGION = 1.6, 3.0, 0.01       # [VIS-EVIDENCE] seuils etalonnes sur Thunderstorm (orage) / Water Tower / Fires
 MEASURABLE_CS = 5.0          # distance moyenne au bord (decale) au-dela de laquelle un mesh n'est pas jugeable
 SIL = True                   # contour exterieur (silhouette) seulement
+SIL_UNION = True             # [SIL-UNION] union des pieces x tranches au lieu de l'enveloppe convexe globale
 import re
 LONG = re.compile(r'Bridge|Viaduct|Causeway', re.I)   # [KEYS-BRIDGES-V1] objets longs et fins: aretes reelles, pas d'enveloppe
 DIRS = [(np.cos(a), np.sin(a)) for a in np.linspace(0, 2 * np.pi, 8, endpoint=False)]
@@ -144,7 +145,50 @@ def _samples_long(ctx, edges):
     return P
 
 
+def _components(edges):
+    """pieces connexes du mesh (aretes partageant un sommet, arrondi 0.5 m)."""
+    par = {}
+    def f(a):
+        while par.setdefault(a, a) != a: par[a] = par[par[a]]; a = par[a]
+        return a
+    key = lambda p: (round(p[0] * 2), round(p[1] * 2), round(p[2] * 2))
+    for a, b in edges: par[f(key(a))] = f(key(b))
+    groups = {}
+    for e in edges: groups.setdefault(f(key(e[0])), []).append(e)
+    return list(groups.values())
+
+
+def _samples_union(ctx, edges):
+    """[SIL-UNION 2026-09-30] contour de l'UNION des pieces du mesh, chaque piece = enveloppes par tranche de hauteur
+    (l'enveloppe convexe globale tirait des diagonales dans le ciel entre 3 cheminees et leurs chaudieres)."""
+    from scipy.spatial import ConvexHull
+    from PIL import ImageDraw
+    polys = []
+    for comp in _components(edges):
+        E = np.asarray(comp, float); z = E[..., 2]; zmin, zmax = z.min(), z.max()
+        nb = max(1, min(12, int((zmax - zmin) / 6)))
+        for b in range(nb):
+            lo = zmin + (zmax - zmin) * b / nb; hi = zmin + (zmax - zmin) * (b + 1) / nb
+            sel = [ab for ab in comp if max(ab[0][2], ab[1][2]) >= lo - 1e-6 and min(ab[0][2], ab[1][2]) <= hi + 1e-6]
+            pr = _project_pts(ctx, sel)
+            if len(pr) < 1: continue
+            A = np.array([p for ab in pr for p in ab])
+            try: polys.append(A[ConvexHull(A).vertices])
+            except Exception: continue
+    if not polys: return np.zeros((0, 2))
+    allp = np.vstack(polys); x0 = int(max(0, np.floor(allp[:, 0].min()) - 2)); y0 = int(max(0, np.floor(allp[:, 1].min()) - 2))
+    x1 = int(min(ctx.W, np.ceil(allp[:, 0].max()) + 3)); y1 = int(min(ctx.H, np.ceil(allp[:, 1].max()) + 3))
+    if x1 - x0 < 3 or y1 - y0 < 3: return np.zeros((0, 2))
+    m = Image.new('L', (x1 - x0, y1 - y0), 0); dr = ImageDraw.Draw(m)
+    for pg in polys: dr.polygon([(float(p[0] - x0), float(p[1] - y0)) for p in pg], fill=1)
+    m = np.asarray(m, bool); bd = m & ~ndimage.binary_erosion(m)
+    ys, xs = np.nonzero(bd); keep = ((xs + ys) % int(STEP)) == 0
+    return np.c_[xs[keep] + x0 + 0.5, ys[keep] + y0 + 0.5]
+
+
 def _samples(ctx, edges, name, hulls):
+    if SIL_UNION and not LONG.search(name):
+        return _clip_occ(ctx, _samples_union(ctx, edges), name, hulls)
     if LONG.search(name):
         P = _samples_long(ctx, edges)
         return _clip_occ(ctx, np.array(P) if P else np.zeros((0, 2)), name, hulls)
@@ -268,7 +312,7 @@ def evaluate(cam_name, state=None, meshes=None):
         if hidden:                  # cache (arbres nets ou liste hidden_meshes de la cam): ni dessin, ni etiquette, ni score
             per[name] = {'score': None, 'visible': False, 'hidden': hidden, 'foliage': fol, 'gain': round(g, 3), 'n': int(len(P)), 'color': meshes[name].get('color', '#facc15')}
             continue
-        if (c0 > MEASURABLE_CS and cs > MEASURABLE_CS) or LONG.search(name):   # brume/contre-jour, ou pont (un tablier long ne se
+        if (c0 > MEASURABLE_CS and cs > MEASURABLE_CS) or LONG.search(name) or ev_all < EVID_ALL:   # + silhouette seulement devinee (brume): dessinee, pas notee   # brume/contre-jour, ou pont (un tablier long ne se
             # localise que perpendiculairement a son axe: le contraste par decalage ne le mesure pas): dessine mais non mesure (—)
             per[name] = {'score': None, 'visible': True, 'hidden': None, 'foliage': fol, 'gain': round(g, 3), 'n': int(len(P)), 'color': meshes[name].get('color', '#facc15')}
             continue
@@ -284,7 +328,7 @@ def evaluate(cam_name, state=None, meshes=None):
 def compute(cam_name, use_cache=True):
     cams = json.load(open(CAMS)); c = cams.get(cam_name)
     if not c or c.get('xyz') is None or not os.path.exists(os.path.join(REPO, 'frames', cam_name + '.png')): return None
-    key = hashlib.md5(json.dumps([os.path.getmtime(os.path.join(THIS, 'generated', 'seg_veg', cam_name.replace('/', '_') + '.png')) if os.path.exists(os.path.join(THIS, 'generated', 'seg_veg', cam_name.replace('/', '_') + '.png')) else 0, c.get('xyz'), c.get('ypr'), c.get('fov'), c.get('hidden_meshes'), os.path.getmtime(MESHES), 'v8evid2']).encode()).hexdigest()
+    key = hashlib.md5(json.dumps([os.path.getmtime(os.path.join(THIS, 'generated', 'seg_veg', cam_name.replace('/', '_') + '.png')) if os.path.exists(os.path.join(THIS, 'generated', 'seg_veg', cam_name.replace('/', '_') + '.png')) else 0, c.get('xyz'), c.get('ypr'), c.get('fov'), c.get('hidden_meshes'), os.path.getmtime(MESHES), 'v9union']).encode()).hexdigest()
     os.makedirs(CACHE, exist_ok=True); cp = os.path.join(CACHE, cam_name.replace('/', '_') + '.json')
     if use_cache and os.path.exists(cp):
         try:
