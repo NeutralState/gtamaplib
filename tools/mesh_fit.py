@@ -36,6 +36,7 @@ SHIFT = 5.0                  # decalage de reference (px)
 FOLIAGE_MAX = 0.75           # >75 % des points du contour du mesh sur de la vegetation (segmentation SegFormer) -> cache
 THIN_PX = 14                 # objets fins (cheminees, treillis): pas de test feuillage (leur structure est texturee)
 HIDDEN = set()                # meshes caches declares a la main (cameras.json: hidden_meshes)
+EVID_ALL, EVID_TOP, EVID_REGION = 1.6, 3.0, 0.01       # [VIS-EVIDENCE] seuils etalonnes sur Thunderstorm (orage) / Water Tower / Fires
 MEASURABLE_CS = 5.0          # distance moyenne au bord (decale) au-dela de laquelle un mesh n'est pas jugeable
 SIL = True                   # contour exterieur (silhouette) seulement
 import re
@@ -59,6 +60,10 @@ class _Ctx:
         hp = img - ndimage.gaussian_filter(img, 2)          # texture fine (feuillage) pour la visibilite
         self.tex = np.sqrt(np.maximum(ndimage.uniform_filter(hp ** 2, 7), 0))
         self.tex_thr = np.percentile(self.tex, 70)
+        # [VIS-EVIDENCE 2026-09-30] force du bord relative au fond local (mediane 31 px), tolerance de pose +-2 px:
+        # un mesh noye dans la brume / l'orage n'a aucun bord la ou sa silhouette tombe (~1.0)
+        g1 = ndimage.gaussian_filter(img, 1.0); G = np.hypot(ndimage.sobel(g1, 0), ndimage.sobel(g1, 1))
+        self.edge_rel = ndimage.maximum_filter(G / (ndimage.median_filter(G, size=31) + 1.0), size=5)
         try:
             import seg_occlusion
             self.veg = seg_occlusion.load_mask(cam_name)        # masque vegetation (SegFormer ADE20K), None si pas calcule
@@ -218,6 +223,17 @@ def _visible(ctx, meshes):
     return out
 
 
+def _region_edges(ctx, edges):
+    """densite de bords detectes dans l'enveloppe projetee du mesh (0 = zone lisse: ciel, nuage, pluie)."""
+    from scipy.spatial import ConvexHull
+    from PIL import ImageDraw
+    pr = _project_pts(ctx, edges); A = np.array([p for ab in pr for p in ab])
+    try: hv = A[ConvexHull(A).vertices]
+    except Exception: return 1.0
+    m = Image.new('L', (ctx.W, ctx.H), 0); ImageDraw.Draw(m).polygon([tuple(map(float, p)) for p in hv], fill=1); m = np.asarray(m, bool)
+    return float((ctx.dist[m] < 1).mean()) if m.sum() >= 30 else 1.0
+
+
 def _to_score(g, full=0.06):
     # etalonnage 2026-09-29 (silhouettes): global ~0.03-0.06 sur les cams bien calees
     # (Port Vice City A, Gameinformer, Postcard, Fires), ~0.003 sur Convertible (pose
@@ -241,7 +257,14 @@ def evaluate(cam_name, state=None, meshes=None):
         if ctx.veg is not None:   # part des points du contour du mesh (non occultes) tombant sur de la vegetation
             yi = np.clip(P[:, 1].astype(int), 0, ctx.H - 1); xi = np.clip(P[:, 0].astype(int), 0, ctx.W - 1)
             fol = float(ctx.veg[yi, xi].mean())
-        hidden = 'manuel' if name in HIDDEN else ('arbres' if (fol is not None and fol > FOLIAGE_MAX) else None)
+        yi = np.clip(P[:, 1].astype(int), 0, ctx.H - 1); xi = np.clip(P[:, 0].astype(int), 0, ctx.W - 1)
+        er = ctx.edge_rel[yi, xi]; top = P[:, 1] <= np.percentile(P[:, 1], 15)
+        ev_all, ev_top = float(np.median(er)), float(np.median(er[top]))
+        seen = ev_all >= EVID_ALL or ev_top >= EVID_TOP        # silhouette entiere, ou seulement le haut (tour qui depasse de la brume)
+        if not seen:   # bords faibles: cache SEULEMENT si toute la zone du mesh est lisse (orage/brouillard); sinon (contre-jour,
+            # treillis, pose un peu decalee) l'objet est la mais mal aligne -> reste affiche
+            seen = _region_edges(ctx, e) >= EVID_REGION
+        hidden = 'manuel' if name in HIDDEN else ('arbres' if (fol is not None and fol > FOLIAGE_MAX) else (None if seen else 'brume'))
         if hidden:                  # cache (arbres nets ou liste hidden_meshes de la cam): ni dessin, ni etiquette, ni score
             per[name] = {'score': None, 'visible': False, 'hidden': hidden, 'foliage': fol, 'gain': round(g, 3), 'n': int(len(P)), 'color': meshes[name].get('color', '#facc15')}
             continue
@@ -261,7 +284,7 @@ def evaluate(cam_name, state=None, meshes=None):
 def compute(cam_name, use_cache=True):
     cams = json.load(open(CAMS)); c = cams.get(cam_name)
     if not c or c.get('xyz') is None or not os.path.exists(os.path.join(REPO, 'frames', cam_name + '.png')): return None
-    key = hashlib.md5(json.dumps([os.path.getmtime(os.path.join(THIS, 'generated', 'seg_veg', cam_name.replace('/', '_') + '.png')) if os.path.exists(os.path.join(THIS, 'generated', 'seg_veg', cam_name.replace('/', '_') + '.png')) else 0, c.get('xyz'), c.get('ypr'), c.get('fov'), c.get('hidden_meshes'), os.path.getmtime(MESHES), 'v7long2']).encode()).hexdigest()
+    key = hashlib.md5(json.dumps([os.path.getmtime(os.path.join(THIS, 'generated', 'seg_veg', cam_name.replace('/', '_') + '.png')) if os.path.exists(os.path.join(THIS, 'generated', 'seg_veg', cam_name.replace('/', '_') + '.png')) else 0, c.get('xyz'), c.get('ypr'), c.get('fov'), c.get('hidden_meshes'), os.path.getmtime(MESHES), 'v8evid2']).encode()).hexdigest()
     os.makedirs(CACHE, exist_ok=True); cp = os.path.join(CACHE, cam_name.replace('/', '_') + '.json')
     if use_cache and os.path.exists(cp):
         try:
