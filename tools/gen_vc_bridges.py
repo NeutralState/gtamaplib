@@ -57,17 +57,22 @@ def extract():
         c = P.mean(0); u = np.linalg.svd(P - c, full_matrices=False)[2][0]; nn = np.array([-u[1], u[0]])
         s = (P - c) @ u; w = (P - c) @ nn
         if s.max() - s.min() < 45: continue
-        axis = []
+        # axe = courbe lisse w(s) (polynome deg 1-3 selon la longueur, ajuste en robuste sur les medianes par pas de 10 m):
+        # la mediane brute serpentait (bretelles, 2 chaussees) -> tablier "explose" (Alexandre 2026-09-30)
+        bs, bw = [], []
         for s0 in np.arange(s.min(), s.max() + 0.1, 10.0):
             m = np.abs(s - s0) < 6
-            if m.sum() > 5: axis.append(c + u * s0 + nn * float(np.median(w[m])))
-        A_ = np.array(axis)                                   # lissage (moyenne glissante 5 sommets, bouts fixes)
-        if len(A_) >= 5:
-            K = np.ones(5) / 5; Sx = np.convolve(np.pad(A_[:, 0], 2, mode='edge'), K, 'valid'); Sy = np.convolve(np.pad(A_[:, 1], 2, mode='edge'), K, 'valid')
-            axis = list(np.c_[Sx, Sy])
+            if m.sum() > 5: bs.append(s0); bw.append(float(np.median(w[m])))
+        bs, bw = np.array(bs), np.array(bw); Lg = s.max() - s.min()
+        deg = 1 if Lg < 150 else (2 if Lg < 350 else 3)
+        keep = np.ones(len(bs), bool)
+        for _ in range(3):                                    # rejet des bins aberrants (> 2.5 m du fit)
+            co = np.polyfit(bs[keep], bw[keep], min(deg, max(0, keep.sum() - 1)))
+            r = np.abs(np.polyval(co, bs) - bw); keep = r < max(2.5, np.percentile(r, 60))
+        axis = [c + u * s0 + nn * float(np.polyval(co, s0)) for s0 in np.arange(s.min(), s.max() + 0.1, 10.0)]
         axis = [axis[0] - (axis[1] - axis[0]) / np.linalg.norm(axis[1] - axis[0]) * 3] + axis + \
                [axis[-1] + (axis[-1] - axis[-2]) / np.linalg.norm(axis[-1] - axis[-2]) * 3]
-        width = float(np.percentile(w, 95) - np.percentile(w, 5))
+        wres = w - np.polyval(co, s); width = float(np.percentile(wres, 93) - np.percentile(wres, 7))
         out.append({'c': c.tolist(), 'axis': [a.tolist() for a in axis], 'width': width, 'length': float(s.max() - s.min() + 6), 'area': int(sizes[i - 1])})
     return out
 
