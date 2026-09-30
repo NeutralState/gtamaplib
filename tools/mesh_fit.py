@@ -33,7 +33,7 @@ MIN_PROJ_PX = 18
 STEP = 2.0
 CAP = 8.0                    # distance max comptee (px)
 SHIFT = 5.0                  # decalage de reference (px)
-FOLIAGE_MAX = 9.9            # detection auto des arbres DESACTIVEE (non fiable: demande d'Alexandre 2026-09-29); cacher a la main via hidden_meshes
+FOLIAGE_MAX = 0.75           # >75 % des points du contour du mesh sur de la vegetation (segmentation SegFormer) -> cache
 THIN_PX = 14                 # objets fins (cheminees, treillis): pas de test feuillage (leur structure est texturee)
 HIDDEN = set()                # meshes caches declares a la main (cameras.json: hidden_meshes)
 MEASURABLE_CS = 5.0          # distance moyenne au bord (decale) au-dela de laquelle un mesh n'est pas jugeable
@@ -57,6 +57,11 @@ class _Ctx:
         hp = img - ndimage.gaussian_filter(img, 2)          # texture fine (feuillage) pour la visibilite
         self.tex = np.sqrt(np.maximum(ndimage.uniform_filter(hp ** 2, 7), 0))
         self.tex_thr = np.percentile(self.tex, 70)
+        try:
+            import seg_occlusion
+            self.veg = seg_occlusion.load_mask(cam_name)        # masque vegetation (SegFormer ADE20K), None si pas calcule
+        except Exception:
+            self.veg = None
 
 
 def _band_masks(ctx, meshes_vis):
@@ -116,13 +121,17 @@ def _foliage(ctx, edges):
     from PIL import ImageDraw
     pr = _project_pts(ctx, edges)
     A = np.array([p for ab in pr for p in ab])
-    w, h = np.ptp(A[:, 0]), np.ptp(A[:, 1])
-    if w < THIN_PX and h > 3 * w: return None     # haut et mince (cheminee, treillis): sa propre structure est texturee
     try: hv = A[ConvexHull(A).vertices]
     except Exception: return None
     m = Image.new('L', (ctx.W, ctx.H), 0); ImageDraw.Draw(m).polygon([tuple(map(float, p)) for p in hv], fill=1)
     m = np.asarray(m, bool)
-    return float((ctx.tex[m] > ctx.tex_thr).mean()) if m.sum() >= 50 else None
+    if m.sum() < 50: return None
+    if ctx.veg is not None and ctx.veg.shape == m.shape:
+        # les arbres cachent par le bas: on juge la moitie HAUTE de l'empreinte (un chateau d'eau dont
+        # la colonne est dans les arbres mais la boule depasse reste visible)
+        ys = np.nonzero(m.any(1))[0]; top = m.copy(); top[int((ys[0] + ys[-1]) / 2):, :] = False
+        return float(ctx.veg[top].mean()) if top.sum() >= 25 else float(ctx.veg[m].mean())                     # part de l'empreinte couverte d'arbres (segmentation)
+    return None                                             # pas de segmentation: pas de decision
 
 
 def _cost(ctx, P, dx=0.0, dy=0.0):
@@ -170,7 +179,10 @@ def evaluate(cam_name, state=None, meshes=None):
         if len(P) < 15: continue
         wpx = min(np.ptp(P[:, 0]), np.ptp(P[:, 1]))          # objets fins (cheminees): decalage < demi-largeur
         g, c0, cs = _gain(ctx, P, float(np.clip(0.3 * wpx, 1.5, SHIFT)))
-        fol = _foliage(ctx, e)
+        fol = None
+        if ctx.veg is not None:   # part des points du contour du mesh (non occultes) tombant sur de la vegetation
+            yi = np.clip(P[:, 1].astype(int), 0, ctx.H - 1); xi = np.clip(P[:, 0].astype(int), 0, ctx.W - 1)
+            fol = float(ctx.veg[yi, xi].mean())
         hidden = 'manuel' if name in HIDDEN else ('arbres' if (fol is not None and fol > FOLIAGE_MAX) else None)
         if hidden:                  # cache (arbres nets ou liste hidden_meshes de la cam): ni dessin, ni etiquette, ni score
             per[name] = {'score': None, 'visible': False, 'hidden': hidden, 'foliage': fol, 'gain': round(g, 3), 'n': int(len(P)), 'color': meshes[name].get('color', '#facc15')}
@@ -190,7 +202,7 @@ def evaluate(cam_name, state=None, meshes=None):
 def compute(cam_name, use_cache=True):
     cams = json.load(open(CAMS)); c = cams.get(cam_name)
     if not c or c.get('xyz') is None or not os.path.exists(os.path.join(REPO, 'frames', cam_name + '.png')): return None
-    key = hashlib.md5(json.dumps([c.get('xyz'), c.get('ypr'), c.get('fov'), c.get('hidden_meshes'), os.path.getmtime(MESHES), 'v5b']).encode()).hexdigest()
+    key = hashlib.md5(json.dumps([os.path.getmtime(os.path.join(THIS, 'generated', 'seg_veg', cam_name.replace('/', '_') + '.png')) if os.path.exists(os.path.join(THIS, 'generated', 'seg_veg', cam_name.replace('/', '_') + '.png')) else 0, c.get('xyz'), c.get('ypr'), c.get('fov'), c.get('hidden_meshes'), os.path.getmtime(MESHES), 'v6seg4']).encode()).hexdigest()
     os.makedirs(CACHE, exist_ok=True); cp = os.path.join(CACHE, cam_name.replace('/', '_') + '.json')
     if use_cache and os.path.exists(cp):
         try:
