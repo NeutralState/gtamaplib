@@ -80,7 +80,7 @@ def build():
                       [*map(float, np.round(c + 3.2 * np.array([np.cos(th), np.sin(th)]), 2)), round(zt, 2)]])
     prism(E, ring(F, 871), ground(*np.mean(ring(F, 871), 0)), HEIGHTS['yard'])
     out['Turkey Point Nuclear Power Station (Fossil Units)'] = E
-    note = ('TURKEY-POINT-V1 2026-09-30 (demande Alexandre: mesh de l usine pour placer Thunderstorm [Gameinformer]): formes V16 '
+    note = ('VALIDE Alexandre 2026-09-30 (decalage V16 correct) | TURKEY-POINT-V1 2026-09-30 (demande Alexandre: mesh de l usine pour placer Thunderstorm [Gameinformer]): formes V16 '
             'translatees de (%.1f, %.1f) m = decalage moyen des 5 reperes triangules 3-4 cams (3 cheminees, 2 domes) a leur cercle V16 '
             '(ecart-type 1.5 m). Cheminees et domes: sommets = landmarks; hauteurs %s.' % (SHIFT[0], SHIFT[1], json.dumps(HEIGHTS)))
     cols = {'Containments': '#e5e7eb', 'Turbine Hall': '#9ca3af', 'Fossil Units': '#f87171'}
