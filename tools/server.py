@@ -1877,6 +1877,24 @@ class Handler(BaseHTTPRequestHandler):
                     mxp,myp=float(marker_px[0]),float(marker_px[1])
                     d=(_math.hypot(px-mxp,py-myp)/size[0])*hfov_deg*60.0
                 lms.append([lm_name,lx,ly,d])
+            # [MAP-EXTENT-MESH-V1 2026-09-29] cadrage aussi sur les meshes VISIBLES dans la frame
+            # (une cam avec peu/pas de LMs cliques donnait une vue de 300 m autour d'elle)
+            try:
+                with open(os.path.join(GTAMAP_DIR,'gtamapdata','building_meshes_procedural.json')) as _mf:
+                    _meshes=json.load(_mf)
+                _md=[]
+                for _mv in _meshes.values():
+                    _ed=_mv.get('world_edges') or []
+                    if not _ed: continue
+                    _pts=[p for e in _ed for p in e]
+                    _c=[sum(p[i] for p in _pts)/len(_pts) for i in range(3)]
+                    _pp=cam.get_pixel(_c)
+                    if _pp is None or not (0<=_pp[0]<=size[0] and 0<=_pp[1]<=size[1]): continue
+                    _md.append(_math.hypot(_c[0]-cx,_c[1]-cy))
+                if _md:
+                    _md.sort(); maxd=max(maxd,min(_md[int(0.8*(len(_md)-1))],12000.0))
+            except Exception as _e:
+                print('map extent meshes:',_e)
             R=maxd*1.15
             # [EXPORT-TILES-V13] crop depuis les tiles V13 (plus de get_map V12)
             x0w,y0w,x1w,y1w=cx-R,cy-R,cx+R,cy+R
