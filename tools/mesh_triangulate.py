@@ -96,7 +96,7 @@ def main():
     C = json.load(open(D('cameras.json'))); P = json.load(open(D('pixels.json'))); L = json.load(open(D('landmarks.json')))
     M = json.load(open(D('building_meshes_procedural.json')))
     A = set(json.load(open(os.path.join(THIS, 'audit', 'anchor_truth_xy.json')))['anchors'])
-    ok = lambda n: n in C and C[n].get('xyz') and C[n].get('fov') and C[n]['fov'][0] and C[n].get('size')
+    ok = lambda n: n in C and C[n].get('xyz') and C[n].get('ypr') and C[n].get('fov') and (C[n]['fov'][0] or C[n]['fov'][1]) and C[n].get('size')
     PR = {k: prisms(v['world_edges']) for k, v in M.items() if v.get('world_edges')}
     EG = {k: np.asarray(v['world_edges'], float) for k, v in M.items() if v.get('world_edges')}
     VX = {k: np.unique(EG[k].reshape(-1, 3).round(2), axis=0) for k in EG}
@@ -120,10 +120,13 @@ def main():
             r = r2
         return r if r in M else None
 
-    def ray(n, uv):
-        c = C[n]; q = G.get_q(c['ypr']); fov = (c['fov'][0], G.get_vfov(c['fov'][0], tuple(c['size'])))
-        d = np.array(G.get_pixel_direction(tuple(uv), q, fov, tuple(c['size'])), float)
-        return np.array(c['xyz'], float), d / np.linalg.norm(d)
+    import common
+    CC = {}
+
+    def ray(n, uv):                                   # modele de cam complet (accepte les cams definies par le fov vertical)
+        if n not in CC: CC[n] = common.get_cam(n)
+        d = np.array(CC[n].get_pixel_direction(tuple(uv)), float)
+        return np.array(C[n]['xyz'], float), d / np.linalg.norm(d)
 
     clicks = {}
     for n, p in P.items():
@@ -139,13 +142,19 @@ def main():
         # 1. MONO
         if m and len(cs) == 1 and k not in A:
             o, d = ray(cs[0], P[cs[0]][k]); t = first_hit(o, d, PR[m])
+            # coin: le rayon d'un clic sur un coin frole un SOMMET du mesh -> profondeur de ce sommet
+            V = VX[m]; tv = (V - o) @ d; perp = np.linalg.norm(V - o - np.outer(tv, d), axis=1); perp[tv <= 0] = 1e9
+            near = np.nonzero(perp < np.maximum(3.0, 0.004 * np.maximum(tv, 0)))[0]; how = 'surface'
+            if len(near):
+                iv = near[np.argmin(tv[near])]                      # premier coin le long du rayon = celui qu'on voit
+                if t is None or tv[iv] < t + 60: t = float(tv[iv]); how = 'coin'
             if t is not None:
                 X = o + d * t
                 occ = [(mm, first_hit(o, d, PR[mm])) for mm in PR if mm != m and not SEE_THROUGH.search(mm) and np.linalg.norm(CEN[mm][:2] - o[:2]) < t + 50]
                 occ = [(mm, tt) for mm, tt in occ if tt is not None and tt < t - 5]
                 R['mono'].append({'lm': k, 'mesh': m, 'cam': cs[0], 'xyz_new': X.round(2).tolist(), 'xyz_old': None if xyz is None else xyz.round(2).tolist(),
                                   'move_m': None if xyz is None else round(float(np.linalg.norm(X - xyz)), 1), 'dist_m': round(float(t), 0),
-                                  'circular': bool(circular), 'occluded_by': occ[0][0] if occ else None, 'mesh_prov': (M[m].get('note') or '')[:70]})
+                                  'circular': bool(circular), 'how': how, 'occluded_by': occ[0][0] if occ else None, 'mesh_prov': (M[m].get('note') or '')[:70]})
         # 2. CHECK
         if m and len(cs) >= 2 and xyz is not None:
             R['check'].append({'lm': k, 'mesh': m, 'n_cams': len(cs), 'dist_to_mesh_m': round(solid_dist(xyz, PR[m]), 1), 'circular': bool(circular)})
@@ -169,11 +178,22 @@ def main():
 
 if __name__ == '__main__':
     R, L = main()
-    mono = R['mono']; good = [r for r in mono if not r['circular'] and not r['occluded_by']]
-    print('== 1. MONO (xyz depuis une seule cam par le mesh): %d candidats, %d surs (non circulaires, non occultes)' % (len(mono), len(good)))
-    for r in sorted(mono, key=lambda r: (r['circular'], r['occluded_by'] is not None, -(r['move_m'] or 1e9))):
-        flag = 'CIRCULAIRE' if r['circular'] else ('OCCULTE par ' + r['occluded_by'] if r['occluded_by'] else 'ok')
-        print('   %-42s %-34s %6s m  -> %-28s (%s)' % (r['lm'][:42], r['cam'][:34], '—' if r['move_m'] is None else r['move_m'], r['xyz_new'], flag))
+    M = json.load(open(D('building_meshes_procedural.json')))
+    mono = R['mono']
+    CORNER = re.compile(r'\((?:[^()]*[\s\d])?(?:N|S|E|W|NE|NW|SE|SW)\)$|\((?:T|B)-')
+    for r in mono:
+        why = None
+        if r['circular'] or re.search(r'W1410-PC|sur (les )?\d+ coins cliques|clics? d.Alexandre dans', M[r['mesh']].get('note') or ''): why = 'circulaire'
+        elif r['occluded_by']: why = 'occulte par ' + r['occluded_by']
+        elif re.search(r'Bocamar', r['lm']): why = 'Bocamar (piliers: arbitrage manuel)'
+        elif r['how'] == 'surface' and CORNER.search(r['lm']): why = 'coin non accroche'
+        elif r['move_m'] is not None and r['move_m'] > 25: why = 'deplacement > 25 m: a revoir'
+        r['refus'] = why
+    good = [r for r in mono if not r['refus']]
+    print('== 1. MONO (xyz depuis une seule cam par le mesh): %d candidats, %d surs' % (len(mono), len(good)))
+    for r in sorted(mono, key=lambda r: (r['refus'] is not None, -(r['move_m'] or 1e9))):
+        flag = r['refus'] or 'OK'
+        print('   %-42s %-34s %6s m  -> %-28s %-7s (%s)' % (r['lm'][:42], r['cam'][:34], '—' if r['move_m'] is None else r['move_m'], r['xyz_new'], r.get('how'), flag))
     ch = sorted(R['check'], key=lambda r: -r['dist_to_mesh_m'])
     bad = [r for r in ch if r['dist_to_mesh_m'] > 8 and not r['circular']]
     print('\n== 2. CHECK (triangules 2+ cams vs leur mesh): %d, dont %d a > 8 m de leur mesh (hors circulaires)' % (len(ch), len(bad)))

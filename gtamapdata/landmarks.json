@@ -4726,16 +4726,16 @@
   },
   "Radio Tower (Ambrosia) (B)": {
     "xyz": [
-      -2069.32,
-      3331.7,
-      19.25
+      -2064.32,
+      3333.11,
+      19.89
     ],
     "source_cameras": [
       "Ambrosia 04 (Fires)"
     ],
     "error_m": null,
     "zone": "ambrosia",
-    "method": "FIRES-V3-RETRI (2026-09-28): base au sol (heightmap) sous le sommet triangule Throwing x Fires"
+    "method": "MESH-TRI-V1 2026-09-30: rayon du clic Ambrosia 04 (Fires) x surface du mesh Radio Tower (Ambrosia) (368 m); ancien [-2069.32, 3331.7, 19.25] | FIRES-V3-RETRI (2026-09-28): base au sol (heightmap) sous le sommet triangule Throwing x Fires"
   },
   "US Sugar Mill (Factory)": {
     "xyz": [
@@ -10620,15 +10620,16 @@
   },
   "1000 Venetian Way (B-NW)": {
     "xyz": [
-      274.0102052022791,
-      1160.8940043305854,
-      1.6886457363963612
+      272.34,
+      1162.07,
+      2.25
     ],
     "source_cameras": [
       "Venetian Islands"
     ],
     "error_m": null,
-    "zone": "unknown"
+    "zone": "unknown",
+    "method": "MESH-TRI-V1 2026-09-30: rayon du clic Venetian Islands x surface du mesh 1000 Venetian Way (327 m); ancien [274.01, 1160.89, 1.69] | "
   },
   "1000 Venetian Way (B-SW)": {
     "xyz": [
@@ -10644,15 +10645,16 @@
   },
   "1000 Venetian Way (W1)": {
     "xyz": [
-      277.50080770776583,
-      1161.585348316735,
-      10.805767118724175
+      272.84,
+      1162.15,
+      11.78
     ],
     "source_cameras": [
       "Venetian Islands"
     ],
     "error_m": null,
-    "zone": "unknown"
+    "zone": "unknown",
+    "method": "MESH-TRI-V1 2026-09-30: rayon du clic Venetian Islands x surface du mesh 1000 Venetian Way (326 m); ancien [277.5, 1161.59, 10.81] | "
   },
   "1000 Venetian Way (W2)": {
     "xyz": [
@@ -10680,15 +10682,16 @@
   },
   "1000 Venetian Way (W4)": {
     "xyz": [
-      299.2081676656742,
-      1130.1187367587534,
-      47.121562883113995
+      279.63,
+      1129.97,
+      48.24
     ],
     "source_cameras": [
       "Venetian Islands"
     ],
     "error_m": null,
-    "zone": "unknown"
+    "zone": "unknown",
+    "method": "MESH-TRI-V1 2026-09-30: rayon du clic Venetian Islands x surface du mesh 1000 Venetian Way (323 m); ancien [299.21, 1130.12, 47.12] | "
   },
   "1000 Venetian Way (W-Box-NW)": {
     "xyz": [
@@ -10742,12 +10745,17 @@
     "zone": "unknown"
   },
   "1000 Venetian Way (Center-NW)": {
-    "xyz": null,
+    "xyz": [
+      309.37,
+      1132.45,
+      67.18
+    ],
     "source_cameras": [
       "Vice City Postcard"
     ],
     "error_m": null,
-    "zone": "unknown"
+    "zone": "unknown",
+    "method": "MESH-TRI-V1 2026-09-30: rayon du clic Vice City Postcard x surface du mesh 1000 Venetian Way (734 m); ancien None | "
   },
   "1000 Venetian Way (Center-SW)": {
     "xyz": null,
@@ -12191,8 +12199,13 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
-    "zone": null
+    "xyz": [
+      -613.51,
+      -528.44,
+      163.59
+    ],
+    "zone": null,
+    "method": "MESH-TRI-V1 2026-09-30: rayon du clic Leonida Keys 01 (Airplane) (X) x surface du mesh Met 1 Condominium (8020 m); ancien None | "
   },
   "MIA North Terminal (A)": {
     "author": "rlx",
@@ -12233,8 +12246,13 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
-    "zone": null
+    "xyz": [
+      -2959.86,
+      -3070.83,
+      68.43
+    ],
+    "zone": null,
+    "method": "MESH-TRI-V1 2026-09-30: rayon du clic Grassrivers 02 (Watson Bay) x surface du mesh Homestead Water Tower (2389 m); ancien None | "
   },
   "McAlpin Ocean Plaza (N)": {
     "author": "rlx",
@@ -12817,8 +12835,13 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
-    "zone": null
+    "xyz": [
+      -2959.85,
+      -3070.92,
+      57.4
+    ],
+    "zone": null,
+    "method": "MESH-TRI-V1 2026-09-30: rayon du clic Grassrivers 02 (Watson Bay) x surface du mesh Homestead Water Tower (2388 m); ancien None | "
   },
   "Rickenbacker Causeway Bridge (B4)": {
     "author": "rlx",
@@ -12914,8 +12937,13 @@
     "author": "rlx",
     "error_m": null,
     "source_cameras": [],
-    "xyz": null,
-    "zone": null
+    "xyz": [
+      -848.69,
+      -1292.77,
+      201.5
+    ],
+    "zone": null,
+    "method": "MESH-TRI-V1 2026-09-30: rayon du clic Ultimate Edition 02 (Green Sports Car) x surface du mesh Four Seasons Hotel Miami (607 m); ancien None | "
   },
   "Brickell Arch (W)": {
     "author": "rlx",
@@ -17736,11 +17764,16 @@
     "note": "V16-RESECT-V3 2026-09-26: re-triangule Panorama (VERIFIED) x Postcard (pose ancree sur les routes de la leak map), gap 2.27 m, parallaxe 16.6 deg; V1 [-2992.1, 3481.7, 74.6] | "
   },
   "US Sugar Mill (Factory) (R2)": {
-    "xyz": null,
+    "xyz": [
+      -2989.51,
+      3447.78,
+      77.77
+    ],
     "source_cameras": [],
     "error_m": null,
     "zone": "ambrosia",
-    "author": "rlx"
+    "author": "rlx",
+    "method": "MESH-TRI-V1 2026-09-30: rayon du clic Ambrosia 02 (Panorama) x surface du mesh US Sugar Mill (Factory) (1980 m); ancien None | "
   },
   "US Sugar Mill (Factory) (SE)": {
     "xyz": [
