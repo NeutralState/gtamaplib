@@ -17031,6 +17031,251 @@
      ]
     ]
    }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Wheelabrator South Broward (North Hall)",
+    "height_top_m": 55.2,
+    "z_base_m": 11.4,
+    "color": "#94a3b8",
+    "note": "MISC-MESH-V1 2026-09-30: extrusion V16 RECT (V16 1302/1301), toit = 55.2.",
+    "kind": "building",
+    "v16_polygon_id": null,
+    "footprint_source": "mesh_base",
+    "footprint_area_m2": 5414.0
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -2429.2,
+       2669.0
+      ],
+      [
+       -2276.8,
+       2669.0
+      ],
+      [
+       -2278.3,
+       2704.3
+      ],
+      [
+       -2429.2,
+       2705.1
+      ],
+      [
+       -2429.2,
+       2669.0
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Wheelabrator South Broward (Boiler Band)",
+    "height_top_m": 45.0,
+    "z_base_m": 11.0,
+    "color": "#94a3b8",
+    "note": "MISC-MESH-V1 2026-09-30: extrusion V16 RECT (V16 1302/1301), toit = 45.0.",
+    "kind": "building",
+    "v16_polygon_id": null,
+    "footprint_source": "mesh_base",
+    "footprint_area_m2": 4877.0
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -2444.4,
+       2669.0
+      ],
+      [
+       -2444.0,
+       2641.4
+      ],
+      [
+       -2262.8,
+       2642.4
+      ],
+      [
+       -2263.0,
+       2668.6
+      ],
+      [
+       -2444.4,
+       2669.0
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Wheelabrator South Broward (Middle)",
+    "height_top_m": 40.0,
+    "z_base_m": 11.0,
+    "color": "#94a3b8",
+    "note": "MISC-MESH-V1 2026-09-30: extrusion V16 RECT (V16 1302/1301), toit = 40.0.",
+    "kind": "building",
+    "v16_polygon_id": null,
+    "footprint_source": "mesh_base",
+    "footprint_area_m2": 2413.0
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -2388.3,
+       2641.7
+      ],
+      [
+       -2387.9,
+       2615.0
+      ],
+      [
+       -2297.8,
+       2614.5
+      ],
+      [
+       -2298.3,
+       2641.4
+      ],
+      [
+       -2388.3,
+       2641.7
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Wheelabrator South Broward (South Hall)",
+    "height_top_m": 63.1,
+    "z_base_m": 11.0,
+    "color": "#94a3b8",
+    "note": "MISC-MESH-V1 2026-09-30: extrusion V16 RECT (V16 1302/1301), toit = 63.1.",
+    "kind": "building",
+    "v16_polygon_id": null,
+    "footprint_source": "mesh_base",
+    "footprint_area_m2": 3315.0
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -2371.0,
+       2614.5
+      ],
+      [
+       -2370.5,
+       2557.0
+      ],
+      [
+       -2312.2,
+       2557.6
+      ],
+      [
+       -2313.1,
+       2614.2
+      ],
+      [
+       -2371.0,
+       2614.5
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "name": "Wheelabrator South Broward (Stack)",
+    "height_top_m": 100.0,
+    "z_base_m": 11.3,
+    "color": "#94a3b8",
+    "note": "MISC-MESH-V1 2026-09-30: extrusion V16 CYL (V16 1302/1301), toit = LM:Wheelabrator South Broward.",
+    "kind": "building",
+    "v16_polygon_id": null,
+    "footprint_source": "mesh_base",
+    "footprint_area_m2": 79.0
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -2377.88,
+       2501.81
+      ],
+      [
+       -2375.83,
+       2500.83
+      ],
+      [
+       -2373.57,
+       2500.83
+      ],
+      [
+       -2371.52,
+       2501.81
+      ],
+      [
+       -2370.11,
+       2503.59
+      ],
+      [
+       -2369.6,
+       2505.8
+      ],
+      [
+       -2370.11,
+       2508.01
+      ],
+      [
+       -2371.52,
+       2509.79
+      ],
+      [
+       -2373.57,
+       2510.77
+      ],
+      [
+       -2375.83,
+       2510.77
+      ],
+      [
+       -2377.88,
+       2509.79
+      ],
+      [
+       -2379.29,
+       2508.01
+      ],
+      [
+       -2379.8,
+       2505.8
+      ],
+      [
+       -2379.29,
+       2503.59
+      ],
+      [
+       -2377.88,
+       2501.81
+      ]
+     ]
+    ]
+   }
   }
  ]
 }
