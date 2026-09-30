@@ -6171,20 +6171,20 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "xyz": [
-   -76.19,
-   1048.34,
-   151.95
+   -75.15,
+   1037.23,
+   152.58
   ],
   "ypr": [
-   166.308,
-   -8.22,
-   -0.153
+   165.94,
+   -8.553,
+   -0.117
   ],
   "fov": [
-   45.505,
+   46.37,
    null
   ],
   "source": "Screenshot Game Informer \u2014 Shoreline (Downtown de nuit vu du nord: Kaseya Center / Sahara Arena, Skyviews Miami Observation Wheel et marina a gauche, I-404 au premier plan, skyline Brickell)",
-  "note": "SOLVE-V4 2026-09-30: + 3 feux rouges du toit du Kaseya Center (LMs SE/S/NW, 5-7 cams, colles a ~10 px: mes anciens clics etaient faux, pas les LMs) + affinage silhouettes; 12 reperes <= 17 px. MESH FIT peu fiable de nuit (fenetres/faisceaux: 3 a 29 pour des poses visuellement identiques). Pose precedente [[-69.1, 1042.7, 148.28], [166.009, -7.998, -0.48], 45.247] | SOLVE-V3 2026-09-30: V2 avait les tours de gauche a ~45 px (parallaxe: cam trop a l est). Reperes identifies par projection: sommets des 2 grues Asia Brickell Key (CC1/CC2), heliports Three/Two Tequesta Point, grande roue (sommet+moyeu), fleche SEFC, 3 piles I-404 dans l emprise V16, horizon; residus <= 14 px. LMs Kaseya S/SE/NW ecartes (incoherents). Pose precedente [[-40.45, 1104.79, 156.49], [165.425, -7.486, -0.533], 42.187] | SOLVE-V2 2026-09-30: ancrages proches (grande roue sommet+moyeu, fleche SEFC, 3 piles I-404 dans l emprise V16, horizon) puis affinage sur les silhouettes de tous les meshes: MESH FIT 6 -> 33. Tours de gauche (Pegassi/Asia) encore ~50 px a gauche; Kaseya LMs S/SE/NW incoherents avec le mesh (a verifier). Pose precedente [[-61.0, 1076.82, 149.76], [165.909, -7.227, -0.998], 43.808] | SOLVE 2026-09-30 (preliminaire): grande roue Skyviews (sommet + moyeu, LMs), sommets Kaseya/SEFC/One Miami E/W/Asia Brickell Key/Pegassi (meshes), horizon marin, et 3 piles du pont I-404 (pieds a l eau dans l emprise V16 du pont); residus 5-45 px sur les sommets lointains (identification Pegassi/Asia a confirmer). Mesure: dessous du tablier I-404 17-19 m. | POSE PRELIMINAIRE 2026-09-30: au nord de l I-404 (quartier SHORELINE (BAYFRONT) de la V16), vise le Kaseya Center"
+  "note": "SOLVE-V5 2026-09-30: + 7 piles eclairees (bleu) du pont I-397 au loin dans l emprise V16 du pont, horizon relu (y 237); 12 reperes + 10 piles; reperes <= 15 px (grande roue: sommet vs moyeu incoherents de ~10 px, LMs 5 m). Pose precedente [[-76.19, 1048.34, 151.95], [166.308, -8.22, -0.153], 45.505] | SOLVE-V4 2026-09-30: + 3 feux rouges du toit du Kaseya Center (LMs SE/S/NW, 5-7 cams, colles a ~10 px: mes anciens clics etaient faux, pas les LMs) + affinage silhouettes; 12 reperes <= 17 px. MESH FIT peu fiable de nuit (fenetres/faisceaux: 3 a 29 pour des poses visuellement identiques). Pose precedente [[-69.1, 1042.7, 148.28], [166.009, -7.998, -0.48], 45.247] | SOLVE-V3 2026-09-30: V2 avait les tours de gauche a ~45 px (parallaxe: cam trop a l est). Reperes identifies par projection: sommets des 2 grues Asia Brickell Key (CC1/CC2), heliports Three/Two Tequesta Point, grande roue (sommet+moyeu), fleche SEFC, 3 piles I-404 dans l emprise V16, horizon; residus <= 14 px. LMs Kaseya S/SE/NW ecartes (incoherents). Pose precedente [[-40.45, 1104.79, 156.49], [165.425, -7.486, -0.533], 42.187] | SOLVE-V2 2026-09-30: ancrages proches (grande roue sommet+moyeu, fleche SEFC, 3 piles I-404 dans l emprise V16, horizon) puis affinage sur les silhouettes de tous les meshes: MESH FIT 6 -> 33. Tours de gauche (Pegassi/Asia) encore ~50 px a gauche; Kaseya LMs S/SE/NW incoherents avec le mesh (a verifier). Pose precedente [[-61.0, 1076.82, 149.76], [165.909, -7.227, -0.998], 43.808] | SOLVE 2026-09-30 (preliminaire): grande roue Skyviews (sommet + moyeu, LMs), sommets Kaseya/SEFC/One Miami E/W/Asia Brickell Key/Pegassi (meshes), horizon marin, et 3 piles du pont I-404 (pieds a l eau dans l emprise V16 du pont); residus 5-45 px sur les sommets lointains (identification Pegassi/Asia a confirmer). Mesure: dessous du tablier I-404 17-19 m. | POSE PRELIMINAIRE 2026-09-30: au nord de l I-404 (quartier SHORELINE (BAYFRONT) de la V16), vise le Kaseya Center"
  }
 }
