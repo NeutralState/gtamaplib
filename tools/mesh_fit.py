@@ -33,8 +33,8 @@ MIN_PROJ_PX = 18
 STEP = 2.0
 CAP = 8.0                    # distance max comptee (px)
 SHIFT = 5.0                  # decalage de reference (px)
-FOLIAGE_MAX = 0.70           # >70 % de l'empreinte couverte de feuillage = cache derriere des arbres
-THIN_PX = 30                 # objets fins (cheminees, treillis): pas de test feuillage (leur structure est texturee)
+FOLIAGE_MAX = 9.9            # detection auto des arbres DESACTIVEE (non fiable: demande d'Alexandre 2026-09-29); cacher a la main via hidden_meshes
+THIN_PX = 14                 # objets fins (cheminees, treillis): pas de test feuillage (leur structure est texturee)
 HIDDEN = set()                # meshes caches declares a la main (cameras.json: hidden_meshes)
 MEASURABLE_CS = 5.0          # distance moyenne au bord (decale) au-dela de laquelle un mesh n'est pas jugeable
 SIL = True                   # contour exterieur (silhouette) seulement
@@ -59,6 +59,32 @@ class _Ctx:
         self.tex_thr = np.percentile(self.tex, 70)
 
 
+def _band_masks(ctx, meshes_vis):
+    """profondeur la plus proche par pixel, occulteurs = enveloppes convexes par TRANCHE de hauteur
+    (une enveloppe unique d'un chateau d'eau - boule + colonne + pieds - masquait tout ce qui est derriere)."""
+    from scipy.spatial import ConvexHull
+    from PIL import ImageDraw
+    depth = np.full((ctx.H, ctx.W), np.inf, np.float32); own = {}
+    cam = np.asarray(ctx.cam.xyz, float)
+    for name, e in meshes_vis.items():
+        E = np.asarray(e, float); z = E[..., 2]; zmin, zmax = z.min(), z.max()
+        nb = max(1, min(12, int((zmax - zmin) / 6)))
+        dist = float(np.linalg.norm(E.reshape(-1, 3).mean(0) - cam))
+        m = Image.new('L', (ctx.W, ctx.H), 0); dr = ImageDraw.Draw(m)
+        for b in range(nb):
+            lo = zmin + (zmax - zmin) * b / nb; hi = zmin + (zmax - zmin) * (b + 1) / nb
+            sel = [ab for ab in e if max(ab[0][2], ab[1][2]) >= lo - 1e-6 and min(ab[0][2], ab[1][2]) <= hi + 1e-6]
+            pr = _project_pts(ctx, sel)
+            if len(pr) < 2: continue
+            A = np.array([p for ab in pr for p in ab])
+            try: hv = A[ConvexHull(A).vertices]
+            except Exception: continue
+            dr.polygon([tuple(map(float, p)) for p in hv], fill=1)
+        mk = np.asarray(m, bool); own[name] = dist
+        depth[mk] = np.minimum(depth[mk], dist)
+    return depth, own
+
+
 def _samples(ctx, edges, name, hulls):
     proj = _project_pts(ctx, edges); P = []
     if SIL:
@@ -76,11 +102,11 @@ def _samples(ctx, edges, name, hulls):
     P = np.array(P)
     m = (P[:, 0] > 8) & (P[:, 0] < ctx.W - 9) & (P[:, 1] > 8) & (P[:, 1] < ctx.H - 9)
     P = P[m]
-    if hulls and name in hulls and len(P):
-        d0 = hulls[name][1]
-        for b2, (eq, d2) in hulls.items():
-            if b2 == name or d2 >= d0 or not len(P): continue
-            P = P[~(_signed_dist_hull(eq, P) < -1.0)]
+    if hulls is not None and len(P):
+        depth, own = hulls
+        d0 = own.get(name, np.inf)
+        yi = np.clip(P[:, 1].astype(int), 0, ctx.H - 1); xi = np.clip(P[:, 0].astype(int), 0, ctx.W - 1)
+        P = P[depth[yi, xi] >= d0 - 1.0]      # garde si aucun mesh plus proche ne couvre le pixel
     return P
 
 
@@ -137,7 +163,7 @@ def evaluate(cam_name, state=None, meshes=None):
     global HIDDEN
     HIDDEN = set(json.load(open(CAMS)).get(cam_name, {}).get('hidden_meshes') or [])
     ctx = _Ctx(cam_name, state)
-    vis = _visible(ctx, meshes); hulls = build_hulls(ctx, vis)
+    vis = _visible(ctx, meshes); hulls = _band_masks(ctx, vis)
     per = {}; Ps = []; GW = []
     for name, e in vis.items():
         P = _samples(ctx, e, name, hulls)
@@ -164,7 +190,7 @@ def evaluate(cam_name, state=None, meshes=None):
 def compute(cam_name, use_cache=True):
     cams = json.load(open(CAMS)); c = cams.get(cam_name)
     if not c or c.get('xyz') is None or not os.path.exists(os.path.join(REPO, 'frames', cam_name + '.png')): return None
-    key = hashlib.md5(json.dumps([c.get('xyz'), c.get('ypr'), c.get('fov'), c.get('hidden_meshes'), os.path.getmtime(MESHES), 'v4']).encode()).hexdigest()
+    key = hashlib.md5(json.dumps([c.get('xyz'), c.get('ypr'), c.get('fov'), c.get('hidden_meshes'), os.path.getmtime(MESHES), 'v5b']).encode()).hexdigest()
     os.makedirs(CACHE, exist_ok=True); cp = os.path.join(CACHE, cam_name.replace('/', '_') + '.json')
     if use_cache and os.path.exists(cp):
         try:
