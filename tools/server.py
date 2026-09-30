@@ -1727,6 +1727,32 @@ class Handler(BaseHTTPRequestHandler):
                 elif isinstance(_v,str): cam_tier=_v
             except Exception: pass
             hfov_deg=cam.fov[0]
+            # [MESH-OVERLAY-V1 2026-09-29] les meshes projetes sur la frame, en fil de fer
+            # a la couleur du mesh (visualiser l'alignement sans dependre des clics).
+            # ?meshes=0 pour les masquer.
+            n_mesh_drawn=0
+            if qs.get('meshes',['1'])[0]!='0':
+                try:
+                    with open(os.path.join(GTAMAP_DIR,'gtamapdata','building_meshes_procedural.json')) as _mf:
+                        _meshes=json.load(_mf)
+                    _cx,_cy=float(cam.xyz[0]),float(cam.xyz[1])
+                    for _mn,_mv in _meshes.items():
+                        _ed=_mv.get('world_edges') or []
+                        if not _ed: continue
+                        _p0=_ed[0][0]
+                        if _math.hypot(_p0[0]-_cx,_p0[1]-_cy)<25: continue
+                        try: _col=tuple(int(_mv.get('color','#facc15').lstrip('#')[i:i+2],16) for i in (0,2,4))
+                        except Exception: _col=(250,204,21)
+                        _drew=False
+                        for _a,_b in _ed:
+                            _pa=cam.get_pixel(list(_a)); _pb=cam.get_pixel(list(_b))
+                            if _pa is None or _pb is None: continue
+                            if (max(_pa[0],_pb[0])<0 or min(_pa[0],_pb[0])>W or max(_pa[1],_pb[1])<0 or min(_pa[1],_pb[1])>H): continue
+                            draw.line([(float(_pa[0]),float(_pa[1])),(float(_pb[0]),float(_pb[1]))],fill=_col+(150,),width=max(1,W//1600))
+                            _drew=True
+                        n_mesh_drawn+=_drew
+                except Exception as _e:
+                    print('mesh overlay:',_e)
             marked=md.pixels.get(cam_name,{})
             pts=[]; deltas=[]
             for lm_name, marker_px in marked.items():
@@ -1774,6 +1800,7 @@ class Handler(BaseHTTPRequestHandler):
                   ("FOV (%.1f, %.1f)    "%(cam.fov[0],cam.fov[1]), WHITE),
                   _conf_seg,
                   ("RMS %.1f'    "%med, WHITE),
+                  ("%d meshes    "%n_mesh_drawn, WHITE),
                   (cam_name, tcol)]
             total_w=sum(fbar.getbbox(t)[2] for t,_ in segs)
             sidepad=int(W*0.012)
