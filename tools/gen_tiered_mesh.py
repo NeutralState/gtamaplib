@@ -20,7 +20,7 @@ import v16_tiers as VT
 # sommet est chanfreine aux extremites (couronne de LED rouges): gradins ESTIMES a -6 m (anneau interieur) et -12 m
 # (anneau exterieur); la couronne ronde de la V16 (regions 9,10,12,13,14 = cercle) en tambour de +4 m (ESTIME).
 SPEC = {
-    'Jade Ocean Condos': {'poly': 3584, 'color': '#34d399', 'groups': [
+    'Jade Ocean Condos': {'poly': 3584, 'color': '#34d399', 'shift': (-13.0, -3.6), 'groups': [
         ([3, 7, 8, 11, 15, 16, 9, 10, 12, 13, 14], 202.9), ([1, 4, 6, 2, 17, 19, 20, 21], 196.9), ([0, 5, 18, 22], 190.9)],
         'drum': ([9, 10, 12, 13, 14], 4.0),
         'src': 'sommet LM 202.9 (2 LMs); gradins -6/-12 m et tambour +4 m ESTIMES d apres le chanfrein de la couronne vu dans Biplane Night. '
@@ -28,7 +28,7 @@ SPEC = {
                '13 m a l ouest / 4 m au sud du polygone V16 (residu 2 px) -> garde sur la V16, a arbitrer'},
     # 1500 Ocean Dr (V16 3335): tour courbe a bout arrondi (region 4) sur podium a facade a persiennes (region 1),
     # lame rose a bow-windows octogonaux (region 2), immeuble ouest (0) + tourelle hexagonale (3). Comme l'IRL.
-    '1500 Ocean Dr': {'poly': 3335, 'color': '#f9a8d4', 'groups': [([4], 63.8), ([2], 62.3), ([1], 21.0), ([0], 34.0), ([3], 36.0)],
+    '1500 Ocean Dr': {'poly': 3335, 'color': '#f9a8d4', 'shift': (-25.0, 0.0), 'groups': [([4], 63.8), ([2], 62.3), ([1], 21.0), ([0], 34.0), ([3], 36.0)],
         'src': 'tour 63.8 (LM) et lame rose 62.3 (3 LMs S/SE/NW/SW); podium 21 m LU dans Vice Beach (B) (echelles aux coins); '
                'immeuble ouest 34 m LU (toit a gradins blanc derriere la lame, Vice Beach (B)), tourelle hexagonale 36 m ESTIMEE. Note: Vice Beach (B) montre tout le complexe ~10-15 m au NO de la V16 (pose de la cam non verifiee, la tour Jade Ocean est decalee dans une autre direction -> pas un decalage V16)'},
     # --- Vice Beach, plus hautes tours (2026-09-30, demande Alexandre). Hauteur de la region qui contient le LM = LM;
@@ -73,6 +73,8 @@ def build(names=None):
     for name, S in SPEC.items():
         if names and name not in names: continue
         R = {r['id']: r for r in VT.regions(S['poly'])}; E = []
+        if S.get('shift'):   # [VB-SETBACK 2026-10-01] V16 Vice Beach = parcelle (terrasse/piscine cote plage): tour recalee sur les images
+            sh = np.array(S['shift']); R = {i: dict(r, ring=[list(np.array(p) + sh) for p in r['ring']], centroid=list(np.array(r['centroid']) + sh)) for i, r in R.items()}
         if S.get('core_scale'):
             ids, sc = S['core_scale']; cc = np.mean(np.vstack([np.array(R[i]['ring']) for i in ids]), 0)
             for i in ids: R[i] = dict(R[i], ring=[list(cc + (np.array(p) - cc) * sc) for p in R[i]['ring']])
@@ -100,8 +102,8 @@ def build(names=None):
             Ud = union_ring([R[i] for i in ids]); ring(Ud, ztop + dh)
             for p in Ud: seg([*p, ztop], [*p, ztop + dh])
         out[name] = {'color': S['color'], 'world_edges': E, '_credit': 'Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5',
-                     'note': 'TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 %d (%d regions, tools/v16_tiers.py); %s.'
-                             % (S['poly'], len(R), S['src'])}
+                     'note': 'TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 %d (%d regions, tools/v16_tiers.py); %s.%s'
+                             % (S['poly'], len(R), S['src'], (' DECALE de (%.1f, %.1f) m par rapport a la V16 (VB-SETBACK, valide Alexandre 2026-10-01: la V16 de Vice Beach dessine la parcelle, la tour est en retrait; decalage lu dans les images)' % tuple(S['shift'])) if S.get('shift') else '')}
     return out
 
 
