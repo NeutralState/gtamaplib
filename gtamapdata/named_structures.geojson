@@ -14470,7 +14470,7 @@
    "properties": {
     "name": "Blue Diamond",
     "height_top_m": 140.0,
-    "z_base_m": 3.7,
+    "z_base_m": 4.4,
     "color": "#60a5fa",
     "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3575 (8 regions, tools/v16_tiers.py); tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 63 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (le LM 146 = pointe lumineuse, 6 m au-dessus de la pyr",
     "kind": "building",
@@ -14571,7 +14571,7 @@
    "properties": {
     "name": "Green Diamond",
     "height_top_m": 140.0,
-    "z_base_m": 4.9,
+    "z_base_m": 6.1,
     "color": "#4ade80",
     "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3576 (8 regions, tools/v16_tiers.py); tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 60 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (LM 145 = pointe); tour ~30 px a l est de la V16 dans ",
     "kind": "building",
@@ -14990,9 +14990,9 @@
    "properties": {
     "name": "Tresor Tower",
     "height_top_m": 121.2,
-    "z_base_m": 4.5,
+    "z_base_m": 3.5,
     "color": "#c084fc",
-    "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3573 (4 regions, tools/v16_tiers.py); fut rond + lame (regions 3,1) = LM 120; aile est 100 m et podium 12 m ESTIMES.",
+    "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3573 (4 regions, tools/v16_tiers.py); fut rond + lame (regions 3,1) = LM 120; aile est 100 m et podium 12 m ESTIMES. DECALE de (-25.2, -6.2) m par rapport a la V16 (VB-SETBACK, valide Alexandre 2026-10-01: la V16 de Vice Beach de",
     "kind": "building",
     "v16_polygon_id": 3573,
     "footprint_source": "v16",
