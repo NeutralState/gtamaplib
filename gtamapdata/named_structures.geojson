@@ -371,58 +371,94 @@
    "type": "Feature",
    "properties": {
     "name": "Portofino Tower",
-    "height_top_m": 146.7,
-    "z_base_m": 0.0,
+    "height_top_m": 150.4,
+    "z_base_m": 8.7,
     "color": "#a78bfa",
-    "note": "",
+    "note": "PORTOFINO-V2 2026-10-01 (Alexandre: garder la position, rendre plus fidele): plan en Y (3 ailes arrondies + noyau) ajuste sur les 3 sommets de pavillons triangules et la silhouette de Dominion Hotel (residus 4-8 px); epaulement 126 m, toit 140 m, pavillons 129-146 m + pyramides aux LMs (lus dans Dom",
     "kind": "building",
     "v16_polygon_id": null,
     "footprint_source": "mesh_base",
-    "footprint_area_m2": 1776.0
+    "footprint_area_m2": 1916.0
    },
    "geometry": {
     "type": "Polygon",
     "coordinates": [
      [
       [
-       1729.32,
-       -180.97
+       1768.95,
+       -213.03
       ],
       [
-       1742.29,
-       -200.34
+       1776.35,
+       -178.23
       ],
       [
-       1757.36,
-       -215.62
+       1776.35,
+       -174.23
       ],
       [
-       1767.4,
-       -212.26
+       1774.55,
+       -170.03
       ],
       [
-       1777.72,
-       -185.67
+       1771.35,
+       -167.03
       ],
       [
-       1782.19,
-       -171.6
+       1767.75,
+       -165.63
       ],
       [
-       1774.78,
-       -164.04
+       1763.75,
+       -165.63
       ],
       [
-       1756.97,
-       -164.92
+       1729.95,
+       -176.83
       ],
       [
-       1731.63,
-       -170.64
+       1725.75,
+       -179.83
       ],
       [
-       1729.32,
-       -180.97
+       1723.35,
+       -184.83
+      ],
+      [
+       1723.55,
+       -189.63
+      ],
+      [
+       1725.75,
+       -193.83
+      ],
+      [
+       1750.75,
+       -216.03
+      ],
+      [
+       1753.35,
+       -218.23
+      ],
+      [
+       1756.95,
+       -219.63
+      ],
+      [
+       1760.95,
+       -219.63
+      ],
+      [
+       1764.55,
+       -218.23
+      ],
+      [
+       1767.15,
+       -216.03
+      ],
+      [
+       1768.95,
+       -213.03
       ]
      ]
     ]
