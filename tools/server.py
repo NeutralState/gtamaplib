@@ -1687,7 +1687,7 @@ class Handler(BaseHTTPRequestHandler):
             # &style=classic pour l'ancien rendu
             if cam_name in md.cameras and qs.get('style',[''])[0] != 'classic':
                 try:
-                    import export_render as _er, mesh_fit as _mf, importlib as _il; _il.reload(_mf); _il.reload(_er)
+                    import export_render as _er, mesh_fit as _mf, skyline_fit as _sf, importlib as _il; _il.reload(_mf); _il.reload(_sf); _il.reload(_er)
                     data = _er.render_camera(cam_name, show_meshes=qs.get('meshes',['1'])[0]!='0')
                     self.send_response(200)
                     self.send_header('Content-Type','image/png')
@@ -1839,7 +1839,7 @@ class Handler(BaseHTTPRequestHandler):
             # &style=classic pour l'ancien rendu
             if cam_name in md.cameras and qs.get('style',[''])[0] != 'classic':
                 try:
-                    import export_render as _er, mesh_fit as _mf, importlib as _il; _il.reload(_mf); _il.reload(_er)
+                    import export_render as _er, mesh_fit as _mf, skyline_fit as _sf, importlib as _il; _il.reload(_mf); _il.reload(_sf); _il.reload(_er)
                     data = _er.render_map(cam_name, _render_tiles_region)
                     self.send_response(200)
                     self.send_header('Content-Type','image/png')
