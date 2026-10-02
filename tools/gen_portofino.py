@@ -14,8 +14,8 @@ import numpy as np, cv2
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(ROOT, 'tools'))
 D = lambda f: os.path.join(ROOT, 'gtamapdata', f)
-CX, CY, TH, HW, RC, DL, LC = 1752.18, -190.55, -19.93, 11.11, 15.0, 5.95, 16.01
-LWS = (30.07, 38.06, 30.0)   # longueur des ailes W, NE, SE (l'aile NE, a gauche dans Dominion, est plus longue)
+CX, CY, TH, HW, RC, DL, LC = 1754.22, -191.85, -13.81, 10.33, 15.0, 6.70, 17.17
+LWS = (33.63, 40.23, 34.70)   # longueur des ailes W, NE, SE (l'aile NE, a gauche dans Dominion, est plus longue)
 Z_SHOULDER, Z_ROOF, Z_CROWN0, Z_EAVE, A_CROWN = 126.0, 140.0, 129.0, 146.0, 12.0
 
 
