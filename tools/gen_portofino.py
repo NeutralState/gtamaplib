@@ -46,14 +46,14 @@ def build():
     for p in up[::max(1, len(up) // 24)]: seg([*p, Z_ROOF], [*p, Z_ROOF + 1.2])
     for a, k in zip((180, 60, -60), ('NW', 'NE', 'S')):            # pavillons a pyramide (couronnes) sur les 3 ailes
         t = np.radians(a + TH); u = np.array([np.cos(t), np.sin(t)]); n = np.array([-u[1], u[0]])
-        c = np.array([CX, CY]) + u * LC; h = A_CROWN / 2
+        c = np.array(L['Portofino Tower (%s)' % k]['xyz'][:2], float); h = A_CROWN / 2   # centre = sommet triangule (pointe de la pyramide)
         sq = [c + u * h + n * h, c + u * h - n * h, c - u * h - n * h, c - u * h + n * h]
         prism(sq, Z_CROWN0, Z_EAVE, floor=3.4); ring([c + (q - c) * 1.12 for q in sq], Z_EAVE)
         apex = [*c, float(L['Portofino Tower (%s)' % k]['xyz'][2])]
         for q in sq: seg([*(c + (q - c) * 1.12), Z_EAVE], apex)
     note = ('PORTOFINO-V2 2026-10-01 (Alexandre: garder la position, rendre plus fidele): plan en Y (3 ailes arrondies + noyau) '
             'ajuste sur les 3 sommets de pavillons triangules et la silhouette de Dominion Hotel (residus 4-8 px); epaulement '
-            '%.0f m, toit %.0f m, pavillons %.0f-%.0f m + pyramides aux LMs (lus dans Dominion Hotel). Forme du Y: vue pre-alpha '
+            '%.0f m, toit %.0f m, pavillons %.0f-%.0f m CENTRES sur les sommets triangules (pointes) + pyramides (lus dans Dominion Hotel). Forme du Y: vue pre-alpha '
             '(position de cette vue NON utilisee).' % (Z_SHOULDER, Z_ROOF, Z_CROWN0, Z_EAVE))
     return {'Portofino Tower': {'color': '#a78bfa', 'world_edges': E, 'note': note, '_credit': 'Alexandre Leblanc (landmarks) + Claude Opus 5.5'}}
 
