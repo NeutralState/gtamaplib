@@ -14,8 +14,8 @@ import numpy as np, cv2
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(ROOT, 'tools'))
 D = lambda f: os.path.join(ROOT, 'gtamapdata', f)
-CX, CY, TH, HW, RC, DL, LC = 1756.06, -190.87, -8.92, 9.85, 15.0, 6.84, 15.93
-LWS = (35.36, 35.36, 35.36)   # SYMETRIQUE (Alexandre): 3 ailes identiques a 120 deg, pavillons a la meme distance sur les axes
+CX, CY, TH, HW, RC, DL, LC = 1755.62, -188.35, -23.33, 9.45, 15.0, 6.74, 15.88
+LWS = (34.24, 34.24, 34.24)   # SYMETRIQUE (Alexandre): 3 ailes identiques a 120 deg, pavillons a la meme distance sur les axes
 Z_SHOULDER, Z_ROOF, Z_CROWN0, Z_EAVE, A_CROWN = 126.0, 140.0, 129.0, 146.0, 12.0
 
 
@@ -53,7 +53,7 @@ def build():
         for q in sq: seg([*(c + (q - c) * 1.12), Z_EAVE], apex)
     note = ('PORTOFINO-V2 2026-10-01 (Alexandre: garder la position, rendre plus fidele): plan en Y (3 ailes arrondies + noyau) '
             'ajuste sur les 3 sommets de pavillons triangules et la silhouette de Dominion Hotel (residus 4-8 px); epaulement '
-            '%.0f m, toit %.0f m, pavillons %.0f-%.0f m + pyramides (Y SYMETRIQUE: les 3 sommets triangules tombent a <= 4.5 m des pointes, residus silhouettes <= 3 px) (lus dans Dominion Hotel). Forme du Y: vue pre-alpha '
+            '%.0f m, toit %.0f m, pavillons %.0f-%.0f m + pyramides (Y SYMETRIQUE attire vers le dessin V16: centre a 4.9 m et rotation a 6.7 deg du dessin; silhouettes 3 vues <= 5 px; sommets triangules a <= 6 m des pointes) (lus dans Dominion Hotel). Forme du Y: vue pre-alpha '
             '(position de cette vue NON utilisee).' % (Z_SHOULDER, Z_ROOF, Z_CROWN0, Z_EAVE))
     return {'Portofino Tower': {'color': '#a78bfa', 'world_edges': E, 'note': note, '_credit': 'Alexandre Leblanc (landmarks) + Claude Opus 5.5'}}
 
