@@ -14,16 +14,17 @@ import numpy as np, cv2
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(ROOT, 'tools'))
 D = lambda f: os.path.join(ROOT, 'gtamapdata', f)
-CX, CY, TH, LW, HW, RC, DL, LC = 1752.95, -190.83, -11.5, 30.3, 10.95, 15.0, 6.18, 16.27
+CX, CY, TH, HW, RC, DL, LC = 1752.18, -190.55, -19.93, 11.11, 15.0, 5.95, 16.01
+LWS = (30.07, 38.06, 30.0)   # longueur des ailes W, NE, SE (l'aile NE, a gauche dans Dominion, est plus longue)
 Z_SHOULDER, Z_ROOF, Z_CROWN0, Z_EAVE, A_CROWN = 126.0, 140.0, 129.0, 146.0, 12.0
 
 
-def yplan(Lw, hw=HW, Rc=RC, round_ends=True):
+def yplan(dl=0.0, hw=HW, Rc=RC, round_ends=True):
     K = 5.0; S = 350; m = np.zeros((S * 2, S * 2), np.uint8); T = lambda x, y: (int(S + x * K), int(S - y * K))
     cv2.circle(m, T(0, 0), int(Rc * K), 255, -1)
-    for a in (180, 60, -60):
+    for a, Lw in zip((180, 60, -60), LWS):
         t = np.radians(a + TH); u = np.array([np.cos(t), np.sin(t)]); n = np.array([-u[1], u[0]])
-        e = Lw - (hw if round_ends else 0)
+        e = Lw - dl - (hw if round_ends else 0)
         P = [n * hw, u * e + n * hw, u * e - n * hw, -n * hw]; cv2.fillPoly(m, [np.array([T(*p) for p in P], np.int32)], 255)
         if round_ends: cv2.circle(m, T(*(u * e)), int(hw * K), 255, -1)
     cs, _ = cv2.findContours(m, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE); c = cv2.approxPolyDP(max(cs, key=cv2.contourArea), 0.35 * K, True).reshape(-1, 2)
@@ -40,8 +41,8 @@ def build():
         zs = [z0] + list(np.arange(z0 + floor, z1, floor)) + [z1]
         for z in zs: ring(r, z)
         for p in r[::vstep]: seg([*p, z0], [*p, z1])
-    full = yplan(LW); prism(full, g, Z_SHOULDER, vstep=max(1, len(full) // 30))
-    up = yplan(LW - DL); prism(up, Z_SHOULDER, Z_ROOF, vstep=max(1, len(up) // 24)); ring(up, Z_ROOF + 1.2)
+    full = yplan(0.0); prism(full, g, Z_SHOULDER, vstep=max(1, len(full) // 30))
+    up = yplan(DL); prism(up, Z_SHOULDER, Z_ROOF, vstep=max(1, len(up) // 24)); ring(up, Z_ROOF + 1.2)
     for p in up[::max(1, len(up) // 24)]: seg([*p, Z_ROOF], [*p, Z_ROOF + 1.2])
     for a, k in zip((180, 60, -60), ('NW', 'NE', 'S')):            # pavillons a pyramide (couronnes) sur les 3 ailes
         t = np.radians(a + TH); u = np.array([np.cos(t), np.sin(t)]); n = np.array([-u[1], u[0]])
