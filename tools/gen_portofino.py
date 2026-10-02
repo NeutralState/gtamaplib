@@ -14,8 +14,8 @@ import numpy as np, cv2
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(ROOT, 'tools'))
 D = lambda f: os.path.join(ROOT, 'gtamapdata', f)
-CX, CY, TH, HW, RC, DL, LC = 1754.22, -191.85, -13.81, 10.33, 15.0, 6.70, 17.17
-LWS = (33.63, 40.23, 34.70)   # longueur des ailes W, NE, SE (l'aile NE, a gauche dans Dominion, est plus longue)
+CX, CY, TH, HW, RC, DL, LC = 1756.06, -190.87, -8.92, 9.85, 15.0, 6.84, 15.93
+LWS = (35.36, 35.36, 35.36)   # SYMETRIQUE (Alexandre): 3 ailes identiques a 120 deg, pavillons a la meme distance sur les axes
 Z_SHOULDER, Z_ROOF, Z_CROWN0, Z_EAVE, A_CROWN = 126.0, 140.0, 129.0, 146.0, 12.0
 
 
@@ -46,14 +46,14 @@ def build():
     for p in up[::max(1, len(up) // 24)]: seg([*p, Z_ROOF], [*p, Z_ROOF + 1.2])
     for a, k in zip((180, 60, -60), ('NW', 'NE', 'S')):            # pavillons a pyramide (couronnes) sur les 3 ailes
         t = np.radians(a + TH); u = np.array([np.cos(t), np.sin(t)]); n = np.array([-u[1], u[0]])
-        c = np.array(L['Portofino Tower (%s)' % k]['xyz'][:2], float); h = A_CROWN / 2   # centre = sommet triangule (pointe de la pyramide)
+        c = np.array([CX, CY]) + u * LC; h = A_CROWN / 2
         sq = [c + u * h + n * h, c + u * h - n * h, c - u * h - n * h, c - u * h + n * h]
         prism(sq, Z_CROWN0, Z_EAVE, floor=3.4); ring([c + (q - c) * 1.12 for q in sq], Z_EAVE)
         apex = [*c, float(L['Portofino Tower (%s)' % k]['xyz'][2])]
         for q in sq: seg([*(c + (q - c) * 1.12), Z_EAVE], apex)
     note = ('PORTOFINO-V2 2026-10-01 (Alexandre: garder la position, rendre plus fidele): plan en Y (3 ailes arrondies + noyau) '
             'ajuste sur les 3 sommets de pavillons triangules et la silhouette de Dominion Hotel (residus 4-8 px); epaulement '
-            '%.0f m, toit %.0f m, pavillons %.0f-%.0f m CENTRES sur les sommets triangules (pointes) + pyramides (lus dans Dominion Hotel). Forme du Y: vue pre-alpha '
+            '%.0f m, toit %.0f m, pavillons %.0f-%.0f m + pyramides (Y SYMETRIQUE: les 3 sommets triangules tombent a <= 4.5 m des pointes, residus silhouettes <= 3 px) (lus dans Dominion Hotel). Forme du Y: vue pre-alpha '
             '(position de cette vue NON utilisee).' % (Z_SHOULDER, Z_ROOF, Z_CROWN0, Z_EAVE))
     return {'Portofino Tower': {'color': '#a78bfa', 'world_edges': E, 'note': note, '_credit': 'Alexandre Leblanc (landmarks) + Claude Opus 5.5'}}
 

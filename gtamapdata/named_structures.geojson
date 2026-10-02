@@ -374,103 +374,99 @@
     "height_top_m": 150.4,
     "z_base_m": 8.7,
     "color": "#a78bfa",
-    "note": "PORTOFINO-V2 2026-10-01 (Alexandre: garder la position, rendre plus fidele): plan en Y (3 ailes arrondies + noyau) ajuste sur les 3 sommets de pavillons triangules et la silhouette de Dominion Hotel (residus 4-8 px); epaulement 126 m, toit 140 m, pavillons 129-146 m + pyramides aux LMs (lus dans Dom",
+    "note": "PORTOFINO-V2 2026-10-01 (Alexandre: garder la position, rendre plus fidele): plan en Y (3 ailes arrondies + noyau) ajuste sur les 3 sommets de pavillons triangules et la silhouette de Dominion Hotel (residus 4-8 px); epaulement 126 m, toit 140 m, pavillons 129-146 m + pyramides (Y SYMETRIQUE: les 3 ",
     "kind": "building",
     "v16_polygon_id": null,
     "footprint_source": "mesh_base",
-    "footprint_area_m2": 2551.0
+    "footprint_area_m2": 2435.0
    },
    "geometry": {
     "type": "Polygon",
     "coordinates": [
      [
       [
-       1772.82,
-       -160.25
+       1774.66,
+       -216.47
       ],
       [
-       1727.02,
-       -177.05
+       1781.86,
+       -170.87
       ],
       [
-       1724.62,
-       -178.65
+       1781.06,
+       -167.07
       ],
       [
-       1722.42,
-       -181.45
+       1779.46,
+       -164.47
       ],
       [
-       1721.62,
-       -183.45
+       1777.06,
+       -162.47
       ],
       [
-       1721.22,
-       -186.25
+       1773.86,
+       -161.27
       ],
       [
-       1721.62,
-       -189.05
+       1769.46,
+       -161.47
       ],
       [
-       1722.42,
-       -191.05
+       1728.06,
+       -177.47
       ],
       [
-       1724.62,
-       -193.85
+       1725.66,
+       -178.47
       ],
       [
-       1754.02,
-       -222.85
+       1723.26,
+       -180.47
       ],
       [
-       1758.02,
-       -225.05
+       1721.06,
+       -185.07
       ],
       [
-       1760.82,
-       -225.45
+       1720.86,
+       -186.87
       ],
       [
-       1765.22,
-       -224.45
+       1721.66,
+       -190.67
       ],
       [
-       1767.62,
-       -222.85
+       1723.26,
+       -193.27
       ],
       [
-       1769.82,
-       -220.05
+       1725.66,
+       -195.27
       ],
       [
-       1770.82,
-       -217.25
+       1759.46,
+       -222.67
       ],
       [
-       1784.62,
-       -173.05
+       1763.26,
+       -224.27
       ],
       [
-       1784.82,
-       -168.25
+       1766.86,
+       -224.27
       ],
       [
-       1783.82,
-       -165.45
+       1770.66,
+       -222.67
       ],
       [
-       1781.62,
-       -162.65
+       1773.46,
+       -219.67
       ],
       [
-       1777.62,
-       -160.45
-      ],
-      [
-       1772.82,
-       -160.25
+       1774.66,
+       -216.47
       ]
      ]
     ]
