@@ -2135,17 +2135,17 @@
   "id": "L1/47",
   "player": null,
   "xyz": [
-   -1340.0,
-   850.0,
-   5.0
+   -1326.0,
+   845.3,
+   5.66
   ],
   "ypr": [
-   0.0,
-   2.5,
+   3.9,
+   3.0,
    0.0
   ],
   "fov": [
-   60,
+   69.5,
    null
   ],
   "size": [
@@ -2153,7 +2153,8 @@
    1080
   ],
   "source": "2022-09-13 16-32-43 [?]",
-  "constraint_class": "D_no_ground_truth"
+  "constraint_class": "D_no_ground_truth",
+  "notes": "SOLVE 2026-10-03: pose devinee remplacee; position = marqueur V16 L1/47 (-1323,846, +-3 m), cap/tangage = point de fuite de la rue N-S (1000,612) a ~2 deg pres, fov 69.5 (verifie independamment: distance de la ligne d arret de l intersection y~868 -> fov ~69). Voit le bout est du portique du toit du stade en haut a gauche (137,276): concorde a 1-2 px."
  },
  "Hangar (B)": {
   "id": "L1/49",
