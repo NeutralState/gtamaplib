@@ -15,8 +15,8 @@ Hauteurs (haut du tablier):
     coherent avec l'I-404 mesuree au sommet): 7/8 = 18.5 m, 9/10 = 25 m (degagement 6.5 m).
   - I-404 prolongee jusqu'au pont deja mesure (I-404 Causeway Bridge (Downtown), x=-164, 20.6 m) ou se trouve la cam
     Convertible (21 m mesure); entre les deux l'I-404 DESCEND (Alexandre, vu dans Convertible: crete a ~30 m de la cam, voitures
-    au-dela a ~4-9 m vers x=-450): ~8 m a x=-600..-450 MESURE dans Biplane (Video) v2811 (bord droit du tablier + piles); pente vers le
-    centre ESTIMEE (~10 %). Voies laterales 13/14 a la hauteur de l'I-404.
+    au-dela a ~4-9 m vers x=-450): ~8 m a x=-600..-450 MESURE dans Biplane (Video) v2811 (bord droit du tablier + piles); remontee lue dans Jason 05
+    (bande eclairee ~3.3 m sous le dessus: dessus ~30 m a x=-800, ~36.5 m a -880); troncon -600..-800 cache par le fusil (pente ~10 % ESTIMEE). Voies laterales 13/14 a la hauteur de l'I-404.
   - raccords: une bretelle prend la hauteur du trace qu'elle rejoint a ses extremites; profil lineaire entre points
     de controle, pente limitee.
 Usage: PYTHONPATH=. python3 tools/gen_interchange.py [--out f.json] [--apply]
@@ -44,7 +44,7 @@ def strokes():
 
 def z_i404(x):
     """haut du tablier de l'I-404 en fonction de x (mesures: centre 37 (Explosion 37-40 / Jason 05 33-34 sous le tablier), x=-1075 33 (Jason 05), pont Downtown 20.6 (Convertible 21); ouest de -1100 ESTIME)."""
-    return float(np.interp(x, [-1440, -1250, -1075, -980, -880, -600, -450, -164, 0], [20.0, 28.0, 33.0, 37.0, 34.0, 8.0, 8.0, 20.6, 20.6]))
+    return float(np.interp(x, [-1440, -1250, -1075, -980, -880, -800, -600, -450, -164, 0], [20.0, 28.0, 33.0, 37.0, 36.5, 30.0, 8.0, 8.0, 20.6, 20.6]))
 
 
 def zmain(i, p):
