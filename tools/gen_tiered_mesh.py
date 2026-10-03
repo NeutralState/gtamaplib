@@ -39,8 +39,8 @@ SPEC = {
     'Green Diamond': {'poly': 3576, 'color': '#4ade80', 'shift': (-22.5, -23.4), 'groups': [([2, 3, 4, 6], 126.0), ([0], 40.0), ([1], 40.0), ([5], 40.0), ([7], 14.0)], 'core_scale': ([2, 3, 4, 6], 1.35),
         'pyramid': ([2, 3, 4, 6], 14.0), 'src': 'tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 60 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (LM 145 = pointe); tour ~30 px a l est de la V16 dans cette vue (garde sur la V16), ailes basses 40 m ESTIMEES (Venetian Islands: fut etroit), verriere pyramidale +14 m (vue dans Biplane Night (Video) Last); podium (region 7) 14 m ESTIME'},
     # [EFFLUVIA 2026-10-02] relus dans Speaking with Brian at Effluvia (3): region 0 = PARCELLE (podium), pas la tour
-    'Icon at South Beach': {'poly': 3251, 'color': '#f472b6', 'shift': (-28.7, -0.5), 'groups': [([1], 140.0), ([2], 113.4), ([0], 12.0)],
-        'src': 'lame courbe V16 (regions 1+2): partie haute 140 m (LM 142) et aile basse 113 m LUES dans Effluvia (3); podium 12 m ESTIME; decalage 28.7 m O (VB-SETBACK, lu)'},
+    'Icon at South Beach': {'poly': 3251, 'color': '#f472b6', 'shift': (-28.7, -0.5), 'wedge': [('Jason Duval 05 (Machine Gun)', 476, 553)], 'groups': [([1], 140.0), ([2], 113.4), ([0], 12.0)],
+        'src': 'lame courbe V16 (regions 1+2): partie haute 140 m (LM 142) et aile basse 113 m LUES dans Effluvia (3); podium 12 m ESTIME; decalage 28.7 m O (VB-SETBACK, lu); [JD05-LEFT 2026-10-03] etendue N-S (invisible depuis Effluvia) restreinte au secteur vu de profil dans Jason 05 (x 476-553: lame nord 11 m trop longue)'},
     'Murano Grande': {'poly': 3233, 'color': '#fb923c', 'shift': (-28.7, -0.5), 'groups': [([1], 139.0), ([2], 133.0), ([4], 127.0), ([3], 12.0), ([0], 30.0)],
         'src': 'tour courbe en 3 segments V16 (1,2,4): 139 (LM) puis gradins 133/127 ESTIMES; podium 12 et bloc 0 30 m ESTIMES'},
     'Tresor Tower': {'poly': 3573, 'color': '#c084fc', 'shift': (-25.2, -6.2), 'groups': [([3, 1], 120.0), ([2], 100.0), ([0], 12.0)],
@@ -60,6 +60,21 @@ SPEC = {
         'src': 'tour blanche vue dans Effluvia (3): toit 80.8 m et position laterale LUS (largeur 117 px vs 104 V16)'},
     'Vice Beach Tower (V16 3258)': {'poly': 3258, 'color': '#e2e8f0', 'shift': (3.5, -0.6), 'groups': [([0], 85.4)],
         'src': 'tour vue dans Effluvia (3): toit 85.4 m et position laterale LUS (largeur 114 vs 117 px)'},
+    # [JD05-LEFT 2026-10-03] Bentley Bay South (clic Jason 05 'The Bentley Bay Condominium South (SW)'): parcelle V16 3257 au bord de
+    # la baie, plus large que le batiment. Emprise = parcelle restreinte aux secteurs vus dans Vice Beach (B) (vue de l'est, x 702.5-885)
+    # et Jason 05 (vue de l'ouest, bord SW x 302; 123 deg d'ecart). VB A donne le meme bord nord a ~20 m pres (non utilise: incoherent).
+    'The Bentley Bay South': {'poly': 3257, 'color': '#f1f5f9', 'wedge': [('Vice Beach (B)', 702.5, 885), ('Jason Duval 05 (Machine Gun)', 150, 302)],
+        'cut': [(1, (1372.5, 255.7), (0.47, -0.88), 9)],
+        'groups': [([1], 80.0), ([9], 69.0), ([2, 3], 80.0)],
+        'src': 'emprise = secteurs VB (B) x Jason 05 (largeur VB B 189-559 vs 205-570 px x2; bord SW Jason 05 297 vs 300 px); lame 80 m et aile sud 69 m LUES dans '
+               'Vice Beach (A) et (B) (echelle z=0/z=80 de la V16); gradin = rayon VB B x 772 sur l axe (1372.5, 255.7); lame cote baie (regions 2,3) 80 m ESTIMEE '
+               '(cachee derriere la region 1 depuis l est; Jason 05 montre un sommet ~80 m continu, flou); sommet Jason 05 697 vs 692-700 px'},
+    # [JD05-LEFT 2026-10-03] C. Clyde Atkins U.S. Courthouse (clics Jason 05 NW/SW/SE, Highway (Panorama) (S) NW, Port VC (A) SE): V16 2583.
+    # Hauteur 40 m LUE dans Vice City 10 (sommet du bloc blanc sur la ligne z=40 de l'empreinte) et Highway (Panorama) (S) (coin NW a 38 m).
+    # DISCORDANCE: Jason 05 montre ce sommet ~2 m sous l'horizon de la cam -> cam a ~42 m (pose actuelle 50.7): indice pour la pose de Jason 05.
+    'C. Clyde Atkins U.S. Courthouse': {'poly': 2583, 'color': '#cbd5e1', 'groups': [([3, 0, 1, 2, 6, 7], 40.0)],
+        'src': 'plan V16 2583 (8 volumes, toit plat); hauteur 40 m LUE dans Vice City 10 et Highway (Panorama) (S) (38 m au coin NW clique); '
+               'annexe ouest (6,7) a la meme hauteur dans VC10. Jason 05 voit le sommet ~2 m sous sa cam (pose 50.7 m): DISCORDANCE de pose, non resolue'},
     'The Floridian': {'poly': 3606, 'color': '#fcd34d', 'wedge': ('Speaking with Brian at Effluvia (3)', 1514, 1640), 'groups': [([0], 98.5)],
         'src': 'tour = parcelle V16 3606 restreinte au secteur vu dans Effluvia (3) (x 1514-1640); toit 98.5 m LU (LM The Floridian 96.5)'},
 }
@@ -83,20 +98,35 @@ def build(names=None):
         R = {r['id']: r for r in VT.regions(S['poly'])}; E = []
         if S.get('shift'):   # [VB-SETBACK 2026-10-01] V16 Vice Beach = parcelle (terrasse/piscine cote plage): tour recalee sur les images
             sh = np.array(S['shift']); R = {i: dict(r, ring=[list(np.array(p) + sh) for p in r['ring']], centroid=list(np.array(r['centroid']) + sh)) for i, r in R.items()}
-        if S.get('wedge'):    # restreindre les regions au secteur angulaire vu dans une cam (tour plus etroite que la parcelle)
+        if S.get('wedge'):    # restreindre les regions au(x) secteur(s) angulaire(s) vu(s) dans des cams (tour plus etroite que la parcelle)
             import common
-            wc, u0, u1 = S['wedge']; cmw = common.get_cam(wc); ow = np.array(cmw.xyz[:2], float)
-            azf = lambda u: np.degrees(np.arctan2(*np.array(cmw.get_pixel_direction((u, 1000)), float)[:2]))
-            a0, a1 = sorted([azf(u0), azf(u1)])
+            W = S['wedge'] if isinstance(S['wedge'], list) else [S['wedge']]
             def clip(ring):
                 K = 5.0; A = np.array(ring); x0, y0 = A.min(0) - 5; x1, y1 = A.max(0) + 5
                 m = np.zeros((int((y1 - y0) * K) + 1, int((x1 - x0) * K) + 1), np.uint8)
                 cv2.fillPoly(m, [np.array([[(x - x0) * K, (y1 - y) * K] for x, y in ring], np.int32)], 1)
                 yy, xx = np.mgrid[0:m.shape[0], 0:m.shape[1]]; X = x0 + xx / K; Y = y1 - yy / K
-                az = np.degrees(np.arctan2(X - ow[0], Y - ow[1])); m[(az < a0) | (az > a1)] = 0
-                cs, _ = cv2.findContours(m, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE); c = cv2.approxPolyDP(max(cs, key=cv2.contourArea), 0.4 * K, True).reshape(-1, 2)
+                for wc, u0, u1 in W:
+                    cmw = common.get_cam(wc); ow = np.array(cmw.xyz[:2], float)
+                    azf = lambda u: np.degrees(np.arctan2(*np.array(cmw.get_pixel_direction((u, 1000)), float)[:2]))
+                    a0, a1 = sorted([azf(u0), azf(u1)])
+                    az = np.degrees(np.arctan2(X - ow[0], Y - ow[1])); m[(az < a0) | (az > a1)] = 0
+                cs, _ = cv2.findContours(m, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+                if not cs or cv2.contourArea(max(cs, key=cv2.contourArea)) < 2 * K * K: return None
+                c = cv2.approxPolyDP(max(cs, key=cv2.contourArea), 0.4 * K, True).reshape(-1, 2)
                 return [[x0 + px / K, y1 - py / K] for px, py in c]
             R = {i: dict(r, ring=clip(r['ring'])) for i, r in R.items()}
+            R = {i: dict(r, centroid=list(np.mean(r['ring'], 0))) for i, r in R.items() if r['ring']}
+        for rid, p, n, nid in S.get('cut', []):   # couper une region V16 par une droite (gradin lu dans les images): cote (x-p).n>0 -> region nid
+            K = 5.0; A = np.array(R[rid]['ring']); x0, y0 = A.min(0) - 5; x1, y1 = A.max(0) + 5
+            m = np.zeros((int((y1 - y0) * K) + 1, int((x1 - x0) * K) + 1), np.uint8)
+            cv2.fillPoly(m, [np.array([[(x - x0) * K, (y1 - y) * K] for x, y in A], np.int32)], 1)
+            yy, xx = np.mgrid[0:m.shape[0], 0:m.shape[1]]; side = ((x0 + xx / K - p[0]) * n[0] + (y1 - yy / K - p[1]) * n[1]) > 0
+            def vec(mk):
+                cs, _ = cv2.findContours(mk.astype(np.uint8), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE); c = cv2.approxPolyDP(max(cs, key=cv2.contourArea), 0.4 * K, True).reshape(-1, 2)
+                return [[x0 + px / K, y1 - py / K] for px, py in c]
+            R[nid] = dict(R[rid], id=nid, ring=vec(m * side)); R[rid] = dict(R[rid], ring=vec(m * ~side))
+            for i in (rid, nid): R[i]['centroid'] = list(np.mean(R[i]['ring'], 0))
         if S.get('core_scale'):
             ids, sc = S['core_scale']; cc = np.mean(np.vstack([np.array(R[i]['ring']) for i in ids]), 0)
             for i in ids: R[i] = dict(R[i], ring=[list(cc + (np.array(p) - cc) * sc) for p in R[i]['ring']])
