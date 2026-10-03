@@ -6326,17 +6326,17 @@
   "id": "T3/7",
   "player": null,
   "xyz": [
-   1950.0,
-   1850.0,
-   500.0
+   1549.31,
+   2456.06,
+   515.28
   ],
   "ypr": [
-   0.0,
-   -89.0,
-   0.0
+   114.765,
+   -92.621,
+   0.082
   ],
   "fov": [
-   60.0,
+   70.083,
    null
   ],
   "size": [
@@ -6346,7 +6346,7 @@
   "source": "Trailer 3 (Extended Look) \u2014 Character Switch in Vice Beach (A) (vue verticale (drone) au-dessus de Vice Beach: canal avec ilot et ponton en haut, avenue a terre-plein, tours de plage (2 rotondes a heliport, tour courbe en M, tour en eventail a heliport), plage et ocean en bas)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "POSITION APPROX 2026-10-03: pose DEVINEE (vue verticale au-dessus de Vice Beach), emplacement exact non trouve; cam ajoutee pour les clics d Alexandre"
+  "notes": "SOLVE 2026-10-03: vue quasi verticale (drone) calee sur les ROUTES V16 (= leak) par appariement chaussee/image: residu sol 0.4 px sur toute l image; altitude/fov (degeneres au sol) fixes par les toits des tooltips d Alexandre (A,B,C,F-I): H 515 m, hfov 70.1, toits a ~10 m. Les LMs existants Maison Grande (TS/TC/TN), Sherry, Akoya, Jade Ocean y sont decales de 20-380 px (voir notes de session)."
  },
  "Character Switch in Vice Beach (B)": {
   "id": "T3/8",

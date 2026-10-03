@@ -21585,5 +21585,60 @@
     "error_m": 0.5,
     "zone": "downtown",
     "notes": "TOOLTIP V16 Alexandre 2026-10-03 (intersection de rues au sud de l echangeur I-97/I-404, clic C dans Biplane (Video) v2370), xy = tooltip, z = heightmap; ancre"
+  },
+  "Rotunda Towers (V16 3578) (Helipad S)": {
+    "xyz": [
+      1721.4,
+      2261.9,
+      80.0
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "vice_beach",
+    "notes": "TOOLTIP V16 Alexandre 2026-10-03 (clic A dans Character Switch in Vice Beach (A)), xy = tooltip, z = toit (mesh/LMs voisins, ~)"
+  },
+  "Rotunda Towers (V16 3578) (Dome N)": {
+    "xyz": [
+      1707.5,
+      2320.4,
+      80.0
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "vice_beach",
+    "notes": "TOOLTIP V16 Alexandre 2026-10-03 (clic B dans Character Switch in Vice Beach (A)), xy = tooltip, z = toit (mesh/LMs voisins, ~)"
+  },
+  "Maison Grande Condominium (Prong S Tip)": {
+    "xyz": [
+      1729.4,
+      2387.9,
+      63.6
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "vice_beach",
+    "notes": "TOOLTIP V16 Alexandre 2026-10-03 (clic C dans Character Switch in Vice Beach (A)), xy = tooltip, z = toit (mesh/LMs voisins, ~)"
+  },
+  "Maison Grande Condominium (Prong C Tip)": {
+    "xyz": [
+      1719.4,
+      2424.0,
+      63.6
+    ],
+    "source_cameras": [],
+    "error_m": 3.0,
+    "zone": "vice_beach",
+    "notes": "MESURE 2026-10-03: rayon du clic D dans Character Switch in Vice Beach (A) (pose calee sur les routes V16, sol 0.4 px) x toit 63.6 m; le tooltip donne etait une copie de celui de C"
+  },
+  "Maison Grande Condominium (Prong N Tip)": {
+    "xyz": [
+      1697.9,
+      2464.2,
+      63.6
+    ],
+    "source_cameras": [],
+    "error_m": 3.0,
+    "zone": "vice_beach",
+    "notes": "MESURE 2026-10-03: rayon du clic E dans Character Switch in Vice Beach (A) (pose calee sur les routes V16, sol 0.4 px) x toit 63.6 m; le tooltip donne etait une copie de celui de C"
   }
 }
