@@ -54,7 +54,7 @@ def build():
     out = {}
     zt = lambda x: float(np.interp(x, *PROF))
     parts = []
-    P = dens(I404); parts += [('I-404 Viaduct (East of Downtown Bridge) %s' % 'NS'[k], c, 9.0) for k, c in enumerate(chains(P, (P[:, 0] > 55) & (P[:, 0] < 180)))]
+    # [I404-UNIFIED 2026-10-03] le tablier de l'I-404 est maintenant dans tools/gen_interchange.py (viaduc continu); ici seulement les bretelles
     for k, r in enumerate(ramps):
         P = dens(r); parts += [('I-404 Ramp South (East) %d' % (k + 1), c, 6.0) for c in chains(P, P[:, 1] >= 400)]
     for name, c, hw in parts:

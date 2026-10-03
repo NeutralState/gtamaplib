@@ -103,6 +103,7 @@ def build():
     for b in sorted(extract(), key=lambda b: -b['area']):
         nm = name_of(b['c'], used); used.add(nm)
         if nm not in CREST: continue
+        if nm == 'I-404 Causeway Bridge (Downtown)': continue   # [I404-UNIFIED 2026-10-03] fait partie du viaduc I-404 continu (tools/gen_interchange.py)
         Lg = b['length']; hw = min(b['width'], 40) / 2
         irl = next((h for key, h in IRL.items() if nm.startswith(key)), None)
         crest = CREST.get(nm) or (CREST['I-404 Causeway Bridge (Downtown)'] if nm.startswith(FLAT) else (irl or next(h for lmin, h in EST if Lg >= lmin)))

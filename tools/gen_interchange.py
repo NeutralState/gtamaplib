@@ -44,7 +44,7 @@ def strokes():
 
 def z_i404(x):
     """haut du tablier de l'I-404 en fonction de x (mesures: centre 37 (Explosion 37-40 / Jason 05 33-34 sous le tablier), x=-1075 33 (Jason 05), pont Downtown 20.6 (Convertible 21); ouest de -1100 ESTIME)."""
-    return float(np.interp(x, [-1440, -1250, -1075, -980, -880, -800, -600, -450, -164, 0], [20.0, 28.0, 33.0, 37.0, 36.5, 30.0, 8.0, 8.0, 20.6, 20.6]))
+    return float(np.interp(x, [-1440, -1250, -1075, -980, -880, -800, -600, -450, -164, 68, 78, 118, 156, 200], [20.0, 28.0, 33.0, 37.0, 36.5, 30.0, 8.0, 8.0, 20.6, 20.6, 19.5, 16.9, 14.2, 14.2]))
 
 
 def zmain(i, p):
@@ -108,7 +108,7 @@ def build():
     for i, name in ((6, 'I-97 Viaduct (Interchange)'), (15, 'I-404 Viaduct (Interchange)')):
         r = R[i]; E = []
         P = np.vstack([np.linspace(a, b, max(2, int(np.hypot(*(b - a)) / 6))) for a, b in zip(r[:-1], r[1:])])
-        xmax = -164.0 if i == 15 else WIN[1] + 100          # I-404: jusqu'au pont deja mesure (I-404 Causeway Bridge (Downtown), x=-164)
+        xmax = 180.0 if i == 15 else WIN[1] + 100           # [I404-UNIFIED] I-404 continue: echangeur + pont Downtown (20.6 m, Shoreline) + troncon est (Postcard)
         mm = (P[:, 0] > WIN[0] - 150) & (P[:, 0] < xmax) & (P[:, 1] > WIN[2] - 150) & (P[:, 1] < WIN[3] + 50)
         for a, b, ka, kb in zip(P[:-1], P[1:], mm[:-1], mm[1:]):
             if not (ka and kb): continue
@@ -124,14 +124,14 @@ def build():
             q = Pm[j]; z = zmain(i, (p + q) / 2)
             for dz in (-1.8, 0.0):
                 E.append([[round(float(p[0]), 2), round(float(p[1]), 2), round(zmain(i, p) + dz, 2)], [round(float(q[0]), 2), round(float(q[1]), 2), round(zmain(i, q) + dz, 2)]])
-            c = (p + q) / 2; g = RR.ground(*c)
+            c = (p + q) / 2; g = max(RR.ground(*c), 0.0)        # au-dessus de l'eau: pile depuis z=0
             if k % 10 == 0 and z - 1.8 - g > 4:      # pile centrale
                 for ox, oy in ((-0.9, -0.9), (0.9, -0.9), (0.9, 0.9), (-0.9, 0.9)):
                     E.append([[round(c[0] + ox, 2), round(c[1] + oy, 2), round(g, 2)], [round(c[0] + ox, 2), round(c[1] + oy, 2), round(z - 1.8, 2)]])
         E_all[name] = E
     for k, E in E_all.items():
         out[k] = {'color': COLOR, 'world_edges': E, '_credit': 'Alexandre Leblanc (V16 leak) + Claude Opus 5.5',
-                  'note': 'INTERCHANGE-V1 2026-10-03: plan = trace V16 (leak map, exact); hauteurs: I-404 37 m au centre MESUREE (Explosion + Jason 05), 33 m a x=-1075 (Jason 05), '
+                  'note': 'INTERCHANGE-V1 2026-10-03: plan = trace V16 (leak map, exact); hauteurs: I-404 UNIFIEE (echangeur -> pont Downtown -> troncon est, un seul mesh, meme profil): 37 m au centre MESUREE (Explosion + Jason 05), 33 m a x=-1075 (Jason 05), 20.6 m sur le pont (Shoreline), 14.2 m a x=156 (Postcard), '
                           '21 m a x=-68 MESUREE (Convertible); I-97 12 m ESTIMEE; niveaux des bretelles interieures ESTIMES par l ordre des niveaux '
                           '(ordre de dessin SVG) 7/8 18.5 m, 9/10 25 m; raccords aux extremites. Voir tools/gen_interchange.py'}
     return out, Z
@@ -144,4 +144,6 @@ if __name__ == '__main__':
     if '--out' in sys.argv: json.dump(out, open(sys.argv[sys.argv.index('--out') + 1], 'w'))
     if '--apply' in sys.argv:
         mp = os.path.join(ROOT, 'gtamapdata', 'building_meshes_procedural.json'); shutil.copy(mp, mp + '.bak_interchange_1003')
-        M = json.load(open(mp)); M.update(out); json.dump(M, open(mp, 'w'), indent=1, ensure_ascii=True); print('applique')
+        M = json.load(open(mp))
+        for k in ('I-404 Causeway Bridge (Downtown)', 'I-404 Viaduct (East of Downtown Bridge) N', 'I-404 Viaduct (East of Downtown Bridge) S'): M.pop(k, None)   # [I404-UNIFIED]
+        M.update(out); json.dump(M, open(mp, 'w'), indent=1, ensure_ascii=True); print('applique')
