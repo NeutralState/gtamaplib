@@ -6352,17 +6352,17 @@
   "id": "T3/8",
   "player": null,
   "xyz": [
-   1639.0,
-   157.5,
-   402.9
+   2093.38,
+   1640.83,
+   562.76
   ],
   "ypr": [
-   123.2,
-   -89.0,
-   0.0
+   113.872,
+   -78.204,
+   0.303
   ],
   "fov": [
-   77.86,
+   61.38,
    null
   ],
   "size": [
@@ -6372,7 +6372,7 @@
   "source": "Trailer 3 (Extended Look) \u2014 Character Switch in Vice Beach (B) (vue verticale (drone) au-dessus du sud de Vice Beach: chantier d une tour ronde avec grues, tour blanche en gradins avec tennis/basket sur le toit, parking a terre-pleins, marina en haut a droite, plage en bas a gauche)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "POSITION APPROX 2026-10-03: pose provisoire (ajustement grossier des rues V16, chantier = parcelle V16 3256 / grue LM Construction Crane (Vice Beach)); a confirmer par clics"
+  "notes": "SOLVE 2026-10-03: 6 tooltips V16 d Alexandre (parking a boucle de Vice Beach + 2 intersections), vue plongeante (tangage -78); residus 4-18 px (E 59 px); ALTITUDE/FOV non contraints (points tous au sol): projection au sol valide, hauteur de cam indicative."
  },
  "Rooftop Pool": {
   "id": "T3/9",

@@ -21640,5 +21640,71 @@
     "error_m": 3.0,
     "zone": "vice_beach",
     "notes": "MESURE 2026-10-03: rayon du clic E dans Character Switch in Vice Beach (A) (pose calee sur les routes V16, sol 0.4 px) x toit 63.6 m; le tooltip donne etait une copie de celui de C"
+  },
+  "Vice Beach Loop Lot (SE)": {
+    "xyz": [
+      2000.0,
+      1452.5,
+      4.13
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "vice_beach",
+    "notes": "TOOLTIP V16 Alexandre 2026-10-03 (clic A dans Character Switch in Vice Beach (B)), xy = tooltip, z = heightmap; ancre"
+  },
+  "Vice Beach Loop Lot (SW)": {
+    "xyz": [
+      1907.1,
+      1453.7,
+      4.43
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "vice_beach",
+    "notes": "TOOLTIP V16 Alexandre 2026-10-03 (clic B dans Character Switch in Vice Beach (B)), xy = tooltip, z = heightmap; ancre"
+  },
+  "Vice Beach Loop Lot (NW)": {
+    "xyz": [
+      1907.3,
+      1516.9,
+      5.22
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "vice_beach",
+    "notes": "TOOLTIP V16 Alexandre 2026-10-03 (clic C dans Character Switch in Vice Beach (B)), xy = tooltip, z = heightmap; ancre"
+  },
+  "Vice Beach Loop Lot (NE)": {
+    "xyz": [
+      1999.1,
+      1515.8,
+      4.15
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "vice_beach",
+    "notes": "TOOLTIP V16 Alexandre 2026-10-03 (clic D dans Character Switch in Vice Beach (B)), xy = tooltip, z = heightmap; ancre"
+  },
+  "Vice Beach Intersection (2002, 1396)": {
+    "xyz": [
+      2001.7,
+      1396.3,
+      7.22
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "vice_beach",
+    "notes": "TOOLTIP V16 Alexandre 2026-10-03 (clic E dans Character Switch in Vice Beach (B)), xy = tooltip, z = heightmap; ancre"
+  },
+  "Vice Beach Intersection (1879, 1614)": {
+    "xyz": [
+      1879.2,
+      1613.6,
+      5.37
+    ],
+    "source_cameras": [],
+    "error_m": 0.5,
+    "zone": "vice_beach",
+    "notes": "TOOLTIP V16 Alexandre 2026-10-03 (clic F dans Character Switch in Vice Beach (B)), xy = tooltip, z = heightmap; ancre"
   }
 }
