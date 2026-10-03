@@ -6303,21 +6303,21 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -880.0,
-   -530.0,
-   215.0
+   -788.61,
+   -386.22,
+   180.53
   ],
   "ypr": [
-   8.0,
-   -17.0,
-   0.0
+   36.812,
+   -6.903,
+   -9.485
   ],
   "fov": [
-   106.0,
+   110.664,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2370 (video biplan t=79.0 s, POV aile: echangeur I-97/I-404 entier au premier plan, stade (dome blanc) et batiment accole a l horizon)",
-  "notes": "POSITION APPROX 2026-10-03 (Fable): pose DEVINEE (interpolation v1980/v2580), cam ajoutee pour les clics d Alexandre (intersections tooltips + sommets de tours). Buts: profil de l I-404 entre le pont et le stack (dip 8 m?), niveaux des bretelles, batiment accole au stade (position Jason 05).",
+  "notes": "SOLVE 2026-10-03: 3 tooltips d Alexandre (Downtown Intersection) + 4 clics Stephen P. Clark + centre du dome du stade (z~45, sigma 8) + appariement des rues V16 (chamfer, mediane 2.5 px); ROULIS LIBRE (l avion vire: -9.5 deg; le prior roulis 0 faussait le pitch), fov libre 110.7. Residus: clics 0-20 px sauf Downtown Intersection (-779,-4) 59 px (bord bas, a reverifier). Provisoire.",
   "id": "S3/105"
  }
 }
