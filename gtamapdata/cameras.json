@@ -6321,5 +6321,109 @@
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2370 (video biplan t=79.0 s, POV aile: echangeur I-97/I-404 entier au premier plan, stade (dome blanc) et batiment accole a l horizon)",
   "notes": "SOLVE 2026-10-03: 3 tooltips d Alexandre (Downtown Intersection) + 4 clics Stephen P. Clark + centre du dome du stade (z~45, sigma 8) + appariement des rues V16 (chamfer, mediane 2.5 px); ROULIS LIBRE (l avion vire: -9.5 deg; le prior roulis 0 faussait le pitch), fov libre 110.7. Residus: clics 0-20 px sauf Downtown Intersection (-779,-4) 59 px (bord bas, a reverifier). Provisoire.",
   "id": "S3/105"
+ },
+ "Character Switch in Vice Beach (A)": {
+  "id": "T3/7",
+  "player": null,
+  "xyz": [
+   1950.0,
+   1850.0,
+   500.0
+  ],
+  "ypr": [
+   0.0,
+   -89.0,
+   0.0
+  ],
+  "fov": [
+   60.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) \u2014 Character Switch in Vice Beach (A) (vue verticale (drone) au-dessus de Vice Beach: canal avec ilot et ponton en haut, avenue a terre-plein, tours de plage (2 rotondes a heliport, tour courbe en M, tour en eventail a heliport), plage et ocean en bas)",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "POSITION APPROX 2026-10-03: pose DEVINEE (vue verticale au-dessus de Vice Beach), emplacement exact non trouve; cam ajoutee pour les clics d Alexandre"
+ },
+ "Character Switch in Vice Beach (B)": {
+  "id": "T3/8",
+  "player": null,
+  "xyz": [
+   1639.0,
+   157.5,
+   402.9
+  ],
+  "ypr": [
+   123.2,
+   -89.0,
+   0.0
+  ],
+  "fov": [
+   77.86,
+   null
+  ],
+  "size": [
+   2058,
+   1170
+  ],
+  "source": "Trailer 3 (Extended Look) \u2014 Character Switch in Vice Beach (B) (vue verticale (drone) au-dessus du sud de Vice Beach: chantier d une tour ronde avec grues, tour blanche en gradins avec tennis/basket sur le toit, parking a terre-pleins, marina en haut a droite, plage en bas a gauche)",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "POSITION APPROX 2026-10-03: pose provisoire (ajustement grossier des rues V16, chantier = parcelle V16 3256 / grue LM Construction Crane (Vice Beach)); a confirmer par clics"
+ },
+ "Rooftop Pool": {
+  "id": "T3/9",
+  "player": null,
+  "xyz": [
+   1560.0,
+   330.0,
+   135.0
+  ],
+  "ypr": [
+   90.0,
+   -22.0,
+   0.0
+  ],
+  "fov": [
+   60.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) \u2014 Rooftop Pool (piscine sur le toit d une tour en terrasses courbes; a droite la tour ronde en construction (meme chantier que Character Switch (B)), au fond la marina, un pont et Downtown)",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "POSITION APPROX 2026-10-03: pose DEVINEE (tour voisine du chantier rond V16 3256, regard vers l ouest); a confirmer par clics"
+ },
+ "Rialto Causeway with Raul (1)": {
+  "id": "T3/10",
+  "player": null,
+  "xyz": [
+   80.0,
+   1075.0,
+   3.0
+  ],
+  "ypr": [
+   90.0,
+   2.0,
+   0.0
+  ],
+  "fov": [
+   60.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) \u2014 Rialto Causeway with Raul (1) (gameplay (HUD, minimap) sur le Rialto Causeway vers l ouest: peage a arcades (toit de tuiles), tours de Downtown/Edgewater derriere)",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "POSITION APPROX 2026-10-03: pose DEVINEE (approche est du peage du Rialto Causeway, regard vers l ouest); a confirmer par clics"
  }
 }
