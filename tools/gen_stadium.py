@@ -7,8 +7,8 @@ qui fait du sens ». Donc:
     tout decale de SHIFT (16 m au nord) comme le portique sud (position N-S donnee par Jason 05) -> plan coherent.
   - rails a la hauteur MESUREE du portique sud (dessus 43.1 / dessous 38.3 m), portique NORD = miroir du sud (memes x de barre et
     de piles) sur l'axe du rail nord V16: ESTIME (symetrie IRL loanDepot park: 2 rails, 2 portiques).
-  - bol: mur exterieur 28 m (ESTIME IRL), toit en 3 panneaux voutes N-S: 43.6 m aux rails -> 57 m au faite (ESTIME IRL, fleche
-    ~1/10 de la portee); poteaux sous les rails tous les ~20 m (ESTIME).
+  - bol: facade 36 m (ESTIME IRL), toit en 3 panneaux voutes N-S: 43.6 m aux rails -> 76.5 m au faite (IRL: ~73 m au-dessus du
+    terrain, Alexandre: « le stade est bien plus haut, fit toi aux dimensions IRL »); poteaux sous les rails tous les ~20 m (ESTIME).
 Usage: PYTHONPATH=.:tools python3 tools/gen_stadium.py [--out f.json] [--apply]
 """
 import json, os, sys, shutil
@@ -20,7 +20,7 @@ import v16_resect as RR, v16_tiers as VT
 import gen_stadium_portique as GP
 
 SH = GP.N * GP.SHIFT
-Z_WALL, Z_CREST = 28.0, 57.0
+Z_WALL, Z_CREST = 36.0, 76.5     # IRL loanDepot park: faite du toit ~240 ft (73 m) au-dessus du terrain (~3.5 m) ; facade du bol ~36 m
 R = {r['id']: [list(np.array(p) + SH) for p in r['ring']] for r in VT.regions(2691)}
 r2 = lambda v: [round(float(a), 2) for a in v]
 
@@ -63,7 +63,7 @@ def build():
                 L([x, yr + w, Z_WALL if inside else RR.ground(x, yr + w)], [x, yr + w, GP.Z_BOT])
     out = {'Stadium (V16 2691)': {'color': '#e2e8f0', 'world_edges': E, '_credit': 'Alexandre Leblanc (V16) + Claude Opus 5.5',
            'note': 'STADIUM-V1 2026-10-03: plan V16 2691 (regions) decale de %.0f m au nord comme le portique sud (MESURE); rails a 43.1/38.3 m '
-                   '(hauteur MESUREE du portique sud); mur du bol 28 m et toit voute 43.6 -> 57 m ESTIMES IRL (loanDepot park), demande '
+                   '(hauteur MESUREE du portique sud); facade du bol 36 m et toit voute 43.6 -> 76.5 m ESTIMES IRL (loanDepot park, faite ~73 m au-dessus du terrain), demande '
                    'd Alexandre: « base sur l IRL, juste avoir de quoi qui fait du sens »' % GP.SHIFT}}
     # --- portique nord = miroir du sud sur l'axe du rail nord V16 (meme decalage)
     A3 = np.array([-1568.2, 1115.0]) + SH; B3 = np.array([-1482.2, 1112.2]) + SH
