@@ -5068,10 +5068,6 @@
       3492,
       614
     ],
-    "C. Clyde Atkins U.S Courthouse (NW)": [
-      208.7,
-      751.0
-    ],
     "Icon at South Beach": [
       494.6,
       594.0
@@ -5140,14 +5136,6 @@
       3671.8,
       385.3
     ],
-    "C. Clyde Atkins U.S Courthouse (SW)": [
-      465.2,
-      752.6
-    ],
-    "C. Clyde Atkins U.S Courthouse (SE)": [
-      471.6,
-      748.5
-    ],
     "Marina Blue (LNE)": [
       1616.4,
       406.1
@@ -5159,6 +5147,18 @@
     "Marina Blue (SW)": [
       1957.0,
       191.9
+    ],
+    "Twin Cylinder Tower (V16 2582) (NW)": [
+      208.7,
+      751.0
+    ],
+    "Twin Cylinder Tower (V16 2582) (SW)": [
+      465.2,
+      752.6
+    ],
+    "Twin Cylinder Tower (V16 2582) (SE)": [
+      471.6,
+      748.5
     ]
   },
   "Jet Ski": {
@@ -13346,14 +13346,6 @@
       3543.5,
       835.7
     ],
-    "C. Clyde Atkins U.S Courthouse (SE)": [
-      3783.0,
-      1016.8
-    ],
-    "C. Clyde Atkins U.S Courthouse (MSE)": [
-      3803.0,
-      1016.4
-    ],
     "Asia Brickell Key (CC2B)": [
       1421.1,
       759.3
@@ -13449,6 +13441,14 @@
     "Marina Blue (SW)": [
       3288.0,
       844.0
+    ],
+    "Twin Cylinder Tower (V16 2582) (SE)": [
+      3783.0,
+      1016.8
+    ],
+    "Twin Cylinder Tower (V16 2582) (MSE)": [
+      3803.0,
+      1016.4
     ]
   },
   "Port Vice City (B)": {
@@ -17138,5 +17138,23 @@
       345.6
     ]
   },
-  "Water Tower [Gameinformer]": {}
+  "Water Tower [Gameinformer]": {},
+  "Biplane (Video) v2811": {
+    "Courthouse Block Intersection (SW)": [
+      561.6,
+      973.9
+    ],
+    "Courthouse Block Intersection (NW)": [
+      442.9,
+      856.8
+    ],
+    "Courthouse Block Intersection (NE)": [
+      651.6,
+      800.9
+    ],
+    "Courthouse Block Intersection (SE)": [
+      751.7,
+      889.3
+    ]
+  }
 }

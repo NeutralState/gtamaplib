@@ -69,12 +69,18 @@ SPEC = {
         'src': 'emprise = secteurs VB (B) x Jason 05 (largeur VB B 189-559 vs 205-570 px x2; bord SW Jason 05 297 vs 300 px); lame 80 m et aile sud 69 m LUES dans '
                'Vice Beach (A) et (B) (echelle z=0/z=80 de la V16); gradin = rayon VB B x 772 sur l axe (1372.5, 255.7); lame cote baie (regions 2,3) 80 m ESTIMEE '
                '(cachee derriere la region 1 depuis l est; Jason 05 montre un sommet ~80 m continu, flou); sommet Jason 05 697 vs 692-700 px'},
-    # [JD05-LEFT 2026-10-03] C. Clyde Atkins U.S. Courthouse (clics Jason 05 NW/SW/SE, Highway (Panorama) (S) NW, Port VC (A) SE): V16 2583.
-    # Hauteur 40 m LUE dans Vice City 10 (sommet du bloc blanc sur la ligne z=40 de l'empreinte) et Highway (Panorama) (S) (coin NW a 38 m).
-    # DISCORDANCE: Jason 05 montre ce sommet ~2 m sous l'horizon de la cam -> cam a ~42 m (pose actuelle 50.7): indice pour la pose de Jason 05.
-    'C. Clyde Atkins U.S. Courthouse': {'poly': 2583, 'color': '#cbd5e1', 'groups': [([3, 0, 1, 2, 6, 7], 40.0)],
-        'src': 'plan V16 2583 (8 volumes, toit plat); hauteur 40 m LUE dans Vice City 10 et Highway (Panorama) (S) (38 m au coin NW clique); '
-               'annexe ouest (6,7) a la meme hauteur dans VC10. Jason 05 voit le sommet ~2 m sous sa cam (pose 50.7 m): DISCORDANCE de pose, non resolue'},
+    # [JD05-LEFT 2026-10-03, corrige] C. Clyde Atkins U.S. Courthouse (V16 2583): batiment BAS a heliport. Mesure dans Biplane (Video) v2811
+    # (pose sur 4 tooltips d'intersections d'Alexandre): toit 19.3 m au coin SW (position V16 confirmee). Le bloc sombre de Jason 05 et
+    # Port VC (A) cliques 'Courthouse' = la tour a cylindres V16 2582 (renommee). Le 40 m de la v1 (VC10/Highway Pano S) etait faux.
+    'C. Clyde Atkins U.S. Courthouse': {'poly': 2583, 'color': '#cbd5e1', 'groups': [([3, 1, 2, 5, 6, 7], 19.5), ([0, 4], 24.0)],
+        'src': 'plan V16 2583; toit 19.3 m MESURE dans Biplane (Video) v2811 (coin SW: pied et toit cliques sur la meme verticale); edicule sombre '
+               '(regions 0,4) +4.5 m ESTIME (un etage au-dessus du toit, vu dans v2811); heliport sur le toit ouest (non modelise)'},
+    # Tour a cylindres jumeaux (V16 2582, nom IRL incertain): fut a deux cylindres + coursives. Mesures Biplane (Video) v2811: cylindre ouest
+    # 48.2 m, cylindre est 52.6 m. Explique le bloc sombre de Jason 05 (sommet ~50 m sur la ligne cliquee) et Port VC (A).
+    'Twin Cylinder Tower (V16 2582)': {'poly': 2582, 'color': '#94a3b8', 'groups': [([3, 1], 48.2), ([2, 5], 52.6), ([4], 15.0), ([0], 10.0)],
+        'src': 'plan V16 2582; cylindre ouest 48.2 m et est 52.6 m MESURES dans Biplane (Video) v2811 (pied/sommet sur la meme verticale); '
+               'attribution des regions aux cylindres ESTIMEE (la V16 dessine un octogone ouest + pointe sud); annexe est (4) 15 m et aile nord (0) 10 m ESTIMEES; '
+               'Jason 05: sommet predit 751 px a ~50 m = clics (749-753 px)'},
     'The Floridian': {'poly': 3606, 'color': '#fcd34d', 'wedge': ('Speaking with Brian at Effluvia (3)', 1514, 1640), 'groups': [([0], 98.5)],
         'src': 'tour = parcelle V16 3606 restreinte au secteur vu dans Effluvia (3) (x 1514-1640); toit 98.5 m LU (LM The Floridian 96.5)'},
 }
