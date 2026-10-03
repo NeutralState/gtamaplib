@@ -6290,7 +6290,34 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2811 (video biplan t=93.7 s, POV aile au-dessus de Downtown: C. Clyde Atkins Courthouse (V16 2583, heliport) + tour a cylindres (V16 2582))",
-  "notes": "SOLVE 2026-10-03: 4 tooltips V16 d Alexandre (Courthouse Block Intersection SW/NW/NE/SE), fov libre -> hfov 115.0, residus <= 4 px, prior roulis 0. Mesures: Courthouse (V16 2583) toit 19.3 m (coin SW), tour a cylindres (V16 2582) 48-53 m.",
+  "notes": "SOLVE 2026-10-03: 4 tooltips V16 d Alexandre (Courthouse Block Intersection SW/NW/NE/SE), fov libre -> hfov 115.0, residus <= 4 px, prior roulis 0. Mesures: Courthouse (V16 2583) toit 19.3 m au-dessus du sol (z 22.7, coin SW), tour a cylindres (V16 2582) 48.2/52.6 m au-dessus du sol (z 51.2/55.6).",
   "id": "S3/104"
+ },
+ "Biplane (Video) v2370": {
+  "player": null,
+  "size": [
+   1920,
+   1080
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "era": "2026",
+  "xyz": [
+   -880.0,
+   -530.0,
+   215.0
+  ],
+  "ypr": [
+   8.0,
+   -17.0,
+   0.0
+  ],
+  "fov": [
+   106.0,
+   null
+  ],
+  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2370 (video biplan t=79.0 s, POV aile: echangeur I-97/I-404 entier au premier plan, stade (dome blanc) et batiment accole a l horizon)",
+  "notes": "POSITION APPROX 2026-10-03 (Fable): pose DEVINEE (interpolation v1980/v2580), cam ajoutee pour les clics d Alexandre (intersections tooltips + sommets de tours). Buts: profil de l I-404 entre le pont et le stack (dip 8 m?), niveaux des bretelles, batiment accole au stade (position Jason 05).",
+  "id": "S3/105"
  }
 }
