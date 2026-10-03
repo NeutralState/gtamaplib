@@ -2086,17 +2086,17 @@
   "id": "L1/45",
   "player": null,
   "xyz": [
-   -1375.0,
-   600.0,
-   5.0
+   -1379.07,
+   554.12,
+   3.39
   ],
   "ypr": [
-   350.0,
-   9.0,
+   -14.606,
+   10.619,
    0.0
   ],
   "fov": [
-   60,
+   67.162,
    null
   ],
   "size": [
@@ -2104,7 +2104,8 @@
    1080
   ],
   "source": "2022-09-12 14-42-12 [?]",
-  "constraint_class": "D_no_ground_truth"
+  "constraint_class": "D_no_ground_truth",
+  "notes": "SOLVE 2026-10-03: pose devinee remplacee; calee sur Venture Apts (V16 2673) et tour rose (V16 2674) (bords a <= 4 px), point de fuite de la rue (852,812) = horizon, 4 points de trottoir sur les bords de rue V16 (<= 3 m). Camera sur la rue V16. Sert a mesurer le portique blanc du toit retractable du stade (dessus ~42-43 m, dessous ~37.5 m, x -1476..-1430 a y~982-999) sur lequel se tient Jason 05."
  },
  "Street (Lucia) (S)": {
   "id": "L1/46",
