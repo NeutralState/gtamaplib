@@ -21685,17 +21685,6 @@
     "zone": "vice_beach",
     "notes": "TOOLTIP V16 Alexandre 2026-10-03 (clic D dans Character Switch in Vice Beach (B)), xy = tooltip, z = heightmap; ancre"
   },
-  "Vice Beach Intersection (2002, 1396)": {
-    "xyz": [
-      2001.7,
-      1396.3,
-      7.22
-    ],
-    "source_cameras": [],
-    "error_m": 0.5,
-    "zone": "vice_beach",
-    "notes": "TOOLTIP V16 Alexandre 2026-10-03 (clic E dans Character Switch in Vice Beach (B)), xy = tooltip, z = heightmap; ancre"
-  },
   "Vice Beach Intersection (1879, 1614)": {
     "xyz": [
       1879.2,
@@ -21706,5 +21695,16 @@
     "error_m": 0.5,
     "zone": "vice_beach",
     "notes": "TOOLTIP V16 Alexandre 2026-10-03 (clic F dans Character Switch in Vice Beach (B)), xy = tooltip, z = heightmap; ancre"
+  },
+  "Vice Beach Tower (V16 3454) (Helipad)": {
+    "xyz": [
+      2001.7,
+      1396.3,
+      56.7
+    ],
+    "source_cameras": [],
+    "error_m": 3.0,
+    "zone": "vice_beach",
+    "notes": "TOOLTIP V16 Alexandre 2026-10-03 (clic E dans Character Switch in Vice Beach (B)) = HELIPORT sur le toit de la tour V16 3454 (pas une intersection); xy = tooltip, z = 56.7 ESTIME par le solve (degenere avec le fov de la cam: 48-84 m pour hfov 80-50)"
   }
 }

@@ -6352,17 +6352,17 @@
   "id": "T3/8",
   "player": null,
   "xyz": [
-   2093.38,
-   1640.83,
-   562.76
+   1999.85,
+   1600.61,
+   505.28
   ],
   "ypr": [
-   113.872,
-   -78.204,
-   0.303
+   115.27,
+   -88.225,
+   1.389
   ],
   "fov": [
-   61.38,
+   70.0,
    null
   ],
   "size": [
@@ -6372,7 +6372,7 @@
   "source": "Trailer 3 (Extended Look) \u2014 Character Switch in Vice Beach (B) (vue verticale (drone) au-dessus du sud de Vice Beach: chantier d une tour ronde avec grues, tour blanche en gradins avec tennis/basket sur le toit, parking a terre-pleins, marina en haut a droite, plage en bas a gauche)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "SOLVE 2026-10-03: 6 tooltips V16 d Alexandre (parking a boucle de Vice Beach + 2 intersections), vue plongeante (tangage -78); residus 4-18 px (E 59 px); ALTITUDE/FOV non contraints (points tous au sol): projection au sol valide, hauteur de cam indicative."
+  "notes": "SOLVE 2026-10-03 V2: le clic E etait l heliport du toit de la tour V16 3454 (traite avant comme une intersection -> pose fausse, routes decalees); vue quasi verticale (tangage -88), 5 tooltips sol + heliport (z libre), residus 1-16 px; hfov fixe 70 (= A): altitude et hauteur du toit couplees au fov, projection au sol inchangee."
  },
  "Rooftop Pool": {
   "id": "T3/9",
