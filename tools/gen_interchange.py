@@ -7,11 +7,14 @@ Topologie lue dans la SVG (croisements / raccords des traces): bretelles exterie
 autoroutes), bretelles interieures 7,8 (partent de 5, finissent sur 3) et 9,10 (partent de 2, finissent sur 4) qui
 traversent le centre du stack (~(-940, 570)).
 Hauteurs (haut du tablier):
-  - I-404 au centre: ~38 m MESURE dans Explosion (tablier superieur perpendiculaire a la vue: 37-40 m sur 7 colonnes);
+  - I-404 au centre: ~37 m MESURE (Explosion: dessus du tablier 37-40 m sur 7 colonnes; Jason 05: bande eclairee sous le
+    tablier a 33-34 m); x=-1075: 33 m (Jason 05: 29-30 m sous le tablier);
     21 m a x=-68 MESURE (Convertible, cam sur le tablier: 22.6 m - 1.3 m); 20.6 m au pont Downtown (CREST, deja mesure).
   - I-97: 12 m ESTIME (Explosion est sur l'I-97 a 15.5 m, 1.2 km au sud; passe sous tout le stack).
   - niveaux des bretelles interieures ESTIMES par l'ordre des niveaux (ordre de dessin SVG: 6 < 7,8 < 9,10 < 15,
     coherent avec l'I-404 mesuree au sommet): 7/8 = 18.5 m, 9/10 = 25 m (degagement 6.5 m).
+  - I-404 prolongee jusqu'au pont deja mesure (I-404 Causeway Bridge (Downtown), x=-164, 20.6 m) ou se trouve la cam
+    Convertible (21 m mesure); voies laterales 13/14 a la hauteur de l'I-404.
   - raccords: une bretelle prend la hauteur du trace qu'elle rejoint a ses extremites; profil lineaire entre points
     de controle, pente limitee.
 Usage: PYTHONPATH=. python3 tools/gen_interchange.py [--out f.json] [--apply]
@@ -38,8 +41,8 @@ def strokes():
 
 
 def z_i404(x):
-    """haut du tablier de l'I-404 en fonction de x (mesures: centre 38 (Explosion), x=-68 21 (Convertible); ouest ESTIME)."""
-    return float(np.interp(x, [-1440, -1250, -1050, -820, -68, 0], [20.0, 30.0, 38.0, 38.0, 21.0, 20.6]))
+    """haut du tablier de l'I-404 en fonction de x (mesures: centre 37 (Explosion 37-40 / Jason 05 33-34 sous le tablier), x=-1075 33 (Jason 05), pont Downtown 20.6 (Convertible 21); ouest de -1100 ESTIME)."""
+    return float(np.interp(x, [-1440, -1250, -1075, -980, -820, -164, 0], [20.0, 28.0, 33.0, 37.0, 37.0, 20.6, 20.6]))
 
 
 def zmain(i, p):
@@ -76,6 +79,9 @@ def build():
                 s, d = proj(r, CENTER)
                 if d < 60: ks.insert(1, s); kz.insert(1, LEVEL[i])
             Z[i] = (np.array(ks), np.array(kz))
+    for i in (13, 14):                         # voies laterales est (les 2 bouts touchent l'I-404): hauteur de l'I-404
+        r = R[i]; C = cum(r); Z[i] = (np.array([0.0, C[-1]]), np.array([z_i404(r[0][0]), z_i404(r[-1][0])]))
+    order = order + [13, 14]
     E_all = {}
     # bretelles: tablier 12 m (axe V16), piles tous les 35 m
     for i in order:
@@ -99,9 +105,9 @@ def build():
     # autoroutes (contours fermes): bords du tablier a la hauteur de la fonction, traverses + piles sur l'axe
     for i, name in ((6, 'I-97 Viaduct (Interchange)'), (15, 'I-404 Viaduct (Interchange)')):
         r = R[i]; E = []
-        m = (r[:, 0] > WIN[0] - 150) & (r[:, 0] < WIN[1] + 100) & (r[:, 1] > WIN[2] - 150) & (r[:, 1] < WIN[3] + 50)
         P = np.vstack([np.linspace(a, b, max(2, int(np.hypot(*(b - a)) / 6))) for a, b in zip(r[:-1], r[1:])])
-        mm = (P[:, 0] > WIN[0] - 150) & (P[:, 0] < WIN[1] + 100) & (P[:, 1] > WIN[2] - 150) & (P[:, 1] < WIN[3] + 50)
+        xmax = -164.0 if i == 15 else WIN[1] + 100          # I-404: jusqu'au pont deja mesure (I-404 Causeway Bridge (Downtown), x=-164)
+        mm = (P[:, 0] > WIN[0] - 150) & (P[:, 0] < xmax) & (P[:, 1] > WIN[2] - 150) & (P[:, 1] < WIN[3] + 50)
         for a, b, ka, kb in zip(P[:-1], P[1:], mm[:-1], mm[1:]):
             if not (ka and kb): continue
             za, zb_ = zmain(i, a), zmain(i, b)
@@ -123,7 +129,7 @@ def build():
         E_all[name] = E
     for k, E in E_all.items():
         out[k] = {'color': COLOR, 'world_edges': E, '_credit': 'Alexandre Leblanc (V16 leak) + Claude Opus 5.5',
-                  'note': 'INTERCHANGE-V1 2026-10-03: plan = trace V16 (leak map, exact); hauteurs: I-404 38 m au centre MESUREE (Explosion), '
+                  'note': 'INTERCHANGE-V1 2026-10-03: plan = trace V16 (leak map, exact); hauteurs: I-404 37 m au centre MESUREE (Explosion + Jason 05), 33 m a x=-1075 (Jason 05), '
                           '21 m a x=-68 MESUREE (Convertible); I-97 12 m ESTIMEE; niveaux des bretelles interieures ESTIMES par l ordre des niveaux '
                           '(ordre de dessin SVG) 7/8 18.5 m, 9/10 25 m; raccords aux extremites. Voir tools/gen_interchange.py'}
     return out, Z
