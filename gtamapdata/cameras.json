@@ -6250,20 +6250,20 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "xyz": [
-   1465.04,
-   1276.12,
-   58.13
+   1467.2,
+   1277.87,
+   57.94
   ],
   "ypr": [
-   159.665,
-   -7.514,
-   0.032
+   159.609,
+   -7.479,
+   0.051
   ],
   "fov": [
-   75.004,
+   74.857,
    null
   ],
   "source": "Screenshot \u2014 Speaking with Brian at Effluvia (3) (toit-terrasse a Vice Beach, au nord de Flamingo Park; Flamingo South Beach (tour courbe), Portofino, Downtown au loin)",
-  "note": "SOLVE 2026-10-02 (preliminaire): 6 reperes (Portofino centre des 3 sommets, Apogee, Icon, grues Asia CC1/CC2, sommet grande roue), residus <= 6 px"
+  "note": "SOLVE-V2 2026-10-02: pose INDEPENDANTE de Portofino (Apogee, Icon, grues Asia CC1/CC2, sommet grande roue; residus <= 6 px) -> test a l aveugle de Portofino (bords 0-2.5 px vs V16 13-15 px). | SOLVE 2026-10-02 (preliminaire): 6 reperes (Portofino centre des 3 sommets, Apogee, Icon, grues Asia CC1/CC2, sommet grande roue), residus <= 6 px"
  }
 }
