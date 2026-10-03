@@ -38,9 +38,10 @@ SPEC = {
         'pyramid': ([2, 3, 5, 7], 14.0), 'src': 'tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 63 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (le LM 146 = pointe lumineuse, 6 m au-dessus de la pyramide lue); tour ~30 px a l est de la V16 dans cette vue (garde sur la V16), ailes basses 40 m ESTIMEES (Venetian Islands: fut etroit), verriere pyramidale +14 m (vue dans Biplane Night (Video) Last); podium (region 4) 14 m ESTIME'},
     'Green Diamond': {'poly': 3576, 'color': '#4ade80', 'shift': (-22.5, -23.4), 'groups': [([2, 3, 4, 6], 126.0), ([0], 40.0), ([1], 40.0), ([5], 40.0), ([7], 14.0)], 'core_scale': ([2, 3, 4, 6], 1.35),
         'pyramid': ([2, 3, 4, 6], 14.0), 'src': 'tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 60 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (LM 145 = pointe); tour ~30 px a l est de la V16 dans cette vue (garde sur la V16), ailes basses 40 m ESTIMEES (Venetian Islands: fut etroit), verriere pyramidale +14 m (vue dans Biplane Night (Video) Last); podium (region 7) 14 m ESTIME'},
-    'Icon at South Beach': {'poly': 3251, 'color': '#f472b6', 'groups': [([0], 142.0), ([1], 147.0), ([2], 110.0)],
-        'src': 'tour (region 0) = LM 142; couronne (region 1) +5 m et aile courbe (region 2) 110 m ESTIMES'},
-    'Murano Grande': {'poly': 3233, 'color': '#fb923c', 'groups': [([1], 139.0), ([2], 133.0), ([4], 127.0), ([3], 12.0), ([0], 30.0)],
+    # [EFFLUVIA 2026-10-02] relus dans Speaking with Brian at Effluvia (3): region 0 = PARCELLE (podium), pas la tour
+    'Icon at South Beach': {'poly': 3251, 'color': '#f472b6', 'shift': (-28.7, -0.5), 'groups': [([1], 140.0), ([2], 113.4), ([0], 12.0)],
+        'src': 'lame courbe V16 (regions 1+2): partie haute 140 m (LM 142) et aile basse 113 m LUES dans Effluvia (3); podium 12 m ESTIME; decalage 28.7 m O (VB-SETBACK, lu)'},
+    'Murano Grande': {'poly': 3233, 'color': '#fb923c', 'shift': (-28.7, -0.5), 'groups': [([1], 139.0), ([2], 133.0), ([4], 127.0), ([3], 12.0), ([0], 30.0)],
         'src': 'tour courbe en 3 segments V16 (1,2,4): 139 (LM) puis gradins 133/127 ESTIMES; podium 12 et bloc 0 30 m ESTIMES'},
     'Tresor Tower': {'poly': 3573, 'color': '#c084fc', 'shift': (-25.2, -6.2), 'groups': [([3, 1], 120.0), ([2], 100.0), ([0], 12.0)],
         'src': 'fut rond + lame (regions 3,1) = LM 120; aile est 100 m et podium 12 m ESTIMES'},
@@ -50,10 +51,17 @@ SPEC = {
         'src': 'lame sud = LM (SE) 113; lame nord 107 = LM (NW) (35 m hors empreinte: attribution ESTIMEE)'},
     'The Ritz-Carlton Bal Harbour': {'poly': 3588, 'color': '#e5e7eb', 'groups': [([0, 1, 3], 104.0), ([2], 108.0), ([4, 5], 30.0)],
         'src': 'lame courbe (regions 0,1,3) = LM 104; edicule 108 et ailes basses courbes 30 m ESTIMES'},
-    'Apogee Condominium': {'poly': 3228, 'color': '#a5b4fc', 'groups': [([0], 93.0), ([1], 15.0)],
+    'Apogee Condominium': {'poly': 3228, 'color': '#a5b4fc', 'shift': (-27.3, -2.8), 'groups': [([0], 92.1), ([1], 15.0)],
         'src': 'tour (region 0) = LM 93; podium (region 1) 15 m ESTIME'},
     'Akoya Condominium': {'poly': 3586, 'color': '#99f6e4', 'groups': [([0], 145.0)],
         'src': 'plan cruciforme V16 = LM 145'},
+    # nouvelles tours vues dans Effluvia (3) (largeurs/toits lus; decalage lateral lu; noms inconnus -> numero V16)
+    'Vice Beach Tower (V16 3274)': {'poly': 3274, 'color': '#e2e8f0', 'shift': (-11.0, 1.1), 'groups': [([0], 80.8)],
+        'src': 'tour blanche vue dans Effluvia (3): toit 80.8 m et position laterale LUS (largeur 117 px vs 104 V16)'},
+    'Vice Beach Tower (V16 3258)': {'poly': 3258, 'color': '#e2e8f0', 'shift': (3.5, -0.6), 'groups': [([0], 85.4)],
+        'src': 'tour vue dans Effluvia (3): toit 85.4 m et position laterale LUS (largeur 114 vs 117 px)'},
+    'The Floridian': {'poly': 3606, 'color': '#fcd34d', 'wedge': ('Speaking with Brian at Effluvia (3)', 1514, 1640), 'groups': [([0], 98.5)],
+        'src': 'tour = parcelle V16 3606 restreinte au secteur vu dans Effluvia (3) (x 1514-1640); toit 98.5 m LU (LM The Floridian 96.5)'},
 }
 
 
@@ -75,6 +83,20 @@ def build(names=None):
         R = {r['id']: r for r in VT.regions(S['poly'])}; E = []
         if S.get('shift'):   # [VB-SETBACK 2026-10-01] V16 Vice Beach = parcelle (terrasse/piscine cote plage): tour recalee sur les images
             sh = np.array(S['shift']); R = {i: dict(r, ring=[list(np.array(p) + sh) for p in r['ring']], centroid=list(np.array(r['centroid']) + sh)) for i, r in R.items()}
+        if S.get('wedge'):    # restreindre les regions au secteur angulaire vu dans une cam (tour plus etroite que la parcelle)
+            import common
+            wc, u0, u1 = S['wedge']; cmw = common.get_cam(wc); ow = np.array(cmw.xyz[:2], float)
+            azf = lambda u: np.degrees(np.arctan2(*np.array(cmw.get_pixel_direction((u, 1000)), float)[:2]))
+            a0, a1 = sorted([azf(u0), azf(u1)])
+            def clip(ring):
+                K = 5.0; A = np.array(ring); x0, y0 = A.min(0) - 5; x1, y1 = A.max(0) + 5
+                m = np.zeros((int((y1 - y0) * K) + 1, int((x1 - x0) * K) + 1), np.uint8)
+                cv2.fillPoly(m, [np.array([[(x - x0) * K, (y1 - y) * K] for x, y in ring], np.int32)], 1)
+                yy, xx = np.mgrid[0:m.shape[0], 0:m.shape[1]]; X = x0 + xx / K; Y = y1 - yy / K
+                az = np.degrees(np.arctan2(X - ow[0], Y - ow[1])); m[(az < a0) | (az > a1)] = 0
+                cs, _ = cv2.findContours(m, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE); c = cv2.approxPolyDP(max(cs, key=cv2.contourArea), 0.4 * K, True).reshape(-1, 2)
+                return [[x0 + px / K, y1 - py / K] for px, py in c]
+            R = {i: dict(r, ring=clip(r['ring'])) for i, r in R.items()}
         if S.get('core_scale'):
             ids, sc = S['core_scale']; cc = np.mean(np.vstack([np.array(R[i]['ring']) for i in ids]), 0)
             for i in ids: R[i] = dict(R[i], ring=[list(cc + (np.array(p) - cc) * sc) for p in R[i]['ring']])
