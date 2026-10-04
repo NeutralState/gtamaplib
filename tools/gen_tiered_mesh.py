@@ -87,6 +87,11 @@ SPEC = {
         'src': 'plan V16 2582; cylindre ouest 48.2 m et est 52.6 m AU-DESSUS DU SOL (sol 3.0 -> z 51.2 / 55.6) MESURES dans Biplane (Video) v2811 (pied/sommet sur la meme verticale); LM (SE) z 51.1 concorde; '
                'attribution des regions aux cylindres ESTIMEE (la V16 dessine un octogone ouest + pointe sud); annexe est (4) 15 m et aile nord (0) 10 m ESTIMEES; '
                'Jason 05: sommet predit 751 px a ~50 m = clics (749-753 px)'},
+    # [RIALTO-V4 2026-10-04] 1800 Club lu dans Rialto Causeway with Raul (1) (pose V4): dalle principale (regions 0,1) a toit cintre
+    # (rives 152, faite 159.5 = LM), tour ronde sud (region 3) 150 + edicule 157, aile sud (region 2) 157.
+    '1800 Club': {'poly': 2718, 'color': '#93c5fd', 'groups': [([0, 1], 152.0), ([2], 157.0), ([3], 150.0)], 'vault': ([0, 1], 6.3, (0.29, -0.96)), 'drum': ([3], 6.5),
+        'src': 'plan V16 2718 (4 volumes); hauteurs LUES dans Rialto Causeway with Raul (1) (pose V4, 4.3 px/m): toit cintre de la dalle 152 -> 159.5 (LM 1800 Club 159.5), '
+               'tour ronde 150 + edicule 156.5, aile sud 157'},
     'The Floridian': {'poly': 3606, 'color': '#fcd34d', 'wedge': ('Speaking with Brian at Effluvia (3)', 1514, 1640), 'groups': [([0], 98.5)],
         'src': 'tour = parcelle V16 3606 restreinte au secteur vu dans Effluvia (3) (x 1514-1640); toit 98.5 m LU (LM The Floridian 96.5)'},
 }
@@ -189,6 +194,16 @@ def build(names=None):
         if S.get('pyramid'):
             ids, ah = S['pyramid']; ids = [i for i in ids if i in R]; zb = max(H[i] for i in ids); Up = union_ring([R[i] for i in ids]); ap = np.mean(Up, 0)
             for p in Up: seg([*p, zb], [*ap, zb + ah])
+        if S.get('vault'):   # toit cintre: arc le long du grand axe des regions (faite au milieu)
+            ids, rise = S['vault'][:2]; zb = max(H[i] for i in ids); Uv = np.array(union_ring([R[i] for i in ids]))
+            cv_ = Uv.mean(0); ax = np.array(S['vault'][2], float) if len(S['vault']) > 2 else np.linalg.svd(Uv - cv_)[2][0]; ax = ax / np.linalg.norm(ax); nx = np.array([-ax[1], ax[0]])
+            sa = (Uv - cv_) @ ax; sn = (Uv - cv_) @ nx; a0, a1, n0, n1 = sa.min(), sa.max(), sn.min(), sn.max()
+            ts = np.linspace(0, 1, 13); zt = lambda t: zb + 1.2 + rise * (1 - (2 * t - 1) ** 2)
+            for nn in (n0, n1):
+                pts = [[*(cv_ + ax * (a0 + (a1 - a0) * t) + nx * nn), zt(t)] for t in ts]
+                for pa, pb in zip(pts[:-1], pts[1:]): seg(pa, pb)
+            for t in ts[::2]:
+                seg([*(cv_ + ax * (a0 + (a1 - a0) * t) + nx * n0), zt(t)], [*(cv_ + ax * (a0 + (a1 - a0) * t) + nx * n1), zt(t)])
         if S.get('drum'):
             ids, dh = S['drum']; ids = [i for i in ids if i in R]; ztop = max(H[i] for i in ids)
             Ud = union_ring([R[i] for i in ids]); ring(Ud, ztop + dh)
