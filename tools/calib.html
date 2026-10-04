@@ -3967,8 +3967,7 @@ window.loadProceduralMeshes = loadProceduralMeshes;
 
 function drawBuildingWireframes() {
   if (!showWireframes) return;
-  if (!projections.length) return;
-
+  // [MESH-NOLM-FIX] plus de return si 0 LM: les aretes procedurales sont pre-projetees par le serveur
   const projMap = {};
   for (const p of projections) {
     if (p.projected) projMap[p.name] = p.projected;
@@ -4160,10 +4159,10 @@ function draw() {
     const h    = camData.size[1] * scale * mainZoom;
     frameImg.style.cssText = `position:absolute;left:${left}px;top:${top}px;width:${w}px;height:${h}px;object-fit:fill;pointer-events:none`;
   }
-  if (!projections.length) return;
-
   // [PORTOFINO-WIREFRAME-V1] Draw building wireframes before markers
-  drawBuildingWireframes();
+  // [MESH-NOLM-FIX 2026-10-04] avant le return: une cam sans LM marque (Rialto, Rooftop Pool) doit afficher ses meshes
+  try { drawBuildingWireframes(); } catch (e) { if (!(e instanceof ReferenceError)) throw e; }   // ReferenceError = draw() appele avant l'init des globals mesh
+  if (!projections.length) return;
 
   projections.forEach(lm => {
     const hi = hoveredLm === lm.name || selectedLm === lm.name;
