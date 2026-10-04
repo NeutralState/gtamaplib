@@ -28,24 +28,25 @@ SPEC = {
                '13 m a l ouest / 4 m au sud du polygone V16 (residu 2 px); sur la silhouette V16 (VB-WATER 2026-10-04, Alexandre)'},
     # 1500 Ocean Dr (V16 3335): tour courbe a bout arrondi (region 4) sur podium a facade a persiennes (region 1),
     # lame rose a bow-windows octogonaux (region 2), immeuble ouest (0) + tourelle hexagonale (3). Comme l'IRL.
-    '1500 Ocean Dr': {'poly': 3335, 'color': '#f9a8d4', 'shift': (-25.0, 0.0), 'groups': [([4], 63.8), ([2], 62.3), ([1], 21.0), ([0], 34.0), ([3], 36.0)],
+    '1500 Ocean Dr': {'poly': 3335, 'color': '#f9a8d4', 'groups': [([4], 63.8), ([2], 62.3), ([1], 21.0), ([0], 34.0), ([3], 36.0)],
         'src': 'tour 63.8 (LM) et lame rose 62.3 (3 LMs S/SE/NW/SW); podium 21 m LU dans Vice Beach (B) (echelles aux coins); '
                'immeuble ouest 34 m LU (toit a gradins blanc derriere la lame, Vice Beach (B)), tourelle hexagonale 36 m ESTIMEE. Note: Vice Beach (B) montre tout le complexe ~10-15 m au NO de la V16 (pose de la cam non verifiee, la tour Jade Ocean est decalee dans une autre direction -> pas un decalage V16)'},
     # --- Vice Beach, plus hautes tours (2026-09-30, demande Alexandre). Hauteur de la region qui contient le LM = LM;
     # les autres volumes ESTIMES (proportions IRL); les traits V16 donnent la forme (arrondis, ailes, gradins).
     # CORRIGE (Alexandre): la tour = le carre a verriere pyramidale (X de la V16) + ses ailes; le grand polygone = le podium bas
-    'Blue Diamond': {'poly': 3575, 'color': '#60a5fa', 'shift': (-39.8, -18.8), 'groups': [([2, 3, 5, 7], 126.0), ([0], 40.0), ([1], 40.0), ([6], 40.0), ([4], 14.0)], 'core_scale': ([2, 3, 5, 7], 1.35),
+    'Blue Diamond': {'poly': 3575, 'color': '#60a5fa', 'groups': [([2, 3, 5, 7], 126.0), ([0], 40.0), ([1], 40.0), ([6], 40.0), ([4], 14.0)], 'core_scale': ([2, 3, 5, 7], 1.35),
         'pyramid': ([2, 3, 5, 7], 14.0), 'src': 'tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 63 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (le LM 146 = pointe lumineuse, 6 m au-dessus de la pyramide lue); tour ~30 px a l est de la V16 dans cette vue (garde sur la V16), ailes basses 40 m ESTIMEES (Venetian Islands: fut etroit), verriere pyramidale +14 m (vue dans Biplane Night (Video) Last); podium (region 4) 14 m ESTIME'},
-    'Green Diamond': {'poly': 3576, 'color': '#4ade80', 'shift': (-22.5, -23.4), 'groups': [([2, 3, 4, 6], 126.0), ([0], 40.0), ([1], 40.0), ([5], 40.0), ([7], 14.0)], 'core_scale': ([2, 3, 4, 6], 1.35),
+    'Green Diamond': {'poly': 3576, 'color': '#4ade80', 'groups': [([2, 3, 4, 6], 126.0), ([0], 40.0), ([1], 40.0), ([5], 40.0), ([7], 14.0)], 'core_scale': ([2, 3, 4, 6], 1.35),
         'pyramid': ([2, 3, 4, 6], 14.0), 'src': 'tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 60 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (LM 145 = pointe); tour ~30 px a l est de la V16 dans cette vue (garde sur la V16), ailes basses 40 m ESTIMEES (Venetian Islands: fut etroit), verriere pyramidale +14 m (vue dans Biplane Night (Video) Last); podium (region 7) 14 m ESTIME'},
     # [EFFLUVIA 2026-10-02] relus dans Speaking with Brian at Effluvia (3): region 0 = PARCELLE (podium), pas la tour
-    # [VB-WATER 2026-10-04, Alexandre] Icon, Murano Grande, Jade Ocean: decalage VB-SETBACK RETIRE (le decalage de ~29 m vers l'ouest
+    # [VB-WATER 2026-10-04, Alexandre] TOUTES les tours de Vice Beach (Icon, Murano, Jade Ocean, puis 1500 Ocean Dr, Diamonds, Tresor,
+    # Apogee, V16 3274/3258): decalage VB-SETBACK RETIRE (le decalage de ~29 m vers l'ouest
     # mettait Icon/Murano dans la baie) -> remis sur les silhouettes V16 (« met sur les silhouettes v16 »); hauteurs inchangees.
     'Icon at South Beach': {'poly': 3251, 'color': '#f472b6', 'groups': [([1], 140.0), ([2], 113.4), ([0], 12.0)],
         'src': 'lame courbe V16 (regions 1+2): partie haute 140 m (LM 142) et aile basse 113 m LUES dans Effluvia (3); podium 12 m ESTIME; sur la silhouette V16 (VB-WATER 2026-10-04, Alexandre: le decalage 28.7 m O le mettait dans la baie)'},
     'Murano Grande': {'poly': 3233, 'color': '#fb923c', 'groups': [([1], 139.0), ([2], 133.0), ([4], 127.0), ([3], 12.0), ([0], 30.0)],
         'src': 'tour courbe en 3 segments V16 (1,2,4): 139 (LM) puis gradins 133/127 ESTIMES; podium 12 et bloc 0 30 m ESTIMES; sur la silhouette V16 (VB-WATER 2026-10-04: decalage retire, il le mettait dans la baie)'},
-    'Tresor Tower': {'poly': 3573, 'color': '#c084fc', 'shift': (-25.2, -6.2), 'groups': [([3, 1], 120.0), ([2], 100.0), ([0], 12.0)],
+    'Tresor Tower': {'poly': 3573, 'color': '#c084fc', 'groups': [([3, 1], 120.0), ([2], 100.0), ([0], 12.0)],
         'src': 'fut rond + lame (regions 3,1) = LM 120; aile est 100 m et podium 12 m ESTIMES'},
     'Flamingo South Beach': {'poly': 3400, 'color': '#fda4af', 'groups': [([2], 111.0), ([0], 51.0), ([1], 52.0), ([3], 62.0)],
         'src': 'hauteurs par region = LMs contenus (T* 111, NENE/NERNE 51-55, NWNE 52, SDS/SRSW 59-64): toutes MESUREES'},
@@ -53,14 +54,14 @@ SPEC = {
         'src': 'lame sud = LM (SE) 113; lame nord 107 = LM (NW) (35 m hors empreinte: attribution ESTIMEE)'},
     'The Ritz-Carlton Bal Harbour': {'poly': 3588, 'color': '#e5e7eb', 'groups': [([0, 1, 3], 104.0), ([2], 108.0), ([4, 5], 30.0)],
         'src': 'lame courbe (regions 0,1,3) = LM 104; edicule 108 et ailes basses courbes 30 m ESTIMES'},
-    'Apogee Condominium': {'poly': 3228, 'color': '#a5b4fc', 'shift': (-27.3, -2.8), 'groups': [([0], 92.1), ([1], 15.0)],
+    'Apogee Condominium': {'poly': 3228, 'color': '#a5b4fc', 'groups': [([0], 92.1), ([1], 15.0)],
         'src': 'tour (region 0) = LM 93; podium (region 1) 15 m ESTIME'},
     'Akoya Condominium': {'poly': 3586, 'color': '#99f6e4', 'groups': [([0], 145.0)],
         'src': 'plan cruciforme V16 = LM 145'},
     # nouvelles tours vues dans Effluvia (3) (largeurs/toits lus; decalage lateral lu; noms inconnus -> numero V16)
-    'Vice Beach Tower (V16 3274)': {'poly': 3274, 'color': '#e2e8f0', 'shift': (-11.0, 1.1), 'groups': [([0], 80.8)],
+    'Vice Beach Tower (V16 3274)': {'poly': 3274, 'color': '#e2e8f0', 'groups': [([0], 80.8)],
         'src': 'tour blanche vue dans Effluvia (3): toit 80.8 m et position laterale LUS (largeur 117 px vs 104 V16)'},
-    'Vice Beach Tower (V16 3258)': {'poly': 3258, 'color': '#e2e8f0', 'shift': (3.5, -0.6), 'groups': [([0], 85.4)],
+    'Vice Beach Tower (V16 3258)': {'poly': 3258, 'color': '#e2e8f0', 'groups': [([0], 85.4)],
         'src': 'tour vue dans Effluvia (3): toit 85.4 m et position laterale LUS (largeur 114 vs 117 px)'},
     # [JD05-LEFT 2026-10-03] Bentley Bay South (clic Jason 05 'The Bentley Bay Condominium South (SW)'): parcelle V16 3257 au bord de
     # la baie, plus large que le batiment. Emprise = parcelle restreinte aux secteurs vus dans Vice Beach (B) (vue de l'est, x 702.5-885)
