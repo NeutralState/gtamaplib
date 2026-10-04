@@ -88,8 +88,34 @@ def vcia_tower():
                     'sommet 97.8 m MESURE (LM FAA Miami ATCT (MIA), 4 cams). Voir tools/gen_rlx_requests.py'}}
 
 
+def schlott():
+    """Schlott Construction (Port Gellhorn, pres du Diner / Hank's Waffle): cour cloturee = V16 1214. Mur d'enceinte + panneaux
+    'SCHLOTT CONSTRUCTION' vus dans Diner (SW)/(S): coins du panneau = LMs '18635 SW 105th Ave (CE)/(CW)' (dessus 18.0-18.1 m, sol 15.6 m
+    -> 2.5 m MESURE); facades basses de la cour 3.5 m LUES dans Diner (S); conteneurs ESTIMES."""
+    E = []; L = lambda a, b: E.append([r2(a), r2(b)])
+    F = {f['id']: f for f in json.load(open(os.path.join(ROOT, 'gtamapdata', 'v16_footprints.json')))['polygons']}
+    O = np.array(F[1214]['ring']); g = RR.ground(*O.mean(0)); zw = g + 3.5
+    ringz(E, O, g); ringz(E, O, zw)
+    for p in O: L([*p, g], [*p, zw])
+    c = O.mean(0); u = np.linalg.svd(O - c)[2][0]; n = np.array([-u[1], u[0]])
+    if (np.array([-6191.1, 4481.2]) - c) @ n < 0: n = -n                       # n vers la facade a enseigne (cote route)
+    s = (O - c) @ u; t = (O - c) @ n; s0, s1, t0, t1 = s.min(), s.max(), t.min(), t.max()
+    P = lambda a, b, z: [*(c + u * a + n * b), z]
+    LM = json.load(open(os.path.join(ROOT, 'gtamapdata', 'landmarks.json')))
+    A, B = np.array(LM['18635 SW 105th Ave (CE)']['xyz']), np.array(LM['18635 SW 105th Ave (CW)']['xyz'])
+    for z in (g + 0.8, A[2]): L([A[0], A[1], z], [B[0], B[1], z])            # panneau SCHLOTT (mesure)
+    for q in (A, B): L([q[0], q[1], g], [q[0], q[1], q[2]])
+    for k in range(3):
+        a = s1 - 4 - k * 7.0
+        Q = [P(a - 6.0, t1 - 4.5, g + 2.6), P(a, t1 - 4.5, g + 2.6), P(a, t1 - 2.1, g + 2.6), P(a - 6.0, t1 - 2.1, g + 2.6)]
+        for q in range(4): L(Q[q], Q[(q + 1) % 4]); L([Q[q][0], Q[q][1], g], Q[q])
+    return {'Schlott Construction (Port Gellhorn)': {'color': '#fca5a5', 'world_edges': E, '_credit': 'Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5 (demande rlx)',
+            'note': 'RLX-REQ 2026-10-04: cour = V16 1214, facades 3.5 m (Diner (S)) et panneau SCHLOTT MESURE (LMs 18635 SW 105th Ave CE/CW); '
+                    'conteneurs ESTIMES. Voir tools/gen_rlx_requests.py'}}
+
+
 def build():
-    out = {}; out.update(marine_stadium()); out.update(vcia_tower()); return out
+    out = {}; out.update(marine_stadium()); out.update(vcia_tower()); out.update(schlott()); return out
 
 
 if __name__ == '__main__':
