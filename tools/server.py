@@ -1159,6 +1159,15 @@ class Handler(BaseHTTPRequestHandler):
                     }
             self.send_json({'meshes': result})
 
+        elif path == '/api/mesh_solids':
+            # [SOLIDS-V1 2026-10-04] volumes pleins des meshes batiments (onglet 3D) — cache recalcule si le JSON des meshes change
+            try:
+                import mesh_solids as _ms, importlib as _il; _il.reload(_ms)
+                self.send_json(_ms.cached())
+            except Exception as e:
+                import traceback; traceback.print_exc()
+                self.send_json({'error': str(e)}, 500)
+            return
         elif path == '/api/cameras':
             # [TIER-DOTS-V1] tiers pour la liste (lecture seule, pas de calc RMS)
             try:

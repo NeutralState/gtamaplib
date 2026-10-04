@@ -788,7 +788,7 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
   </div>
 
   <div class="map-view" id="map-view">
-  <div class="map-health" id="map-health">chargement…</div>
+  <div class="map-health" id="map-health">loading…</div>
   <div class="map-legend" id="map-legend">
     <div class="grp"><span class="dim">confidence</span>
       <span><span class="sw" style="background:#a78bfa"></span>anchor</span>
@@ -802,6 +802,10 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
   </div>
     <!-- [TILES-V1-CANVAS] tile renderer behind the SVG overlay -->
     <canvas class="map-tile-canvas" id="map-tile-canvas"></canvas>
+    <!-- [MAP-INTEL-V1] couche intel: batiments 2.5D, cones de vue, couverture, etiquettes -->
+    <canvas id="map-intel-canvas" style="position:absolute;left:0;top:0;width:100%;height:100%;pointer-events:none"></canvas>
+    <div id="map-layers" class="map-layers"></div>
+    <div id="map-bcard" class="map-bcard" style="display:none"></div>
     <div class="map-svg-wrap" id="map-svg-wrap"></div>
     <div class="map-loading" id="map-loading">Loading yanis map…</div>
     <!-- [COORDREAD-V1] live cursor world coordinates -->
@@ -1531,6 +1535,7 @@ async function init() {
     // [TILES-V1-CANVAS] also re-render the tile canvas if active
     if (window.tilesRender) window.tilesRender();
   }
+  window.applyMapTx = applyMapTx;   // [MAP-INTEL-V1] recentrage depuis la recherche / la couche intel
 
   // [TILES-V1-CANVAS] Tile renderer state & functions ─────────────────────
   //
@@ -1669,7 +1674,7 @@ async function init() {
     const offY = cssH / 2 - cyPix;
     const drawSize = TILES_SIZE * Math.pow(2, zoomDraw - zInt);
 
-    tilesCtx.fillStyle = '#0a0a0c';
+    tilesCtx.fillStyle = 'rgb(31,73,115)';   // [MAP-INTEL-V1] hors pyramide = mer profonde de la V16 (plus de bandes noires)
     tilesCtx.fillRect(0, 0, cssW, cssH);
 
     const [[x0, y0], [x1, y1]] = TILES_RANGES[zInt];
@@ -1694,6 +1699,12 @@ async function init() {
         }
       }
     }
+    // [MAP-INTEL-V1] la planche de legende/credits de la V16 (x monde < -10700) n'est pas de la carte: mer profonde a la place
+    {
+      const xs = offX + (-10700 + TILES_ZERO_X) * tileWorldPxFactor;
+      if (xs > 0) { tilesCtx.fillStyle = 'rgb(31,73,115)'; tilesCtx.fillRect(0, 0, Math.min(cssW, xs), cssH); }
+    }
+    if (window.mapIntelRender) window.mapIntelRender();
   };
 
   // Wire up button — run immediately if DOM already ready, otherwise wait for DOMContentLoaded.
@@ -7483,5 +7494,329 @@ window.addEventListener('load', () => {
   console.log('[FOCUS-V1] panneaux en tiroirs — Tab bascule le mode focus');
 })();
 </script>
+<style>
+/* [MAP-INTEL-V1 2026-10-04] panneau de couches + fiche batiment de la vue Map */
+.map-layers{position:absolute;left:12px;top:12px;z-index:32;display:flex;flex-direction:column;gap:7px;
+  background:rgba(10,10,13,.78);backdrop-filter:blur(8px);border:1px solid #2c2c33;border-radius:10px;padding:10px 11px;
+  font:11px ui-monospace,monospace;color:#b9b9c2;min-width:178px}
+.map-layers .ttl{font-size:9.5px;letter-spacing:.12em;text-transform:uppercase;color:#7c7c88;margin-bottom:1px}
+.map-layers .row{display:flex;gap:5px;flex-wrap:wrap}
+.map-layers .ch{border:1px solid #33333b;border-radius:999px;padding:3px 9px;cursor:pointer;user-select:none;color:#9a9aa4;background:transparent}
+.map-layers .ch:hover{color:#e5e5ea;border-color:#4a4a55}
+.map-layers .ch.on{color:#4ade80;border-color:rgba(74,222,128,.45);background:rgba(74,222,128,.08)}
+.map-layers input{width:100%;box-sizing:border-box;background:#141418;border:1px solid #2c2c33;border-radius:7px;color:#e5e5ea;
+  padding:5px 8px;font:11px ui-monospace,monospace;outline:none}
+.map-layers input:focus{border-color:#4ade80}
+.map-layers .sugg{display:none;flex-direction:column;max-height:220px;overflow:auto;border:1px solid #2c2c33;border-radius:7px;background:#111115}
+.map-layers .sugg div{padding:4px 8px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.map-layers .sugg div:hover,.map-layers .sugg div.act{background:#1d1d24;color:#fff}
+.map-layers .sugg .k{color:#6b7280;font-size:9.5px;margin-left:6px}
+.map-layers .ramp{height:7px;border-radius:4px;background:linear-gradient(90deg,#1f9e89,#6ece58,#fde725,#fb8b24,#e0115f,#9d00ff)}
+.map-layers .rampl{display:flex;justify-content:space-between;font-size:9px;color:#6b7280}
+.map-bcard{position:absolute;left:12px;bottom:92px;z-index:32;background:rgba(10,10,13,.86);backdrop-filter:blur(8px);
+  border:1px solid #2c2c33;border-radius:10px;padding:10px 13px;font:11px ui-monospace,monospace;color:#b9b9c2;max-width:330px}
+.map-bcard b{color:#fff;font-size:12.5px}
+.map-bcard .bt{display:inline-block;margin-top:7px;margin-right:6px;border:1px solid #3a3a44;border-radius:6px;padding:3px 9px;cursor:pointer;color:#e5e5ea}
+.map-bcard .bt:hover{border-color:#4ade80;color:#4ade80}
+#map-tip .tip-thumb{display:block;width:240px;max-width:240px;border-radius:6px;margin-bottom:6px}
+</style>
+<script>
+// ── [MAP-INTEL-V1 2026-10-04] couche « intel » de la vue Map ───────────────────────────────────────────────
+// Dessinee sur un canvas plein ecran entre les tuiles et l'overlay SVG, re-rendue a chaque pan/zoom (hook dans
+// tilesRender). Couches: batiments 2.5D (volumes de tools/mesh_solids.py: un aplat par etage de hauteur, couleur =
+// hauteur du toit, ombre portee), cones de vue de TOUTES les cams (couleur de confiance; la cam active en grand),
+// couverture (combien de cones voient chaque point, 10 m/px), etiquettes de batiments, style du fond
+// (couleur / sombre / gris), recherche cam/batiment, fiche batiment au clic (+ ouvrir en 3D).
+(function mapIntel() {
+  const view = document.getElementById('map-view');
+  const cv = document.getElementById('map-intel-canvas');
+  const panel = document.getElementById('map-layers');
+  const card = document.getElementById('map-bcard');
+  if (!view || !cv || !panel) return;
+  const ctx = cv.getContext('2d');
+  const st = Object.assign({ style: 'color', bld: 1, cones: 1, cov: 0, labels: 1 },
+    (() => { try { return JSON.parse(localStorage.getItem('ui.mapIntel') || '{}'); } catch (e) { return {}; } })());
+  const save = () => { try { localStorage.setItem('ui.mapIntel', JSON.stringify(st)); } catch (e) {} };
+  const TIER = { anchor: '#a78bfa', high: '#4ade80', medium: '#fbbf24', low: '#fb923c', unverified: '#6b7280' };
+  // rampe de hauteur (0 -> 250 m+)
+  const RAMP = [[0, [31, 158, 137]], [25, [110, 206, 88]], [60, [253, 231, 37]], [110, [251, 139, 36]], [170, [224, 17, 95]], [260, [157, 0, 255]]];
+  const hcol = (h, a) => {
+    let i = 0; while (i < RAMP.length - 2 && h > RAMP[i + 1][0]) i++;
+    const [h0, c0] = RAMP[i], [h1, c1] = RAMP[i + 1]; const t = Math.max(0, Math.min(1, (h - h0) / (h1 - h0)));
+    return `rgba(${Math.round(c0[0] + (c1[0] - c0[0]) * t)},${Math.round(c0[1] + (c1[1] - c0[1]) * t)},${Math.round(c0[2] + (c1[2] - c0[2]) * t)},${a})`;
+  };
+  // ── donnees ──
+  let B = [];          // batiments: {name, zmin, zmax, layers:[{z1, polys:[outer[]...]}], bb:[x0,y0,x1,y1], cx, cy, area}
+  (async () => {
+    let S = null;
+    for (const url of ['/api/mesh_solids', '/threejs/_mesh_solids.json']) {
+      try { const r = await fetch(url, { cache: 'no-store' }); if (r.ok) { const j = await r.json(); if (j && !j.error) { S = j; break; } } } catch (e) {}
+    }
+    if (!S) return;
+    B = Object.entries(S).map(([name, so]) => {
+      let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9, ax = 0, ay = 0, n = 0, area = 0;
+      for (const L of so.layers) for (const p of L.polys) {
+        let a = 0;
+        for (let i = 0; i < p.outer.length; i++) {
+          const [x, y] = p.outer[i], [u, v] = p.outer[(i + 1) % p.outer.length];
+          x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y);
+          ax += x; ay += y; n++; a += x * v - u * y;
+        }
+        if (L === so.layers[0]) area += Math.abs(a) / 2;
+      }
+      return { name, zmin: so.zmin, zmax: so.zmax, layers: so.layers, bb: [x0, y0, x1, y1], cx: ax / n, cy: ay / n, area };
+    }).sort((a, b) => a.zmax - b.zmax);
+    render();
+  })();
+  // ── transformations ──
+  const T = () => window.mapTransform;
+  const w2s = (x, y) => {   // monde -> ecran (px CSS dans .map-view)
+    const t = T(), m = window.mapTx;
+    return [m.tx + (x * (t.world_scale || 1) + t.world_offset[0]) * m.scale, m.ty + (t.world_offset[1] + t.y_sign * y * (t.world_scale || 1)) * m.scale];
+  };
+  const s2w = (sx, sy) => { const m = window.mapTx; return window.svgToWorld((sx - m.tx) / m.scale, (sy - m.ty) / m.scale); };
+  const mpp = () => 1 / window.mapTx.scale;      // metres par pixel ecran (1 unite SVG = 1 m)
+  // ── couverture: cones de 1.5 km accumules sur une grille monde de 10 m ──
+  let covCanvas = null; const COV = { x0: -9600, y0: -8800, x1: 3200, y1: 12400, r: 10 };
+  function buildCoverage() {
+    const cams = (window.mapData && window.mapData.cameras) || [];
+    const W = Math.round((COV.x1 - COV.x0) / COV.r), H = Math.round((COV.y1 - COV.y0) / COV.r);
+    const acc = document.createElement('canvas'); acc.width = W; acc.height = H;
+    const a = acc.getContext('2d'); a.globalCompositeOperation = 'lighter'; a.fillStyle = 'rgb(6,6,6)';
+    for (const c of cams) {
+      if (!c.xyz || !c.ypr || !c.hfov || c.xyz[2] > 1500) continue;
+      const yaw = c.ypr[0] * Math.PI / 180, half = Math.min(80, c.hfov / 2) * Math.PI / 180, L = 1500;
+      const P = ang => [c.xyz[0] - Math.sin(ang) * L, c.xyz[1] + Math.cos(ang) * L];
+      const g = (x, y) => [(x - COV.x0) / COV.r, (COV.y1 - y) / COV.r];
+      a.beginPath(); a.moveTo(...g(c.xyz[0], c.xyz[1]));
+      for (let k = 0; k <= 12; k++) { const p = P(yaw - half + 2 * half * k / 12); a.lineTo(...g(p[0], p[1])); }
+      a.closePath(); a.fill();
+    }
+    const im = a.getImageData(0, 0, W, H), d = im.data;
+    const pal = [[0, 0, 0, 0], [40, 120, 255, 70], [0, 210, 255, 105], [80, 255, 140, 130], [255, 230, 40, 150], [255, 120, 30, 165], [255, 40, 80, 180]];
+    for (let i = 0; i < d.length; i += 4) {
+      const n = d[i] / 6; if (n < 0.5) { d[i + 3] = 0; continue; }
+      const f = Math.min(pal.length - 1.001, Math.log2(1 + n) * 1.25), k = Math.floor(f), t = f - k;
+      const A = pal[k], Bc = pal[k + 1];
+      d[i] = A[0] + (Bc[0] - A[0]) * t; d[i + 1] = A[1] + (Bc[1] - A[1]) * t; d[i + 2] = A[2] + (Bc[2] - A[2]) * t; d[i + 3] = A[3] + (Bc[3] - A[3]) * t;
+    }
+    a.globalCompositeOperation = 'copy'; a.putImageData(im, 0, 0);
+    covCanvas = acc;
+  }
+  // ── rendu ──
+  function poly(pts) { ctx.beginPath(); pts.forEach((p, i) => { const q = w2s(p[0], p[1]); i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1]); }); ctx.closePath(); }
+  function render() {
+    if (!window.mapTx || !window.mapTransform || window.currentView !== 'map') return;
+    const r = view.getBoundingClientRect(), dpr = window.devicePixelRatio || 1;
+    if (cv.width !== Math.floor(r.width * dpr) || cv.height !== Math.floor(r.height * dpr)) { cv.width = Math.floor(r.width * dpr); cv.height = Math.floor(r.height * dpr); }
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.clearRect(0, 0, r.width, r.height);
+    const [wx0, wy1] = s2w(0, 0), [wx1, wy0] = s2w(r.width, r.height);
+    const inView = bb => !(bb[2] < wx0 || bb[0] > wx1 || bb[3] < wy0 || bb[1] > wy1);
+    const k = mpp();
+    // couverture
+    if (st.cov) {
+      if (!covCanvas) buildCoverage();
+      const p0 = w2s(COV.x0, COV.y1), p1 = w2s(COV.x1, COV.y0);
+      ctx.imageSmoothingEnabled = true; ctx.globalAlpha = 0.85;
+      ctx.drawImage(covCanvas, p0[0], p0[1], p1[0] - p0[0], p1[1] - p0[1]); ctx.globalAlpha = 1;
+    }
+    // cones de vue
+    const cams = (window.mapData && window.mapData.cameras) || [];
+    const sel = window.currentCam;
+    if (st.cones) {
+      const Lw = Math.max(260, Math.min(70 * k, 900));
+      for (const c of cams) {
+        if (!c.xyz || !c.ypr || !c.hfov || c.name === sel || c.xyz[2] > 1500) continue;
+        const yaw = c.ypr[0] * Math.PI / 180, half = Math.min(80, c.hfov / 2) * Math.PI / 180;
+        if (c.xyz[0] < wx0 - Lw || c.xyz[0] > wx1 + Lw || c.xyz[1] < wy0 - Lw || c.xyz[1] > wy1 + Lw) continue;
+        const col = TIER[c.tier] || TIER.unverified;
+        ctx.beginPath(); const o = w2s(c.xyz[0], c.xyz[1]); ctx.moveTo(o[0], o[1]);
+        for (let j = 0; j <= 8; j++) { const ang = yaw - half + 2 * half * j / 8; const q = w2s(c.xyz[0] - Math.sin(ang) * Lw, c.xyz[1] + Math.cos(ang) * Lw); ctx.lineTo(q[0], q[1]); }
+        ctx.closePath(); ctx.fillStyle = col + '16'; ctx.fill(); ctx.strokeStyle = col + '55'; ctx.lineWidth = 1; ctx.stroke();
+      }
+    }
+    // batiments 2.5D
+    const labels = [];
+    if (st.bld && B.length) {
+      ctx.fillStyle = 'rgba(10,14,30,0.34)';
+      ctx.beginPath();                                              // un seul trace: opacite uniforme (pas d'empilement)
+      for (const b of B) {
+        if (!inView(b.bb)) continue;
+        const h = b.zmax - b.zmin, top = b.layers[b.layers.length - 1];
+        const ox = -0.42 * h * 0.6, oy = -0.42 * h * 0.8;           // soleil au NE (~45 deg) -> ombre vers le SO
+        // ombre = balayage de l'emprise du pied jusqu'au decalage (union de copies intermediaires: une silhouette continue)
+        for (const p of b.layers[0].polys) for (const f of [0.2, 0.4, 0.6, 0.8, 1.0]) {
+          p.outer.forEach((q, i) => { const s2 = w2s(q[0] + ox * f, q[1] + oy * f); i ? ctx.lineTo(s2[0], s2[1]) : ctx.moveTo(s2[0], s2[1]); }); ctx.closePath();
+        }
+      }
+      ctx.fill('nonzero');
+      for (const b of B) {
+        if (!inView(b.bb)) continue;
+        for (const L of b.layers) {
+          const h = L.z1 - b.zmin;
+          for (const p of L.polys) {
+            poly(p.outer);
+            for (const hh of p.holes || []) { hh.forEach((q, i) => { const s2 = w2s(q[0], q[1]); i ? ctx.lineTo(s2[0], s2[1]) : ctx.moveTo(s2[0], s2[1]); }); ctx.closePath(); }
+            ctx.fillStyle = hcol(h, b === hoverB ? 1 : 0.86); ctx.fill('evenodd');
+            ctx.strokeStyle = b === hoverB ? '#fff' : 'rgba(0,0,0,0.45)'; ctx.lineWidth = b === hoverB ? 2 : 0.8; ctx.stroke();
+          }
+        }
+        const sz = Math.max(b.bb[2] - b.bb[0], b.bb[3] - b.bb[1]) / k;
+        if (st.labels && sz > 34) labels.push([b, sz]);
+      }
+    }
+    // cam active: grand cone degrade
+    const c = cams.find(cc => cc.name === sel);
+    if (st.cones && c && c.xyz && c.ypr && c.hfov) {
+      const yaw = c.ypr[0] * Math.PI / 180, half = Math.min(80, c.hfov / 2) * Math.PI / 180, L = 3500;
+      const o = w2s(c.xyz[0], c.xyz[1]);
+      const far = w2s(c.xyz[0] - Math.sin(yaw) * L, c.xyz[1] + Math.cos(yaw) * L);
+      const gr = ctx.createLinearGradient(o[0], o[1], far[0], far[1]);
+      gr.addColorStop(0, 'rgba(250,204,21,0.42)'); gr.addColorStop(1, 'rgba(250,204,21,0)');
+      ctx.beginPath(); ctx.moveTo(o[0], o[1]);
+      for (let j = 0; j <= 24; j++) { const ang = yaw - half + 2 * half * j / 24; const q = w2s(c.xyz[0] - Math.sin(ang) * L, c.xyz[1] + Math.cos(ang) * L); ctx.lineTo(q[0], q[1]); }
+      ctx.closePath(); ctx.fillStyle = gr; ctx.fill();
+      ctx.strokeStyle = 'rgba(250,204,21,0.85)'; ctx.lineWidth = 1.4;
+      for (const sgn of [-1, 1]) { const q = w2s(c.xyz[0] - Math.sin(yaw + sgn * half) * L, c.xyz[1] + Math.cos(yaw + sgn * half) * L); ctx.beginPath(); ctx.moveTo(o[0], o[1]); ctx.lineTo(q[0], q[1]); ctx.stroke(); }
+    }
+    // etiquettes (plus gros d'abord, sans chevauchement)
+    if (labels.length) {
+      labels.sort((a, b) => b[1] - a[1]);
+      const taken = [];
+      ctx.font = '600 11px ui-sans-serif, system-ui, -apple-system, sans-serif'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      for (const [b] of labels.slice(0, 140)) {
+        const [x, y] = w2s(b.cx, b.cy); const t = b.name.replace(/ \(.*?\)$/, '');
+        const w = ctx.measureText(t).width + 8, h = 15;
+        const box = [x - w / 2, y - h / 2, x + w / 2, y + h / 2 + 11];
+        if (taken.some(q => !(box[2] < q[0] || box[0] > q[2] || box[3] < q[1] || box[1] > q[3]))) continue;
+        taken.push(box);
+        ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(8,8,12,0.85)'; ctx.strokeText(t, x, y); ctx.fillStyle = '#fff'; ctx.fillText(t, x, y);
+        ctx.font = '500 9.5px ui-monospace, monospace';
+        const sub = Math.round(b.zmax - b.zmin) + ' m';
+        ctx.strokeText(sub, x, y + 12); ctx.fillStyle = 'rgba(230,230,240,0.85)'; ctx.fillText(sub, x, y + 12);
+        ctx.font = '600 11px ui-sans-serif, system-ui, -apple-system, sans-serif';
+      }
+    }
+  }
+  window.mapIntelRender = render;
+  // ── style du fond ──
+  const STYLES = { color: 'none', dark: 'brightness(0.62) saturate(0.75) contrast(1.05)', gray: 'grayscale(1) brightness(1.05) contrast(1.1)' };
+  const applyStyle = () => { const tc = document.getElementById('map-tile-canvas'); if (tc) tc.style.filter = STYLES[st.style] || 'none'; };
+  // ── panneau ──
+  panel.innerHTML = `<div class="ttl">Base</div><div class="row" id="mi-style"></div>
+    <div class="ttl">Layers</div><div class="row" id="mi-lay"></div>
+    <div id="mi-ramp" style="display:none"><div class="ramp"></div><div class="rampl"><span>0</span><span>60</span><span>110</span><span>170</span><span>260 m</span></div></div>
+    <input id="mi-q" type="text" placeholder="Find camera or building…" spellcheck="false" autocomplete="off"><div class="sugg" id="mi-sugg"></div>`;
+  const mk = (row, key, val, label, title) => {
+    const el = document.createElement('span'); el.className = 'ch'; el.textContent = label; el.title = title || '';
+    const sync = () => el.classList.toggle('on', val === undefined ? !!st[key] : st[key] === val);
+    el.addEventListener('click', () => { st[key] = val === undefined ? (st[key] ? 0 : 1) : val; save(); syncAll(); applyStyle(); render(); });
+    row.appendChild(el); return sync;
+  };
+  const syncs = [];
+  const rs = panel.querySelector('#mi-style'), rl = panel.querySelector('#mi-lay');
+  syncs.push(mk(rs, 'style', 'color', 'Color', 'Full-color V16 base map'));
+  syncs.push(mk(rs, 'style', 'dark', 'Dark', 'Dimmed base map: overlays pop'));
+  syncs.push(mk(rs, 'style', 'gray', 'Gray', 'Grayscale base map (classic)'));
+  syncs.push(mk(rl, 'bld', undefined, 'Buildings', '2.5D building volumes colored by roof height, with cast shadows'));
+  syncs.push(mk(rl, 'cones', undefined, 'Cones', 'Field of view of every camera (confidence color); the selected camera in yellow'));
+  syncs.push(mk(rl, 'cov', undefined, 'Coverage', 'How many camera wedges (1.5 km) see each point — naive, no occlusion'));
+  syncs.push(mk(rl, 'labels', undefined, 'Labels', 'Building names and heights when zoomed in'));
+  const syncAll = () => { syncs.forEach(f => f()); panel.querySelector('#mi-ramp').style.display = st.bld ? 'block' : 'none'; };
+  syncAll(); applyStyle();
+  // ── recherche ──
+  const q = panel.querySelector('#mi-q'), sug = panel.querySelector('#mi-sugg');
+  let items = [], act = -1;
+  const flyTo = (x, y, zoomM) => {
+    const r = view.getBoundingClientRect(), t = T(); const m = window.mapTx; if (!m) return;
+    const scale = r.width / (zoomM || 900);
+    const sx = x * (t.world_scale || 1) + t.world_offset[0], sy = t.world_offset[1] + t.y_sign * y * (t.world_scale || 1);
+    m.scale = scale; m.tx = r.width / 2 - sx * scale; m.ty = r.height / 2 - sy * scale;
+    if (window.applyMapTx) window.applyMapTx();
+  };
+  const pick = it => {
+    sug.style.display = 'none'; q.value = it.label; q.blur();
+    if (it.kind === 'cam') {
+      flyTo(it.x, it.y, 1400);
+      const selEl = document.getElementById('cam-sel');
+      if (selEl && selEl.value !== it.label) { selEl.value = it.label; selEl.dispatchEvent(new Event('change')); }
+    } else { flyTo(it.x, it.y, Math.max(900, (it.b.bb[2] - it.b.bb[0]) * 9)); showCard(it.b); }
+  };
+  q.addEventListener('input', () => {
+    const s = q.value.trim().toLowerCase(); act = -1;
+    if (s.length < 2) { sug.style.display = 'none'; return; }
+    const cams = ((window.mapData && window.mapData.cameras) || []).filter(c => c.xyz && c.name.toLowerCase().includes(s)).slice(0, 8)
+      .map(c => ({ kind: 'cam', label: c.name, x: c.xyz[0], y: c.xyz[1] }));
+    const blds = B.filter(b => b.name.toLowerCase().includes(s)).slice(0, 8).map(b => ({ kind: 'bld', label: b.name, x: b.cx, y: b.cy, b }));
+    items = [...blds, ...cams];
+    sug.innerHTML = items.map((it, i) => `<div data-i="${i}">${it.label.replace(/</g, '&lt;')}<span class="k">${it.kind === 'cam' ? 'camera' : 'building'}</span></div>`).join('') || '<div style="color:#6b7280">no match</div>';
+    sug.style.display = 'flex';
+  });
+  q.addEventListener('keydown', e => {
+    if (!items.length) return;
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') { act = (act + (e.key === 'ArrowDown' ? 1 : -1) + items.length) % items.length; [...sug.children].forEach((d, i) => d.classList.toggle('act', i === act)); e.preventDefault(); }
+    if (e.key === 'Enter') pick(items[Math.max(0, act)]);
+    if (e.key === 'Escape') { sug.style.display = 'none'; q.blur(); }
+    e.stopPropagation();
+  });
+  sug.addEventListener('mousedown', e => { const d = e.target.closest('[data-i]'); if (d) { e.preventDefault(); pick(items[+d.dataset.i]); } });
+  // ── survol / clic batiment ──
+  let hoverB = null, downXY = null;
+  const inPoly = (x, y, pts) => { let c = false; for (let i = 0, j = pts.length - 1; i < pts.length; j = i++) { const [xi, yi] = pts[i], [xj, yj] = pts[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
+  const hitB = (sx, sy) => {
+    if (!st.bld || !B.length || !window.mapTx) return null;
+    const [x, y] = s2w(sx, sy);
+    for (let i = B.length - 1; i >= 0; i--) { const b = B[i]; if (x < b.bb[0] || x > b.bb[2] || y < b.bb[1] || y > b.bb[3]) continue; for (const L of b.layers) for (const p of L.polys) if (inPoly(x, y, p.outer)) return b; }
+    return null;
+  };
+  view.addEventListener('mousemove', e => {
+    if (window.currentView !== 'map' || e.buttons) return;
+    const r = view.getBoundingClientRect(); const b = hitB(e.clientX - r.left, e.clientY - r.top);
+    if (b !== hoverB) { hoverB = b; render(); }
+  });
+  view.addEventListener('mousedown', e => { downXY = [e.clientX, e.clientY]; });
+  view.addEventListener('click', e => {
+    if (e.altKey || window.currentView !== 'map' || !downXY || Math.hypot(e.clientX - downXY[0], e.clientY - downXY[1]) > 4) return;
+    if (e.target.closest && (e.target.closest('.cam-marker') || e.target.closest('#map-layers') || e.target.closest('#map-bcard'))) return;
+    const r = view.getBoundingClientRect(); const b = hitB(e.clientX - r.left, e.clientY - r.top);
+    if (b) showCard(b); else card.style.display = 'none';
+  });
+  function showCard(b) {
+    const h = b.zmax - b.zmin;
+    const tiers = b.layers.map(L => Math.round(L.z1)).filter((v, i, a) => a.indexOf(v) === i);
+    card.innerHTML = `<b>${b.name.replace(/</g, '&lt;')}</b><br>height <span style="color:#fde725">${h.toFixed(1)} m</span> · roof ${b.zmax.toFixed(1)} m · ground ${b.zmin.toFixed(1)} m` +
+      `<br>~${Math.max(1, Math.round(h / 3.4))} floors · footprint ${Math.round(b.area).toLocaleString('en-US')} m²` +
+      (tiers.length > 1 ? `<br>tiers ${tiers.join(' / ')} m` : '') +
+      `<br><span class="bt" id="mi-3d">Open in 3D</span><span class="bt" id="mi-copy">Copy X, Y</span><span class="bt" id="mi-x">Close</span>`;
+    card.style.display = 'block';
+    card.querySelector('#mi-x').onclick = () => { card.style.display = 'none'; };
+    card.querySelector('#mi-copy').onclick = () => { try { navigator.clipboard.writeText(`${b.cx.toFixed(1)}, ${b.cy.toFixed(1)}`); } catch (e) {} };
+    card.querySelector('#mi-3d').onclick = () => {
+      if (window.setView) window.setView('view3d');
+      const send = () => { const fr = document.getElementById('view3d-frame'); try { fr.contentWindow.postMessage({ type: 'gtamaplib-focus-point', x: b.cx, y: b.cy, z: (b.zmin + b.zmax) / 2, r: Math.max(200, h * 2.2) }, '*'); } catch (e) {} };
+      setTimeout(send, 400); setTimeout(send, 2500);
+    };
+  }
+  // ── vignettes au survol des cams (infobulle existante) ──
+  const tip = document.getElementById('map-tip'), tipName = document.getElementById('map-tip-name');
+  if (tip && tipName) {
+    const img = document.createElement('img'); img.className = 'tip-thumb'; img.style.display = 'none';
+    img.onerror = () => { img.style.display = 'none'; };
+    img.onload = () => { img.style.display = 'block'; };
+    tip.insertBefore(img, tip.firstChild);
+    new MutationObserver(() => {
+      const n = tipName.textContent; if (!n || img.dataset.n === n) return;
+      img.dataset.n = n; img.style.display = 'none'; img.src = '/thumbs/' + encodeURIComponent(n) + '.jpg';
+    }).observe(tipName, { childList: true, characterData: true, subtree: true });
+  }
+  // re-rendu quand la cam active change / la vue Map s'ouvre
+  const camSelEl = document.getElementById('cam-sel');
+  if (camSelEl) camSelEl.addEventListener('change', () => setTimeout(render, 60));
+  addEventListener('resize', () => setTimeout(render, 30));
+  new MutationObserver(() => { if (document.body.classList.contains('view-map')) { applyStyle(); setTimeout(render, 80); } })
+    .observe(document.body, { attributes: true, attributeFilter: ['class'] });
+})();
+</script>
+
 </body>
 </html>

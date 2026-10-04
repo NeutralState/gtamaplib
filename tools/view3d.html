@@ -118,6 +118,7 @@
     <span class="lchip on" id="ly-cams" title="Camera frustums (color = confidence tier)">Cameras</span>
     <span class="lchip on" id="ly-lms" title="Triangulated landmarks (blue = z-constrained)">Landmarks</span>
     <span class="lchip on" id="ly-meshes" title="Procedural structure meshes">Meshes</span>
+    <span class="lchip on" id="ly-solid" title="Solid buildings: sun-lit volumes, cast shadows on the terrain, lit windows at night (edges drawn on top)">Solid</span>
     <span class="lchip on" id="ly-terrain" title="Real terrain (leak L16 height map, z=706.07v-301.01)">Terrain</span>
     <span class="lchip" id="ly-leakmap" title="Base map: full leak map (composite over yanis)">Leak map</span>
     <span class="lchip" id="ly-v16" title="Base map: YANIS V16 community map (1 m/px, georeferenced x=px-16992, y=11008-py)">V16</span>
@@ -633,6 +634,7 @@ function applyEnv() {
   scene.background = fogC;
   localStorage.setItem('ui.env3d', JSON.stringify(ENV));
   if (window.__bakeShadows) window.__bakeShadows();   // le soleil a bouge -> re-cuire
+  if (window.__solidsEnv) window.__solidsEnv();       // [SOLIDS-V1] lumieres des batiments pleins
 }
 for (const [id, key, suf] of [['env-az', 'az', '°'], ['env-el', 'el', '°'],
                               ['env-haze', 'haze', '%']]) {
@@ -743,7 +745,23 @@ addEventListener('message', ev => {
     if (sceneReady) focusCam(ev.data.name);
     else pendingFocus = ev.data.name;
   }
+  // [MAP-INTEL-V1] « Open in 3D » depuis la fiche batiment de la Map: vol vers un point (vue 3/4 depuis le sud-est)
+  if (ev.data && ev.data.type === 'gtamaplib-focus-point' && isFinite(ev.data.x) && isFinite(ev.data.y)) {
+    if (!sceneReady) { window.__pendingPoint = ev.data; pendingFocus = null; return; }   // applique apres le build (prioritaire sur le focus cam)
+    window.__focusPoint(ev.data);
+  }
 });
+window.__focusPoint = d => {
+  {
+    const ev = { data: d };
+    const r = ev.data.r || 400, z = ev.data.z || 30;
+    const tgt = new THREE.Vector3(ev.data.x, ev.data.y, z), pos = new THREE.Vector3(ev.data.x + r * 0.62, ev.data.y - r * 0.78, z + r * 0.55);
+    controls.target.copy(tgt); if (controls._desTgt) controls._desTgt.copy(tgt);
+    camera.position.copy(pos); if (controls._desPos) controls._desPos.copy(pos);
+    camera.lookAt(tgt);
+    if (typeof flyAnim !== 'undefined') flyAnim = null;
+  }
+};
 
 const data = await (await fetch('/api/scene3d')).json();
 
@@ -1133,6 +1151,8 @@ const data = await (await fetch('/api/scene3d')).json();
     }
     const terrainMesh = new THREE.Mesh(g, mat);
     layers.terrain.add(terrainMesh);
+    window.__terrainMesh = terrainMesh;                 // [SOLIDS-V1] le capteur d'ombres des batiments reutilise la geometrie
+    if (window.__onTerrainMesh) window.__onTerrainMesh(terrainMesh);
     // [DRAPE-2D] texture assemblee depuis les tiles (source = chip leak map),
     // 4 m/px; les lacs/routes/details de la carte apparaissent sur le relief.
     let drapeTex = null;
@@ -1526,6 +1546,151 @@ if (meshVerts.length) {
   // (6 m au chateau d'eau de Homestead, 2 m a Brickell) = « deux meshs l'un
   // sur l'autre ». Le halo additif reste exactement sur les aretes.
   layers.meshes.add(mhalo);
+  window.__meshWire = { mseg, mhalo };                 // [SOLIDS-V1] style des aretes quand les volumes pleins sont affiches
+}
+
+// ── [SOLIDS-V1 2026-10-04] batiments PLEINS ──
+// Volumes reconstruits cote serveur (tools/mesh_solids.py: aretes horizontales -> champ de hauteur -> prismes
+// empiles). Rendu: MeshStandardMaterial eclaire par le soleil de la scene (meme azimut/hauteur que le ciel),
+// fenetres procedurales (grille d'etages 3.4 m x travees 2.6 m: vitrage sombre et brillant le jour, fenetres
+// allumees au hasard la nuit), ombres portees sur le relief via un capteur d'ombres (ShadowMaterial) pose sur
+// la geometrie du terrain. Les aretes restent dessinees par-dessus, en trait discret.
+{
+  const solidsUni = { uNight: { value: 0 }, uHover: { value: -1 } };
+  const sunLight = new THREE.DirectionalLight(0xffffff, 2.0);
+  const hemiLight = new THREE.HemisphereLight(0xbfd4ff, 0x4a4238, 0.8);
+  scene.add(sunLight, sunLight.target, hemiLight);
+  renderer.shadowMap.enabled = true;
+  renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  sunLight.castShadow = true;
+  const SMAP = window.__lite3d ? 2048 : 4096;
+  sunLight.shadow.mapSize.set(SMAP, SMAP);
+  sunLight.shadow.bias = -0.0004;
+  sunLight.shadow.normalBias = 0.6;
+  const solidMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.82, metalness: 0.0 });
+  solidMat.onBeforeCompile = sh => {
+    sh.uniforms.uNight = solidsUni.uNight; sh.uniforms.uHover = solidsUni.uHover;
+    sh.vertexShader = 'attribute float aId;\nvarying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\n' +
+      sh.vertexShader.replace('#include <project_vertex>', `#include <project_vertex>
+        vWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;
+        vWN = normalize(mat3(modelMatrix) * objectNormal);
+        vId = aId;`);
+    sh.fragmentShader = 'uniform float uNight;\nuniform float uHover;\nvarying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\n' +
+      'float h31(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 37.719))) * 43758.5453); }\n' +
+      sh.fragmentShader
+      .replace('#include <color_fragment>', `#include <color_fragment>
+        float wall = 1.0 - smoothstep(0.25, 0.45, abs(vWN.z));
+        vec2 tn = normalize(vec2(-vWN.y, vWN.x) + vec2(1e-5));
+        vec2 gq = vec2(dot(vWPos.xy, tn) / 2.6, vWPos.z / 3.4);
+        vec2 fw = fwidth(gq);
+        vec2 fq = fract(gq);
+        vec2 lo = vec2(0.18, 0.28), hi = vec2(0.82, 0.86);
+        vec2 mq = smoothstep(lo - fw, lo + fw, fq) * (1.0 - smoothstep(hi - fw, hi + fw, fq));
+        float blur = clamp(max(fw.x, fw.y) * 1.6, 0.0, 1.0);          // loin: la grille se fond en sa moyenne (pas de moire)
+        float win = wall * mix(mq.x * mq.y, 0.37, blur) * step(1.5, vWPos.z);
+        float lit = mix(step(0.58, h31(vec3(floor(gq), vId))), 0.42, blur);
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 0.42 + vec3(0.025, 0.03, 0.035), win * 0.70);
+        float hov = 1.0 - step(0.5, abs(vId - uHover));
+        diffuseColor.rgb = mix(diffuseColor.rgb, vec3(1.0, 0.82, 0.32), hov * 0.40);`)
+      .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
+        roughnessFactor = mix(roughnessFactor, 0.38, win);`)
+      .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+        totalEmissiveRadiance += vec3(1.0, 0.70, 0.36) * 1.6 * win * lit * uNight;
+        totalEmissiveRadiance += vec3(1.0, 0.82, 0.32) * 0.25 * hov;`);
+  };
+  let solidMesh = null, catcher = null, solidNames = [];
+  let solidOn = localStorage.getItem('ui.solid3d') !== '0';
+  const chip = document.getElementById('ly-solid');
+  const styleWire = () => {
+    const w = window.__meshWire; if (!w) return;
+    const solid = solidOn && !!solidMesh && layers.meshes.visible;
+    w.mseg.material.depthTest = !solid; w.mseg.material.opacity = solid ? 0.30 : 1.0;
+    w.mhalo.visible = !solid; w.mseg.material.needsUpdate = true;
+  };
+  const applySolid = () => {
+    chip.classList.toggle('on', solidOn);
+    if (solidMesh) solidMesh.visible = solidOn;
+    if (catcher) catcher.visible = solidOn;
+    styleWire();
+  };
+  chip.addEventListener('click', () => { solidOn = !solidOn; localStorage.setItem('ui.solid3d', solidOn ? '1' : '0'); applySolid(); });
+  document.getElementById('ly-meshes').addEventListener('click', () => setTimeout(styleWire, 0));
+  window.__solidsEnv = () => {
+    const sd = sunDirVec(); const { zen, hor, sun, night } = skyColors();
+    const day = Math.max(0, Math.min(1, sd.z / 0.12));
+    sunLight.color.setRGB(sun[0], sun[1], sun[2]);
+    sunLight.intensity = 2.4 * day * (1 - night);
+    hemiLight.color.setRGB(zen[0] * 0.9 + 0.22, zen[1] * 0.9 + 0.22, zen[2] * 0.9 + 0.22);
+    hemiLight.groundColor.setRGB(hor[0] * 0.45, hor[1] * 0.42, hor[2] * 0.38);
+    hemiLight.intensity = 0.35 + 0.75 * (1 - night);
+    solidsUni.uNight.value = night;
+    sunLight.castShadow = day > 0.02;
+  };
+  window.__solidsEnv();
+  const _sd = new THREE.Vector3();
+  window.__solidsTick = () => {
+    if (!solidMesh) return;
+    solidMesh.visible = solidOn && !povPrev && layers.meshes.visible;   // en POV: fil de fer seul (comparaison a la frame)
+    if (catcher) catcher.visible = solidMesh.visible && layers.terrain.visible;
+    // ombre: boite orthographique centree sur la cible, taille selon le zoom, calee sur le texel (pas de scintillement)
+    const R = Math.max(250, Math.min(3200, camera.position.distanceTo(controls.target) * 1.25));
+    const texel = 2 * R / SMAP;
+    const tx = Math.round(controls.target.x / texel) * texel, ty = Math.round(controls.target.y / texel) * texel;
+    _sd.copy(sunDirVec());
+    sunLight.target.position.set(tx, ty, 0);
+    sunLight.position.set(tx + _sd.x * 4000, ty + _sd.y * 4000, Math.max(50, _sd.z * 4000));
+    const sc = sunLight.shadow.camera;
+    if (sc.right !== R) { sc.left = -R; sc.right = R; sc.top = R; sc.bottom = -R; sc.near = 10; sc.far = 9000; sc.updateProjectionMatrix(); }
+  };
+  const makeCatcher = tm => {
+    if (catcher || !tm) return;
+    catcher = new THREE.Mesh(tm.geometry, new THREE.ShadowMaterial({ opacity: 0.42, transparent: true, depthWrite: false }));
+    catcher.receiveShadow = true; catcher.position.z = 0.35; catcher.renderOrder = 3; catcher.frustumCulled = false;
+    catcher.name = 'solid-shadow-catcher';
+    layers.terrain.add(catcher); applySolid();
+  };
+  window.__onTerrainMesh = makeCatcher;
+  if (window.__terrainMesh) makeCatcher(window.__terrainMesh);
+  (async () => {
+    let S = null;
+    for (const url of ['/api/mesh_solids', '/threejs/_mesh_solids.json']) {
+      try { const r = await fetch(url, { cache: 'no-store' }); if (r.ok) { const j = await r.json(); if (j && !j.error) { S = j; break; } } } catch (e) {}
+    }
+    if (!S) return;
+    const pos = [], nor = [], col = [], ids = [];
+    const concrete = new THREE.Color(0.80, 0.79, 0.76), tint = new THREE.Color(), cc = new THREE.Color();
+    for (const [name, so] of Object.entries(S)) {
+      const id = solidNames.length; solidNames.push({ name, zmin: so.zmin, zmax: so.zmax, nl: so.layers.length });
+      tint.set(so.color || '#9ca3af');
+      const jit = 0.94 + 0.12 * ((Math.sin(id * 91.7) * 43758.5453) % 1 + 1) % 1;
+      cc.copy(concrete).lerp(tint, 0.14).multiplyScalar(jit);
+      for (const L of so.layers) for (const pl of L.polys) {
+        try {
+          const shape = new THREE.Shape(pl.outer.map(q => new THREE.Vector2(q[0], q[1])));
+          for (const hh of pl.holes || []) shape.holes.push(new THREE.Path(hh.map(q => new THREE.Vector2(q[0], q[1]))));
+          let g = new THREE.ExtrudeGeometry(shape, { depth: Math.max(0.2, L.z1 - L.z0), bevelEnabled: false, curveSegments: 1, steps: 1 });
+          g.translate(0, 0, L.z0);
+          if (g.index) g = g.toNonIndexed();
+          g.computeVertexNormals();
+          const P = g.attributes.position.array, N = g.attributes.normal.array;
+          for (let i = 0; i < P.length; i++) { pos.push(P[i]); nor.push(N[i]); }
+          for (let i = 0; i < P.length / 3; i++) { col.push(cc.r, cc.g, cc.b); ids.push(id); }
+          g.dispose();
+        } catch (e) {}
+      }
+    }
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3));
+    geo.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
+    geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+    geo.setAttribute('aId', new THREE.Float32BufferAttribute(ids, 1));
+    geo.computeBoundingSphere();
+    solidMesh = new THREE.Mesh(geo, solidMat);
+    solidMesh.castShadow = true; solidMesh.receiveShadow = true; solidMesh.name = 'solid-buildings';
+    layers.meshes.add(solidMesh);
+    window.__solids = { mesh: solidMesh, names: solidNames, uni: solidsUni };
+    applySolid();
+  })();
 }
 
 // ── ocean z=0 + grille ──
@@ -2164,6 +2329,7 @@ window.__focusCam = focusCam;
 window.__syncToCam = syncToCam;
 sceneReady = true;                               // [VIEW3D-SYNC]
 if (pendingFocus) { focusCam(pendingFocus); pendingFocus = null; }
+if (window.__pendingPoint) { window.__focusPoint(window.__pendingPoint); window.__pendingPoint = null; }   // [MAP-INTEL-V1]
 
 // ── [UI-V2] sidebar: liste des cameras, recherche, details de pose ──
 (() => {
@@ -2359,8 +2525,24 @@ addEventListener('pointermove', ev => {
     info.style.display = 'block';
   } else {
     _hoverName = null;
-    info.style.display = 'none';
     clearHoverRays();                              // [VIEW3D-RAYS]
+    // [SOLIDS-V1] survol d'un batiment plein: surbrillance + fiche
+    const S = window.__solids;
+    let bld = null;
+    if (S && S.mesh.visible) {
+      const hb = ray.intersectObject(S.mesh, false);
+      if (hb.length) bld = S.names[S.mesh.geometry.attributes.aId.array[hb[0].face.a]];
+    }
+    if (bld) {
+      S.uni.uHover.value = S.names.indexOf(bld);
+      const h = bld.zmax - bld.zmin;
+      info.innerHTML = `<div class="body"><b>${bld.name}</b><br>height ${h.toFixed(1)} m &middot; roof ${bld.zmax.toFixed(1)} m` +
+        `<br>ground ${bld.zmin.toFixed(1)} m &middot; ~${Math.max(1, Math.round(h / 3.4))} floors &middot; ${bld.nl} volume${bld.nl > 1 ? 's' : ''}</div>`;
+      info.style.display = 'block';
+    } else {
+      if (S) S.uni.uHover.value = -1;
+      info.style.display = 'none';
+    }
   }
 });
 
@@ -2479,6 +2661,7 @@ renderer.setAnimationLoop(() => {
   if (!povPrev) controls.update(_dt);
   if (!povPrev) camSanity();                    // [ZOOM-IN-CAP] jamais la camera au ras de la cible / sous le sol
   nanGuard();                                   // [NAN-GUARD] jamais un rendu avec une camera NaN
+  if (window.__solidsTick) window.__solidsTick(); // [SOLIDS-V1] ombre qui suit la vue
   renderer.render(scene, camera);
 });
 </script>
