@@ -20,7 +20,7 @@ import v16_tiers as VT
 # sommet est chanfreine aux extremites (couronne de LED rouges): gradins ESTIMES a -6 m (anneau interieur) et -12 m
 # (anneau exterieur); la couronne ronde de la V16 (regions 9,10,12,13,14 = cercle) en tambour de +4 m (ESTIME).
 SPEC = {
-    'Jade Ocean Condos': {'poly': 3584, 'color': '#34d399', 'groups': [
+    'Jade Ocean Condos': {'poly': 3584, 'color': '#34d399', 'shift': (-12.0, -8.0), 'groups': [
         ([3, 7, 8, 11, 15, 16, 9, 10, 12, 13, 14], 202.9), ([1, 4, 6, 2, 17, 19, 20, 21], 196.9), ([0, 5, 18, 22], 190.9)],
         'drum': ([9, 10, 12, 13, 14], 4.0),
         'src': 'sommet LM 202.9 (2 LMs); gradins -6/-12 m et tambour +4 m ESTIMES d apres le chanfrein de la couronne vu dans Biplane Night. '
@@ -28,25 +28,28 @@ SPEC = {
                '13 m a l ouest / 4 m au sud du polygone V16 (residu 2 px); sur la silhouette V16 (VB-WATER 2026-10-04, Alexandre)'},
     # 1500 Ocean Dr (V16 3335): tour courbe a bout arrondi (region 4) sur podium a facade a persiennes (region 1),
     # lame rose a bow-windows octogonaux (region 2), immeuble ouest (0) + tourelle hexagonale (3). Comme l'IRL.
-    '1500 Ocean Dr': {'poly': 3335, 'color': '#f9a8d4', 'groups': [([4], 63.8), ([2], 62.3), ([1], 21.0), ([0], 34.0), ([3], 36.0)],
+    '1500 Ocean Dr': {'poly': 3335, 'color': '#f9a8d4', 'shift': (-36.0, 8.0), 'groups': [([4], 63.8), ([2], 62.3), ([1], 21.0), ([0], 34.0), ([3], 36.0)],
         'src': 'tour 63.8 (LM) et lame rose 62.3 (3 LMs S/SE/NW/SW); podium 21 m LU dans Vice Beach (B) (echelles aux coins); '
                'immeuble ouest 34 m LU (toit a gradins blanc derriere la lame, Vice Beach (B)), tourelle hexagonale 36 m ESTIMEE. Note: Vice Beach (B) montre tout le complexe ~10-15 m au NO de la V16 (pose de la cam non verifiee, la tour Jade Ocean est decalee dans une autre direction -> pas un decalage V16)'},
     # --- Vice Beach, plus hautes tours (2026-09-30, demande Alexandre). Hauteur de la region qui contient le LM = LM;
     # les autres volumes ESTIMES (proportions IRL); les traits V16 donnent la forme (arrondis, ailes, gradins).
     # CORRIGE (Alexandre): la tour = le carre a verriere pyramidale (X de la V16) + ses ailes; le grand polygone = le podium bas
-    'Blue Diamond': {'poly': 3575, 'color': '#60a5fa', 'groups': [([2, 3, 5, 7], 126.0), ([0], 40.0), ([1], 40.0), ([6], 40.0), ([4], 14.0)], 'core_scale': ([2, 3, 5, 7], 1.35),
+    'Blue Diamond': {'poly': 3575, 'color': '#60a5fa', 'shift': (-40.0, -20.0), 'groups': [([2, 3, 5, 7], 126.0), ([0], 40.0), ([1], 40.0), ([6], 40.0), ([4], 14.0)], 'core_scale': ([2, 3, 5, 7], 1.35),
         'pyramid': ([2, 3, 5, 7], 14.0), 'src': 'tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 63 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (le LM 146 = pointe lumineuse, 6 m au-dessus de la pyramide lue); tour ~30 px a l est de la V16 dans cette vue (garde sur la V16), ailes basses 40 m ESTIMEES (Venetian Islands: fut etroit), verriere pyramidale +14 m (vue dans Biplane Night (Video) Last); podium (region 4) 14 m ESTIME'},
     'Green Diamond': {'poly': 3576, 'color': '#4ade80', 'groups': [([2, 3, 4, 6], 126.0), ([0], 40.0), ([1], 40.0), ([5], 40.0), ([7], 14.0)], 'core_scale': ([2, 3, 4, 6], 1.35),
         'pyramid': ([2, 3, 4, 6], 14.0), 'src': 'tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 60 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (LM 145 = pointe); tour ~30 px a l est de la V16 dans cette vue (garde sur la V16), ailes basses 40 m ESTIMEES (Venetian Islands: fut etroit), verriere pyramidale +14 m (vue dans Biplane Night (Video) Last); podium (region 7) 14 m ESTIME'},
     # [EFFLUVIA 2026-10-02] relus dans Speaking with Brian at Effluvia (3): region 0 = PARCELLE (podium), pas la tour
     # [VB-WATER 2026-10-04, Alexandre] TOUTES les tours de Vice Beach (Icon, Murano, Jade Ocean, puis 1500 Ocean Dr, Diamonds, Tresor,
-    # Apogee, V16 3274/3258): decalage VB-SETBACK RETIRE (le decalage de ~29 m vers l'ouest
+    # Apogee, V16 3274/3258): decalage VB-SETBACK RETIRE
+    # [SIL-SCAN 2026-10-04, valide Alexandre] puis decalage REMIS, MESURE par les silhouettes (bords/sommet vs bord du ciel, toutes les cams,
+    # sans clics) pour Blue Diamond (-40,-20; 9.7->3.7 px, 8 cams), Tresor (-28,-12; 10.9->5.1, 6), 1500 Ocean Dr (-36,+8; 8.7->5.7, 8),
+    # Jade Ocean (-12,-8; 5.2->3.4, 10): concorde avec VB-SETBACK. Icon/Green Diamond/Apogee/Murano: minimum plat -> V16 (coupe au trait de cote). (le decalage de ~29 m vers l'ouest
     # mettait Icon/Murano dans la baie) -> remis sur les silhouettes V16 (« met sur les silhouettes v16 »); hauteurs inchangees.
     'Icon at South Beach': {'poly': 3251, 'color': '#f472b6', 'groups': [([1], 140.0), ([2], 113.4), ([0], 12.0)],
         'src': 'lame courbe V16 (regions 1+2): partie haute 140 m (LM 142) et aile basse 113 m LUES dans Effluvia (3); podium 12 m ESTIME; sur la silhouette V16 (VB-WATER 2026-10-04, Alexandre: le decalage 28.7 m O le mettait dans la baie)'},
     'Murano Grande': {'poly': 3233, 'color': '#fb923c', 'groups': [([1], 139.0), ([2], 133.0), ([4], 127.0), ([3], 12.0), ([0], 30.0)],
         'src': 'tour courbe en 3 segments V16 (1,2,4): 139 (LM) puis gradins 133/127 ESTIMES; podium 12 et bloc 0 30 m ESTIMES; sur la silhouette V16 (VB-WATER 2026-10-04: decalage retire, il le mettait dans la baie)'},
-    'Tresor Tower': {'poly': 3573, 'color': '#c084fc', 'groups': [([3, 1], 120.0), ([2], 100.0), ([0], 12.0)],
+    'Tresor Tower': {'poly': 3573, 'color': '#c084fc', 'shift': (-28.0, -12.0), 'groups': [([3, 1], 120.0), ([2], 100.0), ([0], 12.0)],
         'src': 'fut rond + lame (regions 3,1) = LM 120; aile est 100 m et podium 12 m ESTIMES'},
     'Flamingo South Beach': {'poly': 3400, 'color': '#fda4af', 'groups': [([2], 111.0), ([0], 51.0), ([1], 52.0), ([3], 62.0)],
         'src': 'hauteurs par region = LMs contenus (T* 111, NENE/NERNE 51-55, NWNE 52, SDS/SRSW 59-64): toutes MESUREES'},
