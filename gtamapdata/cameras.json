@@ -5272,7 +5272,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 3 \u2014 Vice City 10 (Pegassi Towers, Brickell Key vu du sud-est, en hauteur)",
+  "source": "Screenshot 3 \u2014 Vice City 10 (Pegassi Towers, Brickell Key seen from the southeast, elevated)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RESOLVE 2026-09-10: 23 clics (nouveaux clics d'Alexandre), yaw relief tenu (prior 0.3 deg), bouge 1.2 m; mediane 3.1 px | BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | RECAL-ANCRES 2026-09-06 (tooltips x3, 17 clics, 6 ancres): mediane 1.5->1.5 px, ancres 3.2->3.2, move 0.4 m | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLV"
@@ -5298,7 +5298,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 3 \u2014 Vice City 11 (Megamundo, Ferris Wheel, Amphitheater; Bayfront Park vu de l ouest en hauteur, crepuscule)",
+  "source": "Screenshot 3 \u2014 Vice City 11 (Megamundo, Ferris Wheel, Amphitheater; Bayfront Park seen from the west, elevated, dusk)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "BA-DOWNTOWN-6d 2026-09-06 (bundle zone; ancres mono-cam incluses; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | SOLVE 2026-09-06c: 20 clics (skyline lointain, roue, 5 coins de toit Hard Rock derives de l octogone V16 avec retrait 3.4 m): mediane 2.7 px; z 87 m | SOLVE 2026-09-06 sur 13 clics d'Alexandre (roue + skyline Vice Beach 2-3.6 km): mediane 2.1 px, max 7; z 88 m confirme par les landmarks lointains (pas > 120 m) | z>120 m selon Alexandre (init 150), fov ~69 deg deduit de la taille apparente de la roue a sa position approx; yaw/pitch ajustes sur les 2 clics roue | POSITION APPROX Alexandre 2026-09-06 (-365.4,-427.7, 'zero precis': ne pas traiter comme ancre), z et orientation estimes; a resoudre librement des que les clics sont poses | AJOUT 2026-09-06 (fichier ~/Downloads/Vice_City_11.jpg, 3840x2160, converti PNG): pose INITIALE approximative a la main, a resoudre des que les clics sont poses (grande roue Skyviews, amphitheatre, tours Bayfront, skyline Vice Beach au fond)"
@@ -5324,7 +5324,7 @@
    3840,
    2160
   ],
-  "source": "Screenshot 3 \u2014 Port Gellhorn 06 (Trailer Park; chateau d eau, reservoir incendie 145 000 L, lignes HT, crepuscule)",
+  "source": "Screenshot 3 \u2014 Port Gellhorn 06 (Trailer Park; water tower, 145,000 L fire tank, power lines, dusk)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "POSE A2 2026-09-06: crete (ligne bleue, 11.7 px) + rive + chateau d eau en AZIMUT (ancre forte: dx 0 px) ; reservoir '145000 L' hors solve (objet different du rond V16); xyz (-6773.0,4002.6,15.8) yaw 185.28 fov 59.6 | POSE A 2026-09-06 (retour): crete + rive V16 + chateau d eau (34 px); la pose B (tour+reservoir a 1 px) mettait la cam au bord de la lagune avec l'eau plein cadre -> impossible (vue 3D d'Alexandre). Le reservoir clique ici n'est PAS le rond V16 (-6683.7,3837.6): clic detache vers 'Fire Water Tank (145000 L)' sans position | SOLVE 2026-09-06e: crete (ligne bleue Alexandre, arbres 17 m) + rive proche du canal (ligne eau) + chateau d eau + reservoir; xyz (-6744.3,3927.6,19.4) fov 63.8 | POSE 2026-09-06g (provisoire): crete + rive canal + chateau d eau recale sur le disque V16; residus crete 11 px, rive 27 px, tour 34 px; le tooltip reservoir reste incompatible (+303 px): identite du reservoir a confirmer en jeu | POSE A 2026-09-06f (provisoire): crete (ligne bleue, arbres 12.6 m, rms 10 px) + rive du canal V16 (ligne eau, rms 25 px) + sommet chateau d eau (2 px); centre tour 20 px; le tooltip reservoir (-6683.7,3837.6) est incompatible (6 deg) avec le canal: identite du reservoir a confirmer par Alexandre | 2026-09-06d: retour a la pose 'relief' (fov 60.5, pitch -2.47 cales par Alexandre dans la vue 3D, point Alexandre, z 20 par le sommet du chateau d eau); la variante 'tour' (fov 53.9, centre de tour a 0 px) contredit le relief et met le canal trop pres; ecarts restants: centre tour 15 px (z implique 24.8 vs 26.3), reservoir 5.6 m lateral | SOLVE 2026-09-06c: chateau d eau (sommet+centre) + reservoir tooltip (z libre), prior position Alexandre sigma 20 m; xyz (-6779.6,3977.1,21.0) fov 53.9 | 2026-09-06b: z 21.1 m et fov 53.8 deduits de l'ecart vertical sommet/centre du chateau d eau (11.0 m sur 122 px) a la position d'Alexandre; yaw 188.7 coherent avec le relief; position xy toujours approximative, reservoir sans position | 2026-09-06: pitch d'Alexandre (+5.78 dans la vue 3D, le relief lointain colle) conserve, yaw ajuste pour passer par le clic du chateau d eau (position et z toujours approximatifs) | POSITION APPROX Alexandre 2026-09-06 (-6776.9,3979.1, sol z 3.5; cam en hauteur, z init 20), orientation visee sur le chateau d eau ouest; a resoudre librement apres clics | AJOUT 2026-09-06 (fichier ~/Downloads/Port_Gellhorn_06.jpg, 3840x2160, converti PNG): pose INITIALE arbitraire (500 m SE du chateau d eau ouest, visee dessus), a resoudre des que les clics sont poses"
@@ -5350,7 +5350,7 @@
    3840,
    2160
   ],
-  "source": "Trailer 3 (Extended Look) \u2014 Sunrise over Vice City (vue aerienne vers Downtown au lever du soleil, echangeur autoroutier et metro aerien au premier plan, hotel jaune a gauche, deux reservoirs ronds a droite)",
+  "source": "Trailer 3 (Extended Look) \u2014 Sunrise over Vice City (aerial view toward Downtown at sunrise, highway interchange and elevated metro in the foreground, yellow hotel on the left, two round tanks on the right)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "SOLVE 2026-09-10f: 31 clics, tout libre (z des 4 points proches libres); xyz (-2433.3,25.0,153.1) fov 44.8, mediane 8.4 px | SOLVE 2026-09-10e: + Highway (1), Overpass (2) (leak map +5 m, z libre); xyz (-2436.1,25.2,149.1) fov 44.6, mediane 7.9 px | SOLVE 2026-09-10d: + Metro (1) et Overpass (1) (leak map corrigee +5 m, z libre) -> profondeur tenue; xyz (-2415.1,19.4,148.9) fov 44.8, mediane 8.1 px | SOLVE 2026-09-10c: 14 clics (1.6-3.8 km, 32 deg d'etendue), tout libre: xyz (-2650.8,4.5,149.6) fov 40.4, mediane 6.5 px; minimum unique (15 departs) | SOLVE 2026-09-10b: Marina Blue re-etiquete (NW->NE, NE->SE par projection); 9 clics, xy tenu au point d'Alexandre; z 148 m fov 42.9; mediane 8.5 px | SOLVE 2026-09-10a: 9 clics Downtown (2.3-2.8 km), xy tenu au point d'Alexandre (profondeur inobservable avec des cibles toutes a la meme distance), z 150 m, fov 43.6; mediane 11.8 px | 2026-09-10: yaw -14.8 / pitch +0.81 poses par Alexandre dans la vue 3D (alignement grossier Vizcayne x2 + SPC) | POSITION APPROX Alexandre 2026-09-10 (-2473.3,-9.4), z eleve (init 200 m), visee sur Vizcayne (1918 m, az 86 deg); a resoudre librement apres clics | AJOUT 2026-09-10 (fichier ~/Downloads/Sunrise over Vice City.png): pose INITIALE arbitraire (~3 km a l ouest-nord-ouest de Downtown, 220 m, visee est-sud-est, fov 50), a resoudre des que les clics sont poses (skyline Downtown/Brickell = ancres Vizcayne, SPC, One Miami, Four Seasons; echangeur = routes V16)"
@@ -5376,7 +5376,7 @@
    3840,
    2160
   ],
-  "source": "Trailer 3 (Extended Look) \u2014 Kayaking in the Vice River (kayak vert au ras de l'eau sur la Vice River, viaducs autoroute + metro aerien qui traversent la riviere, tours de Downtown derriere, bateau-taxi jaune a gauche; minimap en bas a gauche)",
+  "source": "Trailer 3 (Extended Look) \u2014 Kayaking in the Vice River (green kayak at water level on the Vice River, highway and elevated metro viaducts crossing the river, Downtown towers behind, yellow water taxi on the left; minimap bottom left)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "POSITION APPROX 2026-09-17: estimation initiale (riviere a l'ouest de Downtown, regard vers l'ENE le long de la riviere) a resoudre avec les clics; la minimap du frame donne la position sur un coude de la riviere"
@@ -5402,7 +5402,7 @@
    3840,
    2160
   ],
-  "source": "Trailer 3 (Extended Look) \u2014 Parachute Jump over Vice Beach (vue aerienne depuis un parachute orange au-dessus de Vice Beach, skyline de Downtown au loin a l'horizon, causeway a gauche, palais des congres/hopital en bas au centre, chenaux a droite)",
+  "source": "Trailer 3 (Extended Look) \u2014 Parachute Jump over Vice Beach (aerial view from an orange parachute above Vice Beach, Downtown skyline on the far horizon, causeway on the left, convention center/hospital bottom center, channels on the right)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "CLICS-ALEX 2026-09-20: 5 clics d'Alexandre (Pelican Harbor Radio Tower 0.8 km, pont-levis Venetian 1.1 km, Waverly SE 1.9 km, Tall Billboard Port VC 3.4 km, Asia Brickell Key 3.8 km) + 3 directions du relief lointain (son alignement POV), mes lectures en poids faible: pose (1612.3,2501.9,143.3) yaw 132.65 pitch 7.52 hfov 78.09; ses clics 6-11 px, relief 7-8 px; deplacement 30 m vers le nord par rapport au solve relief+tours+ponts. Precision ~10 m. | RELIEF+TOURS+PONTS 2026-09-20 (Alexandre: le relief lointain demande yaw -1.22 / pitch -0.26 alors que Downtown etait aligne -> desaccord = position fausse): solve conjoint hfov LIBRE avec (a) 3 directions du relief lointain a droite (x 3000-3750) prises de son alignement, (b) 7 sommets Downtown (lectures Claude), (c) pont plat route 10 + tour du pont-levis Venetian. Resultat: (1607.3, 2471.9, 144.3), yaw 132.59, pitch 7.64, hfov 78.13 (76.7 -> 78.1: l'hfov etait couple a la distance Downtown). Residus: relief 12 px, tours 5-23 px, ponts 20-23 px; V16 projetee dans le POV: rives du chenal et coude de la riviere a 10-20 px, empreintes hopital sur les batiments, Mount Sinai (SE) sur le toit. Cam 100 m au SSW de Jade Ocean, 59 m sous son toit. Precision ~10-20 m. | POV 2026-09-20: yaw -0.39 d'Alexandre applique (133.79 -> 133.40, buildings alignes); le proche reste a ~100 px a 300-900 m: mes lectures (pont plat route 10, tour du pont-levis, pointe de riviere) sont incoherentes entre elles a ce niveau -> il faut des clics d'Alexandre sur le proche pour figer la position le long de la trajectoire. | JADE-FIX 2026-09-20 (Alexandre: 'le saut se fait de Jade'): j'avais pris le pont a arches (Venetian causeway, 1.18 km) pour le pont de la route 10 -> cam trop basse (93 m). Corrige: pont plat sur le chenal a (550,1925) = route 10 (790 m), tour du pont-levis Venetian a (645,1728) = landmark East Venetian Causeway Bridge; position+pitch re-solus a yaw/hfov POV figes -> (1627.2,2563.4,155.6), 47 m sous le toit de Jade Ocean (203 m) et a 30 m de la tour, pitch 7.40. Verifications independantes: Mount Sinai (SE) (non clique) tombe sur le toit de l'hopital (1971,1772), empreintes/eau/routes V16 projetees a 30-50 px du proche, horizon a y~1400, tours 11-31 px (lectures Claude). Precision ~20-40 m. | POV+PROCHE 2026-09-20: orientation POV d'Alexandre (yaw -0.54, pitch -0.06, hfov 76.7 sur le SKYLINE-FIT; Downtown matche, le proche moyen) + pont de la route 10 sur le chenal Nautilus/Washington Beach (790 m) lu par Claude a (450,1768): position/pitch re-solus a yaw+hfov figes -> (1596.4,2537.1,93.5), pitch 8.70; pont 12 px, tours 3-22 px. Le saut part du toit de Jade Ocean (203 m) mais la cam est ~100 m plus bas: l'horizon a y~1440 impose z~90-110 m. Position le long de la trajectoire SW encore incertaine (+-100 m): il faut des clics proches (2 bouts du pont route 10, coins de toit Sunset Harbour South RN/RS, Mount Sinai SE). | EXCLUS 2026-09-20: les 7 lectures de Claude font passer RMS-M de 0.409 a 0.456 m -> exclues des metriques (elles restent visibles pour etre deplacees/validees par Alexandre); la pose reste celle du SKYLINE-FIT. | SKYLINE-FIT 2026-09-20: xy donne par Alexandre (1609.6, 2503.2, 'autour de ca'), z/orientation/fov ajustes sur 7 sommets de tours lus par Claude dans la skyline (SEFC, Four Seasons, Two Tequesta, Quantum S, Opera, 1800 Club, The Grand; +-10 px) + horizon a y=1447: residus 7-21 px, xy deplace de 64 m (prior 30 m), z 107 m, contre-plongee +8.1, hfov 75.3; precision ~20-30 m. Les 7 clics sont des lectures de Claude a verifier/deplacer; a affiner avec des clics d'Alexandre (Mount Sinai en bas, causeway a gauche, Titan America a droite). | POSITION APPROX 2026-09-17: estimation initiale (au-dessus de Vice Beach, ~450 m, regard vers le SW sur Downtown) a resoudre avec les clics; le parachute cache le centre du cadre"
@@ -5428,7 +5428,7 @@
    3840,
    2160
   ],
-  "source": "Trailer 3 (Extended Look) \u2014 Vice Beach Panorama (crepuscule, vue en hauteur depuis Vice Beach vers l'ouest: tour ronde Loews au premier plan avec helipad, hotel aux neons verts, grande roue Skyviews et Downtown au fond, enseigne ALBANY a gauche)",
+  "source": "Trailer 3 (Extended Look) \u2014 Vice Beach Panorama (dusk, elevated view from Vice Beach looking west: round Loews tower with helipad in the foreground, green-neon hotel, Skyviews wheel and Downtown in the background, ALBANY sign on the left)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "POSITION APPROX 2026-09-17: estimation initiale = position de Vice Beach (A) (T1/6, meme point de vue au-dessus de la plage) montee a 110 m; Loews Miami Beach (1957,1147) a droite du centre, roue Skyviews (34,132) a gauche; a resoudre avec les clics"
@@ -5458,7 +5458,7 @@
    3440,
    1440
   ],
-  "source": "Build 2026 \u2014 Cyberleak: The Moose Trap (parc d'attractions avec montagnes russes en bord d'eau, camera libre de debug; HUD: P:-231.1,834.9,3.0 C:-2592.7,6395.7,71.0 Dir:-16.0,-0.0,-124.8 Fov:50.0; v108-ybr, 3440x1440)",
+  "source": "Build 2026 \u2014 Cyberleak: The Moose Trap (waterfront amusement park with roller coaster, free debug camera; HUD: P:-231.1,834.9,3.0 C:-2592.7,6395.7,71.0 Dir:-16.0,-0.0,-124.8 Fov:50.0; v108-ybr, 3440x1440)",
   "era": "2026",
   "constraint_class": "A_full_hud",
   "pose_verified": null,
@@ -5485,7 +5485,7 @@
    1913,
    956
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Prison (Aerial) (Biplane) (capture video 1913x956 avec overlay crypto; vue aerienne depuis un biplan au sud de la prison, regard vers le nord: prison en bas a gauche, chateau d'eau Homestead a gauche, canal, champs, mat WDNA FM a droite, Vice City a l'horizon droit)",
+  "source": "Build 2026 \u2014 Cyberleak: Prison (Aerial) (Biplane) (1913x956 video capture with crypto overlay; aerial view from a biplane south of the prison looking north: prison bottom left, Homestead water tower on the left, canal, fields, WDNA FM mast on the right, Vice City on the right horizon)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | SOLVE 2026-09-18b (canal V16 + chateau d'eau + pied du mat, tours en contrainte douce): rives du canal 1-10 px, chateau d'eau 2 px, mat 34 px; la leak map confirme le canal V16 a 5-10 m pres. Depuis cette pose, les tours ouest (1,5,6) tombent 15-20 m au sud des coins V16, les tours est (3,4) sur les coins. A affiner avec l'autoroute devant la prison (clics) et les 2 autres captures aeriennes. | POSITION APPROX 2026-09-18: estimation initiale a resoudre avec les clics (6 tours de la prison vues de haut, chateau d'eau, mat WDNA FM, canal); frame fournie par Alexandre pour trancher la position des Prison Towers",
@@ -5513,7 +5513,7 @@
    1920,
    1080
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) f100 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 a t=10.83 s, 1920x1080, overlay crypto; sequence 7.5-13.7 s = orbite de la camera autour du biplan au-dessus de la prison)",
+  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) f100 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 at t=10.83 s, 1920x1080, crypto overlay; 7.5-13.7 s sequence = camera orbiting the biplane above the prison)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | SOLVE JOINT-PRISON v5 2026-09-19: orientation de f140 imposee = alignement du relief par Alexandre apres rechargement (yaw -1.20 / pitch +0.64 sur la pose v4), position libre -> cams video deplacees de 11-13 m, points video 3.2 px, sol 5.1 px, tours <= 5.4 m | SOLVE JOINT-PRISON v4 2026-09-19: + crete lointaine (alignement des montagnes par Alexandre sur f140: yaw +1.18 / pitch +0.90) et rives/routes V16 (poids faible); les cams video se deplacent de 9-16 m / 0.8-1.25 deg, fov 89.7, tours <= 4 m | SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM.",
@@ -5540,7 +5540,7 @@
    1920,
    1080
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) f140 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 a t=12.17 s, 1920x1080, overlay crypto; sequence 7.5-13.7 s = orbite de la camera autour du biplan au-dessus de la prison)",
+  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) f140 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 at t=12.17 s, 1920x1080, crypto overlay; 7.5-13.7 s sequence = camera orbiting the biplane above the prison)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | SOLVE JOINT-PRISON v5 2026-09-19: orientation de f140 imposee = alignement du relief par Alexandre apres rechargement (yaw -1.20 / pitch +0.64 sur la pose v4), position libre -> cams video deplacees de 11-13 m, points video 3.2 px, sol 5.1 px, tours <= 5.4 m | SOLVE JOINT-PRISON v4 2026-09-19: + crete lointaine (alignement des montagnes par Alexandre sur f140: yaw +1.18 / pitch +0.90) et rives/routes V16 (poids faible); les cams video se deplacent de 9-16 m / 0.8-1.25 deg, fov 89.7, tours <= 4 m | SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM.",
@@ -5567,7 +5567,7 @@
    1920,
    1080
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) f180 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 a t=13.50 s, 1920x1080, overlay crypto; sequence 7.5-13.7 s = orbite de la camera autour du biplan au-dessus de la prison)",
+  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) f180 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 at t=13.50 s, 1920x1080, crypto overlay; 7.5-13.7 s sequence = camera orbiting the biplane above the prison)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | SOLVE JOINT-PRISON v5 2026-09-19: orientation de f140 imposee = alignement du relief par Alexandre apres rechargement (yaw -1.20 / pitch +0.64 sur la pose v4), position libre -> cams video deplacees de 11-13 m, points video 3.2 px, sol 5.1 px, tours <= 5.4 m | SOLVE JOINT-PRISON v4 2026-09-19: + crete lointaine (alignement des montagnes par Alexandre sur f140: yaw +1.18 / pitch +0.90) et rives/routes V16 (poids faible); les cams video se deplacent de 9-16 m / 0.8-1.25 deg, fov 89.7, tours <= 4 m | SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM.",
@@ -5594,7 +5594,7 @@
    1920,
    1080
   ],
-  "source": "Build 2026 \u2014 Cyberleak: VCIA Night (Runway) (frame video 8305, nuit: piste diagonale 12/30 de VCIA vue depuis son extremite SE vers le NW, feux de bord, seuil vert et bout de piste rouge, terminal illumine a droite, avion au parking en bas a droite; bandes noires haut/bas)",
+  "source": "Build 2026 \u2014 Cyberleak: VCIA Night (Runway) (video frame 8305, night: VCIA diagonal runway 12/30 seen from its SE end toward the NW, edge lights, green threshold and red runway end, lit terminal on the right, parked plane bottom right; black bars top/bottom)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | VCIA-V6 ANNULE 2026-09-20: forcer Titan America (clic (1361,370) vs projection (1459,378), 98 px) casse tout (piste 4 px, fov +7, roll -4) -> clic ou landmark Titan America douteux, exclu du solve; pose v5 conservee (le clic tour deplace de 0.6 px ne change rien: 0.7 px) | SOLVE VCIA-V6 2026-09-20: clic tour deplace par Alexandre a [572.6, 395.9] + Titan America (cimenterie, 1.9 km) + piste + prior POV: piste 4.0 px, tour 0.1 px, Titan 62.4 px | SOLVE VCIA-V5 2026-09-20: Watson Bay Water Tower (feu du sommet a (572,396), 3.6 km, tour fixee via G02+pontons) en point fort + piste V16 sur les traces + prior POV 0.5 deg: piste 1.4 px, tour 0.1 px, dyaw +0.45 vs POV | (v4 'annule' etait une erreur de ponderation: en v3 le feu tombait deja a 5 px) | VCIA-V4 ANNULE 2026-09-20: le point lumineux a (572,396) est 45 px trop bas pour etre le sommet (50.7 m) de la Watson Bay Water Tower a 3.6 km -> pas la tour (ou pas son sommet); pose v3 conservee | SOLVE VCIA-V4 2026-09-20: + Watson Bay Water Tower (feu au sommet a (572,396), 3.6 km) comme point, piste V16 sur les traces, orientation POV d'Alexandre en prior 0.3 deg: piste 0.7 px, tour 45.0 px, hfov 92.0 | SOLVE VCIA-V3 2026-09-19: orientation = alignement du lointain par Alexandre dans le POV (yaw -8.27 / pitch +3.93 sur la v2, tenue a 0.05 deg), position et fov libres contre la piste V16 + traces: cam descendue de 46 m (182 -> 141 m), hfov 96.9 -> 91.2, bords de piste 1.9 px; routes/eau V16 restent 40-60 px a cote des traces (decalage carte probable, comme a la prison); pad V16 (76 m x 150 m) plus petit que dans le jeu. | SOLVE VCIA-V2 2026-09-19: traces d'Alexandre (piste + pad en rouge, route en jaune, eau en bleu) contre la geometrie V16 (bords de piste 43 m, pad 76 m sur 150 m, routes, eau): bords de piste 2 px, coins du pad 18-29 px (pad V16 plus court/etroit que dans le jeu ?), routes/eau decalees de 20-40 px; hfov 97 (grand angle), roll -2; precision ~15 m. Prochaine etape: coins V16 du pad (Alt-clic) et coins du terminal. | SOLVE VCIA-V1 2026-09-19: pose initiale sur la geometrie V16 de la piste (bout SE 2 coins, seuil decale 2 coins, extremite NW, 2 lignes de feux de bord), rms 7.7 px, roll -8.8 (a verifier); precision ~10 m; a affiner par clics (coins du terminal, hangars, avion) et tooltips V16",
@@ -5623,7 +5623,7 @@
    106.705,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v091 (video biplan t=3.03 s, POV depuis l aile: Hamlet, mat WDNA, chateau d eau Homestead, skyline Downtown)",
+  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v091 (biplane video t=3.03 s, wing POV: Hamlet, WDNA mast, Homestead water tower, Downtown skyline)",
   "notes": "SOLVE 2026-09-24b: + Hamlet Interchange (1) (tooltip, cote droit), 12 clics, hfov 106.7, rms 12.9 | SOLVE 2026-09-24: 11 clics d Alexandre (tours 1/5/6, chateau d eau, mat WDNA, Four Seasons SE/SW, 4 intersections tooltip Hamlet) fov libre -> hfov 106.2, rms 11.2 px; ancre du plan A (frames 0-91) pour l orthophoto | POSITION APPROX 2026-09-24: pose provisoire (odometrie/PnP) a verrouiller par les clics d Alexandre pour l orthophoto; fov incertain",
   "id": "S3/86"
  },
@@ -5650,7 +5650,7 @@
    74.1,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v250 (video biplan t=8.33 s, chase-cam: prison en bas a gauche, chateau d eau, mat WDNA, echangeur)",
+  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v250 (biplane video t=8.33 s, chase cam: prison bottom left, water tower, WDNA mast, interchange)",
   "notes": "SOLVE 2026-09-24b: 9 clics (6 tours, chateau d eau, mat, tooltip 82 Intersection (1)), fov LIBRE -> hfov 74.1 (la chase-cam zoome pendant le plan: 89.7 a la frame 325), rms 7.2 px | SOLVE 2026-09-24: 8 clics d Alexandre (6 tours, chateau d eau, mat WDNA), fov 89.677 (chase-cam), rms 33.3 px; ancre du plan B (frames 92-312) | POSITION APPROX 2026-09-24: pose provisoire (odometrie/PnP) a verrouiller par les clics d Alexandre pour l orthophoto; fov incertain",
   "id": "S3/87"
  },
@@ -5677,7 +5677,7 @@
    70.086,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v600 (video biplan t=20.0 s, chase-cam: bassins et echangeur a l est de la prison, Southside au fond)",
+  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v600 (biplane video t=20.0 s, chase cam: ponds and interchange east of the prison, Southside in the background)",
   "notes": "SOLVE 2026-09-24: 8 clics (Canal Bridge (1) tooltip + landmarks; WDNA FM exclu, quasi hors champ), fov libre -> hfov 70.1, rms 3.9 px | POSITION APPROX 2026-09-24: pose odometrie (derive possible 10-20 m, 6.5 s apres la derniere ancre 405); a verrouiller par des tooltips (coins de bassins, intersections cote est)",
   "id": "S3/88"
  },
@@ -5704,7 +5704,7 @@
    85.034,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v160 (video biplan t=5.3 s, chase-cam vers le SW: Grassrivers, zone industrielle au premier plan a droite)",
+  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v160 (biplane video t=5.3 s, chase cam toward the SW: Grassrivers, industrial area in the right foreground)",
   "notes": "SOLVE 2026-09-24: 4 tooltips d Alexandre (Dirt Middle (1-2), Grassrivers Bridge (1), Watson Bay Bridge (1)) + horizon mer lu sur la frame (y=466, roulis ~0), fov libre -> hfov 85.0, rms 4.3 px; Dirt (1) exclu (predit 53 px plus haut que le clic, quelle que soit la config: lot conteneurs different du petit circuit V16 ou coin ambigu); pose a 4 points quasi alignes N-S + 1 point profond: fov/distance encore fragiles (+-10 deg / +-60 m) | POSITION APPROX 2026-09-24: pose odometrie (frame 160, ancre(s) 250; fov estime par la VO, derive possible 10-30 m); cam provisoire pour les tooltips/clics d Alexandre",
   "id": "S3/89"
  },
@@ -5731,7 +5731,7 @@
    76.028,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v500 (video biplan t=16.7 s, chase-cam vers le WNW: prison, canal, chateau d eau Homestead a gauche)",
+  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v500 (biplane video t=16.7 s, chase cam toward the WNW: prison, canal, Homestead water tower on the left)",
   "notes": "SOLVE 2026-09-24: 8 clics d Alexandre (6 tours, chateau d eau Homestead, Canal Bridge (1) tooltip), fov libre -> hfov 76.0, rms 3.0 px; deplacement de 26 m vs la pose odometrie (fondu 405/600) | POSITION APPROX 2026-09-24: pose odometrie (frame 500, ancre(s) 405 et 600 (fondu); fov estime par la VO, derive possible 10-30 m); cam provisoire pour les tooltips/clics d Alexandre",
   "id": "S3/90"
  },
@@ -5758,7 +5758,7 @@
    68.439,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v680 (video biplan t=22.7 s, chase-cam vers l est: bassins/reservoirs, echangeur, Southside au fond)",
+  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v680 (biplane video t=22.7 s, chase cam toward the east: ponds/reservoirs, interchange, Southside in the background)",
   "notes": "POSITION APPROX 2026-09-24: pose odometrie depuis v600 (80 frames, derive possible 10-20 m, fov VO); cam provisoire pour les tooltips d Alexandre cote est (coins de bassins, intersections)",
   "id": "S3/91"
  },
@@ -5785,7 +5785,7 @@
    82.11,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v310 (video biplan t=10.3 s, chase-cam vers le nord: prison a gauche, echangeur 61 et bassins/reservoirs a droite, fin du plan B)",
+  "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v310 (biplane video t=10.3 s, chase cam toward the north: prison on the left, interchange 61 and ponds/reservoirs on the right, end of shot B)",
   "notes": "SOLVE 2026-09-24: 14 clics d Alexandre (WDNA FM, Four Seasons SW/SE, Prison Tower (3), 10 coins de bassins tooltips), fov libre -> hfov 82.1, rms 7.5 px (landmarks 2.5-3.4 px, bassins 4-13 px); exclus: Bassin (1) (59 px horizontal, autre coin?), Hamlet Interchange (1) (60 px vertical: pont sureleve, ancre au sol), Bassin (7) (23 px) | POSITION APPROX 2026-09-24: pose odometrie depuis v250 (60 frames, derive possible 5-15 m, fov VO); cam provisoire pour les tooltips d Alexandre: bassins (a ~1 km, x 1400-1600 y ~760), echangeur 61, prison",
   "id": "S3/92"
  },
@@ -5812,7 +5812,7 @@
    94.896,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0900 (video biplan t=30 s, chase-cam en approche de Downtown, baie a droite)",
+  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0900 (biplane video t=30 s, chase cam approaching Downtown, bay on the right)",
   "notes": "SOLVE 2026-09-25 (v2): 13 clics dont Point (4) au sol, fov libre -> hfov 94.9, rms 5.9 px | SOLVE 2026-09-25: 12 clics d Alexandre (Four Seasons x3, SEFC, Two/Three Tequesta, Asia Brickell Key, Park Grove x3, Infinity x2), fov libre -> hfov 91.2, rms 5.0 px | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/93"
  },
@@ -5839,7 +5839,7 @@
    47.819,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1080 (video biplan t=36 s, chase-cam au-dessus de la baie: marinas, iles, Downtown a gauche)",
+  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1080 (biplane video t=36 s, chase cam above the bay: marinas, islands, Downtown on the left)",
   "notes": "SOLVE 2026-09-25: 5 clics en 2 grappes (Four Seasons x2, Park Grove x3), fov libre -> hfov 47.8, rms 1.4 px; FOV NON CONTRAINT (2 grappes): a fov 80 la cam recule de 300 m; il faut 1-2 tours distinctes de plus | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/94"
  },
@@ -5866,7 +5866,7 @@
    106.7,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1380 (video biplan t=46 s, chase-cam entre les tours de Brickell)",
+  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1380 (biplane video t=46 s, chase cam between the Brickell towers)",
   "notes": "SOLVE 2026-09-26: fov FIXE 106.7 (camera aile droite, = v0770/v0820), rms 7.7 px | SOLVE 2026-09-25 (corrige): fov LIBRE -> hfov 120.6, rms 4.0 px (aile droite, meme camera que v0770 ~126) | SOLVE 2026-09-25: 6 clics (Four Seasons x3, SEFC, Infinity x2 = 3 points distincts), fov FIXE 106.7 (meme camera POV aile que v091) -> rms 7.7 px (hfov 106.7); fov libre donnerait 120.6 mais non contraint; Three Tequesta cliques hors image exclus | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/95"
  },
@@ -5893,7 +5893,7 @@
    67.911,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1980 (video biplan t=66 s, POV haut au-dessus de Downtown, echangeurs)",
+  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1980 (biplane video t=66 s, high POV above Downtown, interchanges)",
   "notes": "SOLVE 2026-09-25: 6 clics (SPC S, SEFC, Akoya, Citigroup x3 dont SW derive), fov libre -> hfov 67.9, rms 2.9 px (solve multi-depart) | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/96"
  },
@@ -5920,7 +5920,7 @@
    84.268,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2580 (video biplan t=86 s, chase-cam tours et front de mer)",
+  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2580 (biplane video t=86 s, chase cam, towers and waterfront)",
   "notes": "SOLVE 2026-09-25: 10 clics (roue, Hard Rock, Vizcayne S x3, Marina Blue x3, Loft Downtown II, Opera Tower); Akoya exclu (44 px), fov libre -> hfov 84.3, rms 9.6 px (solve multi-depart) | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/97"
  },
@@ -5947,7 +5947,7 @@
    87.942,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v3000 (video biplan t=100 s, POV haut au-dessus de Downtown)",
+  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v3000 (biplane video t=100 s, high POV above Downtown)",
   "notes": "SOLVE 2026-09-25: 5 clics (Opera Tower, Akoya, Quantum N/S, 1800 Club), fov libre -> hfov 87.9, rms 5.2 px (solve multi-depart) | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/98"
  },
@@ -5974,7 +5974,7 @@
    106.7,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0770 (video biplan t=25.7 s, POV aile droite: Southside et l autoroute en bas a gauche, Downtown a l horizon, plan 701-843)",
+  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0770 (biplane video t=25.7 s, right wing POV: Southside and the highway bottom left, Downtown on the horizon, shot 701-843)",
   "notes": "SOLVE 2026-09-25 (v4): 14 clics dont Point (1-4) et Southside Intersection (1-2), fov FIXE 106.7 (= aile gauche v091; les Points au loin + les intersections ne sont coherents qu a ~106): rms 9.2 px; le 88.8 precedent etait un artefact de 2 intersections + tours | SOLVE 2026-09-25 (v3): 10 clics dont 2 tooltips d intersections Southside a 250 m (Alexandre), fov libre -> hfov 88.8, rms 5.5 px: les points proches levent la degenerescence altitude/fov (106.7 et 126 etaient faux) | SOLVE 2026-09-25 (corrige): fov LIBRE -> hfov 126.0, rms 2.9 px; verifie par superposition des routes/autoroute V16 au sol sur la frame (le fov 106.7 de l aile gauche ne colle pas: la camera de l aile droite est plus large) | SOLVE 2026-09-25: 8 clics d Alexandre (Park Grove x3, Four Seasons x2, Infinity x2, SEFC), fov FIXE 106.7 (POV aile) -> rms 4.0 px; coherent a 58 m avec l interpolation des chaines VO 700/844 (fov libre donnerait 126 et 180 m d ecart, non retenu) | POSITION APPROX 2026-09-25: position extrapolee de la chaine VO (frame 700 + cap), cap devine, fov 106.7 suppose (POV aile comme v091); cam provisoire pour les clics d Alexandre (tours Downtown + tooltips Southside/autoroute) -> comble le trou Southside entre les frames 700 et 844",
   "id": "S3/99"
  },
@@ -6001,7 +6001,7 @@
    106.7,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0820 (video biplan t=27.3 s, POV aile droite, plan 701-843: Southside au premier plan)",
+  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0820 (biplane video t=27.3 s, right wing POV, shot 701-843: Southside in the foreground)",
   "notes": "SOLVE 2026-09-25 (v4): 12 clics, fov FIXE 106.7 (meme camera que v0770): rms 9.5 px | SOLVE 2026-09-25: 9 clics d Alexandre (Southside Intersection (1) tooltip, Park Grove x2, Four Seasons x2, Infinity x2, SEFC, SPC), fov FIXE 88.8 (= v0770, meme camera aile droite) -> rms 7.8 px; la VO depuis v0770 arrive a 12 m de cette pose (validation independante) | POSITION APPROX 2026-09-25: pose VO depuis v0770 (fov libre 126), cam provisoire pour les tooltips d intersections de Southside d Alexandre",
   "id": "S3/100"
  },
@@ -6028,7 +6028,7 @@
    81.707,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Vice Beach) (capture video nuit avec overlay crypto, 2000x1066 apres retrait du letterbox; chase-cam derriere un biplan jaune au-dessus de Vice Beach nord, regard vers l'est: Blue Diamond et Green Diamond (sommets pyramidaux eclaires), Jade Ocean a gauche, canal au premier plan, mer au fond)",
+  "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Vice Beach) (night video capture with crypto overlay, 2000x1066 after letterbox removal; chase cam behind a yellow biplane above north Vice Beach looking east: Blue Diamond and Green Diamond (lit pyramid tops), Jade Ocean on the left, canal in the foreground, sea in the background)",
   "notes": "SOLVE 2026-09-26: 7 clics d Alexandre (Green/Blue Diamond, Tresor Tower, Jade Ocean, Akoya, Vice Beach Bridge (1), Vice Beach Intersection (1) - ces 2 derniers = tooltips), xyz+ypr+fov libres: residus 1-9 px (pont 36 px avant correction du tablier), hfov 81.7; camera au sud des points, regard NNE | AJOUT 2026-09-26 (Alexandre): POSE PROVISOIRE - ajustee sur les 2 sommets pyramidaux (Blue Diamond a droite, Green Diamond a gauche) avec altitude 160 m, roulis 0 et fov 84.3 (autres frames biplan) FIXES; distance le long de la visee non contrainte. A raffiner avec les clics d Alexandre (la grande tour a eclairage rouge a gauche n est probablement PAS Jade Ocean: fit incoherent)",
   "id": "S3/101"
  },
@@ -6055,7 +6055,7 @@
    106.647,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Video) Last (derniere frame de GTA_6_plane_NIGHT_upload.ee_mirror_1.mp4, t=109 s, 1920x960 apres retrait du letterbox; POV aile du biplan au-dessus de la plage de Vice Beach nord, regard vers le nord: Jade Ocean, Green/Blue Diamond (pyramides) et hotels a gauche, plage et mer a droite)",
+  "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Video) Last (last frame of GTA_6_plane_NIGHT_upload.ee_mirror_1.mp4, t=109 s, 1920x960 after letterbox removal; biplane wing POV above north Vice Beach looking north: Jade Ocean, Green/Blue Diamond (pyramids) and hotels on the left, beach and sea on the right)",
   "notes": "SOLVE 2026-09-26: 6 clics d Alexandre (Green/Blue Diamond, Jade Ocean, Akoya, Tresor Tower, Vice Beach Point (1) tooltip), xyz+ypr+fov libres: residus 4-17 px, hfov 106.6 (POV aile) | POSE PROVISOIRE 2026-09-26: 3 sommets (pyramide droite = Blue Diamond, gauche = Green Diamond, Jade Ocean) avec fov 81.7 fixe (meme video que Biplane Night (Vice Beach)); 3 points pour 6 inconnues = juste determine, residus 2-7 px NON significatifs -> a confirmer par des clics (sol, plage, hotels) | AJOUT 2026-09-26 (Alexandre): pose provisoire sur 3 sommets (Jade Ocean, 2 pyramides), fov = Biplane Night (Vice Beach) (meme video)",
   "id": "S3/102"
  },
@@ -6082,7 +6082,7 @@
    71.675,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Video) v086 (GTA_6_plane_NIGHT_upload.ee_mirror_1.mp4 a t=86 s (1:26), letterbox retire; chase-cam derriere le biplan au-dessus des Venetian Islands, regard vers le nord: 1000 Venetian Way a gauche, iles residentielles au premier plan, zone portuaire eclairee a l horizon)",
+  "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Video) v086 (GTA_6_plane_NIGHT_upload.ee_mirror_1.mp4 at t=86 s (1:26), letterbox removed; chase cam behind the biplane above the Venetian Islands looking north: 1000 Venetian Way on the left, residential islands in the foreground, lit port area on the horizon)",
   "notes": "SOLVE V3 2026-09-26: 9 tooltips d Alexandre Venetian (1)-(3),(5)-(10), residus 1-27 px (nuit), hfov 71.7, roulis 0; horizon heightmap juste au-dessus des lumieres, meshs lointains (Ambrosia) sur l horizon. La V2 contrainte par la bande de lumieres etait fausse (la bande n est pas l horizon du terrain). Venetian (4) exclu (clic incoherent) | SOLVE 2026-09-26: tooltips Venetian (1),(2),(3),(5) d Alexandre, xyz+ypr+fov libres: residus 0.5-5 px, hfov 71.8; Venetian (4) exclu (son clic tombe a (650,1308), 220 m du tooltip (445,1232): clic ou tooltip a verifier) | POSE ALIGNEE 2026-09-26 sur 1000 Venetian Way (identifie par Alexandre): coin de toit SW (landmark), coin de toit E (V16 s24), pied SW; fov 81.7 fixe; 3 points = juste determine -> provisoire, le mesh 1000 Venetian Way tombe sur la tour; en attente des tooltips d Alexandre | AJOUT 2026-09-26 (Alexandre): POSE DEVINEE (a la louche) pour les clics; la grue du port (Waning Sands) serait visible a l horizon",
   "id": "S3/103"
  },
@@ -6108,7 +6108,7 @@
    46.319,
    null
   ],
-  "source": "Screenshot \u2014 Throwing Stuff from an Overpass (deux personnages sur un viaduc d'autoroute; au loin a droite la raffinerie Allied Crystal avec cheminees et chateau d'eau, panneau Ambrosia Raceway Park, skyline de Vice City a gauche a l'horizon)",
+  "source": "Screenshot \u2014 Throwing Stuff from an Overpass (two characters on a highway overpass; far right the Allied Crystal refinery with stacks and water tower, Ambrosia Raceway Park sign, Vice City skyline on the left horizon)",
   "notes": "SOLVE V2 2026-09-28: 17 clics (Downtown dont Four Seasons x3, SEFC, Vizcayne S x4, One Miami W/E; panneaux Oval Motif #1 x5, Irregular Shape x2), residus <= 4 px, hfov 46.3 (Alexandre: 47 au POV); a 17 m de la position du jeu | POSE 2026-09-28: position du jeu (Alexandre, viaduc + 1.7 m); orientation alignee par Alexandre au POV (silo drapeau aligne sur Downtown): dyaw -8.13+0.04, dpitch -3.34-0.05 (Four Seasons cale) sur la pose preliminaire -> ypr 182.91/-4.39/0, hfov 47; le silo projete tombe a ~10 px de son clic. Les clics Billboard with Oval Motif #1 ne correspondent pas a ce landmark (proportions 3.0 vs 1.65) -> exclus",
   "id": "T3/6"
  },
@@ -6135,7 +6135,7 @@
    38.009,
    null
   ],
-  "source": "Screenshot Game Informer \u2014 Water Tower (verger d'agrumes, cueilleurs, pickup Tucker's Citrus Farms, avion d'epandage; chateau d'eau en boule sur colonne au loin, skyline de Vice City a l'horizon)",
+  "source": "Screenshot Game Informer \u2014 Water Tower (citrus grove, pickers, Tucker's Citrus Farms pickup, crop duster; ball-on-column water tower in the distance, Vice City skyline on the horizon)",
   "note": "REFINE 2026-09-29: roll 0.68 deg revele par la derive lineaire des hauts de tours (Quantum -4.6 / Opera -1.4 / Marquis +0.2 px); ajustement yaw/pitch/roll/hfov sur 7 bords de silhouettes (Opera, Quantum S, Marquis) + boule du chateau d eau: RMS 2.7 -> 1.0 px | SOLVE 2026-09-29: position resolue (91 m du tooltip de zone): chateau d eau Daytona (LM 3 cams Panorama/Fires/Postcard, 0.07 deg) = centre de la boule (1390, 364) + diametre 121 px, + Marquis Miami (NW) + orientation POV d Alexandre (Downtown aligne) comme depart; z sol + 1.7. Pose precedente ([-4300.2, 3242.1, 55.99], [249.013, -1.101, 0.0], 38.7) | POV 2026-09-29 (Alexandre, 2e reglage): dyaw -0.56, dpitch +0.09, hfov 38.7 | POV 2026-09-29 (Alexandre): dyaw +11.78, dpitch +1.51, hfov 40.6 sur la pose preliminaire | POSE PRELIMINAIRE 2026-09-29: position = tooltip d Alexandre (-4300.2, 3242.1), z = sol heightmap 54.3 + 1.7 (tooltip Z 53.0); orientation et hfov devines pour viser le chateau d eau = Daytona Beach Water Tower (3400 Transmitter Rd, 429 m, az 131) (boule u~1390 v 300-420); a resoudre avec des clics"
  },
  "Thunderstorm [Gameinformer]": {
@@ -6161,7 +6161,7 @@
    57.395,
    null
   ],
-  "source": "Screenshot Game Informer \u2014 Thunderstorm (hydravion Brian's Boat Works, orage sur les Keys; Lake Surprise Viaduct (pont, confirme par Alexandre), centrale Turkey Point (3 cheminees) au loin, ville des Keys a droite)",
+  "source": "Screenshot Game Informer \u2014 Thunderstorm (Brian's Boat Works seaplane, storm over the Keys; Lake Surprise Viaduct (bridge, confirmed by Alexandre), Turkey Point plant (3 stacks) in the distance, Keys town on the right)",
   "note": "SOLVE-V2 2026-09-30 (Alexandre: silhouette du Four Seasons visible dans la brume, POV yaw +0.59 pitch +0.28 hfov 48.2 la calait mais cassait le reste): le mat Radio Tower (Key Lento) (LM 2 cams, 13.5 m, fossile) avait fixe la profondeur a tort. Resolu sans lui: 14 pieds de piles Lake Surprise (1.3 px) + 3 sommets de cheminees Turkey Point individuels (<1 px) + silhouette Four Seasons a 5.3 km (bords g/d + toit, <1 px); position libre -> cam 310 m plus pres du pont, hfov 57.4. Littoral V16 inchange (70 %), ilots du milieu mieux cales. Le LM du mat tombe 60 px a gauche du mat de l image: LM faux. Pose precedente [[-3073.65, -6136.86, 95.3], [318.406, 0.145, -0.526], 46.441] | SOLVE 2026-09-30: pieds de 14 piles du Lake Surprise Viaduct (2B..16B, pont confirme par Alexandre; grande travee 15B-16B de 44 m = repere) + 3 cheminees Turkey Point (centroide) + mat Radio Tower (Key Lento) (u seul): rms 1.2 px piles, cheminees a 1-2 px; controle independant: rive ouest de Key Lento, quais et hotel V16 alignes (eau/terre 70 %%, V16 bruitee). Hauteurs du tablier mesurees ici -> mesh Lake Surprise Viaduct. Sigma position ~15 m. | POSE PRELIMINAIRE 2026-09-30"
  },
  "Shoreline [Gameinformer]": {
@@ -6187,7 +6187,7 @@
    46.37,
    null
   ],
-  "source": "Screenshot Game Informer \u2014 Shoreline (Downtown de nuit vu du nord: Kaseya Center / Sahara Arena, Skyviews Miami Observation Wheel et marina a gauche, I-404 au premier plan, skyline Brickell)",
+  "source": "Screenshot Game Informer \u2014 Shoreline (Downtown at night seen from the north: Kaseya Center / Sahara Arena, Skyviews Miami Observation Wheel and marina on the left, I-404 in the foreground, Brickell skyline)",
   "note": "SOLVE-V5 2026-09-30: + 7 piles eclairees (bleu) du pont I-397 au loin dans l emprise V16 du pont, horizon relu (y 237); 12 reperes + 10 piles; reperes <= 15 px (grande roue: sommet vs moyeu incoherents de ~10 px, LMs 5 m). Pose precedente [[-76.19, 1048.34, 151.95], [166.308, -8.22, -0.153], 45.505] | SOLVE-V4 2026-09-30: + 3 feux rouges du toit du Kaseya Center (LMs SE/S/NW, 5-7 cams, colles a ~10 px: mes anciens clics etaient faux, pas les LMs) + affinage silhouettes; 12 reperes <= 17 px. MESH FIT peu fiable de nuit (fenetres/faisceaux: 3 a 29 pour des poses visuellement identiques). Pose precedente [[-69.1, 1042.7, 148.28], [166.009, -7.998, -0.48], 45.247] | SOLVE-V3 2026-09-30: V2 avait les tours de gauche a ~45 px (parallaxe: cam trop a l est). Reperes identifies par projection: sommets des 2 grues Asia Brickell Key (CC1/CC2), heliports Three/Two Tequesta Point, grande roue (sommet+moyeu), fleche SEFC, 3 piles I-404 dans l emprise V16, horizon; residus <= 14 px. LMs Kaseya S/SE/NW ecartes (incoherents). Pose precedente [[-40.45, 1104.79, 156.49], [165.425, -7.486, -0.533], 42.187] | SOLVE-V2 2026-09-30: ancrages proches (grande roue sommet+moyeu, fleche SEFC, 3 piles I-404 dans l emprise V16, horizon) puis affinage sur les silhouettes de tous les meshes: MESH FIT 6 -> 33. Tours de gauche (Pegassi/Asia) encore ~50 px a gauche; Kaseya LMs S/SE/NW incoherents avec le mesh (a verifier). Pose precedente [[-61.0, 1076.82, 149.76], [165.909, -7.227, -0.998], 43.808] | SOLVE 2026-09-30 (preliminaire): grande roue Skyviews (sommet + moyeu, LMs), sommets Kaseya/SEFC/One Miami E/W/Asia Brickell Key/Pegassi (meshes), horizon marin, et 3 piles du pont I-404 (pieds a l eau dans l emprise V16 du pont); residus 5-45 px sur les sommets lointains (identification Pegassi/Asia a confirmer). Mesure: dessous du tablier I-404 17-19 m. | POSE PRELIMINAIRE 2026-09-30: au nord de l I-404 (quartier SHORELINE (BAYFRONT) de la V16), vise le Kaseya Center"
  },
  "Speaking with Brian at Effluvia (1)": {
@@ -6213,7 +6213,7 @@
    63.03,
    null
   ],
-  "source": "Screenshot \u2014 Speaking with Brian at Effluvia (1) (toit-terrasse a Vice Beach, au nord de Flamingo Park; Flamingo South Beach (tour courbe), Portofino, Downtown au loin)",
+  "source": "Screenshot \u2014 Speaking with Brian at Effluvia (1) (rooftop terrace in Vice Beach, north of Flamingo Park; Flamingo South Beach (curved tower), Portofino, Downtown in the distance)",
   "note": "SOLVE 2026-10-02 (preliminaire): meme toit que (3) (position tenue a 5 m), orientation+fov sur Portofino/Apogee/Icon, residus <= 7 px"
  },
  "Speaking with Brian at Effluvia (2)": {
@@ -6239,7 +6239,7 @@
    66.406,
    null
   ],
-  "source": "Screenshot \u2014 Speaking with Brian at Effluvia (2) (toit-terrasse a Vice Beach, au nord de Flamingo Park; Flamingo South Beach (tour courbe), Portofino, Downtown au loin)",
+  "source": "Screenshot \u2014 Speaking with Brian at Effluvia (2) (rooftop terrace in Vice Beach, north of Flamingo Park; Flamingo South Beach (curved tower), Portofino, Downtown in the distance)",
   "note": "SOLVE 2026-10-02 (preliminaire): meme toit que (3) (position tenue a 5 m), orientation+fov sur Portofino/Apogee/Icon, residus <= 7 px"
  },
  "Speaking with Brian at Effluvia (3)": {
@@ -6265,7 +6265,7 @@
    74.857,
    null
   ],
-  "source": "Screenshot \u2014 Speaking with Brian at Effluvia (3) (toit-terrasse a Vice Beach, au nord de Flamingo Park; Flamingo South Beach (tour courbe), Portofino, Downtown au loin)",
+  "source": "Screenshot \u2014 Speaking with Brian at Effluvia (3) (rooftop terrace in Vice Beach, north of Flamingo Park; Flamingo South Beach (curved tower), Portofino, Downtown in the distance)",
   "note": "SOLVE-V2 2026-10-02: pose INDEPENDANTE de Portofino (Apogee, Icon, grues Asia CC1/CC2, sommet grande roue; residus <= 6 px) -> test a l aveugle de Portofino (bords 0-2.5 px vs V16 13-15 px). | SOLVE 2026-10-02 (preliminaire): 6 reperes (Portofino centre des 3 sommets, Apogee, Icon, grues Asia CC1/CC2, sommet grande roue), residus <= 6 px"
  },
  "Biplane (Video) v2811": {
@@ -6291,7 +6291,7 @@
    115.041,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2811 (video biplan t=93.7 s, POV aile au-dessus de Downtown: C. Clyde Atkins Courthouse (V16 2583, heliport) + tour a cylindres (V16 2582))",
+  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2811 (biplane video t=93.7 s, wing POV above Downtown: C. Clyde Atkins Courthouse (V16 2583, helipad) + twin-cylinder tower (V16 2582))",
   "notes": "SOLVE 2026-10-03: 4 tooltips V16 d Alexandre (Courthouse Block Intersection SW/NW/NE/SE), fov libre -> hfov 115.0, residus <= 4 px, prior roulis 0. Mesures: Courthouse (V16 2583) toit 19.3 m au-dessus du sol (z 22.7, coin SW), tour a cylindres (V16 2582) 48.2/52.6 m au-dessus du sol (z 51.2/55.6).",
   "id": "S3/104"
  },
@@ -6318,7 +6318,7 @@
    110.664,
    null
   ],
-  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2370 (video biplan t=79.0 s, POV aile: echangeur I-97/I-404 entier au premier plan, stade (dome blanc) et batiment accole a l horizon)",
+  "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2370 (biplane video t=79.0 s, wing POV: whole I-97/I-404 interchange in the foreground, stadium (white dome) and adjoining building on the horizon)",
   "notes": "SOLVE 2026-10-03: 3 tooltips d Alexandre (Downtown Intersection) + 4 clics Stephen P. Clark + centre du dome du stade (z~45, sigma 8) + appariement des rues V16 (chamfer, mediane 2.5 px); ROULIS LIBRE (l avion vire: -9.5 deg; le prior roulis 0 faussait le pitch), fov libre 110.7. Residus: clics 0-20 px sauf Downtown Intersection (-779,-4) 59 px (bord bas, a reverifier). Provisoire.",
   "id": "S3/105"
  },
@@ -6343,7 +6343,7 @@
    3840,
    2160
   ],
-  "source": "Trailer 3 (Extended Look) \u2014 Character Switch in Vice Beach (A) (vue verticale (drone) au-dessus de Vice Beach: canal avec ilot et ponton en haut, avenue a terre-plein, tours de plage (2 rotondes a heliport, tour courbe en M, tour en eventail a heliport), plage et ocean en bas)",
+  "source": "Trailer 3 (Extended Look) \u2014 Character Switch in Vice Beach (A) (top-down drone view above Vice Beach: canal with islet and pontoon at the top, avenue with medians, beach towers (2 rotundas with helipads, M-shaped curved tower, fan-shaped tower with helipad), beach and ocean at the bottom)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "SOLVE 2026-10-03: vue quasi verticale (drone) calee sur les ROUTES V16 (= leak) par appariement chaussee/image: residu sol 0.4 px sur toute l image; altitude/fov (degeneres au sol) fixes par les toits des tooltips d Alexandre (A,B,C,F-I): H 515 m, hfov 70.1, toits a ~10 m. Les LMs existants Maison Grande (TS/TC/TN), Sherry, Akoya, Jade Ocean y sont decales de 20-380 px (voir notes de session)."
@@ -6369,7 +6369,7 @@
    2058,
    1170
   ],
-  "source": "Trailer 3 (Extended Look) \u2014 Character Switch in Vice Beach (B) (vue verticale (drone) au-dessus du sud de Vice Beach: chantier d une tour ronde avec grues, tour blanche en gradins avec tennis/basket sur le toit, parking a terre-pleins, marina en haut a droite, plage en bas a gauche)",
+  "source": "Trailer 3 (Extended Look) \u2014 Character Switch in Vice Beach (B) (top-down drone view above south Vice Beach: round tower under construction with cranes, white stepped tower with tennis/basketball courts on the roof, parking lot with medians, marina top right, beach bottom left)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "SOLVE 2026-10-03 V2: le clic E etait l heliport du toit de la tour V16 3454 (traite avant comme une intersection -> pose fausse, routes decalees); vue quasi verticale (tangage -88), 5 tooltips sol + heliport (z libre), residus 1-16 px; hfov fixe 70 (= A): altitude et hauteur du toit couplees au fov, projection au sol inchangee."
@@ -6395,7 +6395,7 @@
    3840,
    2160
   ],
-  "source": "Trailer 3 (Extended Look) \u2014 Rooftop Pool (piscine sur le toit d une tour en terrasses courbes; a droite la tour ronde en construction = Asia Brickell Key, au fond la marina et le pont de Brickell Key, Tequesta (Brickell))",
+  "source": "Trailer 3 (Extended Look) \u2014 Rooftop Pool (pool on the roof of a curved-terrace tower; on the right the round tower under construction = Asia Brickell Key, in the background the marina and the Brickell Key bridge, Tequesta (Brickell))",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "POSE V1 2026-10-04 PROVISOIRE: tour de la piscine = Pegassi Towers (Brickell Key), repere communautaire T3/239 sur la V16 (26.7,-887.3; cone 218-280 deg -> hfov ~62); tour en construction a droite = Asia Brickell Key (Alexandre); pitch -22 lu sur la marina au sud du pont de Brickell Key; position decalee ~20 m au NO du repere pour concilier Asia (bord gauche u~1340/1920) et la marina; residu ~100 px sur le pont. z 195 ESTIME (au-dessus du dernier plateau d Asia 187)."
@@ -6421,9 +6421,9 @@
    3840,
    2160
   ],
-  "source": "Trailer 3 (Extended Look) \u2014 Rialto Causeway with Raul (1) (gameplay (HUD, minimap) sur le Rialto Causeway vers l ouest: peage a arcades (toit de tuiles), tours de Downtown/Edgewater derriere)",
+  "source": "Trailer 3 (Extended Look) \u2014 Rialto Causeway with Raul (1) (gameplay (HUD, minimap) on the Rialto Causeway heading west: arcaded toll plaza (tile roof), Downtown/Edgewater towers behind)",
   "constraint_class": "D_no_ground_truth",
-  "pose_verified": null,
+  "pose_verified": "SOLVED 2026-10-04 \u2014 pose V5: independent multi-cam meshes match the skyline (Marquis 3 px, Quantum S/N 2.5/3 px, 1800 Club 4 px, toll 4.5 px, Marina Blue 5 px); camera on community path T3/143; Marriott and The Grand corrected and cross-checked in 8 cams each",
   "notes": "POSE V5 2026-10-04 (Alexandre: \"fait en sorte que ca fit partout\"): V4 decalait les tours lointaines de ~1 deg (Marquis -45 px, coin de Ten Museum Park (Convertible 397 m) dans le ciel); moindres carres sur meshes valides par d autres cams: Marquis (centre + toit), 1800 Club, Quantum S/N, peage; yaw +0.26, pitch -0.51, hfov +2.06, cam avancee de 3.1 m sur le trajet T3/143. Marquis/Ten Museum/Marina Blue/1800/Quantum a <=8 px; peage ~11 px (dimensions mesurees avec V4); Marriott (-10,-26 m) et The Grand (face sud +16 m) corriges dans la foulee et verifies dans 8 cams chacun; ligne de ciel: Marquis/1800/Quantum OK, peage 4.5 px. | SOLVE 2026-10-04 V4: tours identifiees par rayons sur la V16 (T1 Marquis, T2 Marriott, T3 Opera cachee derriere The Grand, T4 The Grand (dome), T5 1800 Club, T6 Quantum S, T7 Quantum N); camera SUR le trajet T3/143, 95 m a l est du peage, 4.2 m au-dessus de la route; bords des meshes a 1-40 px (Marquis 58), sommets LM 4-7 px, peage (V16 3217, largeur 35.7 m) a ~5 px."
  }
 }

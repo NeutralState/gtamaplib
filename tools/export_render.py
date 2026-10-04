@@ -3,12 +3,12 @@
 
 Deux rendus, zero clic requis:
   render_camera(cam_name) -> PNG bytes : la frame + meshes projetes (fil de fer a
-      la couleur du mesh) + etiquettes par mesh (pastille couleur du mesh, score de
-      fit) + carte d'info en verre (nom, pose, jauge MESH FIT).
+      la couleur du mesh) + etiquettes par mesh (pastille couleur du mesh) + carte
+      d'info en verre (nom, pose, statut). [EXPORT-V3 2026-10-04: score ciel retire, textes en anglais]
   render_map(cam_name, tiles_fn) -> PNG bytes : carte sombre autour de la cam,
       cone de vision en degrade, empreintes des meshes visibles a leur couleur +
       etiquettes, echelle, nord, meme carte d'info.
-Ecart = skyline_fit.run(): px entre le haut des meshes et la ligne de ciel (SegFormer); mesh_fit ne sert qu'a la visibilite.
+mesh_fit ne sert qu'a la visibilite (arbres/brume/occultation); aucun score n'est affiche (Alexandre 2026-10-04).
 """
 import io, json, math, os, sys
 THIS = os.path.dirname(os.path.abspath(__file__)); REPO = os.path.dirname(THIS)
@@ -17,7 +17,6 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 import common
 import mesh_fit
-import skyline_fit   # [SKYLINE-FIT-V1 2026-10-01] remplace le score MESH FIT 0-100 (Alexandre: « c'est de la merde »)
 
 MESHES = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
 CAMS = os.path.join(REPO, 'gtamapdata', 'cameras.json')
@@ -74,19 +73,6 @@ def _px_col(px):
     return (248, 113, 113)
 
 
-def _gauge(draw, cx, cy, R, sky, font_big, font_small):
-    """[SKYLINE-FIT] anneau = part des meshes OK (<= 4 px sur la ligne de ciel), centre = ecart median en px."""
-    summ = (sky or {}).get('resume', {}); px = summ.get('mediane_px'); n = summ.get('n_mesures') or 0; ok = summ.get('n_ok') or 0
-    col = _px_col(px)
-    draw.ellipse([cx - R, cy - R, cx + R, cy + R], outline=(255, 255, 255, 40), width=max(3, R // 7))
-    if n:
-        draw.arc([cx - R, cy - R, cx + R, cy + R], start=-90, end=-90 + 360 * ok / n, fill=col + (255,), width=max(3, R // 7))
-    t = '—' if px is None else ('%.1f' % px if px < 10 else '%.0f' % px); bb = font_big.getbbox(t)
-    draw.text((cx - (bb[2] - bb[0]) / 2 - bb[0], cy - (bb[3] - bb[1]) / 2 - bb[1] - R * 0.12), t, fill=(255, 255, 255, 255), font=font_big)
-    for i, s in enumerate(('PX CIEL', '%d/%d OK' % (ok, n))):
-        bb = font_small.getbbox(s); draw.text((cx - (bb[2] - bb[0]) / 2, cy + R * (0.28 + 0.3 * i)), s, fill=(200, 205, 220, 230), font=font_small)
-
-
 def _glass(base, box, radius, tint=(14, 16, 24), alpha=190):
     x0, y0, x1, y1 = [int(v) for v in box]
     region = base.crop((x0, y0, x1, y1)).filter(ImageFilter.GaussianBlur(14))
@@ -106,10 +92,10 @@ def _info_card(img, cam_name, c, fit, n_meshes, scale):
     W, H = img.size; s = scale
     fT, fS, fM = _font(int(30 * s), True), _font(int(17 * s)), _mono(int(17 * s))
     fG, fGs = _font(int(40 * s), True), _font(int(12 * s), True)
-    pad = int(22 * s); gauge_R = int(46 * s)
+    pad = int(22 * s)
     lines = ['XYZ  %.0f  %.0f  %.1f' % tuple(c['xyz']), 'YPR  %.2f  %.2f  %.2f' % tuple(c['ypr']), 'FOV  %.1f°' % c['fov'][0]]
     tw = max([fT.getbbox(cam_name)[2]] + [fM.getbbox(l)[2] for l in lines])
-    cw = pad * 3 + tw + gauge_R * 2 + int(10 * s); ch = pad * 2 + int(30 * s) + int(12 * s) + len(lines) * int(24 * s) + int(34 * s)
+    cw = pad * 2 + max(tw, int(330 * s)); ch = pad * 2 + int(30 * s) + int(12 * s) + len(lines) * int(24 * s) + int(34 * s)
     x0, y0 = int(26 * s), H - ch - int(26 * s)
     img = _glass(img, (x0, y0, x0 + cw, y0 + ch), int(20 * s))
     d = ImageDraw.Draw(img)
@@ -122,7 +108,6 @@ def _info_card(img, cam_name, c, fit, n_meshes, scale):
     bw, bh = _pill(d, (x0 + pad, y + int(6 * s)), badge[0], badge[1], fGs, pad=(int(9 * s), int(5 * s)))
     _pill(d, (x0 + pad + bw + int(8 * s), y + int(6 * s)), '%d meshes' % n_meshes, (51, 65, 85), fGs, pad=(int(9 * s), int(5 * s)))
     if cid: _pill(d, (x0 + pad + bw + int(8 * s) + int(100 * s), y + int(6 * s)), str(cid), (30, 41, 59), fGs, pad=(int(9 * s), int(5 * s)))
-    _gauge(d, x0 + cw - pad - gauge_R, y0 + ch / 2, gauge_R, fit, fG, fGs)
     return img
 
 
@@ -133,9 +118,7 @@ def render_camera(cam_name, show_meshes=True):
     W, H = base.size; s = W / 1920.0
     fit = mesh_fit.compute(cam_name) or {'score': None, 'buildings': {}}
     per = fit.get('buildings', {})     # mesh_fit ne sert plus qu'a la VISIBILITE (arbres/brume/occultation)
-    try: sky = skyline_fit.run(cam_name)
-    except Exception: sky = {'resume': {}, 'meshes': {}}
-    SK = sky.get('meshes', {})
+    sky = None
     ov = Image.new('RGBA', base.size, (0, 0, 0, 0)); d = ImageDraw.Draw(ov)
     cx, cy = cam.xyz[0], cam.xyz[1]; tags = []
     if show_meshes:
@@ -152,14 +135,14 @@ def render_camera(cam_name, show_meshes=True):
                 pts += [pa, pb]
             if name in per and pts:
                 P = np.array(pts, float); P = P[(P[:, 0] >= 0) & (P[:, 0] <= W) & (P[:, 1] >= 0) & (P[:, 1] <= H)]
-                if len(P): tags.append((float(P[:, 0].mean()), float(P[:, 1].min()), name, col, SK.get(name, {}).get('abs_px')))
+                if len(P): tags.append((float(P[:, 0].mean()), float(P[:, 1].min()), name, col, None))
     img = Image.alpha_composite(base, ov)
     tags = _pick_tags(tags, per)
     # etiquettes: pastille couleur du mesh + point de score, empilees sans chevauchement
     d = ImageDraw.Draw(img); fL = _font(int(15 * s), True); placed = []
     for x, ytop, name, col, sc in sorted(tags, key=lambda t: t[1]):
-        label = '%s  %s' % (name.replace(' (Ambrosia)', '').replace(' (Allied Crystal)', ''), '—' if sc is None else '%.1f px' % sc)
-        bb = fL.getbbox(label); w = bb[2] - bb[0] + int(40 * s); h = bb[3] - bb[1] + int(12 * s)
+        label = name.replace(' (Ambrosia)', '').replace(' (Allied Crystal)', '')
+        bb = fL.getbbox(label); w = bb[2] - bb[0] + int(20 * s); h = bb[3] - bb[1] + int(12 * s)
         bx = max(6, min(x - w / 2, W - w - 6)); by = ytop - h - int(26 * s)
         for _ in range(40):
             if not any(not (bx + w < p[0] or bx > p[2] or by + h < p[1] or by > p[3]) for p in placed): break
@@ -167,7 +150,7 @@ def render_camera(cam_name, show_meshes=True):
         by = max(6, by); placed.append((bx, by, bx + w, by + h))
         d.line([(x, ytop - 2), (x, by + h)], fill=col + (200,), width=max(1, int(1.5 * s)))
         d.ellipse([x - 3 * s, ytop - 3 * s, x + 3 * s, ytop + 3 * s], fill=col + (255,))
-        _pill(d, (bx, by), label, col, fL, dot=_px_col(sc), pad=(int(9 * s), int(6 * s)), alpha=225)
+        _pill(d, (bx, by), label, col, fL, pad=(int(9 * s), int(6 * s)), alpha=225)
     img = _info_card(img, cam_name, c, sky, fit.get('n_meshes', len(per)), s)
     buf = io.BytesIO(); img.convert('RGB').save(buf, 'PNG'); return buf.getvalue()
 
@@ -176,9 +159,7 @@ def render_map(cam_name, tiles_fn, OUT=1600):
     C = json.load(open(CAMS)); c = C[cam_name]; M = json.load(open(MESHES))
     cam = common.get_cam(cam_name); cx, cy = float(cam.xyz[0]), float(cam.xyz[1]); size = c.get('size') or [1920, 1080]
     fit = mesh_fit.compute(cam_name) or {'score': None, 'buildings': {}}; per = fit.get('buildings', {})
-    try: sky = skyline_fit.run(cam_name)
-    except Exception: sky = {'resume': {}, 'meshes': {}}
-    SK = sky.get('meshes', {})
+    sky = None
     # etendue: meshes visibles dans la frame
     ds = []
     for name in [k for k, v in per.items() if v.get('visible')]:
@@ -214,19 +195,19 @@ def render_map(cam_name, tiles_fn, OUT=1600):
         for a, b in e:
             if abs(a[2] - b[2]) < 0.1 and a[2] < zb + 1.0:
                 d.line([w2c(*a[:2]), w2c(*b[:2])], fill=col + ((255,) if vis else (70,)), width=max(1, int((2.2 if vis else 1) * s)))
-        if vis: tags.append((w2c(*c2), name, col, SK.get(name, {}).get('abs_px')))
+        if vis: tags.append((w2c(*c2), name, col, None))
     img = Image.alpha_composite(img, ov); d = ImageDraw.Draw(img); fL = _font(int(14 * s), True); placed = []
     tags = [t for t in tags if per[t[1]].get('visible') and per[t[1]]['n'] >= 40 and not any(w in t[1] for w in ('(Podium)', '(Annex)', '(Cables)'))]
     tags = sorted(tags, key=lambda t: -per[t[1]]['n'])[:14]
     for (px, py), name, col, sc in sorted(tags, key=lambda t: t[0][1]):
-        label = '%s  %s' % (name.replace(' (Ambrosia)', ''), '—' if sc is None else '%.1f px' % sc); bb = fL.getbbox(label)
-        w = bb[2] - bb[0] + int(38 * s); h = bb[3] - bb[1] + int(12 * s); bx, by = px + 10 * s, py - h / 2
+        label = name.replace(' (Ambrosia)', ''); bb = fL.getbbox(label)
+        w = bb[2] - bb[0] + int(18 * s); h = bb[3] - bb[1] + int(12 * s); bx, by = px + 10 * s, py - h / 2
         if bx + w > OUT - 8: bx = px - 10 * s - w
         for _ in range(30):
             if not any(not (bx + w < q[0] or bx > q[2] or by + h < q[1] or by > q[3]) for q in placed): break
             by += h + 3 * s
         placed.append((bx, by, bx + w, by + h)); d.line([(px, py), (bx, by + h / 2)], fill=col + (200,), width=1)
-        _pill(d, (bx, by), label, col, fL, dot=_px_col(sc), pad=(int(8 * s), int(6 * s)), alpha=230)
+        _pill(d, (bx, by), label, col, fL, pad=(int(8 * s), int(6 * s)), alpha=230)
     # camera
     d.ellipse([camx - 11 * s, camy - 11 * s, camx + 11 * s, camy + 11 * s], fill=(125, 211, 252, 255), outline=(255, 255, 255, 255), width=int(3 * s))
     # echelle + nord

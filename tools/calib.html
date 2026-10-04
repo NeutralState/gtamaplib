@@ -649,7 +649,7 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
   <button class="rays-toggle" id="dual-toggle" title="Compare two cams side-by-side (D)">Dual</button>
   <!-- [MULTICAM-STEP23] Toggle ghost LM projections in dual mode -->
   <button class="rays-toggle" id="proj-toggle" title="Assist: unmarked LMs projected as ghosts, prioritized by gain">Assist</button>
-  <select class="rays-toggle" id="map-src-sel" title="Fond de carte (pyramides detectees dans vendor)"></select>
+  <select class="rays-toggle" id="map-src-sel" title="Base map (tile pyramids found in vendor)"></select>
   <!-- [ASSIST-V1] to-mark LM panel, sorted by priority -->
   <div id="assist-panel"><h4>To mark</h4><div id="assist-list"></div>
   <div class="ap-note">Click a ghost or a row = arm the marking, then click the REAL location in the frame. On a badly calibrated cam, ghost positions are approximate &mdash; trust the names.</div></div>
@@ -677,17 +677,17 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
         <button class="cam-filter-chip on" data-type="Screenshot 1">S1</button><!-- [SS-SPLIT-V1] -->
         <button class="cam-filter-chip on" data-type="Screenshot 2">S2</button>
         <button class="cam-filter-chip on" data-type="Screenshot 3">S3</button><!-- [T3-S3-V1] derniers screenshots -->
-        <button class="cam-filter-chip on" data-type="Build 2026" title="Build 2026 / cyberleak (HUD debug Moose Trap, video biplan prison, VCIA Night): la carte a change depuis le leak 2022, categorie a part">2026</button><!-- [BUILD-2026] -->
+        <button class="cam-filter-chip on" data-type="Build 2026" title="Build 2026 / cyberleak (Moose Trap debug HUD, prison biplane video, VCIA Night): the map changed since the 2022 leak, separate category">2026</button><!-- [BUILD-2026] -->
         <button class="cam-filter-chip on" data-type="Trailer 3">T3</button><!-- [T3-S3-V1] Extended Look -->
       </div>
-      <div class="ls-filter-chips" id="leak-class-chips" title="Sous-filtre des LEAKs par classe de contrainte (A=pose HUD complete ... D=rien de verrouille)"><!-- [LEAK-TYPE-V1] -->
+      <div class="ls-filter-chips" id="leak-class-chips" title="LEAK sub-filter by constraint class (A=full HUD pose ... D=nothing locked)"><!-- [LEAK-TYPE-V1] -->
         <button class="cam-filter-chip on" data-lclass="A">A</button>
         <button class="cam-filter-chip on" data-lclass="B">B</button>
         <button class="cam-filter-chip on" data-lclass="C">C</button>
         <button class="cam-filter-chip on" data-lclass="Cm">Cm</button>
         <button class="cam-filter-chip on" data-lclass="D">D</button>
         <button class="cam-filter-chip on" data-lclass="X">X</button>
-        <button class="cam-filter-chip" id="cam-sort-campaign" title="Basculer l'ordre de la liste: alphabetique / cams les moins marquees en premier">tri a→z</button>
+        <button class="cam-filter-chip" id="cam-sort-campaign" title="Toggle list order: alphabetical / least-marked cams first">sort a→z</button>
       </div>
     </div>
     <div class="ls-list">
@@ -1876,7 +1876,7 @@ async function init() {
       const L = window._v16SnapLast;
       if (!e.shiftKey && L && L.snap && Math.hypot(L.wx - wx, L.wy - wy) < 1.5) { wx = L.snap[0]; wy = L.snap[1]; tag = ` (⌖ ${L.cat})`; }
       const txt = `${wx.toFixed(1)}, ${wy.toFixed(1)}`;
-      const done = () => { readEl.textContent = `✓ copié  ${txt}${tag}`; readEl.style.color = '#86efac'; readEl.classList.add('show'); };
+      const done = () => { readEl.textContent = `✓ copied  ${txt}${tag}`; readEl.style.color = '#86efac'; readEl.classList.add('show'); };
       if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(txt).then(done, done);
       else { const ta = document.createElement('textarea'); ta.value = txt; document.body.appendChild(ta); ta.select(); try { document.execCommand('copy'); } catch (_) {} ta.remove(); done(); }
     }, true);
@@ -2301,10 +2301,10 @@ async function init() {
       '<div id="pe-xy" style="color:#4ade80;margin-bottom:6px">—</div>' +
       '<label>yaw <input id="pe-yaw" type="range" min="0" max="360" step="0.1" style="width:120px"> <span id="pe-yaw-v"></span></label><br>' +
       '<label>hfov <input id="pe-fov" type="range" min="15" max="110" step="0.1" style="width:117px"> <span id="pe-fov-v"></span></label>' +
-      '<div style="margin-top:7px;color:#9ca3af">drag le marker = deplacer x,y</div>' +
+      '<div style="margin-top:7px;color:#9ca3af">drag the marker = move x,y</div>' +
       '<div style="margin-top:7px;display:flex;gap:6px">' +
       '<button id="pe-save" style="flex:1;background:#166534;color:#dcfce7;border:1px solid #22c55e;border-radius:5px;padding:4px;cursor:pointer">Save</button>' +
-      '<button id="pe-cancel" style="flex:1;background:#3f3f46;color:#e5e5ea;border:1px solid #52525b;border-radius:5px;padding:4px;cursor:pointer">Annuler</button></div>';
+      '<button id="pe-cancel" style="flex:1;background:#3f3f46;color:#e5e5ea;border:1px solid #52525b;border-radius:5px;padding:4px;cursor:pointer">Cancel</button></div>';
     document.body.appendChild(panel);
     let editing = null;   // {name, orig:{x,y,yaw,hfov}, cur:{...}}
     function camObj(name) { return (window.mapData?.cameras || []).find(c => c.name === name); }
@@ -2348,14 +2348,14 @@ async function init() {
       if (!editing) return;
       const c = editing.cur;
       let url = `/api/set_cam_pose?cam=${encodeURIComponent(editing.name)}&x=${c.x}&y=${c.y}&yaw=${c.yaw}&hfov=${c.hfov}`;
-      let r = await fetch(url).then(x => x.json()).catch(() => ({error: 'reseau'}));
+      let r = await fetch(url).then(x => x.json()).catch(() => ({error: 'network'}));
       if (r.error === 'SOLVED') {
-        if (confirm(editing.name + ' est SOLVED (validee). Ecraser quand meme?')) {
-          r = await fetch(url + '&override=1').then(x => x.json()).catch(() => ({error: 'reseau'}));
+        if (confirm(editing.name + ' is SOLVED (validated). Overwrite anyway?')) {
+          r = await fetch(url + '&override=1').then(x => x.json()).catch(() => ({error: 'network'}));
         } else return;
       }
       if (r.ok) { panel.style.display = 'none'; editing = null; }
-      else alert('echec: ' + JSON.stringify(r));
+      else alert('failed: ' + JSON.stringify(r));
     });
     // drag du marker de la cam en edition
     let dragging = false;
@@ -3020,7 +3020,7 @@ async function init() {
   if (sortBtn) sortBtn.addEventListener('click', () => {
     camSortCampaign = !camSortCampaign;
     sortBtn.classList.toggle('on', camSortCampaign);
-    sortBtn.textContent = camSortCampaign ? 'tri 0px↑' : 'tri a→z';
+    sortBtn.textContent = camSortCampaign ? 'sort 0px↑' : 'sort a→z';
     renderCamDropdown();
   });
   // Auto-load if URL has ?cam=
@@ -6165,8 +6165,8 @@ window.addEventListener('load', () => {
     foot.className = 'ap-note';
     foot.style.cursor = 'pointer';
     foot.textContent = smartOn
-      ? ('smart: ' + hid + ' ghost(s) masques (occlusion/sub-res) — clic pour tout montrer')
-      : 'smart OFF (tout affiche) — clic pour reactiver';
+      ? ('smart: ' + hid + ' ghost(s) hidden (occlusion/sub-res) — click to show all')
+      : 'smart OFF (all shown) — click to re-enable';
     foot.onclick = () => { window._assistSmart = !smartOn; window._refreshGhosts && window._refreshGhosts(); };
     list.appendChild(foot);
     for (const g of pts) {

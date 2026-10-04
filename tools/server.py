@@ -921,10 +921,10 @@ class Handler(BaseHTTPRequestHandler):
             _cam = unquote(qs.get('cam', [''])[0])
             _raw = json.load(open(os.path.join(GTAMAP_DIR, 'gtamapdata', 'cameras.json')))
             if _cam not in _raw:
-                self.send_json({'error': 'cam inconnue'}, 400); return
+                self.send_json({'error': 'unknown cam'}, 400); return
             _e = _raw[_cam]
             if _e.get('pose_verified') and qs.get('override', ['0'])[0] != '1':
-                self.send_json({'error': 'SOLVED', 'msg': 'pose verrouillee — confirmer l override'}, 423)
+                self.send_json({'error': 'SOLVED', 'msg': 'pose locked — confirm the override'}, 423)
                 return
             def _f(k):
                 v = qs.get(k, [None])[0]
@@ -949,7 +949,7 @@ class Handler(BaseHTTPRequestHandler):
                 else:
                     _e['fov'] = [round(hfov, 3), None]
             _e['note'] = ((_e.get('note') or '').split(' | POSE-EDIT')[0]
-                          + ' | POSE-EDIT: ajustee a la main par Alexandre dans l UI').strip(' |')
+                          + ' | POSE-EDIT: adjusted by hand by Alexandre in the UI').strip(' |')
             import tempfile as _tmp
             _p = os.path.join(GTAMAP_DIR, 'gtamapdata', 'cameras.json')
             _fd, _t = _tmp.mkstemp(dir=os.path.dirname(_p), suffix='.tmp')
@@ -970,7 +970,7 @@ class Handler(BaseHTTPRequestHandler):
                 pass
             _resp = {'ok': True, 'xyz': _e['xyz'], 'ypr': _e['ypr'], 'fov': _e['fov']}
             if _fov_ignored:
-                _resp['fov_ignored'] = 'fov console (HUD/leak) — verite intouchable, orientation sauvee'
+                _resp['fov_ignored'] = 'console fov (HUD/leak) is ground truth and was kept; orientation saved'
             self.send_json(_resp)
             return
 
@@ -2636,7 +2636,7 @@ class Handler(BaseHTTPRequestHandler):
             try:
                 _x = float(qs.get('x', [''])[0]); _y = float(qs.get('y', [''])[0]); _r = float(qs.get('r', ['3'])[0])
             except ValueError:
-                self.send_json({'error': 'x,y requis'}, 400); return
+                self.send_json({'error': 'x,y required'}, 400); return
             global _V16_SNAP
             try:
                 _V16_SNAP
