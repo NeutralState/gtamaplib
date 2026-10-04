@@ -6404,17 +6404,17 @@
   "id": "T3/10",
   "player": null,
   "xyz": [
-   201.25,
-   1125.54,
-   5.55
+   178.27,
+   1166.1,
+   8.81
   ],
   "ypr": [
-   100.466,
-   -4.265,
+   106.125,
+   -8.327,
    0.0
   ],
   "fov": [
-   81.643,
+   86.863,
    null
   ],
   "size": [
@@ -6424,6 +6424,6 @@
   "source": "Trailer 3 (Extended Look) \u2014 Rialto Causeway with Raul (1) (gameplay (HUD, minimap) sur le Rialto Causeway vers l ouest: peage a arcades (toit de tuiles), tours de Downtown/Edgewater derriere)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "SOLVE 2026-10-04 V2: depart = reglage aux sliders d Alexandre (hfov 75, yaw -3.3, pitch -1.8); contraintes: azimut de 5 tours (The Grand, Quantum S/N, Marriott NE, 1800 Club: 1-14 px en u), horizon de l eau a gauche (v 915), base du peage V16 3217 (v 985). Resultat hfov 81.6, tangage -4.3. Les sommets des tours tombent 27-74 px SOUS l image: LMs de ce secteur probablement trop bas de 10-15 m (2-5 cams) ou tour plus haute en jeu. Provisoire."
+  "notes": "SOLVE 2026-10-04 V3: camera SUR le trajet T3/143 de la V16 (y = 1155 + 0.29 (x-140)), 58 m a l est du peage V16 3217; point de fuite de la route (1976,770) = horizon; peage (bords du toit u 1301/2251, base v 985) a <1 px; azimuts de 5 tours a 12-64 px; hauteur cam 5.2 m (chase-cam). Sommets des tours ~40-50 px AU-DESSUS de l image: hauteurs LM/mesh a revoir dans ce secteur."
  }
 }
