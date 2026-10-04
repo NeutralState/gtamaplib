@@ -146,7 +146,7 @@ def rialto_toll():
 
 
 def build():
-    out = {}; out.update(marine_stadium()); out.update(vcia_tower()); out.update(schlott()); out.update(rialto_toll()); return out
+    out = {}; out.update(marine_stadium()); out.update(vcia_tower()); out.update(schlott()); return out   # rialto_toll(): en attente d'une pose fiable de 'Rialto Causeway with Raul (1)' (Alexandre)
 
 
 if __name__ == '__main__':
