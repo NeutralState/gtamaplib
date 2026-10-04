@@ -6404,17 +6404,17 @@
   "id": "T3/10",
   "player": null,
   "xyz": [
-   178.27,
-   1166.1,
-   8.81
+   215.6,
+   1176.92,
+   7.73
   ],
   "ypr": [
-   106.125,
-   -8.327,
+   105.002,
+   -4.805,
    0.0
   ],
   "fov": [
-   86.863,
+   76.911,
    null
   ],
   "size": [
@@ -6424,6 +6424,6 @@
   "source": "Trailer 3 (Extended Look) \u2014 Rialto Causeway with Raul (1) (gameplay (HUD, minimap) sur le Rialto Causeway vers l ouest: peage a arcades (toit de tuiles), tours de Downtown/Edgewater derriere)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "SOLVE 2026-10-04 V3: camera SUR le trajet T3/143 de la V16 (y = 1155 + 0.29 (x-140)), 58 m a l est du peage V16 3217; point de fuite de la route (1976,770) = horizon; peage (bords du toit u 1301/2251, base v 985) a <1 px; azimuts de 5 tours a 12-64 px; hauteur cam 5.2 m (chase-cam). Sommets des tours ~40-50 px AU-DESSUS de l image: hauteurs LM/mesh a revoir dans ce secteur."
+  "notes": "SOLVE 2026-10-04 V4: tours identifiees par rayons sur la V16 (T1 Marquis, T2 Marriott, T3 Opera cachee derriere The Grand, T4 The Grand (dome), T5 1800 Club, T6 Quantum S, T7 Quantum N); camera SUR le trajet T3/143, 95 m a l est du peage, 4.2 m au-dessus de la route; bords des meshes a 1-40 px (Marquis 58), sommets LM 4-7 px, peage (V16 3217, largeur 35.7 m) a ~5 px."
  }
 }
