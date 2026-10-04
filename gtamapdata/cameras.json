@@ -6378,27 +6378,27 @@
   "id": "T3/9",
   "player": null,
   "xyz": [
-   1560.0,
-   330.0,
-   135.0
+   19.0,
+   -870.0,
+   195.0
   ],
   "ypr": [
-   90.0,
+   114.0,
    -22.0,
    0.0
   ],
   "fov": [
-   60.0,
+   62.0,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Trailer 3 (Extended Look) \u2014 Rooftop Pool (piscine sur le toit d une tour en terrasses courbes; a droite la tour ronde en construction (meme chantier que Character Switch (B)), au fond la marina, un pont et Downtown)",
+  "source": "Trailer 3 (Extended Look) \u2014 Rooftop Pool (piscine sur le toit d une tour en terrasses courbes; a droite la tour ronde en construction = Asia Brickell Key, au fond la marina et le pont de Brickell Key, Tequesta (Brickell))",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "POSITION APPROX 2026-10-03: pose DEVINEE (tour voisine du chantier rond V16 3256, regard vers l ouest); a confirmer par clics"
+  "notes": "POSE V1 2026-10-04 PROVISOIRE: tour de la piscine = Pegassi Towers (Brickell Key), repere communautaire T3/239 sur la V16 (26.7,-887.3; cone 218-280 deg -> hfov ~62); tour en construction a droite = Asia Brickell Key (Alexandre); pitch -22 lu sur la marina au sud du pont de Brickell Key; position decalee ~20 m au NO du repere pour concilier Asia (bord gauche u~1340/1920) et la marina; residu ~100 px sur le pont. z 195 ESTIME (au-dessus du dernier plateau d Asia 187)."
  },
  "Rialto Causeway with Raul (1)": {
   "id": "T3/10",
