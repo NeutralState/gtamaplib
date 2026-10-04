@@ -6404,17 +6404,17 @@
   "id": "T3/10",
   "player": null,
   "xyz": [
-   80.0,
-   1075.0,
-   3.0
+   243.86,
+   1190.26,
+   6.99
   ],
   "ypr": [
-   90.0,
-   2.0,
-   0.0
+   109.02,
+   -3.245,
+   0.788
   ],
   "fov": [
-   60.0,
+   60.612,
    null
   ],
   "size": [
@@ -6424,6 +6424,6 @@
   "source": "Trailer 3 (Extended Look) \u2014 Rialto Causeway with Raul (1) (gameplay (HUD, minimap) sur le Rialto Causeway vers l ouest: peage a arcades (toit de tuiles), tours de Downtown/Edgewater derriere)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "POSITION APPROX 2026-10-03: pose DEVINEE (approche est du peage du Rialto Causeway, regard vers l ouest); a confirmer par clics"
+  "notes": "SOLVE 2026-10-04 (sans clics): peage du Rialto = V16 3217 (21.5 x 36 m, ile Biscayne, x~124); bords du toit u 1301/2251 + base des arches v 981 + silhouettes des tours sur le ciel (IoU 0.45: Marriott, Opera Tower, 1800 Club alignes); camera sur la route a ~120 m a l est du peage. Provisoire: profondeur le long de la route peu contrainte."
  }
 }

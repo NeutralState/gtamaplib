@@ -114,8 +114,39 @@ def schlott():
                     'conteneurs ESTIMES. Voir tools/gen_rlx_requests.py'}}
 
 
+def rialto_toll():
+    """Peage du Rialto Causeway (ile Biscayne, V16 3217): arcade a 4 arches et toit de tuiles en croupe, lus dans
+    'Rialto Causeway with Raul (1)' (pose calee sans clics): avant-toit 9.2 m et faitage 10.6 m MESURES (bords du toit, faitage, base), arcade sur la
+    face est de l'emprise (largeur 36.2 m = V16); arches (naissance 4.3 m, cle 7.0 m) aux proportions de l'image; ilots de cabines
+    sous chaque pile (emprise V16, 1.2 m). """
+    E = []; L = lambda a, b: E.append([r2(a), r2(b)])
+    F = {f['id']: f for f in json.load(open(os.path.join(ROOT, 'gtamapdata', 'v16_footprints.json')))['polygons']}
+    O = np.array(F[3217]['ring']); x0, y0 = O.min(0); x1, y1 = O.max(0); g = RR.ground(*O.mean(0))
+    xb = x1; xa = x1 - 4.0; xc = (xa + xb) / 2     # arcade (4 m) sur la face EST de l'emprise (dx +10.9 m mesure)
+    ym = (y0 + y1) / 2 + 3.1; piers = np.linspace(ym - 13.6, ym + 13.6, 5)   # 5 piles sur 27.2 m, centrees 3.1 m au N (lues)
+    for y in piers:                                             # piles
+        for x in (xa, xb):
+            L([x, y - 0.8, g], [x, y - 0.8, g + 9.2]); L([x, y + 0.8, g], [x, y + 0.8, g + 9.2])
+        for z in (g, g + 4.3): ringz(E, [[xa, y - 0.8], [xb, y - 0.8], [xb, y + 0.8], [xa, y + 0.8]], z)
+    for ya, yb in zip(piers[:-1], piers[1:]):                   # arches (demi-cercles sur les deux faces)
+        a0, a1 = ya + 0.8, yb - 0.8; yc = (a0 + a1) / 2; rr = (a1 - a0) / 2
+        for x in (xa, xb):
+            pts = [[x, yc - rr * np.cos(t), g + 4.3 + (7.0 - 4.3) * np.sin(t)] for t in np.linspace(0, np.pi, 9)]
+            for p, q in zip(pts[:-1], pts[1:]): L(p, q)
+    for z in (g + 7.7, g + 9.2): ringz(E, [[xa, piers[0] - 0.8], [xb, piers[0] - 0.8], [xb, piers[-1] + 0.8], [xa, piers[-1] + 0.8]], z)      # entablement / attique
+    ex = 1.2; ra, rb = piers[0] - 1.8, piers[-1] + 1.8; R = [[xa - ex, ra], [xb + ex, ra], [xb + ex, rb], [xa - ex, rb]]
+    ringz(E, R, g + 9.2)
+    for p in R: L([*p, g + 9.2], [xc, min(max(p[1], ra + 3.0), rb - 3.0), g + 10.6])          # toit en croupe
+    L([xc, ra + 3.0, g + 10.6], [xc, rb - 3.0, g + 10.6])
+    for y in piers[1:-1]:                                       # ilots de cabines le long des voies
+        ringz(E, [[x0, y - 0.9], [x1, y - 0.9], [x1, y + 0.9], [x0, y + 0.9]], g + 1.2)
+    return {'Rialto Causeway Toll Plaza': {'color': '#fdba74', 'world_edges': E, '_credit': 'Alexandre Leblanc (V16) + Claude Opus 5.5',
+            'note': 'TOLL-V1 2026-10-04: emprise V16 3217; arcade 4 arches sur la face est, toit de tuiles en croupe 9.2/10.6 m MESURES, arches LUES dans Rialto Causeway with Raul (1) '
+                    '(pose calee sans clics, ~+-1 m). Voir tools/gen_rlx_requests.py'}}
+
+
 def build():
-    out = {}; out.update(marine_stadium()); out.update(vcia_tower()); out.update(schlott()); return out
+    out = {}; out.update(marine_stadium()); out.update(vcia_tower()); out.update(schlott()); out.update(rialto_toll()); return out
 
 
 if __name__ == '__main__':
