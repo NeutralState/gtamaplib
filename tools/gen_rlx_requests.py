@@ -115,38 +115,45 @@ def schlott():
 
 
 def rialto_toll():
-    """Peage du Rialto Causeway (ile Biscayne, V16 3217): arcade a 4 arches et toit de tuiles en croupe, lus dans
-    'Rialto Causeway with Raul (1)' (pose calee sans clics): avant-toit 9.2 m et faitage 10.6 m MESURES (bords du toit, faitage, base), arcade sur la
-    face est de l'emprise (largeur 36.2 m = V16); arches (naissance 4.3 m, cle 7.0 m) aux proportions de l'image; ilots de cabines
-    sous chaque pile (emprise V16, 1.2 m). """
+    """Peage du Rialto Causeway (ile Biscayne, V16 3217), MESURE dans 'Rialto Causeway with Raul (1)' (pose V4, sur le trajet T3/143):
+    arcade de 4 arches sur la face est de l'emprise (face a +4.5 m du centre V16 le long de la route, epaisseur 4 m, decalee 3.3 m au N),
+    largeur du toit 29.9 m, avant-toit 9.3 m, faitage 11.0 m, arches: naissance 4.3 m, cle 7.0 m (bords du toit, faitage, base, arches lus).
+    Axes = rectangle oriente V16 3217 (grand cote perpendiculaire a la route)."""
     E = []; L = lambda a, b: E.append([r2(a), r2(b)])
-    F = {f['id']: f for f in json.load(open(os.path.join(ROOT, 'gtamapdata', 'v16_footprints.json')))['polygons']}
-    O = np.array(F[3217]['ring']); x0, y0 = O.min(0); x1, y1 = O.max(0); g = RR.ground(*O.mean(0))
-    xb = x1; xa = x1 - 4.0; xc = (xa + xb) / 2     # arcade (4 m) sur la face EST de l'emprise (dx +10.9 m mesure)
-    ym = (y0 + y1) / 2 + 3.1; piers = np.linspace(ym - 13.6, ym + 13.6, 5)   # 5 piles sur 27.2 m, centrees 3.1 m au N (lues)
-    for y in piers:                                             # piles
-        for x in (xa, xb):
-            L([x, y - 0.8, g], [x, y - 0.8, g + 9.2]); L([x, y + 0.8, g], [x, y + 0.8, g + 9.2])
-        for z in (g, g + 4.3): ringz(E, [[xa, y - 0.8], [xb, y - 0.8], [xb, y + 0.8], [xa, y + 0.8]], z)
-    for ya, yb in zip(piers[:-1], piers[1:]):                   # arches (demi-cercles sur les deux faces)
-        a0, a1 = ya + 0.8, yb - 0.8; yc = (a0 + a1) / 2; rr = (a1 - a0) / 2
-        for x in (xa, xb):
-            pts = [[x, yc - rr * np.cos(t), g + 4.3 + (7.0 - 4.3) * np.sin(t)] for t in np.linspace(0, np.pi, 9)]
-            for p, q in zip(pts[:-1], pts[1:]): L(p, q)
-    for z in (g + 7.7, g + 9.2): ringz(E, [[xa, piers[0] - 0.8], [xb, piers[0] - 0.8], [xb, piers[-1] + 0.8], [xa, piers[-1] + 0.8]], z)      # entablement / attique
-    ex = 1.2; ra, rb = piers[0] - 1.8, piers[-1] + 1.8; R = [[xa - ex, ra], [xb + ex, ra], [xb + ex, rb], [xa - ex, rb]]
-    ringz(E, R, g + 9.2)
-    for p in R: L([*p, g + 9.2], [xc, min(max(p[1], ra + 3.0), rb - 3.0), g + 10.6])          # toit en croupe
-    L([xc, ra + 3.0, g + 10.6], [xc, rb - 3.0, g + 10.6])
-    for y in piers[1:-1]:                                       # ilots de cabines le long des voies
-        ringz(E, [[x0, y - 0.9], [x1, y - 0.9], [x1, y + 0.9], [x0, y + 0.9]], g + 1.2)
+    C = np.array([124.15, 1146.56]); D = np.array([0.956, 0.292]); N = np.array([0.29, -0.956]); g = RR.ground(*C)
+    BL = -3.3                                                           # arcade decalee de 3.3 m vers le nord (mesure)
+    P = lambda a, b, z: [*(C + D * a + N * (b + BL)), z]                # a: le long de la route (est +), b: le long de l'arcade
+    A0, A1 = 0.5, 4.5; HW = 29.9 / 2 - 1.2; Z_E, Z_R, Z_S, Z_K = 9.3, 11.0, 4.3, 7.0
+    piers = np.linspace(-HW, HW, 5); pw = 0.9
+    for b in piers:                                                     # piles
+        for a in (A0, A1):
+            for db in (-pw, pw): L(P(a, b + db, g), P(a, b + db, g + Z_E))
+        for z in (g, g + Z_S):
+            Q = [P(A0, b - pw, z), P(A1, b - pw, z), P(A1, b + pw, z), P(A0, b + pw, z)]
+            for k in range(4): L(Q[k], Q[(k + 1) % 4])
+    for b0, b1 in zip(piers[:-1], piers[1:]):                           # arches (demi-ellipses, deux faces)
+        c0, c1 = b0 + pw, b1 - pw; bc = (c0 + c1) / 2; rr = (c1 - c0) / 2
+        for a in (A0, A1):
+            pts = [P(a, bc - rr * np.cos(t), g + Z_S + (Z_K - Z_S) * np.sin(t)) for t in np.linspace(0, np.pi, 11)]
+            for pa, pb in zip(pts[:-1], pts[1:]): L(pa, pb)
+    for z in (g + Z_K + 0.6, g + Z_E):                                  # entablement
+        Q = [P(A0, -HW - pw, z), P(A1, -HW - pw, z), P(A1, HW + pw, z), P(A0, HW + pw, z)]
+        for k in range(4): L(Q[k], Q[(k + 1) % 4])
+    ox = 1.2; R = [P(A0 - ox, -HW - 1.2, g + Z_E), P(A1 + ox, -HW - 1.2, g + Z_E), P(A1 + ox, HW + 1.2, g + Z_E), P(A0 - ox, HW + 1.2, g + Z_E)]
+    for k in range(4): L(R[k], R[(k + 1) % 4])
+    am = (A0 + A1) / 2; r0, r1 = P(am, -HW + 1.5, g + Z_R), P(am, HW - 1.5, g + Z_R)   # toit en croupe
+    L(r0, r1)
+    for k, q in enumerate(R): L(q, r0 if k in (0, 1) else r1)
+    for b in piers[1:-1]:                                               # ilots de cabines sous l'arcade
+        Q = [P(-5.5, b - 0.9, g + 1.2), P(A1, b - 0.9, g + 1.2), P(A1, b + 0.9, g + 1.2), P(-5.5, b + 0.9, g + 1.2)]
+        for k in range(4): L(Q[k], Q[(k + 1) % 4])
     return {'Rialto Causeway Toll Plaza': {'color': '#fdba74', 'world_edges': E, '_credit': 'Alexandre Leblanc (V16) + Claude Opus 5.5',
-            'note': 'TOLL-V1 2026-10-04: emprise V16 3217; arcade 4 arches sur la face est, toit de tuiles en croupe 9.2/10.6 m MESURES, arches LUES dans Rialto Causeway with Raul (1) '
-                    '(pose calee sans clics, ~+-1 m). Voir tools/gen_rlx_requests.py'}}
+            'note': 'TOLL-V2 2026-10-04: orientation V16 3217; arcade 4 arches (face est), largeur 29.9 m, avant-toit 9.3 m, faitage 11.0 m, '
+                    'arches 4.3/7.0 m MESURES dans Rialto Causeway with Raul (1) (pose V4, residus <1 px). Voir tools/gen_rlx_requests.py'}}
 
 
 def build():
-    out = {}; out.update(marine_stadium()); out.update(vcia_tower()); out.update(schlott()); return out   # rialto_toll(): en attente d'une pose fiable de 'Rialto Causeway with Raul (1)' (Alexandre)
+    out = {}; out.update(marine_stadium()); out.update(vcia_tower()); out.update(schlott()); out.update(rialto_toll()); return out
 
 
 if __name__ == '__main__':
