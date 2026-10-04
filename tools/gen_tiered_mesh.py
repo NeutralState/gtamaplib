@@ -20,12 +20,12 @@ import v16_tiers as VT
 # sommet est chanfreine aux extremites (couronne de LED rouges): gradins ESTIMES a -6 m (anneau interieur) et -12 m
 # (anneau exterieur); la couronne ronde de la V16 (regions 9,10,12,13,14 = cercle) en tambour de +4 m (ESTIME).
 SPEC = {
-    'Jade Ocean Condos': {'poly': 3584, 'color': '#34d399', 'shift': (-13.0, -3.6), 'groups': [
+    'Jade Ocean Condos': {'poly': 3584, 'color': '#34d399', 'groups': [
         ([3, 7, 8, 11, 15, 16, 9, 10, 12, 13, 14], 202.9), ([1, 4, 6, 2, 17, 19, 20, 21], 196.9), ([0, 5, 18, 22], 190.9)],
         'drum': ([9, 10, 12, 13, 14], 4.0),
         'src': 'sommet LM 202.9 (2 LMs); gradins -6/-12 m et tambour +4 m ESTIMES d apres le chanfrein de la couronne vu dans Biplane Night. '
                'Largeur du fut verifiee dans Beach et Biplane Night (93 vs 90 px, 132 vs 130 px); DISCORDANCE: les deux vues placent la tour '
-               '13 m a l ouest / 4 m au sud du polygone V16 (residu 2 px) -> garde sur la V16, a arbitrer'},
+               '13 m a l ouest / 4 m au sud du polygone V16 (residu 2 px); sur la silhouette V16 (VB-WATER 2026-10-04, Alexandre)'},
     # 1500 Ocean Dr (V16 3335): tour courbe a bout arrondi (region 4) sur podium a facade a persiennes (region 1),
     # lame rose a bow-windows octogonaux (region 2), immeuble ouest (0) + tourelle hexagonale (3). Comme l'IRL.
     '1500 Ocean Dr': {'poly': 3335, 'color': '#f9a8d4', 'shift': (-25.0, 0.0), 'groups': [([4], 63.8), ([2], 62.3), ([1], 21.0), ([0], 34.0), ([3], 36.0)],
@@ -39,10 +39,12 @@ SPEC = {
     'Green Diamond': {'poly': 3576, 'color': '#4ade80', 'shift': (-22.5, -23.4), 'groups': [([2, 3, 4, 6], 126.0), ([0], 40.0), ([1], 40.0), ([5], 40.0), ([7], 14.0)], 'core_scale': ([2, 3, 4, 6], 1.35),
         'pyramid': ([2, 3, 4, 6], 14.0), 'src': 'tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 60 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (LM 145 = pointe); tour ~30 px a l est de la V16 dans cette vue (garde sur la V16), ailes basses 40 m ESTIMEES (Venetian Islands: fut etroit), verriere pyramidale +14 m (vue dans Biplane Night (Video) Last); podium (region 7) 14 m ESTIME'},
     # [EFFLUVIA 2026-10-02] relus dans Speaking with Brian at Effluvia (3): region 0 = PARCELLE (podium), pas la tour
-    'Icon at South Beach': {'poly': 3251, 'color': '#f472b6', 'shift': (-28.7, -0.5), 'wedge': [('Jason Duval 05 (Machine Gun)', 476, 553)], 'groups': [([1], 140.0), ([2], 113.4), ([0], 12.0)],
-        'src': 'lame courbe V16 (regions 1+2): partie haute 140 m (LM 142) et aile basse 113 m LUES dans Effluvia (3); podium 12 m ESTIME; decalage 28.7 m O (VB-SETBACK, lu); [JD05-LEFT 2026-10-03] etendue N-S (invisible depuis Effluvia) restreinte au secteur vu de profil dans Jason 05 (x 476-553: lame nord 11 m trop longue)'},
-    'Murano Grande': {'poly': 3233, 'color': '#fb923c', 'shift': (-28.7, -0.5), 'groups': [([1], 139.0), ([2], 133.0), ([4], 127.0), ([3], 12.0), ([0], 30.0)],
-        'src': 'tour courbe en 3 segments V16 (1,2,4): 139 (LM) puis gradins 133/127 ESTIMES; podium 12 et bloc 0 30 m ESTIMES'},
+    # [VB-WATER 2026-10-04, Alexandre] Icon, Murano Grande, Jade Ocean: decalage VB-SETBACK RETIRE (le decalage de ~29 m vers l'ouest
+    # mettait Icon/Murano dans la baie) -> remis sur les silhouettes V16 (« met sur les silhouettes v16 »); hauteurs inchangees.
+    'Icon at South Beach': {'poly': 3251, 'color': '#f472b6', 'groups': [([1], 140.0), ([2], 113.4), ([0], 12.0)],
+        'src': 'lame courbe V16 (regions 1+2): partie haute 140 m (LM 142) et aile basse 113 m LUES dans Effluvia (3); podium 12 m ESTIME; sur la silhouette V16 (VB-WATER 2026-10-04, Alexandre: le decalage 28.7 m O le mettait dans la baie)'},
+    'Murano Grande': {'poly': 3233, 'color': '#fb923c', 'groups': [([1], 139.0), ([2], 133.0), ([4], 127.0), ([3], 12.0), ([0], 30.0)],
+        'src': 'tour courbe en 3 segments V16 (1,2,4): 139 (LM) puis gradins 133/127 ESTIMES; podium 12 et bloc 0 30 m ESTIMES; sur la silhouette V16 (VB-WATER 2026-10-04: decalage retire, il le mettait dans la baie)'},
     'Tresor Tower': {'poly': 3573, 'color': '#c084fc', 'shift': (-25.2, -6.2), 'groups': [([3, 1], 120.0), ([2], 100.0), ([0], 12.0)],
         'src': 'fut rond + lame (regions 3,1) = LM 120; aile est 100 m et podium 12 m ESTIMES'},
     'Flamingo South Beach': {'poly': 3400, 'color': '#fda4af', 'groups': [([2], 111.0), ([0], 51.0), ([1], 52.0), ([3], 62.0)],
@@ -86,6 +88,30 @@ SPEC = {
 }
 
 
+_WATER = {}
+
+
+def _clip_land(ring, K=5.0):
+    from PIL import Image
+    Image.MAX_IMAGE_PIXELS = None
+    A = np.array(ring); x0, y0 = A.min(0) - 80; x1, y1 = A.max(0) + 80
+    key = (int(x0), int(y1))
+    V = np.asarray(Image.open(os.path.join(ROOT, 'maps', 'yanis,16svg.png')).crop((16991 + int(x0), 11008 - int(y1) - 1, 16991 + int(x1) + 1, 11008 - int(y0))).convert('RGB')).astype(int)
+    wat = ((V[..., 2] > V[..., 0] + 40) & (V[..., 2] > 120)).astype(np.uint8)
+    wat = cv2.morphologyEx(wat, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (11, 11)))   # avale les pontons/quais fins
+    n, lab, stt, _ = cv2.connectedComponentsWithStats(wat)                                                  # piscines (bleu V16) ignorees: seule l'eau > 1500 m2
+    wat = np.isin(lab, [i for i in range(1, n) if stt[i, cv2.CC_STAT_AREA] > 1500]).astype(np.uint8)
+    wat = cv2.resize(wat, (wat.shape[1] * int(K), wat.shape[0] * int(K)), interpolation=cv2.INTER_NEAREST)
+    x0, y1 = int(x0), int(y1) + 1
+    m = np.zeros(wat.shape, np.uint8)
+    cv2.fillPoly(m, [np.array([[(x - x0) * K, (y1 - y) * K] for x, y in ring], np.int32)], 1)
+    m[wat > 0] = 0
+    cs, _ = cv2.findContours(m, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+    if not cs or cv2.contourArea(max(cs, key=cv2.contourArea)) < 4 * K * K: return None
+    c = cv2.approxPolyDP(max(cs, key=cv2.contourArea), 0.4 * K, True).reshape(-1, 2)
+    return [[x0 + px / K, y1 - py / K] for px, py in c]
+
+
 def union_ring(regs):
     A = np.vstack([np.array(r['ring']) for r in regs]); x0, y0 = A.min(0) - 2; x1, y1 = A.max(0) + 2; K = 5.0
     m = np.zeros((int((y1 - y0) * K) + 1, int((x1 - x0) * K) + 1), np.uint8)
@@ -103,7 +129,8 @@ def build(names=None):
         if names and name not in names: continue
         R = {r['id']: r for r in VT.regions(S['poly'])}; E = []
         if S.get('shift'):   # [VB-SETBACK 2026-10-01] V16 Vice Beach = parcelle (terrasse/piscine cote plage): tour recalee sur les images
-            sh = np.array(S['shift']); R = {i: dict(r, ring=[list(np.array(p) + sh) for p in r['ring']], centroid=list(np.array(r['centroid']) + sh)) for i, r in R.items()}
+            sh = np.array(S['shift']); ids = S.get('shift_ids', list(R))   # [VB-WATER 2026-10-04] seules les regions de la TOUR sont decalees (podium = parcelle V16)
+            R = {i: (dict(r, ring=[list(np.array(p) + sh) for p in r['ring']], centroid=list(np.array(r['centroid']) + sh)) if i in ids else r) for i, r in R.items()}
         if S.get('wedge'):    # restreindre les regions au(x) secteur(s) angulaire(s) vu(s) dans des cams (tour plus etroite que la parcelle)
             import common
             W = S['wedge'] if isinstance(S['wedge'], list) else [S['wedge']]
@@ -133,6 +160,9 @@ def build(names=None):
                 return [[x0 + px / K, y1 - py / K] for px, py in c]
             R[nid] = dict(R[rid], id=nid, ring=vec(m * side)); R[rid] = dict(R[rid], ring=vec(m * ~side))
             for i in (rid, nid): R[i]['centroid'] = list(np.mean(R[i]['ring'], 0))
+        if S.get('shift'):    # [VB-WATER 2026-10-04] jamais de batiment dans l'eau: regions coupees au trait de cote V16 (= leak ici)
+            R = {i: dict(r, ring=_clip_land(r['ring'])) for i, r in R.items()}
+            R = {i: dict(r, centroid=list(np.mean(r['ring'], 0))) for i, r in R.items() if r['ring']}
         if S.get('core_scale'):
             ids, sc = S['core_scale']; cc = np.mean(np.vstack([np.array(R[i]['ring']) for i in ids]), 0)
             for i in ids: R[i] = dict(R[i], ring=[list(cc + (np.array(p) - cc) * sc) for p in R[i]['ring']])
@@ -153,10 +183,10 @@ def build(names=None):
             if z > zmin:
                 for p in rr: seg([*p, zmin], [*p, z + 1.2])
         if S.get('pyramid'):
-            ids, ah = S['pyramid']; zb = max(H[i] for i in ids); Up = union_ring([R[i] for i in ids]); ap = np.mean(Up, 0)
+            ids, ah = S['pyramid']; ids = [i for i in ids if i in R]; zb = max(H[i] for i in ids); Up = union_ring([R[i] for i in ids]); ap = np.mean(Up, 0)
             for p in Up: seg([*p, zb], [*ap, zb + ah])
         if S.get('drum'):
-            ids, dh = S['drum']; ztop = max(H[i] for i in ids)
+            ids, dh = S['drum']; ids = [i for i in ids if i in R]; ztop = max(H[i] for i in ids)
             Ud = union_ring([R[i] for i in ids]); ring(Ud, ztop + dh)
             for p in Ud: seg([*p, ztop], [*p, ztop + dh])
         out[name] = {'color': S['color'], 'world_edges': E, '_credit': 'Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5',
