@@ -140,7 +140,7 @@
     <span class="lchip on" id="ly-meshes" title="Procedural structure meshes">Structures</span>
     <span class="lchip on" id="ly-solid" title="Solid buildings: sun-lit volumes, cast shadows, lit windows at night">Solid buildings</span>
     <span class="lchip on" id="ly-roads" title="3D roads: the whole V16 road network as real geometry (asphalt, lane markings), viaducts and bridges at their measured heights with decks, guardrails and piers">3D roads</span>
-    <span class="lchip on" id="ly-fill" title="City fill: every V16 building footprint extruded + estimated infill of the empty V16 blocks (heights and infill ESTIMATED, visual only)">City fill</span>
+    <span class="lchip on" id="ly-fill" title="City fill: every V16 building footprint extruded (heights ESTIMATED, visual only)">City fill</span>
     <span class="lchip on" id="ly-refl" title="Water reflections: buildings, bridges and sky mirrored on the water (planar reflection, rippled by the waves, Fresnel)">Water reflections</span>
     <span class="lchip on" id="ly-traffic"title="Traffic: animated cars and trucks on the V16 road network (headlights and tail lights at night) — visual only">Traffic</span>
     <span class="lchip on" id="ly-palms"title="Vegetation: palm rows along the beach promenade, parks and streets, forests on the hills (placed from the V16 map + height map)">Trees &amp; palms</span>
@@ -2062,18 +2062,6 @@ if (meshVerts.length) {
     window.__ships = [];
     if (MS) MS.forEach((m, i) => { if (shipLike(m)) { window.__ships.push(m); return; } const c = MC && MC[mkey(m.o)];
       S['V16 building #' + (i + 1)] = { zmin: m.z, zmax: m.z + m.h, layers: [{ z0: m.z, z1: m.z + m.h, polys: [{ outer: m.o, holes: [] }] }], color: '#cfcfcf', _mass: 1, facade_color: c ? c.rgb : undefined }; });
-    // [INFILL-V1] densification ESTIMEE des ilots vides (tools/v16_infill.py): couleur tiree des couleurs MESUREES a < 400 m
-    let IF = null; try { const r = await fetch('/threejs/_v16_infill.json', { cache: 'no-store' }); if (r.ok) IF = await r.json(); } catch (e) {}
-    if (IF && MS) {
-      const meas = []; MS.forEach(m => { const c = MC && MC[mkey(m.o)]; if (c) { let x = 0, y = 0; for (const q of m.o) { x += q[0]; y += q[1]; } meas.push([x / m.o.length, y / m.o.length, c.rgb]); } });
-      IF.forEach((m, i) => {
-        let x = 0, y = 0; for (const q of m.o) { x += q[0]; y += q[1]; } x /= m.o.length; y /= m.o.length;
-        const nb = meas.filter(q => Math.abs(q[0] - x) < 400 && Math.abs(q[1] - y) < 400);
-        const pk = nb.length >= 3 ? nb[(m.k * 7 + i) % nb.length][2] : undefined;
-        const pick = pk ? pk.map(v => v * 0.6 + 0.62 * 0.4) : undefined;          // 40 % vers un neutre: estime, pas une mesure
-        S['Estimated infill #' + (i + 1)] = { zmin: m.z, zmax: m.z + m.h, layers: [{ z0: m.z, z1: m.z + m.h, polys: [{ outer: m.o, holes: [] }] }], color: '#cfcfcf', _mass: 1, facade_color: pick };
-      });
-    }
     let massStart = -1;
     const pos = [], nor = [], col = [], ids = [], sty = [], gls = [], bas = [], tops = [], prj = [], acc = [], nls = [], nlz = [];
     let curAcc = [0, 0, 0], curNl = [0, 0, 0, 0], curNlz = [0, 0];
