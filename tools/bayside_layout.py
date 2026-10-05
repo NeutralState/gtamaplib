@@ -54,17 +54,34 @@ def main():
     stage = max(rest, key=lambda t: area(t[1]))                               # la plus grande emprise compacte
     wedges = [t for t in rest if t[0] != stage[0]]
     sc = stage[1].mean(0); zg = float(min(t[2] for t in zone))
-    # gradins: rangees radiales autour du centre de la scene, cellule gardee si dans un coin V16
+    # gradins [BAYSIDE-V2, Alexandre: « l'amphitheatre devrait aller jusqu'a la demi-lune grise et pas etre aussi steep »]:
+    # secteur = etendue angulaire de la demi-lune (bande V16 958) vue depuis la scene; du bord des coins V16 jusqu'a 2 m
+    # devant le bord interieur de la demi-lune; rangees de 0.9 m (la pente est appliquee au rendu, douce)
+    A0 = arc[1]
+    tha = np.arctan2(A0[:, 1] - sc[1], A0[:, 0] - sc[0]); thm = math.atan2(np.mean(np.sin(tha)), np.mean(np.cos(tha)))
+    dd = np.angle(np.exp(1j * (tha - thm))); tlo, thi = dd.min(), dd.max()
+    def ray_hit(a):                                                            # distance du centre au bord de la demi-lune
+        ux, uy = math.cos(a), math.sin(a); best = None
+        for i in range(len(A0)):
+            (x1, y1), (x2, y2) = A0[i], A0[(i + 1) % len(A0)]
+            ex, ey = x2 - x1, y2 - y1; den = ux * ey - uy * ex
+            if abs(den) < 1e-9: continue
+            t = ((x1 - sc[0]) * ey - (y1 - sc[1]) * ex) / den; u = ((x1 - sc[0]) * uy - (y1 - sc[1]) * ux) / den
+            if t > 0 and 0 <= u <= 1 and (best is None or t < best): best = t
+        return best
     seats = []
     allr = [np.hypot(*(O - sc).T) for _, O, _ in wedges]
-    r0 = min(r.min() for r in allr); r1 = max(r.max() for r in allr)
-    k = 0; r = r0 + 0.45
-    while r < r1:
+    r0 = min(r.min() for r in allr)
+    allw = np.concatenate([O for _, O, _ in wedges]); dw = np.angle(np.exp(1j * (np.arctan2(allw[:, 1] - sc[1], allw[:, 0] - sc[0]) - thm)))
+    ulo, uhi = min(tlo, dw.min()), max(thi, dw.max())                        # union: secteur de la demi-lune + coins V16
+    k = 0; r = r0 + 0.45; rmax_all = max([(ray_hit(thm + t) or 0) for t in np.linspace(tlo, thi, 40)] + [max(r.max() for r in allr)])
+    while r < rmax_all:
         step = 0.95 / r
-        for th in np.arange(-math.pi, math.pi, step):
-            x, y = sc[0] + r * math.cos(th), sc[1] + r * math.sin(th)
-            if any(inpoly(x, y, O) for _, O, _ in wedges):
-                seats.append([round(x, 2), round(y, 2), round(th, 4), k])
+        for t in np.arange(ulo, uhi, step):
+            a = thm + t; x, y = sc[0] + r * math.cos(a), sc[1] + r * math.sin(a)
+            rh = ray_hit(a) if tlo <= t <= thi else None
+            if not ((rh is not None and r <= rh - 2.0) or any(inpoly(x, y, O) for _, O, _ in wedges)): continue
+            seats.append([round(x, 2), round(y, 2), round(a, 4), k])
         r += 0.9; k += 1
     # promenade: ligne mediane de la bande = anneau (rayon moyen) borne par les angles de la bande
     A = arc[1]

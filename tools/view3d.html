@@ -4109,7 +4109,7 @@ window.__camScreen = name => {
       const st = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), stdMat(0xb9b6ae, 0.85, 0.0, 0.6), B.seats.length);
       const bk = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), stdMat(0x2f62c8, 0.45, 0.1, 0.6), B.seats.length);
       B.seats.forEach(([x, y, th, k], i) => {
-        const h = 0.25 * (k + 1); q.setFromAxisAngle(Zax, th);                // gradins doux (~7 m au dernier rang)
+        const h = 0.09 * (k + 1) + 0.3; q.setFromAxisAngle(Zax, th);          // pente douce jusqu'a la demi-lune (Alexandre)
         m4.compose(new V3(x, y, B.seat_z + h / 2), q, sc3.set(0.9, 0.97, h)); st.setMatrixAt(i, m4);
         const bx = x + Math.cos(th) * 0.3, by = y + Math.sin(th) * 0.3;
         m4.compose(new V3(bx, by, B.seat_z + h + 0.28), q, sc3.set(0.12, 0.9, 0.5)); bk.setMatrixAt(i, m4);
@@ -4140,7 +4140,10 @@ window.__camScreen = name => {
     }
     // promenade couverte: voiles blanches en selle sur poteaux, le long de la bande courbe V16
     if (B.arc && B.arc.sails && B.arc.sails.length) {
-      const P2 = [], posts = [], wv = Math.max(4, Math.min(8, B.arc.width || 6)), z0 = (B.stage && B.stage.z) || 3;
+      // promenade haute: la bande V16 devient un deck a la hauteur du dernier rang (les gradins s'y raccordent)
+      const kmax = B.seats.reduce((m2, s0) => Math.max(m2, s0[3]), 0), zTop = B.seat_z + 0.09 * (kmax + 1) + 0.3;
+      { const dg = new THREE.ExtrudeGeometry(new THREE.Shape(B.arc.o.map(p => new THREE.Vector2(p[0], p[1]))), { depth: zTop - B.seat_z, bevelEnabled: false }); dg.translate(0, 0, B.seat_z); add(dg, stdMat(0xcfcbc2, 0.85, 0.0, 0.6)); }
+      const P2 = [], posts = [], wv = Math.max(4, Math.min(8, B.arc.width || 6)), z0 = zTop;
       for (const [x, y, a] of B.arc.sails) {
         const tx = -Math.sin(a), ty = Math.cos(a), rx = Math.cos(a), ry = Math.sin(a), L = 3.4, Wd = 3.2, N = 6;
         const pt = (s2, w) => [x + tx * s2 * L + rx * w * Wd, y + ty * s2 * L + ry * w * Wd, z0 + 3.4 + 1.1 * (w + 1) + 0.45 * (1 - s2 * s2)];   // panneau incline, leger creux (suite de voiles)
