@@ -5,7 +5,7 @@ Le bleu vif de la V16 est une convention de carte; l'onglet 3D doit montrer l'ea
 bleu-vert, hauts-fonds turquoise...). Pour chaque cam de jour (luminance moyenne >= 0.22, pose connue, segmentation
 SegFormer dispo): pixels d'eau (ADE20K water/sea/river/lake; pas les piscines), erodes de 3 px; rayon de chaque pixel
 (1 sur 4) intersecte avec z = 0 -> position monde. Gardes: rayon plongeant d'au moins 8 deg (moins de reflet du ciel,
-poids = sin(angle)), distance < 3 km, la heightmap dit eau (sol < 0.3 m). Couleur corrigee comme les facades (balance
+poids = sin(angle)), distance < max(3 km, 12 x altitude), la heightmap dit eau (sol < 0.3 m). Couleur corrigee comme les facades (balance
 monde gris + exposition ramenee a 0.42). Agregat par case de 150 m: mediane ponderee + nombre de cams.
 Sortie (couche visuelle, ignoree par git): tools/threejs/_water_colors.json {cell, cells:[[x, y, r, g, b, n_cams, w]], median}
 Usage: python3 tools/water_colors.py
@@ -53,7 +53,7 @@ def main():
         if sel.sum() < 30: continue
         xs, ys, d = xs[sel], ys[sel], d[sel]
         t = -o[2] / d[:, 2]; P = o[None, :] + t[:, None] * d
-        ok = t < 3000
+        ok = t < max(3000.0, 12.0 * o[2])                                # vues aeriennes: la portee suit l'altitude
         P, xs, ys, d = P[ok], xs[ok], ys[ok], d[ok]
         if len(P) < 30: continue
         g = HR.ground(P[:, 0], P[:, 1]); ok = g < 0.3

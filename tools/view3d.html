@@ -1992,7 +1992,11 @@ if (meshVerts.length) {
     // [MASSING-V1] remplissage urbain: emprises V16 extrudees (hauteurs ESTIMEES), ajoutees en dernier -> masquables par drawRange
     let MS = null; try { const r = await fetch('/threejs/_v16_massing.json', { cache: 'no-store' }); if (r.ok) MS = await r.json(); } catch (e) {}
     const nReal = Object.keys(S).length;
-    if (MS) MS.forEach((m, i) => { S['V16 building #' + (i + 1)] = { zmin: m.z, zmax: m.z + m.h, layers: [{ z0: m.z, z1: m.z + m.h, polys: [{ outer: m.o, holes: [] }] }], color: '#cfcfcf', _mass: 1 }; });
+    // [MASSING-COLOR-V1] couleur mesuree sur les frames (tools/massing_colors.py), cle = centroide arrondi au metre
+    let MC = null; try { const r = await fetch('/threejs/_v16_massing_colors.json', { cache: 'no-store' }); if (r.ok) MC = await r.json(); } catch (e) {}
+    const mkey = o => { let x = 0, y = 0; for (const q of o) { x += q[0]; y += q[1]; } return Math.round(x / o.length) + ',' + Math.round(y / o.length); };
+    if (MS) MS.forEach((m, i) => { const c = MC && MC[mkey(m.o)];
+      S['V16 building #' + (i + 1)] = { zmin: m.z, zmax: m.z + m.h, layers: [{ z0: m.z, z1: m.z + m.h, polys: [{ outer: m.o, holes: [] }] }], color: '#cfcfcf', _mass: 1, facade_color: c ? c.rgb : undefined }; });
     let massStart = -1;
     const pos = [], nor = [], col = [], ids = [], sty = [], gls = [], bas = [], tops = [], prj = [], acc = [], nls = [], nlz = [];
     let curAcc = [0, 0, 0], curNl = [0, 0, 0, 0], curNlz = [0, 0];

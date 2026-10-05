@@ -55,8 +55,8 @@ def prisms(so):
     return out
 
 
-def run(only=None):
-    S = MS.build(); C = json.load(open(CAMS))
+def run(only=None, S=None, min_px=300):
+    S = S or MS.build(); C = json.load(open(CAMS))
     names = [n for n, so in S.items() if so['layers'] and (not only or n == only)]
     cents = {n: np.mean([q for L in S[n]['layers'] for p in L['polys'] for q in p['outer']], axis=0) for n in names}
     faces = {n: prisms(S[n]) for n in names}
@@ -99,7 +99,7 @@ def run(only=None):
             m = (owner == idx)
             m = cv2.erode(m.astype(np.uint8), k).astype(bool) & bmask
             npx = int(m.sum())
-            if npx < 300: continue
+            if npx < min_px: continue
             acc[order[idx]].append((np.clip(np.median(img[m], axis=0) * wb, 0, 1), npx, cam))
     out = {}
     for n, L in acc.items():
