@@ -31,17 +31,26 @@ def strokes():
 
 
 def deck_grid():
-    """hauteur du dessus des tabliers (ponts/viaducs/bretelles) sur une grille de 4 m."""
+    """hauteur du TABLIER (ponts/viaducs/bretelles) sur une grille de 4 m.
+    [ROADS-V2] seulement les aretes quasi horizontales (pente < 8 %): les pylones et haubans (Sunshine Skyway...) sont
+    ignores; par case, le niveau le plus frequent (bins de 1 m) = le tablier, pas le max (sommet des pylones)."""
     M = json.load(open(os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')))
-    G = {}
+    Z = {}
     for n, m in M.items():
         if not any(w in n for w in DECK_WORDS): continue
         for a, b in m.get('world_edges') or []:
             a, b = np.array(a, float), np.array(b, float)
-            L = np.linalg.norm(b[:2] - a[:2]); k = max(1, int(L / 3))
+            L = np.linalg.norm(b[:2] - a[:2])
+            if L < 0.5 or abs(b[2] - a[2]) / L > 0.08: continue
+            k = max(1, int(L / 3))
             for t in np.linspace(0, 1, k + 1):
-                p = a + (b - a) * t; key = (int(p[0] // CELL), int(p[1] // CELL))
-                if p[2] > G.get(key, -1e9): G[key] = p[2]
+                p = a + (b - a) * t; Z.setdefault((int(p[0] // CELL), int(p[1] // CELL)), []).append(p[2])
+    G = {}
+    for key, v in Z.items():
+        v = np.array(v); bins = np.round(v)
+        u, c = np.unique(bins, return_counts=True); mode = u[c.argmax()]
+        near = v[np.abs(v - mode) <= 1.2]
+        G[key] = float(np.median(near)) + 0.9          # mediane du paquet (dessous/dessus/garde-corps) ~ dessous + 0.9 -> dessus
     return G
 
 
@@ -75,8 +84,21 @@ def main():
             if c in ('hwy', 'road', 'mark_w', 'mark_y'):
                 dz = deck_z(x, y)
                 if dz is not None and dz - 1.0 > g + 2.5: z = dz - 1.0 + 0.05; n_el += 1
-            P.append([round(float(x), 1), round(float(y), 1), round(z, 2)])
-        out[c].append({'w': float(s['width'] or 4), 'p': P})
+            P.append([round(float(x), 1), round(float(y), 1), round(z, 2), round(g, 2)])
+        # [ROADS-V2] profil lisse: mediane glissante (5) puis pente bornee a 8 % (pas de pics, rampes d'acces douces)
+        if len(P) >= 3:
+            Zs = np.array([q[2] for q in P]); G0 = np.array([q[3] for q in P])
+            el = Zs > G0 + 2.0
+            if el.any():
+                Zm = Zs.copy()
+                for i in range(len(Zs)):
+                    w = Zs[max(0, i - 2):i + 3]; Zm[i] = np.median(w)
+                d = np.r_[0, np.hypot(*np.diff(np.array([[q[0], q[1]] for q in P]), axis=0).T)]
+                for i in range(1, len(Zm)): Zm[i] = min(Zm[i], Zm[i - 1] + 0.08 * d[i])
+                for i in range(len(Zm) - 2, -1, -1): Zm[i] = min(Zm[i], Zm[i + 1] + 0.08 * d[i + 1])
+                Zm = np.maximum(Zm, G0 + 0.3)
+                for q, z in zip(P, Zm): q[2] = round(float(z), 2)
+        out[c].append({'w': float(s['width'] or 4), 'p': [q[:3] for q in P]})
     json.dump(out, open(OUT, 'w'), separators=(',', ':'))
     print({k: len(v) for k, v in out.items()}, 'points sur tablier:', n_el, '-> %s (%.0f ko)' % (OUT, os.path.getsize(OUT) / 1024))
 

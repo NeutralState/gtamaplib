@@ -1840,6 +1840,7 @@ if (meshVerts.length) {
     w.mseg.visible = !solid; w.mhalo.visible = !solid;
     if (bldWire) { bldWire.visible = solid; structWire.visible = solid; structHalo.visible = solid; }
     if (window.__deckWire) window.__deckWire.visible = solid && !window.__roads3dOn;
+    if (window.__cableWire) window.__cableWire.visible = solid;
   };
   const applySolid = () => {
     chip.classList.toggle('on', solidOn);
@@ -2111,13 +2112,19 @@ if (meshVerts.length) {
       fc.addEventListener('click', () => setF(!fc.classList.contains('on')));
     }
     {
-      const bv = [], bc = [], sv = [], sc = [], dv = [], dc = [], cc2 = new THREE.Color();
+      const bv = [], bc = [], sv = [], sc = [], dv = [], dc = [], kv = [], kc = [], cc2 = new THREE.Color(), YEL = new THREE.Color(0xf5c518);
       const DECK = /Bridge|Viaduct|Ramp|Interchange|Causeway|Overpass/;
       for (const [name, m] of Object.entries(data.meshes || {})) {
         const so = S[name], isSolid = !!(so && (so.layers.length || (so.ff && so.ff.length)));
         cc2.set(m.color || 0x67e8f9);
         const V = isSolid ? bv : DECK.test(name) ? dv : sv, C = isSolid ? bc : DECK.test(name) ? dc : sc;
-        for (const e of (m.world_edges || m)) { V.push(...e[0], ...e[1]); C.push(cc2.r, cc2.g, cc2.b, cc2.r, cc2.g, cc2.b); }
+        const sky = /Bocamar/.test(name);                                      // Bocamar = Sunshine Skyway IRL: haubans jaunes
+        for (const e of (m.world_edges || m)) {
+          // [ROADS-V2] ponts: les aretes RAIDES (pylones, haubans) restent toujours visibles; le reste (tablier) est remplace par la route 3D
+          const L = Math.hypot(e[1][0] - e[0][0], e[1][1] - e[0][1]), steep = DECK.test(name) && Math.abs(e[1][2] - e[0][2]) > 0.15 * Math.max(L, 0.01) && Math.max(e[0][2], e[1][2]) > 6;
+          const cc3 = sky && steep ? YEL : cc2;
+          (steep ? kv : V).push(...e[0], ...e[1]); (steep ? kc : C).push(cc3.r, cc3.g, cc3.b, cc3.r, cc3.g, cc3.b);
+        }
       }
       const mk = (V, C, mat) => { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(V, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(C, 3)); const l = new THREE.LineSegments(g, mat); l.visible = false; layers.meshes.add(l); return l; };
       bldWire = mk(bv, bc, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.22, depthTest: true, depthWrite: false }));
@@ -2128,6 +2135,8 @@ if (meshVerts.length) {
       // [ROADS-V1] fil de fer des ponts/viaducs/bretelles a part: masque quand les routes 3D les remplacent
       const deckWire = mk(dv, dc, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 1.0, depthTest: true, depthWrite: false }));
       deckWire.renderOrder = 12; window.__deckWire = deckWire;
+      const cableWire = mk(kv, kc, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 1.0, depthTest: true, depthWrite: false }));
+      cableWire.renderOrder = 12; window.__cableWire = cableWire;
       const _sw = styleWire;
     }
     // [SOLIDS-V1] modes de couleur: beton (teinte legere du mesh) / hauteur du toit (meme rampe que la Map) / couleur du mesh
