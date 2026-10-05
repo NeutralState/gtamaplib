@@ -3265,8 +3265,8 @@ window.__camScreen = name => {
     const push = (a, b, c, n, col) => { P.push(...a, ...b, ...c); for (let q = 0; q < 3; q++) { N.push(...n); C.push(...col); } };
     const quad = (a, b, c, d, n, col) => { push(a, b, c, n, col); push(a, c, d, n, col); };
     const lin = v => Math.pow(v, 2.2);
-    const ASPH = { road: [0.25, 0.25, 0.26].map(lin), hwy: [0.31, 0.31, 0.32].map(lin), small: [0.34, 0.34, 0.35].map(lin) };   // gris asphalte (sRGB)
-    const CONC = [0.62, 0.61, 0.58].map(lin), CONC2 = [0.48, 0.47, 0.45].map(lin), WHITE = [0.92, 0.92, 0.9].map(lin), YEL = [0.95, 0.78, 0.22].map(lin);
+    const ASPH = { road: [0.25, 0.25, 0.26].map(lin), hwy: [0.38, 0.38, 0.39].map(lin), small: [0.34, 0.34, 0.35].map(lin) };   // gris asphalte (sRGB)
+    const CONC = [0.80, 0.79, 0.76].map(lin), CONC2 = [0.72, 0.71, 0.68].map(lin), WHITE = [0.92, 0.92, 0.9].map(lin), YEL = [0.95, 0.78, 0.22].map(lin);
     const gz = (x, y) => { const z = terrainZAt(x, y); return z === null ? 0 : z; };
     const UP = [0, 0, 1];
     const ribbon = (pts, w, col, lift, deckable, dash) => {
