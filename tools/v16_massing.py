@@ -39,6 +39,16 @@ def inpoly(x, y, O):
 def main():
     F = json.load(open(FOOT))['polygons']; S = json.load(open(SOLIDS))
     solid_polys = [p['outer'] for so in S.values() for L in so['layers'][:1] for p in L['polys']]
+    # + l'enveloppe au sol de TOUS les autres meshes (grande roue, stade, ponts...): pas de boite sous une structure modelisee
+    M = json.load(open(os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')))
+    for n, m in M.items():
+        E = np.asarray(m.get('world_edges') or [], float)
+        if E.ndim != 3 or len(E) < 3: continue
+        P = E[..., :2].reshape(-1, 2)
+        ext = P.max(0) - P.min(0)
+        if max(ext) > 600 or max(ext) < 3: continue           # ponts/viaducs tres longs: leurs bboxes avaleraient des quartiers
+        hull = cv2.convexHull(P.astype(np.float32)).reshape(-1, 2)
+        if len(hull) >= 3: solid_polys.append([[float(x), float(y)] for x, y in hull])
     sbb = [(min(q[0] for q in O), min(q[1] for q in O), max(q[0] for q in O), max(q[1] for q in O)) for O in solid_polys]
     out = []
     for i, p in enumerate(F):

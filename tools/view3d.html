@@ -140,7 +140,7 @@
     <span class="lchip on" id="ly-meshes" title="Procedural structure meshes">Structures</span>
     <span class="lchip on" id="ly-solid" title="Solid buildings: sun-lit volumes, cast shadows, lit windows at night">Solid buildings</span>
     <span class="lchip on" id="ly-fill" title="City fill: every V16 building footprint extruded (heights ESTIMATED, visual only)">City fill</span>
-    <span class="lchip on" id="ly-palms" title="Palm trees on beaches, in parks and along streets (placed from the V16 map)">Palm trees</span>
+    <span class="lchip on" id="ly-palms" title="Vegetation: palm rows along the beach promenade, parks and streets, forests on the hills (placed from the V16 map + height map)">Trees &amp; palms</span>
     <span class="lchip on" id="ly-cine" title="Cinematic rendering: ambient occlusion, bloom, color grading, vignette, MSAA">Cinematic rendering</span>
     <span class="lchip" id="ly-proj" title="Real GTA VI textures: the calibrated game frames are projected onto the building facades they see">Game textures</span>
     <span class="lchip on" id="ly-terrain" title="Real terrain (leak L16 height map)">Terrain</span>
@@ -1084,6 +1084,24 @@ const data = await (await fetch('/api/scene3d')).json();
           vec3 base;
           if (uUseDrape > 0.5) {
             base = texture2D(uDrape, vUv).rgb;
+            // [GROUND-V1 2026-10-05] la carte devient un sol: chaque couleur V16 -> un vrai materiau (texture lineaire)
+            {
+              vec3 c = base;
+              float nz2 = vnoise(vPos.xy * 0.35) * 0.6 + vnoise(vPos.xy * 1.7) * 0.4;
+              float wS = max(1.0 - smoothstep(0.05, 0.13, distance(c, vec3(0.905, 0.776, 0.227))),   // sable 244,228,131
+                             smoothstep(0.28, 0.40, min(c.r, c.g) - c.b) * step(0.55, c.r));         // + bande jaune du rivage
+              float wG = 1.0 - smoothstep(0.05, 0.13, distance(c, vec3(0.533, 0.693, 0.227)));   // gazon 193,217,131
+              float wP = 1.0 - smoothstep(0.05, 0.12, distance(c, vec3(0.309, 0.527, 0.175)));   // parc boise 151,192,116
+              float wU = 1.0 - smoothstep(0.03, 0.08, distance(c, vec3(0.693)));                 // ilots urbains 217
+              float wB = 1.0 - smoothstep(0.02, 0.05, distance(c, vec3(0.434)));                 // emprises de batiments 176
+              float wR = 1.0 - smoothstep(0.02, 0.05, min(distance(c, vec3(0.087)), distance(c, vec3(0.168))));   // chaussees 83 / 114
+              base = mix(base, vec3(0.80, 0.72, 0.54) * (0.94 + 0.10 * nz2), wS);    // sable clair de Miami Beach
+              base = mix(base, vec3(0.19, 0.33, 0.10) * (0.85 + 0.30 * nz2), wG);    // gazon
+              base = mix(base, vec3(0.11, 0.24, 0.07) * (0.80 + 0.35 * nz2), wP);    // parc arbore
+              base = mix(base, vec3(0.56, 0.55, 0.52) * (0.95 + 0.08 * nz2), wU);    // trottoirs / dalles
+              base = mix(base, vec3(0.40, 0.40, 0.41), wB);                          // dalles des emprises
+              base = mix(base, vec3(0.045, 0.046, 0.050) * (0.9 + 0.2 * nz2), wR);   // asphalte
+            }
             // [MAP-COLORS-V2 2026-09-26] la map telle quelle: plus de remplacement de l'eau par le fond marin (c'etait
             // le halo sombre des rivages), la mer 3D ne se dessine que la ou la map est bleue (cf. shader mer)
           } else if (false) {
@@ -1383,6 +1401,9 @@ const data = await (await fetch('/api/scene3d')).json();
           float wdepth = mix(63.75, texture2D(uDepth, clamp(duv, 0.0, 1.0)).r * 63.75, inb);
           float shal = (1.0 - smoothstep(0.0, 12.0, wdepth)) * (1.0 - farBlend);
           col = mix(col, mix(srgb(vec3(0.30, 0.66, 0.62)), mapBlue * 1.08, uMapSea), shal * 0.40);
+          // [GROUND-V1] eau de Miami: turquoise sur les hauts-fonds, bleu plus profond au large (mode carte)
+          col = mix(col, srgb(vec3(0.36, 0.80, 0.78)), (1.0 - smoothstep(0.4, 4.5, wdepth)) * 0.55 * uMapSea * (1.0 - uNight) * (1.0 - farBlend));
+          col = mix(col, col * vec3(0.55, 0.70, 0.85), smoothstep(6.0, 25.0, wdepth) * 0.5 * uMapSea);
           float band = 1.0 - smoothstep(0.10, 1.3, wdepth);
           float fo = vn2(p * 0.06 + vec2(0.0, t * 0.18)) * 0.6
                    + vn2(p * 0.21 - vec2(t * 0.12, 0.0)) * 0.4;
@@ -3182,21 +3203,78 @@ window.__camScreen = name => {
     const isWater = (c) => c[2] > c[0] + 40;
     const isRoad = (c) => near(...c, 83, 83, 83, 12) || near(...c, 114, 114, 114, 10);
     const rnd = (k) => { const x = Math.sin(k * 12.9898) * 43758.5453; return x - Math.floor(x); };
+    // [PALMS-V2] palmiers « Miami Beach »: jamais sur le sable ouvert; rangee au bord INTERIEUR de la plage (promenade),
+    // bosquets sur les pelouses en bord de plage (Lummus Park), epars dans les parcs, alignements le long des rues
     const pts = [];
-    for (let j = 1; j < h - 1 && pts.length < 40000; j++) for (let i = 1; i < w - 1 && pts.length < 40000; i++) {
+    const isSand = (c) => near(...c, 244, 228, 131, 18);
+    const isGrass = (c) => near(...c, 193, 217, 131, 16) || near(...c, 151, 192, 116, 16);
+    const look = (i, j, di, dj) => at(Math.min(w - 1, Math.max(0, i + di)), Math.min(h - 1, Math.max(0, j + dj)));
+    for (let j = 2; j < h - 2 && pts.length < 30000; j++) for (let i = 2; i < w - 2 && pts.length < 30000; i++) {
       const c = at(i, j), seed = (r0 + j) * 9973 + (c0 + i);
       let p = 0;
-      if (near(...c, 244, 228, 131, 18)) {                                   // plage: dense pres de l'eau
-        const wet = isWater(at(i + 2 < w ? i + 2 : i, j)) || isWater(at(i - 2 > 0 ? i - 2 : i, j)) || isWater(at(i, j + 2 < h ? j + 2 : j)) || isWater(at(i, j - 2 > 0 ? j - 2 : j));
-        p = wet ? 0.05 : 0.22;
-      } else if (near(...c, 193, 217, 131, 16) || near(...c, 151, 192, 116, 16)) p = 0.05;   // parcs
-      else if (near(...c, 217, 217, 217, 8) && (isRoad(at(i + 1, j)) || isRoad(at(i - 1, j)) || isRoad(at(i, j + 1)) || isRoad(at(i, j - 1)))) p = 0.10;   // trottoir
+      if (isSand(c)) {
+        let land = false;                                                    // bord interieur: un voisin terre (ni sable ni eau)
+        for (const [di, dj] of [[2, 0], [-2, 0], [0, 2], [0, -2]]) { const q = look(i, j, di, dj); if (isGrass(q) || near(...q, 217, 217, 217, 10) || isRoad(q)) land = true; }   // cote promenade seulement
+        p = land ? 0.30 : 0;
+      } else if (isGrass(c)) {
+        let sandNear = false;
+        for (const [di, dj] of [[4, 0], [-4, 0], [0, 4], [0, -4], [8, 0], [-8, 0], [0, 8], [0, -8]]) if (isSand(look(i, j, di, dj))) sandNear = true;
+        p = sandNear ? 0.16 : 0.025;
+      } else if (near(...c, 217, 217, 217, 8) && (isRoad(at(i + 1, j)) || isRoad(at(i - 1, j)) || isRoad(at(i, j + 1)) || isRoad(at(i, j - 1)))) p = 0.05;
       if (p && rnd(seed) < p) {
         const x = x0 + (c0 + i + rnd(seed + 1)) * MPX, y = yTop - (r0 + j + rnd(seed + 2)) * MPX;
         const z = terrainZAt(x, y);
         if (z !== null && z > 0.2) pts.push([x, y, z, seed]);
       }
     }
+    // [TREES-V1] forets du relief (Mt Kalaga et autres collines): toute la carte drapee, densite croissante avec l'altitude
+    // au-dessus de 25 m, hors eau/routes/ilots urbains/emprises; feuillus en contrebas, coniferes au-dessus de 90 m
+    try {
+      const W2 = canvas.width, H2 = canvas.height, step = 3;
+      const all = canvas.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, W2, H2).data;
+      const trees = [];
+      for (let j = 0; j < H2 && trees.length < 70000; j += step) for (let i = 0; i < W2 && trees.length < 70000; i += step) {
+        const k = 4 * (j * W2 + i), c = [all[k], all[k + 1], all[k + 2]];
+        if (isWater(c) || isRoad(c) || near(...c, 217, 217, 217, 10) || near(...c, 176, 176, 176, 8) || isSand(c) || near(...c, 255, 255, 255, 6)) continue;
+        const seed = j * 7919 + i * 104729;
+        const x = x0 + (i + rnd(seed + 1) * step) * MPX, y = yTop - (j + rnd(seed + 2) * step) * MPX;
+        const z = terrainZAt(x, y);
+        if (z === null || z < 25) continue;
+        const pz = Math.min(1, (z - 25) / 70) * (c[1] >= c[0] ? 0.55 : 0.30);
+        if (rnd(seed) < pz) trees.push([x, y, z, seed]);
+      }
+      if (trees.length) {
+        const tgeo = (() => {                                                  // tronc + houppier (feuillu: 2 octaedres aplatis; resinier: 2 cones)
+          const P = [], C = [], trunk = [0.30, 0.24, 0.18];
+          const tri = (a, b, c2, col) => { P.push(...a, ...b, ...c2); C.push(...col, ...col, ...col); };
+          for (let q = 0; q < 5; q++) { const a0 = q / 5 * 6.283, a1 = (q + 1) / 5 * 6.283, r = 0.035;
+            tri([Math.cos(a0) * r, Math.sin(a0) * r, 0], [Math.cos(a1) * r, Math.sin(a1) * r, 0], [Math.cos(a1) * r, Math.sin(a1) * r, 0.4], trunk);
+            tri([Math.cos(a0) * r, Math.sin(a0) * r, 0], [Math.cos(a1) * r, Math.sin(a1) * r, 0.4], [Math.cos(a0) * r, Math.sin(a0) * r, 0.4], trunk); }
+          const cone = (zb, zt, r, col) => { for (let q = 0; q < 7; q++) { const a0 = q / 7 * 6.283, a1 = (q + 1) / 7 * 6.283;
+            tri([Math.cos(a0) * r, Math.sin(a0) * r, zb], [Math.cos(a1) * r, Math.sin(a1) * r, zb], [0, 0, zt], col); } };
+          cone(0.30, 1.0, 0.30, [0.13, 0.27, 0.10]); cone(0.55, 1.05, 0.22, [0.17, 0.32, 0.12]);
+          const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(C, 3)); g.computeVertexNormals(); return g;
+        })();
+        const tmat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, metalness: 0, side: THREE.DoubleSide });
+        tmat.toneMapped = false; if (window.__envTex) { tmat.envMap = window.__envTex; tmat.envMapIntensity = 0.4; }
+        const prev2 = window.__onEnv; window.__onEnv = t => { tmat.envMap = t; tmat.envMapIntensity = 0.4; tmat.needsUpdate = true; if (prev2) prev2(t); };
+        const tm = new THREE.InstancedMesh(tgeo, tmat, trees.length), M4 = new THREE.Matrix4(), Q = new THREE.Quaternion(), V = new THREE.Vector3(), SC = new THREE.Vector3(), CL = new THREE.Color();
+        trees.forEach(([x, y, z, sd], k) => {
+          const hh = 6 + 9 * rnd(sd + 3), wide = z < 90 ? 1.25 + 0.5 * rnd(sd + 9) : 0.8 + 0.3 * rnd(sd + 9);   // feuillus larges en bas, resineux elances en haut
+          Q.setFromAxisAngle(new THREE.Vector3(0, 0, 1), rnd(sd + 4) * 6.283); SC.set(hh * wide, hh * wide, hh); V.set(x, y, z - 0.3);
+          M4.compose(V, Q, SC); tm.setMatrixAt(k, M4);
+          CL.setRGB(0.75 + 0.5 * rnd(sd + 5), 0.80 + 0.4 * rnd(sd + 6), 0.7 + 0.4 * rnd(sd + 7)); tm.setColorAt(k, CL);
+        });
+        tm.instanceMatrix.needsUpdate = true; if (tm.instanceColor) tm.instanceColor.needsUpdate = true;
+        tm.castShadow = true; tm.frustumCulled = false; tm.name = 'trees';
+        layers.terrain.add(tm);
+        const tc = document.getElementById('ly-palms');
+        const syncT = () => { tm.visible = tc.classList.contains('on'); };
+        tc.addEventListener('click', () => setTimeout(syncT, 0)); syncT();
+        window.__trees = { mesh: tm, n: trees.length };
+        console.log('[TREES-V1]', trees.length, 'arbres');
+      }
+    } catch (e) { console.warn('[TREES-V1]', e); }
     if (!pts.length) return;
     const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.85, metalness: 0, side: THREE.DoubleSide });
     mat.toneMapped = false;
