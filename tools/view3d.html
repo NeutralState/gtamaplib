@@ -2061,7 +2061,9 @@ if (meshVerts.length) {
       for (const [x, y] of O) { const u = x * ux + y * uy, v = -x * uy + y * ux; x0 = Math.min(x0, u); x1 = Math.max(x1, u); v0 = Math.min(v0, v); v1 = Math.max(v1, v); }
       return (x1 - x0) > 120 && (x1 - x0) / Math.max(1, v1 - v0) > 5; };
     window.__ships = [];
-    if (MS) MS.forEach((m, i) => { if (shipLike(m)) { window.__ships.push(m); return; } const c = MC && MC[mkey(m.o)];
+    // [BAYSIDE-V1] emprises remplacees par un modele dedie (amphitheatre: gradins, scene, promenade couverte)
+    let BSrep = new Set(); try { const r = await fetch('/threejs/_bayside.json', { cache: 'no-store' }); if (r.ok) BSrep = new Set((await r.json()).replace || []); } catch (e) {}
+    if (MS) MS.forEach((m, i) => { if (BSrep.has(i)) return; if (shipLike(m)) { window.__ships.push(m); return; } const c = MC && MC[mkey(m.o)];
       S['V16 building #' + (i + 1)] = { zmin: m.z, zmax: m.z + m.h, layers: [{ z0: m.z, z1: m.z + m.h, polys: [{ outer: m.o, holes: [] }] }], color: '#cfcfcf', _mass: 1, facade_color: c ? c.rgb : undefined }; });
     let massStart = -1;
     const pos = [], nor = [], col = [], ids = [], sty = [], gls = [], bas = [], tops = [], prj = [], acc = [], nls = [], nlz = [];
@@ -4096,6 +4098,78 @@ window.__camScreen = name => {
       }
     }
   }
+
+
+  // ---- Bayfront Park / Bayside (tools/bayside_layout.py): amphitheatre, scene sous treillis, promenade couverte, marina ----
+  fetch('/threejs/_bayside.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(B => {
+    if (!B) return;
+    const q = new THREE.Quaternion(), Zax = new V3(0, 0, 1), sc3 = new V3();
+    // gradins: marches beton + dossiers bleus (frames)
+    if (B.seats && B.seats.length) {
+      const st = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), stdMat(0xb9b6ae, 0.85, 0.0, 0.6), B.seats.length);
+      const bk = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), stdMat(0x2f62c8, 0.45, 0.1, 0.6), B.seats.length);
+      B.seats.forEach(([x, y, th, k], i) => {
+        const h = 0.25 * (k + 1); q.setFromAxisAngle(Zax, th);                // gradins doux (~7 m au dernier rang)
+        m4.compose(new V3(x, y, B.seat_z + h / 2), q, sc3.set(0.9, 0.97, h)); st.setMatrixAt(i, m4);
+        const bx = x + Math.cos(th) * 0.3, by = y + Math.sin(th) * 0.3;
+        m4.compose(new V3(bx, by, B.seat_z + h + 0.28), q, sc3.set(0.12, 0.9, 0.5)); bk.setMatrixAt(i, m4);
+      });
+      st.castShadow = st.receiveShadow = true; bk.castShadow = true; grp.add(st); grp.add(bk);
+    }
+    // scene: plateau, cage de scene noire (cote oppose aux gradins), toiture en treillis blanc sur pieds obliques
+    if (B.stage) {
+      const O = B.stage.o, z0 = B.stage.z; let cx = 0, cy = 0; for (const p of O) { cx += p[0]; cy += p[1]; } cx /= O.length; cy /= O.length;
+      let sx = 0, sy = 0; for (const s0 of B.seats) { sx += s0[0]; sy += s0[1]; } sx /= B.seats.length; sy /= B.seats.length;
+      const dl = Math.hypot(cx - sx, cy - sy) || 1, dx = (cx - sx) / dl, dy = (cy - sy) / dl, ang = Math.atan2(dy, dx);
+      const plat = new THREE.ExtrudeGeometry(new THREE.Shape(O.map(p => new THREE.Vector2(p[0], p[1]))), { depth: 1.4, bevelEnabled: false }); plat.translate(0, 0, z0);
+      add(plat, stdMat(0x2c2d30, 0.7, 0.1, 0.4));
+      const house = new THREE.BoxGeometry(6, 13, 8); house.rotateZ(ang); house.translate(cx + dx * 8, cy + dy * 8, z0 + 1.4 + 4); add(house, stdMat(0x1b1c1f, 0.6, 0.2, 0.4));
+      // treillis spatial: 2 nappes (16 et 18 m) en grille de 3 m + montants, 32 x 26 m, oriente sur l'axe scene/gradins
+      const beams = [], W2 = 12, D2 = 9, zA = z0 + 14, zB = z0 + 15.6, ux = dx, uy = dy, vx = -dy, vy = dx;
+      const P = (u, v, z) => [cx + dx * 5 + ux * u + vx * v, cy + dy * 5 + uy * u + vy * v, z];   // au-dessus de la scene, pas des gradins
+      for (let u = -D2; u <= D2 + 0.01; u += 3) { beams.push([P(u, -W2, zA), P(u, W2, zA)], [P(u, -W2, zB), P(u, W2, zB)]); }
+      for (let v = -W2; v <= W2 + 0.01; v += 3) { beams.push([P(-D2, v, zA), P(D2, v, zA)], [P(-D2, v, zB), P(D2, v, zB)]); }
+      for (let u = -D2; u <= D2 + 0.01; u += 6) for (let v = -W2; v <= W2 + 0.01; v += 6) beams.push([P(u, v, zA), P(u + 3, v + 3, zB)]);
+      for (const [su, sv] of [[-1, -1], [-1, 1], [1, -1], [1, 1]]) {                 // pieds obliques en V
+        beams.push([P(su * (D2 + 2), sv * (W2 + 4), z0), P(su * D2, sv * (W2 - 4), zA)], [P(su * (D2 + 2), sv * (W2 + 4), z0), P(su * (D2 - 5), sv * W2, zA)]);
+      }
+      const bi = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), stdMat(0xf2f2ef, 0.45, 0.4, 0.8), beams.length), X = new V3(1, 0, 0);
+      beams.forEach(([a, b], i) => { const A = new V3(...a), Bv = new V3(...b), d = Bv.clone().sub(A), L = d.length(); q.setFromUnitVectors(X, d.clone().normalize());
+        const t = a[2] === z0 ? 0.9 : 0.28; m4.compose(A.clone().add(Bv).multiplyScalar(0.5), q, sc3.set(L, t, t)); bi.setMatrixAt(i, m4); });
+      bi.castShadow = true; grp.add(bi);
+    }
+    // promenade couverte: voiles blanches en selle sur poteaux, le long de la bande courbe V16
+    if (B.arc && B.arc.sails && B.arc.sails.length) {
+      const P2 = [], posts = [], wv = Math.max(4, Math.min(8, B.arc.width || 6)), z0 = (B.stage && B.stage.z) || 3;
+      for (const [x, y, a] of B.arc.sails) {
+        const tx = -Math.sin(a), ty = Math.cos(a), rx = Math.cos(a), ry = Math.sin(a), L = 3.4, Wd = 3.2, N = 6;
+        const pt = (s2, w) => [x + tx * s2 * L + rx * w * Wd, y + ty * s2 * L + ry * w * Wd, z0 + 3.4 + 1.1 * (w + 1) + 0.45 * (1 - s2 * s2)];   // panneau incline, leger creux (suite de voiles)
+        for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
+          const s0 = -1 + 2 * i / N, s1 = -1 + 2 * (i + 1) / N, w0 = -1 + 2 * j / N, w1 = -1 + 2 * (j + 1) / N;
+          P2.push(...pt(s0, w0), ...pt(s1, w0), ...pt(s1, w1), ...pt(s0, w0), ...pt(s1, w1), ...pt(s0, w1));
+        }
+        posts.push([x + tx * L + rx * Wd, y + ty * L + ry * Wd], [x - tx * L - rx * Wd, y - ty * L - ry * Wd]);
+      }
+      const sg = new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.Float32BufferAttribute(P2, 3)); sg.computeVertexNormals();
+      const sm = glowMat(0xf4f3ee, [1.0, 0.95, 0.88], 0.35, 0.6); sm.side = THREE.DoubleSide; add(sg, sm);
+      const pi = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.12, 0.15, 1, 6).rotateX(Math.PI / 2).translate(0, 0, 0.5), stdMat(0xe8e8e6, 0.4, 0.5, 0.6), posts.length);
+      posts.forEach(([x, y], i) => { m4.compose(new V3(x, y, z0), q.identity(), sc3.set(1, 1, 6.2)); pi.setMatrixAt(i, m4); }); grp.add(pi);
+    }
+    // marina: pontons (pixels V16) + bateaux de plaisance amarres
+    if (B.piers && B.piers.length) {
+      const pm = new THREE.InstancedMesh(new THREE.BoxGeometry(1.05, 1.05, 0.35), stdMat(0xb8b2a6, 0.85, 0.0, 0.5), B.piers.length);
+      B.piers.forEach(([x, y], i) => { m4.makeTranslation(x, y, 0.75); pm.setMatrixAt(i, m4); }); pm.receiveShadow = true; grp.add(pm);
+    }
+    if (B.boats && B.boats.length) {
+      const hull = (() => { const s2 = new THREE.Shape(); s2.moveTo(-0.5, -0.17); s2.lineTo(0.32, -0.17); s2.quadraticCurveTo(0.5, -0.1, 0.52, 0); s2.quadraticCurveTo(0.5, 0.1, 0.32, 0.17); s2.lineTo(-0.5, 0.17); s2.lineTo(-0.5, -0.17);
+        const g = new THREE.ExtrudeGeometry(s2, { depth: 0.11, bevelEnabled: false, curveSegments: 4 }); g.translate(0, 0, -0.03); return g; })();
+      const cab = new THREE.BoxGeometry(0.38, 0.24, 0.07); cab.translate(-0.05, 0, 0.115);
+      const hm = new THREE.InstancedMesh(hull, stdMat(0xf5f5f2, 0.3, 0.1, 0.9), B.boats.length), cm = new THREE.InstancedMesh(cab, stdMat(0x3a4450, 0.2, 0.4, 1.0), B.boats.length);
+      B.boats.forEach(([x, y, a, L], i) => { q.setFromAxisAngle(Zax, a); m4.compose(new V3(x, y, 0.15), q, sc3.set(L, L, L)); hm.setMatrixAt(i, m4); cm.setMatrixAt(i, m4); });
+      hm.castShadow = true; grp.add(hm); grp.add(cm);
+    }
+    window.__structs = Object.assign(window.__structs || {}, { bayside: { seats: B.seats.length, sails: B.arc.sails.length, piers: B.piers.length, boats: B.boats.length } });
+  }).catch(e => console.warn('[BAYSIDE]', e));
 
   // ---- cheminees ----
   const smokers = [];
