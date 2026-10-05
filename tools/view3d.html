@@ -4117,10 +4117,11 @@ window.__camScreen = name => {
       st.castShadow = st.receiveShadow = true; bk.castShadow = true; grp.add(st); grp.add(bk);
       // pourtour du bol (frame Megamundo): promenade grise en haut des gradins + talus engazonne jusqu'a la pelouse (pas de mur)
       if (B.bowl) {
-        const bw = B.bowl, zT = B.seat_z + 0.16 * bw.rows + 0.2, zb = B.seat_z, Pc = [], Pg = [], N = 64;
+        const bw = B.bowl, zT = B.seat_z + 0.16 * bw.rows + 0.2, zb = B.seat_z, Pc = [], Pg = [];
         const at = (r, a, z) => [bw.c[0] + r * Math.cos(a), bw.c[1] + r * Math.sin(a), z];
-        for (let i = 0; i < N; i++) {
-          const a0 = bw.th0 + (bw.th1 - bw.th0) * i / N, a1 = bw.th0 + (bw.th1 - bw.th0) * (i + 1) / N;
+        for (let i = 0; i < 180; i++) {
+          if (!bw.cov[i]) continue;
+          const a0 = i * 2 * Math.PI / 180, a1 = (i + 1) * 2 * Math.PI / 180;
           const q4 = (A, r0_, z0_, r1_, z1_) => A.push(...at(r0_, a0, z0_), ...at(r1_, a0, z1_), ...at(r1_, a1, z1_), ...at(r0_, a0, z0_), ...at(r1_, a1, z1_), ...at(r0_, a1, z0_));
           q4(Pc, bw.r1, zT, bw.r1 + 4.5, zT);
           q4(Pg, bw.r1 + 4.5, zT, bw.r1 + 4.5 + (zT - zb) * 2.6, zb);
@@ -4137,11 +4138,13 @@ window.__camScreen = name => {
       // cage de scene = l'emprise V16 (carre ~20 m), boite gris clair a toit plat (frame Megamundo); scene ronde devant, cote gradins
       const house = new THREE.ExtrudeGeometry(new THREE.Shape(O.map(p => new THREE.Vector2(p[0], p[1]))), { depth: 11, bevelEnabled: false }); house.translate(0, 0, z0);
       add(house, stdMat(0xc9c6bf, 0.8, 0.05, 0.6));
-      const ps = new THREE.CylinderGeometry(6, 6, 1.3, 40, 1); ps.rotateX(Math.PI / 2); ps.translate(cx - dx * 8, cy - dy * 8, z0 + 0.65); add(ps, stdMat(0x2a2b2e, 0.6, 0.1, 0.4));
-      const fr = new THREE.BoxGeometry(0.6, 16, 8); fr.rotateZ(ang); fr.translate(cx - dx * 2.5, cy - dy * 2.5, z0 + 1.3 + 4); add(fr, stdMat(0x18191b, 0.5, 0.2, 0.4));   // fond de scene noir
+      // scene ronde au CENTRE du fer a cheval (petite piece centrale V16), fond noir cote cage, toiture en treillis au-dessus
+      const bc = B.bowl ? B.bowl.c : [cx - dx * 10, cy - dy * 10], srad = Math.min(8, Math.max(5, (B.bowl ? B.bowl.r0 : 9) - 1.5));
+      const ps = new THREE.CylinderGeometry(srad, srad, 1.3, 48, 1); ps.rotateX(Math.PI / 2); ps.translate(bc[0], bc[1], z0 + 0.65); add(ps, stdMat(0x2a2b2e, 0.6, 0.1, 0.4));
+      const fr = new THREE.BoxGeometry(0.6, 2 * srad + 2, 8); fr.rotateZ(ang); fr.translate(bc[0] + dx * (srad + 0.5), bc[1] + dy * (srad + 0.5), z0 + 1.3 + 4); add(fr, stdMat(0x18191b, 0.5, 0.2, 0.4));
       // treillis spatial: 2 nappes (16 et 18 m) en grille de 3 m + montants, 32 x 26 m, oriente sur l'axe scene/gradins
-      const beams = [], W2 = 11, D2 = 7, zA = z0 + 13, zB = z0 + 14.5, ux = dx, uy = dy, vx = -dy, vy = dx;
-      const P = (u, v, z) => [cx - dx * 6 + ux * u + vx * v, cy - dy * 6 + uy * u + vy * v, z];    // au-dessus de la scene ronde
+      const beams = [], W2 = 10, D2 = 8, zA = z0 + 10, zB = z0 + 11.2, ux = dx, uy = dy, vx = -dy, vy = dx;
+      const P = (u, v, z) => [bc[0] + dx * 2 + ux * u + vx * v, bc[1] + dy * 2 + uy * u + vy * v, z];    // au-dessus de la scene ronde
       for (let u = -D2; u <= D2 + 0.01; u += 3) { beams.push([P(u, -W2, zA), P(u, W2, zA)], [P(u, -W2, zB), P(u, W2, zB)]); }
       for (let v = -W2; v <= W2 + 0.01; v += 3) { beams.push([P(-D2, v, zA), P(D2, v, zA)], [P(-D2, v, zB), P(D2, v, zB)]); }
       for (let u = -D2; u <= D2 + 0.01; u += 6) for (let v = -W2; v <= W2 + 0.01; v += 6) beams.push([P(u, v, zA), P(u + 3, v + 3, zB)]);

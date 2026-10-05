@@ -54,26 +54,44 @@ def main():
     stage = max(rest, key=lambda t: area(t[1]))                               # la plus grande emprise compacte
     wedges = [t for t in rest if t[0] != stage[0]]
     sc = stage[1].mean(0); zg = float(min(t[2] for t in zone))
-    # gradins [BAYSIDE-V3, compare a la frame Vice City 11 (Megamundo)]: fer a cheval COMPACT = les coins V16 (deux couronnes
-    # = deux niveaux separes par une allee circulaire), PAS jusqu'a la promenade (une pelouse les separe dans le jeu);
-    # trous angulaires entre coins combles, allee a la frontiere des deux couronnes
-    allw = np.concatenate([O for _, O, _ in wedges]); rw = np.hypot(*(allw - sc).T)
-    thw = np.arctan2(allw[:, 1] - sc[1], allw[:, 0] - sc[0]); thm = math.atan2(np.mean(np.sin(thw)), np.mean(np.cos(thw)))
-    dw = np.angle(np.exp(1j * (thw - thm))); tlo, thi = dw.min(), dw.max()
-    r0, r1 = float(rw.min()), float(rw.max())
-    inner_out = [float(np.hypot(*(O - sc).T).max()) for _, O, _ in wedges]; ring_split = float(np.median(inner_out))
-    aisle = (ring_split - 0.9, ring_split + 0.9) if r0 + 4 < ring_split < r1 - 4 else (1e9, 1e9)
-    seats = []
-    k = 0; r = r0 + 0.45
-    while r < r1:
-        if not (aisle[0] <= r <= aisle[1]):
+    # gradins [BAYSIDE-V4]: le VRAI centre du bol = centre des arcs des coins V16 (concentrique a la demi-lune de la promenade),
+    # pas l'emprise de la cage de scene (qui est a l'ouverture, ~21 m). Le petit coin central (r < 12 m) = scene ronde.
+    # Gradins sur les angles couverts par les coins (fer a cheval ~230 deg ouvert vers la cage), deux couronnes + allee.
+    def fit(P):
+        Am = np.c_[2 * P, np.ones(len(P))]; b = (P ** 2).sum(1); cx_, cy_, c_ = np.linalg.lstsq(Am, b, rcond=None)[0]; return np.array([cx_, cy_])
+    allw = np.concatenate([O for _, O, _ in wedges]); C0 = fit(allw)
+    rmax_w = [float(np.hypot(*(O - C0).T).max()) for _, O, _ in wedges]
+    central = [t for t, rm_ in zip(wedges, rmax_w) if rm_ < 13.0]
+    rings = [t for t, rm_ in zip(wedges, rmax_w) if rm_ >= 13.0]
+    C = fit(np.concatenate([O for _, O, _ in rings])) if rings else C0
+    rw = np.concatenate([np.hypot(*(O - C).T) for _, O, _ in rings])
+    r_in = float(min(np.hypot(*(O - C).T).min() for _, O, _ in rings)); r_out = float(rw.max())
+    # couverture angulaire (bins de 2 deg) + petits trous combles
+    cov = np.zeros(180, bool)
+    for _, O, _ in rings:
+        for x in np.linspace(0, 1, 30):
+            for i in range(len(O)):
+                a_, b_ = O[i], O[(i + 1) % len(O)]; p = a_ + (b_ - a_) * x
+                cov[int(((math.degrees(math.atan2(p[1] - C[1], p[0] - C[0])) + 360) % 360) // 2)] = True
+    for _ in range(4): cov = cov | (np.roll(cov, 1) & np.roll(cov, -1)) | (np.roll(cov, 2) & np.roll(cov, -2))
+    # fer a cheval ~200 deg face a la cage de scene (frame Megamundo: demi-cercle ouvert vers la scene)
+    op = math.atan2(sc[1] - C[1], sc[0] - C[0]) + math.pi
+    for i in range(180):
+        a_ = math.radians(i * 2 + 1)
+        if abs(math.atan2(math.sin(a_ - op), math.cos(a_ - op))) > math.radians(100): cov[i] = False
+    outer_min = sorted([float(np.hypot(*(O - C).T).min()) for _, O, _ in rings])
+    split = float(np.median([m_ for m_ in outer_min if m_ > r_in + 5])) if any(m_ > r_in + 5 for m_ in outer_min) else 1e9
+    seats = []; k = 0; r = r_in + 0.45
+    while r < r_out:
+        if not (split - 1.0 <= r <= split + 0.6):
             step = 0.95 / r
-            for t in np.arange(tlo, thi, step):
-                a = thm + t
-                seats.append([round(sc[0] + r * math.cos(a), 2), round(sc[1] + r * math.sin(a), 2), round(a, 4), k])
+            for a in np.arange(0, 2 * math.pi, step):
+                if not cov[int((math.degrees(a) % 360) // 2)]: continue
+                seats.append([round(C[0] + r * math.cos(a), 2), round(C[1] + r * math.sin(a), 2), round(a + 0.0, 4), k])
         r += 0.9; k += 1
-    bowl = {'c': [round(float(sc[0]), 2), round(float(sc[1]), 2)], 'th0': round(float(thm + tlo), 4), 'th1': round(float(thm + thi), 4),
-            'r0': round(r0, 2), 'r1': round(r1, 2), 'rows': k}
+    opening = math.atan2(sc[1] - C[1], sc[0] - C[0])
+    bowl = {'c': [round(float(C[0]), 2), round(float(C[1]), 2)], 'cov': [int(v) for v in cov], 'r0': round(r_in, 2), 'r1': round(r_out, 2),
+            'rows': k, 'open': round(opening, 4), 'stage_r': round(max([float(np.hypot(*(O - C).T).max()) for _, O, _ in central] or [8.0]), 2)}
     # promenade: ligne mediane de la bande = anneau (rayon moyen) borne par les angles de la bande
     A = arc[1]
     # cercle ajuste sur la bande (moindres carres) — la promenade n'est pas forcement centree sur la scene
