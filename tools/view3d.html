@@ -1145,12 +1145,31 @@ const data = await (await fetch('/api/scene3d')).json();
               base = mix(base, uGUrban * (0.95 + 0.08 * nz2), wU);   // trottoirs / dalles
               base = mix(base, vec3(0.40, 0.40, 0.41), wB);          // dalles des emprises
               base = mix(base, uGRoad * (0.9 + 0.2 * nz2), wR);      // asphalte
+              // [GROUND-DETAIL-V1] detail des materiaux au sol, en coordonnees monde, estompe avec la distance (pas de moire):
+              // asphalte (grain, taches), dalles (joints de 1.5 m), gazon (brins, plaques seches), sable (rides)
+              {
+                float dcam = distance(cameraPosition, vPos);
+                float fF = 1.0 - smoothstep(60.0, 450.0, dcam), fM = 1.0 - smoothstep(300.0, 2500.0, dcam);
+                vec2 q = vPos.xy;
+                float n1 = vnoise(q * 2.3), n2 = vnoise(q * 0.55), n3 = vnoise(q * 0.07);
+                float asph = (0.92 + 0.12 * n1 * fF + 0.10 * (n2 - 0.5) * fM) * (1.0 - 0.12 * smoothstep(0.62, 0.72, vnoise(q * 0.18)) * fM);
+                vec2 gj = abs(fract(q / 1.5) - 0.5); float joint = smoothstep(0.46, 0.5, max(gj.x, gj.y)) * fF;
+                float pave = (1.0 - 0.20 * joint) * (0.94 + 0.10 * (n2 - 0.5) * fM + 0.08 * (n3 - 0.5));
+                float grs = 0.80 + 0.30 * n1 * fF + 0.24 * (n2 - 0.5) * fM + 0.20 * (n3 - 0.5);
+                float rip = sin(dot(q, vec2(0.9, 0.42)) * 3.0 + n2 * 4.0) * 0.5 + 0.5;
+                float snd = 0.96 + 0.06 * rip * fF + 0.06 * (n2 - 0.5) * fM;
+                float kk = mix(1.0, asph, wR); kk = mix(kk, pave, wU); kk = mix(kk, grs, max(wG, wP)); kk = mix(kk, snd, wS);
+                base *= kk;
+                base = mix(base, base * vec3(1.18, 1.06, 0.72), wG * smoothstep(0.58, 0.75, n3) * 0.45);   // plaques d'herbe seche
+              }
               // [WATER-COLOR-V1] eau de la carte (bleu dominant) -> couleur de l'eau du JEU mesuree: rives et lacs interieurs
               if (uWaterOn > 0.5) {
                 float wW = smoothstep(0.03, 0.10, c.b - max(c.r, c.g));
                 vec2 wuv = (vPos.xy - uWaterBounds.xy) / (uWaterBounds.zw - uWaterBounds.xy);
                 vec4 wf = texture2D(uWaterTex, clamp(wuv, 0.0, 1.0)) * step(0.0, wuv.x) * step(wuv.x, 1.0) * step(0.0, wuv.y) * step(wuv.y, 1.0);
-                base = mix(base, pow(mix(uWaterMed, wf.rgb, clamp(wf.a * 1.3, 0.0, 1.0)), vec3(2.2)) * 0.95, wW);
+                // la mer 3D ajoute le reflet du ciel; ici (rives au-dessus de z=0, lacs) on l'approche pour que les deux se raccordent
+                vec3 wl = pow(mix(uWaterMed, wf.rgb, clamp(wf.a * 1.3, 0.0, 1.0)), vec3(2.2));
+                base = mix(base, wl * 1.15 + vec3(0.050, 0.068, 0.095), wW);
               }
             }
             // [MAP-COLORS-V2 2026-09-26] la map telle quelle: plus de remplacement de l'eau par le fond marin (c'etait
@@ -3492,7 +3511,8 @@ window.__camScreen = name => {
     const CONC = [0.80, 0.79, 0.76].map(lin), CONC2 = [0.72, 0.71, 0.68].map(lin), WHITE = [0.92, 0.92, 0.9].map(lin), YEL = [0.95, 0.78, 0.22].map(lin);
     const gz = (x, y) => { const z = terrainZAt(x, y); return z === null ? 0 : z; };
     const UP = [0, 0, 1];
-    const ribbon = (pts, w, col, lift, deckable, dash) => {
+    const CURB = [0.78, 0.77, 0.74].map(lin);
+    const ribbon = (pts, w, col, lift, deckable, dash, curb = false) => {
       const n = pts.length; if (n < 2) return;
       const Q = pts.map(([x, y, z]) => { const g = gz(x, y), el = deckable && z - Math.max(g, 0) > 2.5; return { x, y, z: el ? z : Math.max(g, 0) + lift, g, el }; });
       const nx = [], ny = [];
@@ -3508,6 +3528,11 @@ window.__camScreen = name => {
         const aL = [A.x + nx[i] * h, A.y + ny[i] * h, A.z], aR = [A.x - nx[i] * h, A.y - ny[i] * h, A.z];
         const bL = [B.x + nx[i + 1] * h, B.y + ny[i + 1] * h, B.z], bR = [B.x - nx[i + 1] * h, B.y - ny[i + 1] * h, B.z];
         quad(aR, bR, bL, aL, UP, col);
+        if (curb && !(A.el || B.el)) {                                       // [GROUND-DETAIL-V1] bordures de trottoir (0.5 m, +12 cm)
+          const cw = 0.5, ch = 0.12, o = (p, nx0, ny0, k, dz) => [p[0] + nx0 * k, p[1] + ny0 * k, p[2] + dz];
+          quad(o(aL, nx[i], ny[i], 0, ch), o(bL, nx[i + 1], ny[i + 1], 0, ch), o(bL, nx[i + 1], ny[i + 1], cw, ch), o(aL, nx[i], ny[i], cw, ch), UP, CURB);
+          quad(o(bR, -nx[i + 1], -ny[i + 1], 0, ch), o(aR, -nx[i], -ny[i], 0, ch), o(aR, -nx[i], -ny[i], cw, ch), o(bR, -nx[i + 1], -ny[i + 1], cw, ch), UP, CURB);
+        }
         if (deckable && (A.el || B.el)) {                                    // tablier: dalle, sous-face, garde-corps
           const t = 1.6, gh = 1.0, dn = (p, k) => [p[0], p[1], p[2] - k], upk = (p, k) => [p[0], p[1], p[2] + k];
           const nL = [nx[i], ny[i], 0], nR = [-nx[i], -ny[i], 0];
@@ -3534,8 +3559,8 @@ window.__camScreen = name => {
         }
       }
     };
-    for (const r of R.small) ribbon(r.p, Math.max(4, r.w), ASPH.small, 0.30, false, false);
-    for (const r of R.road) ribbon(r.p, Math.max(6, r.w), ASPH.road, 0.34, true, false);
+    for (const r of R.small) ribbon(r.p, Math.max(4, r.w), ASPH.small, 0.30, false, false, true);
+    for (const r of R.road) ribbon(r.p, Math.max(6, r.w), ASPH.road, 0.34, true, false, true);
     for (const r of R.hwy) ribbon(r.p, Math.max(8, r.w), ASPH.hwy, 0.38, true, false);
     for (const r of R.mark_w) ribbon(r.p, 0.35, WHITE, 0.42, true, true);
     for (const r of R.mark_y) ribbon(r.p, 0.30, YEL, 0.42, true, false);
@@ -3553,6 +3578,13 @@ window.__camScreen = name => {
         .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvWP = (modelMatrix * vec4(transformed, 1.0)).xyz;');
       sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nuniform float uNight; varying vec3 vWP;')
         .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+          {                                                            // [GROUND-DETAIL-V1] grain et taches de l'asphalte
+            float dc = distance(cameraPosition, vWP), fF = 1.0 - smoothstep(60.0, 450.0, dc), fM = 1.0 - smoothstep(300.0, 2500.0, dc);
+            vec2 q = vWP.xy; float a1 = fract(sin(dot(floor(q * 3.0), vec2(12.9898, 78.233))) * 43758.5453);
+            float a2 = fract(sin(dot(floor(q * 0.25), vec2(39.3468, 11.135))) * 43758.5453);
+            float isA = 1.0 - smoothstep(0.30, 0.45, diffuseColor.g);  // asphalte (pas le beton clair ni les marquages)
+            diffuseColor.rgb *= mix(1.0, (0.93 + 0.10 * a1 * fF) * (0.95 + 0.08 * (a2 - 0.5) * fM), isA);
+          }
           if (uNight > 0.02) {
             vec2 cell = mod(vWP.xy, 32.0) - 16.0; float pool = exp(-dot(cell, cell) / 90.0);
             totalEmissiveRadiance += vec3(1.0, 0.62, 0.30) * uNight * (0.035 + 0.26 * pool) * (0.6 + 2.0 * diffuseColor.g);
@@ -3562,6 +3594,43 @@ window.__camScreen = name => {
     const prev = window.__onEnv; window.__onEnv = t => { mat.envMap = t; mat.envMapIntensity = 0.35; mat.needsUpdate = true; if (prev) prev(t); };
     const mesh = new THREE.Mesh(g, mat); mesh.castShadow = true; mesh.receiveShadow = true; mesh.name = 'roads3d';
     grp = mesh; layers.terrain.add(mesh); sync();
+    // [GROUND-DETAIL-V1] lampadaires le long des rues et autoroutes (~40 m, cote alterne; des deux cotes si > 16 m), bras vers la
+    // chaussee, tete sodium allumee la nuit (les flaques au sol existent deja dans le shader des routes)
+    {
+      const L = [];
+      const place = (pts, w, hgt, lift, deckable) => {
+        let acc = 20, side = 1;
+        for (let i = 1; i < pts.length; i++) {
+          const [x0, y0, z0] = pts[i - 1], [x1, y1, z1] = pts[i], sl = Math.hypot(x1 - x0, y1 - y0); if (sl < 0.1) continue;
+          acc += sl; if (acc < 40) continue; acc = 0;
+          const nx = -(y1 - y0) / sl, ny = (x1 - x0) / sl;
+          for (const sd of (w > 16 ? [1, -1] : [side])) {
+            const off = w / 2 + 1.2, x = x1 + nx * off * sd, y = y1 + ny * off * sd;
+            const g = gz(x, y), el = deckable && z1 - Math.max(g, 0) > 2.5, z = el ? z1 : Math.max(g, 0) + lift;
+            L.push([x, y, z, Math.atan2(-ny * sd, -nx * sd), hgt]);
+          }
+          side = -side;
+        }
+      };
+      for (const r of R.road) if (r.w >= 8) place(r.p, Math.max(6, r.w), 9, 0.34, true);
+      for (const r of R.hwy) place(r.p, Math.max(8, r.w), 12, 0.38, true);
+      if (L.length) {
+        const P2 = [], N2 = [], tri = (a, b, c) => { P2.push(...a, ...b, ...c); const u = [b[0] - a[0], b[1] - a[1], b[2] - a[2]], v = [c[0] - a[0], c[1] - a[1], c[2] - a[2]]; const n = [u[1] * v[2] - u[2] * v[1], u[2] * v[0] - u[0] * v[2], u[0] * v[1] - u[1] * v[0]], l = Math.hypot(...n) || 1; for (let k = 0; k < 3; k++) N2.push(n[0] / l, n[1] / l, n[2] / l); };
+        const bx = (x0, x1, y0, y1, z0, z1) => { const v = (x, y, z) => [x, y, z]; const c = [v(x0, y0, z0), v(x1, y0, z0), v(x1, y1, z0), v(x0, y1, z0), v(x0, y0, z1), v(x1, y0, z1), v(x1, y1, z1), v(x0, y1, z1)];
+          for (const [a, b, c2, d] of [[0, 1, 5, 4], [1, 2, 6, 5], [2, 3, 7, 6], [3, 0, 4, 7], [4, 5, 6, 7], [3, 2, 1, 0]]) { tri(c[a], c[b], c[c2]); tri(c[a], c[c2], c[d]); } };
+        bx(-0.09, 0.09, -0.09, 0.09, 0, 1); bx(0, 2.0, -0.04, 0.04, 0.97, 1.0);      // xy en metres, z normalise (x hauteur)
+        const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.Float32BufferAttribute(P2, 3)); pg.setAttribute('normal', new THREE.Float32BufferAttribute(N2, 3));
+        P2.length = 0; N2.length = 0; bx(1.5, 2.3, -0.12, 0.12, 0.952, 0.972);
+        const hg = new THREE.BufferGeometry(); hg.setAttribute('position', new THREE.Float32BufferAttribute(P2, 3)); hg.setAttribute('normal', new THREE.Float32BufferAttribute(N2, 3));
+        const pmat = new THREE.MeshStandardMaterial({ color: 0x5b5e62, roughness: 0.55, metalness: 0.5 }); pmat.toneMapped = false;
+        const hmat = new THREE.MeshStandardMaterial({ color: 0x9a9a96, roughness: 0.4, metalness: 0.2, emissive: new THREE.Color(1.0, 0.62, 0.28), emissiveIntensity: 0 }); hmat.toneMapped = false;
+        window.__lampMat = hmat;
+        const pi = new THREE.InstancedMesh(pg, pmat, L.length), hi = new THREE.InstancedMesh(hg, hmat, L.length), q = new THREE.Quaternion(), Zax = new THREE.Vector3(0, 0, 1), m4 = new THREE.Matrix4(), sc = new THREE.Vector3();
+        L.forEach(([x, y, z, a, h], k) => { q.setFromAxisAngle(Zax, a); sc.set(1, 1, h); m4.compose(new THREE.Vector3(x, y, z), q, sc); pi.setMatrixAt(k, m4); hi.setMatrixAt(k, m4); });
+        pi.castShadow = true; pi.name = 'streetlights'; hi.name = 'streetlight-heads'; mesh.add(pi); mesh.add(hi);
+        window.__roadLamps = L.length;
+      }
+    }
     window.__roads3d = { mesh, tris: P.length / 9 };
     console.log('[ROADS-V1]', P.length / 9 | 0, 'triangles');
   };
@@ -4000,6 +4069,7 @@ window.__camScreen = name => {
     const nt = terraUni.uNight.value;
     for (const [m, k] of glowMats) m.emissiveIntensity = k * nt;
     for (const pm of poolMats) { pm.opacity = 0.9 * nt; pm.visible = nt > 0.02; }
+    if (window.__lampMat) window.__lampMat.emissiveIntensity = 4.0 * nt;     // [GROUND-DETAIL-V1] tetes de lampadaires
     if (smoke && grp.visible) {
       qc.copy(camera.quaternion); let i = 0;
       for (const s0 of smokers) for (let k = 0; k < PUFF; k++, i++) {
