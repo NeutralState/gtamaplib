@@ -4317,7 +4317,9 @@ window.__gcolP.then(G => {                                   // [GROUND-COLOR-V1
   set(terraUni.uGUrban, S.sidewalk && S.sidewalk.rgb, 0.35); set(terraUni.uGRoad, S.road && S.road.rgb, 0.35);
 });
 // [WATER-COLOR-V1] champ de couleur de l'eau mesure sur les frames (tools/water_colors.py -> _water_colors.json)
-fetch('/threejs/_water_colors.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(D => {
+// DESACTIVE (Alexandre 2026-10-05): la mesure sortait un gris ardoise (frames de couchant/brume) — l'eau de Floride est
+// turquoise, presque caraibe -> on garde le turquoise des hauts-fonds + bleu au large; window.__measuredWater = true pour retester
+fetch('/threejs/_water_colors.json', { cache: 'no-store' }).then(r => r.ok && window.__measuredWater ? r.json() : null).then(D => {
   if (!D || !D.grid) return;
   const G = D.grid, tex = new THREE.DataTexture(new Uint8Array(G.rgba), G.nx, G.ny, THREE.RGBAFormat);
   tex.magFilter = tex.minFilter = THREE.LinearFilter; tex.needsUpdate = true;      // donnees (sRGB 0-1 brutes, converties dans le shader)
