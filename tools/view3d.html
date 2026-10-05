@@ -585,7 +585,19 @@ function sunDirVec() {   // vecteur VERS le soleil; az horaire depuis le nord (+
 }
 // uniforms PARTAGES, crees avant tout chargement async: les chips/sliders
 // peuvent les referencer meme si le terrain n'est pas encore arrive.
+// [GROUND-COLOR-V1] teintes du sol et de la vegetation MESUREES sur les frames de jour (tools/ground_colors.py):
+// on garde la luminance calibree de chaque materiau et on prend la teinte/saturation du jeu
+const _gLum = c => 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
+// sat < 1: materiaux neutres (dalles, asphalte) — la dominante chaude de l'etalonnage du jeu, etalee sur des km2 de ville, virait au desert
+const gameTint = (cur, srgb, sat = 1) => { if (!srgb) return cur; const m0 = srgb.map(v => Math.pow(v, 2.2)), l0 = _gLum(m0), m = m0.map(v => l0 + (v - l0) * sat), k = _gLum(cur) / Math.max(_gLum(m), 1e-4); return m.map(v => v * k); };
+window.__gcolP = fetch('/threejs/_ground_colors.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null)
+  .then(G => { window.__gcolV = G; return G; });
 const terraUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
+  uGSand:  { value: new THREE.Vector3(0.80, 0.72, 0.54) },   // [GROUND-COLOR-V1] materiaux du sol (lineaires), remplaces par les teintes mesurees
+  uGGrass: { value: new THREE.Vector3(0.19, 0.33, 0.10) },
+  uGPark:  { value: new THREE.Vector3(0.11, 0.24, 0.07) },
+  uGUrban: { value: new THREE.Vector3(0.56, 0.55, 0.52) },
+  uGRoad:  { value: new THREE.Vector3(0.045, 0.046, 0.050) },
   uSunDir:   { value: new THREE.Vector3(0, 0, 1) },
   uDrape:    { value: null },
   uUseDrape: { value: 0 },
@@ -1055,6 +1067,7 @@ const data = await (await fetch('/api/scene3d')).json();
         uniform sampler2D uDrape, uShadow, uDetail;
         uniform vec4 uDetailBounds; uniform float uDetailOn;
         uniform float uUseDrape, uContours, uTime, uShadowOn, uClouds, uNight, uWaterOn;
+        uniform vec3 uGSand, uGGrass, uGPark, uGUrban, uGRoad;
         uniform sampler2D uWaterTex; uniform vec4 uWaterBounds; uniform vec3 uWaterMed;
         uniform vec4 uTerrBounds, uMeasBounds;
         #include <common>
@@ -1124,12 +1137,12 @@ const data = await (await fetch('/api/scene3d')).json();
               float wU = 1.0 - smoothstep(0.03, 0.08, distance(c, vec3(0.693)));                 // ilots urbains 217
               float wB = 1.0 - smoothstep(0.02, 0.05, distance(c, vec3(0.434)));                 // emprises de batiments 176
               float wR = 1.0 - smoothstep(0.02, 0.05, min(distance(c, vec3(0.087)), distance(c, vec3(0.168))));   // chaussees 83 / 114
-              base = mix(base, vec3(0.80, 0.72, 0.54) * (0.94 + 0.10 * nz2), wS);    // sable clair de Miami Beach
-              base = mix(base, vec3(0.19, 0.33, 0.10) * (0.85 + 0.30 * nz2), wG);    // gazon
-              base = mix(base, vec3(0.11, 0.24, 0.07) * (0.80 + 0.35 * nz2), wP);    // parc arbore
-              base = mix(base, vec3(0.56, 0.55, 0.52) * (0.95 + 0.08 * nz2), wU);    // trottoirs / dalles
-              base = mix(base, vec3(0.40, 0.40, 0.41), wB);                          // dalles des emprises
-              base = mix(base, vec3(0.045, 0.046, 0.050) * (0.9 + 0.2 * nz2), wR);   // asphalte
+              base = mix(base, uGSand * (0.94 + 0.10 * nz2), wS);    // sable (teinte mesuree dans le jeu)
+              base = mix(base, uGGrass * (0.85 + 0.30 * nz2), wG);   // gazon
+              base = mix(base, uGPark * (0.80 + 0.35 * nz2), wP);    // parc arbore (canopee)
+              base = mix(base, uGUrban * (0.95 + 0.08 * nz2), wU);   // trottoirs / dalles
+              base = mix(base, vec3(0.40, 0.40, 0.41), wB);          // dalles des emprises
+              base = mix(base, uGRoad * (0.9 + 0.2 * nz2), wR);      // asphalte
               // [WATER-COLOR-V1] eau de la carte (bleu dominant) -> couleur de l'eau du JEU mesuree: rives et lacs interieurs
               if (uWaterOn > 0.5) {
                 float wW = smoothstep(0.03, 0.10, c.b - max(c.r, c.g));
@@ -3756,7 +3769,8 @@ window.__camScreen = name => {
   sync();
   // geometrie: tronc (6 pans, effile) + 8 palmes retombantes, couleurs par sommet
   function palmGeo() {
-    const P = [], C = [], trunk = [0.42, 0.36, 0.29], leaf = [0.20, 0.38, 0.15], leaf2 = [0.30, 0.46, 0.20];
+    const GF = window.__gcolV && window.__gcolV.foliage, pt = GF && GF.palm && GF.palm.rgb;   // [GROUND-COLOR-V1] teinte mesuree des palmiers
+    const P = [], C = [], trunk = [0.42, 0.36, 0.29], leaf = gameTint([0.20, 0.38, 0.15], pt), leaf2 = gameTint([0.30, 0.46, 0.20], pt);
     const tri = (a, b, c, col) => { P.push(...a, ...b, ...c); C.push(...col, ...col, ...col); };
     const n = 6;
     for (let i = 0; i < n; i++) {
@@ -3839,7 +3853,8 @@ window.__camScreen = name => {
             tri([Math.cos(a0) * r, Math.sin(a0) * r, 0], [Math.cos(a1) * r, Math.sin(a1) * r, 0.4], [Math.cos(a0) * r, Math.sin(a0) * r, 0.4], trunk); }
           const cone = (zb, zt, r, col) => { for (let q = 0; q < 7; q++) { const a0 = q / 7 * 6.283, a1 = (q + 1) / 7 * 6.283;
             tri([Math.cos(a0) * r, Math.sin(a0) * r, zb], [Math.cos(a1) * r, Math.sin(a1) * r, zb], [0, 0, zt], col); } };
-          cone(0.30, 1.0, 0.30, [0.13, 0.27, 0.10]); cone(0.55, 1.05, 0.22, [0.17, 0.32, 0.12]);
+          const tt = window.__gcolV && window.__gcolV.foliage && window.__gcolV.foliage.tree && window.__gcolV.foliage.tree.rgb;   // [GROUND-COLOR-V1]
+          cone(0.30, 1.0, 0.30, gameTint([0.13, 0.27, 0.10], tt)); cone(0.55, 1.05, 0.22, gameTint([0.17, 0.32, 0.12], tt));
           const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(C, 3)); g.computeVertexNormals(); return g;
         })();
         const tmat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, metalness: 0, side: THREE.DoubleSide });
@@ -3937,6 +3952,11 @@ const Refl = (() => {
   return { step, rt };
 })();
 window.__refl = Refl;
+window.__gcolP.then(G => {                                   // [GROUND-COLOR-V1]
+  if (!G) return; const S = G.seg || {}, F = G.foliage || {}, set = (u, srgb, sat) => { if (srgb) u.value.fromArray(gameTint(u.value.toArray(), srgb, sat)); };
+  set(terraUni.uGSand, S.sand && S.sand.rgb, 0.8); set(terraUni.uGGrass, S.grass && S.grass.rgb); set(terraUni.uGPark, F.tree && F.tree.rgb);
+  set(terraUni.uGUrban, S.sidewalk && S.sidewalk.rgb, 0.35); set(terraUni.uGRoad, S.road && S.road.rgb, 0.35);
+});
 // [WATER-COLOR-V1] champ de couleur de l'eau mesure sur les frames (tools/water_colors.py -> _water_colors.json)
 fetch('/threejs/_water_colors.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(D => {
   if (!D || !D.grid) return;
