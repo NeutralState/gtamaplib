@@ -1641,6 +1641,7 @@ if (meshVerts.length) {
   // tire du nom + de la hauteur; vitres teintees avec faux reflet du ciel (fresnel), montants, dalles d'etage, rez-de-
   // chaussee vitre plus haut, pied du batiment assombri, toits en gravier, nuit: fenetres chaudes/froides, hall allume.
   const solidMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.84, metalness: 0.0, side: THREE.DoubleSide });
+  solidMat.toneMapped = false;                         // [FACADES-V2] comme la carte drapee: l'ACES assombrissait les batiments
   solidsUni.uSky = { value: new THREE.Vector3(0.5, 0.6, 0.7) };
   solidMat.onBeforeCompile = sh => {
     sh.uniforms.uNight = solidsUni.uNight; sh.uniforms.uHover = solidsUni.uHover; sh.uniforms.uSky = solidsUni.uSky;
@@ -1670,29 +1671,35 @@ if (meshVerts.length) {
         vec2 r2 = mix(rat, vec2(0.94, 0.84), lob);
         vec2 lo = vec2((1.0 - r2.x) * 0.5, (1.0 - r2.y) * 0.62), hi = lo + r2;
         vec2 mq = smoothstep(lo - fw, lo + fw, fq) * (1.0 - smoothstep(hi - fw, hi + fw, fq));
-        float blur = clamp(max(fw.x, fw.y) * 1.6, 0.0, 1.0);          // loin: la grille se fond en sa moyenne (pas de moire)
-        float win = wall * mix(mq.x * mq.y, r2.x * r2.y, blur) * step(0.6, loc) * step(kind, 3.5);
-        float slab = wall * (1.0 - step(0.5, abs(kind - 1.0))) * (1.0 - blur) * (1.0 - lob) * (1.0 - smoothstep(0.0, 0.04 + fw.y, fq.y));
+        vec2 bl2 = clamp(fw * 1.6, 0.0, 1.0);                          // loin: chaque axe se fond separement (les etages survivent aux travees)
+        float blur = max(bl2.x, bl2.y);
+        float win = wall * mix(mq.x, r2.x, bl2.x) * mix(mq.y, r2.y, bl2.y) * step(0.6, loc) * step(kind, 3.5);
+        float mech = wall * step(40.0, vTop - vBase) * step(vTop - 4.6, vWPos.z) * step(kind, 2.5);   // etage technique plein au sommet
+        float pil = wall * (1.0 - step(0.5, abs(kind))) * (1.0 - bl2.x) * (1.0 - step(0.14, fract(gq.x / 3.0)));   // pilastre toutes les 3 travees
+        win *= (1.0 - mech) * (1.0 - pil);
+        float slab = wall * (1.0 - step(0.5, abs(kind - 1.0))) * (1.0 - bl2.y) * (1.0 - lob) * (1.0 - smoothstep(0.0, 0.04 + fw.y, fq.y));
         float lit = mix(step(0.55, h31(vec3(floor(gq), vId))), 0.45, blur);
         vec3 Vd = normalize(cameraPosition - vWPos);
         float fres = pow(1.0 - clamp(abs(dot(Vd, normalize(vWN))), 0.0, 1.0), 2.0);
         // reflet: le verre renvoie le ciel en haut de la tour et la ville/le sol en bas (degrade vertical) -> tours claires, pas des blocs noirs
         float hfrac = clamp(loc / max(30.0, vTop - vBase), 0.0, 1.0);
         vec3 refl = mix(vec3(0.34, 0.36, 0.38), uSky * 1.15 + vec3(0.06), smoothstep(0.0, 0.85, hfrac));
-        vec3 glass = mix(vGls.rgb, refl, 0.42 + 0.40 * fres) * (0.90 + 0.20 * h31(vec3(floor(gq) + 7.0, vId)) * (1.0 - blur));
+        // l'IBL donne le reflet du ciel (speculaire); l'albedo du verre garde sa teinte propre (+ un soupcon de degrade vertical)
+        vec3 glass = mix(vGls.rgb, refl * 0.55, 0.12 + 0.10 * fres) * (0.88 + 0.24 * h31(vec3(floor(gq) + 7.0, vId)) * (1.0 - blur));
         diffuseColor.rgb *= mix(1.0, mix(0.6, 1.0, smoothstep(0.0, 9.0, loc)), wall);   // pied du batiment (occlusion)
         float band = h31(vec3(floor((loc - lobbyH) / (flh * 3.0)), vId, 5.0));            // groupes de 3 etages: legere variation (lisible de loin)
         float face = h31(vec3(floor(tn * 8.0), vId));                                       // chaque face un peu differente
-        diffuseColor.rgb *= mix(1.0, (0.94 + 0.10 * band) * (0.95 + 0.08 * face), wall);
+        diffuseColor.rgb *= mix(1.0, (0.90 + 0.16 * band) * (0.93 + 0.12 * face), wall);
         diffuseColor.rgb = mix(diffuseColor.rgb, glass, win);
         diffuseColor.rgb *= 1.0 - 0.38 * slab;
+        diffuseColor.rgb *= 1.0 + 0.10 * mech - 0.10 * pil;
         diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.60 + 0.12 * h31(floor(vWPos * 1.7))), roof * step(kind, 3.5));
         float hov = 1.0 - step(0.5, abs(vId - uHover));
         diffuseColor.rgb = mix(diffuseColor.rgb, vec3(1.0, 0.82, 0.32), hov * 0.40);`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
-        roughnessFactor = mix(roughnessFactor, 0.10, win);`)
+        roughnessFactor = mix(roughnessFactor, 0.16 + 0.10 * h31(vec3(floor(gq) + 11.0, vId)), win);`)
       .replace('#include <metalnessmap_fragment>', `#include <metalnessmap_fragment>
-        metalnessFactor = mix(metalnessFactor, 0.18, win);`)
+        metalnessFactor = mix(metalnessFactor, 0.10, win);`)
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
         vec3 lc = mix(vec3(1.0, 0.70, 0.36), vec3(0.82, 0.90, 1.0), step(0.78, h31(vec3(floor(gq) + 3.0, vId))));
         totalEmissiveRadiance += lc * (1.5 * lit + 1.2 * lob) * win * uNight;
@@ -1721,14 +1728,30 @@ if (meshVerts.length) {
   };
   chip.addEventListener('click', () => { solidOn = !solidOn; localStorage.setItem('ui.solid3d', solidOn ? '1' : '0'); applySolid(); });
   document.getElementById('ly-meshes').addEventListener('click', () => setTimeout(styleWire, 0));
+  // [FACADES-V3] eclairage par l'environnement: le ciel de la scene -> PMREM -> reflets du verre + lumiere du ciel sur les faces a l'ombre
+  const pmrem = new THREE.PMREMGenerator(renderer);
+  const envScene = new THREE.Scene();
+  const envSky = new THREE.Mesh(new THREE.SphereGeometry(500, 48, 24), sky.material);
+  const envGround = new THREE.Mesh(new THREE.CircleGeometry(480, 48), new THREE.MeshBasicMaterial({ color: 0x7d827c, side: THREE.DoubleSide }));
+  envGround.position.z = -25; envScene.add(envSky, envGround);
+  let envRT = null, envTimer = null;
+  const buildEnv = () => {
+    const { hor, night } = skyColors();
+    envGround.material.color.setRGB(0.36 + hor[0] * 0.25, 0.37 + hor[1] * 0.25, 0.35 + hor[2] * 0.2).multiplyScalar(1 - 0.85 * night);
+    const rt = pmrem.fromScene(envScene, 0.02, 1, 2000);
+    if (envRT) envRT.dispose(); envRT = rt;
+    solidMat.envMap = rt.texture; solidMat.envMapIntensity = window.__envI ?? 0.32; solidMat.needsUpdate = true;
+    renderer.shadowMap.needsUpdate = true;
+  };
   window.__solidsEnv = () => {
+    clearTimeout(envTimer); envTimer = setTimeout(buildEnv, envRT ? 250 : 0);
     const sd = sunDirVec(); const { zen, hor, sun, night } = skyColors();
     const day = Math.max(0, Math.min(1, sd.z / 0.12));
     sunLight.color.setRGB(sun[0], sun[1], sun[2]);
-    sunLight.intensity = 2.9 * day * (1 - night);
+    sunLight.intensity = (window.__sunI ?? 3.4) * day * (1 - night);
     hemiLight.color.setRGB(zen[0] * 0.45 + 0.34, zen[1] * 0.45 + 0.34, zen[2] * 0.45 + 0.33);
     hemiLight.groundColor.setRGB(hor[0] * 0.5 + 0.06, hor[1] * 0.46 + 0.05, hor[2] * 0.40 + 0.04);
-    hemiLight.intensity = 0.4 + 1.0 * (1 - night);
+    hemiLight.intensity = 0.15 + (window.__hemiI ?? 0.15) * (1 - night);   // [FACADES-V3] l'environnement (IBL) fournit maintenant la lumiere du ciel
     solidsUni.uNight.value = night;
     solidsUni.uSky.value.set((hor[0] + zen[0]) * 0.5, (hor[1] + zen[1]) * 0.5, (hor[2] + zen[2]) * 0.5).multiplyScalar(1 - 0.85 * night);
     sunLight.castShadow = day > 0.02;
@@ -1793,12 +1816,14 @@ if (meshVerts.length) {
       if (mc) {
         const toLin = v => Math.pow(Math.min(1, Math.max(0, v)), 2.2);
         const L = 0.2126 * mc[0] + 0.7152 * mc[1] + 0.0722 * mc[2];
-        if (L < 0.24 && h > 30) {                       // tres sombre: tour vitree, le verre prend la couleur mesuree
-          const g = mc.map(v => toLin(v * 1.35));
+        if (L < 0.24 && h > 30) {                       // tres sombre: tour vitree, le verre prend la couleur mesuree (eclaircie)
+          const g = mc.map(v => toLin(Math.min(0.7, v * 1.9 + 0.05)));
           return { kind: 1, fac: mc.map(v => toLin(Math.min(0.85, v * 2.6 + 0.12))), gl: g, s: [1.4 + r2 * 0.7, 0.94, 0.88, 3.5 + 0.5 * r3] };
         }
-        const k2 = Math.min(1.9, 0.86 / Math.max(L, 0.05));
-        const fac = mc.map(v => toLin(Math.min(0.95, v * Math.max(1.35, k2))));
+        // teinte de la mesure, clarte remontee: luminance cible 0.62-0.88 (les facades de Miami sont claires)
+        const Lt = Math.min(0.88, Math.max(0.62, 0.42 + L));
+        const sat = mc.map(v => L + (v - L) * 1.5);                 // la photo + la brume grisent: on rend la teinte
+        const fac = sat.map(v => toLin(Math.min(0.96, Math.max(0, v) * Lt / Math.max(L, 0.05))));
         if (kind === 1) kind = L > 0.42 ? 2 : 1;           // facade claire mesuree: plutot balcons/bandeaux que mur-rideau sombre
         const gl = kind === 1 ? mc.map(v => toLin(v * 1.2)) : kind === 2 ? [0.22, 0.28, 0.34] : TINT[5];
         const sArr = kind === 1 ? [1.4 + r2 * 0.7, 0.94, 0.90, 3.5 + 0.5 * r3] : kind === 2 ? [3.2 + r2, 0.985, 0.40 + 0.18 * r3, 3.2 + 0.4 * r3]
@@ -1915,7 +1940,7 @@ if (meshVerts.length) {
     solidMesh = new THREE.Mesh(geo, solidMat);
     solidMesh.castShadow = true; solidMesh.receiveShadow = true; solidMesh.name = 'solid-buildings';
     layers.meshes.add(solidMesh);
-    window.__solids = { mesh: solidMesh, names: solidNames, uni: solidsUni };
+    window.__solids = { mesh: solidMesh, names: solidNames, uni: solidsUni, mat: solidMat };
     {
       const bv = [], bc = [], sv = [], sc = [], cc2 = new THREE.Color();
       for (const [name, m] of Object.entries(data.meshes || {})) {
@@ -1926,9 +1951,9 @@ if (meshVerts.length) {
       }
       const mk = (V, C, mat) => { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(V, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(C, 3)); const l = new THREE.LineSegments(g, mat); l.visible = false; layers.meshes.add(l); return l; };
       bldWire = mk(bv, bc, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.22, depthTest: true, depthWrite: false }));
-      structWire = mk(sv, sc, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 1.0, depthTest: false, depthWrite: false }));
+      structWire = mk(sv, sc, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 1.0, depthTest: true, depthWrite: false }));   // masquees par les batiments pleins
       structWire.renderOrder = 12;
-      structHalo = new THREE.LineSegments(structWire.geometry, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.35, depthTest: false, depthWrite: false, blending: THREE.AdditiveBlending }));
+      structHalo = new THREE.LineSegments(structWire.geometry, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.35, depthTest: true, depthWrite: false, blending: THREE.AdditiveBlending }));
       structHalo.renderOrder = 11; structHalo.visible = false; layers.meshes.add(structHalo);
     }
     // [SOLIDS-V1] modes de couleur: beton (teinte legere du mesh) / hauteur du toit (meme rampe que la Map) / couleur du mesh
