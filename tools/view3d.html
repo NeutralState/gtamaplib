@@ -4396,14 +4396,23 @@ window.__camScreen = name => {
       const W2 = canvas.width, H2 = canvas.height, step = 3;
       const all = canvas.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, W2, H2).data;
       const trees = [];
-      for (let j = 0; j < H2 && trees.length < 70000; j += step) for (let i = 0; i < W2 && trees.length < 70000; i += step) {
+      for (let j = 0; j < H2 && trees.length < 130000; j += step) for (let i = 0; i < W2 && trees.length < 130000; i += step) {
         const k = 4 * (j * W2 + i), c = [all[k], all[k + 1], all[k + 2]];
-        if (isWater(c) || isRoad(c) || near(...c, 217, 217, 217, 10) || near(...c, 176, 176, 176, 8) || isSand(c) || near(...c, 255, 255, 255, 6)) continue;
+        // [VEG-V2] berges urbaines (riverwalks): ilot urbain au bord de l'eau (< ~12 m) -> rangee d'arbres, comme sur les frames de la riviere
+        const urbanPx = near(...c, 217, 217, 217, 10);
+        const greyish = Math.max(c[0], c[1], c[2]) - Math.min(c[0], c[1], c[2]) < 14 && c[0] > 185 && c[0] < 232;
+        let bank = false;
+        if (greyish) for (const [di, dj] of [[2, 0], [-2, 0], [0, 2], [0, -2], [4, 0], [-4, 0], [0, 4], [0, -4], [5, 0], [-5, 0], [0, 5], [0, -5]]) { const ii = i + di, jj = j + dj; if (ii < 0 || jj < 0 || ii >= W2 || jj >= H2) continue; const kk = 4 * (jj * W2 + ii); if (isWater([all[kk], all[kk + 1], all[kk + 2]])) bank = true; }
+        if (!bank && (isWater(c) || isRoad(c) || urbanPx || greyish || near(...c, 176, 176, 176, 8) || isSand(c) || near(...c, 255, 255, 255, 6))) continue;
         const seed = j * 7919 + i * 104729;
         const x = x0 + (i + rnd(seed + 1) * step) * MPX, y = yTop - (j + rnd(seed + 2) * step) * MPX;
         const z = terrainZAt(x, y);
-        if (z === null || z < 25) continue;
-        const pz = Math.min(1, (z - 25) / 70) * (c[1] >= c[0] ? 0.55 : 0.30);
+        if (z === null) continue;
+        // [VEG-V2 2026-10-05] aussi en plaine: parcs (vert fonce V16) denses, gazons epars (berges, squares, rues) — avant: seulement > 25 m
+        const park = near(...c, 151, 192, 116, 16), lawn = near(...c, 193, 217, 131, 16);
+        let pz = z >= 25 ? Math.min(1, (z - 25) / 70) * (c[1] >= c[0] ? 0.55 : 0.30) : 0;
+        if (z < 25 && z > 0.3) pz = bank ? 0.35 : park ? 0.42 : lawn ? 0.07 : (c[1] > c[0] + 15 && c[1] > c[2] + 15 ? 0.12 : 0);
+        if (pz <= 0) continue;
         if (rnd(seed) < pz) trees.push([x, y, z, seed]);
       }
       if (trees.length) {

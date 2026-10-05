@@ -85,11 +85,22 @@ def main():
                 dz = deck_z(x, y)
                 if dz is not None and dz - 1.0 > g + 2.5: z = dz - 1.0 + 0.05; n_el += 1
             P.append([round(float(x), 1), round(float(y), 1), round(z, 2), round(g, 2)])
+        # [BRIDGES-V1 2026-10-05] route V16 au-dessus de l'eau SANS tablier mesure = pont (riviere de Miami, canaux): tablier a
+        # 6 m (ESTIME: ponts bas / basculants), rampes a 8 % lissees plus bas -> rendu en dalle + garde-corps
+        if c in ('road', 'hwy', 'mark_w', 'mark_y') and len(P) >= 2:
+            wet = [q[3] <= 0.05 and q[2] < q[3] + 2.5 for q in P]
+            if any(wet):
+                for q, wv in zip(P, wet):
+                    if wv: q[2] = round(max(q[2], 6.0), 2)
         # [ROADS-V2] profil lisse: mediane glissante (5) puis pente bornee a 8 % (pas de pics, rampes d'acces douces)
         if len(P) >= 3:
             Zs = np.array([q[2] for q in P]); G0 = np.array([q[3] for q in P])
             el = Zs > G0 + 2.0
             if el.any():
+                # rampes d'acces: on propage le tablier vers les berges (pente 8 %) avant le lissage
+                d0 = np.r_[0, np.hypot(*np.diff(np.array([[q[0], q[1]] for q in P]), axis=0).T)]
+                for i in range(1, len(Zs)): Zs[i] = max(Zs[i], Zs[i - 1] - 0.08 * d0[i])
+                for i in range(len(Zs) - 2, -1, -1): Zs[i] = max(Zs[i], Zs[i + 1] - 0.08 * d0[i + 1])
                 Zm = Zs.copy()
                 for i in range(len(Zs)):
                     w = Zs[max(0, i - 2):i + 3]; Zm[i] = np.median(w)
