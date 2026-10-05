@@ -588,7 +588,7 @@ function sunDirVec() {   // vecteur VERS le soleil; az horaire depuis le nord (+
 // [GROUND-COLOR-V1] teintes du sol et de la vegetation MESUREES sur les frames de jour (tools/ground_colors.py):
 // on garde la luminance calibree de chaque materiau et on prend la teinte/saturation du jeu
 // [STRUCTS-V1] structures rendues en vrai volume par le module STRUCTS (pas de fil de fer vif, pas de faces auto)
-const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)/;
+const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)|Stadium \(V16|Stadium Roof Portique/;
 const _gLum = c => 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
 // sat < 1: materiaux neutres (dalles, asphalte) — la dominante chaude de l'etalonnage du jeu, etalee sur des km2 de ville, virait au desert
 const gameTint = (cur, srgb, sat = 1) => { if (!srgb) return cur; const m0 = srgb.map(v => Math.pow(v, 2.2)), l0 = _gLum(m0), m = m0.map(v => l0 + (v - l0) * sat), k = _gLum(cur) / Math.max(_gLum(m), 1e-4); return m.map(v => v * k); };
@@ -3961,7 +3961,7 @@ window.__camScreen = name => {
   // ---- grues portuaires: aretes -> poutres ----
   {
     const beams = [];
-    for (const n of Object.keys(M)) if (/Container Crane/.test(n)) for (const e of (M[n].world_edges || M[n])) beams.push(e);
+    for (const n of Object.keys(M)) if (/Container Crane|Stadium Roof Portique/.test(n)) for (const e of (M[n].world_edges || M[n])) beams.push(e);
     if (beams.length) {
       const im = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), stdMat(0xe4e2dc, 0.5, 0.3, 0.7), beams.length);
       const q = new THREE.Quaternion(), X = new V3(1, 0, 0);
@@ -3985,6 +3985,66 @@ window.__camScreen = name => {
       const li = new THREE.InstancedMesh(new THREE.SphereGeometry(0.5, 6, 4), glowMat(0x888888, [1.0, 0.94, 0.82], 6.0), bl.length);
       bl.forEach((p, i) => { m4.makeTranslation(p.x, p.y, p.z); li.setMatrixAt(i, m4); }); grp.add(li);
       addPools([...cc.values()].map(([x, y]) => [x, y, 4.5, 64]));
+    }
+  }
+
+
+  // ---- stade (V16 2691) facon loanDepot park: plan et hauteurs du mesh (rails MESURES, bol/voute ESTIMES IRL) ----
+  {
+    const sn = Object.keys(M).find(n => /^Stadium \(V16/.test(n));
+    if (sn) {
+      const E = M[sn].world_edges || M[sn];
+      let zmin = 1e9; for (const [a, b] of E) zmin = Math.min(zmin, a[2], b[2]);
+      // contour du bol: aretes du niveau le plus bas chainees en boucle (la plus longue)
+      const key = p => p[0].toFixed(1) + ',' + p[1].toFixed(1), adj = new Map();
+      for (const [a, b] of E) if (Math.abs(a[2] - zmin) < 0.3 && Math.abs(b[2] - zmin) < 0.3) {
+        const ka = key(a), kb = key(b); if (ka === kb) continue;
+        (adj.get(ka) || adj.set(ka, []).get(ka)).push([kb, b]); (adj.get(kb) || adj.set(kb, []).get(kb)).push([ka, a]);
+      }
+      const seen = new Set(); let best = [];
+      for (const [k0] of adj) {
+        if (seen.has(k0)) continue; const loop = []; let cur = k0, prev = null;
+        for (let it = 0; it < 2000; it++) {
+          seen.add(cur); const [x, y] = cur.split(',').map(Number); loop.push([x, y]);
+          const nx = (adj.get(cur) || []).find(([kk]) => kk !== prev && !seen.has(kk)); if (!nx) break; prev = cur; cur = nx[0];
+        }
+        if (loop.length > best.length) best = loop;
+      }
+      // voute: emprise et hauteurs lues dans le mesh (aretes au-dessus du sommet du bol)
+      let rx0 = 1e9, rx1 = -1e9, ry0 = 1e9, ry1 = -1e9, zc = -1e9, zs = 1e9, ztop = -1e9;
+      for (const [a, b] of E) for (const p of [a, b]) { if (p[2] > 40) { rx0 = Math.min(rx0, p[0]); rx1 = Math.max(rx1, p[0]); ry0 = Math.min(ry0, p[1]); ry1 = Math.max(ry1, p[1]); zc = Math.max(zc, p[2]); zs = Math.min(zs, p[2]); } if (p[2] < 40) ztop = Math.max(ztop, p[2]); }
+      if (best.length >= 3 && zc > zs) {
+        const shape = new THREE.Shape(best.map(([x, y]) => new THREE.Vector2(x, y)));
+        const band = (z0, z1) => { const g = new THREE.ExtrudeGeometry(shape, { depth: z1 - z0, bevelEnabled: false, curveSegments: 1 }); g.translate(0, 0, z0); return g; };
+        add(merge([band(zmin, 20.0), band(ztop - 1.2, ztop)]), stdMat(0xeceae4, 0.7, 0.05, 0.7));              // socle beton blanc + corniche
+        add(merge([band(20.0, ztop - 1.2)]), stdMat(0x5d7487, 0.12, 0.45, 1.1));                             // grande bande vitree
+        // 3 panneaux de toit vouts (coulissants chez loanDepot), legerement etages, nervures tous les 6 m
+        const yc = (ry0 + ry1) / 2, half = (ry1 - ry0) / 2, L = rx1 - rx0, P = [], C = [], gab = [];
+        const zAt = (y, dz) => zs + dz + (zc - zs) * Math.pow(Math.max(0, 1 - Math.pow((y - yc) / half, 2)), 0.85);
+        const lin = v => Math.pow(v, 2.2);
+        for (let k = 0; k < 3; k++) {
+          const xa = rx0 + k * L / 3 - (k ? 2 : 0), xb = rx0 + (k + 1) * L / 3 + (k < 2 ? 2 : 0), dz = [0, 1.4, 2.8][k];
+          const NY = 36, NX = Math.max(2, Math.round((xb - xa) / 6));
+          for (let i = 0; i < NX; i++) for (let j = 0; j < NY; j++) {
+            const x0 = xa + (xb - xa) * i / NX, x1 = xa + (xb - xa) * (i + 1) / NX, y0 = ry0 + (ry1 - ry0) * j / NY, y1 = ry0 + (ry1 - ry0) * (j + 1) / NY;
+            const a = [x0, y0, zAt(y0, dz)], b = [x1, y0, zAt(y0, dz)], c = [x1, y1, zAt(y1, dz)], d = [x0, y1, zAt(y1, dz)];
+            P.push(...a, ...b, ...c, ...a, ...c, ...d);
+            const g = lin(i % 2 ? 0.90 : 0.84); for (let q = 0; q < 6; q++) C.push(g, g, g * 1.01);
+          }
+          for (const xe of [xa, xb]) for (let j = 0; j < NY; j++) {               // pignons: fermes sombres sous la voute
+            const y0 = ry0 + (ry1 - ry0) * j / NY, y1 = ry0 + (ry1 - ry0) * (j + 1) / NY;
+            gab.push(xe, y0, ztop, xe, y1, ztop, xe, y1, zAt(y1, dz), xe, y0, ztop, xe, y1, zAt(y1, dz), xe, y0, zAt(y0, dz));
+          }
+        }
+        const rg = new THREE.BufferGeometry(); rg.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); rg.setAttribute('color', new THREE.Float32BufferAttribute(C, 3)); rg.computeVertexNormals();
+        const rm = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.55, metalness: 0.1, side: THREE.DoubleSide }); rm.toneMapped = false;
+        if (window.__envTex) { rm.envMap = window.__envTex; rm.envMapIntensity = 0.7; }
+        { const prev = window.__onEnv; window.__onEnv = t => { rm.envMap = t; rm.envMapIntensity = 0.7; rm.needsUpdate = true; if (prev) prev(t); }; }
+        const rme = new THREE.Mesh(rg, rm); rme.castShadow = true; rme.receiveShadow = true; grp.add(rme);
+        const gg = new THREE.BufferGeometry(); gg.setAttribute('position', new THREE.Float32BufferAttribute(gab, 3)); gg.computeVertexNormals();
+        const gm = stdMat(0x9aa3aa, 0.35, 0.55, 0.9); gm.side = THREE.DoubleSide; add(gg, gm);   // pignons: fermes acier/vitrage clairs (loanDepot)
+        window.__structs = Object.assign(window.__structs || {}, { stadium: { loop: best.length, roof: [rx0, rx1, ry0, ry1, zs, zc] } });
+      }
     }
   }
 
