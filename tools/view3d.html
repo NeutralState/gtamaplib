@@ -603,6 +603,10 @@ const terraUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uDetail:   { value: null },                              // [DETAIL-V1] carte V16 a 1 m/px autour de la camera
   uDetailBounds: { value: new THREE.Vector4(0, 0, 1, 1) },
   uDetailOn: { value: 0 },
+  uWaterTex: { value: null },                              // [WATER-COLOR-V1] meme champ mesure que la mer (rives, lacs au-dessus de z=0)
+  uWaterBounds: { value: new THREE.Vector4(0, 0, 1, 1) },
+  uWaterMed: { value: new THREE.Vector3(0.264, 0.361, 0.391) },
+  uWaterOn:  { value: 0 },
 }]);
 const seaUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uSunDir:   { value: new THREE.Vector3(0, 0, 1) },
@@ -619,6 +623,10 @@ const seaUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uReflMat:  { value: new THREE.Matrix4() },
   uReflOn:   { value: 0 },
   uReflDbg:  { value: 0 },      // debug: 1 = la mer n'affiche que le reflet
+  uWaterTex: { value: null },   // [WATER-COLOR-V1] couleur de l'eau du JEU mesuree (tools/water_colors.py), champ lisse + confiance
+  uWaterBounds: { value: new THREE.Vector4(0, 0, 1, 1) },
+  uWaterMed: { value: new THREE.Vector3(0.264, 0.361, 0.391) },
+  uWaterOn:  { value: 0 },
 }]);
 const skyUni = {
   uZenith:   { value: new THREE.Vector3() },
@@ -1046,7 +1054,8 @@ const data = await (await fetch('/api/scene3d')).json();
         uniform vec3 uSunDir;
         uniform sampler2D uDrape, uShadow, uDetail;
         uniform vec4 uDetailBounds; uniform float uDetailOn;
-        uniform float uUseDrape, uContours, uTime, uShadowOn, uClouds, uNight;
+        uniform float uUseDrape, uContours, uTime, uShadowOn, uClouds, uNight, uWaterOn;
+        uniform sampler2D uWaterTex; uniform vec4 uWaterBounds; uniform vec3 uWaterMed;
         uniform vec4 uTerrBounds, uMeasBounds;
         #include <common>
         #include <logdepthbuf_pars_fragment>
@@ -1121,6 +1130,13 @@ const data = await (await fetch('/api/scene3d')).json();
               base = mix(base, vec3(0.56, 0.55, 0.52) * (0.95 + 0.08 * nz2), wU);    // trottoirs / dalles
               base = mix(base, vec3(0.40, 0.40, 0.41), wB);                          // dalles des emprises
               base = mix(base, vec3(0.045, 0.046, 0.050) * (0.9 + 0.2 * nz2), wR);   // asphalte
+              // [WATER-COLOR-V1] eau de la carte (bleu dominant) -> couleur de l'eau du JEU mesuree: rives et lacs interieurs
+              if (uWaterOn > 0.5) {
+                float wW = smoothstep(0.03, 0.10, c.b - max(c.r, c.g));
+                vec2 wuv = (vPos.xy - uWaterBounds.xy) / (uWaterBounds.zw - uWaterBounds.xy);
+                vec4 wf = texture2D(uWaterTex, clamp(wuv, 0.0, 1.0)) * step(0.0, wuv.x) * step(wuv.x, 1.0) * step(0.0, wuv.y) * step(wuv.y, 1.0);
+                base = mix(base, pow(mix(uWaterMed, wf.rgb, clamp(wf.a * 1.3, 0.0, 1.0)), vec3(2.2)) * 0.95, wW);
+              }
             }
             // [MAP-COLORS-V2 2026-09-26] la map telle quelle: plus de remplacement de l'eau par le fond marin (c'etait
             // le halo sombre des rivages), la mer 3D ne se dessine que la ou la map est bleue (cf. shader mer)
@@ -1377,7 +1393,8 @@ const data = await (await fetch('/api/scene3d')).json();
       fragmentShader: `
         varying vec3 vPos;
         uniform vec3 uSunDir, uHorizon, uZenith, uSunColor;
-        uniform float uTime, uNight, uMapSea, uReflOn, uReflDbg;
+        uniform float uTime, uNight, uMapSea, uReflOn, uReflDbg, uWaterOn;
+        uniform sampler2D uWaterTex; uniform vec4 uWaterBounds; uniform vec3 uWaterMed;
         uniform vec4 uTerrBounds;
         uniform sampler2D uDepth, uDrape, uRefl;
         uniform mat4 uReflMat;
@@ -1427,6 +1444,16 @@ const data = await (await fetch('/api/scene3d')).json();
           vec3 skyRefl = mix(uZenith, uHorizon, 0.65);
           // [MAP-COLORS-V1] en drape: le bleu de la V16 (49,150,202), a peine module par le ciel
           vec3 mapBlue = mix(srgb(vec3(0.19, 0.59, 0.79)), mapc, minb);   // mapc deja lineaire (texture sRGB)
+          // [WATER-COLOR-V1] l'eau du JEU (mesuree sur les frames de jour) remplace le bleu de carte: champ mesure la ou il
+          // existe, sinon la moyenne mesuree; un peu plus claire sur les hauts-fonds, plus sombre au large (lisibilite des rives).
+          // Couleur mesuree = corps + reflet du ciel: on prend un corps un peu plus sombre, le reflet est ajoute plus bas.
+          if (uWaterOn > 0.5) {
+            vec2 wuv = (vPos.xy - uWaterBounds.xy) / (uWaterBounds.zw - uWaterBounds.xy);
+            vec4 wf = texture2D(uWaterTex, clamp(wuv, 0.0, 1.0)) * step(0.0, wuv.x) * step(wuv.x, 1.0) * step(0.0, wuv.y) * step(wuv.y, 1.0);
+            vec3 wsrgb = mix(uWaterMed, wf.rgb, clamp(wf.a * 1.3, 0.0, 1.0));
+            float wdg = mix(63.75, texture2D(uDepth, clamp(muv, 0.0, 1.0)).r * 63.75, minb);
+            mapBlue = srgb(wsrgb) * 0.82 * mix(1.22, 0.78, smoothstep(0.6, 12.0, wdg));
+          }
           vec3 deep = mix(srgb(vec3(0.05, 0.19, 0.28)), mapBlue, uMapSea);
           vec3 col = mix(deep, skyRefl, mix(0.22 + 0.58 * fres, 0.03 + 0.10 * fres, uMapSea));
           // [REFLECT-V1] vrai reflet: la scene vue depuis la camera miroir (z -> -z), ondulee par les vagues, dosee par Fresnel
@@ -1470,8 +1497,8 @@ const data = await (await fetch('/api/scene3d')).json();
           float shal = (1.0 - smoothstep(0.0, 12.0, wdepth)) * (1.0 - farBlend);
           col = mix(col, mix(srgb(vec3(0.30, 0.66, 0.62)), mapBlue * 1.08, uMapSea), shal * 0.40);
           // [GROUND-V1] eau de Miami: turquoise sur les hauts-fonds, bleu plus profond au large (mode carte)
-          col = mix(col, srgb(vec3(0.36, 0.80, 0.78)), (1.0 - smoothstep(0.4, 4.5, wdepth)) * 0.55 * uMapSea * (1.0 - uNight) * (1.0 - farBlend));
-          col = mix(col, col * vec3(0.55, 0.70, 0.85), smoothstep(6.0, 25.0, wdepth) * 0.5 * uMapSea);
+          col = mix(col, srgb(vec3(0.36, 0.80, 0.78)), (1.0 - smoothstep(0.4, 4.5, wdepth)) * 0.55 * uMapSea * (1.0 - uNight) * (1.0 - farBlend) * (1.0 - uWaterOn));   // turquoise de carte: seulement sans mesure
+          col = mix(col, col * vec3(0.55, 0.70, 0.85), smoothstep(6.0, 25.0, wdepth) * 0.5 * uMapSea * (1.0 - uWaterOn));
           float band = 1.0 - smoothstep(0.10, 1.3, wdepth);
           float fo = vn2(p * 0.06 + vec2(0.0, t * 0.18)) * 0.6
                    + vn2(p * 0.21 - vec2(t * 0.12, 0.0)) * 0.4;
@@ -3910,6 +3937,17 @@ const Refl = (() => {
   return { step, rt };
 })();
 window.__refl = Refl;
+// [WATER-COLOR-V1] champ de couleur de l'eau mesure sur les frames (tools/water_colors.py -> _water_colors.json)
+fetch('/threejs/_water_colors.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(D => {
+  if (!D || !D.grid) return;
+  const G = D.grid, tex = new THREE.DataTexture(new Uint8Array(G.rgba), G.nx, G.ny, THREE.RGBAFormat);
+  tex.magFilter = tex.minFilter = THREE.LinearFilter; tex.needsUpdate = true;      // donnees (sRGB 0-1 brutes, converties dans le shader)
+  seaUni.uWaterTex.value = tex;
+  seaUni.uWaterBounds.value.set(G.x0, G.y0, G.x0 + G.nx * G.cell, G.y0 + G.ny * G.cell);   // texel i couvre [x0 + i*cell, x0 + (i+1)*cell)
+  seaUni.uWaterMed.value.set(...D.median); seaUni.uWaterOn.value = 1;
+  terraUni.uWaterTex.value = tex; terraUni.uWaterBounds.value.copy(seaUni.uWaterBounds.value);
+  terraUni.uWaterMed.value.set(...D.median); terraUni.uWaterOn.value = 1;
+}).catch(() => {});
 
 const Cine = (() => {
   let on = localStorage.getItem('ui.cine3d') !== '0', W = 0, H = 0;
