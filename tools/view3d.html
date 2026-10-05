@@ -2125,7 +2125,7 @@ if (meshVerts.length) {
           const L = Math.hypot(e[1][0] - e[0][0], e[1][1] - e[0][1]), steep = DECK.test(name) && Math.abs(e[1][2] - e[0][2]) > 0.15 * Math.max(L, 0.01) && Math.max(e[0][2], e[1][2]) > 6;
           const cc3 = sky && steep ? YEL : cc2;
           const dz = Math.abs(e[1][2] - e[0][2]), top = Math.max(e[0][2], e[1][2]);
-          if (DECK.test(name) && dz > 2 && dz > 4 * L && top > 30) { pylons.push(e); continue; }              // pylones (au-dessus de 30 m)
+          if (DECK.test(name) && dz > 1.5 && dz > 4 * L) { pylons.push([e, name]); continue; }                 // verticales: piles ou pylones (classees plus bas)
           if (DECK.test(name) && steep && dz <= 4 * L && top > 20) { cables.push([e, sky]); continue; }    // haubans -> vrais cables
           (steep ? kv : V).push(...e[0], ...e[1]); (steep ? kc : C).push(cc3.r, cc3.g, cc3.b, cc3.r, cc3.g, cc3.b);
         }
@@ -2142,15 +2142,38 @@ if (meshVerts.length) {
       const cableWire = mk(kv, kc, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 1.0, depthTest: true, depthWrite: false }));
       cableWire.renderOrder = 12; window.__cableWire = cableWire;
       if (pylons.length) {
+        // tablier local de chaque mesh: niveau des aretes quasi horizontales par cellule de 12 m (mode) -> une verticale qui
+        // depasse le tablier de > 4 m est un PYLONE (fut effile), sinon une PILE (colonne 1.4 m) — comme dans le mesh de base
+        const deckZ = new Map();
+        for (const [name, m] of Object.entries(data.meshes || {})) {
+          if (!DECK.test(name)) continue;
+          for (const e of (m.world_edges || m)) {
+            const L = Math.hypot(e[1][0] - e[0][0], e[1][1] - e[0][1]);
+            if (L < 0.5 || Math.abs(e[1][2] - e[0][2]) > 0.08 * L) continue;
+            const k = name + '|' + Math.floor((e[0][0] + e[1][0]) / 24) + ',' + Math.floor((e[0][1] + e[1][1]) / 24);
+            const a = deckZ.get(k) || []; a.push((e[0][2] + e[1][2]) / 2); deckZ.set(k, a);
+          }
+        }
+        const deckAt = (name, x, y) => {                                     // niveau le plus frequent (tablier), pas le max (traverses des pylones)
+          const cnt = new Map();
+          for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+            const a = deckZ.get(name + '|' + (Math.floor(x / 12) + dx) + ',' + (Math.floor(y / 12) + dy)); if (!a) continue;
+            for (const z of a) { const k = Math.round(z / 2); cnt.set(k, (cnt.get(k) || 0) + 1); }
+          }
+          let bk = null, bc = 0; for (const [k, c] of cnt) if (c > bc) { bc = c; bk = k; }
+          return bk === null ? null : bk * 2 + 1.5;
+        };
         const P = [], N = [];
-        const zTop = Math.max(...pylons.map(([a, b]) => Math.max(a[2], b[2])));
-        for (const [a, b] of pylons) {
+        const zTop = Math.max(...pylons.map(([[a, b]]) => Math.max(a[2], b[2])));
+        for (const [[a, b], name] of pylons) {
           const lo = a[2] < b[2] ? a : b, hi = a[2] < b[2] ? b : a;
-          const s2 = 1.2 + 2.6 * Math.max(0, 1 - lo[2] / Math.max(zTop, 1));   // caisson plus large en bas (fut effile)
+          const dk = deckAt(name, hi[0], hi[1]);
+          const isPylon = dk !== null ? hi[2] > dk + 4 : hi[2] > 30;
+          const s2 = isPylon ? 1.2 + 2.6 * Math.max(0, 1 - lo[2] / Math.max(zTop, 1)) : 0.7;   // pylone effile / pile de 1.4 m
           const c4 = [[-s2, -s2], [s2, -s2], [s2, s2], [-s2, s2]];
           for (let k = 0; k < 4; k++) {
             const [x1, y1] = c4[k], [x2, y2] = c4[(k + 1) % 4], nn = [(y2 - y1) / (2 * s2), -(x2 - x1) / (2 * s2), 0];
-            const t2 = (1.2 + 2.6 * Math.max(0, 1 - hi[2] / Math.max(zTop, 1))) / s2;
+            const t2 = isPylon ? (1.2 + 2.6 * Math.max(0, 1 - hi[2] / Math.max(zTop, 1))) / s2 : 1;
             const A = [lo[0] + x1, lo[1] + y1, lo[2]], B = [lo[0] + x2, lo[1] + y2, lo[2]], C2 = [hi[0] + x2 * t2, hi[1] + y2 * t2, hi[2]], D = [hi[0] + x1 * t2, hi[1] + y1 * t2, hi[2]];
             P.push(...A, ...B, ...C2, ...A, ...C2, ...D); for (let q = 0; q < 6; q++) N.push(...nn);
           }
@@ -3294,7 +3317,7 @@ window.__camScreen = name => {
           quad(bR, aR, upk(aR, gh), upk(bR, gh), nL, CONC); quad(aR, bR, upk(bR, gh), upk(aR, gh), nR, CONC);   // garde-corps droit
         }
       }
-      if (deckable) {                                                         // piles
+      if (false) {                                                            // [ROADS-V3] piles: celles du MESH du pont font foi (cf. bridge-pylons)
         let since = 20;
         for (let i = 0; i < n; i++) {
           const A = Q[i]; if (i > 0) since += Math.hypot(A.x - Q[i - 1].x, A.y - Q[i - 1].y);
