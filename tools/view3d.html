@@ -2113,6 +2113,7 @@ if (meshVerts.length) {
     }
     {
       const bv = [], bc = [], sv = [], sc = [], dv = [], dc = [], kv = [], kc = [], cc2 = new THREE.Color(), YEL = new THREE.Color(0xf5c518);
+      const pylons = [], cables = [];                                                     // [ROADS-V2] pylones de ponts: aretes quasi verticales et hautes -> caissons beton
       const DECK = /Bridge|Viaduct|Ramp|Interchange|Causeway|Overpass/;
       for (const [name, m] of Object.entries(data.meshes || {})) {
         const so = S[name], isSolid = !!(so && (so.layers.length || (so.ff && so.ff.length)));
@@ -2123,6 +2124,9 @@ if (meshVerts.length) {
           // [ROADS-V2] ponts: les aretes RAIDES (pylones, haubans) restent toujours visibles; le reste (tablier) est remplace par la route 3D
           const L = Math.hypot(e[1][0] - e[0][0], e[1][1] - e[0][1]), steep = DECK.test(name) && Math.abs(e[1][2] - e[0][2]) > 0.15 * Math.max(L, 0.01) && Math.max(e[0][2], e[1][2]) > 6;
           const cc3 = sky && steep ? YEL : cc2;
+          const dz = Math.abs(e[1][2] - e[0][2]), top = Math.max(e[0][2], e[1][2]);
+          if (DECK.test(name) && dz > 2 && dz > 4 * L && top > 30) { pylons.push(e); continue; }              // pylones (au-dessus de 30 m)
+          if (DECK.test(name) && steep && dz <= 4 * L && top > 20) { cables.push([e, sky]); continue; }    // haubans -> vrais cables
           (steep ? kv : V).push(...e[0], ...e[1]); (steep ? kc : C).push(cc3.r, cc3.g, cc3.b, cc3.r, cc3.g, cc3.b);
         }
       }
@@ -2137,6 +2141,41 @@ if (meshVerts.length) {
       deckWire.renderOrder = 12; window.__deckWire = deckWire;
       const cableWire = mk(kv, kc, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 1.0, depthTest: true, depthWrite: false }));
       cableWire.renderOrder = 12; window.__cableWire = cableWire;
+      if (pylons.length) {
+        const P = [], N = [];
+        const zTop = Math.max(...pylons.map(([a, b]) => Math.max(a[2], b[2])));
+        for (const [a, b] of pylons) {
+          const lo = a[2] < b[2] ? a : b, hi = a[2] < b[2] ? b : a;
+          const s2 = 1.2 + 2.6 * Math.max(0, 1 - lo[2] / Math.max(zTop, 1));   // caisson plus large en bas (fut effile)
+          const c4 = [[-s2, -s2], [s2, -s2], [s2, s2], [-s2, s2]];
+          for (let k = 0; k < 4; k++) {
+            const [x1, y1] = c4[k], [x2, y2] = c4[(k + 1) % 4], nn = [(y2 - y1) / (2 * s2), -(x2 - x1) / (2 * s2), 0];
+            const t2 = (1.2 + 2.6 * Math.max(0, 1 - hi[2] / Math.max(zTop, 1))) / s2;
+            const A = [lo[0] + x1, lo[1] + y1, lo[2]], B = [lo[0] + x2, lo[1] + y2, lo[2]], C2 = [hi[0] + x2 * t2, hi[1] + y2 * t2, hi[2]], D = [hi[0] + x1 * t2, hi[1] + y1 * t2, hi[2]];
+            P.push(...A, ...B, ...C2, ...A, ...C2, ...D); for (let q = 0; q < 6; q++) N.push(...nn);
+          }
+        }
+        const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); pg.setAttribute('normal', new THREE.Float32BufferAttribute(N, 3));
+        const pm = new THREE.MeshStandardMaterial({ color: 0xd8d6cf, roughness: 0.8, metalness: 0 }); pm.toneMapped = false;
+        const pmesh = new THREE.Mesh(pg, pm); pmesh.castShadow = true; pmesh.receiveShadow = true; pmesh.name = 'bridge-pylons';
+        layers.meshes.add(pmesh); window.__pylons = pmesh;
+      }
+      // [ROADS-V2] haubans: de vrais cables (cylindres instancies ~0.7 m), jaunes pour le Bocamar (Sunshine Skyway), acier sinon
+      if (cables.length) {
+        const cg = new THREE.CylinderGeometry(0.35, 0.35, 1, 6, 1, true); cg.rotateX(Math.PI / 2); cg.translate(0, 0, 0.5);   // axe +z, de 0 a 1
+        const cm = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.5, metalness: 0.05 }); cm.toneMapped = false;
+        if (window.__envTex) { cm.envMap = window.__envTex; cm.envMapIntensity = 0.9; }
+        { const prev = window.__onEnv; window.__onEnv = t => { cm.envMap = t; cm.envMapIntensity = 0.9; cm.needsUpdate = true; if (prev) prev(t); }; }
+        const im = new THREE.InstancedMesh(cg, cm, cables.length), M4 = new THREE.Matrix4(), Q = new THREE.Quaternion(), Z = new THREE.Vector3(0, 0, 1), V = new THREE.Vector3(), S3 = new THREE.Vector3(), CL = new THREE.Color();
+        cables.forEach(([[a, b], sky], k) => {
+          const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b); V.subVectors(B, A); const L = V.length();
+          Q.setFromUnitVectors(Z, V.normalize()); S3.set(1, 1, L); M4.compose(A, Q, S3); im.setMatrixAt(k, M4);
+          im.setColorAt(k, CL.set(sky ? 0xf5c518 : 0xc9ccd2));
+        });
+        im.instanceMatrix.needsUpdate = true; if (im.instanceColor) im.instanceColor.needsUpdate = true;
+        im.castShadow = true; im.frustumCulled = false; im.name = 'bridge-cables';
+        layers.meshes.add(im); window.__cables = im;
+      }
       const _sw = styleWire;
     }
     // [SOLIDS-V1] modes de couleur: beton (teinte legere du mesh) / hauteur du toit (meme rampe que la Map) / couleur du mesh

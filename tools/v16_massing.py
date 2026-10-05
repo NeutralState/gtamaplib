@@ -41,12 +41,19 @@ def main():
     solid_polys = [p['outer'] for so in S.values() for L in so['layers'][:1] for p in L['polys']]
     # + l'enveloppe au sol de TOUS les autres meshes (grande roue, stade, ponts...): pas de boite sous une structure modelisee
     M = json.load(open(os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')))
+    near_cells = set()                                         # cellules de 10 m touchees par un long mesh (ponts: socles des pylones...)
     for n, m in M.items():
         E = np.asarray(m.get('world_edges') or [], float)
         if E.ndim != 3 or len(E) < 3: continue
         P = E[..., :2].reshape(-1, 2)
         ext = P.max(0) - P.min(0)
-        if max(ext) > 600 or max(ext) < 3: continue           # ponts/viaducs tres longs: leurs bboxes avaleraient des quartiers
+        if max(ext) > 600:                                    # ponts/viaducs tres longs: proximite des aretes au lieu de l'enveloppe
+            for a, b in E[..., :2]:
+                L = np.hypot(*(b - a)); k = max(1, int(L / 5))
+                for t in np.linspace(0, 1, k + 1):
+                    q = a + (b - a) * t; near_cells.add((int(q[0] // 10), int(q[1] // 10)))
+            continue
+        if max(ext) < 3: continue
         hull = cv2.convexHull(P.astype(np.float32)).reshape(-1, 2)
         if len(hull) >= 3: solid_polys.append([[float(x), float(y)] for x, y in hull])
     sbb = [(min(q[0] for q in O), min(q[1] for q in O), max(q[0] for q in O), max(q[1] for q in O)) for O in solid_polys]
@@ -61,6 +68,10 @@ def main():
         skip = False
         for O, b in zip(solid_polys, sbb):                      # deja modelise
             if b[0] - 2 <= cx <= b[2] + 2 and b[1] - 2 <= cy <= b[3] + 2 and inpoly(cx, cy, O): skip = True; break
+        if not skip:
+            for x, y in list(R) + [(cx, cy)]:
+                cxi, cyi = int(x // 10), int(y // 10)
+                if any((cxi + dx, cyi + dy) in near_cells for dx in (-1, 0, 1) for dy in (-1, 0, 1)): skip = True; break
         if skip: continue
         a, r1, r2 = p['area'], hsh(i, 1), hsh(i, 2)
         core = -1250 < cx < 350 and -1350 < cy < 1250
