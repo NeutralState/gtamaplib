@@ -33,7 +33,7 @@ FACE_ONLY_OK = ('Water Tower', 'Silo', 'Smokestack', 'Stack', 'Tank', 'Toll Plaz
 MAX_TRIS = 40000
 EXCLUDE = ('Bridge', 'Viaduct', 'Ramp', 'Interchange', 'Causeway', 'Overpass', 'Hill', 'Mountain', 'Ridge', 'Massif',
            'Relief', 'Terrain', 'Stadium', 'Water Tower', 'Antenna', 'Mast', 'Crane', 'Pylon', 'Observation Wheel', 'Portique',
-           'Gantry', 'Toll', 'Billboard', 'Sign', 'Fence', 'Cables', 'Roller Coaster', 'Coaster', 'Pier', 'Dock',
+           'Gantry', 'Toll', 'Radio', 'Billboard', 'Sign', 'Fence', 'Cables', 'Roller Coaster', 'Coaster', 'Pier', 'Dock',
            'Stilts', 'Chimney', 'Stack', 'Silo', 'Lighthouse', 'FM', 'Tower (Radio)', 'Prison Towers')
 MAX_EXTENT = 450.0
 
@@ -181,6 +181,13 @@ def build(only=None):
             s['fv'] = [round(float(v), 2) for v in f[0].reshape(-1)]; s['ff'] = [int(i) for i in f[1].reshape(-1)]
         s['color'] = m.get('color', '#9ca3af')
         if m.get('facade'): s['facade'] = m['facade']          # [FACADES-V1] style de facade lu sur les frames (optionnel)
+        # [FACADE-COLOR-V1] couleur: mesuree sur les frames si fiable (>= 3 cams, >= 6000 px), sinon IRL (« en cas de doute regarde irl »)
+        fc, fi = m.get('facade_color'), m.get('facade_irl')
+        chroma = lambda c: max(c) - min(c)
+        tinted = fc and fi and chroma(fc['rgb']) > 0.06 and chroma(fi['rgb']) < 0.06    # mesure teintee (coucher de soleil...) vs IRL neutre
+        if fc and fc.get('n_cams', 0) >= 3 and fc.get('n_px', 0) >= 6000 and not tinted: s['facade_color'] = fc['rgb']
+        elif fi: s['facade_color'] = fi['rgb']; s['facade_src'] = 'irl'
+        elif fc: s['facade_color'] = fc['rgb']
         out[name] = s
     return out
 

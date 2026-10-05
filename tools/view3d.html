@@ -1675,9 +1675,15 @@ if (meshVerts.length) {
         float slab = wall * (1.0 - step(0.5, abs(kind - 1.0))) * (1.0 - blur) * (1.0 - lob) * (1.0 - smoothstep(0.0, 0.04 + fw.y, fq.y));
         float lit = mix(step(0.55, h31(vec3(floor(gq), vId))), 0.45, blur);
         vec3 Vd = normalize(cameraPosition - vWPos);
-        float fres = pow(1.0 - clamp(abs(dot(Vd, normalize(vWN))), 0.0, 1.0), 3.0);
-        vec3 glass = mix(vGls.rgb, uSky * 0.85, 0.06 + 0.32 * fres) * (0.86 + 0.26 * h31(vec3(floor(gq) + 7.0, vId)) * (1.0 - blur));
+        float fres = pow(1.0 - clamp(abs(dot(Vd, normalize(vWN))), 0.0, 1.0), 2.0);
+        // reflet: le verre renvoie le ciel en haut de la tour et la ville/le sol en bas (degrade vertical) -> tours claires, pas des blocs noirs
+        float hfrac = clamp(loc / max(30.0, vTop - vBase), 0.0, 1.0);
+        vec3 refl = mix(vec3(0.34, 0.36, 0.38), uSky * 1.15 + vec3(0.06), smoothstep(0.0, 0.85, hfrac));
+        vec3 glass = mix(vGls.rgb, refl, 0.42 + 0.40 * fres) * (0.90 + 0.20 * h31(vec3(floor(gq) + 7.0, vId)) * (1.0 - blur));
         diffuseColor.rgb *= mix(1.0, mix(0.6, 1.0, smoothstep(0.0, 9.0, loc)), wall);   // pied du batiment (occlusion)
+        float band = h31(vec3(floor((loc - lobbyH) / (flh * 3.0)), vId, 5.0));            // groupes de 3 etages: legere variation (lisible de loin)
+        float face = h31(vec3(floor(tn * 8.0), vId));                                       // chaque face un peu differente
+        diffuseColor.rgb *= mix(1.0, (0.94 + 0.10 * band) * (0.95 + 0.08 * face), wall);
         diffuseColor.rgb = mix(diffuseColor.rgb, glass, win);
         diffuseColor.rgb *= 1.0 - 0.38 * slab;
         diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.60 + 0.12 * h31(floor(vWPos * 1.7))), roof * step(kind, 3.5));
@@ -1719,10 +1725,10 @@ if (meshVerts.length) {
     const sd = sunDirVec(); const { zen, hor, sun, night } = skyColors();
     const day = Math.max(0, Math.min(1, sd.z / 0.12));
     sunLight.color.setRGB(sun[0], sun[1], sun[2]);
-    sunLight.intensity = 2.4 * day * (1 - night);
+    sunLight.intensity = 2.9 * day * (1 - night);
     hemiLight.color.setRGB(zen[0] * 0.45 + 0.34, zen[1] * 0.45 + 0.34, zen[2] * 0.45 + 0.33);
     hemiLight.groundColor.setRGB(hor[0] * 0.5 + 0.06, hor[1] * 0.46 + 0.05, hor[2] * 0.40 + 0.04);
-    hemiLight.intensity = 0.35 + 0.75 * (1 - night);
+    hemiLight.intensity = 0.4 + 1.0 * (1 - night);
     solidsUni.uNight.value = night;
     solidsUni.uSky.value.set((hor[0] + zen[0]) * 0.5, (hor[1] + zen[1]) * 0.5, (hor[2] + zen[2]) * 0.5).multiplyScalar(1 - 0.85 * night);
     sunLight.castShadow = day > 0.02;
@@ -1763,7 +1769,7 @@ if (meshVerts.length) {
     const pos = [], nor = [], col = [], ids = [], sty = [], gls = [], bas = [], tops = [];
     const hsh = str => { let h = 2166136261; for (let k = 0; k < str.length; k++) h = Math.imul(h ^ str.charCodeAt(k), 16777619); return (h >>> 0) / 4294967296; };
     const FAC = [[0.90, 0.89, 0.86], [0.90, 0.85, 0.74], [0.84, 0.76, 0.62], [0.90, 0.78, 0.74], [0.76, 0.86, 0.84], [0.78, 0.78, 0.78], [0.93, 0.92, 0.90]];
-    const TINT = [[0.07, 0.13, 0.22], [0.07, 0.19, 0.20], [0.20, 0.16, 0.11], [0.24, 0.27, 0.30], [0.10, 0.18, 0.13], [0.05, 0.07, 0.10]];
+    const TINT = [[0.30, 0.44, 0.56], [0.30, 0.50, 0.50], [0.46, 0.42, 0.36], [0.52, 0.56, 0.60], [0.34, 0.48, 0.40], [0.16, 0.19, 0.22]];
     const tint = new THREE.Color();
     const styleOf = (name, h, faceOnly) => {
       const r = hsh(name), r2 = hsh(name + '#b'), r3 = hsh(name + '#c');
@@ -1774,14 +1780,37 @@ if (meshVerts.length) {
         return { kind: k, fac: fo.color || [0.88, 0.88, 0.86], gl: fo.glass || TINT[5],
                  s: [fo.bay || 2.6, (fo.win || [0.5, 0.5])[0], (fo.win || [0.5, 0.5])[1], fo.floor || 3.3] };
       }
-      let kind = h > 70 ? (r < 0.6 ? 1 : r < 0.84 ? 2 : 0) : h > 16 ? (r < 0.28 ? 1 : r < 0.55 ? 2 : 0) : 3;
+      let kind = h > 70 ? (r < 0.38 ? 1 : r < 0.72 ? 2 : 0) : h > 16 ? (r < 0.15 ? 1 : r < 0.48 ? 2 : 0) : 3;
       if (/Silo|Smokestack|Stack|Tank|Hangar|Warehouse|Hall|Shed/i.test(name)) kind = 4;
+      // [FACADE-COLOR-V1] couleur reelle mesuree sur les frames (moyenne photo: ombre + vitres) -> albedo
+      const mc = S[name].facade_color;
+      if (mc && S[name].facade_src === 'irl') {         // couleur IRL: deja un albedo (pas de correction photo)
+        const toLin = v => Math.pow(Math.min(1, Math.max(0, v)), 2.2);
+        const sArr = kind === 1 ? [1.4 + r2 * 0.7, 0.94, 0.90, 3.5 + 0.5 * r3] : kind === 2 ? [3.2 + r2, 0.985, 0.40 + 0.18 * r3, 3.2 + 0.4 * r3]
+                   : kind === 3 ? [3.0 + r2 * 1.5, 0.38 + 0.2 * r3, 0.46, 3.1] : [2.2 + r2 * 1.3, 0.34 + 0.18 * r3, 0.42 + 0.12 * r2, 3.1 + 0.5 * r3];
+        return { kind: kind === 1 ? 0 : kind, fac: mc.map(toLin), gl: TINT[5], s: kind === 1 ? [2.4, 0.4, 0.46, 3.3] : sArr };
+      }
+      if (mc) {
+        const toLin = v => Math.pow(Math.min(1, Math.max(0, v)), 2.2);
+        const L = 0.2126 * mc[0] + 0.7152 * mc[1] + 0.0722 * mc[2];
+        if (L < 0.24 && h > 30) {                       // tres sombre: tour vitree, le verre prend la couleur mesuree
+          const g = mc.map(v => toLin(v * 1.35));
+          return { kind: 1, fac: mc.map(v => toLin(Math.min(0.85, v * 2.6 + 0.12))), gl: g, s: [1.4 + r2 * 0.7, 0.94, 0.88, 3.5 + 0.5 * r3] };
+        }
+        const k2 = Math.min(1.9, 0.86 / Math.max(L, 0.05));
+        const fac = mc.map(v => toLin(Math.min(0.95, v * Math.max(1.35, k2))));
+        if (kind === 1) kind = L > 0.42 ? 2 : 1;           // facade claire mesuree: plutot balcons/bandeaux que mur-rideau sombre
+        const gl = kind === 1 ? mc.map(v => toLin(v * 1.2)) : kind === 2 ? [0.22, 0.28, 0.34] : TINT[5];
+        const sArr = kind === 1 ? [1.4 + r2 * 0.7, 0.94, 0.90, 3.5 + 0.5 * r3] : kind === 2 ? [3.2 + r2, 0.985, 0.40 + 0.18 * r3, 3.2 + 0.4 * r3]
+                   : kind === 3 ? [3.0 + r2 * 1.5, 0.38 + 0.2 * r3, 0.46, 3.1] : [2.2 + r2 * 1.3, 0.34 + 0.18 * r3, 0.42 + 0.12 * r2, 3.1 + 0.5 * r3];
+        return { kind, fac, gl, s: sArr };
+      }
       const fac = kind === 1 ? [0.80, 0.83, 0.86] : FAC[Math.floor(r3 * FAC.length)];
-      const gl = kind === 1 ? TINT[Math.floor(r2 * 5)] : kind === 2 ? [0.08, 0.12, 0.17] : TINT[5];
+      const gl = kind === 1 ? TINT[Math.floor(r2 * 5)] : kind === 2 ? [0.22, 0.28, 0.34] : TINT[5];
       const s = kind === 1 ? [1.4 + r2 * 0.7, 0.94, 0.90, 3.5 + 0.5 * r3]
               : kind === 2 ? [3.2 + r2, 0.985, 0.40 + 0.18 * r3, 3.2 + 0.4 * r3]
               : kind === 3 ? [3.0 + r2 * 1.5, 0.38 + 0.2 * r3, 0.46, 3.1]
-              : [2.2 + r2 * 1.3, 0.40 + 0.22 * r3, 0.46 + 0.14 * r2, 3.1 + 0.5 * r3];
+              : [2.2 + r2 * 1.3, 0.34 + 0.18 * r3, 0.42 + 0.12 * r2, 3.1 + 0.5 * r3];
       return { kind, fac, s, gl };
     };
     let curTop = 0;

@@ -12039,7 +12039,31 @@
     ]
    ]
   ],
-  "_credit": "FS mesh 2026-09-06: gabarit ml.FourSeasons recale par similitude sur les 4 coins tooltips d Alexandre (NE/NW/SE/SW)"
+  "_credit": "FS mesh 2026-09-06: gabarit ml.FourSeasons recale par similitude sur les 4 coins tooltips d Alexandre (NE/NW/SE/SW)",
+  "facade_color": {
+   "rgb": [
+    0.369,
+    0.302,
+    0.294
+   ],
+   "n_cams": 27,
+   "n_px": 153061,
+   "cams": [
+    "Raul Bautista 03 (Motorboat)",
+    "'95 Grotti Cheetah 04 (Garage)",
+    "Rooftop Pool",
+    "Vice City 10 (Pegassi Towers)",
+    "Biplane (Video) v1080"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.84,
+    0.84,
+    0.82
+   ],
+   "note": "IRL ESTIME 2026-10-04: tour blanc-gris, vitrage bleu-gris"
+  }
  },
  "HanksWaffles": {
   "color": "#fbbf24",
@@ -15945,7 +15969,15 @@
     ]
    ]
   ],
-  "note": "HANKS-3D-V5 (2026-08-29): sol z14.0 (GSE+poles), stripe 14.70/14.85/15.00, arcade piliers clics (spring 16.4, apex 16.7/16.8), baie large 13.54-17.60 + pilier de coin massif, gouttiere s18.53, enseignes rayons, C neon face W (z19.4-22.5, depasse le toit), 4 lampes col-de-cygne, bloc exact V3"
+  "note": "HANKS-3D-V5 (2026-08-29): sol z14.0 (GSE+poles), stripe 14.70/14.85/15.00, arcade piliers clics (spring 16.4, apex 16.7/16.8), baie large 13.54-17.60 + pilier de coin massif, gouttiere s18.53, enseignes rayons, C neon face W (z19.4-22.5, depasse le toit), 4 lampes col-de-cygne, bloc exact V3",
+  "facade_irl": {
+   "rgb": [
+    0.86,
+    0.84,
+    0.78
+   ],
+   "note": "IRL ESTIME 2026-10-04: diner routier: bardage clair"
+  }
  },
  "1000 Venetian Way": {
   "color": "#f472b6",
@@ -20212,7 +20244,23 @@
    ]
   ],
   "note": "1000 VENETIAN WAY V2 2026-09-26 (mesh d Alexandre refait sur la V16): tour = traits V16 s13 (moitie ouest) + s24 (moitie est) + jonction s25, toit 67.5-67.7 (landmarks SW/NW/SE/NE/Center-NE), bande ouest de s13 a 62.2 (T-NW, W-Box-NW); cascade NO = les 5 cellules V16 (traits s14-s23), chacune en 2 demi-marches: 53.9/47.1, 42.0/35.0, 29.9/22.9 (landmarks (4),(3),(2),W4,W3,W2), 17.8/10.8 (W1 + extrapolation du pas de 12 m), 5.7 (extrapole); silhouette de la cascade verifiee dans Skyline (corniches a ~46 et ~32 m)",
-  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5 (V16)"
+  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5 (V16)",
+  "facade_color": {
+   "rgb": [
+    0.355,
+    0.354,
+    0.401
+   ],
+   "n_cams": 12,
+   "n_px": 68438,
+   "cams": [
+    "Venetian Islands",
+    "Skyline",
+    "Yacht (2)",
+    "Vice City Postcard",
+    "Handshake"
+   ]
+  }
  },
  "WDNA FM": {
   "color": "#f87171",
@@ -41512,7 +41560,23 @@
    ]
   ],
   "note": "PORTOFINO-V2 2026-10-01 (Alexandre: garder la position, rendre plus fidele): plan en Y (3 ailes arrondies + noyau) ajuste sur les 3 sommets de pavillons triangules et la silhouette de Dominion Hotel (residus 4-8 px); epaulement 126 m, toit 140 m, pavillons 129-146 m + pyramides (Y SYMETRIQUE, meilleur ajustement d ensemble parmi 4 variantes: silhouettes 3 vues rms 1.7 px / max 3.8 px, sommets triangules a 3.6-4.7 m des pointes) (lus dans Dominion Hotel). Forme du Y: vue pre-alpha (position de cette vue NON utilisee).",
-  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5"
+  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5",
+  "facade_color": {
+   "rgb": [
+    0.522,
+    0.453,
+    0.397
+   ],
+   "n_cams": 6,
+   "n_px": 26056,
+   "cams": [
+    "Port",
+    "Port (B)",
+    "Rooftop Party",
+    "Amphitheater",
+    "Park (Mobile Phone)"
+   ]
+  }
  },
  "Homestead Water Tower": {
   "color": "#4373a2",
@@ -45375,7 +45439,23 @@
      181.19425766494209
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.419,
+    0.386,
+    0.366
+   ],
+   "n_cams": 14,
+   "n_px": 40906,
+   "cams": [
+    "Interchange",
+    "Sunrise over Vice City (Extended Look)",
+    "Biplane (Video) v1980",
+    "Street (Bikers) (B)",
+    "Shitzu Squalo 01 (Bay)"
+   ]
+  }
  },
  "Vizcayne South Condominium": {
   "color": "#4ade80",
@@ -49161,7 +49241,31 @@
      177.37
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.347,
+    0.346,
+    0.35
+   ],
+   "n_cams": 13,
+   "n_px": 81676,
+   "cams": [
+    "Biplane (Video) v2580",
+    "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)",
+    "Shoreline [Gameinformer]",
+    "Biplane (Video) v1980",
+    "Biplane (Video) v1380"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.52,
+    0.63,
+    0.72
+   ],
+   "note": "IRL ESTIME 2026-10-04: verre bleu"
+  }
  },
  "Vizcayne North Condominium": {
   "color": "#4ade80",
@@ -52947,7 +53051,31 @@
      177.37
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.306,
+    0.354,
+    0.341
+   ],
+   "n_cams": 15,
+   "n_px": 50638,
+   "cams": [
+    "Shoreline [Gameinformer]",
+    "Shitzu Squalo 01 (Bay)",
+    "Biplane (Video) v2580",
+    "Sunrise over Vice City (Extended Look)",
+    "Skyline"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.52,
+    0.63,
+    0.72
+   ],
+   "note": "IRL ESTIME 2026-10-04: verre bleu"
+  }
  },
  "1500 Sonora Ave (Silo)": {
   "color": "#e53935",
@@ -200902,7 +201030,31 @@
     ]
    ]
   ],
-  "_credit": "Pegassi Towers V4 2026-09-05: empreinte leak close-up; profil (fut, decalage, base, toit incline) ajuste sur le trace de silhouette d Alexandre (pegassi_trace.png) dans Vice City 10 | Three Tequesta Point V5 2026-09-20: plan re-ajuste sur les silhouettes de 10 cams (Vice City 10 a 380 m, Motorboats A, Port Vice City A, Skyline, Vice Beach A/B, Rooftop Party, Postcard, Sunrise): transformation anisotrope du plan V4 (rotation 164.1 deg, echelles 0.634/0.956, translation (10.0,-5.0) m) -> fut 46 x 77 m centre (3.1,-934.1) au lieu de 74 x 85 (le V4 n'etait cale que dans Vice City 10, profondeur non contrainte par une seule vue); residus bords rms 5 px; toit etire a 206.5 m (landmarks 3TP NE/Helipad sur le bord de l'anneau); Two Tequesta inchangee"
+  "_credit": "Pegassi Towers V4 2026-09-05: empreinte leak close-up; profil (fut, decalage, base, toit incline) ajuste sur le trace de silhouette d Alexandre (pegassi_trace.png) dans Vice City 10 | Three Tequesta Point V5 2026-09-20: plan re-ajuste sur les silhouettes de 10 cams (Vice City 10 a 380 m, Motorboats A, Port Vice City A, Skyline, Vice Beach A/B, Rooftop Party, Postcard, Sunrise): transformation anisotrope du plan V4 (rotation 164.1 deg, echelles 0.634/0.956, translation (10.0,-5.0) m) -> fut 46 x 77 m centre (3.1,-934.1) au lieu de 74 x 85 (le V4 n'etait cale que dans Vice City 10, profondeur non contrainte par une seule vue); residus bords rms 5 px; toit etire a 206.5 m (landmarks 3TP NE/Helipad sur le bord de l'anneau); Two Tequesta inchangee",
+  "facade_color": {
+   "rgb": [
+    0.329,
+    0.301,
+    0.299
+   ],
+   "n_cams": 25,
+   "n_px": 265368,
+   "cams": [
+    "Vice City 10 (Pegassi Towers)",
+    "Rooftop Pool",
+    "Shoreline [Gameinformer]",
+    "Motorboats (A)",
+    "Motorboats (B)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.84,
+    0.82,
+    0.76
+   ],
+   "note": "IRL ESTIME 2026-10-04: Tequesta Point: blanc-beige, verre vert"
+  }
  },
  "One Biscayne Tower": {
   "color": "#c084fc",
@@ -202589,7 +202741,31 @@
    ]
   ],
   "note": "FOOTPRINT-MESH-V1 2026-09-13: extrusion de l'empreinte V16 (polygone 2318, 20 sommets, 1720 m2), sol 3.1 (heightmap), toit 113.4 (mediane de 4 coins), coins a 0.0 m du bord (mediane); anneaux tous les 25.0 m",
-  "_credit": "empreinte: GTA VI Community Mapping Project (V16 SVG); hauteurs: triangulation gtamaplib"
+  "_credit": "empreinte: GTA VI Community Mapping Project (V16 SVG); hauteurs: triangulation gtamaplib",
+  "facade_color": {
+   "rgb": [
+    0.196,
+    0.178,
+    0.171
+   ],
+   "n_cams": 11,
+   "n_px": 211468,
+   "cams": [
+    "Vice City 11 (Megamundo)",
+    "Biplane (Video) v1980",
+    "Sunrise over Vice City (Extended Look)",
+    "Shitzu Squalo 01 (Bay)",
+    "Shoreline [Gameinformer]"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.42,
+    0.35,
+    0.3
+   ],
+   "note": "IRL ESTIME 2026-10-04: verre bronze"
+  }
  },
  "50 Biscayne Blvd": {
   "color": "#facc15",
@@ -216600,7 +216776,23 @@
    ]
   ],
   "note": "B50-MESH-V2 2026-09-13: fut 29x60 m angles r4 (lame est V16 2334 elargie, valide dans 11 frames), 36 dalles de balcon tous les 3 m de 30.8 a 139.4, boite technique -> 144.8, canopee doree ondulee -> 147.2 (landmark couronne) debordant 8 m a l'ouest (VC11); podium = polygone V16 entier, hauteur ESTIMEE 28 m (base jamais visible); IRL 55 etages / 169 m, MiMo, couronne neon orange",
-  "_credit": "empreinte: V16 (GTA VI Community Mapping Project); hauteurs: triangulation gtamaplib (couronne 4 cams 1.2 m, NE 2 cams); proportions toit: Sunrise over Vice City, Vice City 11"
+  "_credit": "empreinte: V16 (GTA VI Community Mapping Project); hauteurs: triangulation gtamaplib (couronne 4 cams 1.2 m, NE 2 cams); proportions toit: Sunrise over Vice City, Vice City 11",
+  "facade_color": {
+   "rgb": [
+    0.188,
+    0.183,
+    0.187
+   ],
+   "n_cams": 14,
+   "n_px": 106346,
+   "cams": [
+    "Vice City 11 (Megamundo)",
+    "Shitzu Squalo 01 (Bay)",
+    "Shoreline [Gameinformer]",
+    "Sunrise over Vice City (Extended Look)",
+    "Vice City 10 (Pegassi Towers)"
+   ]
+  }
  },
  "Hard Rock Cafe": {
   "color": "#fb7185",
@@ -216895,7 +217087,31 @@
    ]
   ],
   "note": "FOOTPRINT-MESH-V1 2026-09-13: extrusion de l'empreinte V16 (polygone 2475, 8 sommets, 4545 m2), sol 3.1 (heightmap), toit 14.8 (mediane de 16 coins), coins a 1.6 m du bord (mediane); anneaux tous les 25.0 m",
-  "_credit": "empreinte: GTA VI Community Mapping Project (V16 SVG); hauteurs: triangulation gtamaplib"
+  "_credit": "empreinte: GTA VI Community Mapping Project (V16 SVG); hauteurs: triangulation gtamaplib",
+  "facade_color": {
+   "rgb": [
+    0.344,
+    0.328,
+    0.338
+   ],
+   "n_cams": 5,
+   "n_px": 9159,
+   "cams": [
+    "Vice City 11 (Megamundo)",
+    "Shoreline [Gameinformer]",
+    "Biplane (Video) v2580",
+    "Vice City 08 (Ferris Wheel)",
+    "Yacht (2)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.8,
+    0.72,
+    0.6
+   ],
+   "note": "IRL ESTIME 2026-10-04: Hard Rock Cafe Bayside: stuc beige"
+  }
  },
  "Marina Blue": {
   "color": "#38bdf8",
@@ -230342,7 +230558,31 @@
    ]
   ],
   "note": "MB-MESH-V1 2026-09-13: fut \u00ab spinnaker \u00bb sur les 4 coins de toit (corde SW-SE 64.5 m, face nord Catmull-Rom SW-NW-NE-SE), sol 3.0 (heightmap), toit 174.8 (mediane 4 coins), anneaux 5 m, couronne 4 m; tour 2 (lobe NE de l'ilot V16, coin NW = LNE, toit 126.6) incluse [MB-MESH-V2]; podium non modelise; la V16 ne dessine que l'ilot (polygone 2577)",
-  "_credit": "coins: triangulation gtamaplib (SW 4 cams, NE 6 cams, NW 2 cams, SE tooltip V16 Alexandre, SE deplace a (-441.5, 404.6) = bord est de l'ilot V16, d'apres la silhouette Skyline)"
+  "_credit": "coins: triangulation gtamaplib (SW 4 cams, NE 6 cams, NW 2 cams, SE tooltip V16 Alexandre, SE deplace a (-441.5, 404.6) = bord est de l'ilot V16, d'apres la silhouette Skyline)",
+  "facade_color": {
+   "rgb": [
+    0.372,
+    0.417,
+    0.411
+   ],
+   "n_cams": 17,
+   "n_px": 101742,
+   "cams": [
+    "Shoreline [Gameinformer]",
+    "Boat",
+    "Biplane (Video) v2580",
+    "Convertible",
+    "Sunrise over Vice City (Extended Look)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.48,
+    0.6,
+    0.72
+   ],
+   "note": "IRL ESTIME 2026-10-04: verre bleu"
+  }
  },
  "One Miami Condominium East": {
   "color": "#e2c290",
@@ -232749,7 +232989,23 @@
    ]
   ],
   "note": "Lame a plan parallelogramme (3 coins triangules + 4e coin deduit), 44 etages, couronne 8 m en debord de 0.8 m; sol heightmap 2.2 m; toit 182 m",
-  "_credit": "gen_onemiami_sefc_mesh.py 2026-09-20 (coins de toit multi-cams, Vice City 10 / Landing Gear (B) pour la forme)"
+  "_credit": "gen_onemiami_sefc_mesh.py 2026-09-20 (coins de toit multi-cams, Vice City 10 / Landing Gear (B) pour la forme)",
+  "facade_color": {
+   "rgb": [
+    0.426,
+    0.461,
+    0.44
+   ],
+   "n_cams": 16,
+   "n_px": 90826,
+   "cams": [
+    "Landing Gear (B)",
+    "Vice City 10 (Pegassi Towers)",
+    "Raul Bautista 03 (Motorboat)",
+    "Shoreline [Gameinformer]",
+    "Shitzu Squalo 01 (Bay)"
+   ]
+  }
  },
  "One Miami Condominium West": {
   "color": "#e2c290",
@@ -235252,7 +235508,23 @@
    ]
   ],
   "note": "Lame a plan parallelogramme (3 coins triangules + 4e coin deduit), 45 etages, couronne 8 m en debord de 0.8 m; sol heightmap 5.8 m; toit 188 m",
-  "_credit": "gen_onemiami_sefc_mesh.py 2026-09-20 (coins de toit multi-cams, Vice City 10 / Landing Gear (B) pour la forme)"
+  "_credit": "gen_onemiami_sefc_mesh.py 2026-09-20 (coins de toit multi-cams, Vice City 10 / Landing Gear (B) pour la forme)",
+  "facade_color": {
+   "rgb": [
+    0.473,
+    0.457,
+    0.43
+   ],
+   "n_cams": 14,
+   "n_px": 72404,
+   "cams": [
+    "Landing Gear (B)",
+    "Vice City 10 (Pegassi Towers)",
+    "Biplane (Video) v1980",
+    "Shoreline [Gameinformer]",
+    "Raul Bautista 03 (Motorboat)"
+   ]
+  }
  },
  "One Miami (Podium)": {
   "color": "#e2c290",
@@ -237419,7 +237691,30 @@
    ]
   ],
   "note": "Podium = empreinte V16 2257; hauteur 14 m ESTIMEE (bloc blanc de ~4 niveaux au pied des tours dans Vice City 10)",
-  "_credit": "gen_onemiami_sefc_mesh.py 2026-09-20"
+  "_credit": "gen_onemiami_sefc_mesh.py 2026-09-20",
+  "facade_color": {
+   "rgb": [
+    0.419,
+    0.409,
+    0.396
+   ],
+   "n_cams": 4,
+   "n_px": 9768,
+   "cams": [
+    "Biplane (Video) v1980",
+    "Landing Gear (B)",
+    "Shoreline [Gameinformer]",
+    "Vice City 10 (Pegassi Towers)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.74,
+    0.74,
+    0.72
+   ],
+   "note": "IRL ESTIME 2026-10-04: podium beton gris clair"
+  }
  },
  "Southeast Financial Center": {
   "color": "#d9d9e6",
@@ -262158,7 +262453,31 @@
    ]
   ],
   "note": "Fut = empreinte V16 2267 (scie NE, encoche V ouest) translatee de (0.5,7.0) m et reduite a 0.943 (le fut est plus etroit que l empreinte au sol, silhouettes de 5 cams); toit 246.5 m; couronne = 4 pans de retrait lineaires par etage de 3.6 m: E az 69 28.9 m des z 187, S az 143 15.6 m des z 185, N az 30 13.2 m des z 200, W az 233 25.2 m des z 233 (ajustes sur les silhouettes L/R a 6 hauteurs dans Vice City 10 / Port Vice City A / Skyline / Sunrise / Shitzu Squalo 01, rms 4.9 px); bloc technique 26x14x4 m; mats jusqu a 276.5 m; annexe = V16 2268, 58 m ESTIME (15 etages IRL)",
-  "_credit": "gen_onemiami_sefc_mesh.py 2026-09-20 v2 (silhouettes multi-cams; v1 a pyramide 4 faces refusee par Alexandre)"
+  "_credit": "gen_onemiami_sefc_mesh.py 2026-09-20 v2 (silhouettes multi-cams; v1 a pyramide 4 faces refusee par Alexandre)",
+  "facade_color": {
+   "rgb": [
+    0.31,
+    0.309,
+    0.378
+   ],
+   "n_cams": 19,
+   "n_px": 91482,
+   "cams": [
+    "Vice City 11 (Megamundo)",
+    "Landing Gear (B)",
+    "Shitzu Squalo 01 (Bay)",
+    "Shoreline [Gameinformer]",
+    "Biplane (Video) v1980"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.7,
+    0.7,
+    0.7
+   ],
+   "note": "IRL ESTIME 2026-10-04: granit gris clair + verre sombre"
+  }
  },
  "Vizcayne (Podium)": {
   "color": "#4ade80",
@@ -267541,7 +267860,29 @@
    ]
   ],
   "note": "Podium = ilot V16 2435 (Everglades Plaza + parking, etages 2-7 IRL); hauteur 25 m ESTIMEE (aucune cam nette: dans Shitzu Squalo 01 les arcades roses devant sont la causeway); anneaux tous les 4.2 m; sol 3.1",
-  "_credit": "gen_podiums.py 2026-09-20"
+  "_credit": "gen_podiums.py 2026-09-20",
+  "facade_color": {
+   "rgb": [
+    0.029,
+    0.119,
+    0.099
+   ],
+   "n_cams": 3,
+   "n_px": 6075,
+   "cams": [
+    "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)",
+    "Shoreline [Gameinformer]",
+    "Sunrise over Vice City (Extended Look)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.76,
+    0.77,
+    0.78
+   ],
+   "note": "IRL ESTIME 2026-10-04: podium beton clair"
+  }
  },
  "Four Seasons (Podium)": {
   "color": "#60a5fa",
@@ -277916,7 +278257,23 @@
    ]
   ],
   "note": "Socle = V16 1939 (terrasse piscine, 7e etage IRL) + 1955 (aile ouest); hauteur 32 m lue dans Tennis Stadium (4K) (terrasse aux palmiers a +31..+35 m avec les anneaux-guides, 7e etage IRL); sol 2.9",
-  "_credit": "gen_podiums.py 2026-09-20"
+  "_credit": "gen_podiums.py 2026-09-20",
+  "facade_color": {
+   "rgb": [
+    0.206,
+    0.194,
+    0.198
+   ],
+   "n_cams": 12,
+   "n_px": 46539,
+   "cams": [
+    "Raul Bautista 03 (Motorboat)",
+    "Rooftop Pool",
+    "Biplane (Video) v1080",
+    "Biplane (Video) v1380",
+    "Vice City 10 (Pegassi Towers)"
+   ]
+  }
  },
  "Stephen P. Clark (Podium)": {
   "color": "#fb923c",
@@ -283023,7 +283380,23 @@
    ]
   ],
   "note": "Socle nord = V16 2413, 14 m ESTIME; station Metrorail = V16 3857, 18 m ESTIME (station aerienne dans le batiment IRL); rampe helicoidale = octogones V16 2407/2410, 12 m ESTIME (2 tours); aucune cam nette a < 700 m: a affiner quand une frame le montrera",
-  "_credit": "gen_podiums.py 2026-09-20"
+  "_credit": "gen_podiums.py 2026-09-20",
+  "facade_color": {
+   "rgb": [
+    0.615,
+    0.428,
+    0.653
+   ],
+   "n_cams": 7,
+   "n_px": 20948,
+   "cams": [
+    "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)",
+    "Interchange",
+    "Explosion",
+    "Sunrise over Vice City (Extended Look)",
+    "Biplane (Video) v1980"
+   ]
+  }
  },
  "Flagler on the River": {
   "color": "#7dd3fc",
@@ -284710,7 +285083,23 @@
      126.98
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.46,
+    0.438,
+    0.506
+   ],
+   "n_cams": 14,
+   "n_px": 50749,
+   "cams": [
+    "Kayaking in the Vice River (Extended Look)",
+    "Sunrise over Vice City (Extended Look)",
+    "Biplane (Video) v1980",
+    "Biplane (Video) v0820",
+    "Biplane (Video) v0900"
+   ]
+  }
  },
  "InterContinental Miami": {
   "color": "#fde68a",
@@ -286733,7 +287122,23 @@
      121.26
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.411,
+    0.359,
+    0.376
+   ],
+   "n_cams": 12,
+   "n_px": 26535,
+   "cams": [
+    "Landing Gear (B)",
+    "Shoreline [Gameinformer]",
+    "Shitzu Squalo 01 (Bay)",
+    "Biplane (Video) v1980",
+    "Yacht (2)"
+   ]
+  }
  },
  "Carbonell Brickell": {
   "color": "#c4b5fd",
@@ -297888,7 +298293,23 @@
    ]
   ],
   "note": "CARBONELL BRICKELL V2 2026-09-26: plan = polygone V16 3107 decoupe par ses traits internes (bande de la tour = arc s4 / ligne interieure s14-s11-s13-s15-s21-s19 / s18; aile NO = s18 -> bout arrondi, coupe s32-s27) et par des rayons depuis le centre de courbure (-252.4,-859.8) passant par les traits radiaux s5 (L5) et s12 (L12). Couronne en gradins (plus un toit plat): sommet 123.1 = landmark Carbonell Brickell sur le secteur L18-L5 + 8 m au SE de L5; puis 119.8 (8 m suivants), 117.6 (jusqu a L12 + 5 m), 109.0 bout SE; cote NO 118.0 (s18 -> s32/s27), 108.0, 101.0 bout arrondi. Marches et hauteurs relatives lues sur les silhouettes Skyline (NNE, 2.3 km) et Raul Bautista 03 (SSO, 1.1 km), concordantes a ~2 m; coupes de marche hors traits V16 = ESTIMEES. Sol 4.9.",
-  "_credit": "Alexandre Leblanc (landmark) + Claude Opus 5.5 (V16)"
+  "_credit": "Alexandre Leblanc (landmark) + Claude Opus 5.5 (V16)",
+  "facade_color": {
+   "rgb": [
+    0.471,
+    0.431,
+    0.473
+   ],
+   "n_cams": 21,
+   "n_px": 67967,
+   "cams": [
+    "Raul Bautista 03 (Motorboat)",
+    "Rooftop Pool",
+    "Landing Gear (B)",
+    "Shitzu Squalo 01 (Bay)",
+    "Shoreline [Gameinformer]"
+   ]
+  }
  },
  "Loft Downtown II": {
   "color": "#fca5a5",
@@ -299239,7 +299660,23 @@
      113.11
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.343,
+    0.36,
+    0.36
+   ],
+   "n_cams": 15,
+   "n_px": 72411,
+   "cams": [
+    "Biplane (Video) v2580",
+    "Shoreline [Gameinformer]",
+    "Shitzu Squalo 01 (Bay)",
+    "Vice City 10 (Pegassi Towers)",
+    "Sunrise over Vice City (Extended Look)"
+   ]
+  }
  },
  "100 Biscayne Blvd": {
   "color": "#a7f3d0",
@@ -301262,7 +301699,23 @@
      84.71
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.332,
+    0.295,
+    0.277
+   ],
+   "n_cams": 10,
+   "n_px": 28345,
+   "cams": [
+    "Vice City 11 (Megamundo)",
+    "Shitzu Squalo 01 (Bay)",
+    "Shoreline [Gameinformer]",
+    "Vice City 10 (Pegassi Towers)",
+    "Sunrise over Vice City (Extended Look)"
+   ]
+  }
  },
  "1450 Brickell Ave": {
   "color": "#fdba74",
@@ -303285,7 +303738,23 @@
      160.47
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.469,
+    0.445,
+    0.453
+   ],
+   "n_cams": 15,
+   "n_px": 44682,
+   "cams": [
+    "Biplane (Video) v1080",
+    "Biplane (Video) v1380",
+    "'95 Grotti Cheetah 04 (Garage)",
+    "Grassrivers 05 (Sunrise RV Park)",
+    "Biplane (Video) v0900"
+   ]
+  }
  },
  "One Broadway": {
   "color": "#93c5fd",
@@ -305308,7 +305777,23 @@
      139.37
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.298,
+    0.315,
+    0.31
+   ],
+   "n_cams": 17,
+   "n_px": 56645,
+   "cams": [
+    "'95 Grotti Cheetah 04 (Garage)",
+    "Rooftop Pool",
+    "Metro (SE) (B)",
+    "Biplane (Video) v1380",
+    "Highway (Peacock Bay) (B)"
+   ]
+  }
  },
  "Wells Fargo Center": {
   "color": "#86efac",
@@ -308339,7 +308824,23 @@
      171.33
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.334,
+    0.342,
+    0.384
+   ],
+   "n_cams": 24,
+   "n_px": 69460,
+   "cams": [
+    "Biplane (Video) v1980",
+    "Shoreline [Gameinformer]",
+    "Interchange",
+    "Landing Gear (B)",
+    "Raul Bautista 03 (Motorboat)"
+   ]
+  }
  },
  "Wells Fargo Center (S)": {
   "color": "#86efac",
@@ -311874,7 +312375,23 @@
      176.11
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.504,
+    0.42,
+    0.371
+   ],
+   "n_cams": 13,
+   "n_px": 42223,
+   "cams": [
+    "Biplane (Video) v1980",
+    "Ultimate Edition 02 (Green Sports Car)",
+    "Sunrise over Vice City (Extended Look)",
+    "Kayaking in the Vice River (Extended Look)",
+    "Raul Bautista 03 (Motorboat)"
+   ]
+  }
  },
  "Latitude on the River (S)": {
   "color": "#f9a8d4",
@@ -313225,7 +313742,23 @@
      85.98
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.233,
+    0.163,
+    0.18
+   ],
+   "n_cams": 11,
+   "n_px": 25082,
+   "cams": [
+    "'95 Grotti Cheetah 04 (Garage)",
+    "Sunrise over Vice City (Extended Look)",
+    "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)",
+    "Biplane (Video) v1380",
+    "Interchange"
+   ]
+  }
  },
  "Citigroup Center": {
   "color": "#d1d5db",
@@ -314912,7 +315445,23 @@
      147.45
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.377,
+    0.371,
+    0.376
+   ],
+   "n_cams": 11,
+   "n_px": 22408,
+   "cams": [
+    "Biplane (Video) v1980",
+    "Shoreline [Gameinformer]",
+    "Shitzu Squalo 01 (Bay)",
+    "Skyline",
+    "Rooftop Party"
+   ]
+  }
  },
  "Infinity at Brickell": {
   "color": "#67e8f9",
@@ -329211,7 +329760,31 @@
      181.0
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.503,
+    0.451,
+    0.428
+   ],
+   "n_cams": 15,
+   "n_px": 96945,
+   "cams": [
+    "Biplane (Video) v1380",
+    "Vice City Sign",
+    "Highway (Peacock Bay) (B)",
+    "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)",
+    "Metro (SE) (B)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.74,
+    0.8,
+    0.84
+   ],
+   "note": "IRL ESTIME 2026-10-04: verre clair"
+  }
  },
  "Brickell Arch": {
   "color": "#fcd34d",
@@ -342022,7 +342595,31 @@
      8.99
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.48,
+    0.484,
+    0.489
+   ],
+   "n_cams": 20,
+   "n_px": 170900,
+   "cams": [
+    "Ultimate Edition 02 (Green Sports Car)",
+    "Raul Bautista 03 (Motorboat)",
+    "Rooftop Pool",
+    "'95 Grotti Cheetah 04 (Garage)",
+    "Vice City 10 (Pegassi Towers)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.56,
+    0.66,
+    0.76
+   ],
+   "note": "IRL ESTIME 2026-10-04: verre bleu"
+  }
  },
  "Miami Tower": {
   "color": "#a5b4fc",
@@ -356561,7 +357158,31 @@
      159.0
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.346,
+    0.527,
+    0.344
+   ],
+   "n_cams": 18,
+   "n_px": 79729,
+   "cams": [
+    "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)",
+    "Biplane (Video) v1980",
+    "Kayaking in the Vice River (Extended Look)",
+    "Shoreline [Gameinformer]",
+    "Street (Bikers) (B)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.82,
+    0.82,
+    0.82
+   ],
+   "note": "IRL ESTIME 2026-10-04: tour blanche (Bank of America)"
+  }
  },
  "Miami-Dade County Courthouse": {
   "color": "#e5e7eb",
@@ -362616,7 +363237,23 @@
      116.54
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.168,
+    0.144,
+    0.155
+   ],
+   "n_cams": 11,
+   "n_px": 22729,
+   "cams": [
+    "Interchange",
+    "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)",
+    "Sunrise over Vice City (Extended Look)",
+    "Biplane (Video) v1980",
+    "Biplane (Video) v1380"
+   ]
+  }
  },
  "Pegassi Towers (Podium)": {
   "color": "#f472b6",
@@ -364927,7 +365564,29 @@
    ]
   ],
   "note": "Terrasse/podium = polygones V16 3099 (autour de Three Tequesta) + 3097 (autour de Two); hauteur 9 m lue dans Vice City 10 (bord de la terrasse sur l anneau-guide +8 m)",
-  "_credit": "gen_podiums.py 2026-09-22"
+  "_credit": "gen_podiums.py 2026-09-22",
+  "facade_color": {
+   "rgb": [
+    0.234,
+    0.206,
+    0.191
+   ],
+   "n_cams": 3,
+   "n_px": 8680,
+   "cams": [
+    "Vice City 10 (Pegassi Towers)",
+    "Landing Gear (B)",
+    "Port Vice City (A)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.8,
+    0.76,
+    0.7
+   ],
+   "note": "IRL ESTIME 2026-10-04: podium beige (Brickell Key)"
+  }
  },
  "Marina Blue (Podium)": {
   "color": "#38bdf8",
@@ -366590,7 +367249,29 @@
    ]
   ],
   "note": "Podium = ilot V16 2562; hauteur 20 m ESTIMEE (pedestal parking IRL ~6 niveaux; aucune cam nette sur la base: a mesurer quand une frame le montrera)",
-  "_credit": "gen_podiums.py 2026-09-22"
+  "_credit": "gen_podiums.py 2026-09-22",
+  "facade_color": {
+   "rgb": [
+    0.506,
+    0.497,
+    0.479
+   ],
+   "n_cams": 3,
+   "n_px": 10728,
+   "cams": [
+    "Biplane (Video) v2580",
+    "Shoreline [Gameinformer]",
+    "Sunrise over Vice City (Extended Look)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.84,
+    0.84,
+    0.83
+   ],
+   "note": "IRL ESTIME 2026-10-04: podium blanc"
+  }
  },
  "Ten Museum Park": {
   "color": "#38bdf8",
@@ -367941,7 +368622,31 @@
      127.34
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.313,
+    0.247,
+    0.279
+   ],
+   "n_cams": 14,
+   "n_px": 82095,
+   "cams": [
+    "Shoreline [Gameinformer]",
+    "Convertible",
+    "Biplane (Video) v2580",
+    "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)",
+    "Boat"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.8,
+    0.84,
+    0.84
+   ],
+   "note": "IRL ESTIME 2026-10-04: blanc + verre vert d eau"
+  }
  },
  "100 Biscayne Blvd (NE)": {
   "color": "#a7f3d0",
@@ -369964,7 +370669,23 @@
      84.67
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.314,
+    0.357,
+    0.379
+   ],
+   "n_cams": 7,
+   "n_px": 20284,
+   "cams": [
+    "Shoreline [Gameinformer]",
+    "Vice City 11 (Megamundo)",
+    "Shitzu Squalo 01 (Bay)",
+    "Sunrise over Vice City (Extended Look)",
+    "Vice City 03 (Basketball)"
+   ]
+  }
  },
  "Bayshore Place Condominium": {
   "color": "#fcd34d",
@@ -371987,7 +372708,23 @@
      59.01
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.455,
+    0.451,
+    0.452
+   ],
+   "n_cams": 10,
+   "n_px": 40774,
+   "cams": [
+    "Raul Bautista 03 (Motorboat)",
+    "Ultimate Edition 02 (Green Sports Car)",
+    "Rooftop Pool",
+    "Biplane (Video) v1080",
+    "Biplane (Video) v1380"
+   ]
+  }
  },
  "Meditteranea Condo": {
   "color": "#fda4af",
@@ -383754,7 +384491,23 @@
      56.27
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.294,
+    0.174,
+    0.241
+   ],
+   "n_cams": 6,
+   "n_px": 9063,
+   "cams": [
+    "Vice City Sign",
+    "Rooftop Pool",
+    "Metro (SE) (B)",
+    "Biplane (Video) v0900",
+    "Vice City 10 (Pegassi Towers)"
+   ]
+  }
  },
  "Keystone Park Condo": {
   "color": "#fda4af",
@@ -394009,7 +394762,23 @@
      55.68
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.419,
+    0.442,
+    0.414
+   ],
+   "n_cams": 9,
+   "n_px": 7842,
+   "cams": [
+    "Vice City Sign",
+    "Biplane (Video) v0900",
+    "Biplane (Video) v0820",
+    "Rooftop Pool",
+    "Biplane (Video) v0770"
+   ]
+  }
  },
  "Seybold Pointe": {
   "color": "#c4b5fd",
@@ -394688,7 +395457,23 @@
      48.63
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.642,
+    0.596,
+    0.641
+   ],
+   "n_cams": 5,
+   "n_px": 45983,
+   "cams": [
+    "Kayaking in the Vice River (Extended Look)",
+    "Metro (SE) (B)",
+    "Sunrise over Vice City (Extended Look)",
+    "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)",
+    "Vice City 10 (Pegassi Towers)"
+   ]
+  }
  },
  "Met 1 Condominium": {
   "color": "#f9a8d4",
@@ -398475,7 +399260,23 @@
      192.03
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.368,
+    0.367,
+    0.376
+   ],
+   "n_cams": 12,
+   "n_px": 34951,
+   "cams": [
+    "Biplane (Video) v1980",
+    "Kayaking in the Vice River (Extended Look)",
+    "Landing Gear (B)",
+    "Shoreline [Gameinformer]",
+    "Vice City 10 (Pegassi Towers)"
+   ]
+  }
  },
  "The Palace Condominium": {
   "color": "#fdba74",
@@ -400714,7 +401515,31 @@
      133.62
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.241,
+    0.189,
+    0.215
+   ],
+   "n_cams": 8,
+   "n_px": 81854,
+   "cams": [
+    "Raul Bautista 03 (Motorboat)",
+    "Biplane (Video) v1080",
+    "Highway (Peacock Bay) (A)",
+    "Metro (SE) (B)",
+    "Motorboats (B)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.86,
+    0.78,
+    0.7
+   ],
+   "note": "IRL ESTIME 2026-10-04: stuc blanc-peche"
+  }
  },
  "Asia Brickell Key": {
   "color": "#67e8f9",
@@ -412709,7 +413534,23 @@
      170.57
     ]
    ]
-  ]
+  ],
+  "facade_color": {
+   "rgb": [
+    0.136,
+    0.136,
+    0.161
+   ],
+   "n_cams": 16,
+   "n_px": 265171,
+   "cams": [
+    "Rooftop Pool",
+    "Landing Gear (B)",
+    "Shoreline [Gameinformer]",
+    "Biplane (Video) v1080",
+    "Motorboats (A)"
+   ]
+  }
  },
  "Opera Tower": {
   "color": "#7dd3fc",
@@ -418344,7 +419185,31 @@
    ]
   ],
   "note": "OPERA TOWER 2026-09-26: fut = ellipse V16 (trait s221, 54.7 x 35.1 m, centre (-434.9,862.8)) extrude sol 2.9 -> toit 196.0 (= landmark Opera Tower 199.3 - 3.3 m: parapet lu dans Vice City Postcard); couronne = paroi courbe sur la moitie nord jusqu au landmark (forme IRL: ecran incurve cote baie; etendue ESTIMEE); silhouette verifiee dans Vice City Postcard (1.26 km), Biplane v2580 (0.97 km), v3000 (0.26 km): +-10 px",
-  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)"
+  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)",
+  "facade_color": {
+   "rgb": [
+    0.328,
+    0.326,
+    0.332
+   ],
+   "n_cams": 16,
+   "n_px": 160684,
+   "cams": [
+    "Biplane (Video) v3000",
+    "Dancing",
+    "Vice City 08 (Ferris Wheel)",
+    "Biplane (Video) v2580",
+    "Boat"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.8,
+    0.83,
+    0.86
+   ],
+   "note": "IRL ESTIME 2026-10-04: blanc + verre bleu clair"
+  }
  },
  "Opera Tower (Podium)": {
   "color": "#7dd3fc",
@@ -418711,7 +419576,28 @@
    ]
   ],
   "note": "OPERA TOWER PODIUM 2026-09-26: ilot V16 2712 (4112 m2) extrude a 12 m ESTIME (aucune cam nette sur la base)",
-  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)"
+  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)",
+  "facade_color": {
+   "rgb": [
+    0.217,
+    0.267,
+    0.371
+   ],
+   "n_cams": 2,
+   "n_px": 722,
+   "cams": [
+    "Vice City Postcard",
+    "Biplane (Video) v2580"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.84,
+    0.84,
+    0.83
+   ],
+   "note": "IRL ESTIME 2026-10-04: podium blanc"
+  }
  },
  "Quantum on the Bay (South)": {
   "color": "#a5b4fc",
@@ -422282,7 +423168,31 @@
    ]
   ],
   "note": "QUANTUM ON THE BAY SUD 2026-09-26: plan = trait V16 s274 (eventail a face sud en dents de scie, 1296 m2, centre (-417.2,1126.2)) extrude sol 2.6 -> toit 204.9 (landmarks (S) NE/SE); silhouette verifiee dans Vice City Postcard (1.05 km, bords L/R et toit a +-8 px) et Biplane v3000 (0.45 km); tour NORD en attente (plan V16 ambigu: arcs s276/s278, cercle ajuste r 26 m trop large de 2x dans Postcard) -> tooltips des coins demandes a Alexandre",
-  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)"
+  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)",
+  "facade_color": {
+   "rgb": [
+    0.345,
+    0.348,
+    0.395
+   ],
+   "n_cams": 15,
+   "n_px": 67433,
+   "cams": [
+    "Lucia Caminos 02 (Pool)",
+    "Biplane (Video) v3000",
+    "Boat",
+    "Rialto Causeway with Raul (1)",
+    "Dancing"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.78,
+    0.84,
+    0.84
+   ],
+   "note": "IRL ESTIME 2026-10-04: blanc + verre bleu-vert"
+  }
  },
  "Quantum on the Bay (Podium)": {
   "color": "#a5b4fc",
@@ -423681,7 +424591,30 @@
    ]
   ],
   "note": "QUANTUM PODIUM 2026-09-26: ilot V16 2720 (4550 m2) extrude a 28 m ESTIME (base de ~9 niveaux lue dans Vice City Postcard entre les deux tours)",
-  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)"
+  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)",
+  "facade_color": {
+   "rgb": [
+    0.498,
+    0.617,
+    0.59
+   ],
+   "n_cams": 4,
+   "n_px": 8824,
+   "cams": [
+    "Dancing",
+    "Vice City Postcard",
+    "Biplane (Video) v2580",
+    "Lucia Caminos 02 (Pool)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.86,
+    0.87,
+    0.86
+   ],
+   "note": "IRL ESTIME 2026-10-04: podium blanc"
+  }
  },
  "New Wave Condominiums": {
   "color": "#93c5fd",
@@ -424444,7 +425377,23 @@
    ]
   ],
   "note": "NEW WAVE 2026-09-26: polygone V16 2733 (1465 m2) extrude sol 3.1 -> toit 92.1; le landmark (110.1) est le sommet du MAT central lu dans Vice City Postcard (toit ~18 m sous le mat, 44 px a 819 m); mat modelise; silhouette Postcard: largeur V16 ~8 % plus large que la tour visible",
-  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)"
+  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)",
+  "facade_color": {
+   "rgb": [
+    0.398,
+    0.417,
+    0.405
+   ],
+   "n_cams": 8,
+   "n_px": 26660,
+   "cams": [
+    "Vice City 09 (La Perle)",
+    "Vice City Postcard",
+    "Handshake",
+    "Gas Station (Chase) (SE)",
+    "Vice City 03 (Basketball)"
+   ]
+  }
  },
  "Uptown Lofts": {
   "color": "#fca5a5",
@@ -424835,7 +425784,23 @@
    ]
   ],
   "note": "UPTOWN LOFTS 2026-09-26: polygone V16 2731 (1238 m2) extrude sol 2.8 -> toit 44.8 (landmarks NE/SE/centre); verifie dans Vice City Postcard (batiment sombre, toit et bords a +-12 px)",
-  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)"
+  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)",
+  "facade_color": {
+   "rgb": [
+    0.334,
+    0.35,
+    0.331
+   ],
+   "n_cams": 5,
+   "n_px": 15997,
+   "cams": [
+    "Handshake",
+    "Vice City Postcard",
+    "Vice City 09 (La Perle)",
+    "Gas Station (Chase) (SE)",
+    "Vice City 03 (Basketball)"
+   ]
+  }
  },
  "22 Biscayne Bay": {
   "color": "#fcd34d",
@@ -425082,7 +426047,23 @@
    ]
   ],
   "note": "22 BISCAYNE BAY 2026-09-26: polygone V16 2732 (779 m2) extrude sol 3.0 -> toit 69.2 (landmark SE); Vice City Postcard: toit juste, bord droit (nord) ~15 m plus large que la partie visible (autre corps ?)",
-  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)"
+  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)",
+  "facade_color": {
+   "rgb": [
+    0.551,
+    0.577,
+    0.46
+   ],
+   "n_cams": 6,
+   "n_px": 20485,
+   "cams": [
+    "Handshake",
+    "Vice City 09 (La Perle)",
+    "Vice City Postcard",
+    "Gas Station (Chase) (SE)",
+    "Vice City 03 (Basketball)"
+   ]
+  }
  },
  "Kaseya Center": {
   "color": "#e5e7eb",
@@ -428617,7 +429598,31 @@
    ]
   ],
   "note": "KASEYA CENTER (in-game \u00ab sahara arena \u00bb) V2 2026-09-26, d apres les frames et l IRL: tambour OVALE = trait V16 interieur (s110/111/116-119, 113 x 154 m) a murs EVASES vers le haut (x0.93 au sol -> x1.03 au rebord) et panneaux triangulaires (antiprisme 18 cotes, comme les facettes a neons des frames), rebord a 44.5 m (landmarks SE/S/NW 44-45 m), levre + toit en dome surbaisse jusqu a 48 m (lu dans Biplane v2580, seule vue aerienne nette). Ferris Wheel: pose trop haute de ~60 px sur ses propres landmarks, non utilisee pour caler",
-  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)"
+  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)",
+  "facade_color": {
+   "rgb": [
+    0.455,
+    0.412,
+    0.417
+   ],
+   "n_cams": 15,
+   "n_px": 155034,
+   "cams": [
+    "Vice City 08 (Ferris Wheel)",
+    "Shoreline [Gameinformer]",
+    "Convertible",
+    "Shitzu Squalo 01 (Bay)",
+    "Boat"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.82,
+    0.82,
+    0.82
+   ],
+   "note": "IRL ESTIME 2026-10-04: arene blanche/argent"
+  }
  },
  "Kaseya Center (Annex)": {
   "color": "#9ca3af",
@@ -429884,7 +430889,23 @@
    ]
   ],
   "note": "KASEYA CENTER ANNEXES 2026-09-26: bras NE du polygone V16 2561 (batiment bas noir \u00ab sahara arena \u00bb des frames) 16 m ESTIME ; lobe SE (bloc eclaire a 6-7 niveaux + ecran geant) 20 m ESTIME ; pavillon rond V16 s121 12 m ESTIME",
-  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)"
+  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)",
+  "facade_color": {
+   "rgb": [
+    0.339,
+    0.315,
+    0.32
+   ],
+   "n_cams": 12,
+   "n_px": 53920,
+   "cams": [
+    "Shoreline [Gameinformer]",
+    "Shitzu Squalo 01 (Bay)",
+    "Vice City 08 (Ferris Wheel)",
+    "Boat",
+    "Convertible"
+   ]
+  }
  },
  "Marquis Miami": {
   "color": "#60a5fa",
@@ -431124,9 +432145,9 @@
     0.88
    ],
    "glass": [
-    0.06,
-    0.08,
-    0.12
+    0.2,
+    0.26,
+    0.34
    ],
    "bay": 1.5,
    "win": [
@@ -431135,6 +432156,22 @@
    ],
    "floor": 3.4,
    "_src": "Rialto Causeway with Raul (1): verre bleu-gris sombre, dalles blanches marquees"
+  },
+  "facade_color": {
+   "rgb": [
+    0.212,
+    0.2,
+    0.218
+   ],
+   "n_cams": 11,
+   "n_px": 142413,
+   "cams": [
+    "Vice City 08 (Ferris Wheel)",
+    "Convertible",
+    "Rialto Causeway with Raul (1)",
+    "Skyline",
+    "Boat"
+   ]
   }
  },
  "Marriott Miami Biscayne Bay": {
@@ -432111,9 +433148,9 @@
     0.87
    ],
    "glass": [
-    0.07,
-    0.08,
-    0.1
+    0.18,
+    0.2,
+    0.23
    ],
    "bay": 1.6,
    "win": [
@@ -432122,6 +433159,22 @@
    ],
    "floor": 3.1,
    "_src": "Rialto Causeway with Raul (1): facade blanche, fenetres en bandes verticales sombres"
+  },
+  "facade_color": {
+   "rgb": [
+    0.402,
+    0.444,
+    0.505
+   ],
+   "n_cams": 9,
+   "n_px": 55450,
+   "cams": [
+    "Boat",
+    "Rialto Causeway with Raul (1)",
+    "Dancing",
+    "Lucia Caminos 02 (Pool)",
+    "Vice City Postcard"
+   ]
   }
  },
  "Marriott Miami Biscayne Bay (Podium)": {
@@ -432609,7 +433662,31 @@
    ]
   ],
   "note": "MARRIOTT PODIUM 2026-09-26: moitie NO du bloc V16 2715 a 20 m ESTIME",
-  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)"
+  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)",
+  "facade_color": {
+   "rgb": [
+    0.346,
+    0.27,
+    0.265
+   ],
+   "n_cams": 5,
+   "n_px": 6078,
+   "cams": [
+    "Biplane (Video) v3000",
+    "Boat",
+    "Rialto Causeway with Raul (1)",
+    "Lucia Caminos 02 (Pool)",
+    "Biplane (Video) v2580"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.84,
+    0.8,
+    0.72
+   ],
+   "note": "IRL ESTIME 2026-10-04: podium beige clair"
+  }
  },
  "The Grand": {
   "color": "#c4b5fd",
@@ -442033,9 +443110,9 @@
     0.86
    ],
    "glass": [
-    0.09,
-    0.11,
-    0.14
+    0.2,
+    0.24,
+    0.28
    ],
    "bay": 3.6,
    "win": [
@@ -442044,6 +443121,22 @@
    ],
    "floor": 3.0,
    "_src": "Rialto Causeway with Raul (1): bandeaux blancs de balcons, vitrage sombre"
+  },
+  "facade_color": {
+   "rgb": [
+    0.275,
+    0.31,
+    0.372
+   ],
+   "n_cams": 14,
+   "n_px": 161999,
+   "cams": [
+    "Lucia Caminos 02 (Pool)",
+    "Boat",
+    "Rialto Causeway with Raul (1)",
+    "Dancing",
+    "Biplane (Video) v3000"
+   ]
   }
  },
  "1800 Club": {
@@ -447292,9 +448385,9 @@
     0.89
    ],
    "glass": [
-    0.1,
-    0.14,
-    0.18
+    0.24,
+    0.3,
+    0.36
    ],
    "bay": 3.4,
    "win": [
@@ -447303,6 +448396,22 @@
    ],
    "floor": 3.1,
    "_src": "Rialto Causeway with Raul (1): tour blanche a balcons filants"
+  },
+  "facade_color": {
+   "rgb": [
+    0.37,
+    0.387,
+    0.432
+   ],
+   "n_cams": 17,
+   "n_px": 158116,
+   "cams": [
+    "Biplane (Video) v3000",
+    "Boat",
+    "Lucia Caminos 02 (Pool)",
+    "Rialto Causeway with Raul (1)",
+    "Dancing"
+   ]
   }
  },
  "Quantum on the Bay (North)": {
@@ -448510,7 +449619,31 @@
    ]
   ],
   "note": "QUANTUM ON THE BAY NORD 2026-09-26: plan = lentille V16 entre les traits s276 et s277 (1072 m2, 51 x 42 m) extrude sol 0.1 -> toit 178.2 (landmark (N) (NE)); silhouette Vice City Postcard exacte (tour ronde elancee)",
-  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)"
+  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)",
+  "facade_color": {
+   "rgb": [
+    0.38,
+    0.433,
+    0.382
+   ],
+   "n_cams": 14,
+   "n_px": 82646,
+   "cams": [
+    "Dancing",
+    "Rialto Causeway with Raul (1)",
+    "Biplane (Video) v3000",
+    "Lucia Caminos 02 (Pool)",
+    "Biplane (Video) v2580"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.78,
+    0.84,
+    0.84
+   ],
+   "note": "IRL ESTIME 2026-10-04: blanc + verre bleu-vert"
+  }
  },
  "1000 Venetian Way (Podium)": {
   "color": "#f472b6",
@@ -448997,7 +450130,28 @@
    ]
   ],
   "note": "1000 VENETIAN WAY PODIUM 2026-09-26: lobe nord du polygone V16 3203 (trait s26) a 13.8 m ESTIME (~4 niveaux dans Venetian Islands)",
-  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5 (V16)"
+  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5 (V16)",
+  "facade_color": {
+   "rgb": [
+    0.256,
+    0.287,
+    0.344
+   ],
+   "n_cams": 2,
+   "n_px": 2081,
+   "cams": [
+    "Venetian Islands",
+    "Yacht (2)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.86,
+    0.83,
+    0.76
+   ],
+   "note": "IRL ESTIME 2026-10-04: podium blanc casse"
+  }
  },
  "The Grand (Podium)": {
   "color": "#c4b5fd",
@@ -449868,7 +451022,28 @@
    ]
   ],
   "note": "THE GRAND PODIUM 2026-09-26: partie sud du polygone V16 2716 (sous le trait s4) a 20 m ESTIME (aucune vue degagee du cote sud: Raul Bautista/Kayaking masques); a remplacer par un landmark",
-  "_credit": "Claude Opus 5.5 (V16)"
+  "_credit": "Claude Opus 5.5 (V16)",
+  "facade_color": {
+   "rgb": [
+    0.324,
+    0.246,
+    0.192
+   ],
+   "n_cams": 2,
+   "n_px": 2571,
+   "cams": [
+    "Lucia Caminos 02 (Pool)",
+    "Biplane (Video) v3000"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.86,
+    0.85,
+    0.82
+   ],
+   "note": "IRL ESTIME 2026-10-04: podium blanc"
+  }
  },
  "Water Tower (North Port Gellhorn)": {
   "color": "#4373a2",
@@ -489068,7 +490243,28 @@
    ]
   ],
   "note": "SONORA-SIL 2026-09-28: cuve ajustee sur ses SILHOUETTES (bords G/D a la ligne du bord superieur) Panorama + Fires V3 + Postcard; rayon commun 20.0 m (conjoint A/B/C, non-chevauchement), centre (-2958.3, 3742.7), bord z 42.1, sol 18.2; residus <= 1.6 arcmin. Postcard: pose \"lointain\" interne (-2659.3, 4058.6, fov 48.9), la pose V3 n etant juste qu au proche | FIRES-V3 2026-09-28: groupe des 3 reservoirs translate de (9, 62) m = deplacement du reservoir A re-triangule Panorama x Fires | FIRES-V2 2026-09-28: groupe des 3 reservoirs translate de (-6, -56) m = deplacement du reservoir A re-triangule Panorama x Fires | RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). reservoir Sonora A: centre et rayon (17.6) = ajustement joint des tangentes (Postcard, + Panorama pour A), a 5-7 m du cercle V16; bord du toit 51.6 (ligne du bord lointain dans Postcard). Sol 18.0",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_color": {
+   "rgb": [
+    0.279,
+    0.169,
+    0.211
+   ],
+   "n_cams": 2,
+   "n_px": 4355,
+   "cams": [
+    "Ambrosia Postcard (X)",
+    "Ambrosia 04 (Fires)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.8,
+    0.81,
+    0.8
+   ],
+   "note": "IRL ESTIME 2026-10-04: reservoir industriel blanc/argent"
+  }
  },
  "1500 Sonora Ave (Tank B)": {
   "color": "#ffb300",
@@ -492963,7 +494159,27 @@
    ]
   ],
   "note": "SONORA-SIL 2026-09-28: cuve ajustee sur ses SILHOUETTES (bords G/D a la ligne du bord superieur) Postcard seulement (rayon de A); rayon commun 20.0 m (conjoint A/B/C, non-chevauchement), centre (-2942.9, 3780.7), bord z 36.5, sol 19.2; residus <= 1.6 arcmin. Postcard: pose \"lointain\" interne (-2659.3, 4058.6, fov 48.9), la pose V3 n etant juste qu au proche | FIRES-V3 2026-09-28: groupe des 3 reservoirs translate de (9, 62) m = deplacement du reservoir A re-triangule Panorama x Fires (B/C: suivent A, non mesures individuellement) | FIRES-V2 2026-09-28: groupe des 3 reservoirs translate de (-6, -56) m = deplacement du reservoir A re-triangule Panorama x Fires (B/C: suivent A, non mesures individuellement) | RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). reservoir Sonora B: centre et rayon (17.6) = ajustement joint des tangentes (Postcard, + Panorama pour A), a 5-7 m du cercle V16; bord du toit 46.4 (ligne du bord lointain dans Postcard). Sol 18.9",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_color": {
+   "rgb": [
+    0.306,
+    0.196,
+    0.207
+   ],
+   "n_cams": 1,
+   "n_px": 5148,
+   "cams": [
+    "Ambrosia Postcard (X)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.8,
+    0.81,
+    0.8
+   ],
+   "note": "IRL ESTIME 2026-10-04: reservoir industriel blanc/argent"
+  }
  },
  "1500 Sonora Ave (Tank C)": {
   "color": "#ffb300",
@@ -496858,7 +498074,27 @@
    ]
   ],
   "note": "SONORA-SIL 2026-09-28: cuve ajustee sur ses SILHOUETTES (bords G/D a la ligne du bord superieur) Postcard seulement (rayon de A); rayon commun 20.0 m (conjoint A/B/C, non-chevauchement), centre (-2899.2, 3787.3), bord z 32.6, sol 19.8; residus <= 1.6 arcmin. Postcard: pose \"lointain\" interne (-2659.3, 4058.6, fov 48.9), la pose V3 n etant juste qu au proche | FIRES-V3 2026-09-28: groupe des 3 reservoirs translate de (9, 62) m = deplacement du reservoir A re-triangule Panorama x Fires (B/C: suivent A, non mesures individuellement) | FIRES-V2 2026-09-28: groupe des 3 reservoirs translate de (-6, -56) m = deplacement du reservoir A re-triangule Panorama x Fires (B/C: suivent A, non mesures individuellement) | RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). reservoir Sonora C: centre et rayon (17.6) = ajustement joint des tangentes (Postcard, + Panorama pour A), a 5-7 m du cercle V16; bord du toit 42.4 (ligne du bord lointain dans Postcard). Sol 19.4",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_color": {
+   "rgb": [
+    0.348,
+    0.173,
+    0.183
+   ],
+   "n_cams": 1,
+   "n_px": 2417,
+   "cams": [
+    "Ambrosia Postcard (X)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.8,
+    0.81,
+    0.8
+   ],
+   "note": "IRL ESTIME 2026-10-04: reservoir industriel blanc/argent"
+  }
  },
  "Water Tank (West Port Gellhorn)": {
   "color": "#d9d4c7",
@@ -500129,7 +501365,21 @@
    ]
   ],
   "note": "RESERVOIR WEST PORT GELLHORN 2026-09-26: cercle V16 (contour rouge) sur le tooltip d Alexandre, diametre 23 m; cylindre jusqu a 19.3 m, toit conique a 21.5 m (lus dans Port Gellhorn Postcard, 278 m; landmark solve joint 23.3). Sol 10.2",
-  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5 (V16)"
+  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5 (V16)",
+  "facade_color": {
+   "rgb": [
+    0.382,
+    0.398,
+    0.495
+   ],
+   "n_cams": 3,
+   "n_px": 11507,
+   "cams": [
+    "Port Gellhorn 06 (Trailer Park)",
+    "Port Gellhorn Postcard (X)",
+    "Port Gellhorn 04 (Delights) (X)"
+   ]
+  }
  },
  "White Silos (E)": {
   "color": "#4fc3f7",
@@ -511181,7 +512431,23 @@
    ]
   ],
   "note": "USM-ORIENT 2026-09-28: corps tourne de 19.3 deg -> aligne nord-sud (~17 x 43 m), centre entre les coins re-triangules SE (-2985.8, 3404.1) et NW (-3003.0, 3448.0) (coins opposes); superstructure/mat recalee sur le LM (A) (-2997.0, 3415.5, 99.4); verifie dans Fires, Throwing, Panorama (orientation NNE heritee des anciens coins faux) | FIRES-V3 2026-09-28: translatee de (6, 69) m = deplacement moyen des coins re-triangules ((SE), (NW), (AC), (A)) | FIRES-V2 2026-09-28: translatee de (-48, -206) m = deplacement moyen des coins re-triangules ((SE), (NW), (AC), (A)) | RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). usine principale: forme V16 deplacee de (28, 93) m sur ses points triangules (toit 75.0; treillis jusqu a 91.8, mat 100.2). Sol 16.8. Loin de Postcard (600 m, parallaxe 15 deg): +-20 m le long du rayon de Panorama",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_color": {
+   "rgb": [
+    0.224,
+    0.169,
+    0.158
+   ],
+   "n_cams": 5,
+   "n_px": 8571,
+   "cams": [
+    "Ambrosia Postcard (X)",
+    "Ambrosia 04 (Fires)",
+    "High Rollerz",
+    "Gas Station (Alligator)",
+    "Ambrosia 02 (Panorama)"
+   ]
+  }
  },
  "Warehouse 1410 (Ambrosia)": {
   "color": "#43a047",
@@ -512460,7 +513726,27 @@
    ]
   ],
   "note": "W1410-PC 2026-09-28: reconstruit sur 7 coins cliques par Alexandre dans Postcard V4 (A-G): travee avant 28 m (A-C), faitage 28.4 (B), long. 70 m jusqu a D; travee du milieu 34 m (E-G), faitage 28.7 (F), pignon en retrait de 7 m, long. jusqu a l extremite V16; liaison basse 13 m entre les deux. Axe az -25 deg (= V16). ECHELLE: vue unique sans point au sol -> gouttiere supposee z 26 (6 m au-dessus du sol 20.3), choisie pour coller au plan V16/minimap; incertitude ~+-10 m le long du rayon de Postcard (un tooltip d un coin la fixerait) | RAFFINERIE ALLIED CRYSTAL (Ambrosia) V4 2026-09-26 \u2014 grand entrepot: forme V16 1410 a sa position V16 (3 travees); la minimap du cyberleak (taser.mp4) montre la route d entree d Allied a y 3690-3700 et le batiment juste au nord -> le decalage (-26,-32) tire de Postcard (score plat a +-30 m) mettait l entrepot sur la route: annule. Egout +8, faitage +12 ESTIME. Sol 19.9",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (minimap cyberleak)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (minimap cyberleak)",
+  "facade_color": {
+   "rgb": [
+    0.365,
+    0.285,
+    0.297
+   ],
+   "n_cams": 1,
+   "n_px": 7925,
+   "cams": [
+    "Ambrosia Postcard (X)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.62,
+    0.58,
+    0.52
+   ],
+   "note": "IRL ESTIME 2026-10-04: sucrerie US Sugar Clewiston: tole grise/rouille"
+  }
  },
  "White Silos (W)": {
   "color": "#4fc3f7",
@@ -515846,7 +517132,28 @@
    ]
   ],
   "note": "WT-SIL 2026-09-28: cylindre propre recale sur ses silhouettes Postcard V4 (bord gauche + bord du toit), r 11.4, bord 45.2, accole au silo (1 m) sans le traverser (le transfert sommet par sommet V3->V4 avait tordu la forme) | POSTCARD-V4 2026-09-28: transfere de la pose Postcard V3 a la V4 (chaque sommet garde son pixel et sa hauteur, re-intersecte sur le rayon de la nouvelle pose = re-mesure) | RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). reservoir blanc #2 derriere le silo (Postcard): bord gauche x115, r 11.3 (gabarit V16), accole au silo; bord du toit 50.8, dome 52.3. Profondeur le long du rayon = hypothese de contact (une seule vue). Sol 22.9",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_color": {
+   "rgb": [
+    0.47,
+    0.511,
+    0.528
+   ],
+   "n_cams": 2,
+   "n_px": 23227,
+   "cams": [
+    "Ambrosia Postcard (X)",
+    "Ambrosia 02 (Panorama)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.9,
+    0.9,
+    0.88
+   ],
+   "note": "IRL ESTIME 2026-10-04: reservoir blanc"
+  }
  },
  "White Tank #1 (Allied Crystal)": {
   "color": "#ffd54f",
@@ -518925,7 +520232,28 @@
    ]
   ],
   "note": "WT-SIL 2026-09-28: cylindre propre recale sur ses silhouettes Postcard V4 (bord droit + coin du bord, r 11.3, bord 50.8), sans chevauchement du #2 (le transfert sommet par sommet V3->V4 avait tordu la forme) | POSTCARD-V4 2026-09-28: transfere de la pose Postcard V3 a la V4 (chaque sommet garde son pixel et sa hauteur, re-intersecte sur le rayon de la nouvelle pose = re-mesure) | RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). reservoir blanc #1 derriere le silo (Postcard): bord droit x35, r 11.3 (gabarit V16), accole au #2 (3 m); bord du toit 50.8, dome 52.3. Profondeur le long du rayon = hypothese de contact (une seule vue). Sol 23.0",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_color": {
+   "rgb": [
+    0.835,
+    0.885,
+    0.93
+   ],
+   "n_cams": 2,
+   "n_px": 1843,
+   "cams": [
+    "Ambrosia Postcard (X)",
+    "Ambrosia 02 (Panorama)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.9,
+    0.9,
+    0.88
+   ],
+   "note": "IRL ESTIME 2026-10-04: reservoir blanc"
+  }
  },
  "Allied Crystal Office": {
   "color": "#aa00ff",
@@ -519268,7 +520596,27 @@
    ]
   ],
   "note": "OFFICE-PC4 2026-09-28: rectangle reconstruit sur les 4 coins du toit (z 38.5) transferes a Postcard V4 (exacts a la hauteur du toit), murs verticaux; 15.2 x 11.1 m (le transfert sommet par sommet V3->V4 avait tordu la forme) | POSTCARD-V4 2026-09-28: transfere de la pose Postcard V3 a la V4 (chaque sommet garde son pixel et sa hauteur, re-intersecte sur le rayon de la nouvelle pose = re-mesure) | RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). bureau au logo: les 4 coins du toit = rayons de Postcard (arete avant au sol + 3 coins du toit sur le plan du toit), 4 niveaux, toit 38.5, sol 21.7",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_color": {
+   "rgb": [
+    0.447,
+    0.469,
+    0.439
+   ],
+   "n_cams": 1,
+   "n_px": 7200,
+   "cams": [
+    "Ambrosia Postcard (X)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.82,
+    0.8,
+    0.74
+   ],
+   "note": "IRL ESTIME 2026-10-04: bureau beige clair"
+  }
  },
  "Allied Crystal Office (Wing)": {
   "color": "#aa00ff",
@@ -520499,7 +521847,21 @@
    ]
   ],
   "note": "WING-PC4 2026-09-28: prisme reconstruit sur le contour du toit (z 36.4) transfere a Postcard V4, rectangle symetrique a coins arrondis (r 5), 85.7 x 25.7 m, 3 etages (le transfert sommet par sommet V3->V4 avait tordu la forme) | POSTCARD-V4 2026-09-28: transfere de la pose Postcard V3 a la V4 (chaque sommet garde son pixel et sa hauteur, re-intersecte sur le rayon de la nouvelle pose = re-mesure) | WING-PC 2026-09-28: reconstruite sur l image Postcard (pose V3, juste au proche): plan de facade + hauteurs resolus par le parapet du toit (5 pts, 0.04 m) et le bas de la porte au sol heightmap 23.1 -> facade az -7.7 deg; etages 23.1/27.1/31.3, toit (parapet) 36.4 = 3 etages; largeur 30.4 m par le bord arriere du toit; coin SE arrondi accole au coin NE de la tour du logo (-2799.5, 3919.1); caisson de clim 4.6 x 2.3 m. Longueur: seulement 24 m visibles (sort du cadre) -> 100 m repris de la V16 1417 (a confirmer). Remplace la forme V16 tournee (orientation fausse, bloc nord non mesure) | RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). aile a bouts arrondis: forme V16 1417 deplacee (-8.5, -9.0) et tournee -28.4 deg pour coller a la facade mesuree dans Postcard (ecart 0.8 m); 3 niveaux, toit 35.9. Sol 23.8",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_color": {
+   "rgb": [
+    0.23,
+    0.2,
+    0.146
+   ],
+   "n_cams": 3,
+   "n_px": 25211,
+   "cams": [
+    "Ambrosia Postcard (X)",
+    "Ambrosia 02 (Panorama)",
+    "Throwing Stuff from an Overpass"
+   ]
+  }
  },
  "Refinery Warehouse 1331 (Ambrosia)": {
   "color": "#43a047",
@@ -520722,7 +522084,27 @@
    ]
   ],
   "note": "RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). entrepot/atelier: forme V16 1331 deplacee de (-4, 9) m (correction locale interpolee des objets mesures voisins); hauteur 9 m ESTIMEE. Sol 18.6",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_color": {
+   "rgb": [
+    0.276,
+    0.154,
+    0.11
+   ],
+   "n_cams": 1,
+   "n_px": 5320,
+   "cams": [
+    "Ambrosia Postcard (X)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.62,
+    0.58,
+    0.52
+   ],
+   "note": "IRL ESTIME 2026-10-04: sucrerie US Sugar Clewiston: tole grise/rouille"
+  }
  },
  "Refinery Warehouse 1332 (Ambrosia)": {
   "color": "#43a047",
@@ -520945,7 +522327,27 @@
    ]
   ],
   "note": "RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). entrepot/atelier: forme V16 1332 deplacee de (0, 26) m (correction locale interpolee des objets mesures voisins); hauteur 9 m ESTIMEE. Sol 17.5",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_color": {
+   "rgb": [
+    0.312,
+    0.146,
+    0.15
+   ],
+   "n_cams": 1,
+   "n_px": 1680,
+   "cams": [
+    "Ambrosia Postcard (X)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.62,
+    0.58,
+    0.52
+   ],
+   "note": "IRL ESTIME 2026-10-04: sucrerie US Sugar Clewiston: tole grise/rouille"
+  }
  },
  "Refinery Warehouse 1333 (Ambrosia)": {
   "color": "#43a047",
@@ -521240,7 +522642,15 @@
    ]
   ],
   "note": "RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). entrepot/atelier: forme V16 1333 deplacee de (16, 64) m (correction locale interpolee des objets mesures voisins); hauteur 9 m ESTIMEE. Sol 16.6",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_irl": {
+   "rgb": [
+    0.62,
+    0.58,
+    0.52
+   ],
+   "note": "IRL ESTIME 2026-10-04: sucrerie US Sugar Clewiston: tole grise/rouille"
+  }
  },
  "Refinery Warehouse 1335 (Ambrosia)": {
   "color": "#43a047",
@@ -521463,7 +522873,27 @@
    ]
   ],
   "note": "RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). entrepot/atelier: forme V16 1335 deplacee de (-2, 21) m (correction locale interpolee des objets mesures voisins); hauteur 9 m ESTIMEE. Sol 17.9",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_color": {
+   "rgb": [
+    0.256,
+    0.127,
+    0.069
+   ],
+   "n_cams": 1,
+   "n_px": 889,
+   "cams": [
+    "Ambrosia Postcard (X)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.62,
+    0.58,
+    0.52
+   ],
+   "note": "IRL ESTIME 2026-10-04: sucrerie US Sugar Clewiston: tole grise/rouille"
+  }
  },
  "Refinery Warehouse 1409 (Ambrosia)": {
   "color": "#43a047",
@@ -521614,7 +523044,27 @@
    ]
   ],
   "note": "RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). entrepot/atelier: forme V16 1409 deplacee de (5, 38) m (correction locale interpolee des objets mesures voisins); hauteur 9 m ESTIMEE. Sol 17.2",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_color": {
+   "rgb": [
+    0.201,
+    0.104,
+    0.045
+   ],
+   "n_cams": 1,
+   "n_px": 1133,
+   "cams": [
+    "Ambrosia Postcard (X)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.62,
+    0.58,
+    0.52
+   ],
+   "note": "IRL ESTIME 2026-10-04: sucrerie US Sugar Clewiston: tole grise/rouille"
+  }
  },
  "Refinery Warehouse 1411 (Ambrosia)": {
   "color": "#43a047",
@@ -521837,7 +523287,27 @@
    ]
   ],
   "note": "RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). entrepot/atelier: forme V16 1411 deplacee de (-5, 6) m (correction locale interpolee des objets mesures voisins); hauteur 9 m ESTIMEE. Sol 20.8",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_color": {
+   "rgb": [
+    0.283,
+    0.169,
+    0.142
+   ],
+   "n_cams": 1,
+   "n_px": 4954,
+   "cams": [
+    "Ambrosia Postcard (X)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.62,
+    0.58,
+    0.52
+   ],
+   "note": "IRL ESTIME 2026-10-04: sucrerie US Sugar Clewiston: tole grise/rouille"
+  }
  },
  "Refinery Warehouse 1341 (Ambrosia)": {
   "color": "#43a047",
@@ -521988,7 +523458,27 @@
    ]
   ],
   "note": "RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). entrepot/atelier: forme V16 1341 deplacee de (8, 48) m (correction locale interpolee des objets mesures voisins); hauteur 9 m ESTIMEE. Sol 17.9",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_color": {
+   "rgb": [
+    0.253,
+    0.162,
+    0.126
+   ],
+   "n_cams": 1,
+   "n_px": 868,
+   "cams": [
+    "Ambrosia Postcard (X)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.62,
+    0.58,
+    0.52
+   ],
+   "note": "IRL ESTIME 2026-10-04: sucrerie US Sugar Clewiston: tole grise/rouille"
+  }
  },
  "Refinery Warehouse 1334 (Ambrosia)": {
   "color": "#43a047",
@@ -522139,7 +523629,15 @@
    ]
   ],
   "note": "RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). entrepot/atelier: forme V16 1334 deplacee de (25, 86) m (correction locale interpolee des objets mesures voisins); hauteur 9 m ESTIMEE. Sol 16.9",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_irl": {
+   "rgb": [
+    0.62,
+    0.58,
+    0.52
+   ],
+   "note": "IRL ESTIME 2026-10-04: sucrerie US Sugar Clewiston: tole grise/rouille"
+  }
  },
  "Refinery Warehouse 1404 (Ambrosia)": {
   "color": "#43a047",
@@ -522290,7 +523788,15 @@
    ]
   ],
   "note": "RAFFINERIE ALLIED CRYSTAL (Ambrosia) V3 2026-09-26 \u2014 positions par les CAMERAS (Postcard re-posee sur les routes de la leak map + Panorama VERIFIED); la V16 ne sert qu a la FORME: Yanis a dessine les batiments de cette zone a l oeil (la leak map n a que les routes ici). entrepot/atelier: forme V16 1404 deplacee de (25, 87) m (correction locale interpolee des objets mesures voisins); hauteur 9 m ESTIMEE. Sol 16.1",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (V16-RESECT-V3)",
+  "facade_irl": {
+   "rgb": [
+    0.62,
+    0.58,
+    0.52
+   ],
+   "note": "IRL ESTIME 2026-10-04: sucrerie US Sugar Clewiston: tole grise/rouille"
+  }
  },
  "Refinery Conveyors (Ambrosia)": {
   "color": "#26c6da",
@@ -525945,7 +527451,21 @@
    ]
   ],
   "note": "RAFFINERIE ALLIED CRYSTAL (Ambrosia) V4 2026-09-26 \u2014 galeries de convoyeurs: lignes V16 1419 a leur position V16 (comme l entrepot 1410), +7/+10 m",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (minimap cyberleak)"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5 (minimap cyberleak)",
+  "facade_color": {
+   "rgb": [
+    0.273,
+    0.15,
+    0.106
+   ],
+   "n_cams": 3,
+   "n_px": 43849,
+   "cams": [
+    "Ambrosia Postcard (X)",
+    "Ambrosia 04 (Fires)",
+    "Throwing Stuff from an Overpass"
+   ]
+  }
  },
  "Allied Crystal Tank (ALLIED lettering)": {
   "color": "#ffb300",
@@ -529624,7 +531144,27 @@
    ]
   ],
   "note": "RAFFINERIE ALLIED CRYSTAL (Ambrosia) 2026-09-28: grand reservoir peint (fresque drapeau, lettres ALLIED/CRYSTAL CO.) - POSITION par intersection: direction depuis la voiture a 16 s dans taser.mp4 (position et cap par la minimap calee sur la 35) x rayon central de Panorama (VERIFIED); (-2669,3775) +-15 m, a ~130 m de l entree; rayon 18.5 (largeur dans Panorama a cette distance, coherent avec la largeur apparente dans la video pour un fov ~70-75), bord 48.3. Sol 21.3",
-  "_credit": "Claude Opus 5.5 (Panorama + minimap cyberleak)"
+  "_credit": "Claude Opus 5.5 (Panorama + minimap cyberleak)",
+  "facade_color": {
+   "rgb": [
+    0.483,
+    0.355,
+    0.329
+   ],
+   "n_cams": 1,
+   "n_px": 338,
+   "cams": [
+    "Ambrosia 02 (Panorama)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.88,
+    0.88,
+    0.86
+   ],
+   "note": "IRL ESTIME 2026-10-04: reservoir blanc a lettrage"
+  }
  },
  "Radio Tower (Ambrosia)": {
   "color": "#f87171",
@@ -538549,7 +540089,28 @@
    ]
   ],
   "note": "USM-ORIENT 2026-09-28: aile nord basse = 3 blocs sous une poutre (sommet ~65.7 m) vus dans Fires (clics P1-P3); P2 (-2996.4, 3465.7) et P3 (-2995.4, 3475.1) re-triangules Fires x Postcard lointain; P1 extrapole a l espacement (~9.5 m); largeur E-O supposee (8 m)",
-  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5"
+  "_credit": "Alexandre Leblanc (clics) + Claude Opus 5.5",
+  "facade_color": {
+   "rgb": [
+    0.201,
+    0.135,
+    0.114
+   ],
+   "n_cams": 2,
+   "n_px": 4901,
+   "cams": [
+    "Ambrosia Postcard (X)",
+    "Ambrosia 04 (Fires)"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.55,
+    0.53,
+    0.5
+   ],
+   "note": "IRL ESTIME 2026-10-04: usine US Sugar Clewiston: metal gris"
+  }
  },
  "The Crimson": {
   "color": "#fb7185",
@@ -540140,7 +541701,23 @@
    ]
   ],
   "note": "CRIMSON 2026-09-29: plan = empreinte V16 2729 extrudee, sol 3.4 -> toit 92 m lu dans Vice City Postcard, Vice City 03 et Water Tower [Gameinformer] (poses validees); le LM The Crimson (CC) z 117.6 = sommet de la grue de chantier au-dessus du toit (VC03), pas le toit",
-  "_credit": "Alexandre Leblanc + Claude Opus 5.5"
+  "_credit": "Alexandre Leblanc + Claude Opus 5.5",
+  "facade_color": {
+   "rgb": [
+    0.37,
+    0.402,
+    0.369
+   ],
+   "n_cams": 14,
+   "n_px": 58929,
+   "cams": [
+    "Dancing",
+    "Vice City 09 (La Perle)",
+    "Biplane (Video) v3000",
+    "Gas Station (Chase) (SE)",
+    "Handshake"
+   ]
+  }
  },
  "Lake Surprise Viaduct": {
   "color": "#94a3b8",
@@ -690494,7 +692071,27 @@
    ]
   ],
   "note": "VALIDE Alexandre 2026-09-30 (decalage V16 correct) | TURKEY-POINT-V2 2026-09-30 (Alexandre: V1 trop simple): formes V16 translatees de (-4.9, -16.4) m (5 reperes triangules 3-4 cams). Enceintes = cylindre jusqu a l epaule 54 m + dome surbaisse jusqu aux sommets triangules (Grassrivers 02), event 62 m; cheminees en 2 troncons (fut 6.3 m de rayon jusqu a 57 m puis 2.5 m jusqu aux sommets triangules, Grassrivers 02); chaudieres a profil incline 22 -> 53 m sur 62 % de la longueur puis toit plat (Thunderstorm + Airplane, graduations); portiques aux landmarks CNE/CNW et CSE/CSW. {\"hall\": 30.0, \"w_bldg\": 20.0, \"small\": 12.0, \"boiler\": 53.0, \"boiler_w\": 22.0, \"slope_frac\": 0.62, \"yard\": 8.0, \"shoulder\": 54.0, \"vent\": 62.0, \"stack_r0\": 6.3, \"stack_z1\": 57.0, \"stack_r1\": 2.5}",
-  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5"
+  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5",
+  "facade_color": {
+   "rgb": [
+    0.353,
+    0.383,
+    0.457
+   ],
+   "n_cams": 1,
+   "n_px": 378,
+   "cams": [
+    "Thunderstorm [Gameinformer]"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.85,
+    0.85,
+    0.83
+   ],
+   "note": "IRL ESTIME 2026-10-04: enceintes en beton clair"
+  }
  },
  "Turkey Point Nuclear Power Station (Turbine Hall)": {
   "color": "#9ca3af",
@@ -691941,7 +693538,21 @@
    ]
   ],
   "note": "VALIDE Alexandre 2026-09-30 (decalage V16 correct) | TURKEY-POINT-V2 2026-09-30 (Alexandre: V1 trop simple): formes V16 translatees de (-4.9, -16.4) m (5 reperes triangules 3-4 cams). Enceintes = cylindre jusqu a l epaule 54 m + dome surbaisse jusqu aux sommets triangules (Grassrivers 02), event 62 m; cheminees en 2 troncons (fut 6.3 m de rayon jusqu a 57 m puis 2.5 m jusqu aux sommets triangules, Grassrivers 02); chaudieres a profil incline 22 -> 53 m sur 62 % de la longueur puis toit plat (Thunderstorm + Airplane, graduations); portiques aux landmarks CNE/CNW et CSE/CSW. {\"hall\": 30.0, \"w_bldg\": 20.0, \"small\": 12.0, \"boiler\": 53.0, \"boiler_w\": 22.0, \"slope_frac\": 0.62, \"yard\": 8.0, \"shoulder\": 54.0, \"vent\": 62.0, \"stack_r0\": 6.3, \"stack_z1\": 57.0, \"stack_r1\": 2.5}",
-  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5"
+  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5",
+  "facade_color": {
+   "rgb": [
+    0.368,
+    0.392,
+    0.454
+   ],
+   "n_cams": 3,
+   "n_px": 1256,
+   "cams": [
+    "Prison",
+    "Grassrivers 02 (Watson Bay)",
+    "Thunderstorm [Gameinformer]"
+   ]
+  }
  },
  "Turkey Point Nuclear Power Station (Fossil Units)": {
   "color": "#f87171",
@@ -698752,7 +700363,22 @@
    ]
   ],
   "note": "VALIDE Alexandre 2026-09-30 (decalage V16 correct) | TURKEY-POINT-V2 2026-09-30 (Alexandre: V1 trop simple): formes V16 translatees de (-4.9, -16.4) m (5 reperes triangules 3-4 cams). Enceintes = cylindre jusqu a l epaule 54 m + dome surbaisse jusqu aux sommets triangules (Grassrivers 02), event 62 m; cheminees en 2 troncons (fut 6.3 m de rayon jusqu a 57 m puis 2.5 m jusqu aux sommets triangules, Grassrivers 02); chaudieres a profil incline 22 -> 53 m sur 62 % de la longueur puis toit plat (Thunderstorm + Airplane, graduations); portiques aux landmarks CNE/CNW et CSE/CSW. {\"hall\": 30.0, \"w_bldg\": 20.0, \"small\": 12.0, \"boiler\": 53.0, \"boiler_w\": 22.0, \"slope_frac\": 0.62, \"yard\": 8.0, \"shoulder\": 54.0, \"vent\": 62.0, \"stack_r0\": 6.3, \"stack_z1\": 57.0, \"stack_r1\": 2.5}",
-  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5"
+  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5",
+  "facade_color": {
+   "rgb": [
+    0.336,
+    0.257,
+    0.438
+   ],
+   "n_cams": 4,
+   "n_px": 2289,
+   "cams": [
+    "Thunderstorm [Gameinformer]",
+    "Prison",
+    "Leonida Keys Postcard (X)",
+    "Jason Duval 03 (Boat)"
+   ]
+  }
  },
  "Turkey Point Nuclear Power Station (Gantry Cranes)": {
   "color": "#fbbf24",
@@ -717361,7 +718987,23 @@
    ]
   ],
   "note": "PRISON-V1 2026-09-30 (demande Alexandre): plan V16 (batiments 940-963, tours 964-981); hauteurs lues dans Prison (Aerial) (Biplane) recale sur les 6 tours (rms 5 px): blocs cellulaires 6-8 m a l egout + toit a deux pans, bloc blanc central 18 m, entrepot blanc nord 13 m, bloc est 12 m; petits batiments 4 m (ESTIME). Tours: sommets = landmarks Prison Tower (1-6). Cloture double 4.5 m (ESTIME) sur l hexagone des tours.",
-  "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5"
+  "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
+  "facade_color": {
+   "rgb": [
+    0.278,
+    0.256,
+    0.198
+   ],
+   "n_cams": 7,
+   "n_px": 116298,
+   "cams": [
+    "Prison Tower",
+    "Prison (Video) v600",
+    "Prison (Video) v680",
+    "Prison (Video) v500",
+    "Prison (Aerial) (Biplane)"
+   ]
+  }
  },
  "Prison Towers": {
   "color": "#e5e7eb",
@@ -745477,7 +747119,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 [1756], toit = LM:Park Grove Condominium (N)."
+  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 [1756], toit = LM:Park Grove Condominium (N).",
+  "facade_color": {
+   "rgb": [
+    0.259,
+    0.252,
+    0.248
+   ],
+   "n_cams": 11,
+   "n_px": 102362,
+   "cams": [
+    "Highway (Peacock Bay) (B)",
+    "Highway (Peacock Bay) (A)",
+    "Biplane (Video) v1080",
+    "Biplane (Video) v0900",
+    "Grassrivers 05 (Sunrise RV Park)"
+   ]
+  }
  },
  "Park Grove Condominium (C)": {
   "color": "#67e8f9",
@@ -755792,7 +757450,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 [1621], toit = LM:Park Grove Condominium (C)."
+  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 [1621], toit = LM:Park Grove Condominium (C).",
+  "facade_color": {
+   "rgb": [
+    0.317,
+    0.321,
+    0.305
+   ],
+   "n_cams": 13,
+   "n_px": 149346,
+   "cams": [
+    "Highway (Peacock Bay) (B)",
+    "Highway (Peacock Bay) (A)",
+    "Biplane (Video) v1080",
+    "Biplane (Video) v0900",
+    "Biplane (Video) v0820"
+   ]
+  }
  },
  "Park Grove Condominium (S)": {
   "color": "#67e8f9",
@@ -765999,7 +767673,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 [1488], toit = LM:Park Grove Condominium (S)."
+  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 [1488], toit = LM:Park Grove Condominium (S).",
+  "facade_color": {
+   "rgb": [
+    0.328,
+    0.331,
+    0.316
+   ],
+   "n_cams": 10,
+   "n_px": 69122,
+   "cams": [
+    "Highway (Peacock Bay) (A)",
+    "Biplane (Video) v1080",
+    "Biplane (Video) v0820",
+    "Biplane (Video) v0770",
+    "Grassrivers 05 (Sunrise RV Park)"
+   ]
+  }
  },
  "Bank of America Financial Center (Miami Beach)": {
   "color": "#93c5fd",
@@ -767926,7 +769616,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 [3466, 3465], toit = LM:Bank of America Financial Center (NW)."
+  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 [3466, 3465], toit = LM:Bank of America Financial Center (NW).",
+  "facade_color": {
+   "rgb": [
+    0.217,
+    0.235,
+    0.276
+   ],
+   "n_cams": 7,
+   "n_px": 37351,
+   "cams": [
+    "Vice City 03 (Basketball)",
+    "Trees",
+    "Alley (W)",
+    "Beach",
+    "Venetian Islands"
+   ]
+  }
  },
  "1500 Ocean Dr": {
   "color": "#f9a8d4",
@@ -773417,7 +775123,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3335 (5 regions, tools/v16_tiers.py); tour 63.8 (LM) et lame rose 62.3 (3 LMs S/SE/NW/SW); podium 21 m LU dans Vice Beach (B) (echelles aux coins); immeuble ouest 34 m LU (toit a gradins blanc derriere la lame, Vice Beach (B)), tourelle hexagonale 36 m ESTIMEE. Note: Vice Beach (B) montre tout le complexe ~10-15 m au NO de la V16 (pose de la cam non verifiee, la tour Jade Ocean est decalee dans une autre direction -> pas un decalage V16). DECALE de (-36.0, 8.0) m par rapport a la V16 (VB-SETBACK, valide Alexandre 2026-10-01: la V16 de Vice Beach dessine la parcelle, la tour est en retrait; decalage lu dans les images)"
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3335 (5 regions, tools/v16_tiers.py); tour 63.8 (LM) et lame rose 62.3 (3 LMs S/SE/NW/SW); podium 21 m LU dans Vice Beach (B) (echelles aux coins); immeuble ouest 34 m LU (toit a gradins blanc derriere la lame, Vice Beach (B)), tourelle hexagonale 36 m ESTIMEE. Note: Vice Beach (B) montre tout le complexe ~10-15 m au NO de la V16 (pose de la cam non verifiee, la tour Jade Ocean est decalee dans une autre direction -> pas un decalage V16). DECALE de (-36.0, 8.0) m par rapport a la V16 (VB-SETBACK, valide Alexandre 2026-10-01: la V16 de Vice Beach dessine la parcelle, la tour est en retrait; decalage lu dans les images)",
+  "facade_color": {
+   "rgb": [
+    0.242,
+    0.246,
+    0.286
+   ],
+   "n_cams": 9,
+   "n_px": 257039,
+   "cams": [
+    "Vice Beach (B)",
+    "Vice Beach (A)",
+    "Red Limousine",
+    "Vice City 05 (Vice Beach)",
+    "Beach"
+   ]
+  }
  },
  "Jade Ocean Condos": {
   "color": "#34d399",
@@ -788388,7 +790110,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3584 (23 regions, tools/v16_tiers.py); sommet LM 202.9 (2 LMs); gradins -6/-12 m et tambour +4 m ESTIMES d apres le chanfrein de la couronne vu dans Biplane Night. Largeur du fut verifiee dans Beach et Biplane Night (93 vs 90 px, 132 vs 130 px); DISCORDANCE: les deux vues placent la tour 13 m a l ouest / 4 m au sud du polygone V16 (residu 2 px); sur la silhouette V16 (VB-WATER 2026-10-04, Alexandre). DECALE de (-12.0, -8.0) m par rapport a la V16 (VB-SETBACK, valide Alexandre 2026-10-01: la V16 de Vice Beach dessine la parcelle, la tour est en retrait; decalage lu dans les images)"
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3584 (23 regions, tools/v16_tiers.py); sommet LM 202.9 (2 LMs); gradins -6/-12 m et tambour +4 m ESTIMES d apres le chanfrein de la couronne vu dans Biplane Night. Largeur du fut verifiee dans Beach et Biplane Night (93 vs 90 px, 132 vs 130 px); DISCORDANCE: les deux vues placent la tour 13 m a l ouest / 4 m au sud du polygone V16 (residu 2 px); sur la silhouette V16 (VB-WATER 2026-10-04, Alexandre). DECALE de (-12.0, -8.0) m par rapport a la V16 (VB-SETBACK, valide Alexandre 2026-10-01: la V16 de Vice Beach dessine la parcelle, la tour est en retrait; decalage lu dans les images)",
+  "facade_color": {
+   "rgb": [
+    0.353,
+    0.384,
+    0.352
+   ],
+   "n_cams": 11,
+   "n_px": 37043,
+   "cams": [
+    "Wynwood",
+    "Jet Ski",
+    "Venetian Islands",
+    "Stock 305 Clothing Store 01 (Van)",
+    "Beach"
+   ]
+  }
  },
  "Hotel Breakwater": {
   "color": "#38bdf8",
@@ -788827,7 +790565,31 @@
    ]
   ],
   "note": "FOOTPRINT-MESH-V1 2026-09-30: extrusion de l'empreinte V16 (polygone 3279, 12 sommets, 954 m2), sol 3.3 (heightmap), toit 26.5 (mediane de 1 coins), coins a 2.9 m du bord (mediane); anneaux tous les 25.0 m",
-  "_credit": "empreinte: GTA VI Community Mapping Project (V16 SVG); hauteurs: triangulation gtamaplib"
+  "_credit": "empreinte: GTA VI Community Mapping Project (V16 SVG); hauteurs: triangulation gtamaplib",
+  "facade_color": {
+   "rgb": [
+    0.271,
+    0.194,
+    0.214
+   ],
+   "n_cams": 5,
+   "n_px": 307811,
+   "cams": [
+    "Ocean Drive (NW)",
+    "Red Limousine",
+    "Beach",
+    "Vice Beach (A)",
+    "Rooftop Party"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.88,
+    0.88,
+    0.9
+   ],
+   "note": "IRL ESTIME 2026-10-04: Art deco blanc a bandes bleues"
+  }
  },
  "McAlpin Ocean Plaza": {
   "color": "#a3e635",
@@ -788978,7 +790740,23 @@
    ]
   ],
   "note": "FOOTPRINT-MESH-V1 2026-09-30: extrusion de l'empreinte V16 (polygone 3324, 4 sommets, 553 m2), sol 4.2 (heightmap), toit 17.5 (mediane de 3 coins), coins a 4.6 m du bord (mediane); anneaux tous les 25.0 m",
-  "_credit": "empreinte: GTA VI Community Mapping Project (V16 SVG); hauteurs: triangulation gtamaplib"
+  "_credit": "empreinte: GTA VI Community Mapping Project (V16 SVG); hauteurs: triangulation gtamaplib",
+  "facade_color": {
+   "rgb": [
+    0.297,
+    0.352,
+    0.338
+   ],
+   "n_cams": 5,
+   "n_px": 65167,
+   "cams": [
+    "Dominion Hotel",
+    "Ocean Drive (NW)",
+    "Vice Beach (B)",
+    "Vice Beach (A)",
+    "Beach"
+   ]
+  }
  },
  "Wheelabrator South Broward (North Hall)": {
   "color": "#94a3b8",
@@ -789273,7 +791051,22 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 RECT (V16 1302/1301), toit = 55.2."
+  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 RECT (V16 1302/1301), toit = 55.2.",
+  "facade_color": {
+   "rgb": [
+    0.275,
+    0.176,
+    0.188
+   ],
+   "n_cams": 4,
+   "n_px": 4412,
+   "cams": [
+    "Ambrosia 04 (Fires)",
+    "Ambrosia 02 (Panorama)",
+    "Gas Station (Alligator)",
+    "High Rollerz"
+   ]
+  }
  },
  "Wheelabrator South Broward (Boiler Band)": {
   "color": "#94a3b8",
@@ -789520,7 +791313,22 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 RECT (V16 1302/1301), toit = 45.0."
+  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 RECT (V16 1302/1301), toit = 45.0.",
+  "facade_color": {
+   "rgb": [
+    0.409,
+    0.46,
+    0.492
+   ],
+   "n_cams": 4,
+   "n_px": 1940,
+   "cams": [
+    "Auto Shop (NW)",
+    "Intersection (N)",
+    "High Rollerz",
+    "Empty Lot near Metro Station"
+   ]
+  }
  },
  "Wheelabrator South Broward (Middle)": {
   "color": "#94a3b8",
@@ -789767,7 +791575,27 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 RECT (V16 1302/1301), toit = 40.0."
+  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 RECT (V16 1302/1301), toit = 40.0.",
+  "facade_color": {
+   "rgb": [
+    0.234,
+    0.286,
+    0.271
+   ],
+   "n_cams": 1,
+   "n_px": 627,
+   "cams": [
+    "High Rollerz"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.78,
+    0.79,
+    0.8
+   ],
+   "note": "IRL ESTIME 2026-10-04: usine Wheelabrator: bardage gris clair"
+  }
  },
  "Wheelabrator South Broward (South Hall)": {
   "color": "#94a3b8",
@@ -790110,7 +791938,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 RECT (V16 1302/1301), toit = 63.1."
+  "note": "MISC-MESH-V1 2026-09-30: extrusion V16 RECT (V16 1302/1301), toit = 63.1.",
+  "facade_color": {
+   "rgb": [
+    0.307,
+    0.347,
+    0.302
+   ],
+   "n_cams": 5,
+   "n_px": 7651,
+   "cams": [
+    "High Rollerz",
+    "Auto Shop (NW)",
+    "Intersection (N)",
+    "Empty Lot near Metro Station",
+    "Gas Station (Alligator)"
+   ]
+  }
  },
  "Wheelabrator South Broward (Stack)": {
   "color": "#94a3b8",
@@ -793304,7 +795148,23 @@
    ]
   ],
   "note": "FOOTPRINT-MESH-V1 2026-09-30: extrusion de l'empreinte V16 (polygone 3582, 25 sommets, 5611 m2), sol 3.6 (heightmap), toit 63.6 (mediane de 4 coins), coins a 8.3 m du bord (mediane); anneaux tous les 25.0 m",
-  "_credit": "empreinte: GTA VI Community Mapping Project (V16 SVG); hauteurs: triangulation gtamaplib"
+  "_credit": "empreinte: GTA VI Community Mapping Project (V16 SVG); hauteurs: triangulation gtamaplib",
+  "facade_color": {
+   "rgb": [
+    0.371,
+    0.364,
+    0.392
+   ],
+   "n_cams": 8,
+   "n_px": 10064,
+   "cams": [
+    "Jet Ski",
+    "Venetian Islands",
+    "Wynwood",
+    "Vice City 09 (La Perle)",
+    "Auto Shop (NE)"
+   ]
+  }
  },
  "Sherry Frontenac Oceanfront Hotel": {
   "color": "#60a5fa",
@@ -795423,7 +797283,23 @@
    ]
   ],
   "note": "FOOTPRINT-MESH-V1 2026-09-30: extrusion de l'empreinte V16 (polygone 3585, 44 sommets, 2782 m2), sol 2.9 (heightmap), toit 49.2 (mediane de 2 coins), coins a 8.3 m du bord (mediane); anneaux tous les 25.0 m",
-  "_credit": "empreinte: GTA VI Community Mapping Project (V16 SVG); hauteurs: triangulation gtamaplib"
+  "_credit": "empreinte: GTA VI Community Mapping Project (V16 SVG); hauteurs: triangulation gtamaplib",
+  "facade_color": {
+   "rgb": [
+    0.471,
+    0.501,
+    0.568
+   ],
+   "n_cams": 8,
+   "n_px": 10761,
+   "cams": [
+    "Green Sports Car",
+    "Wynwood",
+    "Venetian Islands",
+    "Beach",
+    "Jet Ski"
+   ]
+  }
  },
  "Blue Diamond": {
   "color": "#60a5fa",
@@ -797842,7 +799718,21 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3575 (8 regions, tools/v16_tiers.py); tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 63 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (le LM 146 = pointe lumineuse, 6 m au-dessus de la pyramide lue); tour ~30 px a l est de la V16 dans cette vue (garde sur la V16), ailes basses 40 m ESTIMEES (Venetian Islands: fut etroit), verriere pyramidale +14 m (vue dans Biplane Night (Video) Last); podium (region 4) 14 m ESTIME. DECALE de (-40.0, -20.0) m par rapport a la V16 (VB-SETBACK, valide Alexandre 2026-10-01: la V16 de Vice Beach dessine la parcelle, la tour est en retrait; decalage lu dans les images)"
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3575 (8 regions, tools/v16_tiers.py); tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 63 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (le LM 146 = pointe lumineuse, 6 m au-dessus de la pyramide lue); tour ~30 px a l est de la V16 dans cette vue (garde sur la V16), ailes basses 40 m ESTIMEES (Venetian Islands: fut etroit), verriere pyramidale +14 m (vue dans Biplane Night (Video) Last); podium (region 4) 14 m ESTIME. DECALE de (-40.0, -20.0) m par rapport a la V16 (VB-SETBACK, valide Alexandre 2026-10-01: la V16 de Vice Beach dessine la parcelle, la tour est en retrait; decalage lu dans les images)",
+  "facade_color": {
+   "rgb": [
+    0.445,
+    0.421,
+    0.494
+   ],
+   "n_cams": 3,
+   "n_px": 2554,
+   "cams": [
+    "Venetian Islands",
+    "Jet Ski",
+    "Vice City 11 (Megamundo)"
+   ]
+  }
  },
  "Green Diamond": {
   "color": "#4ade80",
@@ -800741,7 +802631,21 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3576 (8 regions, tools/v16_tiers.py); tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 60 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (LM 145 = pointe); tour ~30 px a l est de la V16 dans cette vue (garde sur la V16), ailes basses 40 m ESTIMEES (Venetian Islands: fut etroit), verriere pyramidale +14 m (vue dans Biplane Night (Video) Last); podium (region 7) 14 m ESTIME."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3576 (8 regions, tools/v16_tiers.py); tour = carre a X de la V16 elargi x1.35 (largeur lue dans Venetian Islands: 60 px), toit 126 m + pyramide 14 m LUS dans Venetian Islands (LM 145 = pointe); tour ~30 px a l est de la V16 dans cette vue (garde sur la V16), ailes basses 40 m ESTIMEES (Venetian Islands: fut etroit), verriere pyramidale +14 m (vue dans Biplane Night (Video) Last); podium (region 7) 14 m ESTIME.",
+  "facade_color": {
+   "rgb": [
+    0.384,
+    0.383,
+    0.429
+   ],
+   "n_cams": 3,
+   "n_px": 2107,
+   "cams": [
+    "Venetian Islands",
+    "Jet Ski",
+    "Vice City 11 (Megamundo)"
+   ]
+  }
  },
  "Icon at South Beach": {
   "color": "#f472b6",
@@ -802980,7 +804884,31 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3251 (3 regions, tools/v16_tiers.py); lame courbe V16 (regions 1+2): partie haute 140 m (LM 142) et aile basse 113 m LUES dans Effluvia (3); podium 12 m ESTIME; sur la silhouette V16 (VB-WATER 2026-10-04, Alexandre: le decalage 28.7 m O le mettait dans la baie)."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3251 (3 regions, tools/v16_tiers.py); lame courbe V16 (regions 1+2): partie haute 140 m (LM 142) et aile basse 113 m LUES dans Effluvia (3); podium 12 m ESTIME; sur la silhouette V16 (VB-WATER 2026-10-04, Alexandre: le decalage 28.7 m O le mettait dans la baie).",
+  "facade_color": {
+   "rgb": [
+    0.531,
+    0.509,
+    0.488
+   ],
+   "n_cams": 8,
+   "n_px": 67966,
+   "cams": [
+    "Beach Gym",
+    "Port",
+    "Vice Beach (B)",
+    "Vice Beach (A)",
+    "Rooftop Party"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.76,
+    0.82,
+    0.86
+   ],
+   "note": "IRL ESTIME 2026-10-04: verre clair + blanc"
+  }
  },
  "Murano Grande": {
   "color": "#fb923c",
@@ -806251,7 +808179,31 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3233 (5 regions, tools/v16_tiers.py); tour courbe en 3 segments V16 (1,2,4): 139 (LM) puis gradins 133/127 ESTIMES; podium 12 et bloc 0 30 m ESTIMES; sur la silhouette V16 (VB-WATER 2026-10-04: decalage retire, il le mettait dans la baie)."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3233 (5 regions, tools/v16_tiers.py); tour courbe en 3 segments V16 (1,2,4): 139 (LM) puis gradins 133/127 ESTIMES; podium 12 et bloc 0 30 m ESTIMES; sur la silhouette V16 (VB-WATER 2026-10-04: decalage retire, il le mettait dans la baie).",
+  "facade_color": {
+   "rgb": [
+    0.475,
+    0.478,
+    0.441
+   ],
+   "n_cams": 9,
+   "n_px": 57770,
+   "cams": [
+    "Port",
+    "Beach Gym",
+    "Port (B)",
+    "Vice Beach (A)",
+    "Biplane (Video) v2580"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.8,
+    0.84,
+    0.86
+   ],
+   "note": "IRL ESTIME 2026-10-04: blanc + verre"
+  }
  },
  "Tresor Tower": {
   "color": "#c084fc",
@@ -809150,7 +811102,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3573 (4 regions, tools/v16_tiers.py); fut rond + lame (regions 3,1) = LM 120; aile est 100 m et podium 12 m ESTIMES. DECALE de (-28.0, -12.0) m par rapport a la V16 (VB-SETBACK, valide Alexandre 2026-10-01: la V16 de Vice Beach dessine la parcelle, la tour est en retrait; decalage lu dans les images)"
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3573 (4 regions, tools/v16_tiers.py); fut rond + lame (regions 3,1) = LM 120; aile est 100 m et podium 12 m ESTIMES. DECALE de (-28.0, -12.0) m par rapport a la V16 (VB-SETBACK, valide Alexandre 2026-10-01: la V16 de Vice Beach dessine la parcelle, la tour est en retrait; decalage lu dans les images)",
+  "facade_color": {
+   "rgb": [
+    0.42,
+    0.43,
+    0.46
+   ],
+   "n_cams": 5,
+   "n_px": 6729,
+   "cams": [
+    "Rooftop Party",
+    "Jet Ski",
+    "Venetian Islands",
+    "Vice City 11 (Megamundo)",
+    "Beach"
+   ]
+  }
  },
  "Flamingo South Beach": {
   "color": "#fda4af",
@@ -814617,7 +816585,31 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3400 (4 regions, tools/v16_tiers.py); hauteurs par region = LMs contenus (T* 111, NENE/NERNE 51-55, NWNE 52, SDS/SRSW 59-64): toutes MESUREES."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3400 (4 regions, tools/v16_tiers.py); hauteurs par region = LMs contenus (T* 111, NENE/NERNE 51-55, NWNE 52, SDS/SRSW 59-64): toutes MESUREES.",
+  "facade_color": {
+   "rgb": [
+    0.393,
+    0.423,
+    0.432
+   ],
+   "n_cams": 16,
+   "n_px": 165361,
+   "cams": [
+    "Alley (W)",
+    "Vice Beach (B)",
+    "Vice Beach (A)",
+    "Venetian Islands",
+    "Rooftop Party"
+   ]
+  },
+  "facade_irl": {
+   "rgb": [
+    0.88,
+    0.87,
+    0.84
+   ],
+   "note": "IRL ESTIME 2026-10-04: blanc"
+  }
  },
  "The Waverly South Beach": {
   "color": "#fde68a",
@@ -815992,7 +817984,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3302 (2 regions, tools/v16_tiers.py); lame sud = LM (SE) 113; lame nord 107 = LM (NW) (35 m hors empreinte: attribution ESTIMEE)."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3302 (2 regions, tools/v16_tiers.py); lame sud = LM (SE) 113; lame nord 107 = LM (NW) (35 m hors empreinte: attribution ESTIMEE).",
+  "facade_color": {
+   "rgb": [
+    0.251,
+    0.248,
+    0.252
+   ],
+   "n_cams": 8,
+   "n_px": 43202,
+   "cams": [
+    "Beach Gym",
+    "Dominion Hotel",
+    "Vice Beach (B)",
+    "Vice Beach (A)",
+    "Sunrise over Vice City (Extended Look)"
+   ]
+  }
  },
  "The Ritz-Carlton Bal Harbour": {
   "color": "#e5e7eb",
@@ -820487,7 +822495,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3588 (6 regions, tools/v16_tiers.py); lame courbe (regions 0,1,3) = LM 104; edicule 108 et ailes basses courbes 30 m ESTIMES."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3588 (6 regions, tools/v16_tiers.py); lame courbe (regions 0,1,3) = LM 104; edicule 108 et ailes basses courbes 30 m ESTIMES.",
+  "facade_color": {
+   "rgb": [
+    0.309,
+    0.346,
+    0.365
+   ],
+   "n_cams": 7,
+   "n_px": 90266,
+   "cams": [
+    "Green Sports Car",
+    "Vice City 09 (La Perle)",
+    "Jet Ski",
+    "Auto Shop (NE)",
+    "Highway (NE)"
+   ]
+  }
  },
  "Apogee Condominium": {
   "color": "#a5b4fc",
@@ -821706,7 +823730,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3228 (2 regions, tools/v16_tiers.py); tour (region 0) = LM 93; podium (region 1) 15 m ESTIME."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3228 (2 regions, tools/v16_tiers.py); tour (region 0) = LM 93; podium (region 1) 15 m ESTIME.",
+  "facade_color": {
+   "rgb": [
+    0.415,
+    0.346,
+    0.384
+   ],
+   "n_cams": 6,
+   "n_px": 25267,
+   "cams": [
+    "Port",
+    "Port (B)",
+    "Rooftop Party",
+    "Amphitheater",
+    "Park (Mobile Phone)"
+   ]
+  }
  },
  "Akoya Condominium": {
   "color": "#99f6e4",
@@ -831121,7 +833161,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3586 (1 regions, tools/v16_tiers.py); plan cruciforme V16 = LM 145."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3586 (1 regions, tools/v16_tiers.py); plan cruciforme V16 = LM 145.",
+  "facade_color": {
+   "rgb": [
+    0.41,
+    0.432,
+    0.485
+   ],
+   "n_cams": 11,
+   "n_px": 88238,
+   "cams": [
+    "Green Sports Car",
+    "Wynwood",
+    "Venetian Islands",
+    "Jet Ski",
+    "Yacht (1)"
+   ]
+  }
  },
  "Vice Beach Tower (V16 3274)": {
   "color": "#e2e8f0",
@@ -831656,7 +833712,22 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3274 (1 regions, tools/v16_tiers.py); tour blanche vue dans Effluvia (3): toit 80.8 m et position laterale LUS (largeur 117 px vs 104 V16)."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3274 (1 regions, tools/v16_tiers.py); tour blanche vue dans Effluvia (3): toit 80.8 m et position laterale LUS (largeur 117 px vs 104 V16).",
+  "facade_color": {
+   "rgb": [
+    0.249,
+    0.2,
+    0.223
+   ],
+   "n_cams": 4,
+   "n_px": 10249,
+   "cams": [
+    "Beach Gym",
+    "Vice Beach (B)",
+    "Dominion Hotel",
+    "Vice Beach (A)"
+   ]
+  }
  },
  "Vice Beach Tower (V16 3258)": {
   "color": "#e2e8f0",
@@ -832347,7 +834418,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3258 (1 regions, tools/v16_tiers.py); tour vue dans Effluvia (3): toit 85.4 m et position laterale LUS (largeur 114 vs 117 px)."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3258 (1 regions, tools/v16_tiers.py); tour vue dans Effluvia (3): toit 85.4 m et position laterale LUS (largeur 114 vs 117 px).",
+  "facade_color": {
+   "rgb": [
+    0.533,
+    0.366,
+    0.337
+   ],
+   "n_cams": 7,
+   "n_px": 5076,
+   "cams": [
+    "Beach Gym",
+    "Vintage Vice City Pack 02 (Port)",
+    "Vice Beach (B)",
+    "Sunrise over Vice City (Extended Look)",
+    "Biplane (Video) v2580"
+   ]
+  }
  },
  "The Floridian": {
   "color": "#fcd34d",
@@ -834658,7 +836745,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3606 (1 regions, tools/v16_tiers.py); tour = parcelle V16 3606 restreinte au secteur vu dans Effluvia (3) (x 1514-1640); toit 98.5 m LU (LM The Floridian 96.5)."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3606 (1 regions, tools/v16_tiers.py); tour = parcelle V16 3606 restreinte au secteur vu dans Effluvia (3) (x 1514-1640); toit 98.5 m LU (LM The Floridian 96.5).",
+  "facade_color": {
+   "rgb": [
+    0.281,
+    0.297,
+    0.312
+   ],
+   "n_cams": 7,
+   "n_px": 35105,
+   "cams": [
+    "Beach Gym",
+    "Dominion Hotel",
+    "Vice Beach (B)",
+    "Vice Beach (A)",
+    "Yacht (2)"
+   ]
+  }
  },
  "The Bentley Bay South": {
   "color": "#f1f5f9",
@@ -836249,7 +838352,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3257 (4 regions, tools/v16_tiers.py); emprise = secteurs VB (B) x Jason 05 (largeur VB B 189-559 vs 205-570 px x2; bord SW Jason 05 297 vs 300 px); lame 80 m et aile sud 69 m LUES dans Vice Beach (A) et (B) (echelle z=0/z=80 de la V16); gradin = rayon VB B x 772 sur l axe (1372.5, 255.7); lame cote baie (regions 2,3) 80 m ESTIMEE (cachee derriere la region 1 depuis l est; Jason 05 montre un sommet ~80 m continu, flou); sommet Jason 05 697 vs 692-700 px."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 3257 (4 regions, tools/v16_tiers.py); emprise = secteurs VB (B) x Jason 05 (largeur VB B 189-559 vs 205-570 px x2; bord SW Jason 05 297 vs 300 px); lame 80 m et aile sud 69 m LUES dans Vice Beach (A) et (B) (echelle z=0/z=80 de la V16); gradin = rayon VB B x 772 sur l axe (1372.5, 255.7); lame cote baie (regions 2,3) 80 m ESTIMEE (cachee derriere la region 1 depuis l est; Jason 05 montre un sommet ~80 m continu, flou); sommet Jason 05 697 vs 692-700 px.",
+  "facade_color": {
+   "rgb": [
+    0.473,
+    0.472,
+    0.444
+   ],
+   "n_cams": 6,
+   "n_px": 17487,
+   "cams": [
+    "Beach Gym",
+    "Vice Beach (B)",
+    "Vice Beach (A)",
+    "Dominion Hotel",
+    "Amphitheater"
+   ]
+  }
  },
  "C. Clyde Atkins U.S. Courthouse": {
   "color": "#cbd5e1",
@@ -838272,7 +840391,21 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 2583 (8 regions, tools/v16_tiers.py); plan V16 2583; toit 19.3 m au-dessus du sol (sol 3.4 -> z 22.7) MESURE dans Biplane (Video) v2811 (coin SW: pied et toit sur la meme verticale); edicule sombre (regions 0,4) +4.5 m ESTIME (un etage au-dessus du toit, vu dans v2811); heliport sur le toit ouest (non modelise)."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 2583 (8 regions, tools/v16_tiers.py); plan V16 2583; toit 19.3 m au-dessus du sol (sol 3.4 -> z 22.7) MESURE dans Biplane (Video) v2811 (coin SW: pied et toit sur la meme verticale); edicule sombre (regions 0,4) +4.5 m ESTIME (un etage au-dessus du toit, vu dans v2811); heliport sur le toit ouest (non modelise).",
+  "facade_color": {
+   "rgb": [
+    0.431,
+    0.509,
+    0.547
+   ],
+   "n_cams": 3,
+   "n_px": 7748,
+   "cams": [
+    "Explosion",
+    "Convertible",
+    "Gas Station (Chase) (S)"
+   ]
+  }
  },
  "Twin Cylinder Tower (V16 2582)": {
   "color": "#94a3b8",
@@ -842011,7 +844144,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 2582 (6 regions, tools/v16_tiers.py); plan V16 2582; cylindre ouest 48.2 m et est 52.6 m AU-DESSUS DU SOL (sol 3.0 -> z 51.2 / 55.6) MESURES dans Biplane (Video) v2811 (pied/sommet sur la meme verticale); LM (SE) z 51.1 concorde; attribution des regions aux cylindres ESTIMEE (la V16 dessine un octogone ouest + pointe sud); annexe est (4) 15 m et aile nord (0) 10 m ESTIMEES; Jason 05: sommet predit 751 px a ~50 m = clics (749-753 px)."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 2582 (6 regions, tools/v16_tiers.py); plan V16 2582; cylindre ouest 48.2 m et est 52.6 m AU-DESSUS DU SOL (sol 3.0 -> z 51.2 / 55.6) MESURES dans Biplane (Video) v2811 (pied/sommet sur la meme verticale); LM (SE) z 51.1 concorde; attribution des regions aux cylindres ESTIMEE (la V16 dessine un octogone ouest + pointe sud); annexe est (4) 15 m et aile nord (0) 10 m ESTIMEES; Jason 05: sommet predit 751 px a ~50 m = clics (749-753 px).",
+  "facade_color": {
+   "rgb": [
+    0.369,
+    0.367,
+    0.376
+   ],
+   "n_cams": 7,
+   "n_px": 4981,
+   "cams": [
+    "Boat",
+    "Convertible",
+    "Gas Station (Chase) (S)",
+    "Biplane (Video) v2580",
+    "Biplane (Video) v1980"
+   ]
+  }
  },
  "Interchange I-97/I-404 Ramp 2": {
   "color": "#9ca3af",
@@ -991633,7 +993782,23 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16) + Claude Opus 5.5",
-  "note": "GARAGE-2693-V1 2026-10-03: plan V16 2693 (marqueur S2/05 a cote); coupe a l ouest a x -1421 et toit sol + 20.3 m LUS dans Street (Lucia) (N) (facade sud a bandes de couleur), 6 niveaux; cage grise ouest +2.2 m LUE; profondeur N-S = V16. Voir tools/gen_garage_2693.py"
+  "note": "GARAGE-2693-V1 2026-10-03: plan V16 2693 (marqueur S2/05 a cote); coupe a l ouest a x -1421 et toit sol + 20.3 m LUS dans Street (Lucia) (N) (facade sud a bandes de couleur), 6 niveaux; cage grise ouest +2.2 m LUE; profondeur N-S = V16. Voir tools/gen_garage_2693.py",
+  "facade_color": {
+   "rgb": [
+    0.272,
+    0.316,
+    0.319
+   ],
+   "n_cams": 5,
+   "n_px": 58981,
+   "cams": [
+    "Street (Lucia) (S)",
+    "Intersection (N)",
+    "Street (Lucia) (N)",
+    "Street (Bikers) (B)",
+    "Street (Jason)"
+   ]
+  }
  },
  "Jason's House (Keys)": {
   "color": "#fde68a",
@@ -992384,7 +994549,15 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5",
-  "note": "JASON-HOUSE-V1 2026-10-04 (demande rlx): plan et hauteurs = ~60 landmarks triangules (pilotis 1.9->6.0, toit 9.6/11.1, verandas 7.4/7.3, terrasse nord, escaliers); coin NW du corps non observe (rectangle). Voir tools/gen_jason_house.py"
+  "note": "JASON-HOUSE-V1 2026-10-04 (demande rlx): plan et hauteurs = ~60 landmarks triangules (pilotis 1.9->6.0, toit 9.6/11.1, verandas 7.4/7.3, terrasse nord, escaliers); coin NW du corps non observe (rectangle). Voir tools/gen_jason_house.py",
+  "facade_irl": {
+   "rgb": [
+    0.66,
+    0.72,
+    0.75
+   ],
+   "note": "IRL ESTIME 2026-10-04: maison sur pilotis des Keys: bardage bleu-gris pale"
+  }
  },
  "Miami Marine Stadium (Gloriana Key)": {
   "color": "#f1f5f9",
@@ -997258,7 +999431,21 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5 (demande rlx)",
-  "note": "RLX-REQ 2026-10-04: base = V16 2045 (15 m ESTIME), cabine = octogone V16 2139 (83-92.5 m), fut ESTIME IRL; sommet 97.8 m MESURE (LM FAA Miami ATCT (MIA), 4 cams). Voir tools/gen_rlx_requests.py"
+  "note": "RLX-REQ 2026-10-04: base = V16 2045 (15 m ESTIME), cabine = octogone V16 2139 (83-92.5 m), fut ESTIME IRL; sommet 97.8 m MESURE (LM FAA Miami ATCT (MIA), 4 cams). Voir tools/gen_rlx_requests.py",
+  "facade_color": {
+   "rgb": [
+    0.297,
+    0.221,
+    0.21
+   ],
+   "n_cams": 3,
+   "n_px": 8296,
+   "cams": [
+    "Vice City Sign",
+    "'95 Grotti Cheetah 04 (Garage)",
+    "Interchange"
+   ]
+  }
  },
  "Schlott Construction (Port Gellhorn)": {
   "color": "#fca5a5",
@@ -998033,7 +1000220,15 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5 (demande rlx)",
-  "note": "RLX-REQ 2026-10-04: cour = V16 1214, facades 3.5 m (Diner (S)) et panneau SCHLOTT MESURE (LMs 18635 SW 105th Ave CE/CW); conteneurs ESTIMES. Voir tools/gen_rlx_requests.py"
+  "note": "RLX-REQ 2026-10-04: cour = V16 1214, facades 3.5 m (Diner (S)) et panneau SCHLOTT MESURE (LMs 18635 SW 105th Ave CE/CW); conteneurs ESTIMES. Voir tools/gen_rlx_requests.py",
+  "facade_irl": {
+   "rgb": [
+    0.75,
+    0.74,
+    0.7
+   ],
+   "note": "IRL ESTIME 2026-10-04: hangars industriels"
+  }
  },
  "Rialto Causeway Toll Plaza": {
   "color": "#fdba74",
