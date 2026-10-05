@@ -588,7 +588,7 @@ function sunDirVec() {   // vecteur VERS le soleil; az horaire depuis le nord (+
 // [GROUND-COLOR-V1] teintes du sol et de la vegetation MESUREES sur les frames de jour (tools/ground_colors.py):
 // on garde la luminance calibree de chaque materiau et on prend la teinte/saturation du jeu
 // [STRUCTS-V1] structures rendues en vrai volume par le module STRUCTS (pas de fil de fer vif, pas de faces auto)
-const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)|Stadium \(V16|Stadium Roof Portique/;
+const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)|Stadium \(V16|Stadium Roof Portique|^Hard Rock Cafe$/;
 const _gLum = c => 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
 // sat < 1: materiaux neutres (dalles, asphalte) — la dominante chaude de l'etalonnage du jeu, etalee sur des km2 de ville, virait au desert
 const gameTint = (cur, srgb, sat = 1) => { if (!srgb) return cur; const m0 = srgb.map(v => Math.pow(v, 2.2)), l0 = _gLum(m0), m = m0.map(v => l0 + (v - l0) * sat), k = _gLum(cur) / Math.max(_gLum(m), 1e-4); return m.map(v => v * k); };
@@ -4044,6 +4044,55 @@ window.__camScreen = name => {
         const gg = new THREE.BufferGeometry(); gg.setAttribute('position', new THREE.Float32BufferAttribute(gab, 3)); gg.computeVertexNormals();
         const gm = stdMat(0x9aa3aa, 0.35, 0.55, 0.9); gm.side = THREE.DoubleSide; add(gg, gm);   // pignons: fermes acier/vitrage clairs (loanDepot)
         window.__structs = Object.assign(window.__structs || {}, { stadium: { loop: best.length, roof: [rx0, rx1, ry0, ry1, zs, zc] } });
+      }
+    }
+  }
+
+
+  // ---- Hard Rock Cafe (Bayside): pavillon octogonal evase « soucoupe », comme dans le jeu (Megamundo, Vice City 08) et IRL ----
+  {
+    const hn = Object.keys(M).find(n => n === 'Hard Rock Cafe');
+    if (hn) {
+      const P = ptsOf(hn); let z0 = 1e9, z1 = -1e9; for (const p of P) { z0 = Math.min(z0, p[2]); z1 = Math.max(z1, p[2]); }
+      // anneau du toit (les 8 sommets de l'emprise V16), ordonne par angle autour du centre
+      const top = P.filter(p => Math.abs(p[2] - z1) < 0.3); let cx = 0, cy = 0; for (const p of top) { cx += p[0]; cy += p[1]; } cx /= top.length; cy /= top.length;
+      const uniq = []; for (const p of top) if (!uniq.some(q => Math.hypot(q[0] - p[0], q[1] - p[1]) < 1.0)) uniq.push(p);
+      uniq.sort((a, b) => Math.atan2(a[1] - cy, a[0] - cx) - Math.atan2(b[1] - cy, b[0] - cx));
+      if (uniq.length >= 6) {
+        const n = uniq.length, at = (p, k, z) => [cx + (p[0] - cx) * k, cy + (p[1] - cy) * k, z];
+        const zr = z1 - 1.6;                                                      // bas de la rive du toit
+        const Pg = [], Cg = [], Pf = [], Pr = [], lin = v => Math.pow(v, 2.2);
+        const tri = (A, a, b, c) => A.push(...a, ...b, ...c);
+        for (let i = 0; i < n; i++) {
+          const p = uniq[i], q = uniq[(i + 1) % n];
+          // facade vitree evasee: base rentree de 14 %, montants verticaux (6 panneaux par pan)
+          for (let k = 0; k < 6; k++) {
+            const t0 = k / 6, t1 = (k + 1) / 6, mid = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+            const b0 = mid(at(p, 0.86, 0), at(q, 0.86, 0), t0), b1 = mid(at(p, 0.86, 0), at(q, 0.86, 0), t1), u0 = mid(p, q, t0), u1 = mid(p, q, t1);
+            const A = [b0[0], b0[1], z0], B = [b1[0], b1[1], z0], Cc = [u1[0], u1[1], zr], D = [u0[0], u0[1], zr];
+            tri(Pg, A, B, Cc); tri(Pg, A, Cc, D);
+            const g = lin(k % 2 ? 0.50 : 0.44); for (let r = 0; r < 6; r++) Cg.push(g, g * 0.93, g * 0.82);   // verre ambre
+            // montant (bande fine sombre) sur l'arete du panneau
+            const w = 0.012, m0 = mid(at(p, 0.86, 0), at(q, 0.86, 0), t0 + w), m1 = mid(p, q, t0 + w);
+            tri(Pf, A, [m0[0], m0[1], z0], [m1[0], m1[1], zr]); tri(Pf, A, [m1[0], m1[1], zr], D);
+          }
+          // rive du toit (bandeau vertical) + toit plat avec bombement central
+          const P1 = [p[0], p[1], zr], Q1 = [q[0], q[1], zr], P2 = [p[0], p[1], z1], Q2 = [q[0], q[1], z1];
+          tri(Pf, P1, Q1, Q2); tri(Pf, P1, Q2, P2);
+          tri(Pr, P2, Q2, at(q, 0.45, z1 + 2.2)); tri(Pr, P2, at(q, 0.45, z1 + 2.2), at(p, 0.45, z1 + 2.2));
+          tri(Pr, at(p, 0.45, z1 + 2.2), at(q, 0.45, z1 + 2.2), [cx, cy, z1 + 3.0]);
+        }
+        const gg = new THREE.BufferGeometry(); gg.setAttribute('position', new THREE.Float32BufferAttribute(Pg, 3)); gg.setAttribute('color', new THREE.Float32BufferAttribute(Cg, 3)); gg.computeVertexNormals();
+        const gm = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.18, metalness: 0.35, side: THREE.DoubleSide, emissive: new THREE.Color(1.0, 0.74, 0.44), emissiveIntensity: 0 });
+        gm.toneMapped = false; if (window.__envTex) { gm.envMap = window.__envTex; gm.envMapIntensity = 1.0; }
+        { const prev = window.__onEnv; window.__onEnv = t => { gm.envMap = t; gm.envMapIntensity = 1.0; gm.needsUpdate = true; if (prev) prev(t); }; }
+        glowMats.push([gm, 0.75]);                                                 // facade vitree eclairee la nuit (frames)
+        const gme = new THREE.Mesh(gg, gm); gme.castShadow = true; gme.receiveShadow = true; grp.add(gme);
+        const fg = new THREE.BufferGeometry(); fg.setAttribute('position', new THREE.Float32BufferAttribute(Pf, 3)); fg.computeVertexNormals();
+        const fm = stdMat(0xd9d6cf, 0.6, 0.15, 0.7); fm.side = THREE.DoubleSide; add(fg, fm);
+        const rg = new THREE.BufferGeometry(); rg.setAttribute('position', new THREE.Float32BufferAttribute(Pr, 3)); rg.computeVertexNormals();
+        const rm2 = stdMat(0x8f9296, 0.8, 0.1, 0.5); rm2.side = THREE.DoubleSide; add(rg, rm2);
+        window.__structs = Object.assign(window.__structs || {}, { hardrock: n });
       }
     }
   }
