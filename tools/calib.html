@@ -1501,8 +1501,9 @@ async function init() {
   // scale value produced by resetMapView). When zoom-in happens, scale grows,
   // and we shrink the dots by the inverse factor.
   function updateDotSizes() {
-    if (!window.mapTx || !window.mapBaselineScale) return;
-    const factor = Math.pow(window.mapBaselineScale / window.mapTx.scale, 0.5);
+    if (!window.mapTx || !window.mapTx.scale) return;
+    // [MAP-INTEL-V1] baseline 0 quand la vue etait cachee au recentrage -> les pastilles ne retrecissaient jamais (enormes au zoom)
+    const factor = Math.pow((window.mapBaselineScale || 0.05) / window.mapTx.scale, 0.5);
     const overlay = window.mapOverlay;
     if (!overlay) return;
     overlay.querySelectorAll('.cam-marker circle').forEach(c => {
@@ -1761,6 +1762,7 @@ async function init() {
     if (!window.mapData) return;
     const sz = window.mapData.transform.svg_size;
     const rect = mapView.getBoundingClientRect();
+    if (rect.width < 10 || rect.height < 10) { setTimeout(resetMapView, 120); return; }   // vue pas encore affichee: on reessaie
     // [MAP-DESIGN-V1] auto-fit sur la bounding box des cams (+12% padding)
     // au lieu du monde entier: les cams occupent ~2 clusters dans un viewBox
     // de 20000 — la vue monde rendait tout sub-3px et illisible.
@@ -7697,6 +7699,26 @@ window.addEventListener('load', () => {
         ctx.font = '600 11px ui-sans-serif, system-ui, -apple-system, sans-serif';
       }
     }
+    // mesure
+    const M = window.__mapMeasure;
+    if (M && M.pts.length) {
+      const P = M.pts.map(p => w2s(p[0], p[1]));
+      ctx.lineWidth = 2; ctx.strokeStyle = '#22d3ee'; ctx.setLineDash([7, 5]);
+      if (P.length === 2) { ctx.beginPath(); ctx.moveTo(...P[0]); ctx.lineTo(...P[1]); ctx.stroke(); }
+      ctx.setLineDash([]);
+      P.forEach((p, i) => { ctx.beginPath(); ctx.arc(p[0], p[1], 5, 0, Math.PI * 2); ctx.fillStyle = '#22d3ee'; ctx.fill(); ctx.strokeStyle = '#0b1220'; ctx.lineWidth = 2; ctx.stroke();
+        ctx.font = '700 11px ui-monospace, monospace'; ctx.fillStyle = '#fff'; ctx.strokeStyle = 'rgba(8,8,12,.9)'; ctx.lineWidth = 3; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+        const t = (i ? 'B ' : 'A ') + M.pts[i][0].toFixed(1) + ', ' + M.pts[i][1].toFixed(1); ctx.strokeText(t, p[0] + 9, p[1] - 10); ctx.fillText(t, p[0] + 9, p[1] - 10); });
+      if (P.length === 2) {
+        const [a, b] = M.pts, dx = b[0] - a[0], dy = b[1] - a[1], d = Math.hypot(dx, dy);
+        const brg = (Math.atan2(dx, dy) * 180 / Math.PI + 360) % 360, yaw = (360 - brg) % 360;
+        const lab = `${d < 1000 ? d.toFixed(1) + ' m' : (d / 1000).toFixed(3) + ' km'}  ·  bearing ${brg.toFixed(2)}°  ·  yaw ${yaw.toFixed(2)}°`;
+        const mx = (P[0][0] + P[1][0]) / 2, my = (P[0][1] + P[1][1]) / 2;
+        ctx.font = '700 12px ui-monospace, monospace'; ctx.textAlign = 'center'; const w = ctx.measureText(lab).width + 18;
+        ctx.fillStyle = 'rgba(8,10,16,.88)'; ctx.beginPath(); ctx.roundRect(mx - w / 2, my - 26, w, 22, 7); ctx.fill();
+        ctx.strokeStyle = 'rgba(34,211,238,.6)'; ctx.lineWidth = 1; ctx.stroke(); ctx.fillStyle = '#e0f7ff'; ctx.fillText(lab, mx, my - 15);
+      }
+    }
   }
   window.mapIntelRender = render;
   // ── style du fond ──
@@ -7722,6 +7744,16 @@ window.addEventListener('load', () => {
   syncs.push(mk(rl, 'cones', undefined, 'Cones', 'Field of view of every camera (confidence color); the selected camera in yellow'));
   syncs.push(mk(rl, 'cov', undefined, 'Coverage', 'How many camera wedges (1.5 km) see each point — naive, no occlusion'));
   syncs.push(mk(rl, 'labels', undefined, 'Labels', 'Building names and heights when zoomed in'));
+  // outil de mesure (non persistant): clic A, clic B -> distance, cap boussole, yaw (convention projet: 0 = nord, 90 = ouest)
+  const meas = { on: false, pts: [] };
+  {
+    const el = document.createElement('span'); el.className = 'ch'; el.textContent = 'Measure';
+    el.title = 'Click A then B: distance, compass bearing and project yaw (0 = north, 90 = west). Third click restarts, Esc clears.';
+    el.addEventListener('click', () => { meas.on = !meas.on; meas.pts = []; el.classList.toggle('on', meas.on); view.style.cursor = meas.on ? 'crosshair' : ''; render(); });
+    rl.appendChild(el);
+    addEventListener('keydown', e => { if (e.key === 'Escape' && meas.pts.length) { meas.pts = []; render(); } });
+  }
+  window.__mapMeasure = meas;
   const syncAll = () => { syncs.forEach(f => f()); panel.querySelector('#mi-ramp').style.display = st.bld ? 'block' : 'none'; };
   syncAll(); applyStyle();
   // ── recherche ──
@@ -7778,7 +7810,9 @@ window.addEventListener('load', () => {
   view.addEventListener('click', e => {
     if (e.altKey || window.currentView !== 'map' || !downXY || Math.hypot(e.clientX - downXY[0], e.clientY - downXY[1]) > 4) return;
     if (e.target.closest && (e.target.closest('.cam-marker') || e.target.closest('#map-layers') || e.target.closest('#map-bcard'))) return;
-    const r = view.getBoundingClientRect(); const b = hitB(e.clientX - r.left, e.clientY - r.top);
+    const r = view.getBoundingClientRect();
+    if (meas.on) { const w = s2w(e.clientX - r.left, e.clientY - r.top); if (meas.pts.length >= 2) meas.pts = []; meas.pts.push(w); render(); return; }
+    const b = hitB(e.clientX - r.left, e.clientY - r.top);
     if (b) showCard(b); else card.style.display = 'none';
   });
   function showCard(b) {

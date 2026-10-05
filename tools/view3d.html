@@ -125,6 +125,9 @@
     <span class="lchip" id="ly-drape" title="Drape the 2D map onto the relief (lakes, roads, details)">Drape</span>
     <span class="lchip" id="ly-contours" title="Elevation contours (50 m major, 10 m minor)">Contours</span>
     <span class="lchip" id="btn-orbit" title="Slow cinematic orbit around the current target — great for captures">Orbit</span>
+    <span class="lchip" id="btn-tour" title="Cinematic tour: fly from solved camera to solved camera, the real frame fades in perfectly aligned on arrival (Esc or click to stop)">Tour</span>
+    <span class="lchip" id="btn-timelapse" title="Sun timelapse: sunrise, noon, sunset, night (city lights) — loops">Timelapse</span>
+    <span class="lchip" id="ly-scolor" title="Solid building colors: concrete / roof height / mesh color">Clay</span>
     <span class="lchip" id="btn-shot" title="Save a 4K PNG of this view (+ active frame inset)">&#8681; Shot</span>
   </div>
 </div>
@@ -189,6 +192,15 @@
   <span><span class="sw" style="background:#60a5fa"></span>z-constrained</span>
 </div>
 <div id="cam3d-labels" style="position:fixed;inset:0;z-index:8;pointer-events:none"></div>
+<!-- [TOUR-V1] frame en fondu + bandeau titre du tour cinematique -->
+<img id="tour-frame" style="display:none;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);height:100vh;z-index:7;pointer-events:none;opacity:0;transition:opacity 1.1s ease">
+<div id="tour-cap" style="display:none;position:fixed;left:50%;bottom:46px;transform:translateX(-50%);z-index:9;pointer-events:none;
+     text-align:center;padding:12px 26px;border-radius:12px;background:rgba(8,8,12,.62);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.08);
+     opacity:0;transition:opacity .8s ease;font-family:var(--sans)">
+  <div id="tour-name" style="color:#fff;font-size:20px;font-weight:600;letter-spacing:.01em"></div>
+  <div id="tour-sub" style="color:#a1a1aa;font-size:11.5px;margin-top:4px;max-width:70vw"></div>
+  <div id="tour-idx" style="color:#4ade80;font:10px var(--mono);margin-top:6px;letter-spacing:.08em"></div>
+</div>
 <!-- [POV-V5] toute erreur JS devient VISIBLE: plus d'ecran noir muet -->
 <div id="jserr" style="display:none;position:fixed;left:12px;bottom:52px;z-index:99;
      background:#7f1d1dee;color:#fecaca;font:11px monospace;padding:8px 12px;
@@ -1562,6 +1574,8 @@ if (meshVerts.length) {
   scene.add(sunLight, sunLight.target, hemiLight);
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+  renderer.shadowMap.autoUpdate = false;              // carte d'ombres recalculee seulement quand la vue/le soleil bougent
+  let _shKey = '';
   sunLight.castShadow = true;
   const SMAP = window.__lite3d ? 2048 : 4096;
   sunLight.shadow.mapSize.set(SMAP, SMAP);
@@ -1641,6 +1655,8 @@ if (meshVerts.length) {
     sunLight.position.set(tx + _sd.x * 4000, ty + _sd.y * 4000, Math.max(50, _sd.z * 4000));
     const sc = sunLight.shadow.camera;
     if (sc.right !== R) { sc.left = -R; sc.right = R; sc.top = R; sc.bottom = -R; sc.near = 10; sc.far = 9000; sc.updateProjectionMatrix(); }
+    const key = [Math.round(R), tx, ty, _sd.x.toFixed(3), _sd.y.toFixed(3), _sd.z.toFixed(3), solidMesh.visible].join(',');
+    if (key !== _shKey) { _shKey = key; renderer.shadowMap.needsUpdate = true; }
   };
   const makeCatcher = tm => {
     if (catcher || !tm) return;
@@ -1689,6 +1705,27 @@ if (meshVerts.length) {
     solidMesh.castShadow = true; solidMesh.receiveShadow = true; solidMesh.name = 'solid-buildings';
     layers.meshes.add(solidMesh);
     window.__solids = { mesh: solidMesh, names: solidNames, uni: solidsUni };
+    // [SOLIDS-V1] modes de couleur: beton (teinte legere du mesh) / hauteur du toit (meme rampe que la Map) / couleur du mesh
+    const baseCols = Float32Array.from(col);
+    const RAMP = [[0, [31, 158, 137]], [25, [110, 206, 88]], [60, [253, 231, 37]], [110, [251, 139, 36]], [170, [224, 17, 95]], [260, [157, 0, 255]]];
+    const ramp = h => { let i = 0; while (i < RAMP.length - 2 && h > RAMP[i + 1][0]) i++; const [h0, c0] = RAMP[i], [h1, c1] = RAMP[i + 1]; const t = Math.max(0, Math.min(1, (h - h0) / (h1 - h0)));
+      return new THREE.Color().setRGB(...[0, 1, 2].map(k => (c0[k] + (c1[k] - c0[k]) * t) / 255), THREE.SRGBColorSpace); };
+    const MODES = ['Clay', 'Height', 'Mesh'];
+    let mode = Math.max(0, MODES.indexOf(localStorage.getItem('ui.solidColor') || 'Clay'));
+    const scChip = document.getElementById('ly-scolor');
+    const recolor = () => {
+      const ca = geo.attributes.color.array, ia = geo.attributes.aId.array, cache = new Map();
+      for (let v = 0; v < ia.length; v++) {
+        if (MODES[mode] === 'Clay') { ca[3 * v] = baseCols[3 * v]; ca[3 * v + 1] = baseCols[3 * v + 1]; ca[3 * v + 2] = baseCols[3 * v + 2]; continue; }
+        const id = ia[v]; let c = cache.get(id);
+        if (!c) { const nm = solidNames[id]; c = MODES[mode] === 'Height' ? ramp(nm.zmax - nm.zmin) : new THREE.Color(S[nm.name].color || '#9ca3af'); cache.set(id, c); }
+        ca[3 * v] = c.r; ca[3 * v + 1] = c.g; ca[3 * v + 2] = c.b;
+      }
+      geo.attributes.color.needsUpdate = true;
+      scChip.textContent = MODES[mode]; scChip.classList.toggle('on', mode !== 0);
+    };
+    scChip.addEventListener('click', () => { mode = (mode + 1) % MODES.length; localStorage.setItem('ui.solidColor', MODES[mode]); recolor(); });
+    recolor();
     applySolid();
   })();
 }
@@ -2471,6 +2508,111 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
   a.click();
 });
 
+// ── [TOUR-V1 2026-10-04] tour cinematique des cams resolues ──
+// Pour chaque cam SOLVED/VERIFIED/LOCKED (ordre: plus proche voisin depuis la vue courante): vol en arc (3.6 s,
+// slerp de l'orientation, fov interpole), puis la VRAIE frame apparait en fondu, alignee au pixel (la camera a la
+// pose et le fov vertical exacts de la cam, la frame fait 100vh), bandeau titre, et on repart. Esc / clic = stop.
+(() => {
+  const btn = document.getElementById('btn-tour');
+  const img = document.getElementById('tour-frame'), cap = document.getElementById('tour-cap');
+  const capName = document.getElementById('tour-name'), capSub = document.getElementById('tour-sub'), capIdx = document.getElementById('tour-idx');
+  let list = [], i = -1, phase = null, t = 0, from = null, to = null, camsWas = true;
+  const poseOf = c => {
+    const [tl, tr, br, bl] = c.corners.map(d => new THREE.Vector3(...d));
+    const right = new THREE.Vector3().subVectors(tr, tl).normalize();
+    const up = new THREE.Vector3().subVectors(tl, bl).normalize();
+    const zAxis = new THREE.Vector3().crossVectors(right, up).normalize();
+    const yAxis = new THREE.Vector3().crossVectors(zAxis, right).normalize();
+    const vfov = THREE.MathUtils.radToDeg(new THREE.Vector3().addVectors(tl, tr).normalize().angleTo(new THREE.Vector3().addVectors(bl, br).normalize()));
+    return { pos: new THREE.Vector3(...c.xyz), quat: new THREE.Quaternion().setFromRotationMatrix(new THREE.Matrix4().makeBasis(right, yAxis, zAxis)), fov: vfov };
+  };
+  const ease = x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+  function next() {
+    i++; if (i >= list.length) i = 0;
+    const c = list[i];
+    from = { pos: camera.position.clone(), quat: camera.quaternion.clone(), fov: camera.fov };
+    to = poseOf(c);
+    const d = from.pos.distanceTo(to.pos);
+    to.dur = Math.max(2.4, Math.min(6.0, 1.6 + d / 900));
+    to.lift = Math.min(900, d * 0.28);
+    phase = 'fly'; t = 0;
+    img.style.opacity = '0'; cap.style.opacity = '0';
+    img.onload = null; img.src = '/frame/' + encodeURIComponent(c.name);
+    capName.textContent = c.name;
+    capSub.textContent = ((srcMap && srcMap[c.name]) || '').replace(/^.*? — /, '');
+    capIdx.textContent = `${String(c.pose_verified || '').split(' — ')[0]}  ·  ${i + 1} / ${list.length}`;
+  }
+  let srcMap = null;
+  async function start() {
+    if (!srcMap) { try { const d = await (await fetch('/api/map_data')).json(); srcMap = {}; for (const c of d.cameras || []) srcMap[c.name] = c.source || ''; } catch (e) { srcMap = {}; } }
+    const ok = camPickRefs.filter(c => c.corners && c.xyz && c.xyz[2] < 1500 && /^(SOLVED|VERIFIED|LOCKED)/.test(String(c.pose_verified || '')));
+    if (!ok.length) return;
+    // plus proche voisin depuis la camera courante
+    const rest = ok.slice(); list = []; let p = camera.position.clone();
+    while (rest.length) { let bi = 0, bd = 1e18; rest.forEach((c, k) => { const d = p.distanceToSquared(new THREE.Vector3(...c.xyz)); if (d < bd) { bd = d; bi = k; } }); const c = rest.splice(bi, 1)[0]; list.push(c); p = new THREE.Vector3(...c.xyz); }
+    if (povPrev) { try { exitPOV(); } catch (e) {} }
+    window.__tourOn = true; btn.classList.add('on'); i = -1;
+    camsWas = layers.cams.visible; layers.cams.visible = false;
+    img.style.display = 'block'; cap.style.display = 'block';
+    next();
+  }
+  function stop() {
+    if (!window.__tourOn) return;
+    window.__tourOn = false; phase = null; btn.classList.remove('on');
+    img.style.opacity = '0'; cap.style.opacity = '0';
+    setTimeout(() => { if (!window.__tourOn) { img.style.display = 'none'; cap.style.display = 'none'; } }, 900);
+    layers.cams.visible = camsWas;
+    // rendre la main a la navigation sans saut: cible devant la camera, fov par defaut
+    const dir = camera.getWorldDirection(new THREE.Vector3());
+    const tgt = camera.position.clone().addScaledVector(dir, 250);
+    if (tgt.z < 0) tgt.z = 0;
+    camera.fov = 55; camera.near = 1; camera.updateProjectionMatrix();
+    controls.target.copy(tgt); if (controls._desTgt) controls._desTgt.copy(tgt); if (controls._desPos) controls._desPos.copy(camera.position);
+  }
+  window.__tourStep = dt => {
+    if (!window.__tourOn || !phase) return;
+    t += dt;
+    if (phase === 'fly') {
+      const k = Math.min(1, t / to.dur), e = ease(k);
+      camera.position.lerpVectors(from.pos, to.pos, e); camera.position.z += Math.sin(Math.PI * e) * to.lift;
+      camera.quaternion.slerpQuaternions(from.quat, to.quat, ease(Math.min(1, k * 1.15)));
+      camera.fov = from.fov + (to.fov - from.fov) * e; camera.near = 0.5; camera.updateProjectionMatrix();
+      if (k >= 1) { phase = 'show'; t = 0; img.style.opacity = '0.92'; cap.style.opacity = '1'; }
+    } else if (phase === 'show') {
+      if (t > 3.6) { phase = 'fade'; t = 0; img.style.opacity = '0'; cap.style.opacity = '0'; }
+    } else if (phase === 'fade') {
+      if (t > 1.0) next();
+    }
+  };
+  btn.addEventListener('click', e => { e.stopPropagation(); window.__tourOn ? stop() : start(); });
+  addEventListener('keydown', e => { if (e.key === 'Escape') stop(); });
+  canvas.addEventListener('pointerdown', () => stop());
+  window.__tour = { start, stop };
+})();
+// ── [TIMELAPSE-V1] le soleil fait le tour du jour (lever -> midi -> coucher -> nuit), en boucle ~48 s ──
+(() => {
+  const btn = document.getElementById('btn-timelapse');
+  let on = false, ph = 0, saved = null;
+  const azS = document.getElementById('env-az'), elS = document.getElementById('env-el');
+  window.__timelapseStep = dt => {
+    if (!on) return;
+    ph = (ph + dt / 48) % 1;
+    const day = ph < 0.72 ? ph / 0.72 : null;          // 72 % jour, 28 % nuit
+    const el = day !== null ? Math.sin(Math.PI * day) * 62 - 3 : -9 + 3 * Math.sin(Math.PI * (ph - 0.72) / 0.28);
+    const az = day !== null ? 75 + 210 * day : 285 + 150 * (ph - 0.72) / 0.28;
+    ENV.el = Math.round(el * 10) / 10; ENV.az = Math.round(az) % 360;
+    azS.value = ENV.az; elS.value = Math.round(ENV.el);
+    document.getElementById('env-az-v').textContent = ENV.az + '°'; document.getElementById('env-el-v').textContent = Math.round(ENV.el) + '°';
+    const bake = window.__bakeShadows; window.__bakeShadows = null;   // pas de re-cuisson du relief a chaque frame
+    applyEnv(); window.__bakeShadows = bake;
+  };
+  btn.addEventListener('click', () => {
+    on = !on; btn.classList.toggle('on', on);
+    if (on) { saved = { az: ENV.az, el: ENV.el }; ph = 0.05; }
+    else if (window.__bakeShadows) window.__bakeShadows();
+  });
+})();
+
 // ── hover ──
 const ray = new THREE.Raycaster();
 ray.params.Points.threshold = 30;
@@ -2658,8 +2800,10 @@ renderer.setAnimationLoop(() => {
   skyUni.uTime.value = _tSec;                   // derive des nuages
   // en POV la camera est pilotee par nous: controls.update() la re-orienterait
   // vers sa cible a chaque frame (meme controls.enabled=false) -> monde noir
-  if (!povPrev) controls.update(_dt);
-  if (!povPrev) camSanity();                    // [ZOOM-IN-CAP] jamais la camera au ras de la cible / sous le sol
+  if (window.__tourStep) window.__tourStep(_dt);  // [TOUR-V1] le tour pilote la camera
+  if (window.__timelapseStep) window.__timelapseStep(_dt);
+  if (!povPrev && !window.__tourOn) controls.update(_dt);
+  if (!povPrev && !window.__tourOn) camSanity();                    // [ZOOM-IN-CAP] jamais la camera au ras de la cible / sous le sol
   nanGuard();                                   // [NAN-GUARD] jamais un rendu avec une camera NaN
   if (window.__solidsTick) window.__solidsTick(); // [SOLIDS-V1] ombre qui suit la vue
   renderer.render(scene, camera);
