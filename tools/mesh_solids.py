@@ -12,7 +12,11 @@ Ce qui n'est pas horizontal (toits a pans, domes, voutes, tabliers en pente) res
 Exclus (le champ de hauteur les remplirait a tort): ponts/viaducs/bretelles, reliefs, stades (cuvette),
 chateaux d'eau/antennes/mats/grues, portiques/peages (arches), et tout mesh de plus de 450 m d'emprise.
 
-Sortie: {name: {color, zmin, zmax, layers: [{z0, z1, polys: [{outer: [[x,y],...], holes: [[[x,y],...], ...]}]}]}}
+FACES-V1 (2026-10-04): en plus des prismes, les FACES du fil de fer sont reconstruites: boucles fermees planes de
+3 ou 4 aretes (sommets fusionnes a 5 cm, quadrilateres sans diagonale, tolerance de planeite ~10 cm). Avec un prisme,
+on ne garde que les faces inclinees (toits a pans, domes, voutes) et ce qui depasse au-dessus du volume (pignons,
+couronnes, edicules); sans prisme (structures exclues: chateaux d'eau, peage, stade, ponts...), toutes les faces.
+Sortie: {name: {color, zmin, zmax, layers: [{z0, z1, polys: [{outer: [[x,y],...], holes: [...]}]}], fv: [x,y,z,...], ff: [i,j,k,...]}}
 Usage: python3 tools/mesh_solids.py [--out f.json] [--only "Nom"] [--publish]
 """
 import json, os, sys
@@ -22,6 +26,8 @@ import cv2
 THIS = os.path.dirname(os.path.abspath(__file__)); REPO = os.path.dirname(THIS)
 MESHES = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
 CACHE = os.path.join(THIS, 'generated', 'mesh_solids.json')
+NO_FACES = ('Hill', 'Mountain', 'Ridge', 'Massif', 'Relief', 'Terrain', 'Fence', 'Cables')   # reliefs: le terrain 3D existe deja
+MAX_TRIS = 40000
 EXCLUDE = ('Bridge', 'Viaduct', 'Ramp', 'Interchange', 'Causeway', 'Overpass', 'Hill', 'Mountain', 'Ridge', 'Massif',
            'Relief', 'Terrain', 'Stadium', 'Water Tower', 'Antenna', 'Mast', 'Crane', 'Pylon', 'Observation Wheel', 'Portique',
            'Gantry', 'Toll', 'Billboard', 'Sign', 'Fence', 'Cables', 'Roller Coaster', 'Coaster', 'Pier', 'Dock',
@@ -92,16 +98,87 @@ def solidify(edges):
                 polys.append({'outer': w(out), 'holes': [w(hh) for hh in holes]})
         if polys: layers.append({'z0': round(start, 2), 'z1': round(float(h), 2), 'polys': polys})
         start = float(h)
-    return {'zmin': round(zmin, 2), 'zmax': round(zmax, 2), 'layers': layers} if layers else None
+    if not layers: return None
+    def top_at(x, y):
+        u, v = int(round((x - x0) / res)), int(round((y1 - y) / res))
+        if 0 <= u < W and 0 <= v < H:
+            h = float(Hf[v, u])
+            return h if h > -1e8 else None
+        return None
+    return {'zmin': round(zmin, 2), 'zmax': round(zmax, 2), 'layers': layers, '_top': top_at}
+
+
+def cycle_faces(edges, top_at=None):
+    """faces planes (triangles + quadrilateres sans diagonale) du graphe d'aretes -> (sommets [n,3], triangles [m,3])."""
+    E = np.asarray(edges, float)
+    if E.ndim != 3 or len(E) < 3: return None
+    P = E.reshape(-1, 3); key = np.round(P / 0.05).astype(np.int64)
+    uniq, inv = np.unique(key, axis=0, return_inverse=True)
+    inv = inv.reshape(-1)
+    V = np.zeros((len(uniq), 3)); cnt = np.zeros(len(uniq))
+    np.add.at(V, inv, P); np.add.at(cnt, inv, 1); V /= cnt[:, None]
+    es = set()
+    for i in range(0, len(inv), 2):
+        a, b = int(inv[i]), int(inv[i + 1])
+        if a != b: es.add((min(a, b), max(a, b)))
+    if len(es) > 60000: return None
+    adj = {}
+    for a, b in es: adj.setdefault(a, set()).add(b); adj.setdefault(b, set()).add(a)
+    has = lambda a, b: (min(a, b), max(a, b)) in es
+    seen, tris = set(), []
+    def keep(idx):
+        Q = V[list(idx)]
+        n = np.cross(Q[1] - Q[0], Q[2] - Q[0]); ln = np.linalg.norm(n)
+        if ln < 1e-3: return False
+        n /= ln
+        if len(Q) == 4:
+            if abs(np.dot(Q[3] - Q[0], n)) > 0.10 + 0.01 * np.linalg.norm(Q[2] - Q[0]): return False
+        if top_at is None: return True
+        nz = abs(n[2]); c = Q.mean(0); t = top_at(c[0], c[1])
+        if nz > 0.985: return False                                   # horizontal: les chapeaux des prismes s'en chargent
+        if nz < 0.15: return t is None or c[2] > t + 0.3               # vertical: seulement au-dessus du volume / hors emprise
+        return t is None or c[2] > t - 0.6                             # incline: toits, domes, voutes
+    for a, b in es:
+        for c in adj[b]:
+            if c == a: continue
+            if has(a, c):
+                k = tuple(sorted((a, b, c)))
+                if k not in seen:
+                    seen.add(k)
+                    if keep((a, b, c)): tris.append((a, b, c))
+            for d in adj[c]:
+                if d in (a, b) or not has(d, a): continue
+                if has(a, c) or has(b, d): continue                    # diagonale presente: les triangles suffisent
+                k = tuple(sorted((a, b, c, d)))
+                if k in seen: continue
+                seen.add(k)
+                if keep((a, b, c, d)): tris += [(a, b, c), (a, c, d)]
+        if len(tris) > MAX_TRIS: return None
+    if not tris: return None
+    T = np.array(tris, np.int64); used = np.unique(T)
+    remap = -np.ones(len(V), np.int64); remap[used] = np.arange(len(used))
+    return V[used], remap[T]
 
 
 def build(only=None):
     M = json.load(open(MESHES)); out = {}
     for name, m in M.items():
         if only and name != only: continue
-        if not _solid_ok(name): continue
-        s = solidify(m.get('world_edges') or [])
-        if s: s['color'] = m.get('color', '#9ca3af'); out[name] = s
+        edges = m.get('world_edges') or []
+        s = solidify(edges) if _solid_ok(name) else None
+        f = None
+        if not any(w.lower() in name.lower() for w in NO_FACES):
+            try: f = cycle_faces(edges, s['_top'] if s else None)
+            except Exception: f = None
+        if s is None and f is None: continue
+        if s is None:
+            Pz = np.asarray(edges, float)[..., 2]; s = {'zmin': round(float(Pz.min()), 2), 'zmax': round(float(Pz.max()), 2), 'layers': []}
+        s.pop('_top', None)
+        if f is not None:
+            s['fv'] = [round(float(v), 2) for v in f[0].reshape(-1)]; s['ff'] = [int(i) for i in f[1].reshape(-1)]
+        s['color'] = m.get('color', '#9ca3af')
+        if m.get('facade'): s['facade'] = m['facade']          # [FACADES-V1] style de facade lu sur les frames (optionnel)
+        out[name] = s
     return out
 
 
@@ -125,6 +202,7 @@ if __name__ == '__main__':
     only = sys.argv[sys.argv.index('--only') + 1] if '--only' in sys.argv else None
     import time; t = time.time(); out = build(only)
     print('%d solides en %.1fs' % (len(out), time.time() - t))
-    for k, v in list(out.items())[:8]: print('  %-40s %d couches %s' % (k[:40], len(v['layers']), [(l['z0'], l['z1'], len(l['polys'])) for l in v['layers']][:6]))
+    for k, v in list(out.items())[:8]: print('  %-40s %d couches %d faces' % (k[:40], len(v['layers']), len(v.get('ff', [])) // 3))
+    print('faces totales: %d triangles' % sum(len(v.get('ff', [])) // 3 for v in out.values()))
     if '--out' in sys.argv: json.dump(out, open(sys.argv[sys.argv.index('--out') + 1], 'w'))
     if '--publish' in sys.argv and not only: publish(out); print('publie: tools/threejs/_mesh_solids.json')

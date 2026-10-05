@@ -1581,35 +1581,59 @@ if (meshVerts.length) {
   sunLight.shadow.mapSize.set(SMAP, SMAP);
   sunLight.shadow.bias = -0.0004;
   sunLight.shadow.normalBias = 0.6;
-  const solidMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.82, metalness: 0.0 });
+  // [FACADES-V1 2026-10-04] facades par batiment: style (mur-rideau / fenetres percees / bandeaux / bas / structure)
+  // tire du nom + de la hauteur; vitres teintees avec faux reflet du ciel (fresnel), montants, dalles d'etage, rez-de-
+  // chaussee vitre plus haut, pied du batiment assombri, toits en gravier, nuit: fenetres chaudes/froides, hall allume.
+  const solidMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.84, metalness: 0.0, side: THREE.DoubleSide });
+  solidsUni.uSky = { value: new THREE.Vector3(0.5, 0.6, 0.7) };
   solidMat.onBeforeCompile = sh => {
-    sh.uniforms.uNight = solidsUni.uNight; sh.uniforms.uHover = solidsUni.uHover;
-    sh.vertexShader = 'attribute float aId;\nvarying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\n' +
+    sh.uniforms.uNight = solidsUni.uNight; sh.uniforms.uHover = solidsUni.uHover; sh.uniforms.uSky = solidsUni.uSky;
+    sh.vertexShader = 'attribute float aId;\nattribute vec4 aSty;\nattribute vec4 aGls;\nattribute float aBase;\n' +
+      'varying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\nvarying vec4 vSty;\nvarying vec4 vGls;\nvarying float vBase;\n' +
       sh.vertexShader.replace('#include <project_vertex>', `#include <project_vertex>
         vWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;
         vWN = normalize(mat3(modelMatrix) * objectNormal);
-        vId = aId;`);
-    sh.fragmentShader = 'uniform float uNight;\nuniform float uHover;\nvarying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\n' +
+        vId = aId; vSty = aSty; vGls = aGls; vBase = aBase;`);
+    sh.fragmentShader = 'uniform float uNight;\nuniform float uHover;\nuniform vec3 uSky;\n' +
+      'varying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\nvarying vec4 vSty;\nvarying vec4 vGls;\nvarying float vBase;\n' +
       'float h31(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 37.719))) * 43758.5453); }\n' +
       sh.fragmentShader
       .replace('#include <color_fragment>', `#include <color_fragment>
-        float wall = 1.0 - smoothstep(0.25, 0.45, abs(vWN.z));
+        float nz = abs(vWN.z);
+        float wall = 1.0 - smoothstep(0.25, 0.45, nz);
+        float roof = smoothstep(0.85, 0.95, nz);
+        float loc = vWPos.z - vBase;
+        float kind = vGls.w;                       // 0 percees, 1 mur-rideau, 2 bandeaux, 3 bas, 4 sans fenetres
+        float bay = vSty.x; vec2 rat = vSty.yz; float flh = vSty.w;
         vec2 tn = normalize(vec2(-vWN.y, vWN.x) + vec2(1e-5));
-        vec2 gq = vec2(dot(vWPos.xy, tn) / 2.6, vWPos.z / 3.4);
+        float lobbyH = kind > 3.5 ? 0.0 : (abs(kind - 1.0) < 0.5 ? 5.6 : 4.3);
+        float lob = step(loc, lobbyH) * step(kind, 2.5);
+        vec2 gq = vec2(dot(vWPos.xy, tn) / mix(bay, bay * 1.7, lob), mix((loc - lobbyH) / flh, loc / max(lobbyH, 0.1), lob));
         vec2 fw = fwidth(gq);
         vec2 fq = fract(gq);
-        vec2 lo = vec2(0.18, 0.28), hi = vec2(0.82, 0.86);
+        vec2 r2 = mix(rat, vec2(0.94, 0.84), lob);
+        vec2 lo = vec2((1.0 - r2.x) * 0.5, (1.0 - r2.y) * 0.62), hi = lo + r2;
         vec2 mq = smoothstep(lo - fw, lo + fw, fq) * (1.0 - smoothstep(hi - fw, hi + fw, fq));
         float blur = clamp(max(fw.x, fw.y) * 1.6, 0.0, 1.0);          // loin: la grille se fond en sa moyenne (pas de moire)
-        float win = wall * mix(mq.x * mq.y, 0.37, blur) * step(1.5, vWPos.z);
-        float lit = mix(step(0.58, h31(vec3(floor(gq), vId))), 0.42, blur);
-        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * 0.42 + vec3(0.025, 0.03, 0.035), win * 0.70);
+        float win = wall * mix(mq.x * mq.y, r2.x * r2.y, blur) * step(0.6, loc) * step(kind, 3.5);
+        float slab = wall * (1.0 - step(0.5, abs(kind - 1.0))) * (1.0 - blur) * (1.0 - lob) * (1.0 - smoothstep(0.0, 0.04 + fw.y, fq.y));
+        float lit = mix(step(0.55, h31(vec3(floor(gq), vId))), 0.45, blur);
+        vec3 Vd = normalize(cameraPosition - vWPos);
+        float fres = pow(1.0 - clamp(abs(dot(Vd, normalize(vWN))), 0.0, 1.0), 3.0);
+        vec3 glass = mix(vGls.rgb, uSky, 0.16 + 0.55 * fres) * (0.86 + 0.26 * h31(vec3(floor(gq) + 7.0, vId)) * (1.0 - blur));
+        diffuseColor.rgb *= mix(1.0, mix(0.6, 1.0, smoothstep(0.0, 9.0, loc)), wall);   // pied du batiment (occlusion)
+        diffuseColor.rgb = mix(diffuseColor.rgb, glass, win);
+        diffuseColor.rgb *= 1.0 - 0.38 * slab;
+        diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.60 + 0.12 * h31(floor(vWPos * 1.7))), roof * step(kind, 3.5));
         float hov = 1.0 - step(0.5, abs(vId - uHover));
         diffuseColor.rgb = mix(diffuseColor.rgb, vec3(1.0, 0.82, 0.32), hov * 0.40);`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
-        roughnessFactor = mix(roughnessFactor, 0.38, win);`)
+        roughnessFactor = mix(roughnessFactor, 0.10, win);`)
+      .replace('#include <metalnessmap_fragment>', `#include <metalnessmap_fragment>
+        metalnessFactor = mix(metalnessFactor, 0.18, win);`)
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
-        totalEmissiveRadiance += vec3(1.0, 0.70, 0.36) * 1.6 * win * lit * uNight;
+        vec3 lc = mix(vec3(1.0, 0.70, 0.36), vec3(0.82, 0.90, 1.0), step(0.78, h31(vec3(floor(gq) + 3.0, vId))));
+        totalEmissiveRadiance += lc * (1.5 * lit + 1.2 * lob) * win * uNight;
         totalEmissiveRadiance += vec3(1.0, 0.82, 0.32) * 0.25 * hov;`);
   };
   let solidMesh = null, catcher = null, solidNames = [];
@@ -1638,6 +1662,7 @@ if (meshVerts.length) {
     hemiLight.groundColor.setRGB(hor[0] * 0.45, hor[1] * 0.42, hor[2] * 0.38);
     hemiLight.intensity = 0.35 + 0.75 * (1 - night);
     solidsUni.uNight.value = night;
+    solidsUni.uSky.value.set((hor[0] + zen[0]) * 0.5, (hor[1] + zen[1]) * 0.5, (hor[2] + zen[2]) * 0.5).multiplyScalar(1 - 0.85 * night);
     sunLight.castShadow = day > 0.02;
   };
   window.__solidsEnv();
@@ -1673,13 +1698,39 @@ if (meshVerts.length) {
       try { const r = await fetch(url, { cache: 'no-store' }); if (r.ok) { const j = await r.json(); if (j && !j.error) { S = j; break; } } } catch (e) {}
     }
     if (!S) return;
-    const pos = [], nor = [], col = [], ids = [];
-    const concrete = new THREE.Color(0.80, 0.79, 0.76), tint = new THREE.Color(), cc = new THREE.Color();
+    const pos = [], nor = [], col = [], ids = [], sty = [], gls = [], bas = [];
+    const hsh = str => { let h = 2166136261; for (let k = 0; k < str.length; k++) h = Math.imul(h ^ str.charCodeAt(k), 16777619); return (h >>> 0) / 4294967296; };
+    const FAC = [[0.90, 0.89, 0.86], [0.90, 0.85, 0.74], [0.84, 0.76, 0.62], [0.90, 0.78, 0.74], [0.76, 0.86, 0.84], [0.78, 0.78, 0.78], [0.93, 0.92, 0.90]];
+    const TINT = [[0.07, 0.13, 0.22], [0.07, 0.19, 0.20], [0.20, 0.16, 0.11], [0.24, 0.27, 0.30], [0.10, 0.18, 0.13], [0.05, 0.07, 0.10]];
+    const tint = new THREE.Color();
+    const styleOf = (name, h, faceOnly) => {
+      const r = hsh(name), r2 = hsh(name + '#b'), r3 = hsh(name + '#c');
+      if (faceOnly) { tint.set(S[name].color || '#9ca3af'); const g = 0.82; return { kind: 4, fac: [g + (tint.r - g) * 0.35, g + (tint.g - g) * 0.35, g + (tint.b - g) * 0.35], s: [3, 0.5, 0.5, 3.4], gl: [0.1, 0.1, 0.1] }; }
+      const fo = S[name].facade;                       // style lu sur les frames: {kind, color:[r,g,b], glass:[r,g,b], bay, win:[rx,ry], floor}
+      if (fo) {
+        const k = { punched: 0, curtain: 1, ribbon: 2, low: 3, none: 4 }[fo.kind] ?? 0;
+        return { kind: k, fac: fo.color || [0.88, 0.88, 0.86], gl: fo.glass || TINT[5],
+                 s: [fo.bay || 2.6, (fo.win || [0.5, 0.5])[0], (fo.win || [0.5, 0.5])[1], fo.floor || 3.3] };
+      }
+      let kind = h > 70 ? (r < 0.6 ? 1 : r < 0.84 ? 2 : 0) : h > 16 ? (r < 0.28 ? 1 : r < 0.55 ? 2 : 0) : 3;
+      if (/Silo|Smokestack|Stack|Tank|Hangar|Warehouse|Hall|Shed/i.test(name)) kind = 4;
+      const fac = kind === 1 ? [0.80, 0.83, 0.86] : FAC[Math.floor(r3 * FAC.length)];
+      const gl = kind === 1 ? TINT[Math.floor(r2 * 5)] : kind === 2 ? [0.08, 0.12, 0.17] : TINT[5];
+      const s = kind === 1 ? [1.4 + r2 * 0.7, 0.94, 0.90, 3.5 + 0.5 * r3]
+              : kind === 2 ? [3.2 + r2, 0.985, 0.40 + 0.18 * r3, 3.2 + 0.4 * r3]
+              : kind === 3 ? [3.0 + r2 * 1.5, 0.38 + 0.2 * r3, 0.46, 3.1]
+              : [2.2 + r2 * 1.3, 0.40 + 0.22 * r3, 0.46 + 0.14 * r2, 3.1 + 0.5 * r3];
+      return { kind, fac, s, gl };
+    };
+    const push = (P, N, id, st, zb, noWin) => {      // P,N: Float32Array plats (triangles)
+      const k = noWin ? 4 : st.kind;
+      for (let i = 0; i < P.length; i++) { pos.push(P[i]); nor.push(N[i]); }
+      for (let i = 0; i < P.length / 3; i++) { col.push(...st.fac); ids.push(id); sty.push(...st.s); gls.push(...st.gl, k); bas.push(zb); }
+    };
     for (const [name, so] of Object.entries(S)) {
       const id = solidNames.length; solidNames.push({ name, zmin: so.zmin, zmax: so.zmax, nl: so.layers.length });
-      tint.set(so.color || '#9ca3af');
-      const jit = 0.94 + 0.12 * ((Math.sin(id * 91.7) * 43758.5453) % 1 + 1) % 1;
-      cc.copy(concrete).lerp(tint, 0.14).multiplyScalar(jit);
+      const faceOnly = !so.layers.length;
+      const st = styleOf(name, so.zmax - so.zmin, faceOnly);
       for (const L of so.layers) for (const pl of L.polys) {
         try {
           const shape = new THREE.Shape(pl.outer.map(q => new THREE.Vector2(q[0], q[1])));
@@ -1688,11 +1739,34 @@ if (meshVerts.length) {
           g.translate(0, 0, L.z0);
           if (g.index) g = g.toNonIndexed();
           g.computeVertexNormals();
-          const P = g.attributes.position.array, N = g.attributes.normal.array;
-          for (let i = 0; i < P.length; i++) { pos.push(P[i]); nor.push(N[i]); }
-          for (let i = 0; i < P.length / 3; i++) { col.push(cc.r, cc.g, cc.b); ids.push(id); }
+          push(g.attributes.position.array, g.attributes.normal.array, id, st, so.zmin, false);
           g.dispose();
+          // acrotere: muret de 1.1 m au bord du toit (terrasses et toits plats), sans fenetres
+          if (st.kind !== 4 && pl.outer.length >= 3 && L.z1 - so.zmin > 6) {
+            const O = pl.outer, P = [], N = [], z1 = L.z1, z2 = L.z1 + 1.1;
+            let ar = 0; for (let k = 0; k < O.length; k++) { const a = O[k], b = O[(k + 1) % O.length]; ar += a[0] * b[1] - b[0] * a[1]; }
+            const sg = ar > 0 ? 1 : -1;                 // normale vers l'exterieur quel que soit le sens du contour
+            for (let k = 0; k < O.length; k++) {
+              const a = O[k], b = O[(k + 1) % O.length], ex = b[0] - a[0], ey = b[1] - a[1], ln = Math.hypot(ex, ey) || 1;
+              const nx = sg * ey / ln, ny = -sg * ex / ln;
+              P.push(a[0], a[1], z1, b[0], b[1], z1, b[0], b[1], z2, a[0], a[1], z1, b[0], b[1], z2, a[0], a[1], z2);
+              for (let q = 0; q < 6; q++) N.push(nx, ny, 0);
+            }
+            push(P, N, id, st, so.zmin, true);
+          }
         } catch (e) {}
+      }
+      // [FACES-V1] faces reconstruites du fil de fer: toits a pans, domes, voutes, couronnes, structures
+      if (so.fv && so.ff && so.ff.length) {
+        const V = so.fv, F = so.ff, P = new Float32Array(F.length * 3), N = new Float32Array(F.length * 3);
+        const a = new THREE.Vector3(), b = new THREE.Vector3(), c = new THREE.Vector3(), n = new THREE.Vector3();
+        for (let t = 0; t < F.length; t += 3) {
+          a.fromArray(V, 3 * F[t]); b.fromArray(V, 3 * F[t + 1]); c.fromArray(V, 3 * F[t + 2]);
+          n.subVectors(b, a).cross(c.clone().sub(a)).normalize();
+          if (n.z < -0.2) n.negate();                   // normale plutot vers le haut/l'exterieur (le materiau est double face)
+          for (let q = 0; q < 3; q++) { const v = [a, b, c][q]; P[3 * (t + q)] = v.x; P[3 * (t + q) + 1] = v.y; P[3 * (t + q) + 2] = v.z; N[3 * (t + q)] = n.x; N[3 * (t + q) + 1] = n.y; N[3 * (t + q) + 2] = n.z; }
+        }
+        push(P, N, id, st, so.zmin, true);
       }
     }
     const geo = new THREE.BufferGeometry();
@@ -1700,6 +1774,9 @@ if (meshVerts.length) {
     geo.setAttribute('normal', new THREE.Float32BufferAttribute(nor, 3));
     geo.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
     geo.setAttribute('aId', new THREE.Float32BufferAttribute(ids, 1));
+    geo.setAttribute('aSty', new THREE.Float32BufferAttribute(sty, 4));
+    geo.setAttribute('aGls', new THREE.Float32BufferAttribute(gls, 4));
+    geo.setAttribute('aBase', new THREE.Float32BufferAttribute(bas, 1));
     geo.computeBoundingSphere();
     solidMesh = new THREE.Mesh(geo, solidMat);
     solidMesh.castShadow = true; solidMesh.receiveShadow = true; solidMesh.name = 'solid-buildings';

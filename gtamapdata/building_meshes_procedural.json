@@ -431115,7 +431115,27 @@
    ]
   ],
   "note": "MARQUIS-V2b 2026-09-29: + le TROU traversant (ouverture est-ouest) mesure dans Convertible (vue est, 407 m, en proportion de la facade): de 12.9 a 23.9 m du coin SE, z 40.5 -> 79.8 | MARQUIS-V2 2026-09-29 (Alexandre: mesh faux): tour orientee NORD-SUD (grande facade sur la baie comme IRL): facade est = coins NE (-456.7, 572.5, 179.1; Skyline + Port Vice City A/B a 2 arcmin, clic Highway Panorama S faux) et SE (-461.8, 522.9, 173.2; 4 cams a <=7 arcmin) -> 49.8 m; profondeur 37.2 m = rayon NW de Skyline sur le plan de la face nord (z 178.7, coherent); bloc nord a 179.1, partie sud 12 m... toit 173.2 (coin SE plus bas); sol 3.7. Colle au bloc est de l empreinte V16 2573. L ancienne lame E-O (trait V16 s139) ignorait le coin SE | MARQUIS MIAMI 2026-09-26: plan = trait V16 s139 (lame E-O 52.7 x 17.6 m, centre (-471.6,562.5)) extrude sol 3.6 -> toit 178.3 (landmark NE) + ecran de toit 2.7 m en retrait; silhouette verifiee dans Vice City Postcard (1.55 km) ET Biplane v2580 (0.66 km): bords et toit a +-5 px. Le landmark SE (y 523) est 30 m au sud de la lame: coin mal attribue, ignore",
-  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)"
+  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)",
+  "facade": {
+   "kind": "curtain",
+   "color": [
+    0.86,
+    0.87,
+    0.88
+   ],
+   "glass": [
+    0.06,
+    0.08,
+    0.12
+   ],
+   "bay": 1.5,
+   "win": [
+    0.95,
+    0.8
+   ],
+   "floor": 3.4,
+   "_src": "Rialto Causeway with Raul (1): verre bleu-gris sombre, dalles blanches marquees"
+  }
  },
  "Marriott Miami Biscayne Bay": {
   "color": "#f5f5f4",
@@ -432082,7 +432102,27 @@
    ]
   ],
   "note": "MARRIOTT-V2 2026-10-04: tour decalee de (-10, -26) m: scan de silhouettes multi-cams (10 cams, ecart moyen 7.1 -> 4.5 px) + Rialto Causeway with Raul (1) pose V5 (bords 958/1240 px) concordants; verifie visuellement dans Skyline, Basketball, Postcard, Boat, Vice Beach (A), Panorama, v1980; les landmarks E/NE et la remarque Postcard V1 (12-15 m a l est) sont refutes par ces vues; podium inchange | MARRIOTT MIAMI BISCAYNE BAY 2026-09-26: plan = moitie SE du bloc V16 2715 (traits s234+s235, L le long des faces est et sud) extrude sol 4.5 -> toit 144.9 (landmarks E/NE); ATTENTION: dans Vice City Postcard la tour blanche a bandes qui porte les coins E/NE est 12-15 m a l EST de ce plan V16 (aucun autre batiment V16 ne correspond) -> a confirmer par Alexandre",
-  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)"
+  "_credit": "Claude Fable 5.1 + Alexandre Leblanc (V16 Yanis)",
+  "facade": {
+   "kind": "punched",
+   "color": [
+    0.92,
+    0.91,
+    0.87
+   ],
+   "glass": [
+    0.07,
+    0.08,
+    0.1
+   ],
+   "bay": 1.6,
+   "win": [
+    0.62,
+    0.86
+   ],
+   "floor": 3.1,
+   "_src": "Rialto Causeway with Raul (1): facade blanche, fenetres en bandes verticales sombres"
+  }
  },
  "Marriott Miami Biscayne Bay (Podium)": {
   "color": "#f5f5f4",
@@ -441984,7 +442024,27 @@
    ]
   ],
   "note": "THE GRAND V3 2026-10-04: tour prolongee de 16 m vers le SUD (face nord fixe, profondeur 55 -> 71 m): bord gauche (face sud vue du NE) trop au nord dans Rialto (pose V5, -65 px), Vice Beach (B) et Basketball; position verifiee par scan de silhouettes 16 cams (meilleur decalage commun ~0); Postcard/Skyline/v3000/Boat inchanges ou meilleurs | THE GRAND V2 2026-09-26: tour = partie nord du polygone V16 2716, bord sud = trait V16 s4 (angle arrondi), bande est s24; toit principal 164.0 (Postcard: 163-165, et v3000: 11 m sous la voute); couronne = voute en berceau a bouts arrondis (comme IRL et comme dans Postcard/v3000), axe = droite landmarks The Grand (E)-The Grand (centre) (tous deux sur la crete), crete 175.0 (landmarks E 174.7 / centre 175.0; W 177.0 place 13 m au sud de l axe = profondeur incertaine), demi-largeur 9.5 m (crete a 9.5-11 m du bord sud s4), longueur de x -321 a -251 (bouts ajustes sur Postcard). Traits internes V16 (s6-s23) dessines sur le toit. Sol 3.7.",
-  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5 (V16)"
+  "_credit": "Alexandre Leblanc (landmarks) + Claude Opus 5.5 (V16)",
+  "facade": {
+   "kind": "ribbon",
+   "color": [
+    0.88,
+    0.88,
+    0.86
+   ],
+   "glass": [
+    0.09,
+    0.11,
+    0.14
+   ],
+   "bay": 3.6,
+   "win": [
+    0.985,
+    0.52
+   ],
+   "floor": 3.0,
+   "_src": "Rialto Causeway with Raul (1): bandeaux blancs de balcons, vitrage sombre"
+  }
  },
  "1800 Club": {
   "color": "#93c5fd",
@@ -447223,7 +447283,27 @@
    ]
   ],
   "_credit": "Alexandre Leblanc (V16 + landmarks) + Claude Opus 5.5",
-  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 2718 (4 regions, tools/v16_tiers.py); plan V16 2718 (4 volumes); hauteurs LUES dans Rialto Causeway with Raul (1) (pose V4, 4.3 px/m): toit cintre de la dalle 152 -> 159.5 (LM 1800 Club 159.5), tour ronde 150 + edicule 156.5, aile sud 157."
+  "note": "TIERED-MESH-V1 2026-09-30: volumes = traits interieurs du polygone V16 2718 (4 regions, tools/v16_tiers.py); plan V16 2718 (4 volumes); hauteurs LUES dans Rialto Causeway with Raul (1) (pose V4, 4.3 px/m): toit cintre de la dalle 152 -> 159.5 (LM 1800 Club 159.5), tour ronde 150 + edicule 156.5, aile sud 157.",
+  "facade": {
+   "kind": "ribbon",
+   "color": [
+    0.9,
+    0.9,
+    0.89
+   ],
+   "glass": [
+    0.1,
+    0.14,
+    0.18
+   ],
+   "bay": 3.4,
+   "win": [
+    0.985,
+    0.5
+   ],
+   "floor": 3.1,
+   "_src": "Rialto Causeway with Raul (1): tour blanche a balcons filants"
+  }
  },
  "Quantum on the Bay (North)": {
   "color": "#a5b4fc",
