@@ -3797,6 +3797,19 @@ window.__camScreen = name => {
     return m;
   };
   const glowMat = (hex, emis, k, rough = 0.5) => { const m = stdMat(hex, rough, 0.2); m.emissive = new THREE.Color(...emis); m.emissiveIntensity = 0; glowMats.push([m, k]); return m; };
+  // flaques de lumiere au sol (la nuit): panneaux additifs a degrade radial, opacite pilotee par la nuit
+  const poolMats = [];
+  const addPools = list => {
+    if (!list.length) return;
+    const cv = document.createElement('canvas'); cv.width = cv.height = 128; const x = cv.getContext('2d');
+    const gr = x.createRadialGradient(64, 64, 4, 64, 64, 63); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.45, 'rgba(255,255,255,0.45)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+    x.fillStyle = gr; x.fillRect(0, 0, 128, 128);
+    const pm = new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cv), color: new THREE.Color(1.0, 0.66, 0.30), transparent: true, opacity: 0, depthWrite: false, blending: THREE.AdditiveBlending, polygonOffset: true, polygonOffsetFactor: -4 });
+    pm.toneMapped = false; poolMats.push(pm);
+    const pi = new THREE.InstancedMesh(new THREE.PlaneGeometry(1, 1), pm, list.length), sc2 = new V3();
+    list.forEach(([px, py, pz, r], i) => { m4.compose(new V3(px, py, pz + 0.35), new THREE.Quaternion(), sc2.set(r, r, 1)); pi.setMatrixAt(i, m4); });
+    pi.renderOrder = 3; pi.frustumCulled = false; grp.add(pi);
+  };
   const merge = list => {                                                  // fusion non indexee (pas d'addons)
     const P = [], N = [];
     for (let g of list) { if (g.index) g = g.toNonIndexed(); if (!g.attributes.normal) g.computeVertexNormals(); P.push(...g.attributes.position.array); N.push(...g.attributes.normal.array); g.dispose(); }
@@ -3856,6 +3869,20 @@ window.__camScreen = name => {
         q.setFromUnitVectors(X, d.clone().normalize()); m4.compose(A.clone().add(B).multiplyScalar(0.5), q, new V3(len + t * 0.6, t, t)); im.setMatrixAt(i, m4);
       });
       im.castShadow = true; im.receiveShadow = true; im.name = 'crane-steel'; grp.add(im);
+      // la nuit: feux le long des fleches (aretes hautes et quasi horizontales) + flaque sous chaque grue (Port Vice City (A))
+      const bl = [], cc = new Map();
+      for (const n of Object.keys(M)) if (/Container Crane/.test(n)) {
+        let sx = 0, sy = 0, k = 0;
+        for (const [a, b] of (M[n].world_edges || M[n])) {
+          sx += a[0] + b[0]; sy += a[1] + b[1]; k += 2;
+          const L = Math.hypot(b[0] - a[0], b[1] - a[1]);
+          if (L > 8 && Math.abs(b[2] - a[2]) < 0.1 * L && Math.min(a[2], b[2]) > 35) for (let t = 0; t <= 1; t += 9 / L) bl.push(new V3(a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t, a[2] + (b[2] - a[2]) * t - 1.2));
+        }
+        cc.set(n, [sx / k, sy / k]);
+      }
+      const li = new THREE.InstancedMesh(new THREE.SphereGeometry(0.5, 6, 4), glowMat(0x888888, [1.0, 0.94, 0.82], 6.0), bl.length);
+      bl.forEach((p, i) => { m4.makeTranslation(p.x, p.y, p.z); li.setMatrixAt(i, m4); }); grp.add(li);
+      addPools([...cc.values()].map(([x, y]) => [x, y, 4.5, 64]));
     }
   }
 
@@ -3939,6 +3966,32 @@ window.__camScreen = name => {
     }
     window.__structs = Object.assign(window.__structs || {}, { ships: list.length, containers: conts.length });
   };
+  // [PORT-YARD-V1] parc a conteneurs du terminal (tools/port_yard.py): zone = parc gris de la V16, disposition ESTIMEE
+  fetch('/threejs/_port_yard.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(D => {
+    if (!D || !D.containers || !D.containers.length) return;
+    const n = D.containers.reduce((s2, c) => s2 + c[4], 0);
+    const yi = new THREE.InstancedMesh(new THREE.BoxGeometry(12.0, 2.42, 2.55), stdMat(0xffffff, 0.7, 0.25, 0.5), n), col = new THREE.Color(), q = new THREE.Quaternion(), Z = new V3(0, 0, 1), one = new V3(1, 1, 1);
+    let i = 0;
+    for (const [x, y, z, a, tiers, sd] of D.containers) {
+      q.setFromAxisAngle(Z, a);
+      for (let t = 0; t < tiers; t++, i++) {
+        m4.compose(new V3(x, y, z + 1.3 + t * 2.6), q, one); yi.setMatrixAt(i, m4);
+        col.set(PAL[(sd * 7 + t * 5) % PAL.length]).multiplyScalar(0.82 + 0.3 * (((sd + t * 13) * 0.618) % 1)); yi.setColorAt(i, col);
+      }
+    }
+    yi.castShadow = true; yi.receiveShadow = true; yi.name = 'port-yard'; grp.add(yi);
+    yi.material.emissive = new THREE.Color(1.0, 0.72, 0.38); glowMats.push([yi.material, 0.16]);   // conteneurs eclaires par les mats la nuit
+    // [PORT-YARD-V1] la nuit, terminal eclaire comme sur Port Vice City (A): mats d'eclairage (~85 m) a tete sodium + flaques au sol
+    const cells = new Map();
+    for (const [x, y, z] of D.containers) { const k = Math.floor(x / 85) + ',' + Math.floor(y / 85), c = cells.get(k) || [0, 0, 0, 0]; c[0] += x; c[1] += y; c[2] += z; c[3]++; cells.set(k, c); }
+    const masts = [...cells.values()].filter(c => c[3] >= 6).map(c => [c[0] / c[3], c[1] / c[3], c[2] / c[3]]);
+    addPools(masts.map(([x, y, z]) => [x, y, z, 78]));
+    const pole = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.3, 0.45, 30, 6).rotateX(Math.PI / 2).translate(0, 0, 15), stdMat(0x8a8d90, 0.6, 0.4, 0.5), masts.length);
+    const head = new THREE.InstancedMesh(new THREE.BoxGeometry(3.2, 3.2, 1.0), glowMat(0x777777, [1.0, 0.78, 0.45], 7.0, 0.4), masts.length);
+    masts.forEach(([x, y, z], k) => { m4.makeTranslation(x, y, z); pole.setMatrixAt(k, m4); m4.makeTranslation(x, y, z + 30.5); head.setMatrixAt(k, m4); });
+    pole.castShadow = true; grp.add(pole); grp.add(head);
+    window.__structs = Object.assign(window.__structs || {}, { yard: n });
+  }).catch(() => {});
   const waitShips = () => { if (window.__solids && window.__ships) buildShips(window.__ships); else setTimeout(waitShips, 500); };
   waitShips();
 
@@ -3946,6 +3999,7 @@ window.__camScreen = name => {
     grp.visible = !!(window.__solids && window.__solids.mesh.visible) || !window.__solids;
     const nt = terraUni.uNight.value;
     for (const [m, k] of glowMats) m.emissiveIntensity = k * nt;
+    for (const pm of poolMats) { pm.opacity = 0.9 * nt; pm.visible = nt > 0.02; }
     if (smoke && grp.visible) {
       qc.copy(camera.quaternion); let i = 0;
       for (const s0 of smokers) for (let k = 0; k < PUFF; k++, i++) {
