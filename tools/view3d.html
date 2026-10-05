@@ -598,6 +598,9 @@ const terraUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   // (rampes cotieres TERRAIN-EXTEND) — on la fond vers l'abysse plutot que
   // d'exposer des plateaux fabriques dans l'ocean
   uMeasBounds: { value: new THREE.Vector4(-13325.6, -9735.9, 5138.6, 11276.7) },
+  uDetail:   { value: null },                              // [DETAIL-V1] carte V16 a 1 m/px autour de la camera
+  uDetailBounds: { value: new THREE.Vector4(0, 0, 1, 1) },
+  uDetailOn: { value: 0 },
 }]);
 const seaUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uSunDir:   { value: new THREE.Vector3(0, 0, 1) },
@@ -1035,7 +1038,8 @@ const data = await (await fetch('/api/scene3d')).json();
       fragmentShader: `
         varying vec3 vPos; varying vec3 vN; varying vec2 vUv;
         uniform vec3 uSunDir;
-        uniform sampler2D uDrape, uShadow;
+        uniform sampler2D uDrape, uShadow, uDetail;
+        uniform vec4 uDetailBounds; uniform float uDetailOn;
         uniform float uUseDrape, uContours, uTime, uShadowOn, uClouds, uNight;
         uniform vec4 uTerrBounds, uMeasBounds;
         #include <common>
@@ -1085,6 +1089,15 @@ const data = await (await fetch('/api/scene3d')).json();
           vec3 base;
           if (uUseDrape > 0.5) {
             base = texture2D(uDrape, vUv).rgb;
+            // [DETAIL-V1] pres de la camera: la meme carte a 1 m/px (4x plus nette), fondue sur les bords de la fenetre
+            if (uDetailOn > 0.5) {
+              vec2 duv = (vPos.xy - uDetailBounds.xy) / (uDetailBounds.zw - uDetailBounds.xy);
+              if (duv.x > 0.0 && duv.y > 0.0 && duv.x < 1.0 && duv.y < 1.0) {
+                vec2 e = min(duv, 1.0 - duv);
+                float wd = smoothstep(0.0, 0.08, min(e.x, e.y));
+                base = mix(base, texture2D(uDetail, duv).rgb, wd);
+              }
+            }
             // [GROUND-V1 2026-10-05] la carte devient un sol: chaque couleur V16 -> un vrai materiau (texture lineaire)
             {
               vec3 c = base;
@@ -2985,6 +2998,17 @@ if (window.__pendingPoint) { window.__focusPoint(window.__pendingPoint); window.
 })();
 
 // ── [VIEW3D-SHOT] export PNG: vue 3D + frame de la cam active en medaillon ──
+// [GRAB-V1] debug: rendu synchrone -> canvas 2D (marche meme quand l'onglet ne compose pas: verifs sans capture d'ecran)
+window.__grabFrame = (W = 960) => {
+  const [W0, H0] = realSize(), dpr0 = renderer.getPixelRatio();
+  renderer.setPixelRatio(1); renderer.setSize(W, Math.round(W * H0 / W0), false);
+  controls.update(0.016);
+  if (window.__cine) window.__cine.render(); else renderer.render(scene, camera);
+  const out = document.createElement('canvas'); out.width = renderer.domElement.width; out.height = renderer.domElement.height;
+  out.getContext('2d').drawImage(renderer.domElement, 0, 0);
+  renderer.setPixelRatio(dpr0); resize();
+  return out;
+};
 document.getElementById('btn-shot').addEventListener('click', async () => {
   // [SHOT-4K] rendu offscreen a 3840 px de large (pixelRatio 1 le temps du
   // rendu), puis restauration immediate — la vue ne cille qu'une frame
@@ -3291,6 +3315,72 @@ window.__camScreen = name => {
   return { x: (v.x + 1) / 2 * innerWidth, y: (1 - v.y) / 2 * innerHeight, behind: v.z > 1 };
 };
 
+
+// ── [DETAIL-V1 2026-10-05] carte detaillee autour de la camera (V16 a 1 m/px, fenetre 2 km, rechargee en se deplacant) ──
+(() => {
+  const Z = 5, MPX = 1, TS = 256, WIN = 2048;            // z5 = 1 m/px; tuile = 256 m; fenetre 2048 m (8x8 tuiles)
+  const can = document.createElement('canvas'); can.width = WIN; can.height = WIN;
+  const ctx = can.getContext('2d', { willReadFrequently: true });
+  const tex = new THREE.CanvasTexture(can);
+  tex.colorSpace = THREE.SRGBColorSpace; tex.flipY = true; tex.anisotropy = 8;
+  tex.minFilter = THREE.LinearMipmapLinearFilter; tex.magFilter = THREE.LinearFilter; tex.generateMipmaps = true;
+  terraUni.uDetail.value = tex;
+  let labels = []; fetch('/threejs/_v16_labels.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).then(L => { labels = L; }).catch(() => {});
+  let cur = null, loading = 0;
+  const srcQ = () => { let s0 = localStorage.getItem('ui.tileSrc') || 'yanis,16'; if (s0 === 'yanis') s0 = 'yanis,14'; if (s0 === 'leak') s0 = 'leak,1'; return s0 !== 'yanis,14' ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.8')}` : ''; };
+  const inpaint = (x0, yTop) => {                        // meme effacement des libelles que la carte generale (pixels du texte seulement)
+    for (const r of labels) {
+      const X0 = Math.max(1, Math.floor((r[0] - x0) / MPX) - 1), X1 = Math.min(WIN - 2, Math.ceil((r[2] - x0) / MPX) + 1);
+      const Y0 = Math.max(1, Math.floor((yTop - r[3]) / MPX) - 1), Y1 = Math.min(WIN - 2, Math.ceil((yTop - r[1]) / MPX) + 1);
+      const w = X1 - X0 + 1, h = Y1 - Y0 + 1; if (w < 3 || h < 3) continue;
+      const im = ctx.getImageData(X0, Y0, w, h), d = im.data, white = new Uint8Array(w * h), mask = new Uint8Array(w * h);
+      for (let k = 0; k < w * h; k++) white[k] = Math.min(d[4 * k], d[4 * k + 1], d[4 * k + 2]) > 200 ? 1 : 0;
+      const R = 4;                                         // contour plus epais a 1 m/px
+      for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+        let m = 0; for (let dj = -R; dj <= R && !m; dj++) for (let di = -R; di <= R; di++) { const ii = i + di, jj = j + dj; if (ii >= 0 && jj >= 0 && ii < w && jj < h && white[jj * w + ii]) { m = 1; break; } }
+        mask[j * w + i] = m;
+      }
+      for (let it = 0; it < 80; it++) {
+        let left = 0; const fill = [];
+        for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+          const k = j * w + i; if (!mask[k]) continue; let rr = 0, gg = 0, bb = 0, n = 0;
+          for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const ii = i + di, jj = j + dj; if (ii < 0 || jj < 0 || ii >= w || jj >= h) continue; const q = jj * w + ii; if (mask[q]) continue; rr += d[4 * q]; gg += d[4 * q + 1]; bb += d[4 * q + 2]; n++; }
+          if (n) fill.push([k, rr / n, gg / n, bb / n]); else left++;
+        }
+        for (const [k, rr, gg, bb] of fill) { d[4 * k] = rr; d[4 * k + 1] = gg; d[4 * k + 2] = bb; mask[k] = 0; }
+        if (!left) break;
+      }
+      ctx.putImageData(im, X0, Y0);
+    }
+  };
+  function load(cx, cy) {
+    const tx0 = Math.floor((cx - WIN / 2 + 16384) / MPX / TS), ty0 = Math.floor((16384 - (cy + WIN / 2)) / MPX / TS);
+    const x0 = tx0 * TS * MPX - 16384, yTop = 16384 - ty0 * TS * MPX;
+    const key = tx0 + ',' + ty0; if (cur && cur.key === key) return;
+    const job = { key, x0, yTop }; cur = job;
+    const off = document.createElement('canvas'); off.width = WIN; off.height = WIN; const octx = off.getContext('2d');
+    octx.fillStyle = '#1f4973'; octx.fillRect(0, 0, WIN, WIN);
+    let n = 0, got = 0; const q = srcQ();
+    for (let j = 0; j < WIN / TS; j++) for (let i = 0; i < WIN / TS; i++) {
+      n++; const img = new Image();
+      const done = () => {
+        if (++got < n || cur !== job) return;
+        ctx.drawImage(off, 0, 0); inpaint(x0, yTop); tex.needsUpdate = true;
+        terraUni.uDetailBounds.value.set(x0, yTop - WIN * MPX, x0 + WIN * MPX, yTop); terraUni.uDetailOn.value = 1;
+      };
+      img.onload = () => { octx.drawImage(img, i * TS, j * TS); done(); }; img.onerror = done;
+      img.src = `/tiles/${Z}/${Z},${ty0 + j},${tx0 + i}.jpg?v=14${q}`;
+    }
+  }
+  setInterval(() => {                                     // recharge quand la cible s'eloigne du centre de la fenetre (et qu'on est assez pres du sol)
+    if (!window.__drapeOn) { terraUni.uDetailOn.value = 0; return; }
+    const t = controls.target, h = camera.position.distanceTo(t);
+    if (h > 6000) return;
+    if (!cur) return load(t.x, t.y);
+    const cx = cur.x0 + WIN / 2, cy = cur.yTop - WIN / 2;
+    if (Math.hypot(t.x - cx, t.y - cy) > WIN * 0.28) load(t.x, t.y);
+  }, 700);
+})();
 
 // ── [ROADS-V1 2026-10-05] reseau routier V16 en vraie geometrie (tools/v16_roads.py) ──
 // rubans d'asphalte cales sur le terrain affiche; troncons sur tablier (z mesure des meshes de ponts/viaducs) -> dalle
