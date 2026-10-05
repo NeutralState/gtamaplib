@@ -1765,16 +1765,16 @@ if (meshVerts.length) {
   solidMat.onBeforeCompile = sh => {
     sh.uniforms.uNight = solidsUni.uNight; sh.uniforms.uHover = solidsUni.uHover; sh.uniforms.uSky = solidsUni.uSky;
     for (const k of ['uProjOn', 'uFrames', 'uOwners', 'uPO', 'uPF', 'uPR', 'uPU', 'uPW', 'uPK']) sh.uniforms[k] = solidsUni[k];
-    sh.vertexShader = 'attribute float aId;\nattribute vec4 aSty;\nattribute vec4 aGls;\nattribute float aBase;\nattribute float aTop;\nattribute vec2 aProj;\nattribute vec3 aAcc;\n' +
-      'varying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\nvarying vec4 vSty;\nvarying vec4 vGls;\nvarying float vBase;\nvarying float vTop;\nvarying vec2 vProj;\nvarying vec3 vAcc;\n' +
+    sh.vertexShader = 'attribute float aId;\nattribute vec4 aSty;\nattribute vec4 aGls;\nattribute float aBase;\nattribute float aTop;\nattribute vec2 aProj;\nattribute vec3 aAcc;\nattribute vec4 aNl;\nattribute vec2 aNlz;\n' +
+      'varying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\nvarying vec4 vSty;\nvarying vec4 vGls;\nvarying float vBase;\nvarying float vTop;\nvarying vec2 vProj;\nvarying vec3 vAcc;\nvarying vec4 vNl;\nvarying vec2 vNlz;\n' +
       sh.vertexShader.replace('#include <project_vertex>', `#include <project_vertex>
         vWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;
         vWN = normalize(mat3(modelMatrix) * objectNormal);
-        vId = aId; vSty = aSty; vGls = aGls; vBase = aBase; vTop = aTop; vProj = aProj; vAcc = aAcc;`);
+        vId = aId; vSty = aSty; vGls = aGls; vBase = aBase; vTop = aTop; vProj = aProj; vAcc = aAcc; vNl = aNl; vNlz = aNlz;`);
     sh.fragmentShader = 'uniform float uNight;\nuniform float uHover;\nuniform vec3 uSky;\n' +
       'uniform float uProjOn;\nuniform highp sampler2DArray uFrames;\nuniform highp sampler2DArray uOwners;\n' +
       'uniform vec3 uPO[' + PN + '];\nuniform vec3 uPF[' + PN + '];\nuniform vec3 uPR[' + PN + '];\nuniform vec3 uPU[' + PN + '];\nuniform vec3 uPW[' + PN + '];\nuniform vec2 uPK[' + PN + '];\n' +
-      'varying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\nvarying vec4 vSty;\nvarying vec4 vGls;\nvarying float vBase;\nvarying float vTop;\nvarying vec2 vProj;\nvarying vec3 vAcc;\n' +
+      'varying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\nvarying vec4 vSty;\nvarying vec4 vGls;\nvarying float vBase;\nvarying float vTop;\nvarying vec2 vProj;\nvarying vec3 vAcc;\nvarying vec4 vNl;\nvarying vec2 vNlz;\n' +
       'float h31(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 37.719))) * 43758.5453); }\n' +
       sh.fragmentShader
       .replace('#include <color_fragment>', `#include <color_fragment>
@@ -1856,7 +1856,13 @@ if (meshVerts.length) {
         vec3 lc = mix(vec3(1.0, 0.70, 0.36), vec3(0.82, 0.90, 1.0), step(0.78, h31(vec3(floor(gq) + 3.0, vId))));
         totalEmissiveRadiance += lc * (1.5 * lit + 1.2 * lob) * win * uNight;
         // [FIDELITY 2026-10-05] plus de couronnes neon generiques (Alexandre: fidele au jeu, pas d'ajouts de style);
-        // une tour n'aura un eclairage de couronne que si une frame le montre (champ explicite a ajouter au mesh)
+        // [NIGHT-LIGHTS-V1] seulement l'eclairage MESURE sur les frames de nuit (tools/night_lights.py -> night_light):
+        // lavis de la couleur mesuree sur les murs, dans la bande de hauteur mesuree, plus fort vers le haut (projecteurs)
+        if (vNl.a > 0.5 && uNight > 0.02) {
+          float band = smoothstep(vNlz.x - 3.0, vNlz.x + 2.0, vWPos.z) * (1.0 - smoothstep(vNlz.y + 4.0, vNlz.y + 9.0, vWPos.z));
+          float ramp = 0.45 + 0.55 * smoothstep(vNlz.x, vNlz.y, vWPos.z);
+          totalEmissiveRadiance += vNl.rgb * 1.0 * band * ramp * wall * uNight;
+        }
         totalEmissiveRadiance += vec3(1.0, 0.82, 0.32) * 0.25 * hov;
         totalEmissiveRadiance += projCol * 0.62 * proj * (1.0 - 0.9 * uNight);   // la frame porte deja sa lumiere: en grande partie non eclairee`);
   };
@@ -1948,8 +1954,8 @@ if (meshVerts.length) {
     const nReal = Object.keys(S).length;
     if (MS) MS.forEach((m, i) => { S['V16 building #' + (i + 1)] = { zmin: m.z, zmax: m.z + m.h, layers: [{ z0: m.z, z1: m.z + m.h, polys: [{ outer: m.o, holes: [] }] }], color: '#cfcfcf', _mass: 1 }; });
     let massStart = -1;
-    const pos = [], nor = [], col = [], ids = [], sty = [], gls = [], bas = [], tops = [], prj = [], acc = [];
-    let curAcc = [0, 0, 0];
+    const pos = [], nor = [], col = [], ids = [], sty = [], gls = [], bas = [], tops = [], prj = [], acc = [], nls = [], nlz = [];
+    let curAcc = [0, 0, 0], curNl = [0, 0, 0, 0], curNlz = [0, 0];
     let PM = null; try { const r = await fetch('/threejs/_fp_meta.json', { cache: 'no-store' }); if (r.ok) PM = await r.json(); } catch (e) {}
     let curProj = [-1, -1];
     const hsh = str => { let h = 2166136261; for (let k = 0; k < str.length; k++) h = Math.imul(h ^ str.charCodeAt(k), 16777619); return (h >>> 0) / 4294967296; };
@@ -2006,7 +2012,7 @@ if (meshVerts.length) {
     const push = (P, N, id, st, zb, noWin, colOverride) => {      // P,N: plats (triangles)
       const k = noWin ? 4 : st.kind, fc = colOverride || st.fac;
       for (let i = 0; i < P.length; i++) { pos.push(P[i]); nor.push(N[i]); }
-      for (let i = 0; i < P.length / 3; i++) { col.push(...fc); ids.push(id); sty.push(...st.s); gls.push(...st.gl, k); bas.push(zb); tops.push(curTop); prj.push(curProj[0], curProj[1]); acc.push(...curAcc); }
+      for (let i = 0; i < P.length / 3; i++) { col.push(...fc); ids.push(id); sty.push(...st.s); gls.push(...st.gl, k); bas.push(zb); tops.push(curTop); prj.push(curProj[0], curProj[1]); acc.push(...curAcc); nls.push(...curNl); nlz.push(...curNlz); }
     };
     const rnd = seed => { let x = Math.sin(seed) * 43758.5453; return x - Math.floor(x); };
     const inPoly = (x, y, O) => { let c = false; for (let i = 0, j = O.length - 1; i < O.length; j = i++) { const [xi, yi] = O[i], [xj, yj] = O[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
@@ -2051,6 +2057,7 @@ if (meshVerts.length) {
       curTop = so.layers.length ? so.layers[so.layers.length - 1].z1 : so.zmax;
       { const b = PM && PM.buildings[name]; curProj = [b && b.length > 0 ? b[0] : -1, b && b.length > 1 ? b[1] : -1]; }
       curAcc = st.acc || [0, 0, 0];
+      { const nl = S[name].night_light; curNl = nl ? [...nl.rgb.map(v => Math.pow(v, 2.2)), 1] : [0, 0, 0, 0]; curNlz = nl ? [nl.z0, nl.z1] : [0, 0]; }
       for (const L of so.layers) for (const pl of L.polys) {
         try {
           const shape = new THREE.Shape(pl.outer.map(q => new THREE.Vector2(q[0], q[1])));
@@ -2105,6 +2112,8 @@ if (meshVerts.length) {
     geo.setAttribute('aTop', new THREE.Float32BufferAttribute(tops, 1));
     geo.setAttribute('aProj', new THREE.Float32BufferAttribute(prj, 2));
     geo.setAttribute('aAcc', new THREE.Float32BufferAttribute(acc, 3));
+    geo.setAttribute('aNl', new THREE.Float32BufferAttribute(nls, 4));
+    geo.setAttribute('aNlz', new THREE.Float32BufferAttribute(nlz, 2));
     if (PM && PM.cams.length) (async () => {
       // frames + cartes d'appartenance -> textures-tableaux (une couche par cam)
       const load = src => new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });

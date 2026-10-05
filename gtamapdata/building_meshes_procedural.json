@@ -49385,6 +49385,24 @@
    ],
    "floor": 3.1,
    "_src": "IRL ESTIME 2026-10-05 (replique du batiment reel): verre bleu, dalles blanches"
+  },
+  "night_light": {
+   "rgb": [
+    0.301,
+    1.0,
+    0.645
+   ],
+   "z0": 125.1,
+   "z1": 163.9,
+   "top": 177.4,
+   "pattern": "vertical",
+   "n_px": 1796,
+   "frac": 0.0574,
+   "cams": [
+    "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)",
+    "Jason Duval 05 (Machine Gun)"
+   ],
+   "_src": "MEASURED night frames (night_lights.py)"
   }
  },
  "Vizcayne North Condominium": {
@@ -53220,6 +53238,24 @@
    ],
    "floor": 3.1,
    "_src": "IRL ESTIME 2026-10-05 (replique du batiment reel): verre bleu, dalles blanches"
+  },
+  "night_light": {
+   "rgb": [
+    0.507,
+    1.0,
+    0.603
+   ],
+   "z0": 125.1,
+   "z1": 163.9,
+   "top": 177.4,
+   "pattern": "vertical",
+   "n_px": 214,
+   "frac": 0.016,
+   "cams": [
+    "Jason Duval 05 (Machine Gun)"
+   ],
+   "_src": "MEASURED night frames (night_lights.py)",
+   "_band_from": "Vizcayne South Condominium (JD05 shows two identical green crowns; North has only 214 px)"
   }
  },
  "1500 Sonora Ave (Silo)": {

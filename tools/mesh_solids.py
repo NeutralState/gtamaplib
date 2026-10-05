@@ -180,7 +180,8 @@ def build(only=None):
         if f is not None:
             s['fv'] = [round(float(v), 2) for v in f[0].reshape(-1)]; s['ff'] = [int(i) for i in f[1].reshape(-1)]
         s['color'] = m.get('color', '#9ca3af')
-        if m.get('facade'): s['facade'] = m['facade']          # [FACADES-V1] style de facade lu sur les frames (optionnel)
+        if m.get('facade'): s['facade'] = m['facade']
+        if m.get('night_light'): s['night_light'] = m['night_light']   # [NIGHT-LIGHTS-V1] eclairage decoratif MESURE (night_lights.py)          # [FACADES-V1] style de facade lu sur les frames (optionnel)
         # [FACADE-COLOR-V1] couleur: mesuree sur les frames si fiable (>= 3 cams, >= 6000 px), sinon IRL (« en cas de doute regarde irl »)
         fc, fi = m.get('facade_color'), m.get('facade_irl')
         chroma = lambda c: max(c) - min(c)
