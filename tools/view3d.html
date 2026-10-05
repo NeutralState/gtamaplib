@@ -141,7 +141,8 @@
     <span class="lchip on" id="ly-solid" title="Solid buildings: sun-lit volumes, cast shadows, lit windows at night">Solid buildings</span>
     <span class="lchip on" id="ly-roads" title="3D roads: the whole V16 road network as real geometry (asphalt, lane markings), viaducts and bridges at their measured heights with decks, guardrails and piers">3D roads</span>
     <span class="lchip on" id="ly-fill" title="City fill: every V16 building footprint extruded (heights ESTIMATED, visual only)">City fill</span>
-    <span class="lchip on" id="ly-palms" title="Vegetation: palm rows along the beach promenade, parks and streets, forests on the hills (placed from the V16 map + height map)">Trees &amp; palms</span>
+    <span class="lchip on" id="ly-traffic" title="Traffic: animated cars and trucks on the V16 road network (headlights and tail lights at night) — visual only">Traffic</span>
+    <span class="lchip on" id="ly-palms"title="Vegetation: palm rows along the beach promenade, parks and streets, forests on the hills (placed from the V16 map + height map)">Trees &amp; palms</span>
     <span class="lchip on" id="ly-cine" title="Cinematic rendering: ambient occlusion, bloom, color grading, vignette, MSAA">Cinematic rendering</span>
     <span class="lchip" id="ly-proj" title="Real GTA VI textures: the calibrated game frames are projected onto the building facades they see">Game textures</span>
     <span class="lchip on" id="ly-terrain" title="Real terrain (leak L16 height map)">Terrain</span>
@@ -1835,10 +1836,8 @@ if (meshVerts.length) {
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
         vec3 lc = mix(vec3(1.0, 0.70, 0.36), vec3(0.82, 0.90, 1.0), step(0.78, h31(vec3(floor(gq) + 3.0, vId))));
         totalEmissiveRadiance += lc * (1.5 * lit + 1.2 * lob) * win * uNight;
-        // couronne lumineuse des grandes tours (comme la skyline de Miami): bande coloree sous le toit, la nuit
-        float crown = wall * step(110.0, vTop - vBase) * smoothstep(vTop - 7.0, vTop - 6.0, vWPos.z) * (1.0 - smoothstep(vTop - 2.0, vTop - 1.2, vWPos.z));
-        vec3 cc3 = h31(vec3(vId, 1.0, 2.0)) < 0.34 ? vec3(0.2, 0.85, 1.0) : (h31(vec3(vId, 1.0, 2.0)) < 0.67 ? vec3(1.0, 0.25, 0.75) : vec3(0.95, 0.95, 1.0));
-        totalEmissiveRadiance += cc3 * 2.2 * crown * uNight;
+        // [FIDELITY 2026-10-05] plus de couronnes neon generiques (Alexandre: fidele au jeu, pas d'ajouts de style);
+        // une tour n'aura un eclairage de couronne que si une frame le montre (champ explicite a ajouter au mesh)
         totalEmissiveRadiance += vec3(1.0, 0.82, 0.32) * 0.25 * hov;
         totalEmissiveRadiance += projCol * 0.62 * proj * (1.0 - 0.9 * uNight);   // la frame porte deja sa lumiere: en grande partie non eclairee`);
   };
@@ -3394,6 +3393,7 @@ window.__camScreen = name => {
   const build = async () => {
     let R = null; try { const r = await fetch('/threejs/_v16_roads.json', { cache: 'no-store' }); if (r.ok) R = await r.json(); } catch (e) {}
     if (!R) return;
+    window.__roadsData = R;                                              // [TRAFFIC-V1] le trafic roule sur le meme reseau
     const P = [], N = [], C = [];
     const push = (a, b, c, n, col) => { P.push(...a, ...b, ...c); for (let q = 0; q < 3; q++) { N.push(...n); C.push(...col); } };
     const quad = (a, b, c, d, n, col) => { push(a, b, c, n, col); push(a, c, d, n, col); };
@@ -3456,6 +3456,18 @@ window.__camScreen = name => {
     g.computeBoundingSphere();
     const mat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.9, metalness: 0, side: THREE.DoubleSide });
     mat.toneMapped = false;
+    // [TRAFFIC-V1] la nuit: eclairage public au sodium (flaques de lampadaires ~ tous les 32 m) — sinon rubans noirs
+    mat.onBeforeCompile = sh => {
+      sh.uniforms.uNight = terraUni.uNight;
+      sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nvarying vec3 vWP;')
+        .replace('#include <worldpos_vertex>', '#include <worldpos_vertex>\nvWP = (modelMatrix * vec4(transformed, 1.0)).xyz;');
+      sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nuniform float uNight; varying vec3 vWP;')
+        .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+          if (uNight > 0.02) {
+            vec2 cell = mod(vWP.xy, 32.0) - 16.0; float pool = exp(-dot(cell, cell) / 90.0);
+            totalEmissiveRadiance += vec3(1.0, 0.62, 0.30) * uNight * (0.035 + 0.26 * pool) * (0.6 + 2.0 * diffuseColor.g);
+          }`);
+    };
     if (window.__envTex) { mat.envMap = window.__envTex; mat.envMapIntensity = 0.35; }
     const prev = window.__onEnv; window.__onEnv = t => { mat.envMap = t; mat.envMapIntensity = 0.35; mat.needsUpdate = true; if (prev) prev(t); };
     const mesh = new THREE.Mesh(g, mat); mesh.castShadow = true; mesh.receiveShadow = true; mesh.name = 'roads3d';
@@ -3465,6 +3477,214 @@ window.__camScreen = name => {
   };
   // le terrain doit etre la (terrainZAt): on attend la grille de hauteur
   const wait = () => { if (window.__hgrid) build(); else setTimeout(wait, 300); };
+  wait();
+})();
+
+// ── [TRAFFIC-V1 2026-10-05] trafic anime sur le reseau V16 (couche VISUELLE, rien de mesure) ──
+// ~20 000 vehicules repartis par classe (autoroutes denses), circulation a droite, vitesse CONSTANTE par voie (pas de
+// vehicules qui se traversent), changement de troncon aux jonctions (grille des points du reseau, meme classe d'abord);
+// seuls les vehicules proches de la camera recoivent une matrice. La nuit: phares a l'avant, feux rouges a l'arriere
+// (emissifs HDR -> bloom du rendu cinematique).
+(() => {
+  const chip = document.getElementById('ly-traffic');
+  let on = localStorage.getItem('ui.traffic3d') !== '0', cars = null, trucks = null;
+  const sync = () => { chip.classList.toggle('on', on); if (cars) { cars.visible = on; trucks.visible = on; } };   // les feux suivent dans __trafficStep
+  chip.addEventListener('click', () => { on = !on; try { localStorage.setItem('ui.traffic3d', on ? '1' : '0'); } catch (e) {} sync(); });
+  sync();
+  const rnd = k => { const x = Math.sin(k * 12.9898 + 4.1) * 43758.5453; return x - Math.floor(x); };
+  // geometrie (metres, avant = +x, sol = z 0): bas de caisse, caisse, cabine vitree effilee, phares/feux (attribut glow 1/2)
+  function vehGeo(kind) {
+    const P = [], C = [], G = [];
+    const box = (x0, x1, y0, y1, z0, z1, col, top = null) => {
+      const t = top || [x0, x1, y0, y1];
+      const v = [[x0, y0, z0], [x1, y0, z0], [x1, y1, z0], [x0, y1, z0], [t[0], t[2], z1], [t[1], t[2], z1], [t[1], t[3], z1], [t[0], t[3], z1]];
+      for (const f of [[0, 1, 5, 4], [1, 2, 6, 5], [2, 3, 7, 6], [3, 0, 4, 7], [4, 5, 6, 7]]) {
+        const [a, b, c, d] = f.map(q => v[q]), cc = typeof col === 'function' ? col(f) : col;
+        P.push(...a, ...b, ...c, ...a, ...c, ...d); for (let q = 0; q < 6; q++) { C.push(...cc); G.push(0); }
+      }
+    };
+    const lamp = (x, y0, y1, z0, z1, col, glow) => {
+      const a = [x, y0, z0], b = [x, y1, z0], c = [x, y1, z1], d = [x, y0, z1];
+      if (x > 0) P.push(...a, ...b, ...c, ...a, ...c, ...d); else P.push(...a, ...c, ...b, ...a, ...d, ...c);
+      for (let q = 0; q < 6; q++) { C.push(...col); G.push(glow); }
+    };
+    const BODY = [1, 1, 1], DARK = [0.05, 0.05, 0.06], GLASS = [0.09, 0.11, 0.14], LAMP = [0.9, 0.9, 0.86], TAIL = [0.45, 0.04, 0.03];
+    if (kind === 'car') {
+      box(-2.15, 2.15, -0.86, 0.86, 0.05, 0.34, DARK);
+      box(-2.25, 2.25, -0.9, 0.9, 0.34, 0.92, BODY);
+      box(-1.25, 0.85, -0.82, 0.82, 0.92, 1.42, f => f[0] === 4 ? BODY : GLASS, [-1.0, 0.45, -0.70, 0.70]);
+      lamp(2.252, 0.5, 0.82, 0.62, 0.78, LAMP, 1); lamp(2.252, -0.82, -0.5, 0.62, 0.78, LAMP, 1);
+      lamp(-2.252, 0.52, 0.84, 0.64, 0.80, TAIL, 2); lamp(-2.252, -0.84, -0.52, 0.64, 0.80, TAIL, 2);
+    } else {                                                            // semi-remorque: tracteur teinte + remorque claire
+      box(-6.8, 5.6, -1.2, 1.2, 0.05, 0.6, DARK);
+      box(3.4, 5.9, -1.25, 1.25, 0.6, 3.0, BODY);
+      box(5.0, 5.92, -1.15, 1.15, 1.9, 2.8, GLASS);
+      box(-7.0, 3.2, -1.3, 1.3, 1.1, 4.0, [0.92, 0.92, 0.9]);
+      lamp(5.93, 0.75, 1.15, 0.8, 1.0, LAMP, 1); lamp(5.93, -1.15, -0.75, 0.8, 1.0, LAMP, 1);
+      lamp(-7.01, 0.9, 1.25, 1.2, 1.45, TAIL, 2); lamp(-7.01, -1.25, -0.9, 1.2, 1.45, TAIL, 2);
+    }
+    const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3));
+    g.setAttribute('color', new THREE.Float32BufferAttribute(C, 3));
+    g.setAttribute('glow', new THREE.Float32BufferAttribute(G, 1));
+    g.computeVertexNormals();
+    return g;
+  }
+  function mkMat() {
+    const m = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.38, metalness: 0.2 });
+    m.toneMapped = false;
+    if (window.__envTex) { m.envMap = window.__envTex; m.envMapIntensity = 0.7; }
+    const prev = window.__onEnv; window.__onEnv = t => { m.envMap = t; m.envMapIntensity = 0.7; m.needsUpdate = true; if (prev) prev(t); };
+    m.onBeforeCompile = sh => {
+      sh.uniforms.uNight = terraUni.uNight;
+      sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float glow; varying float vGlow;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvGlow = glow;');
+      sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nuniform float uNight; varying float vGlow;')
+        .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
+          if (vGlow > 0.5 && vGlow < 1.5) { diffuseColor.rgb = vec3(0.85); totalEmissiveRadiance += vec3(1.0, 0.92, 0.75) * 9.0 * uNight; }
+          if (vGlow > 1.5) { diffuseColor.rgb = vec3(0.35, 0.02, 0.02); totalEmissiveRadiance += vec3(1.0, 0.05, 0.02) * (0.25 + 5.0 * uNight); }`);
+    };
+    return m;
+  }
+  function build(R) {
+    const gz = (x, y) => { const z = terrainZAt(x, y); return z === null ? 0 : z; };
+    const CL = {   // dens = vehicules par metre et par voie-sens; v = [voie lente, voie rapide] m/s
+      hwy: { lift: 0.38, v: [24, 32], dens: 1 / 80, deck: true, minW: 8, truck: 0.12 },
+      road: { lift: 0.34, v: [10, 15], dens: 1 / 200, deck: true, minW: 6, truck: 0.03 },
+      small: { lift: 0.30, v: [6, 9], dens: 1 / 300, deck: false, minW: 4, truck: 0 },
+    };
+    const paths = [];
+    for (const k of ['hwy', 'road', 'small']) for (const r of R[k] || []) {
+      const p = r.p, n = p.length; if (n < 2) continue; const c = CL[k];
+      const X = new Float32Array(n), Y = new Float32Array(n), Z = new Float32Array(n), S = new Float32Array(n);
+      let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+      for (let i = 0; i < n; i++) {
+        const [x, y, z] = p[i], g = gz(x, y), el = c.deck && z - Math.max(g, 0) > 2.5;   // meme regle que les rubans (ROADS-V1)
+        X[i] = x; Y[i] = y; Z[i] = el ? z : Math.max(g, 0) + c.lift;
+        if (i) S[i] = S[i - 1] + Math.hypot(x - X[i - 1], y - Y[i - 1]);
+        x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y);
+      }
+      if (S[n - 1] < 20) continue;
+      const w = Math.max(c.minW, r.w), nl = Math.max(1, Math.min(4, Math.round(w / 2 / 3.6)));
+      paths.push({ k, c, X, Y, Z, S, L: S[n - 1], nl, laneW: w / 2 / nl, bb: [x0, y0, x1, y1], id: paths.length });
+    }
+    // jonctions: grille 16 m de tous les points du reseau; aux deux bouts de chaque troncon, les points d'autres troncons a < 12 m
+    const CELL = 16, grid = new Map(), key = (ix, iy) => ix * 131071 + iy;
+    paths.forEach((p, pi) => { for (let i = 0; i < p.S.length; i++) { const kk = key(Math.floor(p.X[i] / CELL), Math.floor(p.Y[i] / CELL)); let a = grid.get(kk); if (!a) grid.set(kk, a = []); a.push(pi, i); } });
+    const ends = paths.map((p, pi) => [0, p.S.length - 1].map(ei => {
+      const ex = p.X[ei], ey = p.Y[ei], ix = Math.floor(ex / CELL), iy = Math.floor(ey / CELL), best = new Map();
+      for (let dx = -1; dx <= 1; dx++) for (let dy = -1; dy <= 1; dy++) {
+        const a = grid.get(key(ix + dx, iy + dy)); if (!a) continue;
+        for (let q = 0; q < a.length; q += 2) {
+          const pj = a[q], j = a[q + 1]; if (pj === pi && Math.abs(j - ei) < 4) continue;
+          const d = Math.hypot(paths[pj].X[j] - ex, paths[pj].Y[j] - ey); if (d > 12) continue;
+          const b = best.get(pj); if (!b || d < b[1]) best.set(pj, [j, d]);
+        }
+      }
+      const all = [...best].map(([pj, [j]]) => [pj, j]), same = all.filter(([pj]) => paths[pj].k === p.k);
+      return same.length ? same : all;
+    }));
+    const laneV = (pi, lane, d) => { const p = paths[pi], c = p.c, f = p.nl > 1 ? lane / (p.nl - 1) : 0.5; return (c.v[1] - (c.v[1] - c.v[0]) * f) * (0.92 + 0.16 * rnd(pi * 7 + lane * 3 + (d > 0 ? 1 : 0))); };
+    // vehicules: places en creneaux reguliers (avec jitter) par troncon/sens/voie -> jamais deux au meme endroit
+    const PA = [], SA = [], DA = [], LA = [], TY = [], COL = [];
+    const PAL = [['#f2f2ef', 25], ['#b9bcc0', 18], ['#5c6066', 14], ['#17181a', 17], ['#9a1c1f', 7], ['#21407a', 7], ['#1b2a44', 4], ['#c9b58e', 3], ['#2f4a3a', 2], ['#e8b923', 2], ['#d06a2a', 1]];
+    const palSum = PAL.reduce((s, q) => s + q[1], 0), tmpC = new THREE.Color();
+    const pickCol = (u, truck) => { if (truck && u < 0.6) u = 0; let a = u * palSum; for (const [h, wgt] of PAL) { if ((a -= wgt) < 0) { tmpC.set(h); return [tmpC.r, tmpC.g, tmpC.b]; } } tmpC.set(PAL[0][0]); return [tmpC.r, tmpC.g, tmpC.b]; };
+    let seed = 1;
+    for (const p of paths) for (const d of [1, -1]) for (let lane = 0; lane < p.nl; lane++) {
+      const m = Math.floor(p.L * p.c.dens + rnd(seed++));
+      for (let j = 0; j < m; j++) {
+        const truck = rnd(seed++) < p.c.truck * (lane === p.nl - 1 ? 2 : 0.4);
+        PA.push(p.id); SA.push(Math.min(p.L - 0.1, Math.max(0.1, (j + 0.5 + 0.5 * (rnd(seed++) - 0.5)) * p.L / m)));
+        DA.push(d); LA.push(lane); TY.push(truck ? 1 : 0); COL.push(...pickCol(rnd(seed++), truck));
+        if (PA.length >= 24000) break;
+      }
+    }
+    const N = PA.length;
+    const pa = Int32Array.from(PA), sa = Float32Array.from(SA), da = Int8Array.from(DA), la = Int8Array.from(LA), ty = Uint8Array.from(TY);
+    const va = new Float32Array(N), ka = new Int32Array(N), col = Float32Array.from(COL);
+    for (let i = 0; i < N; i++) va[i] = laneV(pa[i], la[i], da[i]);
+    const nT = TY.reduce((s, v) => s + v, 0);
+    const mat = mkMat();
+    cars = new THREE.InstancedMesh(vehGeo('car'), mat, Math.max(1, N - nT));
+    trucks = new THREE.InstancedMesh(vehGeo('truck'), mat, Math.max(1, nT));
+    for (const im of [cars, trucks]) {
+      im.instanceMatrix.setUsage(THREE.DynamicDrawUsage); im.setColorAt(0, tmpC.setRGB(1, 1, 1)); im.instanceColor.setUsage(THREE.DynamicDrawUsage);
+      im.count = 0; im.frustumCulled = false; im.castShadow = true; layers.terrain.add(im);
+    }
+    cars.name = 'traffic-cars'; trucks.name = 'traffic-trucks';
+    // la nuit: un point lumineux par phare/feu (taille au sol ~2.4 m, jamais < 2 px) -> rubans de lumiere vus de loin
+    const LP = new Float32Array(N * 6), LC = new Float32Array(N * 6);
+    const lg = new THREE.BufferGeometry();
+    lg.setAttribute('position', new THREE.BufferAttribute(LP, 3).setUsage(THREE.DynamicDrawUsage));
+    lg.setAttribute('color', new THREE.BufferAttribute(LC, 3).setUsage(THREE.DynamicDrawUsage));
+    lg.setDrawRange(0, 0);
+    const spr = (() => { const cv = document.createElement('canvas'); cv.width = cv.height = 64; const x = cv.getContext('2d');
+      const gr = x.createRadialGradient(32, 32, 0, 32, 32, 32); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.25, 'rgba(255,255,255,0.75)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+      x.fillStyle = gr; x.fillRect(0, 0, 64, 64); return new THREE.CanvasTexture(cv); })();
+    const lmat = new THREE.PointsMaterial({ size: 3.0, map: spr, vertexColors: true, transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, sizeAttenuation: true });
+    lmat.toneMapped = false;
+    lmat.onBeforeCompile = sh => { sh.vertexShader = sh.vertexShader.replace('#include <logdepthbuf_vertex>', 'gl_PointSize = clamp(gl_PointSize, 2.6, 20.0);\n#include <logdepthbuf_vertex>'); };
+    const lights = new THREE.Points(lg, lmat); lights.frustumCulled = false; lights.name = 'traffic-lights'; layers.terrain.add(lights);
+    const jump = (i, s) => {
+      const p = paths[pa[i]], atEnd = s > p.L, Cn = ends[pa[i]][atEnd ? 1 : 0];
+      if (!Cn.length) { da[i] = -da[i]; sa[i] = atEnd ? p.L - 0.5 : 0.5; va[i] = laneV(pa[i], la[i], da[i]); return; }   // cul-de-sac: demi-tour
+      const [pj, j] = Cn[(Math.random() * Cn.length) | 0], q = paths[pj];
+      const d = j === 0 ? 1 : j === q.S.length - 1 ? -1 : (Math.random() < 0.5 ? 1 : -1);
+      pa[i] = pj; ka[i] = Math.min(j, q.S.length - 2); da[i] = d; la[i] = Math.min(la[i], q.nl - 1);
+      sa[i] = Math.min(q.L, Math.max(0, q.S[j] + d * 0.5)); va[i] = laneV(pj, la[i], d);
+    };
+    window.__trafficStep = dt => {
+      lights.visible = on && terraUni.uNight.value > 0.03;
+      if (!on) return;
+      const night = lights.visible ? terraUni.uNight.value : 0; let nl = 0;
+      const cx = camera.position.x, cy = camera.position.y;
+      const Rv = Math.min(9000, Math.max(2500, 3 * camera.position.distanceTo(controls.target))), R2 = Rv * Rv;
+      const MC = cars.instanceMatrix.array, MT = trucks.instanceMatrix.array, CC = cars.instanceColor.array, CT = trucks.instanceColor.array;
+      let nc = 0, nt = 0;
+      for (let i = 0; i < N; i++) {
+        let s = sa[i] + da[i] * va[i] * dt;
+        if (s > paths[pa[i]].L || s < 0) { jump(i, s); s = sa[i]; } else sa[i] = s;
+        const p = paths[pa[i]], b = p.bb;
+        const ddx = cx < b[0] ? b[0] - cx : cx > b[2] ? cx - b[2] : 0, ddy = cy < b[1] ? b[1] - cy : cy > b[3] ? cy - b[3] : 0;
+        if (ddx * ddx + ddy * ddy > R2) continue;
+        const S = p.S, last = S.length - 2; let k = ka[i];
+        while (k < last && S[k + 1] < s) k++;
+        while (k > 0 && S[k] > s) k--;
+        ka[i] = k;
+        const seg = (S[k + 1] - S[k]) || 1, t = (s - S[k]) / seg;
+        const dx = p.X[k + 1] - p.X[k], dy = p.Y[k + 1] - p.Y[k], dz = p.Z[k + 1] - p.Z[k];
+        const d = da[i], ux = dx / seg * d, uy = dy / seg * d, off = (la[i] + 0.5) * p.laneW * 0.9;
+        const px = p.X[k] + dx * t + uy * off, py = p.Y[k] + dy * t - ux * off, pz = p.Z[k] + dz * t;
+        if ((px - cx) * (px - cx) + (py - cy) * (py - cy) > R2) continue;
+        const sp = dz * d / Math.hypot(seg, dz), cp = Math.sqrt(1 - sp * sp);
+        const truck = ty[i], M = truck ? MT : MC, o = (truck ? nt : nc) * 16;
+        M[o] = ux * cp; M[o + 1] = uy * cp; M[o + 2] = sp; M[o + 3] = 0;
+        M[o + 4] = -uy; M[o + 5] = ux; M[o + 6] = 0; M[o + 7] = 0;
+        M[o + 8] = -ux * sp; M[o + 9] = -uy * sp; M[o + 10] = cp; M[o + 11] = 0;
+        M[o + 12] = px; M[o + 13] = py; M[o + 14] = pz; M[o + 15] = 1;
+        const Ca = truck ? CT : CC, oc = (truck ? nt : nc) * 3;
+        Ca[oc] = col[3 * i]; Ca[oc + 1] = col[3 * i + 1]; Ca[oc + 2] = col[3 * i + 2];
+        if (truck) nt++; else nc++;
+        if (night) {
+          const hl = truck ? 5.9 : 2.3, tl = truck ? 7.0 : 2.3, hz = pz + (truck ? 0.9 : 0.7), o3 = nl * 3;
+          LP[o3] = px + ux * hl; LP[o3 + 1] = py + uy * hl; LP[o3 + 2] = hz;
+          LC[o3] = 3.2 * night; LC[o3 + 1] = 2.9 * night; LC[o3 + 2] = 2.3 * night;
+          LP[o3 + 3] = px - ux * tl; LP[o3 + 4] = py - uy * tl; LP[o3 + 5] = hz;
+          LC[o3 + 3] = 2.6 * night; LC[o3 + 4] = 0.12 * night; LC[o3 + 5] = 0.06 * night;
+          nl += 2;
+        }
+      }
+      lg.setDrawRange(0, nl); if (nl) { lg.attributes.position.needsUpdate = true; lg.attributes.color.needsUpdate = true; }
+      cars.count = nc; trucks.count = nt;
+      cars.instanceMatrix.needsUpdate = trucks.instanceMatrix.needsUpdate = true;
+      cars.instanceColor.needsUpdate = trucks.instanceColor.needsUpdate = true;
+    };
+    sync();
+    window.__traffic = { N, trucks: nT, paths: paths.length };
+    console.log('[TRAFFIC-V1]', N, 'vehicles,', nT, 'trucks on', paths.length, 'road paths');
+  }
+  const wait = () => { if (window.__hgrid && window.__roadsData) build(window.__roadsData); else setTimeout(wait, 400); };
   wait();
 })();
 
@@ -3764,6 +3984,7 @@ renderer.setAnimationLoop(() => {
   if (!povPrev && !window.__tourOn) camSanity();                    // [ZOOM-IN-CAP] jamais la camera au ras de la cible / sous le sol
   nanGuard();                                   // [NAN-GUARD] jamais un rendu avec une camera NaN
   if (window.__solidsTick) window.__solidsTick(); // [SOLIDS-V1] ombre qui suit la vue
+  if (window.__trafficStep) window.__trafficStep(_dt);   // [TRAFFIC-V1]
   Cine.render();                                  // [CINEMA-V1]
 });
 </script>
