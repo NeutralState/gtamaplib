@@ -4,10 +4,9 @@
 Couche VISUELLE de l'onglet 3D (pas un produit mesh: hauteurs ESTIMEES, rien n'est ecrit dans
 building_meshes_procedural.json). Emprises = gtamapdata/v16_footprints.json, categories building* (4 couleurs V16);
 les emprises deja couvertes par un mesh modelise (volumes de tools/mesh_solids.py) sont ignorees.
-Hauteur estimee (hash deterministe par emprise): selon la surface et le quartier
-  - coeur Downtown/Brickell: 400-3000 m2 -> 18-70 m, > 3000 m2 -> 12-30 m
-  - Vice Beach: 300-3000 m2 -> 10-34 m
-  - ailleurs: < 150 m2 maisons 4.5-7 m, 150-700 m2 6-12 m, 700-3000 m2 8-18 m, > 3000 m2 entrepots/centres 7-13 m
+Hauteur [MASSING-V2]: BASSE partout, rien d'invente en hauteur: < 150 m2 maisons 4.5-7 m, sinon 6-9 m (1-2 niveaux).
+Un batiment haut n'existe que s'il est un mesh MESURE (les anciennes regles Downtown 18-70 m / Vice Beach 10-34 m faisaient
+des tours de fiction: amphitheatre de Bayfront Park devenu une tour).
 Sol = heightmap (v16_resect.ground). Sortie servie sans redemarrage: tools/threejs/_v16_massing.json (ignore par git).
 Usage: python3 tools/v16_massing.py
 """
@@ -76,12 +75,10 @@ def main():
         a, r1, r2 = p['area'], hsh(i, 1), hsh(i, 2)
         core = -1250 < cx < 350 and -1350 < cy < 1250
         beach = 1250 < cx < 2700 and -200 < cy < 4300
-        if core and a > 400: h = (18 + 52 * r1 ** 1.6) if a < 3000 else 12 + 18 * r1
-        elif beach and a > 300 and a < 3000: h = 10 + 24 * r1 ** 1.4
-        elif a < 150: h = 4.5 + 2.5 * r1
-        elif a < 700: h = 6 + 6 * r1
-        elif a < 3000: h = 8 + 10 * r1
-        else: h = 7 + 6 * r1
+        # [MASSING-V2 2026-10-05] Alexandre: « des footprints rendus grands pour aucune raison (un amphitheatre devenu une tour) »
+        # -> plus AUCUNE hauteur inventee de tour: le remplissage reste BAS partout (1-2 niveaux); seuls les meshes MESURES sont hauts
+        if a < 150: h = 4.5 + 2.5 * r1
+        else: h = 6.0 + 3.0 * r1
         try: z = max(0.0, float(RR.ground(cx, cy)))
         except Exception: z = 0.0
         out.append({'o': [[round(float(x), 1), round(float(y), 1)] for x, y in R], 'z': round(z, 2), 'h': round(h, 1), 'k': int(r2 * 1000)})

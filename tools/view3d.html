@@ -1158,9 +1158,8 @@ const data = await (await fetch('/api/scene3d')).json();
                 float grs = 0.80 + 0.30 * n1 * fF + 0.24 * (n2 - 0.5) * fM + 0.20 * (n3 - 0.5);
                 float rip = sin(dot(q, vec2(0.9, 0.42)) * 3.0 + n2 * 4.0) * 0.5 + 0.5;
                 float snd = 0.96 + 0.06 * rip * fF + 0.06 * (n2 - 0.5) * fM;
-                float kk = mix(1.0, asph, wR); kk = mix(kk, pave, wU); kk = mix(kk, grs, max(wG, wP)); kk = mix(kk, snd, wS);
+                float kk = mix(1.0, asph, wR); kk = mix(kk, pave, wU); kk = mix(kk, snd, wS);   // gazon: inchange (vert d'origine)
                 base *= kk;
-                base = mix(base, base * vec3(1.18, 1.06, 0.72), wG * smoothstep(0.58, 0.75, n3) * 0.45);   // plaques d'herbe seche
               }
               // [WATER-COLOR-V1] eau de la carte (bleu dominant) -> couleur de l'eau du JEU mesuree: rives et lacs interieurs
               if (uWaterOn > 0.5) {
@@ -4313,7 +4312,7 @@ const Refl = (() => {
 window.__refl = Refl;
 window.__gcolP.then(G => {                                   // [GROUND-COLOR-V1]
   if (!G) return; const S = G.seg || {}, F = G.foliage || {}, set = (u, srgb, sat) => { if (srgb) u.value.fromArray(gameTint(u.value.toArray(), srgb, sat)); };
-  set(terraUni.uGSand, S.sand && S.sand.rgb, 0.8); set(terraUni.uGGrass, S.grass && S.grass.rgb); set(terraUni.uGPark, F.tree && F.tree.rgb);
+  set(terraUni.uGSand, S.sand && S.sand.rgb, 0.8); /* gazon et parcs: on garde le vert d'origine (Alexandre: « le terrain vert est degueux, c'etait tellement plus beau avant ») */
   set(terraUni.uGUrban, S.sidewalk && S.sidewalk.rgb, 0.35); set(terraUni.uGRoad, S.road && S.road.rgb, 0.35);
 });
 // [WATER-COLOR-V1] champ de couleur de l'eau mesure sur les frames (tools/water_colors.py -> _water_colors.json)
