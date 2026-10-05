@@ -54,35 +54,26 @@ def main():
     stage = max(rest, key=lambda t: area(t[1]))                               # la plus grande emprise compacte
     wedges = [t for t in rest if t[0] != stage[0]]
     sc = stage[1].mean(0); zg = float(min(t[2] for t in zone))
-    # gradins [BAYSIDE-V2, Alexandre: « l'amphitheatre devrait aller jusqu'a la demi-lune grise et pas etre aussi steep »]:
-    # secteur = etendue angulaire de la demi-lune (bande V16 958) vue depuis la scene; du bord des coins V16 jusqu'a 2 m
-    # devant le bord interieur de la demi-lune; rangees de 0.9 m (la pente est appliquee au rendu, douce)
-    A0 = arc[1]
-    tha = np.arctan2(A0[:, 1] - sc[1], A0[:, 0] - sc[0]); thm = math.atan2(np.mean(np.sin(tha)), np.mean(np.cos(tha)))
-    dd = np.angle(np.exp(1j * (tha - thm))); tlo, thi = dd.min(), dd.max()
-    def ray_hit(a):                                                            # distance du centre au bord de la demi-lune
-        ux, uy = math.cos(a), math.sin(a); best = None
-        for i in range(len(A0)):
-            (x1, y1), (x2, y2) = A0[i], A0[(i + 1) % len(A0)]
-            ex, ey = x2 - x1, y2 - y1; den = ux * ey - uy * ex
-            if abs(den) < 1e-9: continue
-            t = ((x1 - sc[0]) * ey - (y1 - sc[1]) * ex) / den; u = ((x1 - sc[0]) * uy - (y1 - sc[1]) * ux) / den
-            if t > 0 and 0 <= u <= 1 and (best is None or t < best): best = t
-        return best
+    # gradins [BAYSIDE-V3, compare a la frame Vice City 11 (Megamundo)]: fer a cheval COMPACT = les coins V16 (deux couronnes
+    # = deux niveaux separes par une allee circulaire), PAS jusqu'a la promenade (une pelouse les separe dans le jeu);
+    # trous angulaires entre coins combles, allee a la frontiere des deux couronnes
+    allw = np.concatenate([O for _, O, _ in wedges]); rw = np.hypot(*(allw - sc).T)
+    thw = np.arctan2(allw[:, 1] - sc[1], allw[:, 0] - sc[0]); thm = math.atan2(np.mean(np.sin(thw)), np.mean(np.cos(thw)))
+    dw = np.angle(np.exp(1j * (thw - thm))); tlo, thi = dw.min(), dw.max()
+    r0, r1 = float(rw.min()), float(rw.max())
+    inner_out = [float(np.hypot(*(O - sc).T).max()) for _, O, _ in wedges]; ring_split = float(np.median(inner_out))
+    aisle = (ring_split - 0.9, ring_split + 0.9) if r0 + 4 < ring_split < r1 - 4 else (1e9, 1e9)
     seats = []
-    allr = [np.hypot(*(O - sc).T) for _, O, _ in wedges]
-    r0 = min(r.min() for r in allr)
-    allw = np.concatenate([O for _, O, _ in wedges]); dw = np.angle(np.exp(1j * (np.arctan2(allw[:, 1] - sc[1], allw[:, 0] - sc[0]) - thm)))
-    ulo, uhi = min(tlo, dw.min()), max(thi, dw.max())                        # union: secteur de la demi-lune + coins V16
-    k = 0; r = r0 + 0.45; rmax_all = max([(ray_hit(thm + t) or 0) for t in np.linspace(tlo, thi, 40)] + [max(r.max() for r in allr)])
-    while r < rmax_all:
-        step = 0.95 / r
-        for t in np.arange(ulo, uhi, step):
-            a = thm + t; x, y = sc[0] + r * math.cos(a), sc[1] + r * math.sin(a)
-            rh = ray_hit(a) if tlo <= t <= thi else None
-            if not ((rh is not None and r <= rh - 2.0) or any(inpoly(x, y, O) for _, O, _ in wedges)): continue
-            seats.append([round(x, 2), round(y, 2), round(a, 4), k])
+    k = 0; r = r0 + 0.45
+    while r < r1:
+        if not (aisle[0] <= r <= aisle[1]):
+            step = 0.95 / r
+            for t in np.arange(tlo, thi, step):
+                a = thm + t
+                seats.append([round(sc[0] + r * math.cos(a), 2), round(sc[1] + r * math.sin(a), 2), round(a, 4), k])
         r += 0.9; k += 1
+    bowl = {'c': [round(float(sc[0]), 2), round(float(sc[1]), 2)], 'th0': round(float(thm + tlo), 4), 'th1': round(float(thm + thi), 4),
+            'r0': round(r0, 2), 'r1': round(r1, 2), 'rows': k}
     # promenade: ligne mediane de la bande = anneau (rayon moyen) borne par les angles de la bande
     A = arc[1]
     # cercle ajuste sur la bande (moindres carres) — la promenade n'est pas forcement centree sur la scene
@@ -126,7 +117,7 @@ def main():
         L = 9 + 11 * rng.random()
         boats.append([round(x, 2), round(y, 2), round(ang, 3), round(L, 1)])
         if len(boats) > 160: break
-    out = {'stage': {'o': stage[1].round(2).tolist(), 'z': zg}, 'seats': seats, 'seat_z': zg,
+    out = {'stage': {'o': stage[1].round(2).tolist(), 'z': zg}, 'seats': seats, 'seat_z': zg, 'bowl': bowl,
            'arc': {'o': A.round(2).tolist(), 'sails': sails, 'width': round(2 * half, 1)},
            'piers': piers, 'boats': boats, 'replace': [t[0] for t in zone],
            '_src': 'plan V16 (emprises 948-958 + pontons), aspect = frames (Megamundo, amphitheatre au sol); bateaux ESTIMES'}

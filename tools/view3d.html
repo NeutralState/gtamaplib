@@ -4109,24 +4109,39 @@ window.__camScreen = name => {
       const st = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), stdMat(0xb9b6ae, 0.85, 0.0, 0.6), B.seats.length);
       const bk = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), stdMat(0x2f62c8, 0.45, 0.1, 0.6), B.seats.length);
       B.seats.forEach(([x, y, th, k], i) => {
-        const h = 0.09 * (k + 1) + 0.3; q.setFromAxisAngle(Zax, th);          // pente douce jusqu'a la demi-lune (Alexandre)
+        const h = 0.16 * (k + 1) + 0.2; q.setFromAxisAngle(Zax, th);          // fer a cheval, pente douce (~5 m au dernier rang)
         m4.compose(new V3(x, y, B.seat_z + h / 2), q, sc3.set(0.9, 0.97, h)); st.setMatrixAt(i, m4);
         const bx = x + Math.cos(th) * 0.3, by = y + Math.sin(th) * 0.3;
         m4.compose(new V3(bx, by, B.seat_z + h + 0.28), q, sc3.set(0.12, 0.9, 0.5)); bk.setMatrixAt(i, m4);
       });
       st.castShadow = st.receiveShadow = true; bk.castShadow = true; grp.add(st); grp.add(bk);
+      // pourtour du bol (frame Megamundo): promenade grise en haut des gradins + talus engazonne jusqu'a la pelouse (pas de mur)
+      if (B.bowl) {
+        const bw = B.bowl, zT = B.seat_z + 0.16 * bw.rows + 0.2, zb = B.seat_z, Pc = [], Pg = [], N = 64;
+        const at = (r, a, z) => [bw.c[0] + r * Math.cos(a), bw.c[1] + r * Math.sin(a), z];
+        for (let i = 0; i < N; i++) {
+          const a0 = bw.th0 + (bw.th1 - bw.th0) * i / N, a1 = bw.th0 + (bw.th1 - bw.th0) * (i + 1) / N;
+          const q4 = (A, r0_, z0_, r1_, z1_) => A.push(...at(r0_, a0, z0_), ...at(r1_, a0, z1_), ...at(r1_, a1, z1_), ...at(r0_, a0, z0_), ...at(r1_, a1, z1_), ...at(r0_, a1, z0_));
+          q4(Pc, bw.r1, zT, bw.r1 + 4.5, zT);
+          q4(Pg, bw.r1 + 4.5, zT, bw.r1 + 4.5 + (zT - zb) * 2.6, zb);
+        }
+        const mk2 = (P3, mat) => { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(P3, 3)); g.computeVertexNormals(); mat.side = THREE.DoubleSide; add(g, mat); };
+        mk2(Pc, stdMat(0xc4c1ba, 0.85, 0.0, 0.6)); mk2(Pg, stdMat(0x5f9440, 0.95, 0.0, 0.4));
+      }
     }
     // scene: plateau, cage de scene noire (cote oppose aux gradins), toiture en treillis blanc sur pieds obliques
     if (B.stage) {
       const O = B.stage.o, z0 = B.stage.z; let cx = 0, cy = 0; for (const p of O) { cx += p[0]; cy += p[1]; } cx /= O.length; cy /= O.length;
       let sx = 0, sy = 0; for (const s0 of B.seats) { sx += s0[0]; sy += s0[1]; } sx /= B.seats.length; sy /= B.seats.length;
       const dl = Math.hypot(cx - sx, cy - sy) || 1, dx = (cx - sx) / dl, dy = (cy - sy) / dl, ang = Math.atan2(dy, dx);
-      const plat = new THREE.ExtrudeGeometry(new THREE.Shape(O.map(p => new THREE.Vector2(p[0], p[1]))), { depth: 1.4, bevelEnabled: false }); plat.translate(0, 0, z0);
-      add(plat, stdMat(0x2c2d30, 0.7, 0.1, 0.4));
-      const house = new THREE.BoxGeometry(6, 13, 8); house.rotateZ(ang); house.translate(cx + dx * 8, cy + dy * 8, z0 + 1.4 + 4); add(house, stdMat(0x1b1c1f, 0.6, 0.2, 0.4));
+      // cage de scene = l'emprise V16 (carre ~20 m), boite gris clair a toit plat (frame Megamundo); scene ronde devant, cote gradins
+      const house = new THREE.ExtrudeGeometry(new THREE.Shape(O.map(p => new THREE.Vector2(p[0], p[1]))), { depth: 11, bevelEnabled: false }); house.translate(0, 0, z0);
+      add(house, stdMat(0xc9c6bf, 0.8, 0.05, 0.6));
+      const ps = new THREE.CylinderGeometry(6, 6, 1.3, 40, 1); ps.rotateX(Math.PI / 2); ps.translate(cx - dx * 8, cy - dy * 8, z0 + 0.65); add(ps, stdMat(0x2a2b2e, 0.6, 0.1, 0.4));
+      const fr = new THREE.BoxGeometry(0.6, 16, 8); fr.rotateZ(ang); fr.translate(cx - dx * 2.5, cy - dy * 2.5, z0 + 1.3 + 4); add(fr, stdMat(0x18191b, 0.5, 0.2, 0.4));   // fond de scene noir
       // treillis spatial: 2 nappes (16 et 18 m) en grille de 3 m + montants, 32 x 26 m, oriente sur l'axe scene/gradins
-      const beams = [], W2 = 12, D2 = 9, zA = z0 + 14, zB = z0 + 15.6, ux = dx, uy = dy, vx = -dy, vy = dx;
-      const P = (u, v, z) => [cx + dx * 5 + ux * u + vx * v, cy + dy * 5 + uy * u + vy * v, z];   // au-dessus de la scene, pas des gradins
+      const beams = [], W2 = 11, D2 = 7, zA = z0 + 13, zB = z0 + 14.5, ux = dx, uy = dy, vx = -dy, vy = dx;
+      const P = (u, v, z) => [cx - dx * 6 + ux * u + vx * v, cy - dy * 6 + uy * u + vy * v, z];    // au-dessus de la scene ronde
       for (let u = -D2; u <= D2 + 0.01; u += 3) { beams.push([P(u, -W2, zA), P(u, W2, zA)], [P(u, -W2, zB), P(u, W2, zB)]); }
       for (let v = -W2; v <= W2 + 0.01; v += 3) { beams.push([P(-D2, v, zA), P(D2, v, zA)], [P(-D2, v, zB), P(D2, v, zB)]); }
       for (let u = -D2; u <= D2 + 0.01; u += 6) for (let v = -W2; v <= W2 + 0.01; v += 6) beams.push([P(u, v, zA), P(u + 3, v + 3, zB)]);
@@ -4141,12 +4156,10 @@ window.__camScreen = name => {
     // promenade couverte: voiles blanches en selle sur poteaux, le long de la bande courbe V16
     if (B.arc && B.arc.sails && B.arc.sails.length) {
       // promenade haute: la bande V16 devient un deck a la hauteur du dernier rang (les gradins s'y raccordent)
-      const kmax = B.seats.reduce((m2, s0) => Math.max(m2, s0[3]), 0), zTop = B.seat_z + 0.09 * (kmax + 1) + 0.3;
-      { const dg = new THREE.ExtrudeGeometry(new THREE.Shape(B.arc.o.map(p => new THREE.Vector2(p[0], p[1]))), { depth: zTop - B.seat_z, bevelEnabled: false }); dg.translate(0, 0, B.seat_z); add(dg, stdMat(0xcfcbc2, 0.85, 0.0, 0.6)); }
-      const P2 = [], posts = [], wv = Math.max(4, Math.min(8, B.arc.width || 6)), z0 = zTop;
+      const P2 = [], posts = [], wv = Math.max(4, Math.min(8, B.arc.width || 6)), z0 = (B.stage && B.stage.z) || 3;   // au sol, separee du bol par la pelouse
       for (const [x, y, a] of B.arc.sails) {
-        const tx = -Math.sin(a), ty = Math.cos(a), rx = Math.cos(a), ry = Math.sin(a), L = 3.4, Wd = 3.2, N = 6;
-        const pt = (s2, w) => [x + tx * s2 * L + rx * w * Wd, y + ty * s2 * L + ry * w * Wd, z0 + 3.4 + 1.1 * (w + 1) + 0.45 * (1 - s2 * s2)];   // panneau incline, leger creux (suite de voiles)
+        const tx = -Math.sin(a), ty = Math.cos(a), rx = Math.cos(a), ry = Math.sin(a), L = 3.6, Wd = 4.2, N = 6;
+        const pt = (s2, w) => [x + tx * s2 * L + rx * w * Wd, y + ty * s2 * L + ry * w * Wd, z0 + 4.2 + 1.5 * (w + 1) + 0.6 * (1 - s2 * s2)];   // panneau incline, leger creux (suite de voiles)
         for (let i = 0; i < N; i++) for (let j = 0; j < N; j++) {
           const s0 = -1 + 2 * i / N, s1 = -1 + 2 * (i + 1) / N, w0 = -1 + 2 * j / N, w1 = -1 + 2 * (j + 1) / N;
           P2.push(...pt(s0, w0), ...pt(s1, w0), ...pt(s1, w1), ...pt(s0, w0), ...pt(s1, w1), ...pt(s0, w1));
@@ -4156,7 +4169,7 @@ window.__camScreen = name => {
       const sg = new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.Float32BufferAttribute(P2, 3)); sg.computeVertexNormals();
       const sm = glowMat(0xf4f3ee, [1.0, 0.95, 0.88], 0.35, 0.6); sm.side = THREE.DoubleSide; add(sg, sm);
       const pi = new THREE.InstancedMesh(new THREE.CylinderGeometry(0.12, 0.15, 1, 6).rotateX(Math.PI / 2).translate(0, 0, 0.5), stdMat(0xe8e8e6, 0.4, 0.5, 0.6), posts.length);
-      posts.forEach(([x, y], i) => { m4.compose(new V3(x, y, z0), q.identity(), sc3.set(1, 1, 6.2)); pi.setMatrixAt(i, m4); }); grp.add(pi);
+      posts.forEach(([x, y], i) => { m4.compose(new V3(x, y, z0), q.identity(), sc3.set(1, 1, 7.4)); pi.setMatrixAt(i, m4); }); grp.add(pi);
     }
     // marina: pontons (pixels V16) + bateaux de plaisance amarres
     if (B.piers && B.piers.length) {
