@@ -592,7 +592,9 @@ const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)/;
 const _gLum = c => 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
 // sat < 1: materiaux neutres (dalles, asphalte) — la dominante chaude de l'etalonnage du jeu, etalee sur des km2 de ville, virait au desert
 const gameTint = (cur, srgb, sat = 1) => { if (!srgb) return cur; const m0 = srgb.map(v => Math.pow(v, 2.2)), l0 = _gLum(m0), m = m0.map(v => l0 + (v - l0) * sat), k = _gLum(cur) / Math.max(_gLum(m), 1e-4); return m.map(v => v * k); };
-window.__gcolP = fetch('/threejs/_ground_colors.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).catch(() => null)
+// DESACTIVE (Alexandre 2026-10-05: « previous colors were fun to look at »): couleurs d'origine du sol et de la vegetation;
+// window.__measuredGround = true pour retester les teintes mesurees
+window.__gcolP = fetch('/threejs/_ground_colors.json', { cache: 'no-store' }).then(r => r.ok && window.__measuredGround ? r.json() : null).catch(() => null)
   .then(G => { window.__gcolV = G; return G; });
 const terraUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uGSand:  { value: new THREE.Vector3(0.80, 0.72, 0.54) },   // [GROUND-COLOR-V1] materiaux du sol (lineaires), remplaces par les teintes mesurees
@@ -1991,7 +1993,7 @@ if (meshVerts.length) {
     envGround.material.color.setRGB(0.36 + hor[0] * 0.25, 0.37 + hor[1] * 0.25, 0.35 + hor[2] * 0.2).multiplyScalar(1 - 0.85 * night);
     const rt = pmrem.fromScene(envScene, 0.02, 1, 2000);
     if (envRT) envRT.dispose(); envRT = rt;
-    solidMat.envMap = rt.texture; solidMat.envMapIntensity = window.__envI ?? 0.24;   // [ATMOS-V1] contraste soleil/ombre plus photographique solidMat.needsUpdate = true;
+    solidMat.envMap = rt.texture; solidMat.envMapIntensity = window.__envI ?? 0.32; solidMat.needsUpdate = true;
     window.__envTex = rt.texture; if (window.__onEnv) window.__onEnv(rt.texture);
     renderer.shadowMap.needsUpdate = true;
   };
@@ -2000,7 +2002,7 @@ if (meshVerts.length) {
     const sd = sunDirVec(); const { zen, hor, sun, night } = skyColors();
     const day = Math.max(0, Math.min(1, sd.z / 0.12));
     sunLight.color.setRGB(sun[0], sun[1], sun[2]);
-    sunLight.intensity = (window.__sunI ?? 3.8) * day * (1 - night);
+    sunLight.intensity = (window.__sunI ?? 3.4) * day * (1 - night);
     hemiLight.color.setRGB(zen[0] * 0.45 + 0.34, zen[1] * 0.45 + 0.34, zen[2] * 0.45 + 0.33);
     hemiLight.groundColor.setRGB(hor[0] * 0.5 + 0.06, hor[1] * 0.46 + 0.05, hor[2] * 0.40 + 0.04);
     hemiLight.intensity = 0.15 + (window.__hemiI ?? 0.15) * (1 - night);   // [FACADES-V3] l'environnement (IBL) fournit maintenant la lumiere du ciel
@@ -2099,8 +2101,8 @@ if (meshVerts.length) {
           return { kind: 1, fac: mc.map(v => toLin(Math.min(0.85, v * 2.6 + 0.12))), gl: g, s: [1.4 + r2 * 0.7, 0.94, 0.88, 3.5 + 0.5 * r3] };
         }
         // teinte de la mesure, clarte remontee: luminance cible 0.62-0.88 (les facades de Miami sont claires)
-        const Lt = Math.min(0.82, Math.max(0.55, 0.40 + L));
-        const sat = mc.map(v => L + (v - L) * 1.05);                // [ATMOS-V1] saturation mesuree (x1.5 donnait des couleurs bonbon)
+        const Lt = Math.min(0.88, Math.max(0.62, 0.42 + L));
+        const sat = mc.map(v => L + (v - L) * 1.5);                 // couleurs vives d'origine (Alexandre: « previous colors were fun »)
         const fac = sat.map(v => toLin(Math.min(0.96, Math.max(0, v) * Lt / Math.max(L, 0.05))));
         if (kind === 1) kind = L > 0.42 ? 2 : 1;           // facade claire mesuree: plutot balcons/bandeaux que mur-rideau sombre
         const gl = kind === 1 ? mc.map(v => toLin(v * 1.2)) : kind === 2 ? [0.22, 0.28, 0.34] : TINT[5];
@@ -4461,7 +4463,7 @@ const Cine = (() => {
       U.uCamMat.value.setFromMatrix4(camera.matrixWorld); U.uCamZ.value = camera.position.z;
       U.uHor.value.copy(skyUni.uHorizon.value); U.uSunC.value.copy(skyUni.uSunColor.value); U.uSunD.value.copy(skyUni.uSunDir.value);
       const hz = (typeof ENV !== 'undefined' && ENV.haze != null) ? ENV.haze / 100 : 0.3;
-      U.uB0.value = (0.35 + 1.4 * hz) * 1e-4; U.uAtm.value = window.__atmosOff ? 0 : 1; }
+      U.uB0.value = (0.18 + 0.7 * hz) * 1e-4; U.uAtm.value = window.__atmosOff ? 0 : 1; }   // brume legere: garder les couleurs vives
     pass(finalMat, null);
   }
   const chip = document.getElementById('ly-cine');
