@@ -141,7 +141,8 @@
     <span class="lchip on" id="ly-solid" title="Solid buildings: sun-lit volumes, cast shadows, lit windows at night">Solid buildings</span>
     <span class="lchip on" id="ly-roads" title="3D roads: the whole V16 road network as real geometry (asphalt, lane markings), viaducts and bridges at their measured heights with decks, guardrails and piers">3D roads</span>
     <span class="lchip on" id="ly-fill" title="City fill: every V16 building footprint extruded (heights ESTIMATED, visual only)">City fill</span>
-    <span class="lchip on" id="ly-traffic" title="Traffic: animated cars and trucks on the V16 road network (headlights and tail lights at night) — visual only">Traffic</span>
+    <span class="lchip on" id="ly-refl" title="Water reflections: buildings, bridges and sky mirrored on the water (planar reflection, rippled by the waves, Fresnel)">Water reflections</span>
+    <span class="lchip on" id="ly-traffic"title="Traffic: animated cars and trucks on the V16 road network (headlights and tail lights at night) — visual only">Traffic</span>
     <span class="lchip on" id="ly-palms"title="Vegetation: palm rows along the beach promenade, parks and streets, forests on the hills (placed from the V16 map + height map)">Trees &amp; palms</span>
     <span class="lchip on" id="ly-cine" title="Cinematic rendering: ambient occlusion, bloom, color grading, vignette, MSAA">Cinematic rendering</span>
     <span class="lchip" id="ly-proj" title="Real GTA VI textures: the calibrated game frames are projected onto the building facades they see">Game textures</span>
@@ -614,6 +615,10 @@ const seaUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uNight:    { value: 0 },
   uMapSea:   { value: 0 },      // [MAP-COLORS-V1] 1 = eau aux couleurs de la map (drape)
   uDrape:    { value: null },   // [MAP-COLORS-V2] la mer lit la map: dessinee seulement la ou la map est bleue
+  uRefl:     { value: null },   // [REFLECT-V1] reflet plan (batiments, ponts, ciel) rendu depuis la camera miroir
+  uReflMat:  { value: new THREE.Matrix4() },
+  uReflOn:   { value: 0 },
+  uReflDbg:  { value: 0 },      // debug: 1 = la mer n'affiche que le reflet
 }]);
 const skyUni = {
   uZenith:   { value: new THREE.Vector3() },
@@ -1372,9 +1377,10 @@ const data = await (await fetch('/api/scene3d')).json();
       fragmentShader: `
         varying vec3 vPos;
         uniform vec3 uSunDir, uHorizon, uZenith, uSunColor;
-        uniform float uTime, uNight, uMapSea;
+        uniform float uTime, uNight, uMapSea, uReflOn, uReflDbg;
         uniform vec4 uTerrBounds;
-        uniform sampler2D uDepth, uDrape;
+        uniform sampler2D uDepth, uDrape, uRefl;
+        uniform mat4 uReflMat;
         #include <common>
         #include <logdepthbuf_pars_fragment>
         #include <fog_pars_fragment>
@@ -1423,6 +1429,17 @@ const data = await (await fetch('/api/scene3d')).json();
           vec3 mapBlue = mix(srgb(vec3(0.19, 0.59, 0.79)), mapc, minb);   // mapc deja lineaire (texture sRGB)
           vec3 deep = mix(srgb(vec3(0.05, 0.19, 0.28)), mapBlue, uMapSea);
           vec3 col = mix(deep, skyRefl, mix(0.22 + 0.58 * fres, 0.03 + 0.10 * fres, uMapSea));
+          // [REFLECT-V1] vrai reflet: la scene vue depuis la camera miroir (z -> -z), ondulee par les vagues, dosee par Fresnel
+          // (Schlick, eau n=1.33) — la couleur de fond reste celle de la carte (hauts-fonds turquoise, large plus profond)
+          float reflK = 0.0; vec3 rcol = skyRefl;
+          if (uReflOn > 0.5) {
+            vec4 rc = uReflMat * vec4(vPos.xy, 0.0, 1.0);
+            vec2 ruv = rc.xy / rc.w + n.xy * 0.045 * att;
+            float inr = step(0.001, ruv.x) * step(ruv.x, 0.999) * step(0.001, ruv.y) * step(ruv.y, 0.999);
+            rcol = mix(skyRefl, texture2D(uRefl, clamp(ruv, 0.001, 0.999)).rgb, inr);
+            float F = 0.02 + 0.98 * pow(1.0 - max(dot(n, V), 0.0), 5.0);
+            reflK = clamp(0.03 + 0.80 * F, 0.0, 0.62) * uMapSea;
+          }
           vec3 H = normalize(V + uSunDir);
           float spec = pow(max(dot(n, H), 0.0), 340.0) * 2.0
                      + pow(max(dot(n, H), 0.0), 60.0) * 0.22;
@@ -1462,6 +1479,8 @@ const data = await (await fetch('/api/scene3d')).json();
           col = mix(col, vec3(0.92), foam * 0.75 * (1.0 - 0.6 * uNight) * (1.0 - uMapSea));
           col *= mix(1.0, 0.45, uNight);             // [NIGHT-V1] mer nocturne
           col *= mix(1.0, 0.30, uNight * uMapSea);   // [CINEMA-V1] la mer aux couleurs de la carte restait bleu vif la nuit
+          col = mix(col, rcol, reflK * (1.0 - foam * 0.8));   // [REFLECT-V1] apres teintes de fond et nuit (le reflet porte deja sa lumiere)
+          if (uReflDbg > 0.5) col = rcol;
           float aBase = mix((0.62 + 0.30 * fres) * mix(1.0, 0.55, shal), 0.97, uMapSea);
           float a = max(mix(aBase, 1.0, farBlend), foam * 0.85 * (1.0 - uMapSea));
           a *= mix(1.0, mapWater, uMapSea);
@@ -3002,6 +3021,7 @@ window.__grabFrame = (W = 960) => {
   const [W0, H0] = realSize(), dpr0 = renderer.getPixelRatio();
   renderer.setPixelRatio(1); renderer.setSize(W, Math.round(W * H0 / W0), false);
   controls.update(0.016);
+  if (window.__refl) window.__refl.step();
   if (window.__cine) window.__cine.render(); else renderer.render(scene, camera);
   const out = document.createElement('canvas'); out.width = renderer.domElement.width; out.height = renderer.domElement.height;
   out.getContext('2d').drawImage(renderer.domElement, 0, 0);
@@ -3015,6 +3035,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
   const dpr0 = renderer.getPixelRatio();
   renderer.setPixelRatio(1);
   renderer.setSize(3840, Math.round(3840 * H0 / W0), false);
+  if (window.__refl) window.__refl.step();                     // [REFLECT-V1] reflet a la resolution du shot
   if (window.__cine) window.__cine.render(); else renderer.render(scene, camera);   // [CINEMA-V1] le shot 4K passe aussi par le post-traitement
   const w = renderer.domElement.width, h = renderer.domElement.height;
   const out = document.createElement('canvas');
@@ -3833,6 +3854,54 @@ window.__camScreen = name => {
 // rendu HDR multi-echantillonne + profondeur -> SSAO (demi-resolution, profondeur LOGARITHMIQUE relinearisee) -> bloom
 // 3 niveaux -> passe finale: AO, bloom, courbe filmique douce (preserve les couleurs de la carte), saturation, contraste,
 // vignettage, grain. Interrupteur « Cinematic rendering » (Layers).
+// ── [REFLECT-V1 2026-10-05] reflets plans sur l'eau (z = 0) ──
+// camera miroir (position et visee z -> -z), rendu demi-resolution dans une cible HDR lineaire: seulement ce qui est
+// au-dessus de l'eau et se reflete (batiments + remplissage, pylones, haubans, tabliers, feux du trafic la nuit, ciel);
+// plan de coupe z > 0.2 m. La mer echantillonne ce rendu en projection (uReflMat), ondule par les vagues, dose par Fresnel.
+const Refl = (() => {
+  const rt = new THREE.WebGLRenderTarget(4, 4, { type: THREE.HalfFloatType, depthBuffer: true });
+  rt.texture.minFilter = THREE.LinearFilter; rt.texture.generateMipmaps = false;
+  seaUni.uRefl.value = rt.texture;
+  const rcam = new THREE.PerspectiveCamera(), clip = [new THREE.Plane(new THREE.Vector3(0, 0, 1), -0.2)];
+  const bias = new THREE.Matrix4().set(0.5, 0, 0, 0.5, 0, 0.5, 0, 0.5, 0, 0, 0.5, 0.5, 0, 0, 0, 1);
+  const v2 = new THREE.Vector2(), dir = new THREE.Vector3(), up = new THREE.Vector3(), skyPos = new THREE.Vector3();
+  const KEEP_T = new Set(['roads3d', 'traffic-lights']);
+  const chip = document.getElementById('ly-refl');
+  let on = localStorage.getItem('ui.refl3d') !== '0';
+  const sync = () => { chip.classList.toggle('on', on); if (!on) seaUni.uReflOn.value = 0; };
+  chip.addEventListener('click', () => { on = !on; try { localStorage.setItem('ui.refl3d', on ? '1' : '0'); } catch (e) {} sync(); });
+  sync();
+  function step() {
+    if (!on || !window.__drapeOn || !layers.terrain.visible || povPrev || camera.position.z < 0.5) { seaUni.uReflOn.value = 0; return; }
+    renderer.getDrawingBufferSize(v2);
+    const w = Math.max(64, Math.floor(v2.x / 2)), h = Math.max(64, Math.floor(v2.y / 2));
+    if (rt.width !== w || rt.height !== h) rt.setSize(w, h);
+    rcam.copy(camera, false);
+    rcam.position.set(camera.position.x, camera.position.y, -camera.position.z);
+    camera.getWorldDirection(dir); dir.z = -dir.z;
+    up.set(0, 1, 0).applyQuaternion(camera.quaternion); up.z = -up.z;
+    rcam.up.copy(up); rcam.lookAt(rcam.position.x + dir.x, rcam.position.y + dir.y, rcam.position.z + dir.z);
+    rcam.updateMatrixWorld(); rcam.projectionMatrix.copy(camera.projectionMatrix); rcam.projectionMatrixInverse.copy(camera.projectionMatrixInverse);
+    // visibilite: on ne garde que ce qui se reflete
+    const saved = [];
+    const hide = o => { if (o.visible) { saved.push(o); o.visible = false; } };
+    for (const o of scene.children) if (o !== sky && o !== layers.meshes && o !== layers.terrain && !o.isLight) hide(o);
+    for (const o of layers.terrain.children) if (!KEEP_T.has(o.name)) hide(o);
+    for (const o of layers.meshes.children) if (!o.isMesh) hide(o);
+    skyPos.copy(sky.position); sky.position.copy(rcam.position);
+    const prevRT = renderer.getRenderTarget(), prevClip = renderer.clippingPlanes, prevAuto = renderer.shadowMap.autoUpdate;
+    renderer.shadowMap.autoUpdate = false; renderer.clippingPlanes = clip;
+    renderer.setRenderTarget(rt); renderer.clear(); renderer.render(scene, rcam);
+    renderer.setRenderTarget(prevRT); renderer.clippingPlanes = prevClip; renderer.shadowMap.autoUpdate = prevAuto;
+    sky.position.copy(skyPos);
+    for (const o of saved) o.visible = true;
+    seaUni.uReflMat.value.multiplyMatrices(bias, rcam.projectionMatrix).multiply(rcam.matrixWorldInverse);
+    seaUni.uReflOn.value = 1;
+  }
+  return { step, rt };
+})();
+window.__refl = Refl;
+
 const Cine = (() => {
   let on = localStorage.getItem('ui.cine3d') !== '0', W = 0, H = 0;
   const VS = 'varying vec2 vUv; void main(){ vUv = uv; gl_Position = vec4(position.xy, 0.0, 1.0); }';
@@ -3985,6 +4054,7 @@ renderer.setAnimationLoop(() => {
   nanGuard();                                   // [NAN-GUARD] jamais un rendu avec une camera NaN
   if (window.__solidsTick) window.__solidsTick(); // [SOLIDS-V1] ombre qui suit la vue
   if (window.__trafficStep) window.__trafficStep(_dt);   // [TRAFFIC-V1]
+  Refl.step();                                    // [REFLECT-V1]
   Cine.render();                                  // [CINEMA-V1]
 });
 </script>
