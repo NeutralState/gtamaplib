@@ -588,7 +588,7 @@ function sunDirVec() {   // vecteur VERS le soleil; az horaire depuis le nord (+
 // [GROUND-COLOR-V1] teintes du sol et de la vegetation MESUREES sur les frames de jour (tools/ground_colors.py):
 // on garde la luminance calibree de chaque materiau et on prend la teinte/saturation du jeu
 // [STRUCTS-V1] structures rendues en vrai volume par le module STRUCTS (pas de fil de fer vif, pas de faces auto)
-const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)|Stadium \(V16|Stadium Roof Portique|^Hard Rock Cafe$/;
+const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)|Stadium \(V16|Stadium Roof Portique|^Hard Rock Cafe$|^Kaseya Center$/;
 const _gLum = c => 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
 // sat < 1: materiaux neutres (dalles, asphalte) — la dominante chaude de l'etalonnage du jeu, etalee sur des km2 de ville, virait au desert
 const gameTint = (cur, srgb, sat = 1) => { if (!srgb) return cur; const m0 = srgb.map(v => Math.pow(v, 2.2)), l0 = _gLum(m0), m = m0.map(v => l0 + (v - l0) * sat), k = _gLum(cur) / Math.max(_gLum(m), 1e-4); return m.map(v => v * k); };
@@ -2043,6 +2043,36 @@ if (meshVerts.length) {
       try { const r = await fetch(url, { cache: 'no-store' }); if (r.ok) { const j = await r.json(); if (j && !j.error) { S = j; break; } } } catch (e) {}
     }
     if (!S) return;
+    // [VOIDS-V1] ouvertures traversantes mesurees (trou du Marquis): la tranche concernee est decoupee par deux demi-plans
+    // perpendiculaires a la facade de reference (a -> b), entre s0 et s1 m de a; plancher et plafond = chapeaux des tranches
+    {
+      const clip = (O, ux, uy, ax, ay, sv, keepLess) => {        // Sutherland-Hodgman sur le demi-plan s <= sv (ou >= sv)
+        const out = [], f = p => ((p[0] - ax) * ux + (p[1] - ay) * uy - sv) * (keepLess ? -1 : 1);
+        for (let i = 0; i < O.length; i++) {
+          const P = O[i], Q = O[(i + 1) % O.length], fp = f(P), fq = f(Q);
+          if (fp >= 0) out.push(P);
+          if ((fp >= 0) !== (fq >= 0)) { const t = fp / (fp - fq); out.push([P[0] + (Q[0] - P[0]) * t, P[1] + (Q[1] - P[1]) * t]); }
+        }
+        return out;
+      };
+      for (const so of Object.values(S)) {
+        if (!so.voids || !so.layers) continue;
+        for (const v of so.voids) {
+          const dx = v.b[0] - v.a[0], dy = v.b[1] - v.a[1], L = Math.hypot(dx, dy), ux = dx / L, uy = dy / L, NL = [];
+          for (const Ly of so.layers) {
+            if (Ly.z1 <= v.z0 || Ly.z0 >= v.z1) { NL.push(Ly); continue; }
+            if (Ly.z0 < v.z0) NL.push({ ...Ly, z1: v.z0 });
+            const polys = [];
+            for (const pl of Ly.polys) for (const [sv, less] of [[v.s0, true], [v.s1, false]]) {
+              const O = clip(pl.outer, ux, uy, v.a[0], v.a[1], sv, less); if (O.length >= 3) polys.push({ outer: O, holes: [] });
+            }
+            NL.push({ ...Ly, z0: Math.max(Ly.z0, v.z0), z1: Math.min(Ly.z1, v.z1), polys });
+            if (Ly.z1 > v.z1) NL.push({ ...Ly, z0: v.z1 });
+          }
+          so.layers = NL;
+        }
+      }
+    }
     // [MASSING-V1] remplissage urbain: emprises V16 extrudees (hauteurs ESTIMEES), ajoutees en dernier -> masquables par drawRange
     let MS = null; try { const r = await fetch('/threejs/_v16_massing.json', { cache: 'no-store' }); if (r.ok) MS = await r.json(); } catch (e) {}
     const nReal = Object.keys(S).length;
@@ -4198,6 +4228,73 @@ window.__camScreen = name => {
     }
     window.__structs = Object.assign(window.__structs || {}, { bayside: { seats: B.seats.length, sails: B.arc.sails.length, piers: B.piers.length, boats: B.boats.length } });
   }).catch(e => console.warn('[BAYSIDE]', e));
+
+
+  // ---- Kaseya Center (« sahara arena » dans le jeu): tambour ovale evase a facettes triangulaires, lignes LED, bande vitree ----
+  // d'apres le mesh (rebord MESURE 44.5 m, x0.93 au sol -> x1.03 au rebord, toit 48 m) et les frames (Vice City 08, Convertible)
+  {
+    const kn = Object.keys(M).find(n => n === 'Kaseya Center');
+    if (kn) {
+      const P = ptsOf(kn); let zb = 1e9, zt = -1e9; for (const p of P) { zb = Math.min(zb, p[2]); zt = Math.max(zt, p[2]); }
+      const rim = P.filter(p => Math.abs(p[2] - 44.5) < 0.4);
+      let cx = 0, cy = 0; for (const p of rim) { cx += p[0]; cy += p[1]; } cx /= rim.length; cy /= rim.length;
+      let sxx = 0, sxy = 0, syy = 0; for (const p of rim) { const dx = p[0] - cx, dy = p[1] - cy; sxx += dx * dx; sxy += dx * dy; syy += dy * dy; }
+      const th = 0.5 * Math.atan2(2 * sxy, sxx - syy), ux = Math.cos(th), uy = Math.sin(th);
+      let A = 0, Bv = 0; for (const p of rim) { const dx = p[0] - cx, dy = p[1] - cy; A = Math.max(A, Math.abs(dx * ux + dy * uy)); Bv = Math.max(Bv, Math.abs(-dx * uy + dy * ux)); }
+      const zr = 44.5, N = 18, el = (a, k, z) => [cx + (A * Math.cos(a) * ux - Bv * Math.sin(a) * uy) * k, cy + (A * Math.cos(a) * uy + Bv * Math.sin(a) * ux) * k, z];
+      const kb = 0.93 / 1.03;
+      const Pf = [], Cf = [], leds = [], glass = [];
+      const tri = (a, b, c, g) => { Pf.push(...a, ...b, ...c); for (let q = 0; q < 3; q++) Cf.push(g, g, g * 1.01); };
+      for (let k = 0; k < N; k++) {
+        const a0 = 2 * Math.PI * k / N, a1 = 2 * Math.PI * (k + 1) / N, am = a0 + Math.PI / N, am1 = am + 2 * Math.PI / N;
+        const b0 = el(a0, kb, zb), b1 = el(a1, kb, zb), t0 = el(am, 1, zr), t1 = el(am1, 1, zr);
+        const g1 = Math.pow(0.66 + 0.07 * Math.sin(k * 2.3), 2.2), g2 = Math.pow(0.62 + 0.07 * Math.cos(k * 1.7), 2.2);
+        tri(b0, b1, t0, g1); tri(t0, b1, t1, g2);
+        leds.push([b1, t0], [t0, b0]);                                           // aretes des facettes -> lignes LED (une sur deux visible)
+        // bande vitree cote boulevard (ouest): entre 11 et 25 m, sur les facettes dont la normale regarde l'ouest
+        const mx = (b0[0] + b1[0] + t0[0]) / 3 - cx;
+        if (mx < -0.35 * A) glass.push([a0, a1]);
+      }
+      const fg = new THREE.BufferGeometry(); fg.setAttribute('position', new THREE.Float32BufferAttribute(Pf, 3)); fg.setAttribute('color', new THREE.Float32BufferAttribute(Cf, 3)); fg.computeVertexNormals();
+      const fm = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.45, metalness: 0.35, side: THREE.DoubleSide, emissive: new THREE.Color(0.55, 0.57, 0.62), emissiveIntensity: 0 }); fm.toneMapped = false;
+      glowMats.push([fm, 0.16]);                                                   // panneaux eclaires par projecteurs la nuit (frame Vice City 08)
+      if (window.__envTex) { fm.envMap = window.__envTex; fm.envMapIntensity = 0.8; }
+      { const prev = window.__onEnv; window.__onEnv = t => { fm.envMap = t; fm.envMapIntensity = 0.8; fm.needsUpdate = true; if (prev) prev(t); }; }
+      const fme = new THREE.Mesh(fg, fm); fme.castShadow = true; fme.receiveShadow = true; grp.add(fme);
+      // lignes LED: blanc / orange / cyan (frame Vice City 08), allumees la nuit, gris clair le jour
+      const cols = [[1.0, 0.95, 0.85], [1.0, 0.62, 0.22], [0.45, 0.85, 1.0]], ledG = [[], [], []];
+      leds.forEach(([a, b], i) => { if ((i * 7) % 3 === 2) return; const kz = (i * 5) % 3; ledG[kz].push(cylBetween(new V3(...a).multiplyScalar(1), new V3(...b), 0.22, 0.22, 4)); });
+      ledG.forEach((L, i) => { if (L.length) add(merge(L), glowMat(0xd8d8d8, cols[i], 3.2, 0.4), false); });
+      // bande vitree: anneau partiel legerement en saillie, etages eclaires la nuit
+      const Pg = [];
+      const Ps = [];                                                               // dalles d'etage sombres entre les vitrages
+      for (const [a0, a1] of glass) for (let s2 = 0; s2 < 4; s2++) for (let fl = 0; fl < 4; fl++) {
+        const aa = a0 + (a1 - a0) * s2 / 4, ab = a0 + (a1 - a0) * (s2 + 1) / 4;
+        for (const [z0, z1, A2] of [[11 + 3.5 * fl, 11 + 3.5 * fl + 0.7, Ps], [11 + 3.5 * fl + 0.7, 11 + 3.5 * (fl + 1), Pg]]) {
+          const k0 = kb + (1 - kb) * (z0 - zb) / (zr - zb) + 0.012, k1 = kb + (1 - kb) * (z1 - zb) / (zr - zb) + 0.012;
+          const p00 = el(aa, k0, z0), p10 = el(ab, k0, z0), p11 = el(ab, k1, z1), p01 = el(aa, k1, z1);
+          A2.push(...p00, ...p10, ...p11, ...p00, ...p11, ...p01);
+        }
+      }
+      if (Pg.length) { const gg = new THREE.BufferGeometry(); gg.setAttribute('position', new THREE.Float32BufferAttribute(Pg, 3)); gg.computeVertexNormals();
+        const gm = glowMat(0x3b4a58, [1.0, 0.8, 0.55], 0.55, 0.15); gm.metalness = 0.5; gm.side = THREE.DoubleSide; add(gg, gm);
+        const sg = new THREE.BufferGeometry(); sg.setAttribute('position', new THREE.Float32BufferAttribute(Ps, 3)); sg.computeVertexNormals();
+        const sm2 = stdMat(0x2a2c30, 0.7, 0.2, 0.4); sm2.side = THREE.DoubleSide; add(sg, sm2); }
+      // levre + toit en dome surbaisse (sombre) jusqu'au sommet du mesh
+      const Pr = [], NR = 8;
+      for (let k = 0; k < 72; k++) {
+        const a0 = 2 * Math.PI * k / 72, a1 = 2 * Math.PI * (k + 1) / 72;
+        Pr.push(...el(a0, 1.0, zr), ...el(a1, 1.0, zr), ...el(a1, 1.03, zr + 1.5), ...el(a0, 1.0, zr), ...el(a1, 1.03, zr + 1.5), ...el(a0, 1.03, zr + 1.5));
+        for (let r2 = 0; r2 < NR; r2++) {
+          const ka = 1.03 * (1 - r2 / NR), kc = 1.03 * (1 - (r2 + 1) / NR), za = zr + 1.5 + (zt - zr - 1.5) * Math.sin(Math.PI / 2 * r2 / NR), zc = zr + 1.5 + (zt - zr - 1.5) * Math.sin(Math.PI / 2 * (r2 + 1) / NR);
+          Pr.push(...el(a0, ka, za), ...el(a1, ka, za), ...el(a1, kc, zc), ...el(a0, ka, za), ...el(a1, kc, zc), ...el(a0, kc, zc));
+        }
+      }
+      const rg = new THREE.BufferGeometry(); rg.setAttribute('position', new THREE.Float32BufferAttribute(Pr, 3)); rg.computeVertexNormals();
+      const rm3 = stdMat(0x4a4d52, 0.7, 0.2, 0.5); rm3.side = THREE.DoubleSide; add(rg, rm3);
+      window.__structs = Object.assign(window.__structs || {}, { kaseya: { A: Math.round(A), B: Math.round(Bv), glass: glass.length } });
+    }
+  }
 
   // ---- cheminees ----
   const smokers = [];
