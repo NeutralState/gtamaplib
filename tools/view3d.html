@@ -4422,19 +4422,29 @@ window.__camScreen = name => {
         let pz = z >= 25 ? Math.min(1, (z - 25) / 70) * (c[1] >= c[0] ? 0.55 : 0.30) : 0;
         if (z < 25 && z > 0.3) pz = bank ? 0.35 : park ? 0.42 : lawn ? 0.07 : (c[1] > c[0] + 15 && c[1] > c[2] + 15 ? 0.12 : 0);
         if (pz <= 0) continue;
-        if (rnd(seed) < pz) trees.push([x, y, z, seed]);
+        // [VEG-V3 2026-10-05, Alexandre: « Miami = surtout des palmiers; pas de coniferes en Floride/Georgie/Caroline du Sud »]
+        // plaine: 75 % palmiers / 25 % feuillus (chenes verts); collines: feuillus + 12 % palmiers sabal; aucun conifere
+        if (rnd(seed) < pz) { if (rnd(seed + 11) < (z < 25 ? 0.75 : 0.12)) pts.push([x, y, z, seed]); else trees.push([x, y, z, seed]); }
       }
       if (trees.length) {
-        const tgeo = (() => {                                                  // tronc + houppier (feuillu: 2 octaedres aplatis; resinier: 2 cones)
+        const tgeo = (() => {                                                  // [VEG-V3] feuillu (chene vert): tronc + houppier arrondi en 3 masses, pas de conifere
           const P = [], C = [], trunk = [0.30, 0.24, 0.18];
           const tri = (a, b, c2, col) => { P.push(...a, ...b, ...c2); C.push(...col, ...col, ...col); };
           for (let q = 0; q < 5; q++) { const a0 = q / 5 * 6.283, a1 = (q + 1) / 5 * 6.283, r = 0.035;
             tri([Math.cos(a0) * r, Math.sin(a0) * r, 0], [Math.cos(a1) * r, Math.sin(a1) * r, 0], [Math.cos(a1) * r, Math.sin(a1) * r, 0.4], trunk);
             tri([Math.cos(a0) * r, Math.sin(a0) * r, 0], [Math.cos(a1) * r, Math.sin(a1) * r, 0.4], [Math.cos(a0) * r, Math.sin(a0) * r, 0.4], trunk); }
-          const cone = (zb, zt, r, col) => { for (let q = 0; q < 7; q++) { const a0 = q / 7 * 6.283, a1 = (q + 1) / 7 * 6.283;
-            tri([Math.cos(a0) * r, Math.sin(a0) * r, zb], [Math.cos(a1) * r, Math.sin(a1) * r, zb], [0, 0, zt], col); } };
           const tt = window.__gcolV && window.__gcolV.foliage && window.__gcolV.foliage.tree && window.__gcolV.foliage.tree.rgb;   // [GROUND-COLOR-V1]
-          cone(0.30, 1.0, 0.30, gameTint([0.13, 0.27, 0.10], tt)); cone(0.55, 1.05, 0.22, gameTint([0.17, 0.32, 0.12], tt));
+          const blob = (cx, cy, cz, rx, rz, col) => {                         // masse de feuillage: icosaedre aplati
+            const g = new THREE.IcosahedronGeometry(1, 1).toNonIndexed(), a = g.attributes.position.array;
+            for (let q = 0; q < a.length; q += 9) {
+              const v = [0, 1, 2].map(t => [cx + a[q + 3 * t] * rx, cy + a[q + 3 * t + 1] * rx, cz + a[q + 3 * t + 2] * rz]);
+              const sh = 0.86 + 0.28 * ((v[0][2] - cz) / rz * 0.5 + 0.5);    // dessus plus clair
+              tri(v[0], v[1], v[2], col.map(c3 => c3 * sh));
+            }
+            g.dispose();
+          };
+          const g1 = gameTint([0.12, 0.26, 0.08], tt), g2 = gameTint([0.15, 0.30, 0.10], tt);
+          blob(0, 0, 0.62, 0.36, 0.24, g1); blob(0.16, 0.08, 0.72, 0.26, 0.2, g2); blob(-0.14, -0.1, 0.7, 0.27, 0.2, g2);
           const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(C, 3)); g.computeVertexNormals(); return g;
         })();
         const tmat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, metalness: 0, side: THREE.DoubleSide });
@@ -4442,7 +4452,7 @@ window.__camScreen = name => {
         const prev2 = window.__onEnv; window.__onEnv = t => { tmat.envMap = t; tmat.envMapIntensity = 0.4; tmat.needsUpdate = true; if (prev2) prev2(t); };
         const tm = new THREE.InstancedMesh(tgeo, tmat, trees.length), M4 = new THREE.Matrix4(), Q = new THREE.Quaternion(), V = new THREE.Vector3(), SC = new THREE.Vector3(), CL = new THREE.Color();
         trees.forEach(([x, y, z, sd], k) => {
-          const hh = 6 + 9 * rnd(sd + 3), wide = z < 90 ? 1.25 + 0.5 * rnd(sd + 9) : 0.8 + 0.3 * rnd(sd + 9);   // feuillus larges en bas, resineux elances en haut
+          const hh = 7 + 7 * rnd(sd + 3), wide = 1.15 + 0.45 * rnd(sd + 9);   // chenes verts: houppier plus large que haut
           Q.setFromAxisAngle(new THREE.Vector3(0, 0, 1), rnd(sd + 4) * 6.283); SC.set(hh * wide, hh * wide, hh); V.set(x, y, z - 0.3);
           M4.compose(V, Q, SC); tm.setMatrixAt(k, M4);
           CL.setRGB(0.75 + 0.5 * rnd(sd + 5), 0.80 + 0.4 * rnd(sd + 6), 0.7 + 0.4 * rnd(sd + 7)); tm.setColorAt(k, CL);
