@@ -27,6 +27,9 @@ THIS = os.path.dirname(os.path.abspath(__file__)); REPO = os.path.dirname(THIS)
 MESHES = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json')
 CACHE = os.path.join(THIS, 'generated', 'mesh_solids.json')
 NO_FACES = ('Hill', 'Mountain', 'Ridge', 'Massif', 'Relief', 'Terrain', 'Fence', 'Cables')   # reliefs: le terrain 3D existe deja
+# structures SANS prisme qui ont droit a des faces pleines (volumes massifs); tout le reste (antennes radio, grues, portiques,
+# grande roue, treillis, ponts, viaducs, bretelles) reste en fil de fer (Alexandre 2026-10-04: « fait pas plein sur les radio tower »)
+FACE_ONLY_OK = ('Water Tower', 'Silo', 'Smokestack', 'Stack', 'Tank', 'Toll Plaza', 'Chimney')
 MAX_TRIS = 40000
 EXCLUDE = ('Bridge', 'Viaduct', 'Ramp', 'Interchange', 'Causeway', 'Overpass', 'Hill', 'Mountain', 'Ridge', 'Massif',
            'Relief', 'Terrain', 'Stadium', 'Water Tower', 'Antenna', 'Mast', 'Crane', 'Pylon', 'Observation Wheel', 'Portique',
@@ -167,7 +170,7 @@ def build(only=None):
         edges = m.get('world_edges') or []
         s = solidify(edges) if _solid_ok(name) else None
         f = None
-        if not any(w.lower() in name.lower() for w in NO_FACES):
+        if not any(w.lower() in name.lower() for w in NO_FACES) and (s is not None or any(w.lower() in name.lower() for w in FACE_ONLY_OK)):
             try: f = cycle_faces(edges, s['_top'] if s else None)
             except Exception: f = None
         if s is None and f is None: continue

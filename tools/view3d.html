@@ -11,147 +11,175 @@
 <meta charset="utf-8">
 <title>gtamaplib — 3D</title>
 <style>
-  /* [UI-V2] design system: verre sombre, accents chauds, typographie soignee */
-  :root { --bg:#0a0b0e; --surface:rgba(15,17,22,.86); --surface2:#1a1d26;
-          --border:#272b38; --border-soft:#1e2230;
-          --green:#4ade80; --amber:#fbbf24; --red:#f87171; --gold:#facc15;
-          --text:#e8eaf2; --dim:#596077; --mid:#9aa1b8;
+  /* [UI-V3 2026-10-04] HUD 3D refait: une barre fine + panneaux deroulants, liste des cams repliable, barre d'etat */
+  :root { --bg:#08090c; --glass:rgba(13,15,20,.74); --glass2:rgba(22,25,33,.92);
+          --line:rgba(255,255,255,.08); --line2:rgba(255,255,255,.14);
+          --text:#eef0f6; --mid:#a3a9bb; --dim:#666d82;
+          --acc:#7dd3fc; --gold:#facc15; --green:#4ade80; --amber:#fbbf24; --red:#f87171;
+          --border:var(--line); --surface2:rgba(255,255,255,.05);
           --mono:'SF Mono','JetBrains Mono',ui-monospace,monospace;
-          --sans:-apple-system,'Inter',system-ui,sans-serif; }
-  html, body { margin:0; height:100%; background:var(--bg); overflow:hidden;
-               font:11px var(--sans); color:var(--mid); }
-  #c { position:fixed; inset:0; width:100%; height:100%; } /* [POV-V10] SANS width/height CSS, un canvas (element remplace) s affiche a sa taille INTERNE (= 2x viewport avec pixelRatio 2) ancre haut-gauche -> on voyait le quart haut-gauche zoome 2x. LA cause de toute la saga zoom. */
-  .panel { position:fixed; z-index:10; background:var(--surface);
-           backdrop-filter:blur(14px) saturate(1.2);
-           border:1px solid var(--border); border-radius:12px;
-           padding:10px 12px; box-shadow:0 8px 32px rgba(0,0,0,.35); }
-  .sect { color:var(--dim); font-size:9px; letter-spacing:.14em;
-          text-transform:uppercase; font-weight:600; }
-  /* ── barre superieure: marque + couches ── */
-  #hud { top:12px; left:12px; display:flex; align-items:center; gap:12px;
-         padding:8px 14px; }
-  #brand { color:var(--text); font-weight:700; font-size:12px;
-           letter-spacing:.04em; white-space:nowrap; }
+          --sans:-apple-system,BlinkMacSystemFont,'Inter','Segoe UI',system-ui,sans-serif; }
+  html, body { margin:0; height:100%; background:var(--bg); overflow:hidden; font:12px var(--sans); color:var(--mid);
+               -webkit-font-smoothing:antialiased; }
+  #c { position:fixed; inset:0; width:100%; height:100%; } /* [POV-V10] le canvas DOIT avoir width/height CSS (sinon zoom 2x) */
+  .panel { position:fixed; z-index:10; background:var(--glass); backdrop-filter:blur(18px) saturate(1.4);
+           -webkit-backdrop-filter:blur(18px) saturate(1.4);
+           border:1px solid var(--line); border-radius:14px; box-shadow:0 10px 40px rgba(0,0,0,.35); }
+  .sect { color:var(--dim); font-size:10px; letter-spacing:.12em; text-transform:uppercase; font-weight:600; }
+  /* ── barre superieure ── */
+  #hud { top:14px; left:50%; transform:translateX(-50%); display:flex; align-items:center; gap:4px; padding:5px; border-radius:999px; }
+  #brand { color:var(--text); font-weight:700; font-size:12px; letter-spacing:.06em; padding:0 12px 0 10px; white-space:nowrap; }
   #brand em { color:var(--gold); font-style:normal; }
-  #hud .chips { display:flex; flex-wrap:nowrap; gap:5px; }
-  .lchip { font:10.5px var(--sans); font-weight:500; padding:4px 11px;
-           border-radius:999px; background:var(--surface2);
-           border:1px solid var(--border-soft); color:var(--dim);
-           cursor:pointer; user-select:none;
-           transition:color .12s, border-color .12s, background .12s; }
-  .lchip:hover { color:var(--text); border-color:var(--border); }
-  .lchip.on { color:var(--green); border-color:rgba(74,222,128,.4);
-              background:rgba(74,222,128,.07); }
-  /* ── sidebar droite: cameras + environnement ── */
-  #side { top:12px; right:12px; bottom:12px; width:236px; display:flex;
-          flex-direction:column; gap:0; padding:0; overflow:hidden; }
-  #side .shead { display:flex; align-items:center; justify-content:space-between;
-                 padding:10px 12px 6px; }
-  #cam-search { margin:0 10px 8px; padding:6px 10px; background:var(--surface2);
-                border:1px solid var(--border-soft); border-radius:8px;
-                color:var(--text); font:11px var(--sans); outline:none; }
-  #cam-search:focus { border-color:var(--border); }
+  #brand span { color:var(--dim); font-weight:500; margin-left:4px; }
+  .tb-sep { width:1px; height:18px; background:var(--line2); margin:0 4px; }
+  .tb { display:flex; align-items:center; gap:6px; height:30px; padding:0 13px; border-radius:999px; cursor:pointer; user-select:none;
+        color:var(--mid); font-weight:500; white-space:nowrap; transition:background .12s, color .12s; position:relative; }
+  .tb:hover { background:rgba(255,255,255,.07); color:var(--text); }
+  .tb.open, .tb.on { background:rgba(255,255,255,.11); color:var(--text); }
+  .tb svg { width:15px; height:15px; stroke:currentColor; fill:none; stroke-width:1.7; stroke-linecap:round; stroke-linejoin:round; }
+  .tb .car { opacity:.5; font-size:9px; }
+  .tb.accent { color:#0b0d12; background:var(--gold); font-weight:600; }
+  .tb.accent:hover { background:#fde047; color:#0b0d12; }
+  /* panneaux deroulants */
+  .pop { position:fixed; z-index:20; top:62px; min-width:236px; padding:8px; display:none; border-radius:14px;
+         background:var(--glass2); backdrop-filter:blur(18px); border:1px solid var(--line); box-shadow:0 18px 50px rgba(0,0,0,.45); }
+  .pop.open { display:block; }
+  .pop .sect { padding:6px 8px 4px; }
+  .pop .grp + .grp { border-top:1px solid var(--line); margin-top:6px; padding-top:4px; }
+  /* les interrupteurs: les anciens .lchip, rendus en lignes avec un switch */
+  .lchip { display:flex; align-items:center; justify-content:space-between; gap:14px; padding:7px 9px; border-radius:9px;
+           cursor:pointer; user-select:none; color:var(--mid); font:12.5px var(--sans); font-weight:500; }
+  .lchip:hover { background:rgba(255,255,255,.06); color:var(--text); }
+  .lchip::after { content:''; width:28px; height:16px; border-radius:999px; flex:none; background:rgba(255,255,255,.12);
+                  box-shadow:inset 0 0 0 1px rgba(255,255,255,.06);
+                  background-image:radial-gradient(circle at 8px 8px, #cfd3df 5.5px, transparent 6px); transition:background .15s; }
+  .lchip.on { color:var(--text); }
+  .lchip.on::after { background-color:rgba(125,211,252,.85); background-image:radial-gradient(circle at 20px 8px, #fff 5.5px, transparent 6px); }
+  .lchip.btn::after { display:none; }
+  .lchip .hint { color:var(--dim); font-size:11px; margin-left:auto; }
+  #ly-scolor::after { content:'' ; display:none; }
+  .seg { display:flex; gap:2px; padding:3px; margin:2px 6px 6px; background:rgba(255,255,255,.05); border-radius:9px; }
+  .seg span { flex:1; text-align:center; padding:5px 0; border-radius:7px; cursor:pointer; color:var(--mid); font-weight:500; }
+  .seg span.on { background:rgba(255,255,255,.14); color:var(--text); }
+  /* curseurs */
+  #env label { display:flex; align-items:center; gap:10px; justify-content:space-between; padding:6px 9px; color:var(--mid); font-size:12.5px; }
+  #env .v { color:var(--text); min-width:38px; text-align:right; font:11px var(--mono); }
+  #env .toggles { display:block; }
+  input[type=range] { -webkit-appearance:none; height:4px; border-radius:2px; background:rgba(255,255,255,.12); width:120px; outline:none; }
+  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:14px; height:14px; border-radius:50%; background:#fff;
+        cursor:pointer; border:none; box-shadow:0 1px 4px rgba(0,0,0,.5); }
+  /* ── panneau cameras (repliable) ── */
+  #side { top:14px; right:14px; bottom:58px; width:268px; display:flex; flex-direction:column; padding:0; overflow:hidden;
+          transition:transform .22s ease, opacity .22s ease; }
+  body.side-closed #side { transform:translateX(calc(100% + 24px)); opacity:0; pointer-events:none; }
+  #side .shead { display:flex; align-items:center; justify-content:space-between; padding:12px 14px 8px; }
+  #side .shead .x { cursor:pointer; color:var(--dim); font-size:15px; line-height:1; padding:2px 4px; }
+  #side .shead .x:hover { color:var(--text); }
+  #cam-search { margin:0 12px 8px; padding:8px 11px; background:rgba(255,255,255,.05); border:1px solid var(--line);
+                border-radius:10px; color:var(--text); font:12px var(--sans); outline:none; }
+  #cam-search:focus { border-color:var(--line2); }
   #cam-search::placeholder { color:var(--dim); }
-  #cam-list { flex:1 1 40%; overflow-y:auto; min-height:90px;
-              border-bottom:1px solid var(--border-soft); }
-  #cam-list::-webkit-scrollbar, #cam-details::-webkit-scrollbar { width:8px; }
-  #cam-list::-webkit-scrollbar-thumb,
-  #cam-details::-webkit-scrollbar-thumb { background:var(--surface2); border-radius:4px; }
-  .cam-it { display:flex; align-items:center; gap:7px; padding:4px 12px;
-            cursor:pointer; white-space:nowrap; }
-  .cam-it:hover { background:rgba(255,255,255,.04); }
-  .cam-it.active { background:rgba(250,204,21,.08); }
+  #cam-list { flex:1 1 50%; overflow-y:auto; min-height:90px; border-bottom:1px solid var(--line); padding:0 4px 6px; }
+  #cam-list::-webkit-scrollbar, #cam-details::-webkit-scrollbar { width:6px; }
+  #cam-list::-webkit-scrollbar-thumb, #cam-details::-webkit-scrollbar-thumb { background:rgba(255,255,255,.1); border-radius:3px; }
+  .cam-it { display:flex; align-items:center; gap:9px; padding:6px 10px; cursor:pointer; white-space:nowrap; border-radius:8px; }
+  .cam-it:hover { background:rgba(255,255,255,.05); }
+  .cam-it.active { background:rgba(250,204,21,.10); }
   .cam-it .nm { flex:1; overflow:hidden; text-overflow:ellipsis; color:var(--mid); }
+  .cam-it:hover .nm { color:var(--text); }
   .cam-it.active .nm { color:var(--gold); }
   .cam-it .ck { color:var(--green); font-size:10px; }
   .tdot { width:7px; height:7px; border-radius:50%; flex:none; }
-  #cam-details { padding:9px 12px; border-bottom:1px solid var(--border-soft);
-                 max-height:34%; overflow-y:auto; display:none; }
-  #cam-details .cd-name { color:var(--text); font-weight:600; font-size:11.5px;
-                          margin-bottom:5px; overflow-wrap:anywhere; }
-  #cam-details .badges { display:flex; gap:5px; margin-bottom:7px; flex-wrap:wrap; }
-  .badge { font-size:9px; font-weight:600; padding:2px 8px; border-radius:999px;
-           letter-spacing:.05em; }
-  .badge.solved { color:#dcfce7; background:rgba(34,197,94,.18);
-                  border:1px solid rgba(34,197,94,.4); }
-  .cd-grid { display:grid; grid-template-columns:auto 1fr; gap:2px 10px;
-             font:10.5px var(--mono); }
+  #cam-details { padding:12px 14px; max-height:42%; overflow-y:auto; display:none; }
+  #cam-details .cd-name { color:var(--text); font-weight:600; font-size:13px; margin-bottom:7px; overflow-wrap:anywhere; }
+  #cam-details .badges { display:flex; gap:5px; margin-bottom:9px; flex-wrap:wrap; }
+  .badge { font-size:9.5px; font-weight:600; padding:2px 8px; border-radius:999px; letter-spacing:.05em; }
+  .badge.solved { color:#dcfce7; background:rgba(34,197,94,.18); border:1px solid rgba(34,197,94,.4); }
+  .cd-grid { display:grid; grid-template-columns:auto 1fr; gap:3px 10px; font:11px var(--mono); }
   .cd-grid .k { color:var(--dim); }
   .cd-grid .v { color:var(--text); text-align:right; }
-  #cam-details .cd-note { margin-top:6px; color:var(--dim); font-size:10px;
-                          line-height:1.45; }
-  /* ── environnement ── */
-  #env { padding:9px 12px 12px; display:flex; flex-direction:column; gap:6px; }
-  #env label { display:flex; align-items:center; gap:8px;
-               justify-content:space-between; color:var(--mid); }
-  #env .v { color:var(--text); min-width:34px; text-align:right;
-            font:10.5px var(--mono); }
-  #env .toggles { display:flex; gap:5px; margin-top:3px; }
-  input[type=range] { -webkit-appearance:none; height:4px; border-radius:2px;
-                      background:var(--surface2); width:96px; outline:none; }
-  input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:13px;
-        height:13px; border-radius:50%; background:var(--gold); cursor:pointer;
-        border:2px solid #0a0b0e; box-shadow:0 0 6px rgba(250,204,21,.35); }
-  /* ── divers ── */
-  #info { top:64px; left:12px; display:none; max-width:280px; color:var(--mid);
-          padding:0; overflow:hidden; }
-  #info .thumb { display:block; width:280px; max-height:160px; object-fit:cover; }
-  #info .body { padding:8px 12px; }
-  #info b { color:var(--text); }
+  #cam-details .cd-note { margin-top:8px; color:var(--dim); font-size:11px; line-height:1.5; }
+  /* ── fiche au survol ── */
+  #info { top:62px; left:14px; display:none; max-width:300px; padding:0; overflow:hidden; color:var(--mid); }
+  #info .thumb { display:block; width:300px; max-height:170px; object-fit:cover; }
+  #info .body { padding:10px 13px; line-height:1.55; }
+  #info b { color:var(--text); font-size:13px; }
   #info .rms-bad { color:var(--red); }
-  #legend { bottom:12px; left:12px; display:flex; gap:12px; padding:7px 14px;
-            font-size:10px; }
-  .sw { display:inline-block; width:8px; height:8px; border-radius:50%;
-        margin-right:5px; vertical-align:-1px; }
-  /* labels de cams projetes dans la 3D */
-  .cam3d-label { position:absolute; transform:translate(-50%,-130%);
-                 color:var(--gold); font:10px var(--sans); font-weight:600;
-                 text-shadow:0 1px 3px #000, 0 0 8px rgba(0,0,0,.8);
-                 pointer-events:none; white-space:nowrap; }
+  /* ── barre d'etat (bas) ── */
+  #legend { bottom:14px; left:50%; transform:translateX(-50%); display:flex; gap:14px; padding:7px 16px; border-radius:999px;
+            font-size:11px; align-items:center; }
+  body.cams-off #legend { display:none; }
+  .sw { display:inline-block; width:7px; height:7px; border-radius:50%; margin-right:6px; vertical-align:0; }
+  #poseread { left:14px !important; bottom:14px !important; background:var(--glass) !important; backdrop-filter:blur(18px);
+              border:1px solid var(--line) !important; border-radius:999px !important; padding:7px 14px !important;
+              font:11px var(--mono) !important; color:var(--mid) !important; }
+  #poseread:hover { color:var(--text) !important; }
+  #coordread3d { right:14px !important; bottom:14px !important; background:var(--glass) !important; backdrop-filter:blur(18px);
+                 border:1px solid var(--line) !important; border-radius:999px !important; padding:7px 14px !important;
+                 font:11px var(--mono) !important; }
+  /* etiquettes de cams dans la 3D: discretes */
+  .cam3d-label { position:absolute; transform:translate(-50%,-140%); color:rgba(255,255,255,.88); font:10.5px var(--sans); font-weight:600;
+                 padding:2px 7px; border-radius:6px; background:rgba(8,9,12,.55); backdrop-filter:blur(4px);
+                 pointer-events:none; white-space:nowrap; letter-spacing:.01em; }
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
 <div class="panel" id="hud">
-  <div id="brand">GTA<em>MAP</em>LIB <span style="color:var(--dim);font-weight:400">3D</span></div>
-  <div class="chips">
+  <div id="brand">GTA<em>MAP</em>LIB<span>3D</span></div>
+  <div class="tb-sep"></div>
+  <div class="tb" data-pop="pop-layers" title="Layers"><svg viewBox="0 0 24 24"><path d="M12 3 2 8l10 5 10-5-10-5Z"/><path d="m2 13 10 5 10-5"/></svg>Layers <span class="car">&#9662;</span></div>
+  <div class="tb" data-pop="pop-light" title="Sun, haze, clouds, shadows"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>Light <span class="car">&#9662;</span></div>
+  <div class="tb" data-pop="pop-cine" title="Cinematic tools"><svg viewBox="0 0 24 24"><rect x="2" y="6" width="14" height="12" rx="2"/><path d="m16 10 6-3v10l-6-3"/></svg>Cinematic <span class="car">&#9662;</span></div>
+  <div class="tb-sep"></div>
+  <div class="tb" id="tb-cams" title="Camera list (C)"><svg viewBox="0 0 24 24"><path d="M3 7h3l2-3h8l2 3h3v12H3Z"/><circle cx="12" cy="13" r="4"/></svg>Cameras</div>
+  <div class="tb accent" id="btn-shot" title="Save a 4K PNG of this view (+ active frame inset)"><svg viewBox="0 0 24 24"><path d="M12 3v12M7 10l5 5 5-5M4 21h16"/></svg>Shot</div>
+</div>
+<div class="pop" id="pop-layers">
+  <div class="grp"><div class="sect">Scene</div>
+    <span class="lchip on" id="ly-meshes" title="Procedural structure meshes">Structures</span>
+    <span class="lchip on" id="ly-solid" title="Solid buildings: sun-lit volumes, cast shadows, lit windows at night">Solid buildings</span>
+    <span class="lchip on" id="ly-terrain" title="Real terrain (leak L16 height map)">Terrain</span>
+    <span class="lchip" id="ly-drape" title="Drape the 2D map onto the relief (lakes, roads, details)">Map drape</span>
+    <span class="lchip" id="ly-contours" title="Elevation contours (50 m major, 10 m minor)">Contours</span></div>
+  <div class="grp"><div class="sect">Calibration</div>
     <span class="lchip on" id="ly-cams" title="Camera frustums (color = confidence tier)">Cameras</span>
-    <span class="lchip on" id="ly-lms" title="Triangulated landmarks (blue = z-constrained)">Landmarks</span>
-    <span class="lchip on" id="ly-meshes" title="Procedural structure meshes">Meshes</span>
-    <span class="lchip on" id="ly-solid" title="Solid buildings: sun-lit volumes, cast shadows on the terrain, lit windows at night (edges drawn on top)">Solid</span>
-    <span class="lchip on" id="ly-terrain" title="Real terrain (leak L16 height map, z=706.07v-301.01)">Terrain</span>
-    <span class="lchip" id="ly-leakmap" title="Base map: full leak map (composite over yanis)">Leak map</span>
-    <span class="lchip" id="ly-v16" title="Base map: YANIS V16 community map (1 m/px, georeferenced x=px-16992, y=11008-py)">V16</span>
-    <span class="lchip" id="ly-drape" title="Drape the 2D map onto the relief (lakes, roads, details)">Drape</span>
-    <span class="lchip" id="ly-contours" title="Elevation contours (50 m major, 10 m minor)">Contours</span>
-    <span class="lchip" id="btn-orbit" title="Slow cinematic orbit around the current target — great for captures">Orbit</span>
-    <span class="lchip" id="btn-tour" title="Cinematic tour: fly from solved camera to solved camera, the real frame fades in perfectly aligned on arrival (Esc or click to stop)">Tour</span>
-    <span class="lchip" id="btn-timelapse" title="Sun timelapse: sunrise, noon, sunset, night (city lights) — loops">Timelapse</span>
-    <span class="lchip" id="ly-scolor" title="Solid building colors: concrete / roof height / mesh color">Clay</span>
-    <span class="lchip" id="btn-shot" title="Save a 4K PNG of this view (+ active frame inset)">&#8681; Shot</span>
+    <span class="lchip on" id="ly-lms" title="Triangulated landmarks (blue = z-constrained)">Landmarks</span></div>
+  <div class="grp"><div class="sect">Base map</div>
+    <span class="lchip" id="ly-v16" title="YANIS V16 community map">YANIS V16</span>
+    <span class="lchip" id="ly-leakmap" title="Full leak map (composite over yanis)">Leak map</span></div>
+  <div class="grp"><div class="sect">Building colors</div>
+    <span class="lchip btn" id="ly-scolor" title="Cycle: realistic facades / roof height / mesh color">Clay</span></div>
+</div>
+<div class="pop" id="pop-light">
+  <div id="env">
+    <div class="sect">Sun &amp; atmosphere</div>
+    <label title="Sun azimuth (0 = north, clockwise)">Azimuth
+      <span style="display:flex;align-items:center;gap:8px"><input id="env-az" type="range" min="0" max="359" step="1"><span class="v" id="env-az-v"></span></span></label>
+    <label title="Sun elevation — low = warm grazing light and long shadows; below 0 = night (stars + city lights)">Sun height
+      <span style="display:flex;align-items:center;gap:8px"><input id="env-el" type="range" min="-10" max="80" step="1"><span class="v" id="env-el-v"></span></span></label>
+    <label title="Atmospheric haze (visibility distance)">Haze
+      <span style="display:flex;align-items:center;gap:8px"><input id="env-haze" type="range" min="0" max="100" step="1"><span class="v" id="env-haze-v"></span></span></label>
+    <div class="grp toggles">
+      <span class="lchip on" id="env-clouds" title="Drifting clouds + their moving shadows on the terrain">Clouds</span>
+      <span class="lchip on" id="env-shadows" title="Terrain cast shadows (re-baked when the sun moves)">Terrain shadows</span>
+    </div>
   </div>
 </div>
+<div class="pop" id="pop-cine">
+  <div class="sect">Cinematic</div>
+  <span class="lchip" id="btn-tour" title="Fly from solved camera to solved camera; the real frame fades in perfectly aligned (Esc or click to stop)">Tour of solved cameras</span>
+  <span class="lchip" id="btn-orbit" title="Slow orbit around the current target">Orbit</span>
+  <span class="lchip" id="btn-timelapse" title="Sunrise, noon, sunset, night (city lights) — loops">Sun timelapse</span>
+</div>
 <div class="panel" id="info"></div>
-<!-- [UI-V2] sidebar: liste des cameras + details + environnement -->
+<!-- [UI-V2] sidebar: liste des cameras + details (l'environnement est passe dans le panneau Light) -->
 <div class="panel" id="side">
-  <div class="shead"><span class="sect">Cameras</span>
-    <span class="sect" id="cam-count" style="color:var(--mid)"></span></div>
+  <div class="shead"><span class="sect">Cameras <span id="cam-count" style="color:var(--mid);margin-left:6px"></span></span>
+    <span class="x" id="side-x" title="Close (C)">&#10005;</span></div>
   <input id="cam-search" type="text" placeholder="Search cameras..." spellcheck="false">
   <div id="cam-list"></div>
   <div id="cam-details"></div>
-  <div id="env">
-    <div class="sect" style="margin-bottom:2px">Environment</div>
-    <label title="Sun azimuth (0 = north, clockwise)">Azimuth
-      <span style="display:flex;align-items:center;gap:7px"><input id="env-az" type="range" min="0" max="359" step="1"><span class="v" id="env-az-v"></span></span></label>
-    <label title="Sun elevation — low = warm grazing light and long shadows; below 0 = night (stars + city lights)">Sun height
-      <span style="display:flex;align-items:center;gap:7px"><input id="env-el" type="range" min="-10" max="80" step="1"><span class="v" id="env-el-v"></span></span></label>
-    <label title="Atmospheric haze (visibility distance)">Haze
-      <span style="display:flex;align-items:center;gap:7px"><input id="env-haze" type="range" min="0" max="100" step="1"><span class="v" id="env-haze-v"></span></span></label>
-    <div class="toggles">
-      <span class="lchip on" id="env-clouds" title="Drifting clouds + their moving shadows on the terrain">Clouds</span>
-      <span class="lchip on" id="env-shadows" title="Terrain cast shadows (re-baked when the sun moves)">Shadows</span>
-    </div>
-  </div>
 </div>
 <!-- [VIEW3D-POV] vue a travers une cam: position/orientation/fov exacts -->
 <!-- [POV-ZOOM-V1] centre en X ET en Y: a zoom 1 la frame fait 100vh et top:50%
@@ -223,6 +251,34 @@ addEventListener('unhandledrejection', e => {
 </script>
 <script type="module">
 import * as THREE from 'three';
+
+// ── [UI-V3 2026-10-04] barre du haut: panneaux deroulants, liste des cams repliable (C), legende liee aux cams ──
+(() => {
+  const tbs = [...document.querySelectorAll('#hud .tb[data-pop]')];
+  const closeAll = except => tbs.forEach(t => { if (t !== except) { t.classList.remove('open'); document.getElementById(t.dataset.pop).classList.remove('open'); } });
+  tbs.forEach(t => t.addEventListener('click', e => {
+    e.stopPropagation();
+    const pop = document.getElementById(t.dataset.pop), open = !pop.classList.contains('open');
+    closeAll(t);
+    t.classList.toggle('open', open); pop.classList.toggle('open', open);
+    if (open) { const r = t.getBoundingClientRect(); pop.style.left = Math.max(10, Math.min(innerWidth - pop.offsetWidth - 10, r.left + r.width / 2 - pop.offsetWidth / 2)) + 'px'; }
+  }));
+  document.querySelectorAll('.pop').forEach(p => p.addEventListener('click', e => e.stopPropagation()));
+  addEventListener('click', () => closeAll(null));
+  addEventListener('keydown', e => { if (e.key === 'Escape') closeAll(null); });
+  // liste des cameras: repliee par defaut, memorisee
+  const tbc = document.getElementById('tb-cams');
+  const setSide = open => { document.body.classList.toggle('side-closed', !open); tbc.classList.toggle('on', open); try { localStorage.setItem('ui.side3d', open ? '1' : '0'); } catch (e) {} };
+  setSide(localStorage.getItem('ui.side3d') === '1');
+  tbc.addEventListener('click', e => { e.stopPropagation(); setSide(document.body.classList.contains('side-closed')); });
+  document.getElementById('side-x').addEventListener('click', () => setSide(false));
+  addEventListener('keydown', e => { if ((e.key === 'c' || e.key === 'C') && !/INPUT|TEXTAREA/.test(e.target.tagName) && !e.metaKey && !e.ctrlKey) setSide(document.body.classList.contains('side-closed')); });
+  window.__openSide = () => setSide(true);
+  // legende des tiers seulement si les cameras sont affichees
+  const lc = document.getElementById('ly-cams');
+  const syncLeg = () => document.body.classList.toggle('cams-off', !lc.classList.contains('on'));
+  lc.addEventListener('click', () => setTimeout(syncLeg, 0)); syncLeg();
+})();
 
 // [VIEW3D-TAB] en iframe (onglet 3D de calib), le lien "← calib" est
 // redondant et ouvrirait l'app dans l'app — on le masque.
@@ -1588,14 +1644,14 @@ if (meshVerts.length) {
   solidsUni.uSky = { value: new THREE.Vector3(0.5, 0.6, 0.7) };
   solidMat.onBeforeCompile = sh => {
     sh.uniforms.uNight = solidsUni.uNight; sh.uniforms.uHover = solidsUni.uHover; sh.uniforms.uSky = solidsUni.uSky;
-    sh.vertexShader = 'attribute float aId;\nattribute vec4 aSty;\nattribute vec4 aGls;\nattribute float aBase;\n' +
-      'varying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\nvarying vec4 vSty;\nvarying vec4 vGls;\nvarying float vBase;\n' +
+    sh.vertexShader = 'attribute float aId;\nattribute vec4 aSty;\nattribute vec4 aGls;\nattribute float aBase;\nattribute float aTop;\n' +
+      'varying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\nvarying vec4 vSty;\nvarying vec4 vGls;\nvarying float vBase;\nvarying float vTop;\n' +
       sh.vertexShader.replace('#include <project_vertex>', `#include <project_vertex>
         vWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;
         vWN = normalize(mat3(modelMatrix) * objectNormal);
-        vId = aId; vSty = aSty; vGls = aGls; vBase = aBase;`);
+        vId = aId; vSty = aSty; vGls = aGls; vBase = aBase; vTop = aTop;`);
     sh.fragmentShader = 'uniform float uNight;\nuniform float uHover;\nuniform vec3 uSky;\n' +
-      'varying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\nvarying vec4 vSty;\nvarying vec4 vGls;\nvarying float vBase;\n' +
+      'varying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\nvarying vec4 vSty;\nvarying vec4 vGls;\nvarying float vBase;\nvarying float vTop;\n' +
       'float h31(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 37.719))) * 43758.5453); }\n' +
       sh.fragmentShader
       .replace('#include <color_fragment>', `#include <color_fragment>
@@ -1620,7 +1676,7 @@ if (meshVerts.length) {
         float lit = mix(step(0.55, h31(vec3(floor(gq), vId))), 0.45, blur);
         vec3 Vd = normalize(cameraPosition - vWPos);
         float fres = pow(1.0 - clamp(abs(dot(Vd, normalize(vWN))), 0.0, 1.0), 3.0);
-        vec3 glass = mix(vGls.rgb, uSky, 0.16 + 0.55 * fres) * (0.86 + 0.26 * h31(vec3(floor(gq) + 7.0, vId)) * (1.0 - blur));
+        vec3 glass = mix(vGls.rgb, uSky * 0.85, 0.06 + 0.32 * fres) * (0.86 + 0.26 * h31(vec3(floor(gq) + 7.0, vId)) * (1.0 - blur));
         diffuseColor.rgb *= mix(1.0, mix(0.6, 1.0, smoothstep(0.0, 9.0, loc)), wall);   // pied du batiment (occlusion)
         diffuseColor.rgb = mix(diffuseColor.rgb, glass, win);
         diffuseColor.rgb *= 1.0 - 0.38 * slab;
@@ -1634,16 +1690,22 @@ if (meshVerts.length) {
       .replace('#include <emissivemap_fragment>', `#include <emissivemap_fragment>
         vec3 lc = mix(vec3(1.0, 0.70, 0.36), vec3(0.82, 0.90, 1.0), step(0.78, h31(vec3(floor(gq) + 3.0, vId))));
         totalEmissiveRadiance += lc * (1.5 * lit + 1.2 * lob) * win * uNight;
+        // couronne lumineuse des grandes tours (comme la skyline de Miami): bande coloree sous le toit, la nuit
+        float crown = wall * step(110.0, vTop - vBase) * smoothstep(vTop - 7.0, vTop - 6.0, vWPos.z) * (1.0 - smoothstep(vTop - 2.0, vTop - 1.2, vWPos.z));
+        vec3 cc3 = h31(vec3(vId, 1.0, 2.0)) < 0.34 ? vec3(0.2, 0.85, 1.0) : (h31(vec3(vId, 1.0, 2.0)) < 0.67 ? vec3(1.0, 0.25, 0.75) : vec3(0.95, 0.95, 1.0));
+        totalEmissiveRadiance += cc3 * 2.2 * crown * uNight;
         totalEmissiveRadiance += vec3(1.0, 0.82, 0.32) * 0.25 * hov;`);
   };
   let solidMesh = null, catcher = null, solidNames = [];
   let solidOn = localStorage.getItem('ui.solid3d') !== '0';
   const chip = document.getElementById('ly-solid');
+  // [UI-V3] fil de fer scinde: aretes des batiments pleins discretes; structures/autoroutes/ponts = style lumineux d'origine
+  let bldWire = null, structWire = null, structHalo = null;
   const styleWire = () => {
     const w = window.__meshWire; if (!w) return;
-    const solid = solidOn && !!solidMesh && layers.meshes.visible;
-    w.mseg.material.depthTest = !solid; w.mseg.material.opacity = solid ? 0.30 : 1.0;
-    w.mhalo.visible = !solid; w.mseg.material.needsUpdate = true;
+    const solid = solidOn && !!solidMesh && layers.meshes.visible && !!bldWire;
+    w.mseg.visible = !solid; w.mhalo.visible = !solid;
+    if (bldWire) { bldWire.visible = solid; structWire.visible = solid; structHalo.visible = solid; }
   };
   const applySolid = () => {
     chip.classList.toggle('on', solidOn);
@@ -1658,8 +1720,8 @@ if (meshVerts.length) {
     const day = Math.max(0, Math.min(1, sd.z / 0.12));
     sunLight.color.setRGB(sun[0], sun[1], sun[2]);
     sunLight.intensity = 2.4 * day * (1 - night);
-    hemiLight.color.setRGB(zen[0] * 0.9 + 0.22, zen[1] * 0.9 + 0.22, zen[2] * 0.9 + 0.22);
-    hemiLight.groundColor.setRGB(hor[0] * 0.45, hor[1] * 0.42, hor[2] * 0.38);
+    hemiLight.color.setRGB(zen[0] * 0.45 + 0.34, zen[1] * 0.45 + 0.34, zen[2] * 0.45 + 0.33);
+    hemiLight.groundColor.setRGB(hor[0] * 0.5 + 0.06, hor[1] * 0.46 + 0.05, hor[2] * 0.40 + 0.04);
     hemiLight.intensity = 0.35 + 0.75 * (1 - night);
     solidsUni.uNight.value = night;
     solidsUni.uSky.value.set((hor[0] + zen[0]) * 0.5, (hor[1] + zen[1]) * 0.5, (hor[2] + zen[2]) * 0.5).multiplyScalar(1 - 0.85 * night);
@@ -1698,7 +1760,7 @@ if (meshVerts.length) {
       try { const r = await fetch(url, { cache: 'no-store' }); if (r.ok) { const j = await r.json(); if (j && !j.error) { S = j; break; } } } catch (e) {}
     }
     if (!S) return;
-    const pos = [], nor = [], col = [], ids = [], sty = [], gls = [], bas = [];
+    const pos = [], nor = [], col = [], ids = [], sty = [], gls = [], bas = [], tops = [];
     const hsh = str => { let h = 2166136261; for (let k = 0; k < str.length; k++) h = Math.imul(h ^ str.charCodeAt(k), 16777619); return (h >>> 0) / 4294967296; };
     const FAC = [[0.90, 0.89, 0.86], [0.90, 0.85, 0.74], [0.84, 0.76, 0.62], [0.90, 0.78, 0.74], [0.76, 0.86, 0.84], [0.78, 0.78, 0.78], [0.93, 0.92, 0.90]];
     const TINT = [[0.07, 0.13, 0.22], [0.07, 0.19, 0.20], [0.20, 0.16, 0.11], [0.24, 0.27, 0.30], [0.10, 0.18, 0.13], [0.05, 0.07, 0.10]];
@@ -1722,15 +1784,52 @@ if (meshVerts.length) {
               : [2.2 + r2 * 1.3, 0.40 + 0.22 * r3, 0.46 + 0.14 * r2, 3.1 + 0.5 * r3];
       return { kind, fac, s, gl };
     };
-    const push = (P, N, id, st, zb, noWin) => {      // P,N: Float32Array plats (triangles)
-      const k = noWin ? 4 : st.kind;
+    let curTop = 0;
+    const push = (P, N, id, st, zb, noWin, colOverride) => {      // P,N: plats (triangles)
+      const k = noWin ? 4 : st.kind, fc = colOverride || st.fac;
       for (let i = 0; i < P.length; i++) { pos.push(P[i]); nor.push(N[i]); }
-      for (let i = 0; i < P.length / 3; i++) { col.push(...st.fac); ids.push(id); sty.push(...st.s); gls.push(...st.gl, k); bas.push(zb); }
+      for (let i = 0; i < P.length / 3; i++) { col.push(...fc); ids.push(id); sty.push(...st.s); gls.push(...st.gl, k); bas.push(zb); tops.push(curTop); }
+    };
+    const rnd = seed => { let x = Math.sin(seed) * 43758.5453; return x - Math.floor(x); };
+    const inPoly = (x, y, O) => { let c = false; for (let i = 0, j = O.length - 1; i < O.length; j = i++) { const [xi, yi] = O[i], [xj, yj] = O[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
+    const outward = O => { let ar = 0; for (let k = 0; k < O.length; k++) { const a = O[k], b = O[(k + 1) % O.length]; ar += a[0] * b[1] - b[0] * a[1]; } return ar > 0 ? 1 : -1; };
+    // balcons filants: dalle en saillie (1.3 m) a chaque etage, dessus + nez de dalle
+    const ledges = (O, z0, z1, flh, id, st, zb) => {
+      const sg = outward(O), P = [], N = [], d = 1.3, t = 0.28;
+      for (let z = z0 + flh; z < z1 - 1.5; z += flh) {
+        for (let k = 0; k < O.length; k++) {
+          const a = O[k], b = O[(k + 1) % O.length], ex = b[0] - a[0], ey = b[1] - a[1], ln = Math.hypot(ex, ey);
+          if (ln < 4) continue;
+          const nx = sg * ey / ln, ny = -sg * ex / ln, ax = a[0] + nx * d, ay = a[1] + ny * d, bx = b[0] + nx * d, by = b[1] + ny * d;
+          P.push(a[0], a[1], z, b[0], b[1], z, bx, by, z, a[0], a[1], z, bx, by, z, ax, ay, z);          // dessus
+          for (let q = 0; q < 6; q++) N.push(0, 0, 1);
+          P.push(ax, ay, z - t, bx, by, z - t, bx, by, z, ax, ay, z - t, bx, by, z, ax, ay, z);       // nez de dalle
+          for (let q = 0; q < 6; q++) N.push(nx, ny, 0);
+          P.push(a[0], a[1], z - t, bx, by, z - t, b[0], b[1], z - t, a[0], a[1], z - t, ax, ay, z - t, bx, by, z - t);   // sous-face
+          for (let q = 0; q < 6; q++) N.push(0, 0, -1);
+        }
+      }
+      if (P.length) push(P, N, id, st, zb, true, st.fac.map(v => v * 1.04));
+    };
+    // edicules techniques sur les toits plats
+    const roofUnits = (O, z, id, st, zb, area, seed) => {
+      const n = Math.max(1, Math.min(9, Math.round(area / 260)));
+      let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9; for (const [x, y] of O) { x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y); }
+      const gcol = [0.62, 0.63, 0.64];
+      for (let i = 0, tries = 0; i < n && tries < 60; tries++) {
+        const w = 3 + 6 * rnd(seed + tries * 3.1), dd = 3 + 5 * rnd(seed + tries * 5.7), h = 1.6 + 2.4 * rnd(seed + tries * 7.3);
+        const cx = x0 + (x1 - x0) * rnd(seed + tries * 11.9), cy = y0 + (y1 - y0) * rnd(seed + tries * 13.1);
+        const cs = [[cx - w / 2, cy - dd / 2], [cx + w / 2, cy - dd / 2], [cx + w / 2, cy + dd / 2], [cx - w / 2, cy + dd / 2]];
+        if (!cs.every(([x, y]) => inPoly(x, y, O))) continue;
+        let g = new THREE.BoxGeometry(w, dd, h); g.translate(cx, cy, z + h / 2 + 0.01); if (g.index) g = g.toNonIndexed(); g.computeVertexNormals();
+        push(g.attributes.position.array, g.attributes.normal.array, id, st, zb, true, gcol); g.dispose(); i++;
+      }
     };
     for (const [name, so] of Object.entries(S)) {
       const id = solidNames.length; solidNames.push({ name, zmin: so.zmin, zmax: so.zmax, nl: so.layers.length });
       const faceOnly = !so.layers.length;
       const st = styleOf(name, so.zmax - so.zmin, faceOnly);
+      curTop = so.layers.length ? so.layers[so.layers.length - 1].z1 : so.zmax;
       for (const L of so.layers) for (const pl of L.polys) {
         try {
           const shape = new THREE.Shape(pl.outer.map(q => new THREE.Vector2(q[0], q[1])));
@@ -1741,6 +1840,11 @@ if (meshVerts.length) {
           g.computeVertexNormals();
           push(g.attributes.position.array, g.attributes.normal.array, id, st, so.zmin, false);
           g.dispose();
+          if (st.kind === 2 && L.z1 - so.zmin > 12) ledges(pl.outer, Math.max(L.z0, so.zmin + 4.3), L.z1, st.s[3], id, st, so.zmin);
+          if (L === so.layers[so.layers.length - 1] && st.kind !== 4 && L.z1 - so.zmin > 10) {
+            let ar = 0; const O = pl.outer; for (let k = 0; k < O.length; k++) { const a = O[k], b = O[(k + 1) % O.length]; ar += a[0] * b[1] - b[0] * a[1]; }
+            if (Math.abs(ar) / 2 > 120) roofUnits(O, L.z1, id, st, so.zmin, Math.abs(ar) / 2, id * 17.3 + O.length);
+          }
           // acrotere: muret de 1.1 m au bord du toit (terrasses et toits plats), sans fenetres
           if (st.kind !== 4 && pl.outer.length >= 3 && L.z1 - so.zmin > 6) {
             const O = pl.outer, P = [], N = [], z1 = L.z1, z2 = L.z1 + 1.1;
@@ -1777,11 +1881,27 @@ if (meshVerts.length) {
     geo.setAttribute('aSty', new THREE.Float32BufferAttribute(sty, 4));
     geo.setAttribute('aGls', new THREE.Float32BufferAttribute(gls, 4));
     geo.setAttribute('aBase', new THREE.Float32BufferAttribute(bas, 1));
+    geo.setAttribute('aTop', new THREE.Float32BufferAttribute(tops, 1));
     geo.computeBoundingSphere();
     solidMesh = new THREE.Mesh(geo, solidMat);
     solidMesh.castShadow = true; solidMesh.receiveShadow = true; solidMesh.name = 'solid-buildings';
     layers.meshes.add(solidMesh);
     window.__solids = { mesh: solidMesh, names: solidNames, uni: solidsUni };
+    {
+      const bv = [], bc = [], sv = [], sc = [], cc2 = new THREE.Color();
+      for (const [name, m] of Object.entries(data.meshes || {})) {
+        const so = S[name], isSolid = !!(so && (so.layers.length || (so.ff && so.ff.length)));
+        cc2.set(m.color || 0x67e8f9);
+        const V = isSolid ? bv : sv, C = isSolid ? bc : sc;
+        for (const e of (m.world_edges || m)) { V.push(...e[0], ...e[1]); C.push(cc2.r, cc2.g, cc2.b, cc2.r, cc2.g, cc2.b); }
+      }
+      const mk = (V, C, mat) => { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(V, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(C, 3)); const l = new THREE.LineSegments(g, mat); l.visible = false; layers.meshes.add(l); return l; };
+      bldWire = mk(bv, bc, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.22, depthTest: true, depthWrite: false }));
+      structWire = mk(sv, sc, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 1.0, depthTest: false, depthWrite: false }));
+      structWire.renderOrder = 12;
+      structHalo = new THREE.LineSegments(structWire.geometry, new THREE.LineBasicMaterial({ vertexColors: true, transparent: true, opacity: 0.35, depthTest: false, depthWrite: false, blending: THREE.AdditiveBlending }));
+      structHalo.renderOrder = 11; structHalo.visible = false; layers.meshes.add(structHalo);
+    }
     // [SOLIDS-V1] modes de couleur: beton (teinte legere du mesh) / hauteur du toit (meme rampe que la Map) / couleur du mesh
     const baseCols = Float32Array.from(col);
     const RAMP = [[0, [31, 158, 137]], [25, [110, 206, 88]], [60, [253, 231, 37]], [110, [251, 139, 36]], [170, [224, 17, 95]], [260, [157, 0, 255]]];
@@ -1799,7 +1919,7 @@ if (meshVerts.length) {
         ca[3 * v] = c.r; ca[3 * v + 1] = c.g; ca[3 * v + 2] = c.b;
       }
       geo.attributes.color.needsUpdate = true;
-      scChip.textContent = MODES[mode]; scChip.classList.toggle('on', mode !== 0);
+      scChip.innerHTML = 'Colors <span class="hint">' + ({ Clay: 'Realistic facades', Height: 'Roof height', Mesh: 'Mesh color' })[MODES[mode]] + ' &#8635;</span>';
     };
     scChip.addEventListener('click', () => { mode = (mode + 1) % MODES.length; localStorage.setItem('ui.solidColor', MODES[mode]); recolor(); });
     recolor();
@@ -1889,6 +2009,7 @@ loadGroundTiles();
     'padding:5px 11px;font:11px ui-monospace,monospace;color:#facc15;' +
     'cursor:pointer;white-space:nowrap;user-select:none';
   el.title = 'click: copy the camera pose (JSON) to paste in chat';
+  el.id = 'poseread';                                 // [UI-V3] style dans le CSS (barre d'etat)
   document.body.appendChild(el);
   const dirV = new THREE.Vector3();
   function pose() {
@@ -1901,7 +2022,7 @@ loadGroundTiles();
   }
   setInterval(() => {
     const p = pose();
-    el.textContent = `CAM ${p.xyz.join(', ')}  yaw ${p.ypr[0]}  pitch ${p.ypr[1]}  (click = copy)`;
+    el.textContent = `${p.xyz.join(', ')}  ·  yaw ${p.ypr[0]}°  pitch ${p.ypr[1]}°`;
   }, 250);
   el.addEventListener('click', () => {
     const txt = JSON.stringify(pose());
@@ -1921,6 +2042,7 @@ loadGroundTiles();
     'padding:5px 11px;font:11px ui-monospace,monospace;color:#4ade80;' +
     'pointer-events:none;white-space:nowrap;opacity:0;transition:opacity .12s';
   el.textContent = 'X —  Y —  Z —';
+  el.id = 'coordread3d';                              // [UI-V3]
   document.body.appendChild(el);
   function gz(x, y) {
     const g = window.__hgrid;
