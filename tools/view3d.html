@@ -139,6 +139,7 @@
   <div class="grp"><div class="sect">Scene</div>
     <span class="lchip on" id="ly-meshes" title="Procedural structure meshes">Structures</span>
     <span class="lchip on" id="ly-solid" title="Solid buildings: sun-lit volumes, cast shadows, lit windows at night">Solid buildings</span>
+    <span class="lchip" id="ly-proj" title="Real GTA VI textures: the calibrated game frames are projected onto the building facades they see">Game textures</span>
     <span class="lchip on" id="ly-terrain" title="Real terrain (leak L16 height map)">Terrain</span>
     <span class="lchip" id="ly-drape" title="Drape the 2D map onto the relief (lakes, roads, details)">Map drape</span>
     <span class="lchip" id="ly-contours" title="Elevation contours (50 m major, 10 m minor)">Contours</span></div>
@@ -1643,16 +1644,25 @@ if (meshVerts.length) {
   const solidMat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.84, metalness: 0.0, side: THREE.DoubleSide });
   solidMat.toneMapped = false;                         // [FACADES-V2] comme la carte drapee: l'ACES assombrissait les batiments
   solidsUni.uSky = { value: new THREE.Vector3(0.5, 0.6, 0.7) };
+  // [FACADE-PROJ-V1] projecteurs: les frames calibrees peignent les facades qu'elles voient (tools/facade_projection.py)
+  const PN = 28;
+  const V3 = () => Array.from({ length: PN }, () => new THREE.Vector3());
+  Object.assign(solidsUni, { uProjOn: { value: 0 }, uFrames: { value: null }, uOwners: { value: null },
+    uPO: { value: V3() }, uPF: { value: V3() }, uPR: { value: V3() }, uPU: { value: V3() }, uPW: { value: V3() },
+    uPK: { value: Array.from({ length: PN }, () => new THREE.Vector2()) } });
   solidMat.onBeforeCompile = sh => {
     sh.uniforms.uNight = solidsUni.uNight; sh.uniforms.uHover = solidsUni.uHover; sh.uniforms.uSky = solidsUni.uSky;
-    sh.vertexShader = 'attribute float aId;\nattribute vec4 aSty;\nattribute vec4 aGls;\nattribute float aBase;\nattribute float aTop;\n' +
-      'varying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\nvarying vec4 vSty;\nvarying vec4 vGls;\nvarying float vBase;\nvarying float vTop;\n' +
+    for (const k of ['uProjOn', 'uFrames', 'uOwners', 'uPO', 'uPF', 'uPR', 'uPU', 'uPW', 'uPK']) sh.uniforms[k] = solidsUni[k];
+    sh.vertexShader = 'attribute float aId;\nattribute vec4 aSty;\nattribute vec4 aGls;\nattribute float aBase;\nattribute float aTop;\nattribute vec2 aProj;\nattribute vec3 aAcc;\n' +
+      'varying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\nvarying vec4 vSty;\nvarying vec4 vGls;\nvarying float vBase;\nvarying float vTop;\nvarying vec2 vProj;\nvarying vec3 vAcc;\n' +
       sh.vertexShader.replace('#include <project_vertex>', `#include <project_vertex>
         vWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;
         vWN = normalize(mat3(modelMatrix) * objectNormal);
-        vId = aId; vSty = aSty; vGls = aGls; vBase = aBase; vTop = aTop;`);
+        vId = aId; vSty = aSty; vGls = aGls; vBase = aBase; vTop = aTop; vProj = aProj; vAcc = aAcc;`);
     sh.fragmentShader = 'uniform float uNight;\nuniform float uHover;\nuniform vec3 uSky;\n' +
-      'varying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\nvarying vec4 vSty;\nvarying vec4 vGls;\nvarying float vBase;\nvarying float vTop;\n' +
+      'uniform float uProjOn;\nuniform highp sampler2DArray uFrames;\nuniform highp sampler2DArray uOwners;\n' +
+      'uniform vec3 uPO[' + PN + '];\nuniform vec3 uPF[' + PN + '];\nuniform vec3 uPR[' + PN + '];\nuniform vec3 uPU[' + PN + '];\nuniform vec3 uPW[' + PN + '];\nuniform vec2 uPK[' + PN + '];\n' +
+      'varying vec3 vWPos;\nvarying vec3 vWN;\nvarying float vId;\nvarying vec4 vSty;\nvarying vec4 vGls;\nvarying float vBase;\nvarying float vTop;\nvarying vec2 vProj;\nvarying vec3 vAcc;\n' +
       'float h31(vec3 p) { return fract(sin(dot(p, vec3(12.9898, 78.233, 37.719))) * 43758.5453); }\n' +
       sh.fragmentShader
       .replace('#include <color_fragment>', `#include <color_fragment>
@@ -1693,7 +1703,36 @@ if (meshVerts.length) {
         diffuseColor.rgb = mix(diffuseColor.rgb, glass, win);
         diffuseColor.rgb *= 1.0 - 0.38 * slab;
         diffuseColor.rgb *= 1.0 + 0.10 * mech - 0.10 * pil;
+        // couleur d'accent (IRL): allege des murs-rideaux, bande basse des bandeaux (garde-corps vitres), couronne technique
+        float hasAcc = step(0.001, vAcc.r + vAcc.g + vAcc.b);
+        float rail = wall * step(1.5, kind) * step(kind, 2.5) * (1.0 - bl2.y) * (1.0 - lob) * step(fq.y, lo.y) * step(lo.y * 0.35, fq.y);
+        float spand = wall * (1.0 - step(0.5, abs(kind - 1.0))) * (1.0 - win) * (1.0 - lob);
+        diffuseColor.rgb = mix(diffuseColor.rgb, vAcc, hasAcc * clamp(rail * 0.85 + spand * 0.6 + mech * 0.9, 0.0, 1.0));
         diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * (0.60 + 0.12 * h31(floor(vWPos * 1.7))), roof * step(kind, 3.5));
+        // ── vraies textures du jeu: projection des frames calibrees (2 meilleures cams du batiment) ──
+        vec3 projCol = vec3(0.0); float projW = 0.0;
+        if (uProjOn > 0.5) {
+          for (int k = 0; k < 2; k++) {
+            float Lr = k == 0 ? vProj.x : vProj.y;
+            if (Lr < -0.5) continue;
+            int li = int(Lr + 0.5);
+            vec3 D = vWPos - uPO[li];
+            float zc = dot(D, uPF[li]);
+            if (zc < 1.0) continue;
+            vec2 uvp = vec2(0.5 + uPK[li].x * dot(D, uPR[li]) / zc, 0.5 - uPK[li].y * dot(D, uPU[li]) / zc);
+            if (uvp.x < 0.002 || uvp.y < 0.002 || uvp.x > 0.998 || uvp.y > 0.998) continue;
+            float own = texture(uOwners, vec3(uvp, Lr)).r * 255.0;
+            if (abs(own - (vId + 1.0)) > 0.5) continue;                    // le pixel appartient a ce batiment (ni arbre, ni voisin)
+            float facing = dot(normalize(vWN), normalize(uPO[li] - vWPos));
+            if (facing < 0.06) continue;
+            float wk = smoothstep(0.06, 0.40, facing) * (k == 0 ? 1.0 : 0.55);
+            projCol += texture(uFrames, vec3(uvp, Lr)).rgb * uPW[li] * wk; projW += wk;
+          }
+        }
+        float proj = 0.0;
+        if (projW > 0.0) { projCol /= projW; proj = clamp(projW * 1.4, 0.0, 1.0); }
+        diffuseColor.rgb = mix(diffuseColor.rgb, projCol * 0.45, proj);
+        win *= 1.0 - proj;
         float hov = 1.0 - step(0.5, abs(vId - uHover));
         diffuseColor.rgb = mix(diffuseColor.rgb, vec3(1.0, 0.82, 0.32), hov * 0.40);`)
       .replace('#include <roughnessmap_fragment>', `#include <roughnessmap_fragment>
@@ -1707,7 +1746,8 @@ if (meshVerts.length) {
         float crown = wall * step(110.0, vTop - vBase) * smoothstep(vTop - 7.0, vTop - 6.0, vWPos.z) * (1.0 - smoothstep(vTop - 2.0, vTop - 1.2, vWPos.z));
         vec3 cc3 = h31(vec3(vId, 1.0, 2.0)) < 0.34 ? vec3(0.2, 0.85, 1.0) : (h31(vec3(vId, 1.0, 2.0)) < 0.67 ? vec3(1.0, 0.25, 0.75) : vec3(0.95, 0.95, 1.0));
         totalEmissiveRadiance += cc3 * 2.2 * crown * uNight;
-        totalEmissiveRadiance += vec3(1.0, 0.82, 0.32) * 0.25 * hov;`);
+        totalEmissiveRadiance += vec3(1.0, 0.82, 0.32) * 0.25 * hov;
+        totalEmissiveRadiance += projCol * 0.62 * proj * (1.0 - 0.9 * uNight);   // la frame porte deja sa lumiere: en grande partie non eclairee`);
   };
   let solidMesh = null, catcher = null, solidNames = [];
   let solidOn = localStorage.getItem('ui.solid3d') !== '0';
@@ -1789,7 +1829,10 @@ if (meshVerts.length) {
       try { const r = await fetch(url, { cache: 'no-store' }); if (r.ok) { const j = await r.json(); if (j && !j.error) { S = j; break; } } } catch (e) {}
     }
     if (!S) return;
-    const pos = [], nor = [], col = [], ids = [], sty = [], gls = [], bas = [], tops = [];
+    const pos = [], nor = [], col = [], ids = [], sty = [], gls = [], bas = [], tops = [], prj = [], acc = [];
+    let curAcc = [0, 0, 0];
+    let PM = null; try { const r = await fetch('/threejs/_fp_meta.json', { cache: 'no-store' }); if (r.ok) PM = await r.json(); } catch (e) {}
+    let curProj = [-1, -1];
     const hsh = str => { let h = 2166136261; for (let k = 0; k < str.length; k++) h = Math.imul(h ^ str.charCodeAt(k), 16777619); return (h >>> 0) / 4294967296; };
     const FAC = [[0.90, 0.89, 0.86], [0.90, 0.85, 0.74], [0.84, 0.76, 0.62], [0.90, 0.78, 0.74], [0.76, 0.86, 0.84], [0.78, 0.78, 0.78], [0.93, 0.92, 0.90]];
     const TINT = [[0.30, 0.44, 0.56], [0.30, 0.50, 0.50], [0.46, 0.42, 0.36], [0.52, 0.56, 0.60], [0.34, 0.48, 0.40], [0.16, 0.19, 0.22]];
@@ -1797,10 +1840,12 @@ if (meshVerts.length) {
     const styleOf = (name, h, faceOnly) => {
       const r = hsh(name), r2 = hsh(name + '#b'), r3 = hsh(name + '#c');
       if (faceOnly) { tint.set(S[name].color || '#9ca3af'); const g = 0.82; return { kind: 4, fac: [g + (tint.r - g) * 0.35, g + (tint.g - g) * 0.35, g + (tint.b - g) * 0.35], s: [3, 0.5, 0.5, 3.4], gl: [0.1, 0.1, 0.1] }; }
-      const fo = S[name].facade;                       // style lu sur les frames: {kind, color:[r,g,b], glass:[r,g,b], bay, win:[rx,ry], floor}
+      const fo = S[name].facade;                       // facade IRL / lue sur les frames: {kind, color, glass, accent, bay, win:[rx,ry], floor}
       if (fo) {
-        const k = { punched: 0, curtain: 1, ribbon: 2, low: 3, none: 4 }[fo.kind] ?? 0;
-        return { kind: k, fac: fo.color || [0.88, 0.88, 0.86], gl: fo.glass || TINT[5],
+        const k = { punched: 0, curtain: 1, ribbon: 2, balcony: 2, low: 3, none: 4 }[fo.kind] ?? 0;
+        const lin = c => c.map(v => Math.pow(v, 2.2));             // les specs sont en sRGB (couleurs « vues »)
+        return { kind: k, fac: lin(fo.color || [0.9, 0.9, 0.88]), gl: lin(fo.glass || [0.2, 0.25, 0.3]), acc: fo.accent ? lin(fo.accent) : null,
+                 balcony: fo.kind === 'balcony',
                  s: [fo.bay || 2.6, (fo.win || [0.5, 0.5])[0], (fo.win || [0.5, 0.5])[1], fo.floor || 3.3] };
       }
       let kind = h > 70 ? (r < 0.38 ? 1 : r < 0.72 ? 2 : 0) : h > 16 ? (r < 0.15 ? 1 : r < 0.48 ? 2 : 0) : 3;
@@ -1842,7 +1887,7 @@ if (meshVerts.length) {
     const push = (P, N, id, st, zb, noWin, colOverride) => {      // P,N: plats (triangles)
       const k = noWin ? 4 : st.kind, fc = colOverride || st.fac;
       for (let i = 0; i < P.length; i++) { pos.push(P[i]); nor.push(N[i]); }
-      for (let i = 0; i < P.length / 3; i++) { col.push(...fc); ids.push(id); sty.push(...st.s); gls.push(...st.gl, k); bas.push(zb); tops.push(curTop); }
+      for (let i = 0; i < P.length / 3; i++) { col.push(...fc); ids.push(id); sty.push(...st.s); gls.push(...st.gl, k); bas.push(zb); tops.push(curTop); prj.push(curProj[0], curProj[1]); acc.push(...curAcc); }
     };
     const rnd = seed => { let x = Math.sin(seed) * 43758.5453; return x - Math.floor(x); };
     const inPoly = (x, y, O) => { let c = false; for (let i = 0, j = O.length - 1; i < O.length; j = i++) { const [xi, yi] = O[i], [xj, yj] = O[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
@@ -1884,6 +1929,8 @@ if (meshVerts.length) {
       const faceOnly = !so.layers.length;
       const st = styleOf(name, so.zmax - so.zmin, faceOnly);
       curTop = so.layers.length ? so.layers[so.layers.length - 1].z1 : so.zmax;
+      { const b = PM && PM.buildings[name]; curProj = [b && b.length > 0 ? b[0] : -1, b && b.length > 1 ? b[1] : -1]; }
+      curAcc = st.acc || [0, 0, 0];
       for (const L of so.layers) for (const pl of L.polys) {
         try {
           const shape = new THREE.Shape(pl.outer.map(q => new THREE.Vector2(q[0], q[1])));
@@ -1894,7 +1941,7 @@ if (meshVerts.length) {
           g.computeVertexNormals();
           push(g.attributes.position.array, g.attributes.normal.array, id, st, so.zmin, false);
           g.dispose();
-          if (st.kind === 2 && L.z1 - so.zmin > 12) ledges(pl.outer, Math.max(L.z0, so.zmin + 4.3), L.z1, st.s[3], id, st, so.zmin);
+          if (st.kind === 2 && (st.balcony || !S[name].facade) && L.z1 - so.zmin > 12) ledges(pl.outer, Math.max(L.z0, so.zmin + 4.3), L.z1, st.s[3], id, st, so.zmin);
           if (L === so.layers[so.layers.length - 1] && st.kind !== 4 && L.z1 - so.zmin > 10) {
             let ar = 0; const O = pl.outer; for (let k = 0; k < O.length; k++) { const a = O[k], b = O[(k + 1) % O.length]; ar += a[0] * b[1] - b[0] * a[1]; }
             if (Math.abs(ar) / 2 > 120) roofUnits(O, L.z1, id, st, so.zmin, Math.abs(ar) / 2, id * 17.3 + O.length);
@@ -1936,6 +1983,34 @@ if (meshVerts.length) {
     geo.setAttribute('aGls', new THREE.Float32BufferAttribute(gls, 4));
     geo.setAttribute('aBase', new THREE.Float32BufferAttribute(bas, 1));
     geo.setAttribute('aTop', new THREE.Float32BufferAttribute(tops, 1));
+    geo.setAttribute('aProj', new THREE.Float32BufferAttribute(prj, 2));
+    geo.setAttribute('aAcc', new THREE.Float32BufferAttribute(acc, 3));
+    if (PM && PM.cams.length) (async () => {
+      // frames + cartes d'appartenance -> textures-tableaux (une couche par cam)
+      const load = src => new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = rej; im.src = src; });
+      try {
+        const [fi, oi] = await Promise.all([load('/threejs/_fp_frames.jpg?v=' + Date.now()), load('/threejs/_fp_owners.png?v=' + Date.now())]);
+        const N = Math.min(PN, PM.cams.length);
+        const grab = (im, w, h) => { const cv = document.createElement('canvas'); cv.width = w; cv.height = h * N; const cx = cv.getContext('2d', { willReadFrequently: true }); cx.drawImage(im, 0, 0, w, h * N); return cx.getImageData(0, 0, w, h * N).data; };
+        const fd = grab(fi, PM.fw, PM.fh);
+        const ftex = new THREE.DataArrayTexture(new Uint8Array(fd.buffer), PM.fw, PM.fh, N);
+        ftex.format = THREE.RGBAFormat; ftex.colorSpace = THREE.SRGBColorSpace; ftex.minFilter = THREE.LinearFilter; ftex.magFilter = THREE.LinearFilter; ftex.flipY = false; ftex.needsUpdate = true;
+        const od = grab(oi, PM.ow, PM.oh), o8 = new Uint8Array(PM.ow * PM.oh * N);
+        for (let i = 0; i < o8.length; i++) o8[i] = od[4 * i];
+        const otex = new THREE.DataArrayTexture(o8, PM.ow, PM.oh, N);
+        otex.format = THREE.RedFormat; otex.minFilter = THREE.NearestFilter; otex.magFilter = THREE.NearestFilter; otex.flipY = false; otex.needsUpdate = true;
+        PM.cams.slice(0, N).forEach((c, i) => {
+          solidsUni.uPO.value[i].fromArray(c.o); solidsUni.uPF.value[i].fromArray(c.f); solidsUni.uPR.value[i].fromArray(c.r);
+          solidsUni.uPU.value[i].fromArray(c.u); solidsUni.uPW.value[i].fromArray(c.wb); solidsUni.uPK.value[i].set(c.kx, c.ky);
+        });
+        solidsUni.uFrames.value = ftex; solidsUni.uOwners.value = otex;
+        const pc = document.getElementById('ly-proj');
+        const setP = on => { solidsUni.uProjOn.value = on ? 1 : 0; pc.classList.toggle('on', on); try { localStorage.setItem('ui.proj3d.v2', on ? '1' : '0'); } catch (e) {} };
+        setP(localStorage.getItem('ui.proj3d.v2') === '1');   // off par defaut (Alexandre: « j'aime pas »); nouvelle cle: l'ancienne avait memorise « on »
+        pc.addEventListener('click', () => setP(!solidsUni.uProjOn.value));
+        window.__proj = { meta: PM, ftex, otex };
+      } catch (e) { console.warn('[FACADE-PROJ] textures', e); }
+    })();
     geo.computeBoundingSphere();
     solidMesh = new THREE.Mesh(geo, solidMat);
     solidMesh.castShadow = true; solidMesh.receiveShadow = true; solidMesh.name = 'solid-buildings';
