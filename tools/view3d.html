@@ -2164,22 +2164,42 @@ if (meshVerts.length) {
           return bk === null ? null : bk * 2 + 1.5;
         };
         const P = [], N = [];
-        const zTop = Math.max(...pylons.map(([[a, b]]) => Math.max(a[2], b[2])));
+        const box = (cx, cy, z0, z1, hx0, hy0, hx1, hy1) => {             // tronc de pyramide (4 faces + chapeau)
+          const c0 = [[-hx0, -hy0], [hx0, -hy0], [hx0, hy0], [-hx0, hy0]], c1 = [[-hx1, -hy1], [hx1, -hy1], [hx1, hy1], [-hx1, hy1]];
+          for (let k = 0; k < 4; k++) {
+            const k2 = (k + 1) % 4, A = [cx + c0[k][0], cy + c0[k][1], z0], B = [cx + c0[k2][0], cy + c0[k2][1], z0], C2 = [cx + c1[k2][0], cy + c1[k2][1], z1], D = [cx + c1[k][0], cy + c1[k][1], z1];
+            const ex = B[0] - A[0], ey = B[1] - A[1], l = Math.hypot(ex, ey) || 1, nn = [ey / l, -ex / l, 0];
+            P.push(...A, ...B, ...C2, ...A, ...C2, ...D); for (let q = 0; q < 6; q++) N.push(...nn);
+          }
+          const T = c1.map(([x, y]) => [cx + x, cy + y, z1]);
+          P.push(...T[0], ...T[1], ...T[2], ...T[0], ...T[2], ...T[3]); for (let q = 0; q < 6; q++) N.push(0, 0, 1);
+        };
+        // [ROADS-V3] regroupement: les aretes verticales d'un meme pylone/pile (coins du mesh) -> UN seul fut
+        const groups = new Map();
         for (const [[a, b], name] of pylons) {
           const lo = a[2] < b[2] ? a : b, hi = a[2] < b[2] ? b : a;
           const dk = deckAt(name, hi[0], hi[1]);
           const isPylon = dk !== null ? hi[2] > dk + 4 : hi[2] > 30;
-          const s2 = isPylon ? 1.2 + 2.6 * Math.max(0, 1 - lo[2] / Math.max(zTop, 1)) : 0.7;   // pylone effile / pile de 1.4 m
-          const c4 = [[-s2, -s2], [s2, -s2], [s2, s2], [-s2, s2]];
-          for (let k = 0; k < 4; k++) {
-            const [x1, y1] = c4[k], [x2, y2] = c4[(k + 1) % 4], nn = [(y2 - y1) / (2 * s2), -(x2 - x1) / (2 * s2), 0];
-            const t2 = isPylon ? (1.2 + 2.6 * Math.max(0, 1 - hi[2] / Math.max(zTop, 1))) / s2 : 1;
-            const A = [lo[0] + x1, lo[1] + y1, lo[2]], B = [lo[0] + x2, lo[1] + y2, lo[2]], C2 = [hi[0] + x2 * t2, hi[1] + y2 * t2, hi[2]], D = [hi[0] + x1 * t2, hi[1] + y1 * t2, hi[2]];
-            P.push(...A, ...B, ...C2, ...A, ...C2, ...D); for (let q = 0; q < 6; q++) N.push(...nn);
+          const cell = isPylon ? 14 : 4;
+          const k = name + '|' + isPylon + '|' + Math.floor(lo[0] / cell) + ',' + Math.floor(lo[1] / cell);
+          const g = groups.get(k) || { pyl: isPylon, x0: 1e9, y0: 1e9, x1: -1e9, y1: -1e9, z0: 1e9, z1: -1e9 };
+          for (const p of [lo, hi]) { g.x0 = Math.min(g.x0, p[0]); g.y0 = Math.min(g.y0, p[1]); g.x1 = Math.max(g.x1, p[0]); g.y1 = Math.max(g.y1, p[1]); g.z0 = Math.min(g.z0, p[2]); g.z1 = Math.max(g.z1, p[2]); }
+          groups.set(k, g);
+        }
+        for (const g of groups.values()) {
+          const cx = (g.x0 + g.x1) / 2, cy = (g.y0 + g.y1) / 2;
+          if (g.pyl) {
+            const hx = Math.max(2.25, (g.x1 - g.x0) / 2 + 0.8), hy = Math.max(2.25, (g.y1 - g.y0) / 2 + 0.8);
+            box(cx, cy, g.z0, g.z1, hx, hy, hx * 0.62, hy * 0.62);
+          } else {
+            const hx = Math.max(0.7, (g.x1 - g.x0) / 2 + 0.5), hy = Math.max(0.7, (g.y1 - g.y0) / 2 + 0.5);
+            box(cx, cy, g.z0, g.z1, hx, hy, hx, hy);
           }
         }
         const pg = new THREE.BufferGeometry(); pg.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); pg.setAttribute('normal', new THREE.Float32BufferAttribute(N, 3));
-        const pm = new THREE.MeshStandardMaterial({ color: 0xd8d6cf, roughness: 0.8, metalness: 0 }); pm.toneMapped = false;
+        const pm = new THREE.MeshStandardMaterial({ color: 0xe6e1d6, roughness: 0.75, metalness: 0 }); pm.toneMapped = false;   // beton clair, eclaire par le ciel (IBL)
+        if (window.__envTex) { pm.envMap = window.__envTex; pm.envMapIntensity = 0.55; }
+        { const prev = window.__onEnv; window.__onEnv = t => { pm.envMap = t; pm.envMapIntensity = 0.55; pm.needsUpdate = true; if (prev) prev(t); }; }
         const pmesh = new THREE.Mesh(pg, pm); pmesh.castShadow = true; pmesh.receiveShadow = true; pmesh.name = 'bridge-pylons';
         layers.meshes.add(pmesh); window.__pylons = pmesh;
       }
