@@ -19341,16 +19341,16 @@
   },
   "House #1 (Waning Sands)": {
     "xyz": [
-      -984.1,
-      4003.55,
-      31.81
+      -469.3,
+      4215.3,
+      13.3
     ],
     "source_cameras": [
-      "Waning Sands (A) (X)",
-      "Waning Sands (B)"
+      "Waning Sands (A) (X)"
     ],
-    "error_m": 2.0,
-    "method": "ANCHOR-HARVEST-V1: triangulation 2 cams, perp med 0.2 m, angle max 19.3 deg"
+    "error_m": 5.0,
+    "method": "TOOLTIP xy Alexandre 2026-10-06 (= V16 #1979; ancien (-984.1,4003.6,31.8) circulaire, derriere la cam A)",
+    "note": "z = rayon du clic (toit) depuis Waning Sands (A) pose WS-A-CALIB-V2 a cette xy (sol heightmap 4.8 -> toit ~8.5 m); clic (B) non utilise (pose B provisoire)"
   },
   "House #2 (Waning Sands)": {
     "xyz": [
