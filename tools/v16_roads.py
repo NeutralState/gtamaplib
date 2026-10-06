@@ -76,31 +76,31 @@ def main():
         c = CLS.get(s['color'].upper() if s['color'].startswith('#') else s['color'])
         if not c or len(s['ring']) < 2: continue
         R = resample(s['ring'])
-        P = []
+        P = []; deck_hit = False
         for x, y in R:
             try: g = max(0.0, float(RR.ground(x, y)))
             except Exception: g = 0.0
             z = g + 0.3
             if c in ('hwy', 'road', 'mark_w', 'mark_y'):
                 dz = deck_z(x, y)
-                if dz is not None and dz - 1.0 > g + 2.5: z = dz - 1.0 + 0.05; n_el += 1
+                if dz is not None and dz - 1.0 > g + 2.5: z = dz - 1.0 + 0.05; n_el += 1; deck_hit = True
             P.append([round(float(x), 1), round(float(y), 1), round(z, 2), round(g, 2)])
-        # [BRIDGES-V1 2026-10-05] route V16 au-dessus de l'eau SANS tablier mesure = pont (riviere de Miami, canaux): tablier a
-        # 6 m (ESTIME: ponts bas / basculants), rampes a 8 % lissees plus bas -> rendu en dalle + garde-corps
-        if c in ('road', 'hwy', 'mark_w', 'mark_y') and len(P) >= 2:
+        # [BRIDGES-V1b 2026-10-05] route V16 au-dessus de l'eau SANS tablier mesure = pont bas (riviere de Miami, canaux):
+        # tablier 6 m ESTIME + rampes a 8 % propagees UNIQUEMENT depuis ces points; une route qui touche un tablier MESURE
+        # (Bocamar/Sunshine Skyway...) n'est pas concernee (la propagation depuis les pics du tablier mesure avait eclate le pont)
+        wetZ = None
+        if c in ('road', 'hwy', 'mark_w', 'mark_y') and len(P) >= 2 and not deck_hit:
             wet = [q[3] <= 0.05 and q[2] < q[3] + 2.5 for q in P]
             if any(wet):
-                for q, wv in zip(P, wet):
-                    if wv: q[2] = round(max(q[2], 6.0), 2)
+                dd = np.r_[0, np.hypot(*np.diff(np.array([[q[0], q[1]] for q in P]), axis=0).T)]
+                wetZ = np.array([6.0 if w else 0.0 for w in wet])
+                for i in range(1, len(wetZ)): wetZ[i] = max(wetZ[i], wetZ[i - 1] - 0.08 * dd[i])
+                for i in range(len(wetZ) - 2, -1, -1): wetZ[i] = max(wetZ[i], wetZ[i + 1] - 0.08 * dd[i + 1])
         # [ROADS-V2] profil lisse: mediane glissante (5) puis pente bornee a 8 % (pas de pics, rampes d'acces douces)
         if len(P) >= 3:
             Zs = np.array([q[2] for q in P]); G0 = np.array([q[3] for q in P])
             el = Zs > G0 + 2.0
             if el.any():
-                # rampes d'acces: on propage le tablier vers les berges (pente 8 %) avant le lissage
-                d0 = np.r_[0, np.hypot(*np.diff(np.array([[q[0], q[1]] for q in P]), axis=0).T)]
-                for i in range(1, len(Zs)): Zs[i] = max(Zs[i], Zs[i - 1] - 0.08 * d0[i])
-                for i in range(len(Zs) - 2, -1, -1): Zs[i] = max(Zs[i], Zs[i + 1] - 0.08 * d0[i + 1])
                 Zm = Zs.copy()
                 for i in range(len(Zs)):
                     w = Zs[max(0, i - 2):i + 3]; Zm[i] = np.median(w)
@@ -109,6 +109,9 @@ def main():
                 for i in range(len(Zm) - 2, -1, -1): Zm[i] = min(Zm[i], Zm[i + 1] + 0.08 * d[i + 1])
                 Zm = np.maximum(Zm, G0 + 0.3)
                 for q, z in zip(P, Zm): q[2] = round(float(z), 2)
+        if wetZ is not None:
+            for q, wz in zip(P, wetZ):
+                if wz > q[3] + 0.5: q[2] = round(max(q[2], float(wz)), 2)
         out[c].append({'w': float(s['width'] or 4), 'p': [q[:3] for q in P]})
     json.dump(out, open(OUT, 'w'), separators=(',', ':'))
     print({k: len(v) for k, v in out.items()}, 'points sur tablier:', n_el, '-> %s (%.0f ko)' % (OUT, os.path.getsize(OUT) / 1024))

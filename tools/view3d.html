@@ -182,10 +182,11 @@
   <div class="sect" style="margin-top:10px">Tour cameras <span id="tour-count" style="color:var(--mid);margin-left:6px"></span></div>
   <div style="display:flex;gap:6px;margin:4px 0 6px">
     <input id="tour-search" type="text" placeholder="Filter..." spellcheck="false" style="flex:1;min-width:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;color:inherit;padding:4px 7px;font:inherit;font-size:12px">
-    <span class="lchip" id="tour-solved" title="Select the solved cameras (default)">Solved</span>
-    <span class="lchip" id="tour-all" title="Select every listed camera">All</span>
-    <span class="lchip" id="tour-none" title="Clear the selection">None</span>
+    <button type="button" class="tbtn" id="tour-solved" title="Select the solved cameras (default)">Solved</button>
+    <button type="button" class="tbtn" id="tour-all" title="Select every listed camera">All</button>
+    <button type="button" class="tbtn" id="tour-none" title="Clear the selection">None</button>
   </div>
+  <style>.tbtn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:inherit;border-radius:6px;padding:3px 8px;font:inherit;font-size:12px;cursor:pointer}.tbtn:hover{background:rgba(255,255,255,.16)}</style>
   <div id="tour-list" style="max-height:220px;overflow:auto;font-size:12px;line-height:1.7;padding-right:4px"></div>
 </div>
 <div class="panel" id="info"></div>
@@ -2776,6 +2777,7 @@ addEventListener('pointerup', () => { _panDrag = null; });
 povZoomEl.addEventListener('input', () => setPovZoom(+povZoomEl.value / 100));
 addEventListener('wheel', ev => {
   if (!povPrev || !povBase) return;   // hors POV, la molette reste a OrbitControls
+  if (ev.target && ev.target.closest && ev.target.closest('.pop, .panel, #side')) return;   // [TOUR-PICK-V2] les listes des menus defilent
   ev.preventDefault();
   setPovZoom(povZoom * Math.exp(ev.deltaY * 0.0012));
 }, { passive: false });
@@ -3283,7 +3285,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
   async function start() {
     if (!srcMap) { try { const d = await (await fetch('/api/map_data')).json(); srcMap = {}; for (const c of d.cameras || []) srcMap[c.name] = c.source || ''; } catch (e) { srcMap = {}; } }
     const sel = window.__tourSel && window.__tourSel();                  // [TOUR-PICK-V1] cams choisies par l'utilisateur
-    const ok = camPickRefs.filter(c => c.corners && c.xyz && c.xyz[2] < 1500 && (sel ? sel.has(c.name) : /^(SOLVED|VERIFIED|LOCKED)/.test(String(c.pose_verified || ''))));
+    let ok = camPickRefs.filter(c => c.corners && c.xyz && c.xyz[2] < 1500 && (sel && sel.size ? sel.has(c.name) : /^(SOLVED|VERIFIED|LOCKED)/.test(String(c.pose_verified || ''))));   // selection vide -> cams resolues
     if (!ok.length) return;
     // plus proche voisin depuis la camera courante
     const rest = ok.slice(); list = []; let p = camera.position.clone();
