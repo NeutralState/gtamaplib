@@ -4300,6 +4300,26 @@ window.__camScreen = name => {
     }
   }
 
+
+  // ---- ecrans LED de facade (tools/led_facades.py): image du jeu redressee, posee sur la face mesuree, lumineuse la nuit ----
+  fetch('/threejs/_led_facades.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(Lf => {
+    if (!Lf) return;
+    for (const e of Object.values(Lf)) {
+      const P = M[e.building] ? ptsOf(e.building) : null; if (!P) continue;
+      let cx = 0, cy = 0; for (const p of P) { cx += p[0]; cy += p[1]; } cx /= P.length; cy /= P.length;
+      const L = Math.hypot(e.b[0] - e.a[0], e.b[1] - e.a[1]), tx = (e.b[0] - e.a[0]) / L, ty = (e.b[1] - e.a[1]) / L;
+      let nx = ty, ny = -tx; const mx = e.a[0] + tx * L / 2, my = e.a[1] + ty * L / 2; if ((mx - cx) * nx + (my - cy) * ny < 0) { nx = -nx; ny = -ny; }
+      const pt = (s2, z) => [e.a[0] + tx * s2 + nx * 0.3, e.a[1] + ty * s2 + ny * 0.3, z];
+      const A = pt(e.s0, e.z0), B = pt(e.s1, e.z0), C2 = pt(e.s1, e.z1), D = pt(e.s0, e.z1);
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute([...A, ...B, ...C2, ...A, ...C2, ...D], 3));
+      g.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1], 2)); g.computeVertexNormals();
+      const tex = new THREE.TextureLoader().load('/threejs/' + e.img); tex.colorSpace = THREE.SRGBColorSpace;
+      const mt = new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: new THREE.Color(1, 1, 1), emissiveIntensity: 0.25, roughness: 0.3, metalness: 0.1, side: THREE.DoubleSide });
+      mt.toneMapped = false; glowMats.push([mt, 1.6]); add(g, mt, false);
+    }
+    window.__structs = Object.assign(window.__structs || {}, { led: Object.keys(Lf).length });
+  }).catch(() => {});
   // ---- cheminees ----
   const smokers = [];
   {
