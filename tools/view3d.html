@@ -175,9 +175,18 @@
 </div>
 <div class="pop" id="pop-cine">
   <div class="sect">Cinematic</div>
-  <span class="lchip" id="btn-tour" title="Fly from solved camera to solved camera; the real frame fades in perfectly aligned (Esc or click to stop)">Tour of solved cameras</span>
+  <span class="lchip" id="btn-tour" title="Fly from camera to camera through the cameras ticked below (solved ones by default); the real frame fades in perfectly aligned (Esc or click to stop)">Camera tour</span>
   <span class="lchip" id="btn-orbit" title="Slow orbit around the current target">Orbit</span>
   <span class="lchip" id="btn-timelapse" title="Sunrise, noon, sunset, night (city lights) — loops">Sun timelapse</span>
+  <!-- [TOUR-PICK-V1] choix des cams du tour -->
+  <div class="sect" style="margin-top:10px">Tour cameras <span id="tour-count" style="color:var(--mid);margin-left:6px"></span></div>
+  <div style="display:flex;gap:6px;margin:4px 0 6px">
+    <input id="tour-search" type="text" placeholder="Filter..." spellcheck="false" style="flex:1;min-width:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;color:inherit;padding:4px 7px;font:inherit;font-size:12px">
+    <span class="lchip" id="tour-solved" title="Select the solved cameras (default)">Solved</span>
+    <span class="lchip" id="tour-all" title="Select every listed camera">All</span>
+    <span class="lchip" id="tour-none" title="Clear the selection">None</span>
+  </div>
+  <div id="tour-list" style="max-height:220px;overflow:auto;font-size:12px;line-height:1.7;padding-right:4px"></div>
 </div>
 <div class="panel" id="info"></div>
 <!-- [UI-V2] sidebar: liste des cameras + details (l'environnement est passe dans le panneau Light) -->
@@ -3273,7 +3282,8 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
   let srcMap = null;
   async function start() {
     if (!srcMap) { try { const d = await (await fetch('/api/map_data')).json(); srcMap = {}; for (const c of d.cameras || []) srcMap[c.name] = c.source || ''; } catch (e) { srcMap = {}; } }
-    const ok = camPickRefs.filter(c => c.corners && c.xyz && c.xyz[2] < 1500 && /^(SOLVED|VERIFIED|LOCKED)/.test(String(c.pose_verified || '')));
+    const sel = window.__tourSel && window.__tourSel();                  // [TOUR-PICK-V1] cams choisies par l'utilisateur
+    const ok = camPickRefs.filter(c => c.corners && c.xyz && c.xyz[2] < 1500 && (sel ? sel.has(c.name) : /^(SOLVED|VERIFIED|LOCKED)/.test(String(c.pose_verified || ''))));
     if (!ok.length) return;
     // plus proche voisin depuis la camera courante
     const rest = ok.slice(); list = []; let p = camera.position.clone();
@@ -3316,6 +3326,34 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
   addEventListener('keydown', e => { if (e.key === 'Escape') stop(); });
   canvas.addEventListener('pointerdown', () => stop());
   window.__tour = { start, stop };
+  // [TOUR-PICK-V1] liste a cocher (memorisee): par defaut les cams resolues; vide = aucune cam -> le tour ne demarre pas
+  {
+    const listEl = document.getElementById('tour-list'), search = document.getElementById('tour-search'), countEl = document.getElementById('tour-count');
+    const solved = c => /^(SOLVED|VERIFIED|LOCKED)/.test(String(c.pose_verified || ''));
+    const cams = () => camPickRefs.filter(c => c.corners && c.xyz && c.xyz[2] < 1500).sort((a, b) => (solved(b) - solved(a)) || a.name.localeCompare(b.name));
+    let picked = null;
+    try { const v = JSON.parse(localStorage.getItem('ui.tourSel') || 'null'); if (Array.isArray(v)) picked = new Set(v); } catch (e) {}
+    const save = () => { try { localStorage.setItem('ui.tourSel', JSON.stringify(picked ? [...picked] : null)); } catch (e) {} };
+    const current = () => picked || new Set(cams().filter(solved).map(c => c.name));
+    const render = () => {
+      const q = search.value.trim().toLowerCase(), cur = current(); listEl.innerHTML = '';
+      for (const c of cams()) {
+        if (q && !c.name.toLowerCase().includes(q)) continue;
+        const row = document.createElement('label'); row.style.cssText = 'display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
+        const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = cur.has(c.name);
+        cb.addEventListener('change', () => { picked = new Set(current()); cb.checked ? picked.add(c.name) : picked.delete(c.name); save(); countEl.textContent = picked.size + ' selected'; });
+        const tx = document.createElement('span'); tx.textContent = (solved(c) ? '✓ ' : '') + c.name; if (!solved(c)) tx.style.opacity = '0.7';
+        row.append(cb, tx); listEl.appendChild(row);
+      }
+      countEl.textContent = cur.size + ' selected';
+    };
+    search.addEventListener('input', render);
+    document.getElementById('tour-solved').addEventListener('click', () => { picked = null; save(); render(); });
+    document.getElementById('tour-all').addEventListener('click', () => { picked = new Set(cams().map(c => c.name)); save(); render(); });
+    document.getElementById('tour-none').addEventListener('click', () => { picked = new Set(); save(); render(); });
+    window.__tourSel = () => current();
+    const wait = () => { if (camPickRefs.length) render(); else setTimeout(wait, 500); }; wait();
+  }
 })();
 // ── [TIMELAPSE-V1] le soleil fait le tour du jour (lever -> midi -> coucher -> nuit), en boucle ~48 s ──
 (() => {
