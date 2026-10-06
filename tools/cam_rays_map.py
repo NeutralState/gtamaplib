@@ -4,7 +4,7 @@
 Deux panneaux: large (rayons jusqu'a --far m, tuiles V16 z3 = 4 m/px) et proche (+-400 m, z5 = 1 m/px).
 Rayon = direction horizontale du pixel clique selon la pose courante (cameras.json); point rouge = landmark avec xyz.
 Sortie: docs/rays/<cam>.jpg (image derivee de la V16, ignoree par git si docs/rays/ l'est).
-Usage: python3 tools/cam_rays_map.py "Waning Sands (A) (X)" [--far 6000]
+Usage: python3 tools/cam_rays_map.py "Waning Sands (A) (X)" [--far 3000] [--exclude REGEX] [--tag suffixe]
 """
 import json, os, sys, math
 import numpy as np, cv2
@@ -35,8 +35,12 @@ def main():
     P = json.load(open(os.path.join(REPO, 'gtamapdata', 'pixels.json'))).get(cam, {})
     L = json.load(open(os.path.join(REPO, 'gtamapdata', 'landmarks.json')))
     cm = common.get_cam(cam); o = np.array(st['xyz'], float)
+    import re
+    exc = sys.argv[sys.argv.index('--exclude') + 1] if '--exclude' in sys.argv else None
+    tag = sys.argv[sys.argv.index('--tag') + 1] if '--tag' in sys.argv else ''
     rays = []
     for name, px in sorted(P.items()):
+        if exc and re.search(exc, name, re.I): continue
         d = np.array(cm.get_pixel_direction(tuple(px)), float); h = d[:2] / np.linalg.norm(d[:2])
         el = math.degrees(math.atan2(d[2], np.linalg.norm(d[:2])))
         xyz = (L.get(name) or {}).get('xyz')
@@ -81,7 +85,7 @@ def main():
         cv2.putText(leg, '%2d  %s  (brg %.1f, el %+.1f)' % (k + 1, name, math.degrees(math.atan2(h[0], h[1])) % 360, el), (10, 44 + 22 * k),
                     cv2.FONT_HERSHEY_SIMPLEX, 0.48, (220, 0, 0) if xyz else (0, 60, 160), 1, cv2.LINE_AA)
     panels.insert(1, leg)
-    out = os.path.join(REPO, 'docs', 'rays', cam + '.jpg'); os.makedirs(os.path.dirname(out), exist_ok=True)
+    out = os.path.join(REPO, 'docs', 'rays', cam + (' ' + tag if tag else '') + '.jpg'); os.makedirs(os.path.dirname(out), exist_ok=True)
     w = max(p.shape[1] for p in panels)
     canvas = np.full((sum(p.shape[0] + 10 for p in panels), w, 3), 255, np.uint8); y = 0
     for p in panels: canvas[y:y + p.shape[0], :p.shape[1]] = p; y += p.shape[0] + 10
