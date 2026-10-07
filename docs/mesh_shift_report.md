@@ -8,11 +8,11 @@ Residuals in px at 1280 width. View spread < 25 deg = only one component is real
 | building | cams | dx m | dy m | |shift| m | residual before px | after px | view spread deg | median width error px | cams |
 |---|---|---|---|---|---|---|---|---|---|
 | 50 Biscayne Blvd | 3 | +1.9 | -2.4 | 3.1 | 8.2 | 0.2 | 116 | -1.8 | Port Vice City (A); Port Vice City (B); Vice City 11 (Megamundo) |
-| Four Seasons Hotel Miami | 6 | +13.6 | +21.3 | 25.3 | 4.1 | 1.0 | 187 | -1.0 | Prison; Vice Beach (A); Vice Beach (B); Motorboats (A); Grassrivers 05 (Sunrise RV Park); Biplane (Video) v0900 |
-| Flamingo South Beach | 4 | -7.4 | +2.0 | 7.6 | 3.1 | 0.2 | 200 | +10.9 | Vice Beach (A); Vice Beach (B); Venetian Islands; Vice City 11 (Megamundo) |
-| Quantum on the Bay (South) | 3 | -1.5 | -3.3 | 3.7 | 1.5 | 0.0 | 45 | +0.3 | Vice Beach (A); Vice Beach (B); Vice City Postcard |
-| Marina Blue | 3 | +6.0 | -0.9 | 6.1 | 0.6 | 0.0 | 30 | -0.8 | Vice Beach (B); Port Vice City (A); Port Vice City (B) |
-| Opera Tower | 3 | +2.0 | +0.6 | 2.1 | 0.6 | 0.1 | 47 | -2.6 | Vice Beach (A); Vice Beach (B); Vice City Postcard |
-| Southeast Financial Center | 10 | -2.1 | -0.7 | 2.2 | 1.5 | 1.3 | 211 | -1.9 | Prison; Vice Beach (A); Vice Beach (B); Vice City Postcard; Port Vice City (A); Port Vice City (B) |
-| Asia Brickell Key | 7 | +4.3 | +5.1 | 6.6 | 1.6 | 1.4 | 220 | -0.6 | Vice Beach (A); Vice Beach (B); Rooftop Party; Vice City Postcard; Grassrivers 05 (Sunrise RV Park); Parachute Jump over Vice Beach (Extended Look) |
-| Pegassi Towers | 8 | -0.5 | -1.4 | 1.5 | 0.9 | 0.8 | 227 | -3.3 | Vice Beach (A); Vice Beach (B); Rooftop Party; Vice City Postcard; Port Vice City (A); Port Vice City (B) |
+| Flamingo South Beach | 4 | -7.3 | +1.9 | 7.6 | 3.1 | 0.3 | 200 | +10.9 | Vice Beach (A); Vice Beach (B); Venetian Islands; Vice City 11 (Megamundo) |
+| Quantum on the Bay (South) | 3 | -1.8 | -3.5 | 3.9 | 1.5 | 0.0 | 45 | +0.3 | Vice Beach (A); Vice Beach (B); Vice City Postcard |
+| Four Seasons Hotel Miami | 5 | +0.1 | +8.0 | 8.0 | 2.4 | 1.0 | 187 | -1.3 | Prison; Vice Beach (A); Vice Beach (B); Grassrivers 05 (Sunrise RV Park); Biplane (Video) v0900 |
+| Marina Blue | 3 | +6.7 | -1.1 | 6.8 | 0.7 | 0.0 | 30 | -0.8 | Vice Beach (B); Port Vice City (A); Port Vice City (B) |
+| Opera Tower | 3 | +1.7 | +0.4 | 1.7 | 0.5 | 0.1 | 47 | -2.6 | Vice Beach (A); Vice Beach (B); Vice City Postcard |
+| Southeast Financial Center | 10 | -2.5 | -0.6 | 2.5 | 1.4 | 1.2 | 211 | -1.9 | Prison; Vice Beach (A); Vice Beach (B); Vice City Postcard; Port Vice City (A); Port Vice City (B) |
+| Asia Brickell Key | 7 | +3.7 | +4.9 | 6.1 | 1.7 | 1.6 | 220 | -0.6 | Vice Beach (A); Vice Beach (B); Rooftop Party; Vice City Postcard; Grassrivers 05 (Sunrise RV Park); Parachute Jump over Vice Beach (Extended Look) |
+| Pegassi Towers | 8 | -0.8 | -1.7 | 1.9 | 0.9 | 0.8 | 227 | -3.3 | Vice Beach (A); Vice Beach (B); Rooftop Party; Vice City Postcard; Port Vice City (A); Port Vice City (B) |

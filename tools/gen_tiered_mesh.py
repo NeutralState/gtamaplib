@@ -20,6 +20,17 @@ import v16_tiers as VT
 # sommet est chanfreine aux extremites (couronne de LED rouges): gradins ESTIMES a -6 m (anneau interieur) et -12 m
 # (anneau exterieur); la couronne ronde de la V16 (regions 9,10,12,13,14 = cercle) en tambour de +4 m (ESTIME).
 SPEC = {
+    # --- MESH-FIT 2026-10-06 (pose audit): parcelles V16 extrudees a pleine hauteur = trop larges dans plusieurs cams;
+    # la tour = les regions V16 choisies par les aretes de silhouette (tools/mesh_pose_audit.py, banc d'essai par variantes).
+    'Wells Fargo Center': {'poly': 2269, 'color': '#94a3b8', 'groups': [([3, 0, 4], 186.6), ([1, 2], 35.0)],
+        'src': 'tour = carre central V16 + ses deux bandes (regions 3+0+4), toit 186.6 (coin N); choisie par les aretes de silhouette: erreur 11.3 -> 1.8 px sur 9 aretes '
+               '(Skyline, Basketball, Postcard, Port Vice City A/B, Shitzu Squalo 01, Grassrivers 05, Parachute Jump, Effluvia 3); podium/garage (regions 1+2) 35 m ESTIME'},
+    'Infinity at Brickell': {'poly': 1929, 'color': '#a5b4fc', 'groups': [([6, 4], 177.2), ([0, 1, 2, 3, 5, 7, 8, 9, 10], 30.0)],
+        'src': 'tour = fut nord + couronne ronde (regions 6+4), toit 177.2 (coins); choisie par les aretes de silhouette: erreur 8.2 -> 3.4 px (Prison, Highway (Peacock Bay) B, '
+               'Grassrivers 05, Shoreline); volumes bas 30 m ESTIMES; helipad V16 1930 a 181 conserve'},
+    'The Crimson': {'poly': 2729, 'color': '#fca5a5', 'shift': (-10.3, -19.2), 'core_scale': ([1], 0.9), 'groups': [([1], 92.0), ([0, 2], 30.0)],
+        'src': 'tour = barre V16 (region 1) reduite x0.9, decalee (-10.3, -19.2) m (MESH-SHIFT-V1), toit 92 m LU (Postcard, Basketball, Water Tower); aretes <= 3.5 px dans 5 cams de jour '
+               '(Vice Beach A/B, Basketball, Postcard, Parachute Jump); bloc NE + bande (regions 0+2) 30 m ESTIMES'},
     'Jade Ocean Condos': {'poly': 3584, 'color': '#34d399', 'shift': (-12.0, -8.0), 'groups': [
         ([3, 7, 8, 11, 15, 16, 9, 10, 12, 13, 14], 202.9), ([1, 4, 6, 2, 17, 19, 20, 21], 196.9), ([0, 5, 18, 22], 190.9)],
         'drum': ([9, 10, 12, 13, 14], 4.0),
@@ -45,7 +56,8 @@ SPEC = {
     # sans clics) pour Blue Diamond (-40,-20; 9.7->3.7 px, 8 cams), Tresor (-28,-12; 10.9->5.1, 6), 1500 Ocean Dr (-36,+8; 8.7->5.7, 8),
     # Jade Ocean (-12,-8; 5.2->3.4, 10): concorde avec VB-SETBACK. Icon/Green Diamond/Apogee/Murano: minimum plat -> V16 (coupe au trait de cote). (le decalage de ~29 m vers l'ouest
     # mettait Icon/Murano dans la baie) -> remis sur les silhouettes V16 (« met sur les silhouettes v16 »); hauteurs inchangees.
-    'Icon at South Beach': {'poly': 3251, 'color': '#f472b6', 'groups': [([1], 140.0), ([2], 113.4), ([0], 12.0)],
+    # MESH-SHIFT-V1 2026-10-06: tout le plan decale (-17.6, -0.9) m, mesure par les aretes de silhouette (Vice Beach A/B, Effluvia (3), Biplane v2580)
+    'Icon at South Beach': {'poly': 3251, 'color': '#f472b6', 'shift': (-17.6, -0.9), 'groups': [([1], 140.0), ([2], 113.4), ([0], 12.0)],
         'src': 'lame courbe V16 (regions 1+2): partie haute 140 m (LM 142) et aile basse 113 m LUES dans Effluvia (3); podium 12 m ESTIME; sur la silhouette V16 (VB-WATER 2026-10-04, Alexandre: le decalage 28.7 m O le mettait dans la baie)'},
     'Murano Grande': {'poly': 3233, 'color': '#fb923c', 'groups': [([1], 139.0), ([2], 133.0), ([4], 127.0), ([3], 12.0), ([0], 30.0)],
         'src': 'tour courbe en 3 segments V16 (1,2,4): 139 (LM) puis gradins 133/127 ESTIMES; podium 12 et bloc 0 30 m ESTIMES; sur la silhouette V16 (VB-WATER 2026-10-04: decalage retire, il le mettait dans la baie)'},
