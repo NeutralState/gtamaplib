@@ -3621,6 +3621,39 @@ window.__camScreen = name => {
     let R = null; try { const r = await fetch('/threejs/_v16_roads.json', { cache: 'no-store' }); if (r.ok) R = await r.json(); } catch (e) {}
     if (!R) return;
     window.__roadsData = R;                                              // [TRAFFIC-V1] le trafic roule sur le meme reseau
+    // [TUNNEL-V1 2026-10-06] tunnels (R.tunnel, non rendus): la heightmap du jeu creuse leur tranchee (-28 m) qui
+    // apparaissait comme des trous d'eau dans le port. AFFICHAGE seulement: le terrain le long du tube est releve au
+    // niveau du sol voisin (jamais abaisse; sous le chenal les voisins sont dans l'eau -> rien ne change).
+    const fillTunnels = tm => {
+      if (!R.tunnel || !R.tunnel.length || !tm) return;
+      const pa = tm.geometry.attributes.position, A = pa.array, X0 = A[0], Y0 = A[1], ST = A[3] - A[0];
+      let NX = 1; while (NX < pa.count && Math.abs(A[3 * NX + 1] - Y0) < 1e-3) NX++;
+      const NY = Math.round(pa.count / NX), idx = (i, j) => (i < 0 || j < 0 || i >= NX || j >= NY) ? -1 : j * NX + i;
+      const zAt = (x, y) => { const k = idx(Math.round((x - X0) / ST), Math.round((y - Y0) / ST)); return k < 0 ? null : A[3 * k + 2]; };
+      let n = 0;
+      for (const t of R.tunnel) {
+        const p = t.p, r = t.w / 2 + 2 * ST;   // la tranchee du jeu est jusqu'a ~17 m a cote du trace V16
+        for (let s = 0; s < p.length - 1; s++) {
+          const ax = p[s][0], ay = p[s][1], dx = p[s + 1][0] - ax, dy = p[s + 1][1] - ay, L = Math.hypot(dx, dy) || 1, nx_ = -dy / L, ny_ = dx / L;
+          for (let u = 0; u <= L; u += ST * 0.5) {
+            const cx = ax + dx * u / L, cy = ay + dy * u / L, ref = [];
+            for (const sg of [-1, 1]) for (const o of [r + ST, r + 2 * ST]) { const z = zAt(cx + sg * nx_ * o, cy + sg * ny_ * o); if (z !== null) ref.push(z); }
+            if (!ref.length) continue; ref.sort((a, b) => a - b); const zr = ref[Math.min(ref.length - 1, Math.floor(ref.length * 0.75))];   // 3e quartile: un voisin dans l'autre tube ne tire pas vers le bas
+            const i0 = Math.floor((cx - r - X0) / ST), i1 = Math.ceil((cx + r - X0) / ST), j0 = Math.floor((cy - r - Y0) / ST), j1 = Math.ceil((cy + r - Y0) / ST);
+            for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) {
+              const k = idx(i, j); if (k < 0) continue;
+              const vx = A[3 * k] - cx, vy = A[3 * k + 1] - cy;
+              if (Math.abs(vx * nx_ + vy * ny_) <= r && A[3 * k + 2] < zr - 0.5) { A[3 * k + 2] = zr; n++; }
+            }
+          }
+        }
+      }
+      if (n) { pa.needsUpdate = true; tm.geometry.computeVertexNormals(); tm.geometry.computeBoundingSphere(); renderer.shadowMap.needsUpdate = true; }
+      window.__tunnelFill = n;
+    };
+    const fill2 = tm => { fillTunnels(tm); const n1 = window.__tunnelFill || 0; fillTunnels(tm); window.__tunnelFill = n1 + (window.__tunnelFill || 0); };   // 2 passes (deux tubes voisins)
+    if (window.__terrainMesh) fill2(window.__terrainMesh);
+    else { const prev = window.__onTerrainMesh; window.__onTerrainMesh = tm => { if (prev) prev(tm); fill2(tm); }; }
     const P = [], N = [], C = [];
     const push = (a, b, c, n, col) => { P.push(...a, ...b, ...c); for (let q = 0; q < 3; q++) { N.push(...n); C.push(...col); } };
     const quad = (a, b, c, d, n, col) => { push(a, b, c, n, col); push(a, c, d, n, col); };

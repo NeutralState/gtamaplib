@@ -61,6 +61,21 @@ def resample(R, step=6.0):
     return np.c_[np.interp(t, s, R[:, 0]), np.interp(t, s, R[:, 1])]
 
 
+# [TUNNEL-V1 2026-10-06] tunnels: la V16 dessine la route en surface; la heightmap du jeu creuse leur tranchee (tube ouest a
+# -28 m sur toute sa longueur, tube est sous le chenal a -16 m) -> ces polylignes vont dans out['tunnel'] (non rendues en 3D,
+# pas de lampadaires ni de trafic) au lieu d'etre montees en pont a 6 m au-dessus de l'eau (elles traversaient le paquebot).
+# Selection par extremites (tolerance 15 m): Port of Vice City tunnel (= PortMiami Tunnel IRL, Starfish Island -> Port VC, 2 tubes).
+TUNNELS = [((323.0, 216.0), (517.0, -632.0)), ((289.0, 248.0), (517.0, -647.0))]
+
+
+def is_tunnel(R, tol=15.0):
+    a, b = R[0], R[-1]
+    for p, q in TUNNELS:
+        if (np.hypot(a[0] - p[0], a[1] - p[1]) < tol and np.hypot(b[0] - q[0], b[1] - q[1]) < tol) or \
+           (np.hypot(a[0] - q[0], a[1] - q[1]) < tol and np.hypot(b[0] - p[0], b[1] - p[1]) < tol): return True
+    return False
+
+
 def main():
     S = strokes(); G = deck_grid()
     def deck_z(x, y):
@@ -70,12 +85,19 @@ def main():
                 z = G.get((int(x // CELL) + dx, int(y // CELL) + dy))
                 if z is not None and (best is None or z > best): best = z
         return best
-    out = {'road': [], 'hwy': [], 'small': [], 'mark_w': [], 'mark_y': []}
+    out = {'road': [], 'hwy': [], 'small': [], 'mark_w': [], 'mark_y': [], 'tunnel': []}
     n_el = 0
     for s in S:
         c = CLS.get(s['color'].upper() if s['color'].startswith('#') else s['color'])
         if not c or len(s['ring']) < 2: continue
         R = resample(s['ring'])
+        if c in ('road', 'hwy', 'small', 'mark_w', 'mark_y') and is_tunnel(R):
+            P = []
+            for x, y in R:
+                try: g = float(RR.ground(x, y))
+                except Exception: g = 0.0
+                P.append([round(float(x), 1), round(float(y), 1), round(min(g, 0.0) - 8.0, 2)])   # sous le lit / la tranchee
+            out['tunnel'].append({'w': float(s['width'] or 4), 'p': P, 'cls': c}); continue
         P = []; deck_hit = False
         for x, y in R:
             try: g = max(0.0, float(RR.ground(x, y)))
