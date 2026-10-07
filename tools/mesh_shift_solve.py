@@ -7,7 +7,7 @@ centre_d (px a 1280, decalage du centre des aretes L/R de la frame par rapport a
 le decalage global de la cam; jacobien numerique d(x_pixel)/d(dx, dy) en projetant le centre du mesh a mi-hauteur;
 moindres carres ponderes -> translation (dx, dy) en metres, residus avant/apres. Une seule direction de vue = une
 seule composante observable (signalee). Rien n'est ecrit dans les meshes: rapport seulement (docs/mesh_shift_report.md).
-Usage: python3 tools/mesh_shift_solve.py [--min-cams 3]
+Usage: python3 tools/mesh_shift_solve.py [--min-cams 3] [--wide]  (--wide: cams with >= 4 judged buildings, global shift removed)
 """
 import json, os, sys, math
 import numpy as np
@@ -24,7 +24,10 @@ OUT = os.path.join(REPO, 'docs', 'mesh_shift_report.md')
 def main():
     mn = int(sys.argv[sys.argv.index('--min-cams') + 1]) if '--min-cams' in sys.argv else 3
     A = json.load(open(AUD)); S = MS.build()
-    good = {c: o for c, o in A.items() if o['n_judged'] >= 8 and o['fit'] and abs(o['fit']['shift_px']) <= 1.5}
+    if '--wide' in sys.argv:   # toutes les cams avec >= 4 volumes juges; leur decalage global (cap) est soustrait
+        good = {c: o for c, o in A.items() if o['n_judged'] >= 4 and o['fit'] and o['fit']['n'] >= 4}
+    else:
+        good = {c: o for c, o in A.items() if o['n_judged'] >= 8 and o['fit'] and abs(o['fit']['shift_px']) <= 1.5}
     obs = {}
     for cam, o in good.items():
         for n, m in o['meshes'].items():
