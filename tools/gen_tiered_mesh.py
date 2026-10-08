@@ -22,6 +22,9 @@ import v16_tiers as VT
 SPEC = {
     # --- VICE BEACH 2026-10-07: tours dans des parcelles V16 plus larges; hauteurs = landmarks triangules (>= 2 cams), regions V16
     # choisies par les aretes de silhouette dans les cams (Sidewalk (Jason) (E), Venetian Islands, Rooftop Party, Megamundo, Vice Beach A/B)
+    'Sunset Harbour South Condo': {'poly': 3621, 'color': '#f8fafc', 'shift': (0.0, -18.0), 'groups': [([4, 0, 1, 3], 80.7)],
+        'src': 'tour Sud = regions V16 4+0+1+3 (sans la region nord 2 = tour Nord, hauteur non mesuree), toit 80.7 = LMs (RN)/(RS) (2-3 cams; le LM principal 87.7 = edicule); '
+               'decalee de 18 m au sud de la parcelle V16 (aretes 16.2 -> 8.5 px, sommet -0.1 px dans Sidewalk (Jason) (E), Venetian Islands, Jet Ski, Megamundo; le LM (RS) tombe alors au bord sud)'},
     'Loews Miami Beach': {'poly': 3340, 'color': '#fde68a', 'groups': [([1, 2, 3], 87.1), ([0, 4], 25.0)],
         'src': 'tour = regions V16 1+2+3 (contiennent le LM 87.1, 4 cams); aretes 9.4 -> 5.8 px, sommet 16.9 -> ~0 px; ailes basses (regions 0+4) 25 m ESTIMEES (sommets coherents entre 20 et 35 m)'},
     'W South Beach': {'poly': 3556, 'color': '#e5e7eb', 'groups': [([44, 51, 60], 76.7), ([i for i in range(61) if i not in (44, 51, 60)], 27.4)],
