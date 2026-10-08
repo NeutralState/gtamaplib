@@ -20,6 +20,14 @@ import v16_tiers as VT
 # sommet est chanfreine aux extremites (couronne de LED rouges): gradins ESTIMES a -6 m (anneau interieur) et -12 m
 # (anneau exterieur); la couronne ronde de la V16 (regions 9,10,12,13,14 = cercle) en tambour de +4 m (ESTIME).
 SPEC = {
+    # --- VICE BEACH 2026-10-07: tours dans des parcelles V16 plus larges; hauteurs = landmarks triangules (>= 2 cams), regions V16
+    # choisies par les aretes de silhouette dans les cams (Sidewalk (Jason) (E), Venetian Islands, Rooftop Party, Megamundo, Vice Beach A/B)
+    'Loews Miami Beach': {'poly': 3340, 'color': '#fde68a', 'groups': [([1, 2, 3], 87.1), ([0, 4], 25.0)],
+        'src': 'tour = regions V16 1+2+3 (contiennent le LM 87.1, 4 cams); aretes 9.4 -> 5.8 px, sommet 16.9 -> ~0 px; ailes basses (regions 0+4) 25 m ESTIMEES (sommets coherents entre 20 et 35 m)'},
+    'W South Beach': {'poly': 3556, 'color': '#e5e7eb', 'groups': [([44, 51, 60], 76.7), ([i for i in range(61) if i not in (44, 51, 60)], 27.4)],
+        'src': 'tour = region V16 44 (+51, 60) au LM (SE) 76.7 (2 cams); podium 27.4 = LM (BNW) (2 cams); sommet 10.5 -> -0.8 px; les deux aretes de la tour restent 6-13 px a gauche dans 2 cams (tour en retrait de la parcelle, non corrige)'},
+    'Royal Palm South Beach': {'poly': 3336, 'color': '#fef3c7', 'groups': [([0, 1, 2], 67.9), ([5, 7], 67.0), ([3, 4, 6, 8], 15.0)],
+        'src': 'tour N (regions 0+1+2) aux LMs (N) 67.9 (3-4 cams), tour S (5+7) au LM (S) 67.0 (3 cams); aretes 12.9 -> 8.1 px; ailes basses 15 m ESTIMEES'},
     # --- MESH-FIT 2026-10-06 (pose audit): parcelles V16 extrudees a pleine hauteur = trop larges dans plusieurs cams;
     # la tour = les regions V16 choisies par les aretes de silhouette (tools/mesh_pose_audit.py, banc d'essai par variantes).
     'Wells Fargo Center': {'poly': 2269, 'color': '#94a3b8', 'groups': [([3, 0, 4], 186.6), ([1, 2], 35.0)],
