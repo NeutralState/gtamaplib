@@ -142,6 +142,7 @@
     <span class="lchip on" id="ly-roads" title="3D roads: the whole V16 road network as real geometry (asphalt, lane markings), viaducts and bridges at their measured heights with decks, guardrails and piers">3D roads</span>
     <span class="lchip on" id="ly-fill" title="City fill: every V16 building footprint extruded (heights ESTIMATED, visual only)">City fill</span>
     <span class="lchip on" id="ly-refl" title="Water reflections: buildings, bridges and sky mirrored on the water (planar reflection, rippled by the waves, Fresnel)">Water reflections</span>
+    <span class="lchip on" id="ly-facadetex" title="Real facades from the game frames: each measured facade is rectified from the best daytime frame (and a night frame shows its lit windows at night); hidden parts keep the plain colour">Game facades</span>
     <span class="lchip on" id="ly-traffic"title="Traffic: animated cars and trucks on the V16 road network (headlights and tail lights at night) — visual only">Traffic</span>
     <span class="lchip on" id="ly-palms"title="Vegetation: palm rows along the beach promenade, parks and streets, forests on the hills (placed from the V16 map + height map)">Trees &amp; palms</span>
     <span class="lchip on" id="ly-cine" title="Cinematic rendering: ambient occlusion, bloom, color grading, vignette, MSAA">Cinematic rendering</span>
@@ -4453,6 +4454,41 @@ window.__camScreen = name => {
     }
     window.__structs = Object.assign(window.__structs || {}, { led: Object.keys(Lf).length });
   }).catch(() => {});
+  // ---- [FACADE-TEX-V1 2026-10-07] facades reelles redressees depuis les frames (tools/facade_textures.py): texture de jour
+  // (frame de jour, pose confirmee par l'audit) et texture de NUIT (fenetres allumees) quand une frame de nuit voit la face ----
+  const facDay = new THREE.Group(), facNight = new THREE.Group(), facPair = [];
+  facDay.name = 'facade-tex-day'; facNight.name = 'facade-tex-night'; grp.add(facDay); grp.add(facNight);
+  {
+    const chipF = document.getElementById('ly-facadetex');
+    let onF = localStorage.getItem('ui.facadeTex') !== '0';
+    const syncF = () => { chipF.classList.toggle('on', onF); window.__facadeTexOn = onF; };
+    chipF.addEventListener('click', () => { onF = !onF; try { localStorage.setItem('ui.facadeTex', onF ? '1' : '0'); } catch (e) {} syncF(); });
+    syncF();
+  }
+  fetch('/threejs/_facade_tex.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(Ft => {
+    if (!Ft) return;
+    const loader = new THREE.TextureLoader(), byKey = {};
+    for (const e of Ft) {
+      const L = Math.hypot(e.b[0] - e.a[0], e.b[1] - e.a[1]); if (L < 1) continue;
+      const off = 0.25, nx = e.n[0] * off, ny = e.n[1] * off;
+      const A = [e.a[0] + nx, e.a[1] + ny, e.z0], B = [e.b[0] + nx, e.b[1] + ny, e.z0], C2 = [e.b[0] + nx, e.b[1] + ny, e.z1], D = [e.a[0] + nx, e.a[1] + ny, e.z1];
+      const g = new THREE.BufferGeometry();
+      g.setAttribute('position', new THREE.Float32BufferAttribute([...A, ...B, ...C2, ...A, ...C2, ...D], 3));
+      g.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1], 2)); g.computeVertexNormals();
+      const tex = loader.load('/threejs/' + e.img); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+      let mt;
+      if (e.tod === 'night') {
+        mt = new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: new THREE.Color(1, 1, 1), emissiveIntensity: 0, roughness: 0.6, metalness: 0.0, alphaTest: 0.5 });
+        glowMats.push([mt, 1.1]);                                                 // la frame de nuit = ses propres lumieres
+      } else mt = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.85, metalness: 0.0, alphaTest: 0.5 });
+      mt.polygonOffset = true; mt.polygonOffsetFactor = -1; mt.polygonOffsetUnits = -2;
+      const me = new THREE.Mesh(g, mt); me.receiveShadow = true;
+      (e.tod === 'night' ? facNight : facDay).add(me);
+      const key = e.building + '|' + e.a.join(',') + '|' + e.z0; (byKey[key] = byKey[key] || {})[e.tod] = me;
+    }
+    for (const k in byKey) if (byKey[k].day && byKey[k].night) facPair.push(byKey[k]);
+    window.__structs = Object.assign(window.__structs || {}, { facadeTex: Ft.length });
+  }).catch(() => {});
   // ---- cheminees ----
   const smokers = [];
   {
@@ -4599,6 +4635,9 @@ window.__camScreen = name => {
     grp.visible = !!(window.__solids && window.__solids.mesh.visible) || !window.__solids;
     const nt = terraUni.uNight.value;
     for (const [m, k] of glowMats) m.emissiveIntensity = k * nt;
+    { const on = window.__facadeTexOn !== false, nightOn = nt >= 0.5;                 // [FACADE-TEX-V1] jour / nuit
+      facDay.visible = on; facNight.visible = on && nightOn;
+      for (const p of facPair) p.day.visible = !nightOn; }
     for (const pm of poolMats) { pm.opacity = 0.9 * nt; pm.visible = nt > 0.02; }
     if (window.__lampMat) window.__lampMat.emissiveIntensity = 4.0 * nt;     // [GROUND-DETAIL-V1] tetes de lampadaires
     if (smoke && grp.visible) {
