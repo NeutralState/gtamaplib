@@ -8,7 +8,7 @@ Vice City n'est pas une deformation lisse de Miami). Un mesh fidele = coins de t
 Classement: emprises du remplissage urbain (> 600 m2), visibles (centre a l'image, < 1500 m, rayon central non coupe par
 un volume deja modelise) dans le plus de SCENES independantes (frames d'une meme video / serie (A)(B) comptees une fois).
 Sortie: docs/mesh_click_list.md (anglais, public) — nom propose, position, aire, meilleures cams ou cliquer.
-Usage: python3 tools/mesh_click_list.py [--top 40]
+Usage: python3 tools/mesh_click_list.py [--top 40] [--bbox X0 Y0 X1 Y1 --name vicebeach]
 """
 import json, os, sys, math, re
 import numpy as np
@@ -45,9 +45,12 @@ def seg_hits_box(o, p, boxes):
 
 def main():
     top = int(sys.argv[sys.argv.index('--top') + 1]) if '--top' in sys.argv else 40
+    bb = [float(v) for v in sys.argv[sys.argv.index('--bbox') + 1:sys.argv.index('--bbox') + 5]] if '--bbox' in sys.argv else None
+    out = OUT if '--name' not in sys.argv else OUT.replace('.md', '_%s.md' % sys.argv[sys.argv.index('--name') + 1])
     M = json.load(open(MASS)); C = json.load(open(CAMS))
     area = lambda O: abs(np.sum(O[:, 0] * np.roll(O[:, 1], 1) - np.roll(O[:, 0], 1) * O[:, 1])) / 2
     cand = [(i, np.array(m['o'], float), float(m['z'])) for i, m in enumerate(M) if area(np.array(m['o'], float)) > 600]
+    if bb: cand = [c for c in cand if bb[0] <= c[1][:, 0].mean() <= bb[2] and bb[1] <= c[1][:, 1].mean() <= bb[3]]
     boxes = []
     for so in MSO.build().values():
         if not so['layers']: continue
@@ -82,8 +85,8 @@ def main():
          '| # | V16 id | position (x, y) | footprint m² | independent scenes | best cams to click |', '|---|---|---|---|---|---|']
     for k, (n, i, c, a, best) in enumerate(rows[:top], 1):
         L.append('| %d | V16 #%d | %.0f, %.0f | %.0f | %d | %s |' % (k, i, c[0], c[1], a, n, '; '.join('%s (%.0f px)' % (b[0], b[1]) for b in best)))
-    open(OUT, 'w').write('\n'.join(L) + '\n')
-    print('%d emprises visibles dans >= 2 scenes; top %d -> %s' % (len(rows), top, OUT))
+    open(out, 'w').write('\n'.join(L) + '\n')
+    print('%d emprises visibles dans >= 2 scenes; top %d -> %s' % (len(rows), top, out))
 
 
 if __name__ == '__main__':
