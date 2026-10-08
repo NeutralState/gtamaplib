@@ -175,19 +175,33 @@
 </div>
 <div class="pop" id="pop-cine">
   <div class="sect">Cinematic</div>
-  <span class="lchip" id="btn-tour" title="Fly from camera to camera through the cameras ticked below (solved ones by default); the real frame fades in perfectly aligned (Esc or click to stop)">Camera tour</span>
+  <span class="lchip" id="btn-tour" title="Fly from camera to camera in the order of the playlist below (solved cameras if it is empty); the real frame fades in perfectly aligned. During the tour: ← → skip, Space pause, Esc or click to stop">Camera tour</span>
   <span class="lchip" id="btn-orbit" title="Slow orbit around the current target">Orbit</span>
   <span class="lchip" id="btn-timelapse" title="Sunrise, noon, sunset, night (city lights) — loops">Sun timelapse</span>
-  <!-- [TOUR-PICK-V1] choix des cams du tour -->
-  <div class="sect" style="margin-top:10px">Tour cameras <span id="tour-count" style="color:var(--mid);margin-left:6px"></span></div>
-  <div style="display:flex;gap:6px;margin:4px 0 6px">
-    <input id="tour-search" type="text" placeholder="Filter..." spellcheck="false" style="flex:1;min-width:0;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;color:inherit;padding:4px 7px;font:inherit;font-size:12px">
-    <button type="button" class="tbtn" id="tour-solved" title="Select the solved cameras (default)">Solved</button>
-    <button type="button" class="tbtn" id="tour-all" title="Select every listed camera">All</button>
-    <button type="button" class="tbtn" id="tour-none" title="Clear the selection">None</button>
+  <!-- [TOUR-PICK-V3 2026-10-07] playlist ordonnee du tour (glisser-deposer, fleches, ajout depuis la liste filtree) -->
+  <style>.tbtn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:inherit;border-radius:6px;padding:3px 8px;font:inherit;font-size:12px;cursor:pointer}.tbtn:hover{background:rgba(255,255,255,.16)}
+  .tpl-row{display:flex;align-items:center;gap:4px;padding:1px 4px;border-radius:5px;white-space:nowrap}.tpl-row:hover{background:rgba(255,255,255,.07)}
+  .tpl-row.drag{opacity:.4}.tpl-row.over{box-shadow:inset 0 2px 0 var(--accent,#facc15)}.tpl-row.cur{background:rgba(250,204,21,.18)}
+  .tpl-n{width:22px;color:var(--mid);text-align:right;font-variant-numeric:tabular-nums}.tpl-name{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;cursor:pointer}
+  .tpl-b{background:none;border:0;color:inherit;opacity:.55;cursor:pointer;padding:0 3px;font-size:12px}.tpl-b:hover{opacity:1}
+  .tad-row{display:flex;align-items:center;gap:6px;padding:1px 4px;border-radius:5px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.tad-row:hover{background:rgba(255,255,255,.07)}
+  .tad-row.in{opacity:.45}</style>
+  <div class="sect" style="margin-top:10px">Tour playlist <span id="tour-count" style="color:var(--mid);margin-left:6px"></span></div>
+  <div style="display:flex;gap:5px;flex-wrap:wrap;margin:4px 0 6px">
+    <button type="button" class="tbtn" id="tour-addsolved" title="Append every solved camera that is not in the playlist yet">+ Solved</button>
+    <button type="button" class="tbtn" id="tour-route" title="Reorder the playlist as the shortest flight path, starting from the first camera">Nearest route</button>
+    <button type="button" class="tbtn" id="tour-rev" title="Reverse the order">Reverse</button>
+    <button type="button" class="tbtn" id="tour-clear" title="Empty the playlist (an empty playlist tours the solved cameras)">Clear</button>
   </div>
-  <style>.tbtn{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);color:inherit;border-radius:6px;padding:3px 8px;font:inherit;font-size:12px;cursor:pointer}.tbtn:hover{background:rgba(255,255,255,.16)}</style>
-  <div id="tour-list" style="max-height:220px;overflow:auto;font-size:12px;line-height:1.7;padding-right:4px"></div>
+  <div id="tour-list" style="height:150px;overflow:auto;font-size:12px;line-height:1.6;padding-right:4px;border:1px solid rgba(255,255,255,.08);border-radius:6px"></div>
+  <div style="display:flex;gap:8px;align-items:center;margin:6px 0 2px;font-size:12px">
+    <label title="Seconds the real frame stays on screen at each camera">Hold <select id="tour-hold" style="background:rgba(255,255,255,.06);color:inherit;border:1px solid rgba(255,255,255,.12);border-radius:5px;font:inherit;font-size:12px"><option>2</option><option>4</option><option>6</option><option>10</option></select> s</label>
+    <label title="Start again from the first camera at the end"><input type="checkbox" id="tour-loop"> Loop</label>
+    <span style="color:var(--mid);margin-left:auto" title="During the tour">← → skip · Space pause</span>
+  </div>
+  <div class="sect" style="margin-top:8px">Add cameras</div>
+  <input id="tour-search" type="text" placeholder="Filter... (click a camera to add it)" spellcheck="false" style="width:100%;box-sizing:border-box;margin:4px 0 6px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.12);border-radius:6px;color:inherit;padding:4px 7px;font:inherit;font-size:12px">
+  <div id="tour-add" style="max-height:170px;overflow:auto;font-size:12px;line-height:1.6;padding-right:4px"></div>
 </div>
 <div class="panel" id="info"></div>
 <!-- [UI-V2] sidebar: liste des cameras + details (l'environnement est passe dans le panneau Light) -->
@@ -3267,8 +3281,9 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
   };
   const ease = x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
   function next() {
-    i++; if (i >= list.length) i = 0;
-    const c = list[i];
+    i++; if (i >= list.length) { if (window.__tourLoop && !window.__tourLoop()) { stop(); return; } i = 0; }
+    if (i < 0) i = list.length - 1;
+    const c = list[i]; if (window.__tourMark) window.__tourMark(c.name);
     from = { pos: camera.position.clone(), quat: camera.quaternion.clone(), fov: camera.fov };
     to = poseOf(c);
     const d = from.pos.distanceTo(to.pos);
@@ -3284,12 +3299,15 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
   let srcMap = null;
   async function start() {
     if (!srcMap) { try { const d = await (await fetch('/api/map_data')).json(); srcMap = {}; for (const c of d.cameras || []) srcMap[c.name] = c.source || ''; } catch (e) { srcMap = {}; } }
-    const sel = window.__tourSel && window.__tourSel();                  // [TOUR-PICK-V1] cams choisies par l'utilisateur
-    let ok = camPickRefs.filter(c => c.corners && c.xyz && c.xyz[2] < 1500 && (sel && sel.size ? sel.has(c.name) : /^(SOLVED|VERIFIED|LOCKED)/.test(String(c.pose_verified || ''))));   // selection vide -> cams resolues
-    if (!ok.length) return;
-    // plus proche voisin depuis la camera courante
-    const rest = ok.slice(); list = []; let p = camera.position.clone();
-    while (rest.length) { let bi = 0, bd = 1e18; rest.forEach((c, k) => { const d = p.distanceToSquared(new THREE.Vector3(...c.xyz)); if (d < bd) { bd = d; bi = k; } }); const c = rest.splice(bi, 1)[0]; list.push(c); p = new THREE.Vector3(...c.xyz); }
+    const okc = c => c && c.corners && c.xyz && c.xyz[2] < 1500;
+    const pl = (window.__tourList ? window.__tourList() : []).map(n => camPickRefs.find(c => c.name === n)).filter(okc);   // [TOUR-PICK-V3] ordre de la playlist
+    if (pl.length) list = pl;
+    else {                                                               // playlist vide -> cams resolues, plus court chemin depuis la camera courante
+      const rest = camPickRefs.filter(c => okc(c) && /^(SOLVED|VERIFIED|LOCKED)/.test(String(c.pose_verified || '')));
+      if (!rest.length) return;
+      list = []; let p = camera.position.clone();
+      while (rest.length) { let bi = 0, bd = 1e18; rest.forEach((c, k) => { const d = p.distanceToSquared(new THREE.Vector3(...c.xyz)); if (d < bd) { bd = d; bi = k; } }); const c = rest.splice(bi, 1)[0]; list.push(c); p = new THREE.Vector3(...c.xyz); }
+    }
     if (povPrev) { try { exitPOV(); } catch (e) {} }
     window.__tourOn = true; btn.classList.add('on'); i = -1;
     camsWas = layers.cams.visible; layers.cams.visible = false;
@@ -3319,41 +3337,83 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
       camera.fov = from.fov + (to.fov - from.fov) * e; camera.near = 0.5; camera.updateProjectionMatrix();
       if (k >= 1) { phase = 'show'; t = 0; img.style.opacity = '0.92'; cap.style.opacity = '1'; }
     } else if (phase === 'show') {
-      if (t > 3.6) { phase = 'fade'; t = 0; img.style.opacity = '0'; cap.style.opacity = '0'; }
+      if (!paused && t > (window.__tourHold ? window.__tourHold() : 3.6)) { phase = 'fade'; t = 0; img.style.opacity = '0'; cap.style.opacity = '0'; }
     } else if (phase === 'fade') {
       if (t > 1.0) next();
     }
   };
   btn.addEventListener('click', e => { e.stopPropagation(); window.__tourOn ? stop() : start(); });
-  addEventListener('keydown', e => { if (e.key === 'Escape') stop(); });
+  let paused = false;
+  addEventListener('keydown', e => {
+    if (e.key === 'Escape') stop();
+    if (!window.__tourOn || (e.target && /INPUT|SELECT|TEXTAREA/.test(e.target.tagName))) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); paused = false; next(); }                       // [TOUR-PICK-V3] cam suivante
+    else if (e.key === 'ArrowLeft') { e.preventDefault(); paused = false; i -= 2; next(); }           // cam precedente
+    else if (e.key === ' ') { e.preventDefault(); paused = !paused; capIdx.textContent = capIdx.textContent.replace(/\s+·\s+paused$/, '') + (paused ? '  ·  paused' : ''); }
+  });
   canvas.addEventListener('pointerdown', () => stop());
   window.__tour = { start, stop };
-  // [TOUR-PICK-V1] liste a cocher (memorisee): par defaut les cams resolues; vide = aucune cam -> le tour ne demarre pas
+  // [TOUR-PICK-V3 2026-10-07] playlist ordonnee (memorisee): glisser-deposer / fleches pour l'ordre, x pour retirer, clic = voir la cam;
+  // liste filtree en dessous pour ajouter; vide -> le tour fait les cams resolues. Migre l'ancienne selection (ui.tourSel).
   {
-    const listEl = document.getElementById('tour-list'), search = document.getElementById('tour-search'), countEl = document.getElementById('tour-count');
+    const listEl = document.getElementById('tour-list'), addEl = document.getElementById('tour-add'), search = document.getElementById('tour-search'), countEl = document.getElementById('tour-count');
+    const holdEl = document.getElementById('tour-hold'), loopEl = document.getElementById('tour-loop');
     const solved = c => /^(SOLVED|VERIFIED|LOCKED)/.test(String(c.pose_verified || ''));
     const cams = () => camPickRefs.filter(c => c.corners && c.xyz && c.xyz[2] < 1500).sort((a, b) => (solved(b) - solved(a)) || a.name.localeCompare(b.name));
-    let picked = null;
-    try { const v = JSON.parse(localStorage.getItem('ui.tourSel') || 'null'); if (Array.isArray(v)) picked = new Set(v); } catch (e) {}
-    const save = () => { try { localStorage.setItem('ui.tourSel', JSON.stringify(picked ? [...picked] : null)); } catch (e) {} };
-    const current = () => picked || new Set(cams().filter(solved).map(c => c.name));
+    const ls = (k, d) => { try { const v = JSON.parse(localStorage.getItem(k) || 'null'); return v === null ? d : v; } catch (e) { return d; } };
+    const lsSet = (k, v) => { try { localStorage.setItem(k, JSON.stringify(v)); } catch (e) {} };
+    let pl = ls('ui.tourList', null);
+    if (!Array.isArray(pl)) { const old = ls('ui.tourSel', null); pl = Array.isArray(old) ? old : []; }
+    holdEl.value = String(ls('ui.tourHold', 4)); loopEl.checked = ls('ui.tourLoop', true);
+    holdEl.addEventListener('change', () => lsSet('ui.tourHold', +holdEl.value)); loopEl.addEventListener('change', () => lsSet('ui.tourLoop', loopEl.checked));
+    window.__tourHold = () => +holdEl.value || 4; window.__tourLoop = () => loopEl.checked;
+    let curName = null;
+    window.__tourMark = n => { curName = n; for (const r of listEl.children) r.classList.toggle('cur', r.dataset.n === n); const r = [...listEl.children].find(r => r.dataset.n === n); if (r) r.scrollIntoView({ block: 'nearest' }); };
+    const save = () => { lsSet('ui.tourList', pl); render(); };
+    const route = () => {                                                // plus court chemin glouton depuis la premiere cam
+      const byN = Object.fromEntries(cams().map(c => [c.name, c])); const rest = pl.filter(n => byN[n]); if (rest.length < 3) return;
+      const out = [rest.shift()];
+      while (rest.length) { const p = byN[out[out.length - 1]].xyz; let bi = 0, bd = 1e18; rest.forEach((n, k) => { const q = byN[n].xyz, d = (q[0] - p[0]) ** 2 + (q[1] - p[1]) ** 2 + (q[2] - p[2]) ** 2; if (d < bd) { bd = d; bi = k; } }); out.push(rest.splice(bi, 1)[0]); }
+      pl = out; save();
+    };
+    let dragI = -1;
     const render = () => {
-      const q = search.value.trim().toLowerCase(), cur = current(); listEl.innerHTML = '';
+      listEl.innerHTML = '';
+      if (!pl.length) { const e = document.createElement('div'); e.style.cssText = 'color:var(--mid);padding:4px 6px'; e.textContent = 'Empty: the tour flies through the solved cameras. Add cameras below.'; listEl.appendChild(e); }
+      pl.forEach((n, k) => {
+        const row = document.createElement('div'); row.className = 'tpl-row' + (n === curName ? ' cur' : ''); row.draggable = true; row.dataset.n = n;
+        const num = document.createElement('span'); num.className = 'tpl-n'; num.textContent = k + 1;
+        const nm = document.createElement('span'); nm.className = 'tpl-name'; nm.textContent = n; nm.title = 'Show this camera';
+        nm.addEventListener('click', () => { const c = camPickRefs.find(c => c.name === n); if (c && window.__focusCam) window.__focusCam(c); });
+        const mk = (t, tip, f) => { const b = document.createElement('button'); b.type = 'button'; b.className = 'tpl-b'; b.textContent = t; b.title = tip; b.addEventListener('click', e => { e.stopPropagation(); f(); }); return b; };
+        row.append(num, nm,
+          mk('↑', 'Move up', () => { if (k > 0) { [pl[k - 1], pl[k]] = [pl[k], pl[k - 1]]; save(); } }),
+          mk('↓', 'Move down', () => { if (k < pl.length - 1) { [pl[k + 1], pl[k]] = [pl[k], pl[k + 1]]; save(); } }),
+          mk('✕', 'Remove', () => { pl.splice(k, 1); save(); }));
+        row.addEventListener('dragstart', e => { dragI = k; row.classList.add('drag'); e.dataTransfer.effectAllowed = 'move'; try { e.dataTransfer.setData('text/plain', n); } catch (er) {} });
+        row.addEventListener('dragend', () => { dragI = -1; row.classList.remove('drag'); });
+        row.addEventListener('dragover', e => { e.preventDefault(); row.classList.add('over'); });
+        row.addEventListener('dragleave', () => row.classList.remove('over'));
+        row.addEventListener('drop', e => { e.preventDefault(); row.classList.remove('over'); if (dragI < 0 || dragI === k) return; const [m] = pl.splice(dragI, 1); pl.splice(dragI < k ? k - 1 : k, 0, m); save(); });
+        listEl.appendChild(row);
+      });
+      const q = search.value.trim().toLowerCase(), inPl = new Set(pl); addEl.innerHTML = '';
       for (const c of cams()) {
         if (q && !c.name.toLowerCase().includes(q)) continue;
-        const row = document.createElement('label'); row.style.cssText = 'display:flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;overflow:hidden;text-overflow:ellipsis';
-        const cb = document.createElement('input'); cb.type = 'checkbox'; cb.checked = cur.has(c.name);
-        cb.addEventListener('change', () => { picked = new Set(current()); cb.checked ? picked.add(c.name) : picked.delete(c.name); save(); countEl.textContent = picked.size + ' selected'; });
-        const tx = document.createElement('span'); tx.textContent = (solved(c) ? '✓ ' : '') + c.name; if (!solved(c)) tx.style.opacity = '0.7';
-        row.append(cb, tx); listEl.appendChild(row);
+        const r = document.createElement('div'); r.className = 'tad-row' + (inPl.has(c.name) ? ' in' : '');
+        r.textContent = (inPl.has(c.name) ? '• ' : '+ ') + (solved(c) ? '✓ ' : '') + c.name; r.title = inPl.has(c.name) ? 'Already in the playlist (click to remove)' : 'Add to the end of the playlist';
+        r.addEventListener('click', () => { const j = pl.indexOf(c.name); if (j >= 0) pl.splice(j, 1); else pl.push(c.name); save(); });
+        addEl.appendChild(r);
       }
-      countEl.textContent = cur.size + ' selected';
+      countEl.textContent = pl.length ? pl.length + ' cameras' : 'solved cameras';
     };
     search.addEventListener('input', render);
-    document.getElementById('tour-solved').addEventListener('click', () => { picked = null; save(); render(); });
-    document.getElementById('tour-all').addEventListener('click', () => { picked = new Set(cams().map(c => c.name)); save(); render(); });
-    document.getElementById('tour-none').addEventListener('click', () => { picked = new Set(); save(); render(); });
-    window.__tourSel = () => current();
+    document.getElementById('tour-addsolved').addEventListener('click', () => { const inPl = new Set(pl); for (const c of cams()) if (solved(c) && !inPl.has(c.name)) pl.push(c.name); save(); });
+    document.getElementById('tour-route').addEventListener('click', route);
+    document.getElementById('tour-rev').addEventListener('click', () => { pl.reverse(); save(); });
+    document.getElementById('tour-clear').addEventListener('click', () => { pl = []; save(); });
+    window.__tourList = () => pl.slice();
+    window.__tourSel = () => new Set(pl);                                // compat
     const wait = () => { if (camPickRefs.length) render(); else setTimeout(wait, 500); }; wait();
   }
 })();
