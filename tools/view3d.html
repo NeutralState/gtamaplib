@@ -142,7 +142,7 @@
     <span class="lchip on" id="ly-roads" title="3D roads: the whole V16 road network as real geometry (asphalt, lane markings), viaducts and bridges at their measured heights with decks, guardrails and piers">3D roads</span>
     <span class="lchip on" id="ly-fill" title="City fill: every V16 building footprint extruded (heights ESTIMATED, visual only)">City fill</span>
     <span class="lchip on" id="ly-refl" title="Water reflections: buildings, bridges and sky mirrored on the water (planar reflection, rippled by the waves, Fresnel)">Water reflections</span>
-    <span class="lchip on" id="ly-facadetex" title="Real facades from the game frames: each measured facade is rectified from the best daytime frame (and a night frame shows its lit windows at night); hidden parts keep the plain colour">Game facades</span>
+    <span class="lchip" id="ly-facadetex" title="Real facades from the game frames: each measured facade is rectified from the best daytime frame (and a night frame shows its lit windows at night); hidden parts keep the plain colour">Game facades</span>
     <span class="lchip on" id="ly-traffic"title="Traffic: animated cars and trucks on the V16 road network (headlights and tail lights at night) — visual only">Traffic</span>
     <span class="lchip on" id="ly-palms"title="Vegetation: palm rows along the beach promenade, parks and streets, forests on the hills (placed from the V16 map + height map)">Trees &amp; palms</span>
     <span class="lchip on" id="ly-cine" title="Cinematic rendering: ambient occlusion, bloom, color grading, vignette, MSAA">Cinematic rendering</span>
@@ -4509,9 +4509,9 @@ window.__camScreen = name => {
   facDay.name = 'facade-tex-day'; facNight.name = 'facade-tex-night'; grp.add(facDay); grp.add(facNight);
   {
     const chipF = document.getElementById('ly-facadetex');
-    let onF = localStorage.getItem('ui.facadeTex') !== '0';
+    let onF = localStorage.getItem('ui.facadeTex2') === '1';                     // [FACADE-TEX-V4] OFF par defaut: trop peu de vues de face nettes, textures abimees
     const syncF = () => { chipF.classList.toggle('on', onF); window.__facadeTexOn = onF; };
-    chipF.addEventListener('click', () => { onF = !onF; try { localStorage.setItem('ui.facadeTex', onF ? '1' : '0'); } catch (e) {} syncF(); });
+    chipF.addEventListener('click', () => { onF = !onF; try { localStorage.setItem('ui.facadeTex2', onF ? '1' : '0'); } catch (e) {} syncF(); });
     syncF();
   }
   fetch('/threejs/_facade_tex.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(Ft => {

@@ -117,16 +117,17 @@ def main():
             for fi, (a, b, z0, z1, nv) in enumerate(fl):
                 mid = np.array([*(a + b) / 2, (z0 + z1) / 2]); v = o - mid; dist = float(np.linalg.norm(v))
                 cosv = float(np.dot(nv, v[:2]) / max(np.linalg.norm(v), 1e-9))
-                if cosv < 0.35: continue
+                if cosv < 0.55: continue                                                    # [FACADE-TEX-V4] vues obliques = textures etirees
                 def px(X):
                     D = np.asarray(X, float) - o; z = D @ f
                     return np.c_[(W / 2 + fpx * (D @ r) / z) * kf + sh, (H / 2 - fpx * (D @ u) / z) * kf], z
                 (pa, za), (pb, zb) = px(np.array([*a, (z0 + z1) / 2])[None]), px(np.array([*b, (z0 + z1) / 2])[None])
                 if za[0] < 5 or zb[0] < 5: continue
                 wpx = float(np.hypot(*(pb[0] - pa[0])))
-                if wpx < 70: continue
+                if wpx < 220: continue                                                      # [FACADE-TEX-V4] trop petit dans la frame = bouillie
                 L_ = float(np.hypot(*(b - a))); t = (b - a) / L_
                 res = float(np.clip(dist / (fpx * kf) * 1.0, 0.15, 2.0))
+                if res > 0.7: continue                                                      # [FACADE-TEX-V4] > 0.7 m par texel: illisible
                 ns, nz = int(min(1024, max(8, L_ / res))), int(min(1024, max(8, (z1 - z0) / res)))
                 ss = (np.arange(ns) + 0.5) / ns * L_; zz = z1 - (np.arange(nz) + 0.5) / nz * (z1 - z0)
                 SS, ZZ = np.meshgrid(ss, zz)
@@ -163,7 +164,7 @@ def main():
                             if mm.sum() < 10: continue
                             if float(np.linalg.norm(np.median(lab[y0:y0 + band][mm], 0) - ref)) > 30: al[y0:] = 0; break
                         m_ = al > 0
-                        if m_.mean() < 0.3: continue
+                        if m_.mean() < 0.6: continue                                       # [FACADE-TEX-V4] facade trop morcelee
                 best.setdefault(key, []).append((score, {'building': n, 'a': [round(float(a[0]), 2), round(float(a[1]), 2)], 'b': [round(float(b[0]), 2), round(float(b[1]), 2)],
                                      'z0': round(z0, 2), 'z1': round(z1, 2), 'n': [round(float(nv[0]), 4), round(float(nv[1]), 4)],
                                      'cam': cam, 'conf': conf[cam], 'tod': tod[cam], 'valid': round(vf, 2), 'px': [ns, nz], 'wpx': round(wpx), 'sharp': round(sharp)}, np.dstack([rgb, al])))
