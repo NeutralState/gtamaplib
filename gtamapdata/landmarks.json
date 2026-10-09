@@ -19176,9 +19176,9 @@
   },
   "Flat Water Tower": {
     "xyz": [
-      -2767.645,
-      197.151,
-      67.074
+      -2769.645,
+      208.151,
+      64.074
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -19186,7 +19186,7 @@
     ],
     "error_m": null,
     "zone": "ambrosia",
-    "note": "triangule par le solve joint (monde H, 2026-07-25) mais absent du fichier jusqu'ici: Ambrosia 02 (Panorama) + rayon externe ['Vice City Postcard']. Residu max 10.2'."
+    "note": "triangule par le solve joint (monde H, 2026-07-25) mais absent du fichier jusqu'ici: Ambrosia 02 (Panorama) + rayon externe ['Vice City Postcard']. Residu max 10.2'. | ROADS-GT 2026-10-09: re-triangulated under the road constraint (roads are ground truth, Alexandre): the old point put the tower base on a V16 road that the leak map confirms; nearest off-road position minimising both rays (Ambrosia 02 (Panorama) + Vice City Postcard): moved 11.2 m, residuals 6.4 / 9.6 px (was 8.6 / 6.5)."
   },
   "Red Boxville (FL)": {
     "xyz": [
@@ -21378,9 +21378,9 @@
   },
   "Very Tall Water Tower": {
     "xyz": [
-      -3001.72,
-      4260.61,
-      90.27
+      -3007.72,
+      4245.61,
+      91.27
     ],
     "source_cameras": [
       "Ambrosia 02 (Panorama)",
@@ -21388,7 +21388,8 @@
     ],
     "error_m": null,
     "zone": "unknown",
-    "method": "FIRES-V3 2026-09-28: triangulation Panorama x Throwing (sommet de la cuve), parallaxe 14 deg -> profondeur +/- ~20-30 m, residus <= 3.5 arcmin"
+    "method": "FIRES-V3 2026-09-28: triangulation Panorama x Throwing (sommet de la cuve), parallaxe 14 deg -> profondeur +/- ~20-30 m, residus <= 3.5 arcmin",
+    "note": "ROADS-GT 2026-10-09: re-triangulated under the road constraint (roads are ground truth, Alexandre): the old point put the tower base on a V16 road that the leak map confirms; nearest off-road position minimising both rays (Ambrosia 02 (Panorama) + Throwing Stuff from an Overpass): moved 16.2 m, residuals 7.3 / 5.4 px (was 4.5 / 0.3)."
   },
   "Warehouse 1410 (Ambrosia) (A)": {
     "xyz": [
