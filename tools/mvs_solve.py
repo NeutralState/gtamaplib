@@ -264,11 +264,50 @@ def report(out):
     open(DOC, 'w').write('\n'.join(L) + '\n')
 
 
+# ROADS-GT (Alexandre 2026-10-09): roads are ground truth (the 2022 leak map; V16 roads match it) - a mesh plan may never be
+# moved onto a road. Footprint = convex hull of the mesh's lowest vertices; overlap = share of its area within a V16 road
+# stroke (road / hwy / small, at their width).
+_ROADSEG = None
+def _roads():
+    global _ROADSEG
+    if _ROADSEG is None:
+        R = json.load(open(os.path.join(THIS, 'threejs', '_v16_roads.json'))); A_, B_, W_ = [], [], []
+        for cl in ('road', 'hwy', 'small'):
+            for s_ in R[cl]:
+                Q = np.array(s_['p'], float)[:, :2]
+                for a, b in zip(Q[:-1], Q[1:]): A_.append(a); B_.append(b); W_.append(s_['w'] / 2)
+        _ROADSEG = (np.array(A_), np.array(B_), np.array(W_))
+    return _ROADSEG
+
+
+def footprint(E):
+    import cv2
+    E = np.asarray(E, float); z = E[:, :, 2]; low = E[np.isclose(z.min(1), z.min())][:, :, :2].reshape(-1, 2)
+    return cv2.convexHull(low.astype(np.float32)).reshape(-1, 2) if len(low) >= 3 else None
+
+
+def road_overlap(poly, step=2.0):
+    import cv2
+    if poly is None: return 0.0
+    SA, SB, SW = _roads(); x0, y0 = poly.min(0); x1, y1 = poly.max(0)
+    pts = np.array([(x, y) for x in np.arange(x0, x1, step) for y in np.arange(y0, y1, step)
+                    if cv2.pointPolygonTest(poly.reshape(-1, 1, 2).astype(np.float32), (float(x), float(y)), False) >= 0])
+    if len(pts) == 0: return 0.0
+    c = poly.mean(0); near = np.where(np.minimum(np.hypot(*(SA - c).T), np.hypot(*(SB - c).T)) < np.hypot(*(poly.max(0) - poly.min(0))) + 60)[0]
+    on = np.zeros(len(pts), bool)
+    for i in near:
+        a, b, w = SA[i], SB[i], SW[i]; ab = b - a; L2 = ab @ ab
+        if L2 < 1e-6: continue
+        t = np.clip(((pts - a) @ ab) / L2, 0, 1); on |= np.hypot(*(pts - (a + t[:, None] * ab)).T) < w
+    return float(on.mean())
+
+
 def apply():
     """guarded application of tools/generated/mvs_solution.json (backups first; SOLVED cameras are never in the solution).
     Cameras: canonical landmark RMS (common.cam_rms, arcmin) must not rise > 5 %, edges must improve, |dxy| <= 40 m,
     |dz| <= 20 m; without landmarks: >= 8 edges and >= 30 % edge gain. Skips negligible changes (z-score < 0.15).
-    Meshes: >= 3 cameras, >= 25 % edge gain, |t| <= 25 m, |sh| <= 0.15. Everything else -> review list in the report."""
+    Meshes: >= 3 cameras, >= 25 % edge gain, |t| <= 25 m, |sh| <= 0.15, and never onto a road (ROADS-GT: the road
+    overlap of the footprint may not grow). Everything else -> review list in the report."""
     import shutil
     sol = json.load(open(OUT)); C = json.load(open(A.CAMS)); MP = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json'); M = json.load(open(MP))
     shutil.copy(A.CAMS, A.CAMS + '.bak_mvs_1009'); shutil.copy(MP, MP + '.bak_mvs_1009')
@@ -296,6 +335,11 @@ def apply():
         if v['edge_rms_after'] > 0.75 * v['edge_rms_before']: why.append('edge gain < 25 %%: %s -> %s' % (v['edge_rms_before'], v['edge_rms_after']))
         if np.hypot(t[0], t[1]) > 25 or abs(t[2]) > 0.15: why.append('change too large')
         if np.hypot(t[0], t[1]) < 1.0 and abs(t[2]) < 0.01: continue
+        if not why and np.hypot(t[0], t[1]) >= 1.0:                    # ROADS-GT: never onto a road
+            E0 = np.array(M[n]['world_edges'], float); fp0 = footprint(E0)
+            if fp0 is not None:
+                o0, o1 = road_overlap(fp0), road_overlap(fp0 + t[:2])
+                if o1 > o0 + 0.005: why.append('would cover a V16 road (%.0f%% -> %.0f%%; roads are ground truth)' % (o0 * 100, o1 * 100))
         if why: rej_m.append((n, t.tolist(), why)); continue
         E = np.array(M[n]['world_edges'], float); g = E[:, :, 2].min()
         E[:, :, 0] += t[0]; E[:, :, 1] += t[1]; E[:, :, 2] = g + (E[:, :, 2] - g) * (1 + t[2])
