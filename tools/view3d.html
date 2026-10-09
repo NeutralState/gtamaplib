@@ -4516,7 +4516,7 @@ window.__camScreen = name => {
   }
   fetch('/threejs/_facade_tex.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(Ft => {
     if (!Ft) return;
-    const loader = new THREE.TextureLoader(), byKey = {};
+    const loader = new THREE.TextureLoader(), byKey = {}, facVer = Date.now();
     for (const e of Ft) {
       const L = Math.hypot(e.b[0] - e.a[0], e.b[1] - e.a[1]); if (L < 1) continue;
       const off = 0.25, nx = e.n[0] * off, ny = e.n[1] * off;
@@ -4524,7 +4524,7 @@ window.__camScreen = name => {
       const g = new THREE.BufferGeometry();
       g.setAttribute('position', new THREE.Float32BufferAttribute([...A, ...B, ...C2, ...A, ...C2, ...D], 3));
       g.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1], 2)); g.computeVertexNormals();
-      const tex = loader.load('/threejs/' + e.img); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+      const tex = loader.load('/threejs/' + e.img + '?v=' + facVer); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;   // anti-cache: les noms de fichiers sont stables d'une regeneration a l'autre
       let mt;
       if (e.tod === 'night') {
         mt = new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: new THREE.Color(1, 1, 1), emissiveIntensity: 0, roughness: 0.6, metalness: 0.0, alphaTest: 0.5 });
