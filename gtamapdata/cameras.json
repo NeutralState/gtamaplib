@@ -55,17 +55,17 @@
   "id": "L1/3",
   "player": null,
   "xyz": [
-   -244.2,
-   -244.8,
-   11.4
+   -232.841,
+   -283.0,
+   9.621
   ],
   "ypr": [
-   258.1756,
-   -12.7357,
-   1.5362
+   259.495,
+   -12.53,
+   1.375
   ],
   "fov": [
-   63.229,
+   62.933,
    null
   ],
   "size": [
@@ -75,7 +75,8 @@
   "source": "2021-07-09 15-18-02 [1]",
   "constraint_class": "D_no_ground_truth",
   "notes": "AMPHI 2026-09-04: clic 'Continuum (S)' re-etiquete (N) (tour 32 px a gauche du tooltip S = tour nord); grues 6 et 7-ambigu exclues (les grues visibles sont 2x plus rapprochees que les 9 tooltips: etiquetage indecidable d'ici); orientation re-resolue a position fixe (tooltip Alexandre): mediane 5.3->4.7 px, Portofino <1 px. | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | POSITION ALEXANDRE 2026-09-02: x,y = tooltip (-244.2,-244.8), sol 3.4, estrades -> z = sol+8 = 11.4 (les 8 clics sont a 1.4-2.2 km et ne contraignent pas z: residu plat de +2 a +25 m, a ajuster au slider si besoin). Orientation+fov re-solves: mediane 9.5 px, max 15. Ancienne pose (-367.9,-151.8,-9.6) etait sous le sol. Backup cameras.json.bak_amphi_0902 | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 18.8 m), residu mediane 4.7->3.5 px | ",
-  "pose_verified": null
+  "pose_verified": null,
+  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +11.4 -38.2 -1.8 m, d(ypr) +1.32 +0.21 -0.16 deg, dfov -0.30; edges 8.91 -> 2.86 sigma, landmark RMS 12.69' -> 12.77'"
  },
  "Diner (NE)": {
   "id": "L1/4",
@@ -2910,17 +2911,17 @@
   "id": "T2/12",
   "player": null,
   "xyz": [
-   -1499.035,
-   -2285.486,
-   18.442
+   -1498.693,
+   -2284.164,
+   19.222
   ],
   "ypr": [
-   343.915,
-   14.182,
-   0.092
+   343.882,
+   14.19,
+   0.371
   ],
   "fov": [
-   55.762,
+   55.868,
    null
   ],
   "size": [
@@ -2929,7 +2930,7 @@
   ],
   "source": "Trailer 2 [1111]",
   "notes": "ROAD-LOCK (cam conducteur posee sur la chaussee V16, ne pas bouger au bundle) | ROAD-SNAP 2026-09-04 (Alexandre: 'les cams tombent meme pas sur la highway'): position sur la chaussee est (sens nord) de la I-97 d'apres V16, lateral -3.3 m, z libre (viaduc) -> 15.8, roll 0; clics Park Grove re-etiquetes sur les noyaux SW/W (V16); mediane 8.2->5.6 px | ROAD-SNAP 2026-09-04 (Alexandre: 'les cams tombent meme pas sur la highway'): position sur la chaussee est (sens nord) de la I-97 d'apres V16, lateral -3.1 m, z libre (viaduc) -> 16.5, roll 0; clics Park Grove re-etiquetes sur les noyaux SW/W (V16); mediane 14.2->4.2 px | ",
-  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +3.9 +6.5 +2.6 m, d(ypr) -0.10 -0.05 +0.09 deg, dfov +0.01; edges 8.64 -> 1.46 sigma, landmark RMS 10.66' -> 9.08'"
+  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +3.9 +6.5 +2.6 m, d(ypr) -0.10 -0.05 +0.09 deg, dfov +0.01; edges 8.64 -> 1.46 sigma, landmark RMS 10.66' -> 9.08' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +0.3 +1.3 +0.8 m, d(ypr) -0.03 +0.01 +0.28 deg, dfov +0.11; edges 5.82 -> 1.72 sigma, landmark RMS 9.08' -> 8.9'"
  },
  "Beach Gym": {
   "id": "T2/13",
@@ -3510,17 +3511,17 @@
   "id": "S2/54",
   "player": null,
   "xyz": [
-   -6357.817,
-   3677.227,
-   12.222
+   -6358.46,
+   3674.485,
+   10.796
   ],
   "ypr": [
-   68.891,
-   -21.952,
-   0.108
+   68.186,
+   -21.487,
+   -0.097
   ],
   "fov": [
-   79.918,
+   79.834,
    52.035
   ],
   "size": [
@@ -3528,7 +3529,7 @@
    2160
   ],
   "source": "Screenshot 1 \u2014 Port Gellhorn 04 [1]",
-  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m. | z ancre au sol height map (11.3+1.7, etait 7.1) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.19 deg (dz +5.9 m a d~282 m) | orientation refittee sur markings (xyz fige), mediane 5' -> 4' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -17.1 -21.7 -0.8 m, d(ypr) -4.41 +0.84 +0.15 deg, dfov -1.98; edges None -> None sigma, landmark RMS 47.04' -> 8.4'"
+  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m. | z ancre au sol height map (11.3+1.7, etait 7.1) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -1.19 deg (dz +5.9 m a d~282 m) | orientation refittee sur markings (xyz fige), mediane 5' -> 4' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -17.1 -21.7 -0.8 m, d(ypr) -4.41 +0.84 +0.15 deg, dfov -1.98; edges None -> None sigma, landmark RMS 47.04' -> 8.4' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -0.6 -2.7 -1.4 m, d(ypr) -0.70 +0.47 -0.20 deg, dfov -0.08; edges None -> None sigma, landmark RMS 8.4' -> 5.7'"
  },
  "Port Gellhorn 05 (Fire)": {
   "id": "S2/55",
@@ -4219,17 +4220,17 @@
   "id": "T1/40",
   "player": null,
   "xyz": [
-   -828.518,
-   1611.052,
-   1.04
+   -830.521,
+   1623.39,
+   -0.267
   ],
   "ypr": [
-   151.433,
-   -0.228,
-   -0.008
+   151.015,
+   -0.313,
+   -0.054
   ],
   "fov": [
-   61.501,
+   62.565,
    null
   ],
   "size": [
@@ -4237,7 +4238,7 @@
    2160
   ],
   "source": "Trailer 1 [?]",
-  "note": "z ancre au sol height map (4.8+1.7, etait -0.1) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +6.6 m a d~1537 m) | orientation refittee sur markings (xyz fige), mediane 3' -> 2' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -5.1 +11.8 -5.4 m, d(ypr) -0.72 -0.01 +0.02 deg, dfov +1.83; edges None -> None sigma, landmark RMS 10.43' -> 6.73'",
+  "note": "z ancre au sol height map (4.8+1.7, etait -0.1) 2026-08-22 \u2014 ancres 3D insuffisantes pour re-resection, pose complete a refaire quand des ancres absolues (leak map) seront pointees [UNBURY-V1] | pitch compense -0.24 deg (dz +6.6 m a d~1537 m) | orientation refittee sur markings (xyz fige), mediane 3' -> 2' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -5.1 +11.8 -5.4 m, d(ypr) -0.72 -0.01 +0.02 deg, dfov +1.83; edges None -> None sigma, landmark RMS 10.43' -> 6.73' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -2.0 +12.3 -1.3 m, d(ypr) -0.42 -0.09 -0.05 deg, dfov +1.06; edges 14.65 -> 0.04 sigma, landmark RMS 6.73' -> 5.98'",
   "notes": "RESTAURE 2026-09-06: le bundle Downtown elargi l'avait enfoncee a z=-18 (7 clics, profondeur degeneree) | BA-DOWNTOWN-6c 2026-09-04 (bundle zone; ancres tooltips x3 dont 8 coins Vizcayne; V16 sigma 2.5 m; cams SOLVED/leak/HUD hors variables; z_constraint et structures respectes) | "
  },
  "Intersection (Bikers)": {
@@ -4774,17 +4775,17 @@
   "id": "T2/54",
   "player": null,
   "xyz": [
-   -5330.768,
-   3442.061,
-   66.457
+   -5331.026,
+   3439.563,
+   66.311
   ],
   "ypr": [
-   8.555,
-   7.127,
-   0.723
+   8.0,
+   6.985,
+   0.776
   ],
   "fov": [
-   49.115,
+   47.417,
    null
   ],
   "size": [
@@ -4792,7 +4793,7 @@
    1728
   ],
   "source": "Trailer 2 [4322]",
-  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m. | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -0.4 -3.6 -0.2 m, d(ypr) -0.86 -0.23 +0.10 deg, dfov -2.58; edges None -> None sigma, landmark RMS 89.12' -> 79.36'",
+  "note": "pose PGH-BA-V1 (2026-07-30): solve joint de la zone avec les cams LEAK (Motel, Pool) et les temoins exterieurs (Chase, Ambrosia 04) FIGES; juge (metres medians sur les figees) 0.19 -> 0.11 m. | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -0.4 -3.6 -0.2 m, d(ypr) -0.86 -0.23 +0.10 deg, dfov -2.58; edges None -> None sigma, landmark RMS 89.12' -> 79.36' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -0.3 -2.5 -0.1 m, d(ypr) -0.56 -0.14 +0.05 deg, dfov -1.70; edges None -> None sigma, landmark RMS 79.36' -> 73.94'",
   "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 7 clics, 0 ancres): mediane 4.0->2.5 px, ancres None->None, move 2.4 m | "
  },
  "Stock 305 Clothing Store 01 (Van)": {
@@ -5345,17 +5346,17 @@
   "id": "T3/2",
   "player": null,
   "xyz": [
-   -2423.472,
-   21.285,
-   151.234
+   -2417.242,
+   20.011,
+   150.099
   ],
   "ypr": [
-   260.143,
-   -4.939,
-   -0.163
+   260.138,
+   -4.926,
+   -0.141
   ],
   "fov": [
-   45.019,
+   45.176,
    null
   ],
   "size": [
@@ -5366,7 +5367,7 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "SOLVE 2026-09-10f: 31 clics, tout libre (z des 4 points proches libres); xyz (-2433.3,25.0,153.1) fov 44.8, mediane 8.4 px | SOLVE 2026-09-10e: + Highway (1), Overpass (2) (leak map +5 m, z libre); xyz (-2436.1,25.2,149.1) fov 44.6, mediane 7.9 px | SOLVE 2026-09-10d: + Metro (1) et Overpass (1) (leak map corrigee +5 m, z libre) -> profondeur tenue; xyz (-2415.1,19.4,148.9) fov 44.8, mediane 8.1 px | SOLVE 2026-09-10c: 14 clics (1.6-3.8 km, 32 deg d'etendue), tout libre: xyz (-2650.8,4.5,149.6) fov 40.4, mediane 6.5 px; minimum unique (15 departs) | SOLVE 2026-09-10b: Marina Blue re-etiquete (NW->NE, NE->SE par projection); 9 clics, xy tenu au point d'Alexandre; z 148 m fov 42.9; mediane 8.5 px | SOLVE 2026-09-10a: 9 clics Downtown (2.3-2.8 km), xy tenu au point d'Alexandre (profondeur inobservable avec des cibles toutes a la meme distance), z 150 m, fov 43.6; mediane 11.8 px | 2026-09-10: yaw -14.8 / pitch +0.81 poses par Alexandre dans la vue 3D (alignement grossier Vizcayne x2 + SPC) | POSITION APPROX Alexandre 2026-09-10 (-2473.3,-9.4), z eleve (init 200 m), visee sur Vizcayne (1918 m, az 86 deg); a resoudre librement apres clics | AJOUT 2026-09-10 (fichier ~/Downloads/Sunrise over Vice City.png): pose INITIALE arbitraire (~3 km a l ouest-nord-ouest de Downtown, 220 m, visee est-sud-est, fov 50), a resoudre des que les clics sont poses (skyline Downtown/Brickell = ancres Vizcayne, SPC, One Miami, Four Seasons; echangeur = routes V16)",
-  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +9.8 -3.7 -1.9 m, d(ypr) +0.02 +0.02 +0.03 deg, dfov +0.23; edges 5.22 -> 2.33 sigma, landmark RMS 10.23' -> 9.7'"
+  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +9.8 -3.7 -1.9 m, d(ypr) +0.02 +0.02 +0.03 deg, dfov +0.23; edges 5.22 -> 2.33 sigma, landmark RMS 10.23' -> 9.7' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +6.2 -1.3 -1.1 m, d(ypr) -0.01 +0.01 +0.02 deg, dfov +0.16; edges 4.77 -> 2.03 sigma, landmark RMS 9.7' -> 9.83'"
  },
  "Kayaking in the Vice River (Extended Look)": {
   "id": "T3/3",
@@ -5482,17 +5483,17 @@
   "id": "S3/80",
   "player": null,
   "xyz": [
-   -2095.038,
-   -2724.632,
-   192.653
+   -2092.195,
+   -2723.295,
+   194.422
   ],
   "ypr": [
-   79.241,
-   -1.558,
-   0.517
+   79.388,
+   -1.712,
+   0.544
   ],
   "fov": [
-   73.601,
+   73.318,
    null
   ],
   "size": [
@@ -5504,7 +5505,7 @@
   "pose_verified": null,
   "notes": "CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | SOLVE 2026-09-18b (canal V16 + chateau d'eau + pied du mat, tours en contrainte douce): rives du canal 1-10 px, chateau d'eau 2 px, mat 34 px; la leak map confirme le canal V16 a 5-10 m pres. Depuis cette pose, les tours ouest (1,5,6) tombent 15-20 m au sud des coins V16, les tours est (3,4) sur les coins. A affiner avec l'autoroute devant la prison (clics) et les 2 autres captures aeriennes. | POSITION APPROX 2026-09-18: estimation initiale a resoudre avec les clics (6 tours de la prison vues de haut, chateau d'eau, mat WDNA FM, canal); frame fournie par Alexandre pour trancher la position des Prison Towers",
   "era": "2026",
-  "note": "PRISON-V1 2026-09-30: pose recalee sur les 6 tours (sommet = LM Prison Tower n, pied = sol sous le polygone V16 de la tour, lus dans l image) + chateau d eau Homestead: rms 5.2 px (etait 23 px sur les clics). Pose precedente [[-2023.71, -2742.96, 234.6], [78.565, -5.52, 2.113], 65.76] |  | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +4.1 +26.7 +17.1 m, d(ypr) +0.68 -0.08 -1.33 deg, dfov +1.52; edges None -> None sigma, landmark RMS 108.11' -> 26.18'"
+  "note": "PRISON-V1 2026-09-30: pose recalee sur les 6 tours (sommet = LM Prison Tower n, pied = sol sous le polygone V16 de la tour, lus dans l image) + chateau d eau Homestead: rms 5.2 px (etait 23 px sur les clics). Pose precedente [[-2023.71, -2742.96, 234.6], [78.565, -5.52, 2.113], 65.76] |  | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +4.1 +26.7 +17.1 m, d(ypr) +0.68 -0.08 -1.33 deg, dfov +1.52; edges None -> None sigma, landmark RMS 108.11' -> 26.18' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +2.8 +1.3 +1.8 m, d(ypr) +0.15 -0.15 +0.03 deg, dfov -0.28; edges None -> None sigma, landmark RMS 26.18' -> 25.96'"
  },
  "Prison (Video) f100": {
   "id": "S3/82",
@@ -5593,17 +5594,17 @@
   "id": "S3/85",
   "player": null,
   "xyz": [
-   -2018.381,
-   -1317.411,
-   124.173
+   -2023.373,
+   -1319.206,
+   121.272
   ],
   "ypr": [
-   100.678,
-   -10.342,
-   -0.187
+   100.638,
+   -10.284,
+   -0.216
   ],
   "fov": [
-   93.039,
+   93.238,
    null
   ],
   "size": [
@@ -5615,7 +5616,7 @@
   "pose_verified": null,
   "notes": "CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | VCIA-V6 ANNULE 2026-09-20: forcer Titan America (clic (1361,370) vs projection (1459,378), 98 px) casse tout (piste 4 px, fov +7, roll -4) -> clic ou landmark Titan America douteux, exclu du solve; pose v5 conservee (le clic tour deplace de 0.6 px ne change rien: 0.7 px) | SOLVE VCIA-V6 2026-09-20: clic tour deplace par Alexandre a [572.6, 395.9] + Titan America (cimenterie, 1.9 km) + piste + prior POV: piste 4.0 px, tour 0.1 px, Titan 62.4 px | SOLVE VCIA-V5 2026-09-20: Watson Bay Water Tower (feu du sommet a (572,396), 3.6 km, tour fixee via G02+pontons) en point fort + piste V16 sur les traces + prior POV 0.5 deg: piste 1.4 px, tour 0.1 px, dyaw +0.45 vs POV | (v4 'annule' etait une erreur de ponderation: en v3 le feu tombait deja a 5 px) | VCIA-V4 ANNULE 2026-09-20: le point lumineux a (572,396) est 45 px trop bas pour etre le sommet (50.7 m) de la Watson Bay Water Tower a 3.6 km -> pas la tour (ou pas son sommet); pose v3 conservee | SOLVE VCIA-V4 2026-09-20: + Watson Bay Water Tower (feu au sommet a (572,396), 3.6 km) comme point, piste V16 sur les traces, orientation POV d'Alexandre en prior 0.3 deg: piste 0.7 px, tour 45.0 px, hfov 92.0 | SOLVE VCIA-V3 2026-09-19: orientation = alignement du lointain par Alexandre dans le POV (yaw -8.27 / pitch +3.93 sur la v2, tenue a 0.05 deg), position et fov libres contre la piste V16 + traces: cam descendue de 46 m (182 -> 141 m), hfov 96.9 -> 91.2, bords de piste 1.9 px; routes/eau V16 restent 40-60 px a cote des traces (decalage carte probable, comme a la prison); pad V16 (76 m x 150 m) plus petit que dans le jeu. | SOLVE VCIA-V2 2026-09-19: traces d'Alexandre (piste + pad en rouge, route en jaune, eau en bleu) contre la geometrie V16 (bords de piste 43 m, pad 76 m sur 150 m, routes, eau): bords de piste 2 px, coins du pad 18-29 px (pad V16 plus court/etroit que dans le jeu ?), routes/eau decalees de 20-40 px; hfov 97 (grand angle), roll -2; precision ~15 m. Prochaine etape: coins V16 du pad (Alt-clic) et coins du terminal. | SOLVE VCIA-V1 2026-09-19: pose initiale sur la geometrie V16 de la piste (bout SE 2 coins, seuil decale 2 coins, extremite NW, 2 lignes de feux de bord), rms 7.7 px, roll -8.8 (a verifier); precision ~10 m; a affiner par clics (coins du terminal, hangars, avion) et tooltips V16",
   "era": "2026",
-  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -26.6 -8.3 -12.4 m, d(ypr) -0.03 +0.06 +0.06 deg, dfov +0.55; edges None -> None sigma, landmark RMS 32.11' -> 9.98'"
+  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -26.6 -8.3 -12.4 m, d(ypr) -0.03 +0.06 +0.06 deg, dfov +0.55; edges None -> None sigma, landmark RMS 32.11' -> 9.98' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -5.0 -1.8 -2.9 m, d(ypr) -0.04 +0.06 -0.03 deg, dfov +0.20; edges None -> None sigma, landmark RMS 9.98' -> 9.15'"
  },
  "Prison (Video) v091 (Wing)": {
   "player": null,
@@ -5709,23 +5710,23 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -2712.835,
-   -3494.081,
-   182.916
+   -2708.202,
+   -3496.001,
+   183.911
   ],
   "ypr": [
-   105.726,
-   -5.781,
-   1.549
+   105.412,
+   -5.91,
+   1.349
   ],
   "fov": [
-   83.795,
+   83.038,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v160 (biplane video t=5.3 s, chase cam toward the SW: Grassrivers, industrial area in the right foreground)",
   "notes": "SOLVE 2026-09-24: 4 tooltips d Alexandre (Dirt Middle (1-2), Grassrivers Bridge (1), Watson Bay Bridge (1)) + horizon mer lu sur la frame (y=466, roulis ~0), fov libre -> hfov 85.0, rms 4.3 px; Dirt (1) exclu (predit 53 px plus haut que le clic, quelle que soit la config: lot conteneurs different du petit circuit V16 ou coin ambigu); pose a 4 points quasi alignes N-S + 1 point profond: fov/distance encore fragiles (+-10 deg / +-60 m) | POSITION APPROX 2026-09-24: pose odometrie (frame 160, ancre(s) 250; fov estime par la VO, derive possible 10-30 m); cam provisoire pour les tooltips/clics d Alexandre",
   "id": "S3/89",
-  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +6.4 -3.0 +3.7 m, d(ypr) -0.48 -0.52 -0.27 deg, dfov -1.24; edges None -> None sigma, landmark RMS 12.06' -> 5.61'"
+  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +6.4 -3.0 +3.7 m, d(ypr) -0.48 -0.52 -0.27 deg, dfov -1.24; edges None -> None sigma, landmark RMS 12.06' -> 5.61' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +4.6 -1.9 +1.0 m, d(ypr) -0.31 -0.13 -0.20 deg, dfov -0.76; edges None -> None sigma, landmark RMS 5.61' -> 3.55'"
  },
  "Prison (Video) v500": {
   "player": null,
@@ -5872,23 +5873,23 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -1356.602,
-   -1651.415,
-   208.093
+   -1350.987,
+   -1645.009,
+   208.134
   ],
   "ypr": [
-   286.183,
-   3.42,
-   -0.818
+   285.503,
+   3.28,
+   -0.66
   ],
   "fov": [
-   109.76,
+   111.225,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1380 (biplane video t=46 s, chase cam between the Brickell towers)",
   "notes": "SOLVE 2026-09-26: fov FIXE 106.7 (camera aile droite, = v0770/v0820), rms 7.7 px | SOLVE 2026-09-25 (corrige): fov LIBRE -> hfov 120.6, rms 4.0 px (aile droite, meme camera que v0770 ~126) | SOLVE 2026-09-25: 6 clics (Four Seasons x3, SEFC, Infinity x2 = 3 points distincts), fov FIXE 106.7 (meme camera POV aile que v091) -> rms 7.7 px (hfov 106.7); fov libre donnerait 120.6 mais non contraint; Three Tequesta cliques hors image exclus | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
   "id": "S3/95",
-  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +9.2 +12.2 +0.9 m, d(ypr) -1.50 -0.08 +0.09 deg, dfov +3.06; edges 3.42 -> 1.55 sigma, landmark RMS 28.38' -> 27.11'"
+  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +9.2 +12.2 +0.9 m, d(ypr) -1.50 -0.08 +0.09 deg, dfov +3.06; edges 3.42 -> 1.55 sigma, landmark RMS 28.38' -> 27.11' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +5.6 +6.4 +0.0 m, d(ypr) -0.68 -0.14 +0.16 deg, dfov +1.47; edges 1.84 -> 1.16 sigma, landmark RMS 27.11' -> 27.46'"
  },
  "Biplane (Video) v1980": {
   "player": null,
@@ -5981,23 +5982,23 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -2058.129,
-   -2611.742,
-   189.923
+   -2066.12,
+   -2615.456,
+   192.973
   ],
   "ypr": [
-   286.227,
-   -0.583,
-   -0.081
+   286.304,
+   -0.702,
+   -0.062
   ],
   "fov": [
-   105.79,
+   105.435,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0770 (biplane video t=25.7 s, right wing POV: Southside and the highway bottom left, Downtown on the horizon, shot 701-843)",
   "notes": "SOLVE 2026-09-25 (v4): 14 clics dont Point (1-4) et Southside Intersection (1-2), fov FIXE 106.7 (= aile gauche v091; les Points au loin + les intersections ne sont coherents qu a ~106): rms 9.2 px; le 88.8 precedent etait un artefact de 2 intersections + tours | SOLVE 2026-09-25 (v3): 10 clics dont 2 tooltips d intersections Southside a 250 m (Alexandre), fov libre -> hfov 88.8, rms 5.5 px: les points proches levent la degenerescence altitude/fov (106.7 et 126 etaient faux) | SOLVE 2026-09-25 (corrige): fov LIBRE -> hfov 126.0, rms 2.9 px; verifie par superposition des routes/autoroute V16 au sol sur la frame (le fov 106.7 de l aile gauche ne colle pas: la camera de l aile droite est plus large) | SOLVE 2026-09-25: 8 clics d Alexandre (Park Grove x3, Four Seasons x2, Infinity x2, SEFC), fov FIXE 106.7 (POV aile) -> rms 4.0 px; coherent a 58 m avec l interpolation des chaines VO 700/844 (fov libre donnerait 126 et 180 m d ecart, non retenu) | POSITION APPROX 2026-09-25: position extrapolee de la chaine VO (frame 700 + cap), cap devine, fov 106.7 suppose (POV aile comme v091); cam provisoire pour les clics d Alexandre (tours Downtown + tooltips Southside/autoroute) -> comble le trou Southside entre les frames 700 et 844",
   "id": "S3/99",
-  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -15.7 -9.0 +5.9 m, d(ypr) +0.27 -0.27 -0.06 deg, dfov -0.91; edges 3.25 -> 1.02 sigma, landmark RMS 32.27' -> 31.17'"
+  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -15.7 -9.0 +5.9 m, d(ypr) +0.27 -0.27 -0.06 deg, dfov -0.91; edges 3.25 -> 1.02 sigma, landmark RMS 32.27' -> 31.17' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -8.0 -3.7 +3.0 m, d(ypr) +0.08 -0.12 +0.02 deg, dfov -0.35; edges 3.46 -> 1.37 sigma, landmark RMS 31.17' -> 31.24'"
  },
  "Biplane (Video) v0820": {
   "player": null,
@@ -6250,21 +6251,21 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "xyz": [
-   1466.73,
-   1276.55,
-   56.45
+   1482.382,
+   1302.505,
+   49.046
   ],
   "ypr": [
-   159.985,
-   -6.88,
-   -0.004
+   160.313,
+   -6.247,
+   -0.011
   ],
   "fov": [
-   66.406,
+   64.425,
    null
   ],
   "source": "Screenshot \u2014 Speaking with Brian at Effluvia (2) (rooftop terrace in Vice Beach, north of Flamingo Park; Flamingo South Beach (curved tower), Portofino, Downtown in the distance)",
-  "note": "SOLVE 2026-10-02 (preliminaire): meme toit que (3) (position tenue a 5 m), orientation+fov sur Portofino/Apogee/Icon, residus <= 7 px"
+  "note": "SOLVE 2026-10-02 (preliminaire): meme toit que (3) (position tenue a 5 m), orientation+fov sur Portofino/Apogee/Icon, residus <= 7 px | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +15.7 +26.0 -7.4 m, d(ypr) +0.33 +0.63 -0.01 deg, dfov -1.98; edges 6.76 -> 4.65 sigma, landmark RMS None' -> None'"
  },
  "Speaking with Brian at Effluvia (3)": {
   "id": "S4/6",
@@ -6276,21 +6277,21 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "xyz": [
-   1482.275,
-   1302.045,
-   51.954
+   1487.594,
+   1316.138,
+   47.563
   ],
   "ypr": [
-   159.628,
-   -7.072,
-   0.181
+   159.574,
+   -6.873,
+   0.279
   ],
   "fov": [
-   73.943,
+   73.407,
    null
   ],
   "source": "Screenshot \u2014 Speaking with Brian at Effluvia (3) (rooftop terrace in Vice Beach, north of Flamingo Park; Flamingo South Beach (curved tower), Portofino, Downtown in the distance)",
-  "note": "SOLVE-V2 2026-10-02: pose INDEPENDANTE de Portofino (Apogee, Icon, grues Asia CC1/CC2, sommet grande roue; residus <= 6 px) -> test a l aveugle de Portofino (bords 0-2.5 px vs V16 13-15 px). | SOLVE 2026-10-02 (preliminaire): 6 reperes (Portofino centre des 3 sommets, Apogee, Icon, grues Asia CC1/CC2, sommet grande roue), residus <= 6 px | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +15.1 +24.2 -6.0 m, d(ypr) +0.02 +0.41 +0.13 deg, dfov -0.91; edges 5.25 -> 2.07 sigma, landmark RMS None' -> None'"
+  "note": "SOLVE-V2 2026-10-02: pose INDEPENDANTE de Portofino (Apogee, Icon, grues Asia CC1/CC2, sommet grande roue; residus <= 6 px) -> test a l aveugle de Portofino (bords 0-2.5 px vs V16 13-15 px). | SOLVE 2026-10-02 (preliminaire): 6 reperes (Portofino centre des 3 sommets, Apogee, Icon, grues Asia CC1/CC2, sommet grande roue), residus <= 6 px | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +15.1 +24.2 -6.0 m, d(ypr) +0.02 +0.41 +0.13 deg, dfov -0.91; edges 5.25 -> 2.07 sigma, landmark RMS None' -> None' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +5.3 +14.1 -4.4 m, d(ypr) -0.05 +0.20 +0.10 deg, dfov -0.54; edges 3.29 -> 2.06 sigma, landmark RMS None' -> None'"
  },
  "Biplane (Video) v2811": {
   "player": null,
@@ -6329,39 +6330,39 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -791.36,
-   -365.357,
-   181.744
+   -795.058,
+   -352.273,
+   184.649
   ],
   "ypr": [
-   37.535,
-   -7.12,
-   -9.403
+   37.798,
+   -7.592,
+   -9.072
   ],
   "fov": [
-   111.942,
+   113.034,
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2370 (biplane video t=79.0 s, wing POV: whole I-97/I-404 interchange in the foreground, stadium (white dome) and adjoining building on the horizon)",
   "notes": "SOLVE 2026-10-03: 3 tooltips d Alexandre (Downtown Intersection) + 4 clics Stephen P. Clark + centre du dome du stade (z~45, sigma 8) + appariement des rues V16 (chamfer, mediane 2.5 px); ROULIS LIBRE (l avion vire: -9.5 deg; le prior roulis 0 faussait le pitch), fov libre 110.7. Residus: clics 0-20 px sauf Downtown Intersection (-779,-4) 59 px (bord bas, a reverifier). Provisoire.",
   "id": "S3/105",
-  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -2.8 +20.9 +1.2 m, d(ypr) +0.72 -0.22 +0.08 deg, dfov +1.28; edges 1.12 -> 0.63 sigma, landmark RMS 103.18' -> 81.04'"
+  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -2.8 +20.9 +1.2 m, d(ypr) +0.72 -0.22 +0.08 deg, dfov +1.28; edges 1.12 -> 0.63 sigma, landmark RMS 103.18' -> 81.04' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -3.7 +13.1 +2.9 m, d(ypr) +0.26 -0.47 +0.33 deg, dfov +1.09; edges 0.75 -> 0.6 sigma, landmark RMS 81.04' -> 74.32'"
  },
  "Character Switch in Vice Beach (A)": {
   "id": "T3/7",
   "player": null,
   "xyz": [
-   1537.927,
-   2446.04,
-   509.354
+   1535.688,
+   2444.93,
+   506.823
   ],
   "ypr": [
-   116.626,
-   -93.881,
-   -0.099
+   116.82,
+   -94.286,
+   0.149
   ],
   "fov": [
-   69.274,
+   69.491,
    null
   ],
   "size": [
@@ -6372,7 +6373,7 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "SOLVE 2026-10-03: vue quasi verticale (drone) calee sur les ROUTES V16 (= leak) par appariement chaussee/image: residu sol 0.4 px sur toute l image; altitude/fov (degeneres au sol) fixes par les toits des tooltips d Alexandre (A,B,C,F-I): H 515 m, hfov 70.1, toits a ~10 m. Les LMs existants Maison Grande (TS/TC/TN), Sherry, Akoya, Jade Ocean y sont decales de 20-380 px (voir notes de session).",
-  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -11.4 -10.0 -5.9 m, d(ypr) +1.86 -1.26 -0.18 deg, dfov -0.81; edges None -> None sigma, landmark RMS 84.02' -> 49.72'"
+  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -11.4 -10.0 -5.9 m, d(ypr) +1.86 -1.26 -0.18 deg, dfov -0.81; edges None -> None sigma, landmark RMS 84.02' -> 49.72' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -2.2 -1.1 -2.5 m, d(ypr) +0.19 -0.41 +0.25 deg, dfov +0.22; edges None -> None sigma, landmark RMS 49.72' -> 50.37'"
  },
  "Character Switch in Vice Beach (B)": {
   "id": "T3/8",
