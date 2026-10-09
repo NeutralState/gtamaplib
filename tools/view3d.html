@@ -613,7 +613,7 @@ function sunDirVec() {   // vecteur VERS le soleil; az horaire depuis le nord (+
 // [GROUND-COLOR-V1] teintes du sol et de la vegetation MESUREES sur les frames de jour (tools/ground_colors.py):
 // on garde la luminance calibree de chaque materiau et on prend la teinte/saturation du jeu
 // [STRUCTS-V1] structures rendues en vrai volume par le module STRUCTS (pas de fil de fer vif, pas de faces auto)
-const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)|Stadium \(V16|Stadium Roof Portique|^Hard Rock Cafe$|^Kaseya Center$/;
+const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)|Stadium \(V16|Stadium Roof Portique|^Hard Rock Cafe$|^Kaseya Center$|^Oceanarium Dome$/;
 const _gLum = c => 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
 // sat < 1: materiaux neutres (dalles, asphalte) — la dominante chaude de l'etalonnage du jeu, etalee sur des km2 de ville, virait au desert
 const gameTint = (cur, srgb, sat = 1) => { if (!srgb) return cur; const m0 = srgb.map(v => Math.pow(v, 2.2)), l0 = _gLum(m0), m = m0.map(v => l0 + (v - l0) * sat), k = _gLum(cur) / Math.max(_gLum(m), 1e-4); return m.map(v => v * k); };
@@ -4228,6 +4228,25 @@ window.__camScreen = name => {
   }
 
 
+  // ---- [DOME-V1 2026-10-08] dome geodesique dore de l'Oceanarium (cam Oceanarium): demi-sphere a facettes sur un tambour, comme la frame ----
+  {
+    const dn = Object.keys(M).find(n => n === 'Oceanarium Dome');
+    if (dn) {
+      const P = ptsOf(dn); let z0 = 1e9, z1 = -1e9, cx = 0, cy = 0; for (const p of P) { z0 = Math.min(z0, p[2]); z1 = Math.max(z1, p[2]); cx += p[0]; cy += p[1]; }
+      cx /= P.length; cy /= P.length; const base = P.filter(p => Math.abs(p[2] - z0) < 0.2);
+      const a = base.reduce((s2, p) => s2 + Math.hypot(p[0] - cx, p[1] - cy), 0) / base.length, h = z1 + 1.5 - z0;   // z1 = dernier anneau (1.5 m sous l'apex)
+      const Rs = (a * a + h * h) / (2 * h), zc = z0 + h - Rs;
+      const ico = new THREE.IcosahedronGeometry(Rs, 3).toNonIndexed(), pa = ico.attributes.position, keep = [];
+      for (let i = 0; i < pa.count; i += 3) {
+        const zs = [pa.getZ(i), pa.getZ(i + 1), pa.getZ(i + 2)];
+        if (Math.min(...zs) >= -0.02 * Rs + (z0 - zc)) for (let k = 0; k < 3; k++) keep.push(pa.getX(i + k) + cx, pa.getY(i + k) + cy, pa.getZ(i + k) + zc);
+      }
+      const dg = new THREE.BufferGeometry(); dg.setAttribute('position', new THREE.Float32BufferAttribute(keep, 3)); dg.computeVertexNormals();
+      const gold = stdMat(0xd8a83a, 0.32, 0.6, 0.9); gold.flatShading = true; gold.side = THREE.DoubleSide; add(dg, gold);
+      if (zc > z0 + 0.3) { const dr = new THREE.CylinderGeometry(a, a, zc - z0, 48, 1, true); dr.rotateX(Math.PI / 2); dr.translate(cx, cy, (z0 + zc) / 2); add(dr, stdMat(0xb89a5a, 0.6, 0.3, 0.6)); }
+      window.__structs = Object.assign(window.__structs || {}, { dome: Math.round(Rs) });
+    }
+  }
   // ---- Hard Rock Cafe (Bayside): pavillon octogonal evase « soucoupe », comme dans le jeu (Megamundo, Vice City 08) et IRL ----
   {
     const hn = Object.keys(M).find(n => n === 'Hard Rock Cafe');
