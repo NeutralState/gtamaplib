@@ -6425,5 +6425,31 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": "SOLVED 2026-10-04 \u2014 pose V5: independent multi-cam meshes match the skyline (Marquis 3 px, Quantum S/N 2.5/3 px, 1800 Club 4 px, toll 4.5 px, Marina Blue 5 px); camera on community path T3/143; Marriott and The Grand corrected and cross-checked in 8 cams each",
   "notes": "POSE V5 2026-10-04 (Alexandre: \"fait en sorte que ca fit partout\"): V4 decalait les tours lointaines de ~1 deg (Marquis -45 px, coin de Ten Museum Park (Convertible 397 m) dans le ciel); moindres carres sur meshes valides par d autres cams: Marquis (centre + toit), 1800 Club, Quantum S/N, peage; yaw +0.26, pitch -0.51, hfov +2.06, cam avancee de 3.1 m sur le trajet T3/143. Marquis/Ten Museum/Marina Blue/1800/Quantum a <=8 px; peage ~11 px (dimensions mesurees avec V4); Marriott (-10,-26 m) et The Grand (face sud +16 m) corriges dans la foulee et verifies dans 8 cams chacun; ligne de ciel: Marquis/1800/Quantum OK, peage 4.5 px. | SOLVE 2026-10-04 V4: tours identifiees par rayons sur la V16 (T1 Marquis, T2 Marriott, T3 Opera cachee derriere The Grand, T4 The Grand (dome), T5 1800 Club, T6 Quantum S, T7 Quantum N); camera SUR le trajet T3/143, 95 m a l est du peage, 4.2 m au-dessus de la route; bords des meshes a 1-40 px (Marquis 58), sommets LM 4-7 px, peage (V16 3217, largeur 35.7 m) a ~5 px."
+ },
+ "Oceanarium": {
+  "id": "S4/7",
+  "player": null,
+  "size": [
+   3840,
+   2160
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "xyz": [
+   142.37,
+   -2033.86,
+   22.39
+  ],
+  "ypr": [
+   38.416,
+   -5.982,
+   0.847
+  ],
+  "fov": [
+   73.407,
+   null
+  ],
+  "source": "Screenshot \u2014 Oceanarium (Rickenbacker-style causeway to Gloriana Key: golden geodesic dome of the oceanarium on the right, Downtown / Tequesta skyline ahead)",
+  "note": "SOLVE 2026-10-08: position along the causeway (Alexandre ~202, -2037) refined to (142.4, -2033.9) over the south carriageway (V16 hwy 5 m north) by the parallax of the tower edges (Four Seasons vs Southeast Financial); yaw/fov from the edge centres of 5 measured towers, z/pitch/roll from the skyline profile vs SegFormer sky. Pose audit: 12 buildings judged, 6 match within 2 px (Four Seasons 2.0, Pegassi 0.3, Brickell Arch -2.0, Southeast Financial -1.0, One Broadway 0.1, The Palace), global edge shift 0.35 px. Asia Brickell Key looks 13 px wider in the game (under construction), 1450 Brickell right edge off 21 px (mesh suspects)."
  }
 }
