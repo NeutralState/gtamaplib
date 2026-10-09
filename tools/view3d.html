@@ -357,6 +357,32 @@ canvas.addEventListener('webglcontextrestored', () => {
 // (framebuffer + MSAA divises par 4 sur Retina); ?hd=1 rend l'ancien comportement.
 window.__lite3d = (() => { const q = new URLSearchParams(location.search); return q.get('lite') === '1' || (q.get('hd') !== '1' && !(navigator.deviceMemory > 8)); })();
 renderer.setPixelRatio(window.__lite3d ? 1 : Math.min(devicePixelRatio, 2));
+window.__renderer = renderer;                    // [PERF-V1] debug hook (renderer.info)
+// [PERF-V1 2026-10-09] instances PAR TUILES (Alexandre: « moins laggy »): un seul InstancedMesh de 40 000 arbres etait
+// dessine en entier a chaque frame (frustumCulled = false, ~10 M triangles), et encore dans la passe d'ombres. Tuiles de
+// `tile` m avec sphere englobante -> frustum culling (aussi pour la camera d'ombre) + coupure au-dela de maxD m.
+const TILED = [];
+window.__tiledInst = (geo, mat, items, fill, opt = {}) => {
+  const tile = opt.tile || 600, buckets = new Map();
+  for (const it of items) { const key = Math.floor(it[0] / tile) + ',' + Math.floor(it[1] / tile); let b = buckets.get(key); if (!b) buckets.set(key, b = []); b.push(it); }
+  const grp = new THREE.Group(); grp.userData.maxD = opt.maxD || 0;
+  for (const b of buckets.values()) {
+    const im = new THREE.InstancedMesh(geo, mat, b.length);
+    b.forEach((it, k) => fill(im, k, it));
+    im.instanceMatrix.needsUpdate = true; if (im.instanceColor) im.instanceColor.needsUpdate = true;
+    im.computeBoundingSphere(); im.frustumCulled = true;
+    im.castShadow = !!opt.castShadow; im.receiveShadow = !!opt.receiveShadow;
+    grp.add(im);
+  }
+  if (grp.userData.maxD) TILED.push(grp);
+  return grp;
+};
+let _tiledFrame = 0;
+const tiledCull = () => {                                   // coupure en distance, 1 frame sur 6 (quelques centaines de tuiles)
+  if ((++_tiledFrame) % 6) return;
+  const cp = camera.position;
+  for (const g of TILED) { const md = g.userData.maxD; for (const im of g.children) { const bs = im.boundingSphere; if (bs) im.visible = bs.center.distanceTo(cp) - bs.radius < md; } }
+};
 // [BEAUTY-V2] tone mapping cinema: les hautes lumieres roulent doucement au
 // lieu d'ecrete (glint du soleil, ciel au couchant)
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -2052,13 +2078,40 @@ if (meshVerts.length) {
     if (sc.right !== R) { sc.left = -R; sc.right = R; sc.top = R; sc.bottom = -R; sc.near = 10; sc.far = 9000; sc.updateProjectionMatrix(); }
     const key = [Math.round(R), tx, ty, _sd.x.toFixed(3), _sd.y.toFixed(3), _sd.z.toFixed(3), solidMesh.visible].join(',');
     if (key !== _shKey) { _shKey = key; renderer.shadowMap.needsUpdate = true; }
+    if (catcher && catcher.visible) updateCatcher(tx, ty, R);
+  };
+  // [PERF-V1 2026-10-09] le capteur d'ombres reprenait TOUTE la geometrie du terrain (5 M triangles redessines a chaque
+  // frame, Alexandre: « moins laggy »): les ombres n'existent que dans la boite d'ombre (R <= 3200 m autour de la cible)
+  // -> patch 256 x 256 qui suit la boite, z echantillonne (bilineaire) sur le terrain AFFICHE; 130 k triangles.
+  const CN = 256;
+  let _tmPos = null, _tmGrid = null, _catchKey = '';
+  const catchZ = (x, y) => {
+    const g = _tmGrid; if (!g || !_tmPos) return 0;
+    const fi = Math.min(g.nx - 1.001, Math.max(0, (x - g.x0) / g.step)), fj = Math.min(g.ny - 1.001, Math.max(0, (y - g.y0) / g.step));
+    const i = fi | 0, j = fj | 0, a = fi - i, b = fj - j, k = j * g.nx + i;
+    const z00 = _tmPos[3 * k + 2], z10 = _tmPos[3 * (k + 1) + 2], z01 = _tmPos[3 * (k + g.nx) + 2], z11 = _tmPos[3 * (k + g.nx + 1) + 2];
+    return (z00 * (1 - a) + z10 * a) * (1 - b) + (z01 * (1 - a) + z11 * a) * b;
+  };
+  const updateCatcher = (cx, cy, R) => {
+    if (!catcher) return;
+    const key = cx + ',' + cy + ',' + Math.round(R); if (key === _catchKey) return; _catchKey = key;
+    const pa = catcher.geometry.attributes.position, A = pa.array, d = 2 * R / (CN - 1);
+    for (let j = 0, k = 0; j < CN; j++) for (let i = 0; i < CN; i++, k++) {
+      const x = cx - R + i * d, y = cy + R - j * d;                       // ordre de PlaneGeometry (rangee du haut d'abord): faces vers +z
+      A[3 * k] = x; A[3 * k + 1] = y; A[3 * k + 2] = catchZ(x, y);
+    }
+    pa.needsUpdate = true; catcher.geometry.computeBoundingSphere();
   };
   const makeCatcher = tm => {
     if (catcher || !tm) return;
-    catcher = new THREE.Mesh(tm.geometry, new THREE.ShadowMaterial({ opacity: 0.6, transparent: true, depthWrite: false }));
+    _tmPos = tm.geometry.attributes.position.array; _tmGrid = window.__hgrid;
+    const g = new THREE.PlaneGeometry(1, 1, CN - 1, CN - 1);           // indices de grille reutilises, positions reecrites
+    g.setAttribute('position', new THREE.Float32BufferAttribute(new Float32Array(CN * CN * 3), 3));
+    g.deleteAttribute('normal'); g.deleteAttribute('uv');
+    catcher = new THREE.Mesh(g, new THREE.ShadowMaterial({ opacity: 0.6, transparent: true, depthWrite: false }));
     catcher.receiveShadow = true; catcher.position.z = 0.35; catcher.renderOrder = 3; catcher.frustumCulled = false;
     catcher.name = 'solid-shadow-catcher';
-    layers.terrain.add(catcher); applySolid();
+    layers.terrain.add(catcher); applySolid(); _catchKey = '';
   };
   window.__onTerrainMesh = makeCatcher;
   if (window.__terrainMesh) makeCatcher(window.__terrainMesh);
@@ -3471,7 +3524,14 @@ addEventListener('pointerup', ev => {
 });
 
 let _hoverName = null;   // [UI-V2] ne reconstruit la carte (et son <img>) qu'au changement de cam
+// [PERF-V1] le survol lancait 2 raycasts (cams + ~400 k triangles des batiments, CPU) a CHAQUE pointermove, meme en
+// faisant glisser la vue: limite a ~14 Hz et suspendu pendant un glisser (boutons enfonces)
+let _hvEv = null, _hvT = 0;
 addEventListener('pointermove', ev => {
+  if (ev.buttons) { _hvEv = null; return; }
+  _hvEv = ev; if (!_hvT) _hvT = setTimeout(() => { _hvT = 0; if (_hvEv) hoverAt(_hvEv); }, 70);
+});
+function hoverAt(ev) {
   const ndc = new THREE.Vector2(ev.clientX / innerWidth * 2 - 1,
                                 -(ev.clientY / innerHeight) * 2 + 1);
   ray.setFromCamera(ndc, camera);
@@ -3515,7 +3575,7 @@ addEventListener('pointermove', ev => {
       info.style.display = 'none';
     }
   }
-});
+}
 
 addEventListener('dblclick', ev => {
   const ndc = new THREE.Vector2(ev.clientX / innerWidth * 2 - 1,
@@ -3837,9 +3897,10 @@ window.__camScreen = name => {
         const pmat = new THREE.MeshStandardMaterial({ color: 0x5b5e62, roughness: 0.55, metalness: 0.5 }); pmat.toneMapped = false;
         const hmat = new THREE.MeshStandardMaterial({ color: 0x9a9a96, roughness: 0.4, metalness: 0.2, emissive: new THREE.Color(1.0, 0.62, 0.28), emissiveIntensity: 0 }); hmat.toneMapped = false;
         window.__lampMat = hmat;
-        const pi = new THREE.InstancedMesh(pg, pmat, L.length), hi = new THREE.InstancedMesh(hg, hmat, L.length), q = new THREE.Quaternion(), Zax = new THREE.Vector3(0, 0, 1), m4 = new THREE.Matrix4(), sc = new THREE.Vector3();
-        L.forEach(([x, y, z, a, h], k) => { q.setFromAxisAngle(Zax, a); sc.set(1, 1, h); m4.compose(new THREE.Vector3(x, y, z), q, sc); pi.setMatrixAt(k, m4); hi.setMatrixAt(k, m4); });
-        pi.castShadow = true; pi.name = 'streetlights'; hi.name = 'streetlight-heads'; mesh.add(pi); mesh.add(hi);
+        const q = new THREE.Quaternion(), Zax = new THREE.Vector3(0, 0, 1), m4 = new THREE.Matrix4(), sc = new THREE.Vector3(), pv = new THREE.Vector3();
+        const lampFill = (im, k, [x, y, z, a, h]) => { q.setFromAxisAngle(Zax, a); sc.set(1, 1, h); m4.compose(pv.set(x, y, z), q, sc); im.setMatrixAt(k, m4); };
+        const pi = window.__tiledInst(pg, pmat, L, lampFill, { tile: 600, maxD: 3000, castShadow: true }), hi = window.__tiledInst(hg, hmat, L, lampFill, { tile: 600, maxD: 3000 });   // [PERF-V1]
+        pi.name = 'streetlights'; hi.name = 'streetlight-heads'; mesh.add(pi); mesh.add(hi);
         window.__roadLamps = L.length;
       }
     }
@@ -4829,15 +4890,14 @@ window.__camScreen = name => {
         const tmat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, metalness: 0, side: THREE.DoubleSide });
         tmat.toneMapped = false; if (window.__envTex) { tmat.envMap = window.__envTex; tmat.envMapIntensity = 0.4; }
         const prev2 = window.__onEnv; window.__onEnv = t => { tmat.envMap = t; tmat.envMapIntensity = 0.4; tmat.needsUpdate = true; if (prev2) prev2(t); };
-        const tm = new THREE.InstancedMesh(tgeo, tmat, trees.length), M4 = new THREE.Matrix4(), Q = new THREE.Quaternion(), V = new THREE.Vector3(), SC = new THREE.Vector3(), CL = new THREE.Color();
-        trees.forEach(([x, y, z, sd], k) => {
+        const M4 = new THREE.Matrix4(), Q = new THREE.Quaternion(), V = new THREE.Vector3(), SC = new THREE.Vector3(), CL = new THREE.Color(), ZA = new THREE.Vector3(0, 0, 1);
+        const tm = window.__tiledInst(tgeo, tmat, trees, (im, k, [x, y, z, sd]) => {     // [PERF-V1] tuiles + culling
           const hh = 7 + 7 * rnd(sd + 3), wide = 1.15 + 0.45 * rnd(sd + 9);   // chenes verts: houppier plus large que haut
-          Q.setFromAxisAngle(new THREE.Vector3(0, 0, 1), rnd(sd + 4) * 6.283); SC.set(hh * wide, hh * wide, hh); V.set(x, y, z - 0.3);
-          M4.compose(V, Q, SC); tm.setMatrixAt(k, M4);
-          CL.setRGB(0.75 + 0.5 * rnd(sd + 5), 0.80 + 0.4 * rnd(sd + 6), 0.7 + 0.4 * rnd(sd + 7)); tm.setColorAt(k, CL);
-        });
-        tm.instanceMatrix.needsUpdate = true; if (tm.instanceColor) tm.instanceColor.needsUpdate = true;
-        tm.castShadow = true; tm.frustumCulled = false; tm.name = 'trees';
+          Q.setFromAxisAngle(ZA, rnd(sd + 4) * 6.283); SC.set(hh * wide, hh * wide, hh); V.set(x, y, z - 0.3);
+          M4.compose(V, Q, SC); im.setMatrixAt(k, M4);
+          CL.setRGB(0.75 + 0.5 * rnd(sd + 5), 0.80 + 0.4 * rnd(sd + 6), 0.7 + 0.4 * rnd(sd + 7)); im.setColorAt(k, CL);
+        }, { tile: 500, maxD: 4500, castShadow: true });
+        tm.name = 'trees';
         layers.terrain.add(tm);
         const tc = document.getElementById('ly-palms');
         const syncT = () => { tm.visible = tc.classList.contains('on'); };
@@ -4852,17 +4912,14 @@ window.__camScreen = name => {
     if (window.__envTex) { mat.envMap = window.__envTex; mat.envMapIntensity = 0.45; }
     const prevOnEnv = window.__onEnv;
     window.__onEnv = t => { mat.envMap = t; mat.envMapIntensity = 0.45; mat.needsUpdate = true; if (prevOnEnv) prevOnEnv(t); };
-    mesh = new THREE.InstancedMesh(palmGeo(), mat, pts.length);
     const m4 = new THREE.Matrix4(), q = new THREE.Quaternion(), e = new THREE.Euler(), sc = new THREE.Vector3(), ps = new THREE.Vector3();
-    pts.forEach(([x, y, z, sd], k) => {
+    mesh = window.__tiledInst(palmGeo(), mat, pts, (im, k, [x, y, z, sd]) => {          // [PERF-V1] tuiles + culling
       const hgt = 8 + 7 * rnd(sd + 3);
       e.set((rnd(sd + 4) - 0.5) * 0.16, (rnd(sd + 5) - 0.5) * 0.16, rnd(sd + 6) * Math.PI * 2, 'ZXY');
       q.setFromEuler(e); sc.set(hgt * (0.9 + 0.2 * rnd(sd + 7)), hgt * (0.9 + 0.2 * rnd(sd + 8)), hgt);
-      ps.set(x, y, z - 0.2); m4.compose(ps, q, sc); mesh.setMatrixAt(k, m4);
-    });
-    mesh.instanceMatrix.needsUpdate = true;
-    mesh.castShadow = true; mesh.receiveShadow = false; mesh.name = 'palms';
-    mesh.frustumCulled = false;
+      ps.set(x, y, z - 0.2); m4.compose(ps, q, sc); im.setMatrixAt(k, m4);
+    }, { tile: 500, maxD: 4500, castShadow: true });
+    mesh.name = 'palms';
     layers.terrain.add(mesh); sync();
     window.__palms = { mesh, n: pts.length };
     console.log('[PALMS-V1]', pts.length, 'palmiers');
@@ -4891,8 +4948,13 @@ const Refl = (() => {
   const sync = () => { chip.classList.toggle('on', on); if (!on) seaUni.uReflOn.value = 0; };
   chip.addEventListener('click', () => { on = !on; try { localStorage.setItem('ui.refl3d', on ? '1' : '0'); } catch (e) {} sync(); });
   sync();
+  let _rKey = '', _rSkip = 0;
   function step() {
-    if (!on || !window.__drapeOn || !layers.terrain.visible || povPrev || camera.position.z < 0.5) { seaUni.uReflOn.value = 0; return; }
+    if (!on || !window.__drapeOn || !layers.terrain.visible || povPrev || camera.position.z < 0.5) { seaUni.uReflOn.value = 0; _rKey = ''; return; }
+    // [PERF-V1] la scene reflechie est statique: on ne la re-rend que si la camera a bouge (ou toutes les 30 frames: soleil, trafic)
+    const me = camera.matrixWorld.elements, key = me.map(v => v.toFixed(2)).join(',') + camera.fov;
+    if (key === _rKey && (++_rSkip) < 30) return;
+    _rKey = key; _rSkip = 0;
     renderer.getDrawingBufferSize(v2);
     const w = Math.max(64, Math.floor(v2.x / 2)), h = Math.max(64, Math.floor(v2.y / 2));
     if (rt.width !== w || rt.height !== h) rt.setSize(w, h);
@@ -5118,6 +5180,7 @@ renderer.setAnimationLoop(() => {
   if (window.__solidsTick) window.__solidsTick(); // [SOLIDS-V1] ombre qui suit la vue
   if (window.__trafficStep) window.__trafficStep(_dt);   // [TRAFFIC-V1]
   if (window.__structTick) window.__structTick(_dt);     // [STRUCTS-V1]
+  tiledCull();                                    // [PERF-V1] coupure en distance des instances par tuiles
   Refl.step();                                    // [REFLECT-V1]
   Cine.render();                                  // [CINEMA-V1]
 });
