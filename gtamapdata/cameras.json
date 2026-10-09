@@ -6438,7 +6438,7 @@
   "xyz": [
    142.37,
    -2033.86,
-   22.39
+   13.8
   ],
   "ypr": [
    38.416,
@@ -6450,6 +6450,6 @@
    null
   ],
   "source": "Screenshot \u2014 Oceanarium (Rickenbacker-style causeway to Gloriana Key: golden geodesic dome of the oceanarium on the right, Downtown / Tequesta skyline ahead)",
-  "note": "SOLVE 2026-10-08: position along the causeway (Alexandre ~202, -2037) refined to (142.4, -2033.9) over the south carriageway (V16 hwy 5 m north) by the parallax of the tower edges (Four Seasons vs Southeast Financial); yaw/fov from the edge centres of 5 measured towers, z/pitch/roll from the skyline profile vs SegFormer sky. Pose audit: 12 buildings judged, 6 match within 2 px (Four Seasons 2.0, Pegassi 0.3, Brickell Arch -2.0, Southeast Financial -1.0, One Broadway 0.1, The Palace), global edge shift 0.35 px. Asia Brickell Key looks 13 px wider in the game (under construction), 1450 Brickell right edge off 21 px (mesh suspects)."
+  "note": "SOLVE 2026-10-08: position along the causeway (Alexandre ~202, -2037) refined to (142.4, -2033.9) over the south carriageway (V16 hwy 5 m north) by the parallax of the tower edges (Four Seasons vs Southeast Financial); yaw/fov from the edge centres of 5 measured towers, z/pitch/roll from the skyline profile vs SegFormer sky. Pose audit: 12 buildings judged, 6 match within 2 px (Four Seasons 2.0, Pegassi 0.3, Brickell Arch -2.0, Southeast Financial -1.0, One Broadway 0.1, The Palace), global edge shift 0.35 px. Asia Brickell Key looks 13 px wider in the game (under construction), 1450 Brickell right edge off 21 px (mesh suspects). | Z-FIX 2026-10-09: altitude 22.39 -> 13.8 m. The skyline profile barely constrains z; four independent checks agree on ~14 m: (1) car wheelbases/widths on the deck put the camera 4-6 m above the road; (2) the overhead sign gantry ~119 m ahead (5.4 m sign clearance, 28 m span) has its post bases 9 m below the camera, on ground at ~5 m; (3) far road pixels intersected with the heightmap land on the V16 road for z <= 14 (0.63) vs 0.30 at 22.4; (4) tower tops: median residual 0.2-0.5 px at z 13-14 vs -4.1 px at 22.4, side-edge rms 2.7 vs 3.1 px. Orientation unchanged."
  }
 }
