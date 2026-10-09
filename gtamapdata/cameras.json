@@ -2288,24 +2288,25 @@
   "id": "T1/7",
   "player": null,
   "xyz": [
-   -850.0,
-   -850.0,
-   5.0
+   -759.18,
+   -801.87,
+   6.01
   ],
   "ypr": [
-   300.0,
-   55.0,
-   0.0
+   307.81,
+   44.85,
+   -0.9
   ],
   "fov": [
-   60.0,
+   81.11,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Trailer 1 [575]"
+  "source": "Trailer 1 [575]",
+  "note": "BRICKELL-RESECT-V1 2026-10-09: replaces the placeholder pose (-850,-850,5 / 300,55,0 / fov 60, zero landmarks). Identification: centre = Brickell on the River (GTADB L227; tower + its south podium with the pool deck), right = 500 Brickell West Tower (GTADB L228; twin towers joined at the top by the roof with a round oculus, East Tower visible beyond the void), left round tower with crown = tower on V16 lot 2262 (unmeshed, bearing 20 deg). Camera on the Brickell Ave sidewalk ~25 m west of the BOTR podium, street level (ground 4.3 + 1.7). Method: pitch 44.85 / roll -0.90 / hfov 81.11 from vanishing points (vertical VP from 61 LSD lines, podium horizontal VP: f^2 = -(v1-c).(v3-c)); x, y, yaw by silhouette fit of the measured BOTR tower (138.6 m) against the SegFormer sky mask, palms ignored (coarse grid 126k poses then Nelder-Mead). Check (mesh_pose_audit edges, px at 1280): BOTR R -1.2, top +3.5, L +7.4 (left edge partly behind palm fronds). Independent: 500 Brickell East Tower top within ~3 deg, West Tower roof ~7 deg right of the V16 lot end (tower set back on its podium). The BOTR podium in front looks ~25-30 m tall here (mesh 15.6, ESTIMATED). Not SOLVED: one measured mesh only, no landmarks. Overlay: tools/generated/overlays/Brickell.png"
  },
  "Beach": {
   "id": "T1/10",
