@@ -4228,6 +4228,36 @@ window.__camScreen = name => {
   }
 
 
+  // ---- [PYRAMID-V1 2026-10-08] toits pyramidaux (verrieres des Blue/Green Diamond...): les volumes pleins ne gardent que des
+  // prismes, la pyramide des aretes (sommet + anneau) n'etait jamais rendue. Verriere teintee de la couleur du batiment,
+  // eclairee la nuit (pointe lumineuse vue dans Biplane Night). Seulement les meshes dont la note decrit une pyramide.
+  {
+    let np_ = 0;
+    for (const n of Object.keys(M)) {
+      const m = M[n]; if (!m || !m.world_edges || !/pyramid/i.test(m.note || '')) continue;
+      const E = m.world_edges; let ap = null;
+      for (const e of E) for (const p of e) if (!ap || p[2] > ap[2]) ap = p;
+      const ring = [];
+      for (const e of E) {
+        const [a, b] = e, ia = Math.hypot(a[0] - ap[0], a[1] - ap[1]) < 0.05 && Math.abs(a[2] - ap[2]) < 0.05, ib = Math.hypot(b[0] - ap[0], b[1] - ap[1]) < 0.05 && Math.abs(b[2] - ap[2]) < 0.05;
+        const q = ia && !ib ? b : (ib && !ia ? a : null);
+        if (q && ap[2] - q[2] > 3 && !ring.some(r => Math.hypot(r[0] - q[0], r[1] - q[1]) < 0.3)) ring.push(q);
+      }
+      if (ring.length < 3) continue;
+      ring.sort((a, b) => Math.atan2(a[1] - ap[1], a[0] - ap[0]) - Math.atan2(b[1] - ap[1], b[0] - ap[0]));
+      const pos = [];
+      for (let i = 0; i < ring.length; i++) { const a = ring[i], b = ring[(i + 1) % ring.length]; pos.push(...a, ...b, ...ap); }
+      const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); g.computeVertexNormals();
+      const col = new THREE.Color(m.color || '#9ca3af');
+      const glass = /Diamond|Portofino/.test(n);                                   // verrieres; le palais de justice = toit de pierre
+      const mt = glass ? new THREE.MeshStandardMaterial({ color: col.clone().lerp(new THREE.Color(0xdde8f0), 0.35), metalness: 0.65, roughness: 0.14, side: THREE.DoubleSide })
+                       : new THREE.MeshStandardMaterial({ color: 0xd8d2c4, metalness: 0.05, roughness: 0.8, side: THREE.DoubleSide });
+      mt.flatShading = true;
+      if (/Diamond/.test(n)) { mt.emissive = col.clone().lerp(new THREE.Color(1, 1, 1), 0.5); mt.emissiveIntensity = 0; glowMats.push([mt, 0.9]); }   // lumineuses la nuit: frame Biplane Night
+      add(g, mt); np_++;
+    }
+    window.__structs = Object.assign(window.__structs || {}, { pyramids: np_ });
+  }
   // ---- [DOME-V1 2026-10-08] dome geodesique dore de l'Oceanarium (cam Oceanarium): demi-sphere a facettes sur un tambour, comme la frame ----
   {
     const dn = Object.keys(M).find(n => n === 'Oceanarium Dome');
