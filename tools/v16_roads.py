@@ -99,13 +99,23 @@ def main():
                 P.append([round(float(x), 1), round(float(y), 1), round(min(g, 0.0) - 8.0, 2)])   # sous le lit / la tranchee
             out['tunnel'].append({'w': float(s['width'] or 4), 'p': P, 'cls': c}); continue
         P = []; deck_hit = False
+        on_deck = False                                     # [DECK-RAMP] le trait touche-t-il un tablier (> sol + 2.5 m) quelque part ?
+        if c in ('hwy', 'road', 'mark_w', 'mark_y'):
+            for x, y in R:
+                dz = deck_z(x, y)
+                if dz is not None:
+                    try: g_ = max(0.0, float(RR.ground(x, y)))
+                    except Exception: g_ = 0.0
+                    if dz - 1.0 > g_ + 2.5: on_deck = True; break
         for x, y in R:
             try: g = max(0.0, float(RR.ground(x, y)))
             except Exception: g = 0.0
             z = g + 0.3
             if c in ('hwy', 'road', 'mark_w', 'mark_y'):
                 dz = deck_z(x, y)
-                if dz is not None and dz - 1.0 > g + 2.5: z = dz - 1.0 + 0.05; n_el += 1; deck_hit = True
+                # [DECK-RAMP 2026-10-09] le tablier mesure est suivi jusqu'au sol (ses rampes descendent a sol + 0.3): seuil 2.5 m ->
+                # marche de 2.5 m au bout des rampes (Alexandre: « apres le bridge drop pas de meme »); 0.4 m pour un trait qui monte sur un tablier
+                if dz is not None and (dz - 1.0 > g + 2.5 or (on_deck and dz - 1.0 > g + 0.4)): z = dz - 1.0 + 0.05; n_el += 1; deck_hit = True
             P.append([round(float(x), 1), round(float(y), 1), round(z, 2), round(g, 2)])
         # [BRIDGES-V1b 2026-10-05] route V16 au-dessus de l'eau SANS tablier mesure = pont bas (riviere de Miami, canaux):
         # tablier 6 m ESTIME + rampes a 8 % propagees UNIQUEMENT depuis ces points; une route qui touche un tablier MESURE

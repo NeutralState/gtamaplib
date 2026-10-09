@@ -8,7 +8,7 @@ Height = MEASURED in the Oceanarium frame (camera at the west end of the deck, z
     above the deck -> deck top 8.5 m at the camera, flat for the first ~40 m (cars at 13-42 m);
   - the overhead sign gantry ~119 m west (5.4 m clearance, 28 m span) stands on ground (~5-6.5 m): the westbound ramp
     is back at grade there -> ramp from 30 m to 125 m west of the camera;
-  - the east ramp is not seen: mirrored (ESTIMATED).
+  - the east ramp is not seen (ESTIMATED): same plateau, then a gentle descent at max 4 % grade to the lower east bank.
 Look (frame): two decks side by side with a concrete median barrier, concrete parapets ~1 m, piers below.
 Usage: PYTHONPATH=. python3 tools/gen_gloriana_bridge.py [--apply]
 """
@@ -60,12 +60,14 @@ def build():
         s_w, s_e = min(min(wetS), sc), max(wetS)                              # channel 
         z0 = lambda s: float(ground(*A[min(len(A) - 1, int(np.searchsorted(S, s)))])) + 0.3
         a_w, b_w = sc - FLAT_W - RAMP, sc - FLAT_W                            # west ramp (measured)
-        a_e, b_e = s_e + FLAT_W, s_e + FLAT_W + RAMP        # east ramp (mirrored, estimated)
+        # east ramp (not seen, ESTIMATED): same plateau, then a gentle descent (max grade 4 %) — the east bank is lower (~3 m)
+        ramp_e = max(RAMP, 1.5708 * (TOP - z0(s_e + FLAT_W + RAMP)) / 0.04)
+        a_e, b_e = s_e + FLAT_W, s_e + FLAT_W + ramp_e
         def top(s):
             if s <= a_w or s >= b_e: return z0(s)
             if b_w <= s <= a_e: return TOP
             if s < b_w: t = (s - a_w) / RAMP; g = z0(a_w)
-            else: t = (b_e - s) / RAMP; g = z0(b_e)
+            else: t = (b_e - s) / ramp_e; g = z0(b_e)
             k = 0.5 - 0.5 * math.cos(math.pi * t)
             return g + (TOP - g) * k
         zb = lambda s: top(s) - DEPTH
@@ -76,12 +78,12 @@ def build():
             if zb(s) - float(ground(*p)) > 2.0:
                 br.bent(s, zb, -HALF_W + 0.5, HALF_W - 0.5, ncol=2, col=1.3, zw=min(0.0, float(ground(*p))))
         br_all += br.E
-        notes.append('carriageway %d: deck %.0f m over the channel (%.0f m wide), ramps %.0f m each side' % (sid, b_e - a_w, s_e - s_w, RAMP))
+        notes.append('carriageway %d: deck %.0f m over the channel (%.0f m wide), west ramp %.0f m (measured), east ramp %.0f m (estimated, max grade 4 %%)' % (sid, b_e - a_w, s_e - s_w, RAMP, ramp_e))
     return {NAME: {'color': '#cbd5e1', 'world_edges': br_all, 'name_game': NAME, 'name_irl': 'Bear Cut Bridge (Rickenbacker Causeway)',
                    '_credit': 'Alexandre Leblanc (V16) + Claude Opus 5.5',
                    'note': ('GLORIANA-BR-V1 2026-10-09: plan = the two V16 I-397 carriageways (strokes 3874/3876, 12 m each) over the channel; deck top %.1f m MEASURED in the Oceanarium frame '
                             '(car wheelbases/widths: camera 4-6 m above the deck; plateau seen for ~40 m), west ramp back to grade at the sign gantry ~119 m west (gantry posts on ground, measured); '
-                            'east ramp mirrored (ESTIMATED, not seen). Concrete parapets 1.0 m and median barriers as in the frame; piers every 25 m where the deck clears the ground by > 2 m. %s. '
+                            'east ramp ESTIMATED (not seen; max grade 4 %%, the east bank is lower). Concrete parapets 1.0 m and median barriers as in the frame; piers every 25 m where the deck clears the ground by > 2 m. %s. '
                             'Replaces nothing: the VC-BRIDGES estimate for this bridge (8 m, IRL) had been removed on 2026-09-30 for lack of an image.' % (TOP, '; '.join(notes)))}}
 
 
