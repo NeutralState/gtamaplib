@@ -151,6 +151,19 @@ def main():
                 if m_.sum() < 64: continue
                 sharp = float(cv2.Laplacian(g, cv2.CV_32F)[m_].var()); contrast = float(g[m_].std())
                 if tod[cam] == 'day' and (sharp < 25 or contrast < 10): continue                # flou / brume: la couleur de base vaut mieux
+                if tod[cam] == 'day':                                                         # [FACADE-TEX-V3] coherence verticale: un batiment NON
+                    lab = cv2.cvtColor(rgb, cv2.COLOR_RGB2LAB).astype(np.float32)               # modelise devant la tour peint le bas de la texture
+                    rows = np.where(m_.any(1))[0]                                               # d'une autre couleur -> bandes masquees (alpha 0)
+                    top = rows[: max(4, len(rows) * 3 // 10)]
+                    ref = np.median(lab[top][m_[top]], 0) if m_[top].sum() > 30 else None
+                    if ref is not None:
+                        band = max(4, nz // 24)
+                        for y0 in range(0, nz, band):                                       # du haut vers le bas: a la 1re bande qui diverge,
+                            mm = m_[y0:y0 + band]                                           # tout le dessous est masque (ce qui est devant est en bas)
+                            if mm.sum() < 10: continue
+                            if float(np.linalg.norm(np.median(lab[y0:y0 + band][mm], 0) - ref)) > 30: al[y0:] = 0; break
+                        m_ = al > 0
+                        if m_.mean() < 0.3: continue
                 best.setdefault(key, []).append((score, {'building': n, 'a': [round(float(a[0]), 2), round(float(a[1]), 2)], 'b': [round(float(b[0]), 2), round(float(b[1]), 2)],
                                      'z0': round(z0, 2), 'z1': round(z1, 2), 'n': [round(float(nv[0]), 4), round(float(nv[1]), 4)],
                                      'cam': cam, 'conf': conf[cam], 'tod': tod[cam], 'valid': round(vf, 2), 'px': [ns, nz], 'wpx': round(wpx), 'sharp': round(sharp)}, np.dstack([rgb, al])))

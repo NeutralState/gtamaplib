@@ -4475,7 +4475,7 @@ window.__camScreen = name => {
   }).catch(() => {});
   // ---- [FACADE-TEX-V1 2026-10-07] facades reelles redressees depuis les frames (tools/facade_textures.py): texture de jour
   // (frame de jour, pose confirmee par l'audit) et texture de NUIT (fenetres allumees) quand une frame de nuit voit la face ----
-  const facDay = new THREE.Group(), facNight = new THREE.Group(), facPair = [];
+  const facDay = new THREE.Group(), facNight = new THREE.Group(), facPair = [], facDayMats = [];
   facDay.name = 'facade-tex-day'; facNight.name = 'facade-tex-night'; grp.add(facDay); grp.add(facNight);
   {
     const chipF = document.getElementById('ly-facadetex');
@@ -4499,7 +4499,10 @@ window.__camScreen = name => {
       if (e.tod === 'night') {
         mt = new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: new THREE.Color(1, 1, 1), emissiveIntensity: 0, roughness: 0.6, metalness: 0.0, alphaTest: 0.5 });
         glowMats.push([mt, 1.1]);                                                 // la frame de nuit = ses propres lumieres
-      } else mt = new THREE.MeshStandardMaterial({ map: tex, roughness: 0.85, metalness: 0.0, alphaTest: 0.5 });
+      } else {                                                                  // la frame porte deja son eclairage: part auto-lumineuse (sinon une face a l'ombre tombe au noir,
+        mt = new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: new THREE.Color(1, 1, 1), emissiveIntensity: 0.6, roughness: 0.9, metalness: 0.0, alphaTest: 0.5 });
+        mt.envMapIntensity = 0.2; facDayMats.push(mt);                           // alors que les volumes ont une ambiance forte); baisse la nuit (structTick)
+      }
       mt.polygonOffset = true; mt.polygonOffsetFactor = -1; mt.polygonOffsetUnits = -2;
       const me = new THREE.Mesh(g, mt); me.receiveShadow = true;
       (e.tod === 'night' ? facNight : facDay).add(me);
@@ -4656,7 +4659,8 @@ window.__camScreen = name => {
     for (const [m, k] of glowMats) m.emissiveIntensity = k * nt;
     { const on = window.__facadeTexOn !== false, nightOn = nt >= 0.5;                 // [FACADE-TEX-V1] jour / nuit
       facDay.visible = on; facNight.visible = on && nightOn;
-      for (const p of facPair) p.day.visible = !nightOn; }
+      for (const p of facPair) p.day.visible = !nightOn;
+      for (const m of facDayMats) m.emissiveIntensity = 0.6 * (1 - 0.85 * nt); }
     for (const pm of poolMats) { pm.opacity = 0.9 * nt; pm.visible = nt > 0.02; }
     if (window.__lampMat) window.__lampMat.emissiveIntensity = 4.0 * nt;     // [GROUND-DETAIL-V1] tetes de lampadaires
     if (smoke && grp.visible) {
