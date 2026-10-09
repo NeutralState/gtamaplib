@@ -7,7 +7,9 @@ Unknowns (deltas from the current state, with priors):
   - every non-SOLVED, non-HUD-locked camera (leak debug poses are exact and frozen): dx dy dz (m), dyaw dpitch droll (deg), dfov (deg, active fov slot). Player-locked cameras
     (a 'player' position, e.g. the 2022 debug HUD) keep their position (sigma 0.5 m). SOLVED cameras are FIXED.
   - every mesh seen in >= 2 edge observations: plan translation tx ty (m) and height scale sh (top = ground + (1+sh) h).
-    Priors: measured meshes (notes MEASURED/MESURE/LM/triangul) sigma 3 m / 0.03, V16-IRL-estimated ones 6 m / 0.12.
+    Priors: measured meshes (notes MEASURED/MESURE/LM/triangul) sigma 3 m / 0.03, V16-IRL-estimated ones 6 m / 0.12;
+    a triangulated landmark on the roof pins the plan (sigma 0.3 m, ROOF-ANCHOR: a direct measurement of the
+    building position; edges alone dragged Wells Fargo Center (S) 34 m against sigma 2 m).
 Observations:
   - pose-audit edges (tools/generated/pose_audit.json: left/right/top silhouette residual d = frame - model, px at
     1280 wide, median over rows; kept when mad <= 3 and n >= 6, day frames only), sigma = 1 + mad px. A parameter
@@ -122,6 +124,17 @@ def main():
     print('free cameras %d, free meshes %d, edge obs %d, LM obs %d, params %d' % (nc, nm, len(edges), len(lms), NP), flush=True)
     csig = np.array([CS_PLAYER if C[c].get('player') else CS for c in free_c]) if nc else np.zeros((0, 7))
     msig = np.array([[3.0, 3.0, 0.03] if MEASURED.search(M.get(n, {}).get('note', '')) else [6.0, 6.0, 0.12] for n in free_m]) if nm else np.zeros((0, 3))
+    # ROOF-ANCHOR: a triangulated landmark on the mesh roof (inside the top footprint, within 3 m of the top) pins the plan
+    # (Wells Fargo Center (S), 2026-10-09: the solver wanted +41 m onto a road while its roof landmark sat 16.6 m inside)
+    # -> near-hard (sigma 0.3 m); the height scale stays free
+    import cv2
+    LMX = np.array([v for v in md.landmarks.values() if v is not None], float); anchored = set()
+    for n in free_m:
+        Pm, g = solids[n]; zt = Pm[:, 2].max(); top = Pm[np.isclose(Pm[:, 2], zt)][:, :2]
+        if len(top) < 3: continue
+        hull = cv2.convexHull(top.astype(np.float32)); near = LMX[np.abs(LMX[:, 2] - zt) < 3.0]
+        if any(cv2.pointPolygonTest(hull, (float(x), float(y)), False) >= 0 for x, y, _ in near):
+            msig[mi[n], :2] = 0.3; anchored.add(n)
     B0 = {c: basis(c, C[c]) for c in cams}
     def edge_ok(c, n, t):                                              # whole mesh in front (>= MIN_DEPTH) and its extreme in frame
         B = B0[c]; o, f = B[0], B[1]; X = solids[n][0]
@@ -229,7 +242,7 @@ def main():
         q = Q[mi[n]]; ks = rows_m[n]
         out['meshes'][n] = {'delta': [round(float(v), 3) for v in q], 'cams': sorted({edges[k][0] for k in ks}), 'edges': len(ks),
                             'edge_rms_before': round(float(np.sqrt(np.mean(r0[ks] ** 2))), 2), 'edge_rms_after': round(float(np.sqrt(np.mean(r1[ks] ** 2))), 2),
-                            'prior': 'measured' if msig[mi[n], 2] < 0.05 else 'estimated'}
+                            'prior': ('roof-anchored ' if n in anchored else '') + ('measured' if msig[mi[n], 2] < 0.05 else 'estimated')}
     json.dump(out, open(OUT, 'w'), indent=1)
     report(out)
     print(json.dumps({k: out[k] for k in ('stats_before', 'stats_after', 'n_edges', 'n_lms', 'secs')}))
