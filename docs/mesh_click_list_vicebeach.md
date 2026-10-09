@@ -17,7 +17,7 @@ on the V16 footprint. Automatic heights were rejected (silhouette scan ~41/44 fa
 | 9 | V16 #1728 | 1739, 934 | 691 | 4 | Vice City 05 (Vice Beach) (198 px); Alley (W) (137 px); Rooftop Party (86 px); Port (19 px) |
 | 10 | V16 #1740 | 1811, 1073 | 605 | 4 | Vice Beach (B) (189 px); Vice Beach Panorama (Extended Look) (157 px); Alley (W) (134 px); Rooftop Party (95 px) |
 | 11 | V16 #1549 | 1227, -319 | 6149 | 3 | Port Vice City (A) (888 px); Vintage Vice City Pack 02 (Port) (449 px); Amphitheater (86 px) |
-| 12 | V16 #1928 | 1160, 1937 | 5905 | 3 | Jet Ski (225 px); Venetian Islands (177 px); Alley (W) (79 px) |
+| 12 | V16 #1927 | 1160, 1937 | 5905 | 3 | Jet Ski (225 px); Venetian Islands (177 px); Alley (W) (79 px) |
 | 13 | V16 #1680 | 1508, 434 | 4743 | 3 | Beach Gym (479 px); Speaking with Brian at Effluvia (2) (260 px); Vice Beach Panorama (Extended Look) (221 px) |
 | 14 | V16 #1888 | 1295, 401 | 3815 | 3 | Beach Gym (296 px); Vice Beach (B) (170 px); Vice Beach Panorama (Extended Look) (165 px) |
 | 15 | V16 #1698 | 1577, 534 | 3317 | 3 | Speaking with Brian at Effluvia (2) (256 px); Vice Beach Panorama (Extended Look) (204 px); Port (59 px) |
@@ -31,14 +31,14 @@ on the V16 footprint. Automatic heights were rejected (silhouette scan ~41/44 fa
 | 23 | V16 #1745 | 1732, 1055 | 1484 | 3 | Vice Beach Panorama (Extended Look) (213 px); Vice Beach (A) (207 px); Alley (W) (162 px) |
 | 24 | V16 #1860 | 1863, 1866 | 1208 | 3 | Biplane Night (Vice Beach) (111 px); Character Switch in Vice Beach (B) (104 px); Jet Ski (85 px) |
 | 25 | V16 #1895 | 1733, 1745 | 1157 | 3 | Biplane Night (Vice Beach) (183 px); Character Switch in Vice Beach (B) (100 px); Jet Ski (95 px) |
-| 26 | V16 #1930 | 1179, 1909 | 1035 | 3 | Jet Ski (96 px); Venetian Islands (74 px); Alley (W) (34 px) |
+| 26 | V16 #1929 | 1179, 1909 | 1035 | 3 | Jet Ski (96 px); Venetian Islands (74 px); Alley (W) (34 px) |
 | 27 | V16 #1510 | 1144, 5 | 1002 | 3 | Port Vice City (B) (198 px); Vintage Vice City Pack 02 (Port) (138 px); Amphitheater (39 px) |
 | 28 | V16 #1692 | 1665, 603 | 1002 | 3 | Beach (178 px); Speaking with Brian at Effluvia (1) (144 px); Vice Beach Panorama (Extended Look) (127 px) |
 | 29 | V16 #1764 | 1737, 1143 | 978 | 3 | Vice Beach Panorama (Extended Look) (184 px); Vice Beach (A) (180 px); Alley (W) (118 px) |
 | 30 | V16 #1697 | 1603, 585 | 969 | 3 | Speaking with Brian at Effluvia (1) (139 px); Vice Beach Panorama (Extended Look) (116 px); Port (30 px) |
 | 31 | V16 #1674 | 1767, 372 | 968 | 3 | Beach Gym (441 px); Beach (227 px); Speaking with Brian at Effluvia (1) (105 px) |
 | 32 | V16 #1857 | 1885, 1816 | 945 | 3 | Biplane Night (Vice Beach) (111 px); Character Switch in Vice Beach (B) (92 px); Jet Ski (77 px) |
-| 33 | V16 #1920 | 1341, 2278 | 928 | 3 | Green Sports Car (173 px); Jet Ski (66 px); Biplane Night (Vice Beach) (55 px) |
+| 33 | V16 #1919 | 1341, 2278 | 928 | 3 | Green Sports Car (173 px); Jet Ski (66 px); Biplane Night (Vice Beach) (55 px) |
 | 34 | V16 #1708 | 1959, 657 | 922 | 3 | Ocean View Hotel (3380 px); Vice City 06 (Ocean Drive) (2911 px); Vice Beach Panorama (Extended Look) (187 px) |
 | 35 | V16 #1753 | 1735, 1096 | 857 | 3 | Vice Beach (B) (196 px); Vice Beach Panorama (Extended Look) (167 px); Alley (W) (117 px) |
 | 36 | V16 #1861 | 2014, 1909 | 844 | 3 | Biplane Night (Video) Last (116 px); Character Switch in Vice Beach (B) (87 px); Biplane Night (Vice Beach) (76 px) |
