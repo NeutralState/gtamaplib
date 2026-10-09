@@ -7,147 +7,140 @@ or not judged (edges hidden). Per camera, edge errors are fitted as shift + scal
 
 | camera | judged | match | off | weak | edge shift px | edge scale px | rms px | yaw hint (deg) | status |
 |---|---|---|---|---|---|---|---|---|---|
-| Vice Beach (B) | 26 | 15 | 4 | 7 | -0.15 | -0.99 | 2.72 | -0.01 |  |
-| Vice City Postcard | 23 | 13 | 7 | 3 | 0.16 | -5.91 | 4.41 | 0.01 |  |
-| Skyline | 22 | 11 | 7 | 4 | -1.98 | -6.56 | 4.1 | -0.1 |  |
-| Port Vice City (A) | 21 | 14 | 6 | 1 | 1.46 | -1.7 | 2.83 | 0.1 |  |
-| Port Vice City (B) | 21 | 10 | 4 | 7 | 1.21 | -1.37 | 2.0 | 0.08 | SOLVED |
-| Vice Beach (A) | 19 | 7 | 7 | 5 | 0.5 | -0.03 | 4.15 | 0.03 |  |
-| Sunrise over Vice City (Extended Look) | 18 | 5 | 7 | 6 | -2.86 | -1.44 | 5.58 | -0.11 |  |
-| Speaking with Brian at Effluvia (3) | 17 | 5 | 11 | 1 | 4.97 | -3.11 | 5.39 | 0.34 |  |
-| Shitzu Squalo 01 (Bay) | 16 | 6 | 10 | 0 | -3.09 | -6.59 | 8.32 | -0.11 |  |
-| Venetian Islands | 16 | 8 | 5 | 3 | -0.02 | -1.01 | 3.89 | -0.0 |  |
-| Biplane (Video) v2580 | 15 | 1 | 12 | 2 | 6.22 | 6.19 | 5.22 | 0.5 |  |
-| Parachute Jump over Vice Beach (Extended Look) | 15 | 9 | 4 | 2 | -0.1 | 0.04 | 1.67 | -0.01 |  |
-| Prison | 15 | 7 | 5 | 3 | -0.73 | -1.13 | 3.8 | -0.05 |  |
-| Grassrivers 05 (Sunrise RV Park) | 13 | 6 | 5 | 2 | 1.08 | -9.29 | 4.53 | 0.03 |  |
-| Vice Beach Panorama (Extended Look) | 13 | 3 | 9 | 1 | 1.08 | 5.26 | 13.89 | 0.06 |  (night) |
-| Oceanarium | 12 | 6 | 5 | 1 | 0.34 | 2.61 | 3.11 | 0.02 |  |
-| Rooftop Party | 12 | 4 | 7 | 1 | 2.45 | -5.48 | 5.85 | 0.13 |  |
-| Shoreline [Gameinformer] | 12 | 2 | 7 | 3 | 4.49 | -0.44 | 2.99 | 0.17 |  |
-| Vice City 10 (Pegassi Towers) | 12 | 4 | 7 | 1 | 0.26 | 5.06 | 3.04 | 0.02 |  |
-| Biplane (Video) v0900 | 11 | 4 | 6 | 1 | -0.3 | -0.65 | 4.79 | -0.03 |  |
-| Speaking with Brian at Effluvia (2) | 11 | 1 | 9 | 1 | 10.71 | 5.57 | 7.2 | 0.63 |  |
-| Sidewalk (Jason) (E) | 10 | 1 | 7 | 2 | 4.08 | 5.79 | 6.76 | 0.31 |  |
-| Vice City 11 (Megamundo) | 10 | 3 | 5 | 2 | -0.63 | -8.23 | 5.78 | -0.03 |  |
-| Biplane (Video) v0820 | 9 | 3 | 4 | 2 | -2.52 | -7.34 | 3.91 | -0.3 |  |
-| Biplane (Video) v0770 | 8 | 6 | 1 | 1 | -2.75 | -5.9 | 2.85 | -0.33 |  |
-| Grassrivers 02 (Watson Bay) | 8 | 2 | 6 | 0 | -2.68 | 0.71 | 5.35 | -0.11 |  |
-| Motorboats (B) | 8 | 4 | 4 | 0 | 3.45 | -1.45 | 5.37 | 0.19 |  |
-| Rialto Causeway with Raul (1) | 8 | 3 | 3 | 2 | 2.48 | 2.7 | 1.7 | 0.18 | SOLVED |
-| Motorboats (A) | 7 | 1 | 4 | 2 | 0.36 | -3.85 | 5.66 | 0.02 |  |
-| Speaking with Brian at Effluvia (1) | 7 | 1 | 5 | 1 | 7.0 | 3.88 | 5.91 | 0.38 |  |
-| Beach | 6 | 1 | 5 | 0 | -7.79 | 32.59 | 4.38 | -0.22 | SOLVED |
-| Biplane Night (Vice Beach) | 6 | 2 | 2 | 2 | 0.43 | 10.68 | 6.8 | 0.03 |  (night) |
-| Jet Ski | 6 | 5 | 1 | 0 | -2.87 | 4.81 | 2.17 | -0.15 |  |
-| Raul Bautista 03 (Motorboat) | 6 | 1 | 5 | 0 | 10.99 | -16.62 | 3.36 | 0.46 |  |
-| Vice City 03 (Basketball) | 6 | 4 | 2 | 0 | -0.93 | 2.13 | 4.56 | -0.04 |  |
-| Vice City Sign | 6 | 2 | 3 | 1 | 2.68 | 9.37 | 4.12 | 0.04 |  |
-| Biplane (Video) v1380 | 5 | 2 | 2 | 1 | -8.44 | -16.48 | 2.63 | -1.02 |  |
-| Biplane (Video) v1980 | 5 | 1 | 1 | 3 | -3.64 | 7.56 | 1.7 | -0.22 |  |
-| Biplane (Video) v3000 | 5 | 1 | 2 | 2 | -0.05 | 8.82 | 2.46 | -0.0 |  |
-| Highway (Peacock Bay) (B) | 5 | 0 | 4 | 1 | 5.24 | -26.49 | 8.71 | 0.25 |  |
-| Jason Duval 05 (Machine Gun) | 5 | 1 | 4 | 0 | -16.2 | 12.78 | 2.51 | -0.55 |  (night) |
-| Prison (Video) v091 (Wing) | 5 | 2 | 1 | 2 | 4.69 | -3.65 | 0.59 | 0.56 |  |
-| Prison (Video) v310 | 5 | 2 | 2 | 1 | 5.13 | -18.53 | 1.43 | 0.4 |  |
-| Water Tower [Gameinformer] | 5 | 3 | 1 | 1 | 6.42 | -13.04 | 1.28 | 0.2 |  |
-| Biplane (Video) v2811 | 4 | 1 | 2 | 1 | 6.46 | 3.68 | 3.47 | 0.91 |  |
-| Boat | 4 | 1 | 2 | 1 | -17.84 | 30.77 | 5.8 | -0.43 |  |
-| Convertible | 4 | 1 | 2 | 1 | 11.39 | -12.77 | 2.37 | 0.64 |  |
-| Highway (NE) | 4 | 2 | 0 | 2 | 9.35 | -10.32 | 0.57 | 0.72 |  |
-| Airport (X) | 3 | 1 | 2 | 0 | -8.35 | 0.96 | 4.2 | -0.64 |  |
-| Amphitheater | 3 | 0 | 2 | 1 | 21.71 | 46.6 | 1.44 | 1.2 |  |
-| Biplane (Video) v1080 | 3 | 0 | 3 | 0 | -51.08 | -52.58 | 0.4 | -2.03 |  |
-| Biplane Night (Video) Last | 3 | 0 | 0 | 3 | -1.18 | 3.03 | 0.01 | -0.14 |  (night) |
-| Gas Station (Chase) (S) | 3 | 0 | 3 | 0 | -1.83 | -18.78 | 9.22 | -0.1 |  |
-| Metro (SE) (B) | 3 | 0 | 2 | 1 | 12.34 | 0.14 | 6.54 | 0.95 |  |
-| Port | 3 | 1 | 2 | 0 | 1.89 | -21.54 | 2.49 | 0.14 |  |
-| Tennis Stadium (4K) | 3 | 0 | 3 | 0 | 6.89 | -16.37 | 1.56 | 0.45 |  |
-| Thunderstorm [Gameinformer] | 3 | 2 | 1 | 0 | 5.66 | 18.13 | 1.24 | 0.28 |  |
-| Ultimate Edition 02 (Green Sports Car) | 3 | 0 | 3 | 0 | 63.09 | -78.06 | 0.47 | 1.83 |  |
+| Vice Beach (B) | 27 | 16 | 5 | 6 | -0.74 | -0.81 | 2.03 | -0.04 |  |
+| Sunrise over Vice City (Extended Look) | 23 | 11 | 9 | 3 | -1.29 | 1.3 | 6.44 | -0.05 |  |
+| Skyline | 22 | 13 | 3 | 6 | -1.43 | -6.22 | 3.54 | -0.08 |  |
+| Speaking with Brian at Effluvia (3) | 22 | 11 | 7 | 4 | -1.78 | 2.13 | 4.03 | -0.12 |  |
+| Port Vice City (A) | 21 | 15 | 2 | 4 | 0.47 | -0.34 | 1.62 | 0.03 |  |
+| Vice City Postcard | 21 | 15 | 2 | 4 | -0.08 | -1.51 | 1.86 | -0.0 |  |
+| Port Vice City (B) | 19 | 12 | 3 | 4 | 1.12 | -1.9 | 1.73 | 0.08 | SOLVED |
+| Venetian Islands | 18 | 10 | 6 | 2 | 0.83 | 1.0 | 2.64 | 0.05 |  |
+| Vice Beach (A) | 17 | 12 | 1 | 4 | -0.59 | -0.71 | 1.31 | -0.03 |  |
+| Oceanarium | 16 | 6 | 5 | 5 | -0.54 | 3.56 | 2.94 | -0.04 |  |
+| Shitzu Squalo 01 (Bay) | 16 | 10 | 6 | 0 | -1.91 | -2.96 | 6.42 | -0.07 |  |
+| Biplane (Video) v2580 | 15 | 2 | 8 | 5 | 4.72 | 8.46 | 3.96 | 0.38 |  |
+| Rooftop Party | 15 | 5 | 6 | 4 | 1.07 | -1.69 | 3.82 | 0.05 |  |
+| Vice City 10 (Pegassi Towers) | 14 | 6 | 6 | 2 | -1.0 | 3.67 | 2.6 | -0.07 |  |
+| Parachute Jump over Vice Beach (Extended Look) | 13 | 8 | 1 | 4 | -0.8 | 0.74 | 1.75 | -0.06 |  |
+| Prison | 13 | 10 | 1 | 2 | -0.71 | -0.13 | 1.48 | -0.05 |  |
+| Vice Beach Panorama (Extended Look) | 13 | 3 | 9 | 1 | -1.52 | 10.01 | 13.4 | -0.08 |  (night) |
+| Grassrivers 05 (Sunrise RV Park) | 12 | 6 | 4 | 2 | 1.94 | -9.82 | 2.99 | 0.05 |  |
+| Shoreline [Gameinformer] | 12 | 7 | 3 | 2 | 0.17 | -2.57 | 3.2 | 0.01 |  |
+| Vice City 11 (Megamundo) | 11 | 9 | 1 | 1 | -1.24 | -1.84 | 3.48 | -0.06 |  |
+| Biplane (Video) v0820 | 10 | 5 | 3 | 2 | -0.16 | -0.81 | 3.67 | -0.02 |  |
+| Sidewalk (Jason) (E) | 10 | 3 | 4 | 3 | -1.76 | -6.18 | 5.89 | -0.13 |  |
+| Speaking with Brian at Effluvia (2) | 10 | 0 | 9 | 1 | 11.02 | 10.15 | 4.77 | 0.65 |  |
+| Motorboats (B) | 9 | 5 | 3 | 1 | 1.51 | 1.22 | 4.79 | 0.08 |  |
+| Biplane (Video) v0770 | 8 | 6 | 2 | 0 | -0.7 | -2.69 | 2.62 | -0.08 |  |
+| Biplane (Video) v0900 | 8 | 3 | 5 | 0 | 0.89 | 4.49 | 3.3 | 0.09 |  |
+| Prison (Video) v310 | 8 | 2 | 4 | 2 | -0.54 | 0.73 | 3.87 | -0.04 |  |
+| Rialto Causeway with Raul (1) | 8 | 3 | 2 | 3 | 2.35 | 0.45 | 1.23 | 0.17 | SOLVED |
+| Beach | 7 | 1 | 6 | 0 | -6.98 | 36.39 | 1.44 | -0.2 | SOLVED |
+| Biplane (Video) v1380 | 7 | 4 | 1 | 2 | -0.62 | -2.44 | 0.95 | -0.08 |  |
+| Grassrivers 02 (Watson Bay) | 7 | 3 | 1 | 3 | -2.07 | 0.88 | 2.53 | -0.08 |  |
+| Jet Ski | 7 | 5 | 1 | 1 | -2.35 | 2.93 | 1.48 | -0.12 |  |
+| Motorboats (A) | 7 | 3 | 3 | 1 | -1.71 | -6.61 | 5.47 | -0.09 |  |
+| Speaking with Brian at Effluvia (1) | 7 | 4 | 1 | 2 | -1.47 | -0.02 | 3.78 | -0.08 |  |
+| Vice City 03 (Basketball) | 7 | 5 | 1 | 1 | -0.99 | -0.52 | 1.68 | -0.05 |  |
+| Jason Duval 05 (Machine Gun) | 6 | 1 | 4 | 1 | -10.43 | 14.86 | 5.8 | -0.35 |  (night) |
+| Biplane (Video) v1980 | 5 | 1 | 2 | 2 | -3.84 | 8.32 | 1.66 | -0.23 |  |
+| Biplane Night (Vice Beach) | 5 | 3 | 1 | 1 | 3.63 | 12.78 | 2.72 | 0.28 |  (night) |
+| Highway (Peacock Bay) (B) | 5 | 0 | 3 | 2 | 2.67 | 3.74 | 7.99 | 0.13 |  |
+| Prison (Video) v091 (Wing) | 5 | 5 | 0 | 0 | 4.75 | -5.51 | 0.83 | 0.56 |  |
+| Water Tower [Gameinformer] | 5 | 2 | 1 | 2 | 7.57 | -15.7 | 1.6 | 0.23 |  |
+| Amphitheater | 4 | 0 | 3 | 1 | 25.1 | 51.59 | 3.85 | 1.38 |  |
+| Biplane (Video) v2811 | 4 | 0 | 2 | 2 | 4.97 | 8.95 | 3.86 | 0.7 |  |
+| Biplane (Video) v3000 | 4 | 1 | 2 | 1 | 3.07 | -20.12 | 5.29 | 0.27 |  |
+| Biplane Night (Video) Last | 4 | 0 | 3 | 1 | 42.43 | 65.47 | 2.97 | 5.07 |  (night) |
+| Highway (NE) | 4 | 2 | 0 | 2 | 10.82 | -12.21 | 0.44 | 0.83 |  |
+| Raul Bautista 03 (Motorboat) | 4 | 0 | 4 | 0 | 14.23 | -17.75 | 3.42 | 0.6 |  |
+| Vice City Sign | 4 | 1 | 2 | 1 | -1.89 | -3.98 | 5.55 | -0.03 |  |
+| Airport (X) | 3 | 1 | 2 | 0 | -7.25 | 2.16 | 2.42 | -0.55 |  |
+| Biplane (Video) v1080 | 3 | 1 | 2 | 0 | -67.26 | -78.43 | 0.03 | -2.67 |  |
+| Boat | 3 | 0 | 2 | 1 | -22.7 | 40.9 | 9.49 | -0.54 |  |
+| Convertible | 3 | 1 | 2 | 0 | -1.59 | 19.41 | 1.19 | -0.09 |  |
+| Metro (SE) (B) | 3 | 0 | 2 | 1 | 12.16 | 0.11 | 6.9 | 0.93 |  |
+| Port | 3 | 1 | 2 | 0 | 1.81 | -6.35 | 2.75 | 0.13 |  |
+| Street (Lucia) (N) | 3 | 1 | 2 | 0 | -1.92 | -14.64 | 2.93 | -0.12 |  |
+| Tennis Stadium (4K) | 3 | 0 | 3 | 0 | 3.62 | -11.92 | 1.19 | 0.24 |  |
+| Thunderstorm [Gameinformer] | 3 | 2 | 1 | 0 | 5.92 | 18.88 | 1.25 | 0.29 |  |
 | Ambrosia 04 (Fires) | 2 | 2 | 0 | 0 |  |  |  |  | SOLVED |
-| Ambrosia Postcard (X) | 2 | 0 | 1 | 1 |  |  |  |  |  |
-| Beach Gym | 2 | 0 | 1 | 1 |  |  |  |  |  |
-| Highway (Peacock Bay) (A) | 2 | 0 | 2 | 0 |  |  |  |  |  |
-| Lucia Caminos 02 (Pool) | 2 | 0 | 2 | 0 |  |  |  |  |  |
-| Port (B) | 2 | 1 | 0 | 1 |  |  |  |  |  |
+| Ambrosia Postcard (X) | 2 | 1 | 1 | 0 |  |  |  |  |  |
+| Gas Station (Chase) (S) | 2 | 0 | 2 | 0 |  |  |  |  |  |
+| Highway (Peacock Bay) (A) | 2 | 0 | 1 | 1 |  |  |  |  |  |
+| Metro (SE) (C) | 2 | 1 | 0 | 1 |  |  |  |  |  |
+| Port (B) | 2 | 1 | 1 | 0 |  |  |  |  |  |
+| Street (Jason) | 2 | 1 | 1 | 0 |  |  |  |  |  |
 | Strip Club (Lucia) | 2 | 0 | 2 | 0 |  |  |  |  |  (night) |
+| Tennis Court (E) | 2 | 1 | 1 | 0 |  |  |  |  |  |
 | Throwing Stuff from an Overpass | 2 | 0 | 2 | 0 |  |  |  |  |  |
-| Truck (2) | 2 | 0 | 2 | 0 |  |  |  |  |  (night) |
-| Vice City 05 (Vice Beach) | 2 | 0 | 2 | 0 |  |  |  |  |  |
+| Trees | 2 | 0 | 2 | 0 |  |  |  |  |  |
 | Vice City 08 (Ferris Wheel) | 2 | 0 | 2 | 0 |  |  |  |  |  |
+| Vintage Vice City Pack 02 (Port) | 2 | 1 | 1 | 0 |  |  |  |  |  |
 | Yacht (1) | 2 | 2 | 0 | 0 |  |  |  |  |  |
 | '95 Grotti Cheetah 04 (Garage) | 1 | 0 | 1 | 0 |  |  |  |  |  |
 | Ambrosia 02 (Panorama) | 1 | 0 | 1 | 0 |  |  |  |  | VERIFIED |
-| Biplane (Video) v2370 | 1 | 0 | 1 | 0 |  |  |  |  |  |
-| Handshake | 1 | 0 | 0 | 1 |  |  |  |  |  |
+| Beach Gym | 1 | 0 | 1 | 0 |  |  |  |  |  |
+| Biplane (Video) v2370 | 1 | 0 | 0 | 1 |  |  |  |  |  |
+| Brickell | 1 | 0 | 0 | 1 |  |  |  |  |  |
+| Explosion | 1 | 0 | 1 | 0 |  |  |  |  | SOLVED |
+| Gas Station (Chase) (SE) | 1 | 0 | 1 | 0 |  |  |  |  |  |
 | Hangar (A) | 1 | 0 | 1 | 0 |  |  |  |  |  (night) |
 | Hedge (D) | 1 | 0 | 1 | 0 |  |  |  |  |  |
-| Interchange | 1 | 0 | 1 | 0 |  |  |  |  |  |
+| Interchange | 1 | 0 | 0 | 1 |  |  |  |  |  |
 | Little Haiti | 1 | 0 | 1 | 0 |  |  |  |  |  (night) |
-| Metro (SE) (C) | 1 | 1 | 0 | 0 |  |  |  |  |  |
+| Lucia Caminos 02 (Pool) | 1 | 1 | 0 | 0 |  |  |  |  |  |
 | Park | 1 | 0 | 1 | 0 |  |  |  |  |  |
-| Street (Bikers) (B) | 1 | 0 | 0 | 1 |  |  |  |  |  |
-| Street (Lucia) (N) | 1 | 1 | 0 | 0 |  |  |  |  |  |
-| Tennis Court (E) | 1 | 1 | 0 | 0 |  |  |  |  |  |
-| Vintage Vice City Pack 02 (Port) | 1 | 0 | 1 | 0 |  |  |  |  |  |
+| Street (Bikers) (B) | 1 | 0 | 1 | 0 |  |  |  |  |  |
+| Tennis Court (NE) | 1 | 0 | 0 | 1 |  |  |  |  |  |
+| Truck (2) | 1 | 0 | 1 | 0 |  |  |  |  |  (night) |
+| Vice City 05 (Vice Beach) | 1 | 0 | 1 | 0 |  |  |  |  |  |
 
 ## Buildings off in several cameras (mesh suspects)
 
 | building | cams judged | off | match |
 |---|---|---|---|
-| Four Seasons Hotel Miami | 29 | 13 | 10 |
-| Murano Grande | 11 | 11 | 0 |
-| Wells Fargo Center (S) | 11 | 10 | 1 |
 | Opera Tower | 19 | 9 | 7 |
-| Vizcayne South Condominium | 11 | 9 | 1 |
-| Pegassi Towers | 27 | 9 | 14 |
-| Quantum on the Bay (North) | 11 | 8 | 3 |
-| Flagler on the River | 10 | 8 | 1 |
-| Flamingo South Beach | 10 | 7 | 1 |
-| Miami Tower | 13 | 7 | 2 |
-| Marina Blue | 13 | 7 | 6 |
-| Apogee Condominium | 8 | 6 | 0 |
-| The Floridian | 6 | 6 | 0 |
-| Infinity at Brickell | 8 | 6 | 2 |
-| Southeast Financial Center | 27 | 6 | 20 |
-| Quantum on the Bay (South) | 15 | 6 | 7 |
-| The Palace Condominium | 11 | 6 | 2 |
-| Icon at South Beach | 9 | 5 | 2 |
-| Marriott Miami Biscayne Bay | 8 | 5 | 1 |
-| Met 1 Condominium | 7 | 5 | 1 |
-| 1450 Brickell Ave | 7 | 5 | 2 |
-| One Miami Condominium East | 11 | 5 | 3 |
-| Vizcayne North Condominium | 15 | 5 | 7 |
-| The Bentley Bay South | 7 | 4 | 2 |
-| Brickell Arch | 11 | 4 | 4 |
-| The Grand | 14 | 4 | 3 |
-| Park Grove Condominium (S) | 6 | 4 | 1 |
-| One Miami Condominium West | 12 | 4 | 7 |
-| Asia Brickell Key | 18 | 4 | 10 |
-| Royal Palm South Beach | 5 | 4 | 1 |
-| Carbonell Brickell | 8 | 4 | 4 |
-| Wells Fargo Center | 13 | 4 | 9 |
-| W South Beach | 3 | 3 | 0 |
-| Loews Miami Beach | 4 | 3 | 1 |
-| The Waverly South Beach | 5 | 3 | 2 |
-| 1000 Venetian Way | 4 | 3 | 1 |
-| The Ritz-Carlton Bal Harbour | 7 | 3 | 1 |
-| Miami-Dade County Courthouse | 4 | 3 | 0 |
-| 1500 Ocean Dr | 4 | 3 | 1 |
-| Ten Museum Park | 5 | 3 | 2 |
-| Marquis Miami | 8 | 3 | 5 |
-| One Broadway | 4 | 3 | 1 |
-| Park Grove Condominium | 4 | 3 | 1 |
-| Citigroup Center | 3 | 3 | 0 |
-| 100 Biscayne Blvd (NE) | 4 | 3 | 0 |
-| Sunset Harbour South Condo | 5 | 2 | 1 |
-| Akoya Condominium | 10 | 2 | 5 |
-| Bayshore Place Condominium | 2 | 2 | 0 |
+| Flagler on the River | 10 | 8 | 2 |
+| Four Seasons Hotel Miami | 28 | 7 | 18 |
+| Infinity at Brickell | 8 | 7 | 1 |
+| Wells Fargo Center (S) | 8 | 7 | 1 |
+| Icon Brickell | 16 | 7 | 5 |
+| Murano Grande | 11 | 6 | 4 |
+| The Waverly South Beach | 7 | 6 | 1 |
+| Pegassi Towers | 26 | 6 | 17 |
+| Vizcayne North Condominium | 15 | 6 | 7 |
+| Apogee Condominium | 7 | 5 | 2 |
+| Park Grove Condominium (S) | 6 | 5 | 0 |
+| Quantum on the Bay (North) | 12 | 5 | 3 |
+| Marina Blue | 14 | 5 | 6 |
+| South Pointe Tower | 5 | 4 | 0 |
+| Flamingo South Beach | 10 | 4 | 2 |
+| Brickell Arch | 9 | 4 | 2 |
+| Marriott Miami Biscayne Bay | 6 | 4 | 0 |
+| Vizcayne South Condominium | 10 | 4 | 1 |
+| Citigroup Center | 6 | 4 | 0 |
+| Marquis Miami | 9 | 4 | 5 |
+| Portofino Tower | 9 | 3 | 4 |
+| Bank of America Financial Center (Miami Beach) | 4 | 3 | 1 |
+| Icon at South Beach | 9 | 3 | 6 |
+| The Ritz-Carlton Bal Harbour | 7 | 3 | 2 |
+| Akoya Condominium | 10 | 3 | 5 |
+| The Grand | 13 | 3 | 4 |
+| One Miami Condominium East | 10 | 3 | 7 |
+| Quantum on the Bay (South) | 13 | 3 | 5 |
+| Tresor Tower | 6 | 3 | 3 |
+| 100 Biscayne Blvd (NE) | 4 | 3 | 1 |
+| The Bentley Bay South | 4 | 2 | 1 |
+| Sunset Harbour South Condo | 5 | 2 | 2 |
+| The Floridian | 4 | 2 | 1 |
+| Southeast Financial Center | 25 | 2 | 22 |
 | Turkey Point Nuclear Power Station (Turbine Hall) | 2 | 2 | 0 |
-| Bank of America Financial Center (Miami Beach) | 3 | 2 | 0 |
-| 50 Biscayne Blvd | 8 | 2 | 4 |
+| Asia Brickell Key | 17 | 2 | 12 |
+| Carbonell Brickell | 6 | 2 | 3 |
+| One Broadway | 5 | 2 | 1 |
 | New Wave Condominiums | 2 | 2 | 0 |
+| Vice Beach Tower (V16 3258) | 3 | 2 | 1 |
 
 ## Buildings whose width disagrees in several cameras (footprint/shape suspects)
 
@@ -155,17 +148,23 @@ Width error = right edge error - left edge error (px at 1280, positive = the gam
 
 | building | cams with both edges | median width error px | cams |
 |---|---|---|---|
-| The Bentley Bay South | 2 | -15.2 | Speaking with Brian at Effluvia (2) (-10.9); Speaking with Brian at Effluvia (3) (-19.5) |
-| Carbonell Brickell | 2 | -10.7 | Shitzu Squalo 01 (Bay) (-15.8); Parachute Jump over Vice Beach (Extended Look) (-5.5) |
-| One Broadway | 2 | 9.2 | Highway (Peacock Bay) (B) (+11.0); Oceanarium (+7.5) |
-| Icon at South Beach | 6 | -7.3 | Vice Beach (A) (-7.9); Vice Beach (B) (-8.7); Biplane (Video) v2580 (-5.7); Speaking with Brian at Effluvia (1) (-7.2) |
-| Quantum on the Bay (North) | 2 | -7.0 | Vice City Postcard (-2.2); Rialto Causeway with Raul (1) (-11.9) |
+| Continuum on South Beach | 2 | 14.6 | Rooftop Party (+12.2); Speaking with Brian at Effluvia (1) (+16.9) |
+| Carbonell Brickell | 2 | -10.6 | Shitzu Squalo 01 (Bay) (-15.8); Parachute Jump over Vice Beach (Extended Look) (-5.4) |
+| Infinity at Brickell | 2 | 9.1 | Highway (Peacock Bay) (B) (+2.0); Oceanarium (+16.2) |
+| Miami Tower | 2 | -8.8 | Skyline (-7.4); Shitzu Squalo 01 (Bay) (-10.3) |
+| Icon Brickell | 4 | -8.0 | Vice Beach (B) (-16.7); Sunrise over Vice City (Extended Look) (-1.5); Vice Beach Panorama (Extended Look) (-5.6); Oceanarium (-10.3) |
+| Icon at South Beach | 6 | -7.3 | Vice Beach (A) (-7.5); Vice Beach (B) (-8.6); Biplane (Video) v2580 (-5.6); Speaking with Brian at Effluvia (1) (-7.9) |
+| Stephen P. Clark Government Center | 2 | -7.2 | Highway (Peacock Bay) (B) (-4.0); Shitzu Squalo 01 (Bay) (-10.4) |
+| Royal Palm South Beach | 2 | -7.1 | Vice Beach (A) (-12.4); Venetian Islands (-1.7) |
+| Flamingo South Beach | 6 | -7.0 | Vice Beach (B) (+10.9); Venetian Islands (+12.8); Vice City 11 (Megamundo) (+1.4); Speaking with Brian at Effluvia (1) (-15.3) |
 | Akoya Condominium | 7 | -6.3 | Highway (NE) (-5.9); Beach (-10.3); Venetian Islands (-6.3); Jet Ski (-8.2) |
+| Murano Grande | 2 | -6.2 | Vice Beach (A) (-15.5); Sunrise over Vice City (Extended Look) (+3.1) |
 | Marquis Miami | 6 | -6.0 | Convertible (-6.0); Skyline (+1.3); Port Vice City (A) (-6.4); Port Vice City (B) (-7.0) |
-| Stephen P. Clark Government Center | 3 | -5.7 | Highway (Peacock Bay) (B) (-3.9); Street (Bikers) (B) (-5.7); Shitzu Squalo 01 (Bay) (-11.4) |
-| Vizcayne North Condominium | 4 | 5.3 | Skyline (+6.2); Jason Duval 05 (Machine Gun) (+4.3); Shitzu Squalo 01 (Bay) (+7.4); Vice City 10 (Pegassi Towers) (+0.3) |
+| Vizcayne North Condominium | 4 | 5.1 | Skyline (+6.2); Jason Duval 05 (Machine Gun) (+4.0); Shitzu Squalo 01 (Bay) (+6.9); Vice City 10 (Pegassi Towers) (+0.0) |
+| Quantum on the Bay (North) | 2 | -4.6 | Vice City Postcard (-1.6); Rialto Causeway with Raul (1) (-7.6) |
 | Turkey Point Nuclear Power Station (Fossil Units) | 2 | -4.4 | Prison (-6.2); Thunderstorm [Gameinformer] (-2.5) |
-| Tresor Tower | 2 | -4.1 | Jet Ski (-5.5); Vice City 11 (Megamundo) (-2.7) |
-| Pegassi Towers | 16 | -3.8 | Vice Beach (A) (+1.3); Vice Beach (B) (+0.6); Rooftop Party (-0.7); Vice City Postcard (-4.5) |
-| Brickell Arch | 2 | -3.7 | Vice City 10 (Pegassi Towers) (-3.9); Oceanarium (-3.5) |
-| Apogee Condominium | 4 | 3.3 | Rooftop Party (+1.3); Speaking with Brian at Effluvia (1) (+3.3); Speaking with Brian at Effluvia (2) (+4.1); Speaking with Brian at Effluvia (3) (+3.4) |
+| Apogee Condominium | 4 | 4.1 | Rooftop Party (+1.3); Speaking with Brian at Effluvia (1) (+4.2); Speaking with Brian at Effluvia (2) (+4.0); Speaking with Brian at Effluvia (3) (+4.1) |
+| Green Diamond | 3 | -3.9 | Venetian Islands (-3.9); Tennis Court (E) (-17.4); Vice City 11 (Megamundo) (-0.4) |
+| Brickell Arch | 2 | -3.8 | Vice City 10 (Pegassi Towers) (-4.0); Oceanarium (-3.6) |
+| Pegassi Towers | 19 | -3.7 | Vice Beach (A) (+0.8); Vice Beach (B) (+0.3); Rooftop Party (-1.5); Grassrivers 02 (Watson Bay) (-1.8) |
+| Tresor Tower | 2 | -3.5 | Jet Ski (-4.4); Vice City 11 (Megamundo) (-2.6) |
