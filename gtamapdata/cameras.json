@@ -4638,19 +4638,20 @@
    0.5497702572780822
   ],
   "ypr": [
-   127.25272782064944,
-   -5.449869091599211,
-   -3.915189972301385e-05
+   129.26,
+   -5.881,
+   3.861
   ],
   "fov": [
-   59.41532759511673,
+   55.167,
    null
   ],
   "size": [
    3840,
    2160
   ],
-  "source": "Screenshot 2 \u2014 Crest Kayak [1]"
+  "source": "Screenshot 2 \u2014 Crest Kayak [1]",
+  "note": "BROKEN-REPAIR 2026-10-09: marking Island A (W) excluded (fine in Leonida Keys 01 / Postcard at 0.3-0.4', behind the camera here), 104000 Overseas Hwy excluded (bad landmark); orientation/fov refit on 99353 Overseas Hwy + Seven Mile Bridge (C): 1.1' each (self-consistent, 2 points). Was ypr [127.253, -5.45, -0.0] fov [59.415, None]."
  },
  "Green Sports Car": {
   "id": "S3/2",
@@ -5212,17 +5213,17 @@
  "Hank's Waffle (Bocamar Bridge)": {
   "id": "T3/1",
   "xyz": [
-   -6184.014,
-   4511.199,
-   15.416
+   -6183.904,
+   4512.038,
+   15.494
   ],
   "ypr": [
-   85.2446,
-   -3.5009,
-   -1.4252
+   86.642,
+   -2.63,
+   0.091
   ],
   "fov": [
-   60.909,
+   56.141,
    null
   ],
   "size": [
@@ -5233,7 +5234,7 @@
   "notes": "RECAL-ANCRES 2026-09-06 (tooltips x3, 12 clics, 0 ancres): mediane 298.7->119.1 px, ancres None->None, move 4.3 m | ILOTS 2026-09-02: orientation+fov re-solves a position fixe sur les 4 clics de mats (N/BN/S/BS aux ilots), residus [3.1, 4.3, 5.0, 5.6] px; mats identiques. Le pres-champ 536 (clics Arch/RSW/Roofline) est vu en rasant a 2-7 m et n'est pas utilisable au pixel. Pas SOLVED. | ancien: AXE-SKYWAY-FINAL (2026-08-29): calibree sur le secteur Diner LOCKE (arches 536 + ligne mat t415 + tablier extrait au gradient, rms 2px). Teleobjectif fov~33 (plan serre Jason, compression \u2713). VERDICT PYLONES: mat visible gauche = SUD a t415 (0.2px); mat NORD t132 projete x~3680 = occulte par l'avant-toit de Hank's Waffles; la colonne jaune x2895 est un POTEAU D'AVANT-PLAN (aucun eventail, descend ",
   "player": null,
   "tag": "extended-look",
-  "note": "POSE-EDIT: ajustee a la main par Alexandre dans l UI | POSE-EDIT: ajustee a la main par Alexandre dans l UI",
+  "note": "POSE-EDIT: ajustee a la main par Alexandre dans l UI | POSE-EDIT: ajustee a la main par Alexandre dans l UI | BROKEN-REPAIR 2026-10-09: refit with METRIC residuals (angle x distance): its landmarks are 3-8 m away (Hanks roofline, red poles, arches, triangulated from the Diner cameras to ~0.5-1 m), so arcminute residuals blew up (median 114') although the pose was close; median 0.37 -> 0.19 m, Bocamar Bridge (500-600 m) 156/44/16' -> 0.8/4.1/6.2'. Was xyz [-6184.014, 4511.199, 15.416] ypr [85.245, -3.501, -1.425] fov [60.909, None].",
   "pose_verified": null
  },
  "Grassrivers 05 (Sunrise RV Park)": {
