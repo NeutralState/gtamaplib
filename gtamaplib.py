@@ -903,6 +903,10 @@ class Map:
         self.scale = self.og_scale
         self.og_zero = zero
         self.zero = self.og_zero
+        # [PATHS-V1] maps.json filenames are relative to the repo (it moved); a stale absolute path falls back to maps/<name>
+        if not os.path.isabs(filename): filename = os.path.join(DIRNAME, filename)
+        elif not os.path.exists(filename) and os.path.exists(os.path.join(DIRNAME, 'maps', os.path.basename(filename))):
+            filename = os.path.join(DIRNAME, 'maps', os.path.basename(filename))
         self.filename = filename
         self.cropped = None
         self.section_name = None

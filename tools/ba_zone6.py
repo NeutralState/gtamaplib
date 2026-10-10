@@ -1,12 +1,12 @@
 import sys, json, collections, time, os, re
 sys.path.insert(0,'/private/tmp/claude-501/-Users-alexandreleblanc-Downloads-gtamaplib-main/b03356f6-af67-4086-b7cc-fad47ae03b07/scratchpad')
-sys.path.insert(0,'/Users/alexandreleblanc/Downloads/gtamaplib-main/tools'); sys.path.insert(0,'/Users/alexandreleblanc/Downloads/gtamaplib-main')
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0,os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from camlib import *
 from scipy.optimize import least_squares
 from scipy.sparse import lil_matrix
 import structures as _structs
 APPLY = len(sys.argv)>1 and sys.argv[1]=='apply'
-REPO='/Users/alexandreleblanc/Downloads/gtamaplib-main/'
+REPO=os.path.dirname(os.path.dirname(os.path.abspath(__file__)))+'/'
 EX=json.load(open(ROOT+'excluded_markings.json')); MV=json.load(open(ROOT+'map_validated.json'))
 LEAKREF=set(json.load(open(REPO+'tools/audit/leak_poses_ref.json'))); SOLVEDREF=set(json.load(open(REPO+'tools/audit/solved_poses_ref.json')))
 X0,X1,Y0,Y1=[float(v) for v in sys.argv[2:6]] if len(sys.argv)>=6 else (-800,2600,-2800,2800)

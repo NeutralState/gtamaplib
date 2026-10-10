@@ -17,6 +17,7 @@ Toute calibration (horizon_resect, players HUD...) reste sur le DDS pur.
 
 Sortie: gtamapdata/heightmap/terrain_hd_f32.npy + terrain_hd_meta.json
 """
+import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__))); import paths as _P   # [PATHS-V1]
 import json
 import os
 import sys
@@ -79,7 +80,7 @@ def main():
     Zb = catrom_up(Z, ZX + xs*SC, ZY - ys[::-1]*SC)[::-1]   # rangee 0 = sud
     print('Z_base upsample ok', flush=True)
 
-    leak = np.asarray(Image.open(os.path.expanduser('~/Downloads/fullmap.png'))
+    leak = np.asarray(Image.open(_P.asset('fullmap.png'))
                       .convert('L')).astype(np.float64)
     lu = (xs - WX0)/MPP
     lv = (WY0 - ys[::-1])/MPP

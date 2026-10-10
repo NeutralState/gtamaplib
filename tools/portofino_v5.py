@@ -9,6 +9,7 @@ Modifies landmarks.json (adds new LMs) and tools/densify_portofino_edges.py
 to include the new edges. Run densify after to update calib.html.
 """
 
+import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__))); import paths as _P   # [PATHS-V1]
 import os
 import sys
 import json
@@ -16,7 +17,7 @@ import math
 import shutil
 import re
 
-REPO = os.path.expanduser('~/Downloads/gtamaplib-main')
+REPO = _P.REPO
 sys.path.insert(0, REPO)
 import numpy as np
 import gtamapdata as md

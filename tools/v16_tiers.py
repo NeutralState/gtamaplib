@@ -8,12 +8,13 @@ API: regions(poly_id, svg=None, win_margin=5) -> [{'id','ring':[[x,y]...],'area'
      render(regions, out_png, extra=None)  (plan annote, pour choisir les hauteurs)
 Cache des traits: tools/generated/v16_strokes_cache/<poly>.json
 """
+import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__))); import paths as _P   # [PATHS-V1]
 import json, os, subprocess, sys
 import numpy as np
 import cv2
 
 THIS = os.path.dirname(os.path.abspath(__file__)); ROOT = os.path.dirname(THIS)
-SVG = os.path.expanduser('~/Downloads/GTA VI Community Mapping Project-3.svg')
+SVG = _P.asset('GTA VI Community Mapping Project-3.svg')
 CACHE = os.path.join(THIS, 'generated', 'v16_strokes_cache')
 RES = 0.2
 

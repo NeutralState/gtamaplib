@@ -9,13 +9,14 @@ la route prend la hauteur du tablier mesure (grille 4 m des aretes des meshes: m
 les meshes). Sortie: tools/threejs/_v16_roads.json (ignore par git).
 Usage: python3 tools/v16_roads.py
 """
+import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__))); import paths as _P   # [PATHS-V1]
 import json, os, sys, subprocess, math
 import numpy as np
 
 THIS = os.path.dirname(os.path.abspath(__file__)); REPO = os.path.dirname(THIS); sys.path.insert(0, THIS); sys.path.insert(0, REPO)
 import v16_resect as RR
 
-SVG = os.path.expanduser('~/Downloads/GTA VI Community Mapping Project-3.svg')
+SVG = _P.asset('GTA VI Community Mapping Project-3.svg')
 CACHE = os.path.join(THIS, 'generated', 'v16_all_strokes.json')
 OUT = os.path.join(THIS, 'threejs', '_v16_roads.json')
 CLS = {'#535353': 'road', '#727272': 'hwy', '#636363': 'small', '#FAFAFA': 'mark_w', '#FFF4B0': 'mark_y'}

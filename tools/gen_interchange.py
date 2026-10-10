@@ -21,13 +21,14 @@ Hauteurs (haut du tablier):
     de controle, pente limitee.
 Usage: PYTHONPATH=. python3 tools/gen_interchange.py [--out f.json] [--apply]
 """
+import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__))); import paths as _P   # [PATHS-V1]
 import json, os, sys, shutil, subprocess
 import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(ROOT, 'tools'))
 from gen_keys_bridges import Bridge
 import v16_resect as RR
-SVG = os.path.expanduser('~/Downloads/GTA VI Community Mapping Project-3.svg')
+SVG = _P.asset('GTA VI Community Mapping Project-3.svg')
 CACHE = os.path.join(ROOT, 'tools', 'generated', 'interchange_strokes.json')
 WIN = (-1300, -600, 300, 1100)
 CENTER = np.array([-940.0, 570.0])

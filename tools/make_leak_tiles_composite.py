@@ -1,12 +1,13 @@
 # [LEAK-TILES-V3] pyramide composite depuis la clean map FIXED (nord/sud
 # enfin peints — fixed_ps.psd d'Alexandre, meme georef que fullmap.png):
 # leak par-dessus yanis, bords adoucis (feather 12 px). Sortie: leak,1.
+import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__))); import paths as _P   # [PATHS-V1]
 import os
 import numpy as np
 from PIL import Image
 Image.MAX_IMAGE_PIXELS = None
 WX0, WY0, MPP = -10740.0, 9736.0, 5.65
-SRC = os.path.expanduser('~/Downloads/fullmap_fixed.png')
+SRC = _P.asset('fullmap_fixed.png')
 BASE = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
                     'vendor', 'gtadb.org', 'maps', 'tiles', '6')
 YAN = f'{BASE}/yanis,14'

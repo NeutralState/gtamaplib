@@ -10,13 +10,14 @@ decalage -2 m applique. Profil: x 60: 20.6, 78: 19.5, 118: 16.9, 156: 14.2; bret
 (y >= 400); au-dela cache par l'immeuble du premier plan -> non emis.
 Usage: PYTHONPATH=. python3 tools/gen_i404_east.py [--out f.json] [--apply]
 """
+import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__))); import paths as _P   # [PATHS-V1]
 import json, os, sys, shutil, subprocess
 import numpy as np
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, os.path.join(ROOT, 'tools'))
 from gen_keys_bridges import Bridge
 import v16_resect as RR
-SVG = os.path.expanduser('~/Downloads/GTA VI Community Mapping Project-3.svg')
+SVG = _P.asset('GTA VI Community Mapping Project-3.svg')
 CACHE = os.path.join(ROOT, 'tools', 'generated', 'i404_east_strokes.json')
 PROF = ([55, 68, 78, 118, 156, 180], [20.6, 20.6, 19.5, 16.9, 14.2, 14.2])
 COLOR = '#9ca3af'

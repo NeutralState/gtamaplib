@@ -12,13 +12,14 @@ Structure based on actual LMs found:
 - Peak boxes: PB, PT levels × 3 branches × 4 corners (pbOL/pbOR/pbIL/pbIR)
 """
 
+import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__))); import paths as _P   # [PATHS-V1]
 import os
 import re
 import json
 import sys
 from collections import defaultdict
 
-REPO = os.path.expanduser('~/Downloads/gtamaplib-main')
+REPO = _P.REPO
 sys.path.insert(0, REPO)
 import gtamapdata as md
 

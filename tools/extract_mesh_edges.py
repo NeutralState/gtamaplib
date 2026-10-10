@@ -24,11 +24,12 @@ Then the frontend can iterate these edges, project each endpoint via
 cam.get_pixel(xyz), and draw lines in pixel space — same as Portofino.
 """
 
+import sys as _sys, os as _os; _sys.path.insert(0, _os.path.dirname(_os.path.abspath(__file__))); import paths as _P   # [PATHS-V1]
 import json
 import os
 import sys
 
-REPO = os.path.expanduser('~/Downloads/gtamaplib-main')
+REPO = _P.REPO
 sys.path.insert(0, REPO)
 
 import gtamaplib as ml
