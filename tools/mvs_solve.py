@@ -123,6 +123,13 @@ def main():
     lms = [l for l in lms if l[0] in ci]                               # fixed cameras: constant LM residuals, dropped
     print('free cameras %d, free meshes %d, edge obs %d, LM obs %d, params %d' % (nc, nm, len(edges), len(lms), NP), flush=True)
     csig = np.array([CS_PLAYER if C[c].get('player') else CS for c in free_c]) if nc else np.zeros((0, 7))
+    from horizon_resect import ground as _gnd                         # MVS-GUARD: street-level (eye-height) cameras keep their height
+    for c in free_c:
+        h = C[c]['xyz'][2] - float(_gnd(*C[c]['xyz'][:2]))
+        if 1.2 <= h <= 2.2: csig[ci[c], 2] = 0.3
+    # sibling shots (< 5 m apart: same terrace / same spot, e.g. Speaking with Brian at Effluvia (1)-(3)) keep their place
+    for c in free_c:
+        if any(o != c and np.linalg.norm(np.array(C[o]['xyz'], float) - np.array(C[c]['xyz'], float)) < 5.0 for o in C): csig[ci[c], :3] = np.minimum(csig[ci[c], :3], 2.0)
     msig = np.array([[3.0, 3.0, 0.03] if MEASURED.search(M.get(n, {}).get('note', '')) else [6.0, 6.0, 0.12] for n in free_m]) if nm else np.zeros((0, 3))
     # ROOF-ANCHOR: a triangulated landmark on the mesh roof (inside the top footprint, within 3 m of the top) pins the plan
     # (Wells Fargo Center (S), 2026-10-09: the solver wanted +41 m onto a road while its roof landmark sat 16.6 m inside)
@@ -306,16 +313,35 @@ def apply():
     """guarded application of tools/generated/mvs_solution.json (backups first; SOLVED cameras are never in the solution).
     Cameras: canonical landmark RMS (common.cam_rms, arcmin) must not rise > 5 %, edges must improve, |dxy| <= 40 m,
     |dz| <= 20 m; without landmarks: >= 8 edges and >= 30 % edge gain. Skips negligible changes (z-score < 0.15).
+    MVS-GUARD (2026-10-10): never below the ground; street-level cameras keep their eye height; sibling shots (< 5 m apart)
+    stay together (and get a 2 m position prior in the solve); cumulative drift from _mvs_origin <= 20 m without
+    landmarks (40 m if >= 20 edges improve >= 50 %) / 40 m with landmarks.
     Meshes: >= 3 cameras, >= 25 % edge gain, |t| <= 25 m, |sh| <= 0.15, and never onto a road (ROADS-GT: the road
     overlap of the footprint may not grow). Everything else -> review list in the report."""
     import shutil
     sol = json.load(open(OUT)); C = json.load(open(A.CAMS)); MP = os.path.join(REPO, 'gtamapdata', 'building_meshes_procedural.json'); M = json.load(open(MP))
     shutil.copy(A.CAMS, A.CAMS + '.bak_mvs_1009'); shutil.copy(MP, MP + '.bak_mvs_1009')
     acc_c, rej_c, acc_m, rej_m = [], [], [], []
+    from horizon_resect import ground as _gnd
+    # MVS-GUARD 2026-10-10: siblings = cameras shot within 5 m of each other (same scene) must stay within 5 m of each other;
+    # origin = position before the first MVS move (stored as _mvs_origin): cumulative drift <= 20 m (no landmarks) / 40 m
+    pos0 = {c: np.array(C[c]['xyz'], float) for c in C}
+    sib = {c: [o for o in sol['cams'] if o != c and np.linalg.norm(pos0[o] - pos0[c]) < 5.0] for c in sol['cams']}
+    newpos = {}
     for cam, v in sol['cams'].items():
         d = np.array(v['delta']); c0 = C[cam]
         if v['z_score'] < 0.15: continue
         st = state(c0, d); why = []
+        h0 = c0['xyz'][2] - float(_gnd(*c0['xyz'][:2])); h1 = st['xyz'][2] - float(_gnd(*st['xyz'][:2]))
+        if h1 < 0.5 and h1 < h0: why.append('would go below the ground (%.1f m above the heightmap)' % h1)
+        if 1.2 <= h0 <= 2.2 and abs(h1 - h0) > 0.5: why.append('street-level camera would change its eye height %.1f -> %.1f m' % (h0, h1))
+        org = np.array(c0.get('_mvs_origin') or c0['xyz'], float)
+        strong = v['edges'] >= 20 and v['edge_rms_after'] is not None and v['edge_rms_after'] <= 0.5 * v['edge_rms_before']
+        lim = 40.0 if (v['lms'] >= 3 or strong) else 20.0
+        if np.linalg.norm(np.array(st['xyz']) - org) > lim: why.append('cumulative drift %.0f m from its pre-MVS position (> %.0f m)' % (np.linalg.norm(np.array(st['xyz']) - org), lim))
+        for o in sib[cam]:
+            po = np.array(state(C[o], np.array(sol['cams'][o]['delta']))['xyz']) if o in sol['cams'] else pos0[o]
+            if abs(np.linalg.norm(np.array(st['xyz']) - po) - np.linalg.norm(pos0[cam] - pos0[o])) > 5.0: why.append('would separate from its sibling shot %s' % o)
         r0 = common.cam_rms(cam, cam_state={'xyz': c0['xyz'], 'ypr': c0['ypr'], 'fov': c0['fov']}); r1 = common.cam_rms(cam, cam_state=st)
         if np.hypot(d[0], d[1]) > 40 or abs(d[2]) > 20: why.append('move too large')
         if v['lms'] >= 3:
@@ -323,6 +349,7 @@ def apply():
         elif not (v['edges'] >= 8 and v['edge_rms_after'] is not None and v['edge_rms_after'] <= 0.7 * v['edge_rms_before']): why.append('no landmarks and weak edge gain')
         if v['edges'] and v['edge_rms_after'] is not None and v['edge_rms_after'] > v['edge_rms_before']: why.append('edges worse')
         if why: rej_c.append((cam, d.tolist(), why)); continue
+        C[cam].setdefault('_mvs_origin', [round(float(x), 3) for x in c0['xyz']])
         C[cam]['xyz'] = [round(float(x), 3) for x in st['xyz']]; C[cam]['ypr'] = [round(float(x), 3) for x in st['ypr']]
         C[cam]['fov'] = [None if f is None else round(float(f), 3) for f in st['fov']]
         C[cam]['note'] = (str(C[cam].get('note') or '') + (' | ' if C[cam].get('note') else '') +
