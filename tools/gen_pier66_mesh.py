@@ -10,7 +10,14 @@ round tower: a core circle r 9.7 m and an outer ring r 16.5 m with radial room p
 Height: no measured or published height. IRL tower = 17 floors (Wikipedia; skydb) -> 17 x 3.2 m = 54.4 m, the
 project rule for an IRL height given only as levels. The 221 ft overall figure (photo-site database, likely to the
 spire) is not used; the revolving Pier Top lounge and spire are NOT modelled. Rest of the lot = podium 12 m
-ESTIMATED (gtadb_meshes convention). Ground = heightmap. Not checked in any camera frame.
+ESTIMATED (gtadb_meshes convention). Ground = heightmap.
+Frame check (PIER66-V3 2026-10-13, Alexandre: "le mieux c'est biplane night"): Biplane Night (Video) v086 (Build 2026, night,
+2577 m, pose RMS 8.4') shows a lone lit tower with a bright crown at the projected spot: its top-band ray passes 11-39 m from
+the tower axis (left edge inside the 16.5 m ring) and reaches 58-60 m above ground there (+-6 m at 3.7 px RMS) -> consistent
+with the 54.4 m IRL value, which is kept. A single camera only: no two-ray triangulation yet (the tower is visible in the video
+from t~83 to 87.5 s, so a second calibrated frame would give ~4 deg of parallax). Highway (N)/(NE) (2022 build, daylight) show
+empty sky where a 57 m top would be: weak evidence (older build); their dark block is a rooftop ~500 m from them near 3800 NE
+Miami Ct (two-ray fix), not this tower.
 Wings (PIER66-V2, Alexandre: "ajoute aussi le U de batiments autour"): separate mesh NAME_WINGS = the grey U of low
 buildings east of the tower on the same V16 (one connected outline, 9132 m2, interior strokes = roof details).
 Height ESTIMATED 2 floors x 3.2 = 6.4 m: before the 2019 closure the complex was mostly two-story room wings around
@@ -96,7 +103,10 @@ def build():
             'Tower = the round V16 roof drawing: outer ring r %.1f m (core circle r 9.7 m, radial room partitions), centre (%.1f, %.1f). '
             'Tower roof %.1f m = IRL 17 floors x %.1f m (Wikipedia, skydb; no published height; the 221 ft overall figure from a photo database not used); '
             'revolving Pier Top lounge and spire NOT modelled. Rest of the lot = podium %.0f m ESTIMATED. Ground %.1f (heightmap). '
-            'Not checked in any camera frame (identification + IRL floor count only). The grey U of low wings is the separate mesh Pier Sixty-Six (wings).'
+            'Frame check: Biplane Night (Video) v086 (night, 2577 m, RMS 8.4 arcmin) shows a lone lit tower with a bright crown here; its top-band ray passes '
+            '11-39 m from the tower axis and reaches 58-60 m above ground at it (+-6 m), consistent with the IRL value kept. Single camera, no two-ray triangulation yet. '
+            'Highway (N)/(NE) (2022 build) show empty sky where the top would be: weak evidence (older build). '
+            'The grey U of low wings is the separate mesh Pier Sixty-Six (wings).'
             % (TOWER_R, TOWER_C[0], TOWER_C[1], hh, FLOOR_H, PODIUM_H, g))
     return {'color': '#cbd5e1', 'world_edges': E, 'name_game': None, 'name_irl': 'Pier Sixty-Six', 'gtadb': 'L1977',
             '_credit': 'identification: GTA VI Landmarks Data (CC BY 4.0) https://map.gtadb.org; plan: V16 (yanis); height: IRL floor count (Wikipedia)',
