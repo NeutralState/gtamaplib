@@ -6686,5 +6686,32 @@
   ],
   "source": "Screenshot \u2014 Oceanarium (Rickenbacker-style causeway to Gloriana Key: golden geodesic dome of the oceanarium on the right, Downtown / Tequesta skyline ahead)",
   "note": "SOLVE 2026-10-08: position along the causeway (Alexandre ~202, -2037) refined to (142.4, -2033.9) over the south carriageway (V16 hwy 5 m north) by the parallax of the tower edges (Four Seasons vs Southeast Financial); yaw/fov from the edge centres of 5 measured towers, z/pitch/roll from the skyline profile vs SegFormer sky. Pose audit: 12 buildings judged, 6 match within 2 px (Four Seasons 2.0, Pegassi 0.3, Brickell Arch -2.0, Southeast Financial -1.0, One Broadway 0.1, The Palace), global edge shift 0.35 px. Asia Brickell Key looks 13 px wider in the game (under construction), 1450 Brickell right edge off 21 px (mesh suspects). | Z-FIX 2026-10-09: altitude 22.39 -> 13.8 m. The skyline profile barely constrains z; four independent checks agree on ~14 m: (1) car wheelbases/widths on the deck put the camera 4-6 m above the road; (2) the overhead sign gantry ~119 m ahead (5.4 m sign clearance, 28 m span) has its post bases 9 m below the camera, on ground at ~5 m; (3) far road pixels intersected with the heightmap land on the V16 road for z <= 14 (0.63) vs 0.30 at 22.4; (4) tower tops: median residual 0.2-0.5 px at z 13-14 vs -4.1 px at 22.4, side-edge rms 2.7 vs 3.1 px. Orientation unchanged."
+ },
+ "Biplane Night (Video) v084": {
+  "player": null,
+  "size": [
+   1920,
+   960
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "era": "2026",
+  "xyz": [
+   756.34,
+   936.69,
+   144.46
+  ],
+  "ypr": [
+   35.671,
+   -4.506,
+   -0.329
+  ],
+  "fov": [
+   72.436,
+   null
+  ],
+  "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Video) v084 (GTA_6_plane_NIGHT_upload.ee_mirror_1.mp4 at t=84.0 s (1:24), HDR10 PQ/BT.2020 tone-mapped to SDR and colour-matched to the v086 frame, letterbox removed; same chase cam as v086, 2 s earlier, looking north over the Venetian Islands: the lit Pier Sixty-Six tower (Waning Sands) on the horizon, right of centre)",
+  "notes": "AJOUT 2026-10-13 (Alexandre: \"ajoute la frame 84 s dans l outil de calibration\"): second view of the Pier Sixty-Six tower for a two-ray triangulation with v086 (~2 s of flight apart). POSE DEVINEE: xyz, roll and fov copied from v086 (MVS pose); yaw/pitch set so the V16 tower top (358.9, 3482.9, 57) lands on the lit structure seen at ~(1622, 430) -> to be solved from clicks on known landmarks (1000 Venetian Way etc.).",
+  "id": "S3/106"
  }
 }
