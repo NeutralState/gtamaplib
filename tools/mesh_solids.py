@@ -37,7 +37,7 @@ EXCLUDE = ('Bridge', 'Viaduct', 'Ramp', 'Interchange', 'Causeway', 'Overpass', '
            'Stilts', 'Chimney', 'Stack', 'Silo', 'Lighthouse', 'FM', 'Tower (Radio)', 'Prison Towers')
 MAX_EXTENT = 450.0
 # [PIER66-V1 2026-10-13] buildings whose name contains an EXCLUDE word but are plain buildings (Pier Sixty-Six = hotel, not a pier)
-SOLID_NAMES = ('Pier Sixty-Six',)
+SOLID_NAMES = ('Pier Sixty-Six', 'Pier Sixty-Six (wings)')
 
 
 def _solid_ok(name):
