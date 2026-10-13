@@ -23,7 +23,10 @@ Shape (PIER66-V4, Alexandre: "make it look like the real building"; V1 was a pla
   two-storey lounge drum, fins leaving it at mid-height; balcony bands on the north hotel.
 - V6b/c (Alexandre's 2020 photos): the pointed bays are stacks of smooth triangular balconies (no teeth); a central
   balcony bay stands proud on the long N/S faces (facade recessed 1.5 m on both sides); deeper fin dish whose rim
-  rises above the drum. Limits of the 2.5D solids: no open gaps between stacked balconies, no pilotis at the base.
+  rises above the drum (superseded by V7).
+- V7 (Alexandre's 2024 canal-side photo): the crown is a hat: a wide BRIM of nearly flat radial fins at the drum base
+  (= the V16 outer ring r 16.5), the glazed lounge drum (one tall storey, r 9.7) and a TIARA of vertical fins on top of
+  it flaring slightly outward; the service slab tops out at about the drum top. Limits of the 2.5D solids: no open gaps between stacked balconies, no pilotis at the base.
   Ground = heightmap.
 Frame check (PIER66-V3 2026-10-13, Alexandre: "le mieux c'est biplane night"): Biplane Night (Video) v086 (Build 2026, night,
 2577 m, pose RMS 8.4') shows a lone lit tower with a bright crown at the projected spot: its top-band ray passes 11-39 m from
@@ -87,10 +90,12 @@ WING_FLOORS = 2
 Y_N, Y_S = 3501.25, 3464.75
 NORTH_FLOORS = 10
 DRUM_R, N_FINS = 9.7, 44
-DRUM_H = 6.0                      # V6: two-storey lounge drum with windows (photo)
+DRUM_H = 5.0                      # V7: one tall glazed lounge storey (2024 photo)
 # fin profile (radius, height above the tower roof): inner-bottom, inner-top, outer-top, outer-bottom; V6: the blades
 # leave the drum at mid-height and fan up and out past the shaft faces (Alexandre's pool-side photo)
-FIN = ((DRUM_R + 0.2, 0.5), (DRUM_R + 0.2, 3.0), (TOWER_R, 7.5), (TOWER_R, 3.5))   # V6b: a deeper dish (2020 photo)
+FIN = ((DRUM_R + 0.2, 0.3), (DRUM_R + 0.2, 1.3), (TOWER_R, 2.3), (TOWER_R, 1.6))   # V7: the wide BRIM of nearly flat fins at the drum base
+# V7 (2024 photo): a tiara of vertical fins on top of the drum, flaring slightly outward: (r, dz above roof) of each blade
+TOP_FIN = ((DRUM_R - 1.5, DRUM_H), (DRUM_R - 0.7, DRUM_H + 4.0), (DRUM_R + 0.9, DRUM_H + 4.0), (DRUM_R, DRUM_H))
 # [PIER66-V6] slim shaft = the frame the V16 draws around the crown (34 x 29 m) with its two pointed bays (W and E):
 # the stacked angled balconies. The rest of the hexagonal body part of the lot = low base (PODIUM_H).
 # V6b (Alexandre's 2020 photo): a central balcony bay stands proud on the long N and S faces -> the facade is recessed
@@ -101,7 +106,7 @@ SHAFT = [[342.25, 3469.75], [353.25, 3469.75], [353.25, 3468.25], [365.25, 3468.
 SAW_EDGES, SAW_PITCH, SAW_DEPTH = (), 3.5, 1.4   # V6c: the pointed bays are stacks of smooth triangular balconies (Alexandre photo) -> no teeth
 # tall service slab on the north face rising above the roof, with a mast (photo); top of mast = roof + MAST_TOP
 SLAB = [[344.0, 3494.0], [356.0, 3494.0], [356.0, 3500.5], [344.0, 3500.5]]
-SLAB_TOP, MAST_TOP, MAST_W = 7.0, 12.6, 1.2
+SLAB_TOP, MAST_TOP, MAST_W = 5.0, 12.6, 1.2   # V7: the slab tops out at about the drum top (2024 photo)
 TOWER_COLOR = '#f1f5f9'
 
 
@@ -187,6 +192,8 @@ def build():
         a = 2 * math.pi * (k + 0.5) / N_FINS; ca, sa = math.cos(a), math.sin(a)
         P = [[cx + r * ca, cy + r * sa, t + dz] for r, dz in FIN]
         for i in range(4): seg(P[i], P[(i + 1) % 4])
+        Q = [[cx + r * ca, cy + r * sa, t + dz] for r, dz in TOP_FIN]      # tiara blade on top of the drum
+        for i in range(4): seg(Q[i], Q[(i + 1) % 4])
     note = ('PIER66-V6 2026-10-13 (Alexandre: "make it look like the real building", then his pool-side photo): '
             'GTADB L1977 = IRL Pier Sixty-Six (Hyatt Regency Pier Sixty-Six, 2301 SE 17th St, Fort Lauderdale; OSM way 272811104). '
             'Plan = latest V16 lot (gtadb tiles yanis,16 z6; tile frame +9.0 m E +8.0 m N to ours, water/pier overlay NCC 0.994), 5468 m2, '
@@ -194,16 +201,16 @@ def build():
             'Crown = the round V16 roof drawing, which matches the IRL aerial (Esri World Imagery, 0.27 m/px): starburst of ~44 radial fins with tips at r %.1f m '
             '(aerial 16.6) around the drum of the revolving Pier Top lounge, r %.1f m (aerial 9.7), centre (%.1f, %.1f). Tower body %.1f m = IRL 17 floors x %.1f m '
             '(Wikipedia, skydb). Shaft = the 34 x 29 m frame the V16 draws around the crown with its two pointed bays (W, E) = the stacked angled balconies '
-            '(smooth wedges, one per floor), a central balcony bay standing proud 1.5 m on the long faces, floor lines every floor, white; a tall service slab on its north face rises 7 m above the roof with a mast to +12.6 m '
-            '(top 67.0 m above ground, in line with the 221 ft overall figure), as on the photo. Lounge drum 2 storeys (%.0f m) with 44 blade fins leaving it at '
-            'mid-height and fanning out to +%.0f m above the roof, profile by eye from photos. North = the new hotel built just north of the tower in the 2020s rebuild, %d floors x %.1f m '
+            '(smooth wedges, one per floor), a central balcony bay standing proud 1.5 m on the long faces, floor lines every floor, white; a tall service slab on its north face rises to about the drum top with a mast to +12.6 m '
+            '(top 67.0 m above ground, in line with the 221 ft overall figure), as on the photo. Crown (V7, 2024 photo) = a hat: a wide brim of 44 nearly flat fins at the drum base reaching the V16 outer ring '
+            '(rim +%.1f m), the glazed lounge drum (%.0f m) and a tiara of 44 vertical fins on top, flaring slightly outward, to +%.0f m above the roof; profile by eye from photos. North = the new hotel built just north of the tower in the 2020s rebuild, %d floors x %.1f m '
             'ESTIMATED (Gardiner: new 10-storey hotel; a developer page says 9). South block %.0f m ESTIMATED. Ground %.1f (heightmap). '
-            % (Y_S, Y_N, TOWER_R, DRUM_R, cx, cy, hh, FLOOR_H, DRUM_H, FIN[2][1], NORTH_FLOORS, FLOOR_H, PODIUM_H, g)
+            % (Y_S, Y_N, TOWER_R, DRUM_R, cx, cy, hh, FLOOR_H, FIN[2][1], DRUM_H, TOP_FIN[1][1], NORTH_FLOORS, FLOOR_H, PODIUM_H, g)
             + 'Frame check: Biplane Night (Video) v086 (night, 2577 m, RMS 8.4 arcmin) shows a lone lit tower with a bright crown here; its top-band ray passes '
             '11-39 m from the tower axis and reaches 58-60 m above ground at it (+-6 m), consistent with the crown top (+%.1f m above ground). '
             'Single camera, no two-ray triangulation yet (second view Biplane Night (Video) v084 added for clicks). '
             'Highway (N)/(NE) (2022 build) show empty sky where the top would be: weak evidence (older build). '
-            'The grey U of low wings is the separate mesh Pier Sixty-Six (wings).' % (hh + FIN[2][1]))
+            'The grey U of low wings is the separate mesh Pier Sixty-Six (wings).' % (hh + TOP_FIN[1][1]))
     return {'color': TOWER_COLOR, 'world_edges': E, 'name_game': None, 'name_irl': 'Pier Sixty-Six', 'gtadb': 'L1977',
             '_credit': 'identification: GTA VI Landmarks Data (CC BY 4.0) https://map.gtadb.org; plan: V16 (yanis); height: IRL floor count (Wikipedia)',
             'note': note}, g, hh
@@ -212,7 +219,7 @@ def build():
 def main():
     m, g, hh = build(); mw, gw, hw = build_wings()
     print('%s: %d edges, ground %.1f, south block %.1f, north hotel %.1f, tower roof %.1f, crown top %.1f' % (
-        NAME, len(m['world_edges']), g, g + PODIUM_H, g + NORTH_FLOORS * FLOOR_H, g + hh, g + hh + FIN[2][1]))
+        NAME, len(m['world_edges']), g, g + PODIUM_H, g + NORTH_FLOORS * FLOOR_H, g + hh, g + hh + TOP_FIN[1][1]))
     print('%s: %d edges, ground %.1f, roof %.1f' % (NAME_WINGS, len(mw['world_edges']), gw, gw + hw))
     if '--apply' in sys.argv:
         M = json.load(open(MESHES))
