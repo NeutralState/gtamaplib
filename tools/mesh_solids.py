@@ -36,10 +36,12 @@ EXCLUDE = ('Bridge', 'Viaduct', 'Ramp', 'Interchange', 'Causeway', 'Overpass', '
            'Gantry', 'Toll', 'Radio', 'Billboard', 'Sign', 'Fence', 'Cables', 'Roller Coaster', 'Coaster', 'Pier', 'Dock',
            'Stilts', 'Chimney', 'Stack', 'Silo', 'Lighthouse', 'FM', 'Tower (Radio)', 'Prison Towers')
 MAX_EXTENT = 450.0
+# [PIER66-V1 2026-10-13] buildings whose name contains an EXCLUDE word but are plain buildings (Pier Sixty-Six = hotel, not a pier)
+SOLID_NAMES = ('Pier Sixty-Six',)
 
 
 def _solid_ok(name):
-    return not any(w.lower() in name.lower() for w in EXCLUDE)
+    return name in SOLID_NAMES or not any(w.lower() in name.lower() for w in EXCLUDE)
 
 
 def solidify(edges):
