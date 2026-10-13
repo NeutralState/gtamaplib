@@ -5,12 +5,17 @@ Identification: GTADB L1977 "?, Waning Sands" (hotel) = IRL Pier Sixty-Six / Hya
 2301 SE 17th St, Fort Lauderdale (OSM way 272811104, tourism=hotel). Alexandre pointed it out on the latest V16.
 Plan: the latest V16 (gtadb tiles yanis,16 z6, 0.5 m/px, fetched 2026-10-13; our local yanis,16svg.png predates
 the buildings here). Tile frame -> our V16 frame: +9.0 m E, +8.0 m N (water and pier edges, NCC 0.994, exact
-overlay over the whole 384 m crop). The hotel is the GTADB-highlighted lot (5468 m2); its V16 roof drawing has a
-round tower: a core circle r 9.7 m and an outer ring r 16.5 m with radial room partitions.
-Height: no measured or published height. IRL tower = 17 floors (Wikipedia; skydb) -> 17 x 3.2 m = 54.4 m, the
-project rule for an IRL height given only as levels. The 221 ft overall figure (photo-site database, likely to the
-spire) is not used; the revolving Pier Top lounge and spire are NOT modelled. Rest of the lot = podium 12 m
-ESTIMATED (gtadb_meshes convention). Ground = heightmap.
+overlay over the whole 384 m crop). The hotel is the GTADB-highlighted lot (5468 m2).
+Shape (PIER66-V4, Alexandre: "make it look like the real building"; V1 was a plain cylinder on a 12 m slab):
+- the round V16 roof drawing is the crown, not the shaft: the IRL aerial (Esri World Imagery, 0.27 m/px) shows the
+  starburst of ~44 radial fins with tips at r 16.6 m around the drum of the revolving Pier Top lounge, r 9.7 m -
+  the V16 draws the same two circles (16.5 / 9.7). Photos: a white tower with stacked cantilevered balconies, the
+  finned crown wrapping its top floor and flaring up and out.
+- the lot is split along the strokes the V16 draws: tower body = the hexagonal part around the crown (Y_S..Y_N),
+  17 floors x 3.2 m = 54.4 m (IRL floor count, Wikipedia / skydb; project rule for levels-only heights), with floor
+  lines; north part = the new hotel built just north of the tower (Gardiner: 10 storeys; a developer page says 9)
+  -> 10 x 3.2 m ESTIMATED; south block = 12 m ESTIMATED (gtadb_meshes convention).
+- crown: lounge drum 4 m + fins up to 7 m above the roof, profile by eye from photos. Ground = heightmap.
 Frame check (PIER66-V3 2026-10-13, Alexandre: "le mieux c'est biplane night"): Biplane Night (Video) v086 (Build 2026, night,
 2577 m, pose RMS 8.4') shows a lone lit tower with a bright crown at the projected spot: its top-band ray passes 11-39 m from
 the tower axis (left edge inside the 16.5 m ring) and reaches 58-60 m above ground there (+-6 m at 3.7 px RMS) -> consistent
@@ -68,6 +73,27 @@ WINGS = [[482.25, 3579.75], [478.25, 3581.25], [473.75, 3581.25], [472.75, 3579.
 TOWER_C, TOWER_R, N_SEG = (358.94, 3482.91), 16.5, 48
 PODIUM_H, FLOORS, FLOOR_H = 12.0, 17, 3.2
 WING_FLOORS = 2
+# [PIER66-V4] split of the lot along the strokes the V16 draws (our frame): north of Y_N = the new hotel, between = tower
+# body (hexagonal part around the crown), south of Y_S = low block
+Y_N, Y_S = 3501.25, 3464.75
+NORTH_FLOORS = 10
+DRUM_R, N_FINS = 9.7, 44
+DRUM_H = 4.0
+# fin profile (radius, height above the tower roof): inner-bottom, inner-top, outer-top, outer-bottom
+FIN = ((DRUM_R + 0.2, -1.5), (DRUM_R + 0.2, 4.5), (TOWER_R, 7.0), (TOWER_R, 1.0))
+
+
+def clip_y(ring, y, keep_above):
+    """Sutherland-Hodgman clip of a polygon by the half-plane y >= y0 (keep_above) or y <= y0."""
+    inside = (lambda p: p[1] >= y - 1e-9) if keep_above else (lambda p: p[1] <= y + 1e-9)
+    out = []
+    for k in range(len(ring)):
+        a, b = ring[k], ring[(k + 1) % len(ring)]
+        if inside(a): out.append(list(a))
+        if inside(a) != inside(b):
+            t = (y - a[1]) / (b[1] - a[1]); out.append([round(a[0] + t * (b[0] - a[0]), 2), y])
+    # drop consecutive duplicates
+    return [p for i, p in enumerate(out) if p != out[i - 1]]
 
 
 def prism(E, ring, z0, z1):
@@ -93,21 +119,39 @@ def build_wings():
 
 def build():
     E = []
+    def seg(a, b): E.append([[round(float(v), 2) for v in a], [round(float(v), 2) for v in b]])
     g = float(ground(*[sum(c) / len(OUTER) for c in zip(*OUTER)]))
-    tower = [[TOWER_C[0] + TOWER_R * math.cos(2 * math.pi * k / N_SEG), TOWER_C[1] + TOWER_R * math.sin(2 * math.pi * k / N_SEG)] for k in range(N_SEG)]
-    hh = FLOORS * FLOOR_H
-    prism(E, OUTER, g, g + PODIUM_H); prism(E, tower, g + PODIUM_H, g + hh)
-    note = ('PIER66-V1 2026-10-13 (Alexandre: add the Pier Sixty-Six hotel in Waning Sands, shown on the latest V16): '
+    hh = FLOORS * FLOOR_H; t = g + hh
+    north, south = clip_y(OUTER, Y_N, True), clip_y(OUTER, Y_S, False)
+    body = clip_y(clip_y(OUTER, Y_S, True), Y_N, False)
+    prism(E, south, g, g + PODIUM_H)                              # low block south of the tower
+    prism(E, north, g, g + NORTH_FLOORS * FLOOR_H)                # new hotel north of the tower
+    prism(E, body, g, t)                                          # tower body (17 floors)
+    for k in range(1, FLOORS):                                    # floor lines (balcony rhythm)
+        z = g + k * FLOOR_H
+        for i in range(len(body)): seg([*body[i], z], [*body[(i + 1) % len(body)], z])
+    cx, cy = TOWER_C
+    drum = [[cx + DRUM_R * math.cos(2 * math.pi * k / N_SEG), cy + DRUM_R * math.sin(2 * math.pi * k / N_SEG)] for k in range(N_SEG)]
+    prism(E, drum, t, t + DRUM_H)                                 # revolving Pier Top lounge
+    for k in range(N_FINS):                                       # starburst crown: radial fins flaring up and out
+        a = 2 * math.pi * (k + 0.5) / N_FINS; ca, sa = math.cos(a), math.sin(a)
+        P = [[cx + r * ca, cy + r * sa, t + dz] for r, dz in FIN]
+        for i in range(4): seg(P[i], P[(i + 1) % 4])
+    note = ('PIER66-V4 2026-10-13 (Alexandre: "make it look like the real building"): '
             'GTADB L1977 = IRL Pier Sixty-Six (Hyatt Regency Pier Sixty-Six, 2301 SE 17th St, Fort Lauderdale; OSM way 272811104). '
-            'Plan = latest V16 lot (gtadb tiles yanis,16 z6; tile frame +9.0 m E +8.0 m N to ours, water/pier overlay NCC 0.994), 5468 m2. '
-            'Tower = the round V16 roof drawing: outer ring r %.1f m (core circle r 9.7 m, radial room partitions), centre (%.1f, %.1f). '
-            'Tower roof %.1f m = IRL 17 floors x %.1f m (Wikipedia, skydb; no published height; the 221 ft overall figure from a photo database not used); '
-            'revolving Pier Top lounge and spire NOT modelled. Rest of the lot = podium %.0f m ESTIMATED. Ground %.1f (heightmap). '
-            'Frame check: Biplane Night (Video) v086 (night, 2577 m, RMS 8.4 arcmin) shows a lone lit tower with a bright crown here; its top-band ray passes '
-            '11-39 m from the tower axis and reaches 58-60 m above ground at it (+-6 m), consistent with the IRL value kept. Single camera, no two-ray triangulation yet. '
+            'Plan = latest V16 lot (gtadb tiles yanis,16 z6; tile frame +9.0 m E +8.0 m N to ours, water/pier overlay NCC 0.994), 5468 m2, '
+            'split along the strokes the V16 draws: tower body = hexagonal part around the crown (y %.2f-%.2f), new hotel to the north, low block to the south. '
+            'Crown = the round V16 roof drawing, which matches the IRL aerial (Esri World Imagery, 0.27 m/px): starburst of ~44 radial fins with tips at r %.1f m '
+            '(aerial 16.6) around the drum of the revolving Pier Top lounge, r %.1f m (aerial 9.7), centre (%.1f, %.1f). Tower body %.1f m = IRL 17 floors x %.1f m '
+            '(Wikipedia, skydb), floor lines every floor; lounge drum %.0f m and fins flaring to +%.0f m above the roof, profile by eye from photos '
+            '(the fins wrap the top floor and rise outward). North = the new hotel built just north of the tower in the 2020s rebuild, %d floors x %.1f m '
+            'ESTIMATED (Gardiner: new 10-storey hotel; a developer page says 9). South block %.0f m ESTIMATED. Ground %.1f (heightmap). '
+            % (Y_S, Y_N, TOWER_R, DRUM_R, cx, cy, hh, FLOOR_H, DRUM_H, FIN[2][1], NORTH_FLOORS, FLOOR_H, PODIUM_H, g)
+            + 'Frame check: Biplane Night (Video) v086 (night, 2577 m, RMS 8.4 arcmin) shows a lone lit tower with a bright crown here; its top-band ray passes '
+            '11-39 m from the tower axis and reaches 58-60 m above ground at it (+-6 m), consistent with the crown top (+%.1f m above ground). '
+            'Single camera, no two-ray triangulation yet (second view Biplane Night (Video) v084 added for clicks). '
             'Highway (N)/(NE) (2022 build) show empty sky where the top would be: weak evidence (older build). '
-            'The grey U of low wings is the separate mesh Pier Sixty-Six (wings).'
-            % (TOWER_R, TOWER_C[0], TOWER_C[1], hh, FLOOR_H, PODIUM_H, g))
+            'The grey U of low wings is the separate mesh Pier Sixty-Six (wings).' % (hh + FIN[2][1]))
     return {'color': '#cbd5e1', 'world_edges': E, 'name_game': None, 'name_irl': 'Pier Sixty-Six', 'gtadb': 'L1977',
             '_credit': 'identification: GTA VI Landmarks Data (CC BY 4.0) https://map.gtadb.org; plan: V16 (yanis); height: IRL floor count (Wikipedia)',
             'note': note}, g, hh
@@ -115,7 +159,8 @@ def build():
 
 def main():
     m, g, hh = build(); mw, gw, hw = build_wings()
-    print('%s: %d edges, ground %.1f, podium to %.1f, tower to %.1f' % (NAME, len(m['world_edges']), g, g + PODIUM_H, g + hh))
+    print('%s: %d edges, ground %.1f, south block %.1f, north hotel %.1f, tower roof %.1f, crown top %.1f' % (
+        NAME, len(m['world_edges']), g, g + PODIUM_H, g + NORTH_FLOORS * FLOOR_H, g + hh, g + hh + FIN[2][1]))
     print('%s: %d edges, ground %.1f, roof %.1f' % (NAME_WINGS, len(mw['world_edges']), gw, gw + hw))
     if '--apply' in sys.argv:
         M = json.load(open(MESHES))
