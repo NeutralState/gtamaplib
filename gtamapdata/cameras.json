@@ -6724,13 +6724,13 @@
   "pose_verified": null,
   "era": "2026",
   "xyz": [
-   -59.59,
-   3626.17,
-   5.88
+   -49.48,
+   3624.39,
+   5.9
   ],
   "ypr": [
-   261.892,
-   -11.025,
+   261.87,
+   -7.136,
    0.0
   ],
   "fov": [
@@ -6738,7 +6738,7 @@
    null
   ],
   "source": "Build 2026 \u2014 video14-gamestore.mp4 (Alexandre, 2026-10-13) at t=76.3 s (frame 189 of the 70 s cut): an in-game TV ad (subtitles \"...side effects: nausea, depression, emotional distance\") playing on the TV of the game store; the TV picture was tone-mapped from HDR10 and metrically rectified from two orthogonal vanishing points of the store (TV-wall horizontals x world verticals, game f 1035 px) to a 16:9 1280x720 frame (right ~8 % cut). Residential street with Spanish-style houses, a woman in red on the sidewalk, the Pier Sixty-Six tower (Waning Sands) behind the houses.",
-  "notes": "AJOUT 2026-10-13 (Alexandre: \"go fais le placement approximatif quand meme\"): POSE APPROXIMATIVE, low confidence. Street = the V16 loop road around the small lake west of I-97 (Alexandre's hint; the houses of the fan drawing he shared were NOT used, not ground truth). Ad camera f ~1290 px (hfov 52.8) chosen from the tower width (~30 m <-> 95 px) and the across-street garage door (~2.4 m <-> 70 px, ~44 m away); the VP-based estimate (2809 px) was ill-conditioned (street seen nearly face-on). In the image the tower is 99 deg clockwise from the road-left direction; along the V16 loop this only fits the WEST side, best at road centre (-41.6, 3623.0) (424 m from the tower), alternative (-27, 3512) (387 m) ~110 m further south; camera height 1.8 m; offset from the road centre (18.3 m) and pitch fitted to the two road edges (+-5 m, y 225 / 305 at the image centre), yaw to the tower column (x 895). The tower then projects 91 px ABOVE where it is seen: the vertical scale of the rectified TV (estimated TV bottom, possible letterbox) or the cut top makes the image unreliable vertically -> use this camera for the horizontal direction to the tower only, not for its height. Roll 0. Useful as a rough direction to Pier Sixty-Six from the WNW; to be refined by clicks.",
+  "notes": "AJOUT 2026-10-13 (Alexandre: \"go fais le placement approximatif quand meme\"): POSE APPROXIMATIVE, low confidence. Street = the V16 loop road around the small lake west of I-97 (Alexandre's hint; the houses of the fan drawing he shared were NOT used, not ground truth). Ad camera f ~1290 px (hfov 52.8) chosen from the tower width (~30 m <-> 95 px) and the across-street garage door (~2.4 m <-> 70 px, ~44 m away); the VP-based estimate (2809 px) was ill-conditioned (street seen nearly face-on). In the image the tower is 99 deg clockwise from the road-left direction; along the V16 loop this only fits the WEST side, best at road centre (-41.6, 3623.0) (424 m from the tower), alternative (-27, 3512) (387 m) ~110 m further south; camera on the outer sidewalk 8 m from the road centre, 2 m above ground; yaw/pitch set so the tower lands where it is seen (x 895, y 60). A variant fitting the two road edges instead (18 m from the centre, pitch -11) put the tower 91 px too high and was rejected by Alexandre (\"fit bien mieux que la derniere\"): the road edges of this pose project ~80-150 px lower than the asphalt, so the vertical scale of the rectified TV picture stays uncertain. Roll 0. Useful as a rough direction to Pier Sixty-Six from the WNW; to be refined by clicks.",
   "id": "S3/107"
  }
 }
