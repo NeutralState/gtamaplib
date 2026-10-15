@@ -199,7 +199,11 @@ def mill():
     pulp/recovery band beside it, digesters, tank farm, evaporators, lime kiln, chip pile + inclined conveyor), scaled into
     the V17 lot; the V17 items are kept as anchors (square = recovery boiler, round = tank, rectangle = lime-kiln building,
     small rounds = stacks/vents). Lot frame: u along the lot (0..190 m, NE), v across (0..84 m, towards the SE rail)."""
-    D = json.load(open(MILL)); S = sorted(D['shapes'], key=lambda s: -s['area_m2']); lot = D['lot']
+    D = json.load(open(MILL)); sh = D['v16_shift']                                  # [V3b] placed on the V16 drawing (shown in the app)
+    mv = lambda p: [p[0] + sh[0], p[1] + sh[1]]
+    for s_ in D['shapes']: s_['ring'] = [mv(q) for q in s_['ring']]; s_['centre'] = mv(s_['centre'])
+    D['stacks'] = [[x + sh[0], y + sh[1], r] for x, y, r in D['stacks']]; D['lot'] = {k: (mv(v) if isinstance(v, list) else v) for k, v in D['lot'].items()}
+    S = sorted(D['shapes'], key=lambda s: -s['area_m2']); lot = D['lot']
     Lc, Tc, Bc = (np.array(lot[k], float) for k in ('L', 'T', 'B'))
     uh = (Tc - Lc) / np.linalg.norm(Tc - Lc); vh = (Bc - Lc) / np.linalg.norm(Bc - Lc)
     W_ = lambda u, v: list(Lc + u * uh + v * vh)
@@ -260,10 +264,11 @@ def mill():
         if r >= 1.0: st.cyl([x, y], 2.0, gs, gs + 70.0, 16); st.cyl([x, y], 2.4, gs + 67.0, gs + 70.0, 16)
         else: st.cyl([x, y], 0.9, gs, gs + 26.0, 10)
     base = ('PORT-GELLHORN-V3 2026-10-15 (Alexandre: "la papeterie est trop simple, fais-la comme la vraie et place-la environ ou on a draw sur Yanis"): '
-            'GTADB L536 / L1201 = IRL WestRock Paper Mill (Panama City; closed 2022). Layout of the IRL mill (Esri World Imagery: long paper-machine hall along '
+            'GTADB L536 / L1201 = IRL WestRock Paper Mill (Panama City; closed 2022). Placed on the V16 drawing (Alexandre: "pas a son emplacement de la map de Yanis"; '
+            'V17 moved the same drawing by (-57.5, +71.6) m and the rail to the other side). Layout of the IRL mill (Esri World Imagery: long paper-machine hall along '
             'the site, recovery band beside it, digesters, tank farm, evaporators, lime kiln, chip pile + conveyor) scaled into the V17 lot (190 x 84 m, long axis NE); '
-            'V17 items kept as anchors: square = recovery boiler, round = liquor tank, rectangle = lime-kiln building, small rounds = stacks/vents. '
-            'NOT on V17 (IRL composition, positions in the lot ESTIMATED): ')
+            'drawn items kept as anchors: square = recovery boiler, round = liquor tank, rectangle = lime-kiln building, small rounds = stacks/vents. '
+            'NOT on the map (IRL composition, positions in the lot ESTIMATED): ')
     return {'Draper Island Paper Mill (Buildings)': ('#d6d3d1', body, base + 'paper-machine hall 114 x 24 m 22 m + roof monitor, roll warehouse 14 m, power boiler 42 m, 2 digesters 44 m, '
                                                      '5 pulp tanks 22 m, 5 evaporators 30 m, chip pile 12 m, kiln piers. V17-based: recovery boiler 58 m + annex 64 m, tank d 19 m 18 m, kiln building 12 m. '
                                                      'Heights ESTIMATED (IRL practice).'),
@@ -276,12 +281,12 @@ def rail_bridge():
     """FEC Strauss-type crossing, as in the IRL Jacksonville bridge (aerial + photos): low plate-girder trestle, a run of
     through Pratt truss spans next to the channel, single-leaf heel-trunnion bascule with a fixed steel tower at the heel,
     overhead counterweight on a frame pivoting at the tower top, timber fenders along the channel."""
-    R = json.load(open(RAIL)); A = np.array(R['A']); t = np.array(R['t']); n = np.array([-t[1], t[0]]); (s0, s1) = R['runs'][0]
+    R = json.load(open(RAIL)); A = np.array(R['A']); t = np.array(R['t']); n = np.array([-t[1], t[0]]); s0, s1 = R['runs'][0][0], float(R['south_shore_s'])
     m, tr, dk, cw = Mesh(), Mesh(), Mesh(), Mesh(); zt = 4.5; half = 5.2
     P = lambda s, w, z: [*(A + s * t + w * n), z]
     quad = lambda sa, sb, wa, wb: [list(A + sa * t + n * wa), list(A + sb * t + n * wa), list(A + sb * t + n * wb), list(A + sa * t + n * wb)]
     S_TIP = 497.0; LEAF = 50.0; S_HEEL = S_TIP - LEAF; TRUSS0, NTR, LTR = S_HEEL - 4 * 55.0 - 8.0, 4, 55.0
-    def pier(s, d=1.0, z1=zt - 1.8, w=half + 0.8): m.prism(quad(s - d, s + d, -w, w), 0.0, z1)
+    def pier(s, d=1.0, z1=zt - 1.8, w=half + 0.8): m.prism(quad(s - d, s + d, -w, w), max(0.0, float(ground(*(A + s * t)))), z1)
     def trestle(sa, sb, span=20.0):                                           # plate-girder deck (1.8 m) on bents
         ss = list(np.arange(sa, sb, span)) + [sb]
         for a, b in zip(ss[:-1], ss[1:]):
@@ -343,7 +348,8 @@ def rail_bridge():
             'next to Bocamar Bridge. Built like the IRL bridge (Esri aerial + photos): low plate-girder trestle, %d through Pratt truss spans of %.0f m (10 m high) next '
             'to the channel, single-leaf heel-trunnion bascule 50 m (through truss 10 -> 6 m) RAISED 80 deg (as in Port Gellhorn Postcard (X)), tip %.1f m; fixed braced '
             'steel tower 34 m at the heel, counterweight frame pivoting at its top with a 15 x 11 x 8 m concrete block (swung down behind the tower when open), link to the '
-            'heel, rest pier, timber fenders along the channel. Axis = the V17 rail line (bearing 135.0 deg), over water s %.0f..%.0f m; opening at the deepest water = '
+            'heel, rest pier, timber fenders along the channel. Axis = the V17 rail line (bearing 135.0 deg) = the V16 one, from the Draper Island shore to the Port Gellhorn beach '
+            '(s %.0f..%.0f m, over an islet at s 665-705; V3b: extended to the south shore, the PORT GELLHORN label had cut the water test at s 575); opening at the deepest water = '
             'the GTADB point (s 470). Deck top %.1f m. Sizes ESTIMATED (IRL: plate girder approaches, simple truss, bascule, 2 tracks).' % (NTR, LTR, tip_z, s0, s1, zt))
     return {'Draper Island Rail Bascule Bridge': ('#7c2d12', m, note),
             'Draper Island Rail Bascule (Truss)': ('#7c2d12', tr, 'Steel of the Draper Island Rail Bascule Bridge (fixed through trusses, raised leaf, heel tower, counterweight frame), drawn as steel beams. ' + note),

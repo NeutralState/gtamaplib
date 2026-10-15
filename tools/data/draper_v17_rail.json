@@ -1,1 +1,26 @@
-{"A": [-7449.0, 4698.0], "t": [0.7071067811865475, -0.7071067811865475], "runs": [[85.0, 575.0], [725.0, 805.0]]}
+{
+ "A": [
+  -7449.0,
+  4698.0
+ ],
+ "t": [
+  0.7071067811865475,
+  -0.7071067811865475
+ ],
+ "runs": [
+  [
+   85.0,
+   575.0
+  ],
+  [
+   725.0,
+   805.0
+  ]
+ ],
+ "south_shore_s": 900,
+ "islet_s": [
+  665,
+  705
+ ],
+ "_note": "runs = over-water stretches by a water test at +-30 m (broken by the white PORT GELLHORN label); the crossing really goes from the Draper Island shore (s 85) over an islet (islet_s) to the Port Gellhorn beach (south_shore_s), read on V17 along the rail (label pixels skipped)."
+}

@@ -20,8 +20,8 @@ import v16_resect as RR
 FOOT = os.path.join(REPO, 'gtamapdata', 'v16_footprints.json')
 SOLIDS = os.path.join(THIS, 'threejs', '_mesh_solids.json')
 OUT = os.path.join(THIS, 'threejs', '_v16_massing.json')
-# [PORT-GELLHORN-V2 2026-10-15] V16 footprints superseded by a newer map: the Draper Island paper mill moved in V17
-# (~60 m W, ~75 m N); its meshes (gen_port_gellhorn.py) sit at the V17 position, so the stale V16 boxes must not be extruded
+# [PORT-GELLHORN-V2/V3 2026-10-15] V16 footprints replaced by detailed meshes: the Draper Island paper mill (gen_port_gellhorn.py,
+# on this V16 drawing) — its small items (stacks, vents) are not all covered by a solid, so the whole set is skipped explicitly
 SUPERSEDED = {1235, 1236, 1237, 1238, 1239, 1240, 1241, 1242, 1243}
 
 

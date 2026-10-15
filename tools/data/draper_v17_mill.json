@@ -235,5 +235,10 @@
    4921.0
   ],
   "_note": "V17 mill lot (rotated rectangle ~190 x 84 m, long axis NE) read on the V17 crop; the rail runs along its SE edge (v ~85 m)"
- }
+ },
+ "v16_shift": [
+  57.45,
+  -71.59
+ ],
+ "_v16_note": "Yanis moved the mill between V16 and V17 by a pure translation; v16_shift = V16 - V17 position of the round tank (V16 footprint 1238); the warehouse gives (55.6, -67.7)"
 }
