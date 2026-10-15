@@ -40,7 +40,7 @@ MILL = os.path.join(THIS, 'data', 'draper_v17_mill.json')
 RAIL = os.path.join(THIS, 'data', 'draper_v17_rail.json')
 CREDIT = 'identification: GTA VI Landmarks Data (CC BY 4.0) https://map.gtadb.org; plan: V16/V17 (yanis); heights: estimated (IRL practice), tallest items bounded by Port Gellhorn Postcard (X)'
 REF_BOX = (-7700, -7300, 5080, 5420)
-OBSOLETE = ('Draper Island Refinery', 'Draper Island Paper Mill')      # V1 names replaced by the split meshes
+OBSOLETE = ('Draper Island Refinery', 'Draper Island Paper Mill', 'Draper Island Rail Bascule (Deck)')      # V1 names replaced by the split meshes
 
 
 class Mesh:
@@ -282,7 +282,12 @@ def rail_bridge():
     through Pratt truss spans next to the channel, single-leaf heel-trunnion bascule with a fixed steel tower at the heel,
     overhead counterweight on a frame pivoting at the tower top, timber fenders along the channel."""
     R = json.load(open(RAIL)); A = np.array(R['A']); t = np.array(R['t']); n = np.array([-t[1], t[0]]); s0, s1 = R['runs'][0][0], float(R['south_shore_s'])
-    m, tr, dk, cw = Mesh(), Mesh(), Mesh(), Mesh(); zt = 4.5; half = 5.2
+    m, tr, cw, cb = Mesh(), Mesh(), Mesh(), Mesh(); zt = 4.5; half = 5.2
+    decks = [Mesh(), Mesh(), Mesh()]                                          # 3 deck meshes (mesh_solids skips meshes > 450 m)
+    class _DK:
+        def prism(self, R_, z0, z1):
+            s_ = (np.mean(R_, 0) - A) @ t; decks[0 if s_ < 470 else (1 if s_ < 705 else 2)].prism(R_, z0, z1)
+    dk = _DK()
     P = lambda s, w, z: [*(A + s * t + w * n), z]
     quad = lambda sa, sb, wa, wb: [list(A + sa * t + n * wa), list(A + sb * t + n * wa), list(A + sb * t + n * wb), list(A + sa * t + n * wb)]
     S_TIP = 497.0; LEAF = 50.0; S_HEEL = S_TIP - LEAF; TRUSS0, NTR, LTR = S_HEEL - 4 * 55.0 - 8.0, 4, 55.0
@@ -310,10 +315,15 @@ def rail_bridge():
         for k in range(1, panels - 1): tr.seg(P(ss[k], -half, zt + h), P(ss[k + 1], half, zt + h))             # top lateral bracing
         dk.prism(quad(sa + 0.3, sb - 0.3, -half + 0.4, half - 0.4), zt - 1.2, zt)                                 # deck floor
         pier(sa, 2.0, zt - 1.2, half + 1.5); pier(sb, 2.0, zt - 1.2, half + 1.5)                                   # river piers
-    trestle(s0, TRUSS0)
-    for k in range(NTR): through_truss(TRUSS0 + k * LTR, TRUSS0 + (k + 1) * LTR)
-    trestle(TRUSS0 + NTR * LTR, S_HEEL - 2.0, 10.0)
-    trestle(S_TIP + 3.0, s1, 25.0)
+    isl0, isl1 = R['islet_s']
+    def truss_run(sa, sb):                                                    # equal through-truss spans of ~55 m over the water
+        k = max(1, int(round((sb - sa) / LTR))); e = np.linspace(sa, sb, k + 1)
+        for a, b in zip(e[:-1], e[1:]): through_truss(a, b)
+        return k
+    trestle(s0, s0 + 20.0)                                                    # short trestles at the shores and over the islet
+    NT = truss_run(s0 + 20.0, S_HEEL - 12.0); trestle(S_HEEL - 12.0, S_HEEL - 2.0, 10.0)
+    NT += truss_run(S_TIP + 3.0, isl0); trestle(isl0, isl1, 20.0)
+    NT += truss_run(isl1, s1 - 20.0); trestle(s1 - 20.0, s1)
     # heel: trunnion pier + fixed steel tower (4 legs, braced), counterweight frame pivoting at its top, counterweight block
     cw.prism(quad(S_HEEL - 16.0, S_HEEL + 3.0, -half - 3.0, half + 3.0), 0.0, zt)
     TH = 34.0; s_a, s_b = S_HEEL - 9.0, S_HEEL + 1.0; zz = [zt, zt + 11.0, zt + 22.0, zt + TH]
@@ -326,7 +336,7 @@ def rail_bridge():
         tr.seg(P(s, -half - 1.0, zt + 22.0), P(s, half + 1.0, zt + TH)); tr.seg(P(s, half + 1.0, zt + 22.0), P(s, -half - 1.0, zt + TH))
     # counterweight frame (raised leaf -> frame swung down behind the tower): pivot at the tower top, block 15 x 11 x 8 m
     piv = (S_HEEL - 4.0, zt + TH); cwt0, cwt1 = S_HEEL - 26.0, S_HEEL - 11.0; czb = zt + 14.0
-    cw.prism(quad(cwt0, cwt1, -half - 0.5, half + 0.5), czb, czb + 8.0)
+    cb.prism(quad(cwt0, cwt1, -half - 0.5, half + 0.5), czb, czb + 8.0)
     for w in (-half - 0.5, half + 0.5):
         tr.seg(P(piv[0], w, piv[1]), P(cwt1, w, czb + 8.0)); tr.seg(P(piv[0], w, piv[1]), P(cwt0, w, czb + 8.0))   # counterweight frame
         tr.seg(P(cwt1, w, czb + 8.0), P(S_HEEL + 2.0, w, zt + 8.0))                                                 # link to the leaf heel
@@ -343,18 +353,20 @@ def rail_bridge():
     tip_z = zp + LEAF * math.sin(th) + depth(LEAF) * math.cos(th)
     # rest pier at the tip + timber fenders along the channel (both sides, 70 m)
     cw.prism(quad(S_TIP - 1.0, S_TIP + 3.0, -half - 2.0, half + 2.0), 0.0, zt)
-    for w0 in (-half - 9.0, half + 7.5): cw.prism(quad(S_HEEL - 10.0, S_TIP + 15.0, w0, w0 + 1.5), 0.0, 2.8)
+    for w0 in (-half - 9.0, half + 7.5): cw.prism(quad(S_HEEL - 10.0, S_TIP + 15.0, w0, w0 + 1.2), 0.0, 1.6)
     note = ('PORT-GELLHORN-V3 2026-10-15 (Alexandre: "le bridge est encore pas bon"): GTADB L597 "Train Bridge" = IRL FEC Strauss Trunnion Bascule Bridge (Jacksonville), '
             'next to Bocamar Bridge. Built like the IRL bridge (Esri aerial + photos): low plate-girder trestle, %d through Pratt truss spans of %.0f m (10 m high) next '
             'to the channel, single-leaf heel-trunnion bascule 50 m (through truss 10 -> 6 m) RAISED 80 deg (as in Port Gellhorn Postcard (X)), tip %.1f m; fixed braced '
             'steel tower 34 m at the heel, counterweight frame pivoting at its top with a 15 x 11 x 8 m concrete block (swung down behind the tower when open), link to the '
             'heel, rest pier, timber fenders along the channel. Axis = the V17 rail line (bearing 135.0 deg) = the V16 one, from the Draper Island shore to the Port Gellhorn beach '
             '(s %.0f..%.0f m, over an islet at s 665-705; V3b: extended to the south shore, the PORT GELLHORN label had cut the water test at s 575); opening at the deepest water = '
-            'the GTADB point (s 470). Deck top %.1f m. Sizes ESTIMATED (IRL: plate girder approaches, simple truss, bascule, 2 tracks).' % (NTR, LTR, tip_z, s0, s1, zt))
+            'the GTADB point (s 470). Deck top %.1f m. Sizes ESTIMATED (IRL: plate girder approaches, simple truss, bascule, 2 tracks).' % (LTR, NT, tip_z, s0, s1, zt))
     return {'Draper Island Rail Bascule Bridge': ('#7c2d12', m, note),
             'Draper Island Rail Bascule (Truss)': ('#7c2d12', tr, 'Steel of the Draper Island Rail Bascule Bridge (fixed through trusses, raised leaf, heel tower, counterweight frame), drawn as steel beams. ' + note),
-            'Draper Island Rail Bascule (Deck)': ('#8b8178', dk, 'Decks of the Draper Island Rail Bascule Bridge: trestle girders 1.8 m and truss-span floors 1.2 m, deck top 4.5 m ESTIMATED. ' + note),
-            'Draper Island Rail Bascule (Counterweight)': ('#a8a29e', cw, 'Concrete of the Draper Island Rail Bascule Bridge: trunnion pier, counterweight block, rest pier, timber fenders (ESTIMATED sizes). ' + note)}
+            **{'Draper Island Rail Bascule (Deck %s)' % k: ('#8b8178', decks[i], 'Decks of the Draper Island Rail Bascule Bridge (%s part): trestle girders 1.8 m and truss-span floors 1.2 m, deck top 4.5 m ESTIMATED. ' % k + note)
+               for i, k in enumerate(('N', 'S', 'SE'))},
+            'Draper Island Rail Bascule (Counterweight)': ('#a8a29e', cw, 'Concrete of the Draper Island Rail Bascule Bridge: trunnion pier, rest pier, timber fenders (ESTIMATED sizes). ' + note),
+            'Draper Island Rail Bascule (Counterweight Block)': ('#b8b2a8', cb, 'Concrete counterweight block 15 x 11 x 8 m of the Draper Island Rail Bascule Bridge, hanging from its frame (drawn by view3d as a block, not a height field). ' + note)}
 
 
 def build():
@@ -362,6 +374,7 @@ def build():
     for name, (col, m, note) in {**refinery(F, V), **mill(), **rail_bridge()}.items():
         irl, gid = (('Vertex Energy Mobile Refinery', 'L535') if 'Refinery' in name else (('WestRock Paper Mill', 'L536') if 'Mill' in name else ('FEC Strauss Trunnion Bascule Bridge', 'L597')))
         out[name] = {'color': col, 'world_edges': m.E, 'name_game': None, 'name_irl': irl, 'gtadb': gid, '_credit': CREDIT, 'note': note}
+        if 'Bascule (' in name: out[name]['facade'] = {'kind': 'none', 'color': [0.66, 0.64, 0.6]}          # concrete, no windows
     return out
 
 

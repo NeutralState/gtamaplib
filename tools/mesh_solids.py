@@ -35,7 +35,7 @@ EXCLUDE = ('Bridge', 'Viaduct', 'Ramp', 'Interchange', 'Causeway', 'Overpass', '
            'Relief', 'Terrain', 'Stadium', 'Water Tower', 'Antenna', 'Mast', 'Crane', 'Pylon', 'Observation Wheel', 'Portique',
            'Gantry', 'Toll', 'Radio', 'Billboard', 'Sign', 'Fence', 'Cables', 'Roller Coaster', 'Coaster', 'Pier', 'Dock',
            'Stilts', 'Chimney', 'Stack', 'Silo', 'Lighthouse', 'FM', 'Tower (Radio)', 'Prison Towers',
-           'Pipe Rack', 'Process Frame', 'Truss')   # [PORT-GELLHORN-V2] open steel structures: wireframe, a height field would fill them
+           'Pipe Rack', 'Process Frame', 'Truss', 'Counterweight Block')   # [PORT-GELLHORN-V2] open steel structures: wireframe, a height field would fill them
 MAX_EXTENT = 450.0
 # [PIER66-V1 2026-10-13] buildings whose name contains an EXCLUDE word but are plain buildings (Pier Sixty-Six = hotel, not a pier)
 SOLID_NAMES = ('Pier Sixty-Six', 'Pier Sixty-Six (wings)')
