@@ -195,75 +195,160 @@ def refinery(F, V):
 
 
 def mill():
-    D = json.load(open(MILL)); S = sorted(D['shapes'], key=lambda s: -s['area_m2'])
+    """WestRock-style kraft mill laid out like the IRL Panama City mill (aerial: long paper-machine hall along the site,
+    pulp/recovery band beside it, digesters, tank farm, evaporators, lime kiln, chip pile + inclined conveyor), scaled into
+    the V17 lot; the V17 items are kept as anchors (square = recovery boiler, round = tank, rectangle = lime-kiln building,
+    small rounds = stacks/vents). Lot frame: u along the lot (0..190 m, NE), v across (0..84 m, towards the SE rail)."""
+    D = json.load(open(MILL)); S = sorted(D['shapes'], key=lambda s: -s['area_m2']); lot = D['lot']
+    Lc, Tc, Bc = (np.array(lot[k], float) for k in ('L', 'T', 'B'))
+    uh = (Tc - Lc) / np.linalg.norm(Tc - Lc); vh = (Bc - Lc) / np.linalg.norm(Bc - Lc)
+    W_ = lambda u, v: list(Lc + u * uh + v * vh)
+    rect = lambda u0, u1, v0, v1: [W_(u0, v0), W_(u1, v0), W_(u1, v1), W_(u0, v1)]
+    g = float(ground(*W_(95, 42)))
+    body, st, steel, racks = Mesh(), Mesh(), Mesh(), Mesh()
     main, annex, ware, tank = S[0], S[3], S[1], S[2]
-    body, st = Mesh(), Mesh()
-    g = float(ground(*main['centre'])); body.prism(main['ring'], g, g + 34.0)                  # boiler house
-    body.prism(annex['ring'], g, g + 42.0)                                                       # stair / boiler annex tower
-    c, u, n, L, W = obb(ware['ring']); gw = float(ground(*c)); P = lambda a, b, z: [*(c + u * a + n * b), z]
-    body.prism(box_ring(c, u, n, L, W), gw, gw + 12.0)                                         # warehouse walls
-    for a in (-L, L): body.seg(P(a, -W, gw + 12.0), P(a, 0, gw + 15.0)); body.seg(P(a, 0, gw + 15.0), P(a, W, gw + 12.0))
-    body.seg(P(-L, 0, gw + 15.0), P(L, 0, gw + 15.0))                                           # gable ridge
-    gt = float(ground(*tank['centre'])); body.cyl(tank['centre'], tank['r_m'], gt, gt + 26.0, 28); body.cone(tank['centre'], tank['r_m'], gt + 26.0, gt + 29.0, 28)
+    # 1) paper machine hall (IRL: the long white building) + raised roof monitor; roll warehouse at its SW end
+    body.prism(rect(8, 122, 3, 27), g, g + 22.0); body.prism(rect(12, 118, 12, 18), g + 22.0, g + 26.0)
+    body.prism(rect(8, 40, 27, 40), g, g + 14.0)
+    # 2) recovery boiler = the V17 square (tallest block) + annex stair tower (the V17 notch); power boiler beside it
+    body.prism(main['ring'], g, g + 58.0); body.prism(annex['ring'], g, g + 64.0)
+    body.prism(rect(152, 166, 13, 29), g, g + 42.0)
+    # 3) digesters (tall cylinders, cone top) with top platforms
+    for u, v in ((110, 38), (119, 44)):
+        c = W_(u, v); body.cyl(c, 3.6, g, g + 44.0, 20); body.cone(c, 3.6, g + 44.0, g + 47.0, 20)
+        racks.ring(body.circle(c, 5.0, 16), g + 44.0); racks.ring(body.circle(c, 5.0, 16), g + 45.1)
+    # 4) pulp / liquor tank farm (white tanks) + the V17 round tank
+    for u, v in ((156, 44), (168, 44), (180, 44), (162, 57), (174, 57)):
+        c = W_(u, v); body.cyl(c, 5.0, g, g + 22.0, 24); body.cone(c, 5.0, g + 22.0, g + 23.6, 24)
+    gt = float(ground(*tank['centre'])); body.cyl(tank['centre'], tank['r_m'], gt, gt + 18.0, 28); body.cone(tank['centre'], tank['r_m'], gt + 18.0, gt + 20.5, 28)
+    # 5) evaporator train (slender bodies in a row) with their structure
+    for k in range(5):
+        c = W_(128 + 4.6 * k, 63); body.cyl(c, 2.0, g, g + 30.0, 14)
+    process_frame(racks, rect(125, 150, 59, 67), g, 4, fh=7.0, grid=8.0)
+    # 6) lime kiln: inclined rotary cylinder on piers + kiln building (the V17 rectangle, gabled)
+    c, u, n, L, Wd = obb(ware['ring']); gw = float(ground(*c)); P = lambda a, b, z: [*(c + u * a + n * b), z]
+    body.prism(box_ring(c, u, n, L, Wd), gw, gw + 12.0)
+    for a in (-L, L): body.seg(P(a, -Wd, gw + 12.0), P(a, 0, gw + 15.0)); body.seg(P(a, 0, gw + 15.0), P(a, Wd, gw + 12.0))
+    body.seg(P(-L, 0, gw + 15.0), P(L, 0, gw + 15.0))
+    k0, k1 = np.array(W_(42, 71)), np.array(W_(94, 71)); kd = (k1 - k0) / np.linalg.norm(k1 - k0); kn = np.array([-kd[1], kd[0]])
+    for k in range(16):                                                      # kiln shell as a 12-sided tube, rising 3 m towards the feed end
+        a0, a1 = 2 * math.pi * k / 12, 2 * math.pi * (k + 1) / 12
+        if k >= 12: break
+        for t0 in (0.0,):
+            p0 = lambda a, tt: [*(k0 + kd * tt * 52 + kn * 1.9 * math.cos(a)), g + 6.0 + 3.0 * tt + 1.9 * math.sin(a)]
+            steel.seg(p0(a0, 0), p0(a0, 1)); steel.seg(p0(a0, 0), p0(a1, 0)); steel.seg(p0(a0, 1), p0(a1, 1))
+    for tt in (0.1, 0.4, 0.7, 0.95):                                         # kiln piers (concrete)
+        q = k0 + kd * tt * 52; body.prism([list(q + kd * dd + kn * ww) for dd, ww in ((-1.5, -2.6), (1.5, -2.6), (1.5, 2.6), (-1.5, 2.6))], g, g + 4.0 + 3.0 * tt)
+    # 7) chip pile (cone) + inclined belt-conveyor gallery up to the digester tops
+    cp = W_(66, 50); body.cone(cp, 12.0, g, g + 11.0, 28)
+    a_ = np.array(W_(70, 49)); b_ = np.array(W_(107, 39)); za, zb = g + 10.0, g + 47.0; dd_ = (b_ - a_) / np.linalg.norm(b_ - a_); nn_ = np.array([-dd_[1], dd_[0]])
+    for k in range(9):                                                       # gallery: 2 x 3 m box truss, 8 panels, on 2 bents
+        t0, t1 = k / 9, (k + 1) / 9
+        q = lambda tt, w, h: [*(a_ + (b_ - a_) * tt + nn_ * w), za + (zb - za) * tt + h]
+        for w in (-1.2, 1.2):
+            steel.seg(q(t0, w, 0), q(t1, w, 0)); steel.seg(q(t0, w, 2.6), q(t1, w, 2.6)); steel.seg(q(t0, w, 0), q(t1, w, 2.6))
+        steel.seg(q(t0, -1.2, 0), q(t0, 1.2, 0)); steel.seg(q(t0, -1.2, 2.6), q(t0, 1.2, 2.6))
+    for tt in (0.35, 0.7):
+        q0 = a_ + (b_ - a_) * tt; zq = za + (zb - za) * tt
+        for w in (-1.6, 1.6): steel.seg([*(q0 + nn_ * w), g], [*(q0 + nn_ * w), zq])
+    # 8) pipe rack along the process band
+    pr = np.array(W_(42, 31)); prb = np.array(W_(104, 31)); pu = (prb - pr) / np.linalg.norm(prb - pr)
+    pipe_rack(racks, (pr + prb) / 2, pu, np.array([-pu[1], pu[0]]), np.linalg.norm(prb - pr) / 2, 2.0, g)
+    # 9) stacks: the two largest V17 small rounds = recovery / power boiler stacks; the others vents
     for x, y, r in D['stacks']:
         gs = float(ground(x, y))
-        if r >= 1.0: st.cyl([x, y], 1.6, gs, gs + 68.0, 14); st.cyl([x, y], 2.0, gs + 66.0, gs + 68.0, 14)   # stacks, cap band
-        else: st.cyl([x, y], 0.9, gs, gs + 24.0, 10)                                                       # vents
-    base = ('PORT-GELLHORN-V2 2026-10-15 (Alexandre): GTADB L536 / L1201 "Factory?" = IRL WestRock Paper Mill (Panama City; closed 2022). '
-            'Plan = V17 (moved ~60 m W / 75 m N from the V16 footprints): ')
-    return {'Draper Island Paper Mill (Buildings)': ('#d6d3d1', body, base + 'boiler house 402 m2 34 m + annex tower 42 m, warehouse 332 m2 12 m with a 3 m gable, round tank d 19 m 26 m + cone; heights ESTIMATED.'),
-            'Draper Island Paper Mill (Stacks)': ('#78716c', st, base + 'the two largest small round items as stacks 68 m (within the ~60-70 m the Postcard bounds), the 4 others as 24 m vents; ESTIMATED.')}
+        if r >= 1.0: st.cyl([x, y], 2.0, gs, gs + 70.0, 16); st.cyl([x, y], 2.4, gs + 67.0, gs + 70.0, 16)
+        else: st.cyl([x, y], 0.9, gs, gs + 26.0, 10)
+    base = ('PORT-GELLHORN-V3 2026-10-15 (Alexandre: "la papeterie est trop simple, fais-la comme la vraie et place-la environ ou on a draw sur Yanis"): '
+            'GTADB L536 / L1201 = IRL WestRock Paper Mill (Panama City; closed 2022). Layout of the IRL mill (Esri World Imagery: long paper-machine hall along '
+            'the site, recovery band beside it, digesters, tank farm, evaporators, lime kiln, chip pile + conveyor) scaled into the V17 lot (190 x 84 m, long axis NE); '
+            'V17 items kept as anchors: square = recovery boiler, round = liquor tank, rectangle = lime-kiln building, small rounds = stacks/vents. '
+            'NOT on V17 (IRL composition, positions in the lot ESTIMATED): ')
+    return {'Draper Island Paper Mill (Buildings)': ('#d6d3d1', body, base + 'paper-machine hall 114 x 24 m 22 m + roof monitor, roll warehouse 14 m, power boiler 42 m, 2 digesters 44 m, '
+                                                     '5 pulp tanks 22 m, 5 evaporators 30 m, chip pile 12 m, kiln piers. V17-based: recovery boiler 58 m + annex 64 m, tank d 19 m 18 m, kiln building 12 m. '
+                                                     'Heights ESTIMATED (IRL practice).'),
+            'Draper Island Paper Mill (Stacks)': ('#78716c', st, base + 'stacks 70 m on the two largest V17 small rounds (white steam drawn by view3d), 4 vents 26 m.'),
+            'Draper Island Paper Mill (Truss)': ('#9a8f86', steel, base + 'rotary lime kiln (d 3.8 m, 52 m, inclined) and the inclined chip-conveyor gallery to the digester tops; drawn as steel beams.'),
+            'Draper Island Paper Mill (Pipe Racks)': ('#9ca3af', racks, base + 'process pipe rack (62 m, 2 tiers), evaporator structure, digester platforms.')}
 
 
 def rail_bridge():
+    """FEC Strauss-type crossing, as in the IRL Jacksonville bridge (aerial + photos): low plate-girder trestle, a run of
+    through Pratt truss spans next to the channel, single-leaf heel-trunnion bascule with a fixed steel tower at the heel,
+    overhead counterweight on a frame pivoting at the tower top, timber fenders along the channel."""
     R = json.load(open(RAIL)); A = np.array(R['A']); t = np.array(R['t']); n = np.array([-t[1], t[0]]); (s0, s1) = R['runs'][0]
-    m = Mesh(); tr = Mesh(); cw = Mesh(); zt = 4.5; zg = zt - 2.6; half = 5.2
+    m, tr, dk, cw = Mesh(), Mesh(), Mesh(), Mesh(); zt = 4.5; half = 5.2
     P = lambda s, w, z: [*(A + s * t + w * n), z]
-    S_TIP = 470.0 + 25.0; LEAF = 50.0; S_HEEL = S_TIP - LEAF                 # opening centred on the deepest water (s 470)
-    dk = Mesh()
-    def girders(sa, sb):                                                      # plate-girder span = solid deck box (2.6 m) + handrails
-        dk.prism([list(A + (sa + 0.3) * t - n * half), list(A + (sb - 0.3) * t - n * half), list(A + (sb - 0.3) * t + n * half), list(A + (sa + 0.3) * t + n * half)], zg, zt)
-        for w in (-half, half): m.seg(P(sa, w, zt + 1.1), P(sb, w, zt + 1.1))
-    def pier(s, wide=1.0):
-        R_ = [list(A + s * t + n * w + t * d) for d, w in ((-1.0 * wide, -half - 0.8), (1.0 * wide, -half - 0.8), (1.0 * wide, half + 0.8), (-1.0 * wide, half + 0.8))]
-        m.prism(R_, 0.0, zg)
-    spans = list(np.arange(s0, S_HEEL - 12.0, 25.0)) + [S_HEEL - 12.0]
-    for a, b in zip(spans[:-1], spans[1:]): girders(a, b); pier(b)
-    pier(s0); spans2 = list(np.arange(S_TIP + 2.0, s1, 25.0)) + [s1]
-    for a, b in zip(spans2[:-1], spans2[1:]): girders(a, b); pier(b)
-    pier(S_TIP + 2.0, 2.0)                                                   # rest pier at the leaf tip
-    # trunnion pier + counterweight tower (A-frames) over the heel
-    cw.prism([list(A + (S_HEEL + d) * t + n * w) for d, w in ((-12, -8), (2, -8), (2, 8), (-12, 8))], 0.0, zt)
+    quad = lambda sa, sb, wa, wb: [list(A + sa * t + n * wa), list(A + sb * t + n * wa), list(A + sb * t + n * wb), list(A + sa * t + n * wb)]
+    S_TIP = 497.0; LEAF = 50.0; S_HEEL = S_TIP - LEAF; TRUSS0, NTR, LTR = S_HEEL - 4 * 55.0 - 8.0, 4, 55.0
+    def pier(s, d=1.0, z1=zt - 1.8, w=half + 0.8): m.prism(quad(s - d, s + d, -w, w), 0.0, z1)
+    def trestle(sa, sb, span=20.0):                                           # plate-girder deck (1.8 m) on bents
+        ss = list(np.arange(sa, sb, span)) + [sb]
+        for a, b in zip(ss[:-1], ss[1:]):
+            dk.prism(quad(a + 0.2, b - 0.2, -half, half), zt - 1.8, zt)
+            for w in (-half, half): m.seg(P(a, w, zt + 1.1), P(b, w, zt + 1.1))
+        for s in ss: pier(s, 0.7)
+    def through_truss(sa, sb, h=10.0, panels=8):                              # Pratt through truss, portal + top/bottom laterals
+        ss = np.linspace(sa, sb, panels + 1)
+        for w in (-half, half):
+            tr.seg(P(sa, w, zt), P(sb, w, zt))
+            tr.seg(P(sa, w, zt), P(ss[1], w, zt + h)); tr.seg(P(sb, w, zt), P(ss[-2], w, zt + h))          # inclined end posts
+            tr.seg(P(ss[1], w, zt + h), P(ss[-2], w, zt + h))                                                   # top chord
+            for k in range(1, panels):
+                tr.seg(P(ss[k], w, zt), P(ss[k], w, zt + h))                                                     # verticals
+                mid = panels // 2
+                if k < mid: tr.seg(P(ss[k], w, zt + h), P(ss[k + 1], w, zt))                                      # Pratt diagonals (towards the centre)
+                elif k > mid: tr.seg(P(ss[k], w, zt + h), P(ss[k - 1], w, zt))
+        for k in range(1, panels):
+            tr.seg(P(ss[k], -half, zt + h), P(ss[k], half, zt + h))                                             # top struts
+            tr.seg(P(ss[k], -half, zt), P(ss[k], half, zt))                                                     # floor beams
+        for k in range(1, panels - 1): tr.seg(P(ss[k], -half, zt + h), P(ss[k + 1], half, zt + h))             # top lateral bracing
+        dk.prism(quad(sa + 0.3, sb - 0.3, -half + 0.4, half - 0.4), zt - 1.2, zt)                                 # deck floor
+        pier(sa, 2.0, zt - 1.2, half + 1.5); pier(sb, 2.0, zt - 1.2, half + 1.5)                                   # river piers
+    trestle(s0, TRUSS0)
+    for k in range(NTR): through_truss(TRUSS0 + k * LTR, TRUSS0 + (k + 1) * LTR)
+    trestle(TRUSS0 + NTR * LTR, S_HEEL - 2.0, 10.0)
+    trestle(S_TIP + 3.0, s1, 25.0)
+    # heel: trunnion pier + fixed steel tower (4 legs, braced), counterweight frame pivoting at its top, counterweight block
+    cw.prism(quad(S_HEEL - 16.0, S_HEEL + 3.0, -half - 3.0, half + 3.0), 0.0, zt)
+    TH = 34.0; s_a, s_b = S_HEEL - 9.0, S_HEEL + 1.0; zz = [zt, zt + 11.0, zt + 22.0, zt + TH]
+    for w in (-half - 1.0, half + 1.0):
+        for s in (s_a, s_b): tr.seg(P(s, w, zt), P(s, w, zt + TH))
+        for z0, z1 in zip(zz[:-1], zz[1:]): tr.seg(P(s_a, w, z0), P(s_b, w, z1)); tr.seg(P(s_b, w, z0), P(s_a, w, z1))
+        for z in zz[1:]: tr.seg(P(s_a, w, z), P(s_b, w, z))
+    for s in (s_a, s_b):
+        for z in zz[1:]: tr.seg(P(s, -half - 1.0, z), P(s, half + 1.0, z))
+        tr.seg(P(s, -half - 1.0, zt + 22.0), P(s, half + 1.0, zt + TH)); tr.seg(P(s, half + 1.0, zt + 22.0), P(s, -half - 1.0, zt + TH))
+    # counterweight frame (raised leaf -> frame swung down behind the tower): pivot at the tower top, block 15 x 11 x 8 m
+    piv = (S_HEEL - 4.0, zt + TH); cwt0, cwt1 = S_HEEL - 26.0, S_HEEL - 11.0; czb = zt + 14.0
+    cw.prism(quad(cwt0, cwt1, -half - 0.5, half + 0.5), czb, czb + 8.0)
     for w in (-half - 0.5, half + 0.5):
-        tr.seg(P(S_HEEL - 11.0, w, zt), P(S_HEEL - 5.0, w, zt + 26.0)); tr.seg(P(S_HEEL + 1.0, w, zt), P(S_HEEL - 5.0, w, zt + 26.0))
-        tr.seg(P(S_HEEL - 8.0, w, zt + 13.0), P(S_HEEL - 2.0, w, zt + 13.0))
-    tr.seg(P(S_HEEL - 5.0, -half - 0.5, zt + 26.0), P(S_HEEL - 5.0, half + 0.5, zt + 26.0))
-    # counterweight (raised leaf -> counterweight down near the deck, behind the heel)
-    cw.prism([list(A + (S_HEEL + d) * t + n * w) for d, w in ((-17, -half), (-6, -half), (-6, half), (-17, half))], zt + 3.0, zt + 11.0)
-    tr.seg(P(S_HEEL - 5.0, 0, zt + 26.0), P(S_HEEL - 11.5, 0, zt + 11.0))                     # link
-    # raised leaf: through Pratt truss, depth 9 m at the heel -> 5 m at the tip, panels of 6.25 m, rotated 80 deg about the trunnion
-    th = math.radians(80.0); zp = zt + 2.0
-    def Q(a, h, w):  # leaf local (a along the closed leaf from the heel, h above its floor) -> world
-        return P(S_HEEL + a * math.cos(th) - h * math.sin(th), w, zp + a * math.sin(th) + h * math.cos(th))
-    depth = lambda a: 9.0 - 4.0 * a / LEAF; panels = np.linspace(0, LEAF, 9)
+        tr.seg(P(piv[0], w, piv[1]), P(cwt1, w, czb + 8.0)); tr.seg(P(piv[0], w, piv[1]), P(cwt0, w, czb + 8.0))   # counterweight frame
+        tr.seg(P(cwt1, w, czb + 8.0), P(S_HEEL + 2.0, w, zt + 8.0))                                                 # link to the leaf heel
+    # raised leaf: through Pratt truss 50 m, 10 -> 6 m deep, raised 80 deg about the trunnion at the heel
+    th = math.radians(80.0); zp = zt + 1.0
+    def Q(a, h, w): return P(S_HEEL + a * math.cos(th) - h * math.sin(th), w, zp + a * math.sin(th) + h * math.cos(th))
+    depth = lambda a: 10.0 - 4.0 * a / LEAF; panels = np.linspace(0, LEAF, 9)
     for w in (-half, half):
         for a0, a1 in zip(panels[:-1], panels[1:]):
-            tr.seg(Q(a0, 0, w), Q(a1, 0, w)); tr.seg(Q(a0, depth(a0), w), Q(a1, depth(a1), w))       # chords
-            tr.seg(Q(a0, 0, w), Q(a1, depth(a1), w))                                                 # diagonal
-        for a in panels: tr.seg(Q(a, 0, w), Q(a, depth(a), w))                                       # verticals
-    for a in panels:
-        tr.seg(Q(a, 0, -half), Q(a, 0, half)); tr.seg(Q(a, depth(a), -half), Q(a, depth(a), half))   # floor beams + top struts
-    for a0, a1 in zip(panels[:-1], panels[1:]): tr.seg(Q(a0, depth(a0), -half), Q(a1, depth(a1), half))   # top lateral bracing
+            tr.seg(Q(a0, 0, w), Q(a1, 0, w)); tr.seg(Q(a0, depth(a0), w), Q(a1, depth(a1), w)); tr.seg(Q(a0, 0, w), Q(a1, depth(a1), w))
+        for a in panels: tr.seg(Q(a, 0, w), Q(a, depth(a), w))
+    for a in panels: tr.seg(Q(a, 0, -half), Q(a, 0, half)); tr.seg(Q(a, depth(a), -half), Q(a, depth(a), half))
+    for a0, a1 in zip(panels[:-1], panels[1:]): tr.seg(Q(a0, depth(a0), -half), Q(a1, depth(a1), half))
     tip_z = zp + LEAF * math.sin(th) + depth(LEAF) * math.cos(th)
-    note = ('PORT-GELLHORN-V2 2026-10-15 (Alexandre): GTADB L597 "Train Bridge" = IRL FEC Strauss Trunnion Bascule Bridge (Jacksonville), next to Bocamar Bridge. '
-            'Axis = the V17 rail line across the bay (bearing 135.0 deg), over water from s %.0f to %.0f m (490 m). Bascule opening at the deepest water = the GTADB point '
-            '(s 470): single-leaf through Pratt truss 50 m (depth 9 -> 5 m), RAISED 80 deg as in Port Gellhorn Postcard (X), tip %.1f m; trunnion pier, A-frame counterweight '
-            'tower 26 m and counterweight block over the heel (Strauss overhead-counterweight type). Approaches: 4 plate girders (2 tracks), deck top %.1f m, piers every 25 m. '
-            'All ESTIMATED (IRL: plate girder approaches, 2 tracks, 5 ft closed clearance; Postcard pose too poor to fix the leaf along the rail).' % (s0, s1, tip_z, zt))
+    # rest pier at the tip + timber fenders along the channel (both sides, 70 m)
+    cw.prism(quad(S_TIP - 1.0, S_TIP + 3.0, -half - 2.0, half + 2.0), 0.0, zt)
+    for w0 in (-half - 9.0, half + 7.5): cw.prism(quad(S_HEEL - 10.0, S_TIP + 15.0, w0, w0 + 1.5), 0.0, 2.8)
+    note = ('PORT-GELLHORN-V3 2026-10-15 (Alexandre: "le bridge est encore pas bon"): GTADB L597 "Train Bridge" = IRL FEC Strauss Trunnion Bascule Bridge (Jacksonville), '
+            'next to Bocamar Bridge. Built like the IRL bridge (Esri aerial + photos): low plate-girder trestle, %d through Pratt truss spans of %.0f m (10 m high) next '
+            'to the channel, single-leaf heel-trunnion bascule 50 m (through truss 10 -> 6 m) RAISED 80 deg (as in Port Gellhorn Postcard (X)), tip %.1f m; fixed braced '
+            'steel tower 34 m at the heel, counterweight frame pivoting at its top with a 15 x 11 x 8 m concrete block (swung down behind the tower when open), link to the '
+            'heel, rest pier, timber fenders along the channel. Axis = the V17 rail line (bearing 135.0 deg), over water s %.0f..%.0f m; opening at the deepest water = '
+            'the GTADB point (s 470). Deck top %.1f m. Sizes ESTIMATED (IRL: plate girder approaches, simple truss, bascule, 2 tracks).' % (NTR, LTR, tip_z, s0, s1, zt))
     return {'Draper Island Rail Bascule Bridge': ('#7c2d12', m, note),
-            'Draper Island Rail Bascule (Truss)': ('#7c2d12', tr, 'PORT-GELLHORN-V2 2026-10-15: steel of the Draper Island Rail Bascule Bridge: raised through-truss leaf (50 m, 80 deg) and A-frame counterweight tower; drawn as steel beams. ' + note),
-            'Draper Island Rail Bascule (Deck)': ('#8b8178', dk, 'PORT-GELLHORN-V2 2026-10-15: plate-girder approach spans of the Draper Island Rail Bascule Bridge as solid deck boxes (2.6 m deep, 10.4 m wide, deck top 4.5 m ESTIMATED), 25 m spans.'),
-            'Draper Island Rail Bascule (Counterweight)': ('#a8a29e', cw, 'PORT-GELLHORN-V2 2026-10-15: concrete trunnion pier and counterweight block of the Draper Island Rail Bascule Bridge (ESTIMATED sizes).')}
+            'Draper Island Rail Bascule (Truss)': ('#7c2d12', tr, 'Steel of the Draper Island Rail Bascule Bridge (fixed through trusses, raised leaf, heel tower, counterweight frame), drawn as steel beams. ' + note),
+            'Draper Island Rail Bascule (Deck)': ('#8b8178', dk, 'Decks of the Draper Island Rail Bascule Bridge: trestle girders 1.8 m and truss-span floors 1.2 m, deck top 4.5 m ESTIMATED. ' + note),
+            'Draper Island Rail Bascule (Counterweight)': ('#a8a29e', cw, 'Concrete of the Draper Island Rail Bascule Bridge: trunnion pier, counterweight block, rest pier, timber fenders (ESTIMATED sizes). ' + note)}
 
 
 def build():
