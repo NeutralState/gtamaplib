@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
-"""gen_port_cranes.py — portiques a conteneurs (STS) de Port Vice City. [PORT-CRANES-V1 2026-09-30]
+"""gen_port_cranes.py — portiques a conteneurs (STS) de Port Vice City et de Port Gellhorn. [PORT-CRANES-V1 2026-09-30, V2 2026-10-15]
 
 Plan = polygones V16 3132-3140: chaque grue est dessinee en plan (portique 29 x 21 m, local des machines, arriere-bec,
 fleche de 47 m au-dessus de l'eau), axe = grand axe du polygone, fleche du cote s < 0 (eau).
 Hauteurs = landmarks: sommet du chevalet 'Container Crane (n)' (72-82 m, 2-6 cams), dessous de fleche 'CC (n) (BB2)'
 (40-45 m) -> fleche a z 44 (mediane) pour les grues sans BB2.
+V2 (Alexandre: "port cranes" de Port Gellhorn): the 3 cranes of Draper Island (GTADB L323/L1086/L1087 = Port of Tampa
+Container Terminal, like Port Vice City) are V16 polygons 1220-1222, same 1185 m2 plan as 3132-3140; A-frame tops =
+landmarks 'Port of Tampa Container Crane (n)' (69-71 m, Diner (W) + Port Gellhorn Postcard); no BB2 -> boom at the median.
 Usage: PYTHONPATH=. python3 tools/gen_port_cranes.py [--out f.json] [--apply]
 """
 import json, os, sys, shutil
@@ -14,16 +17,24 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, os.path.join(ROOT, 'tools'))
 D = lambda f: os.path.join(ROOT, 'gtamapdata', f)
 POLYS = [3140, 3139, 3138, 3137, 3136, 3135, 3134, 3133, 3132]
+SITES = [(POLYS, 'Container Crane (', 'CC ('), ([1220, 1221, 1222], 'Port of Tampa Container Crane (', None)]
 
 
 def build():
     import v16_resect as RR
     F = {f['id']: f for f in json.load(open(D('v16_footprints.json')))['polygons']}
     L = json.load(open(D('landmarks.json')))
-    tops = {k: np.array(v['xyz']) for k, v in L.items() if k.startswith('Container Crane (') and v and v.get('xyz')}
-    bb2 = {k: np.array(v['xyz']) for k, v in L.items() if k.startswith('CC (') and k.endswith('(BB2)') and v and v.get('xyz')}
     out = {}
-    for pid in POLYS:
+    for polys, top_prefix, bb2_prefix in SITES:
+        out.update(build_site(F, L, RR, polys, top_prefix, bb2_prefix))
+    return out
+
+
+def build_site(F, L, RR, polys, top_prefix, bb2_prefix):
+    tops = {k: np.array(v['xyz']) for k, v in L.items() if k.startswith(top_prefix) and v and v.get('xyz')}
+    bb2 = {k: np.array(v['xyz']) for k, v in L.items() if bb2_prefix and k.startswith(bb2_prefix) and k.endswith('(BB2)') and v and v.get('xyz')}
+    out = {}
+    for pid in polys:
         r = np.array(F[pid]['ring'], float); c = r.mean(0); u = np.linalg.svd(r - c)[2][0]; n = np.array([-u[1], u[0]])
         s = (r - c) @ u
         if s.min() > -40: u, n = -u, -n                      # fleche (s = -65) du cote eau
