@@ -322,8 +322,7 @@ def rail_bridge():
         return k
     trestle(s0, s0 + 20.0)                                                    # short trestles at the shores and over the islet
     NT = truss_run(s0 + 20.0, S_HEEL - 12.0); trestle(S_HEEL - 12.0, S_HEEL - 2.0, 10.0)
-    NT += truss_run(S_TIP + 3.0, isl0); trestle(isl0, isl1, 20.0)
-    NT += truss_run(isl1, s1 - 20.0); trestle(s1 - 20.0, s1)
+    NT += truss_run(S_TIP + 3.0, s1 - 20.0); trestle(s1 - 20.0, s1)          # V3d: the trusses carry on over the islet (Alexandre)
     # heel: trunnion pier + fixed steel tower (4 legs, braced), counterweight frame pivoting at its top, counterweight block
     cw.prism(quad(S_HEEL - 16.0, S_HEEL + 3.0, -half - 3.0, half + 3.0), 0.0, zt)
     TH = 34.0; s_a, s_b = S_HEEL - 9.0, S_HEEL + 1.0; zz = [zt, zt + 11.0, zt + 22.0, zt + TH]
