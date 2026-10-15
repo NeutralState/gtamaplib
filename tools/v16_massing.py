@@ -20,6 +20,9 @@ import v16_resect as RR
 FOOT = os.path.join(REPO, 'gtamapdata', 'v16_footprints.json')
 SOLIDS = os.path.join(THIS, 'threejs', '_mesh_solids.json')
 OUT = os.path.join(THIS, 'threejs', '_v16_massing.json')
+# [PORT-GELLHORN-V2 2026-10-15] V16 footprints superseded by a newer map: the Draper Island paper mill moved in V17
+# (~60 m W, ~75 m N); its meshes (gen_port_gellhorn.py) sit at the V17 position, so the stale V16 boxes must not be extruded
+SUPERSEDED = {1235, 1236, 1237, 1238, 1239, 1240, 1241, 1242, 1243}
 
 
 def hsh(i, k):
@@ -58,7 +61,7 @@ def main():
     sbb = [(min(q[0] for q in O), min(q[1] for q in O), max(q[0] for q in O), max(q[1] for q in O)) for O in solid_polys]
     out = []
     for i, p in enumerate(F):
-        if not str(p.get('cat', '')).startswith('building'): continue
+        if not str(p.get('cat', '')).startswith('building') or p.get('id') in SUPERSEDED: continue
         R = np.array(p['ring'], float)
         if len(R) < 3 or p['area'] < 12 or p['area'] > 60000: continue
         R = cv2.approxPolyDP(R.astype(np.float32).reshape(-1, 1, 2), 0.6, True).reshape(-1, 2)

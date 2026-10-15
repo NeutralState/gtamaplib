@@ -639,7 +639,7 @@ function sunDirVec() {   // vecteur VERS le soleil; az horaire depuis le nord (+
 // [GROUND-COLOR-V1] teintes du sol et de la vegetation MESUREES sur les frames de jour (tools/ground_colors.py):
 // on garde la luminance calibree de chaque materiau et on prend la teinte/saturation du jeu
 // [STRUCTS-V1] structures rendues en vrai volume par le module STRUCTS (pas de fil de fer vif, pas de faces auto)
-const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)|Stadium \(V16|Stadium Roof Portique|^Hard Rock Cafe$|^Kaseya Center$|^Oceanarium Dome$/;
+const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)|\(Stacks\)|Flare Stack|\(Truss\)|\(Pipe Racks\)|\(Process Frames\)|Stadium \(V16|Stadium Roof Portique|^Hard Rock Cafe$|^Kaseya Center$|^Oceanarium Dome$/;
 const _gLum = c => 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
 // sat < 1: materiaux neutres (dalles, asphalte) — la dominante chaude de l'etalonnage du jeu, etalee sur des km2 de ville, virait au desert
 const gameTint = (cur, srgb, sat = 1) => { if (!srgb) return cur; const m0 = srgb.map(v => Math.pow(v, 2.2)), l0 = _gLum(m0), m = m0.map(v => l0 + (v - l0) * sat), k = _gLum(cur) / Math.max(_gLum(m), 1e-4); return m.map(v => v * k); };
@@ -4201,7 +4201,20 @@ window.__camScreen = name => {
   // ---- grues portuaires: aretes -> poutres ----
   {
     const beams = [];
-    for (const n of Object.keys(M)) if (/Container Crane|Stadium Roof Portique/.test(n)) for (const e of (M[n].world_edges || M[n])) beams.push(e);
+    // [PORT-GELLHORN-V2] + raffinerie (racks, charpentes de procede) et treillis du pont basculant: memes poutres, plus fines
+    const STEEL = [[/Container Crane|Stadium Roof Portique/, 1.0, 0xe4e2dc], [/\(Truss\)/, 0.75, 0x6b3a26], [/\(Pipe Racks\)|\(Process Frames\)/, 0.32, 0x9aa0a6]];
+    const beamsBy = STEEL.map(() => []);
+    for (const n of Object.keys(M)) STEEL.forEach(([re], k) => { if (re.test(n)) for (const e of (M[n].world_edges || M[n])) (k === 0 ? beams : beamsBy[k]).push(e); });
+    for (let k = 1; k < STEEL.length; k++) {
+      const B_ = beamsBy[k]; if (!B_.length) continue;
+      const im2 = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), stdMat(STEEL[k][2], 0.55, 0.35, 0.6), B_.length);
+      const q2 = new THREE.Quaternion(), X2 = new V3(1, 0, 0), sk = STEEL[k][1];
+      B_.forEach(([a, b], i) => {
+        const A = new V3(...a), B = new V3(...b), d = B.clone().sub(A), len = d.length() || 0.01;
+        q2.setFromUnitVectors(X2, d.clone().normalize()); m4.compose(A.clone().add(B).multiplyScalar(0.5), q2, new V3(len + sk * 0.5, sk, sk)); im2.setMatrixAt(i, m4);
+      });
+      im2.castShadow = true; im2.receiveShadow = true; im2.name = 'steel-' + k; grp.add(im2);
+    }
     if (beams.length) {
       const im = new THREE.InstancedMesh(new THREE.BoxGeometry(1, 1, 1), stdMat(0xe4e2dc, 0.5, 0.3, 0.7), beams.length);
       const q = new THREE.Quaternion(), X = new V3(1, 0, 0);
@@ -4603,12 +4616,27 @@ window.__camScreen = name => {
     window.__structs = Object.assign(window.__structs || {}, { facadeTex: Ft.length });
   }).catch(() => {});
   // ---- cheminees ----
-  const smokers = [];
+  const smokers = [], flares = [];
   {
     const shafts = [], rings = [], lamps = [];
+    // [PORT-GELLHORN-V2] un mesh "(Stacks)" porte plusieurs futs: groupes par cellule de 6 m; "(Flare Stack)" = torche (flamme plus bas)
+    const stackSets = [];
     for (const n of Object.keys(M)) {
-      if (!/Smokestack|\(Stack\)/.test(n)) continue;
-      const P = ptsOf(n); let z0 = 1e9, z1 = -1e9, cx = 0, cy = 0;
+      if (/Smokestack|\(Stack\)/.test(n)) { stackSets.push([n, ptsOf(n)]); continue; }
+      if (!/\(Stacks\)|Flare Stack/.test(n)) continue;
+      const cl = new Map();
+      for (const p of ptsOf(n)) { const k = Math.round(p[0] / 6) + ',' + Math.round(p[1] / 6); (cl.get(k) || cl.set(k, []).get(k)).push(p); }
+      const merged = [];                                                    // fusion des cellules voisines (un fut a cheval sur 2 cellules)
+      for (const P of cl.values()) {
+        const c = P.reduce((a, p) => [a[0] + p[0] / P.length, a[1] + p[1] / P.length], [0, 0]);
+        const m_ = merged.find(g => Math.hypot(g.c[0] - c[0], g.c[1] - c[1]) < 5);
+        if (m_) m_.P.push(...P); else merged.push({ c, P: [...P] });
+      }
+      for (const g of merged) { const zr = g.P.map(p => p[2]); if (Math.max(...zr) - Math.min(...zr) > 8) stackSets.push([n, g.P.filter(p => Math.hypot(p[0] - g.c[0], p[1] - g.c[1]) < 4)]); }
+    }
+    for (const [n, P] of stackSets) {
+      if (!P.length) continue;
+      let z0 = 1e9, z1 = -1e9, cx = 0, cy = 0;
       for (const p of P) { z0 = Math.min(z0, p[2]); z1 = Math.max(z1, p[2]); cx += p[0]; cy += p[1]; }
       cx /= P.length; cy /= P.length; const H = z1 - z0;
       const rAt = zz => { const nb = P.filter(p => Math.abs(p[2] - zz) < 0.12 * H); return nb.length ? nb.reduce((s2, p) => s2 + Math.hypot(p[0] - cx, p[1] - cy), 0) / nb.length : null; };
@@ -4618,6 +4646,9 @@ window.__camScreen = name => {
       const levels = H > 60 ? [0.98, 0.66, 0.33] : H > 30 ? [0.98, 0.5] : [0.98];   // feux d'obstacle a plusieurs niveaux (vus sur la frame)
       for (const f of levels) { const zz = z0 + f * H, rr = rb + (rt - rb) * f + 0.35; for (let k = 0; k < 4; k++) { const a = k * Math.PI / 2 + 0.4; lamps.push(new V3(cx + rr * Math.cos(a), cy + rr * Math.sin(a), zz)); } }
       if (/USSM/.test(n)) smokers.push({ x: cx, y: cy, z: z1, r: rt });
+      else if (/Flare Stack/.test(n)) flares.push({ x: cx, y: cy, z: z1, r: rt });
+      else if (/Refinery \(Stacks\)/.test(n)) smokers.push({ x: cx, y: cy, z: z1, r: rt, dark: 0.85 });            // fumee sombre (Port Gellhorn Postcard)
+      else if (/Paper Mill \(Stacks\)/.test(n) && H > 40) smokers.push({ x: cx, y: cy, z: z1, r: rt, steam: true });   // panache blanc de vapeur
     }
     if (shafts.length) {
       add(merge(shafts), stdMat(0x3a3836, 0.85, 0.05, 0.5));
@@ -4639,6 +4670,19 @@ window.__camScreen = name => {
     for (let i = 0; i < smokers.length * PUFF; i++) ages.push((i % PUFF) / PUFF * 60 + Math.random() * 2);
     smoke.frustumCulled = false; smoke.renderOrder = 5; smoke.name = 'stack-smoke'; grp.add(smoke);
   }
+  // [PORT-GELLHORN-V2] torche: flamme = 3 panneaux additifs face camera (coeur jaune, flamme orange, halo), vacillement + lumiere la nuit
+  let flame = null; const FL = 3, flameLights = [];
+  if (flares.length) {
+    const cv = document.createElement('canvas'); cv.width = 64; cv.height = 128; const x = cv.getContext('2d');
+    const gr = x.createRadialGradient(32, 92, 2, 32, 70, 60); gr.addColorStop(0, 'rgba(255,255,255,1)'); gr.addColorStop(0.35, 'rgba(255,255,255,0.75)'); gr.addColorStop(1, 'rgba(255,255,255,0)');
+    x.fillStyle = gr; x.beginPath(); x.ellipse(32, 72, 26, 56, 0, 0, Math.PI * 2); x.fill();
+    const fm = new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(cv), transparent: true, depthWrite: false, blending: THREE.AdditiveBlending, color: 0xffffff }); fm.toneMapped = false;
+    flame = new THREE.InstancedMesh(new THREE.PlaneGeometry(1, 2), fm, flares.length * FL);
+    flame.instanceColor = new THREE.InstancedBufferAttribute(new Float32Array(flares.length * FL * 3), 3);
+    flame.frustumCulled = false; flame.renderOrder = 6; flame.name = 'flare-flame'; grp.add(flame);
+    for (const f0 of flares) { const L_ = new THREE.PointLight(0xff8a30, 0, 420, 1.6); L_.position.set(f0.x, f0.y, f0.z + 6); grp.add(L_); flameLights.push(L_); }
+  }
+  let _ft = 0;
   const WIND = new V3(-0.8, 0.35, 0).normalize();
   const qc = new THREE.Quaternion(), sc = new V3(), pp = new V3();
 
@@ -4761,12 +4805,27 @@ window.__camScreen = name => {
         const f = a / 60, size = s0.r * 2.2 + f * 38;
         pp.set(s0.x + WIND.x * a * 3.2 + Math.sin(i * 1.7 + a * 0.2) * 2, s0.y + WIND.y * a * 3.2 + Math.cos(i * 2.3 + a * 0.15) * 2, s0.z + 2 + a * 0.9 * (1 - 0.5 * f));
         sc.set(size, size, size); m4.compose(pp, qc, sc); smoke.setMatrixAt(i, m4);
-        const g = (0.10 + 0.32 * f) * (1 - 0.72 * nt); smoke.instanceColor.setXYZ(i, g, g * 0.98, g * 0.95);   // fumee noire, plus sombre la nuit (Ambrosia 02)
+        const g = s0.steam ? (0.78 + 0.17 * f) * (1 - 0.6 * nt) : (0.10 + 0.32 * f) * (1 - 0.72 * nt) * (s0.dark || 1);   // fumee noire (Ambrosia 02) / vapeur blanche
+        smoke.instanceColor.setXYZ(i, g, g * 0.98, g * 0.95);
       }
       smoke.instanceMatrix.needsUpdate = true; smoke.instanceColor.needsUpdate = true;
     }
+    if (flame && grp.visible) {
+      _ft += dt; qc.copy(camera.quaternion); let i = 0;
+      const COL = [[1.0, 0.93, 0.62], [1.0, 0.55, 0.12], [0.9, 0.28, 0.05]], SZ = [3.2, 6.0, 11.0];
+      flares.forEach((f0, j) => {
+        const fl = 0.75 + 0.25 * Math.sin(_ft * 13.0 + j) * Math.sin(_ft * 7.3 + 1.1 * j) + 0.12 * Math.sin(_ft * 29.0);
+        for (let k = 0; k < FL; k++, i++) {
+          const s_ = SZ[k] * (0.85 + 0.3 * fl);
+          pp.set(f0.x + WIND.x * k * 1.5, f0.y + WIND.y * k * 1.5, f0.z + s_ * 0.9); sc.set(s_, s_, s_); m4.compose(pp, qc, sc); flame.setMatrixAt(i, m4);
+          const b = (k === 2 ? 0.35 + 0.65 * nt : 1.0) * fl; flame.instanceColor.setXYZ(i, COL[k][0] * b, COL[k][1] * b, COL[k][2] * b);
+        }
+        flameLights[j].intensity = 2500 * nt * fl;
+      });
+      flame.instanceMatrix.needsUpdate = true; flame.instanceColor.needsUpdate = true;
+    }
   };
-  window.__structs = Object.assign(window.__structs || {}, { wheel: !!wn, smokers: smokers.length });
+  window.__structs = Object.assign(window.__structs || {}, { wheel: !!wn, smokers: smokers.length, flares: flares.length });
 })();
 
 // ── [PALMS-V1 2026-10-05] palmiers instancies, places d'apres la carte drapee (V16) ──
