@@ -6806,20 +6806,20 @@
   "era": "2026",
   "id": "T4/46",
   "xyz": [
-   2185.73,
-   126.89,
-   60.96
+   2084.94,
+   226.39,
+   47.13
   ],
   "ypr": [
-   37.59,
-   -6.14,
+   35.52,
+   -6.7,
    0.0
   ],
   "fov": [
-   40.24,
+   50.05,
    null
   ],
-  "source": "Trailer 4 (launch trailer, 2026) - Vice Beach at Night: dusk view from above the South Pointe beach looking NW up Shore Dr (Ocean Drive): Lummus-style park and beach in the foreground, lit art-deco hotels (Cortez, Boulevard, Breakwater, \"Hotel Dixon\" sign = Hotel Victor), Old City Hall lit crown, Flamingo South Beach tower behind, Mid-Beach towers on the right.",
-  "notes": "SOLVE 2026-10-17: least squares on 6 roof/sign points: Old City Hall crown (1260,487), Flamingo South Beach top (1170,205), Hotel Victor sign tower (3560,615), Cortez Hotel roof (1418,965), Boulevard Hotel sign (1716,975), Hotel Breakwater sign (2875,800). RMS 25 px at 3840 (mostly mesh-height uncertainty of the low hotels), position sd ~40 m, height sd ~6 m. The downtown skyline is NOT in the frame, which rules out a westward view; Flamingo left of the City Hall crown puts the camera on the SE extension of the Flamingo-City Hall line. Yanis map marker T4/46 (eyeballed, ~(2113, 212), on the beach) lies on the same view axis ~110 m closer; the fit lands there (2127, 189, z 53, fov 45.6) only if the Hotel Breakwater anchor is dropped, which then misses the blue vertical fin + orange bands of the Breakwater by 121 px, so the Breakwater-consistent pose is kept."
+  "source": "Trailer 4 (launch trailer, 2026) - Vice Beach at Night: dusk view from above the South Pointe beach looking NW up Shore Dr (Ocean Drive): Lummus-style park and beach in the foreground, lit art-deco hotels (Cortez, Boulevard, Breakwater, \"Hotel Dixon\" sign = Hotel Victor), Old City Hall lit crown, Flamingo South Beach tower behind, Akoya and Jade Ocean (North Vice Beach) on the right edge.",
+  "notes": "REFIT 2026-10-17 V2 (Alexandre: the North Vice Beach towers must be in the frame - Akoya and the tall one = Jade Ocean - and V1 was off the relief): least squares on silhouette edges and roofs: Council Towers North left/right/top (360, 1080, 430), Akoya left/right/top (3516, 3648, 288), Jade Ocean left/top (3725, 160), Flamingo South Beach tallest roof (1172, 205), Old City Hall crown (1260, 487), Hotel Victor sign tower (3560, 615, loose). All residuals within their sigmas (chi 0.9; max 24 px = Akoya top), position sd ~7 m, z sd 1.6 m, yaw 0.3 deg, fov 0.6 deg. Pose moved from V1 (2185.73, 126.89, 60.96) ypr (37.59, -6.14) fov 40.24, which left Akoya/Jade ~4 deg outside the right edge and leaned on a vertical sign wrongly read as the Hotel Breakwater fin. Yanis map marker T4/46 (eyeballed) is ~30 m SE of this pose."
  }
 }
