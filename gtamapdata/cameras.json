@@ -6833,20 +6833,20 @@
   "era": "2026",
   "id": "T4/41",
   "xyz": [
-   -680.39,
-   416.7,
-   285.49
+   -862.89,
+   252.54,
+   378.75
   ],
   "ypr": [
-   -58.8,
-   -15.97,
-   -18.84
+   -58.06,
+   -16.25,
+   -19.26
   ],
   "fov": [
-   67.39,
+   62.75,
    null
   ],
   "source": "Trailer 4 (launch trailer, 2026) - Jason in a Helicopter: night, Jason on the skid of a helicopter banking over Bayside/Edgewater, looking NE across Biscayne Bay at Vice Beach; Akoya, Jade Ocean and the Blue/Green Diamond towers on the far shore, the Arsht-style Galina Ballet Opera House and Knight Concert Hall (lit striped roofs, Catalan Blvd between them) below, I-404 lights at the bottom.",
-  "notes": "REFIT 2026-10-17 V2 (Alexandre circled the Galina Ballet Opera House and the Knight Concert Hall roofs in the frame): Galina (731,1472), Knight (1227,1387) (sigma 25) + Jade Ocean / Akoya / Green Diamond / Blue Diamond roof lights (sigma 8): single solution (-680.39, 416.7, 285.49) ypr (-58.8, -15.97, -18.84) fov 67.39, all residuals <= 16 px (chi 0.35); the two near halls now fix the distance (V1 family degeneracy gone). Not used: the foreground tower meshes (Opera Tower / The Grand / Marriott) and the I-404 light band, which disagree (unverified). | PROVISIONAL 2026-10-17 (Alexandre: area west of Catalan Blvd / I-404, Akoya + Jade in the background; Galina and Knight Concert Hall with the gap between them; the major road at the bottom): least squares on the roof tops of Jade Ocean (1607,71), Akoya (1421,66), Green Diamond (1975,263), Blue Diamond (2053,290) (aviation lights, sigma 8 px) + Galina roof (630,1470) and Knight Concert Hall roof (1190,1410) (sigma 30-35): all within 1 sigma (Knight 23/-40 px). Strong roll -18.9 deg (banking). Weak: the distance along the Galina/Knight ray (the solution family runs from (-700,350,320) to (-850,150,500)); the foreground towers (Opera Tower / The Grand / Marriott / 1800 Club meshes) do not agree with Galina (adding their red lights moves Galina by 180 px) - their identification or meshes are unverified."
+  "notes": "REFIT 2026-10-17 V3 (Alexandre labelled Opera / The Grand / Marriott in the foreground, then approved the overlay: \"OUIIII\"): roof centres Opera Tower (717,440), The Grand (960,455), Marriott Miami Biscayne Bay (1196,730) (sigma 25-30; these meshes are multi-cam verified) + Jade Ocean / Akoya / Green Diamond / Blue Diamond roof lights (sigma 8) + Galina / Knight Concert Hall (sigma 80: both meshes are whole-lot extrusions, their lit terraced roofs are not the lot centroid): (-862.89, 252.54, 378.75) ypr (-58.06, -16.25, -19.26) fov 62.75; far towers <= 8 px, foreground towers <= 62 px, Galina/Knight 110-190 px (mesh limits). Position sd ~45 m, z ~20 m. V2 (halls only): (-680.39, 416.7, 285.49) ypr (-58.8, -15.97, -18.84) fov 67.39. | REFIT 2026-10-17 V2 (Alexandre circled the Galina Ballet Opera House and the Knight Concert Hall roofs in the frame): Galina (731,1472), Knight (1227,1387) (sigma 25) + Jade Ocean / Akoya / Green Diamond / Blue Diamond roof lights (sigma 8): single solution (-680.39, 416.7, 285.49) ypr (-58.8, -15.97, -18.84) fov 67.39, all residuals <= 16 px (chi 0.35); the two near halls now fix the distance (V1 family degeneracy gone). Not used: the foreground tower meshes (Opera Tower / The Grand / Marriott) and the I-404 light band, which disagree (unverified). | PROVISIONAL 2026-10-17 (Alexandre: area west of Catalan Blvd / I-404, Akoya + Jade in the background; Galina and Knight Concert Hall with the gap between them; the major road at the bottom): least squares on the roof tops of Jade Ocean (1607,71), Akoya (1421,66), Green Diamond (1975,263), Blue Diamond (2053,290) (aviation lights, sigma 8 px) + Galina roof (630,1470) and Knight Concert Hall roof (1190,1410) (sigma 30-35): all within 1 sigma (Knight 23/-40 px). Strong roll -18.9 deg (banking). Weak: the distance along the Galina/Knight ray (the solution family runs from (-700,350,320) to (-850,150,500)); the foreground towers (Opera Tower / The Grand / Marriott / 1800 Club meshes) do not agree with Galina (adding their red lights moves Galina by 180 px) - their identification or meshes are unverified."
  }
 }
