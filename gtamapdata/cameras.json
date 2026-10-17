@@ -6806,20 +6806,20 @@
   "era": "2026",
   "id": "T4/46",
   "xyz": [
-   2082.98,
-   237.13,
-   52.13
+   2086.14,
+   237.73,
+   50.87
   ],
   "ypr": [
-   36.01,
-   -7.48,
+   35.88,
+   -7.22,
    0.0
   ],
   "fov": [
-   51.4,
+   51.07,
    null
   ],
   "source": "Trailer 4 (launch trailer, 2026) - Vice Beach at Night: dusk view from above the South Pointe beach looking NW up Shore Dr (Ocean Drive): Lummus-style park and beach in the foreground, lit art-deco hotels (Cortez, Boulevard, Breakwater, \"Hotel Dixon\" sign = Hotel Victor), Old City Hall lit crown, Flamingo South Beach tower behind, Akoya and Jade Ocean (North Vice Beach) on the right edge.",
-  "notes": "RELIEF-FIX 2026-10-17 V3 (Alexandre, 3D view: the terrain needs pitch -0.78 deg vs V2 to line up): pitch fixed at -7.48, x, y, z, yaw, fov refitted on the same 11 silhouette/roof observations: (2082.98, 237.13, 52.13) yaw 36.01 fov 51.4, chi 1.51 (residuals <= 37 px at 3840: Council Towers N top +37, Hotel Victor +37, Jade Ocean -28). V2 pose (buildings only, chi 0.9): (2084.94, 226.39, 47.13) ypr (35.52, -6.70) fov 50.05. | REFIT 2026-10-17 V2 (Alexandre: the North Vice Beach towers must be in the frame - Akoya and the tall one = Jade Ocean - and V1 was off the relief): least squares on silhouette edges and roofs: Council Towers North left/right/top (360, 1080, 430), Akoya left/right/top (3516, 3648, 288), Jade Ocean left/top (3725, 160), Flamingo South Beach tallest roof (1172, 205), Old City Hall crown (1260, 487), Hotel Victor sign tower (3560, 615, loose). All residuals within their sigmas (chi 0.9; max 24 px = Akoya top), position sd ~7 m, z sd 1.6 m, yaw 0.3 deg, fov 0.6 deg. Pose moved from V1 (2185.73, 126.89, 60.96) ypr (37.59, -6.14) fov 40.24, which left Akoya/Jade ~4 deg outside the right edge and leaned on a vertical sign wrongly read as the Hotel Breakwater fin. Yanis map marker T4/46 (eyeballed) is ~30 m SE of this pose."
+  "notes": "RELIEF-FIT 2026-10-17 V4 (Alexandre: the terrain lines up with an extra yaw -1.03 / pitch -0.17 in the 3D view, but then the rest stops fitting): a rotation alone cannot fit both, so the position was refitted. 273 ground points of the terrain as aligned by Alexandre (V3 position, yaw 34.98, pitch -7.65, fov 51.4; ground at z 2) + the far tower observations (Flamingo South Beach roof, Old City Hall crown, Akoya L/R/top, Jade Ocean L/top, Council Towers North top), solved together: (2086.14, 237.73, 50.87) yaw 35.88 pitch -7.22 fov 51.07. Ground median 16 px (max 48) vs 75 px for V3; towers <= 31 px. Not used, kept as checks: Council Towers North left/right (-80/-67 px: that mesh fills the whole V16 lot, wider than the building) and the sign tower read as Hotel Victor (-104 px: identification doubtful). | RELIEF-FIX 2026-10-17 V3 (Alexandre, 3D view: the terrain needs pitch -0.78 deg vs V2 to line up): pitch fixed at -7.48, x, y, z, yaw, fov refitted on the same 11 silhouette/roof observations: (2082.98, 237.13, 52.13) yaw 36.01 fov 51.4, chi 1.51 (residuals <= 37 px at 3840: Council Towers N top +37, Hotel Victor +37, Jade Ocean -28). V2 pose (buildings only, chi 0.9): (2084.94, 226.39, 47.13) ypr (35.52, -6.70) fov 50.05. | REFIT 2026-10-17 V2 (Alexandre: the North Vice Beach towers must be in the frame - Akoya and the tall one = Jade Ocean - and V1 was off the relief): least squares on silhouette edges and roofs: Council Towers North left/right/top (360, 1080, 430), Akoya left/right/top (3516, 3648, 288), Jade Ocean left/top (3725, 160), Flamingo South Beach tallest roof (1172, 205), Old City Hall crown (1260, 487), Hotel Victor sign tower (3560, 615, loose). All residuals within their sigmas (chi 0.9; max 24 px = Akoya top), position sd ~7 m, z sd 1.6 m, yaw 0.3 deg, fov 0.6 deg. Pose moved from V1 (2185.73, 126.89, 60.96) ypr (37.59, -6.14) fov 40.24, which left Akoya/Jade ~4 deg outside the right edge and leaned on a vertical sign wrongly read as the Hotel Breakwater fin. Yanis map marker T4/46 (eyeballed) is ~30 m SE of this pose."
  }
 }
