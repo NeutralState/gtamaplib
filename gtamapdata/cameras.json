@@ -6848,5 +6848,32 @@
   ],
   "source": "Trailer 4 (launch trailer, 2026) - Jason in a Helicopter: night, Jason on the skid of a helicopter banking over Bayside/Edgewater, looking NE across Biscayne Bay at Vice Beach; Akoya, Jade Ocean and the Blue/Green Diamond towers on the far shore, the Arsht-style Galina Ballet Opera House and Knight Concert Hall (lit striped roofs, Catalan Blvd between them) below, I-404 lights at the bottom.",
   "notes": "REFIT 2026-10-17 V3 (Alexandre labelled Opera / The Grand / Marriott in the foreground, then approved the overlay: \"OUIIII\"): roof centres Opera Tower (717,440), The Grand (960,455), Marriott Miami Biscayne Bay (1196,730) (sigma 25-30; these meshes are multi-cam verified) + Jade Ocean / Akoya / Green Diamond / Blue Diamond roof lights (sigma 8) + Galina / Knight Concert Hall (sigma 80: both meshes are whole-lot extrusions, their lit terraced roofs are not the lot centroid): (-862.89, 252.54, 378.75) ypr (-58.06, -16.25, -19.26) fov 62.75; far towers <= 8 px, foreground towers <= 62 px, Galina/Knight 110-190 px (mesh limits). Position sd ~45 m, z ~20 m. V2 (halls only): (-680.39, 416.7, 285.49) ypr (-58.8, -15.97, -18.84) fov 67.39. | REFIT 2026-10-17 V2 (Alexandre circled the Galina Ballet Opera House and the Knight Concert Hall roofs in the frame): Galina (731,1472), Knight (1227,1387) (sigma 25) + Jade Ocean / Akoya / Green Diamond / Blue Diamond roof lights (sigma 8): single solution (-680.39, 416.7, 285.49) ypr (-58.8, -15.97, -18.84) fov 67.39, all residuals <= 16 px (chi 0.35); the two near halls now fix the distance (V1 family degeneracy gone). Not used: the foreground tower meshes (Opera Tower / The Grand / Marriott) and the I-404 light band, which disagree (unverified). | PROVISIONAL 2026-10-17 (Alexandre: area west of Catalan Blvd / I-404, Akoya + Jade in the background; Galina and Knight Concert Hall with the gap between them; the major road at the bottom): least squares on the roof tops of Jade Ocean (1607,71), Akoya (1421,66), Green Diamond (1975,263), Blue Diamond (2053,290) (aviation lights, sigma 8 px) + Galina roof (630,1470) and Knight Concert Hall roof (1190,1410) (sigma 30-35): all within 1 sigma (Knight 23/-40 px). Strong roll -18.9 deg (banking). Weak: the distance along the Galina/Knight ray (the solution family runs from (-700,350,320) to (-850,150,500)); the foreground towers (Opera Tower / The Grand / Marriott / 1800 Club meshes) do not agree with Galina (adding their red lights moves Galina by 180 px) - their identification or meshes are unverified."
+ },
+ "Runway (T4)": {
+  "player": null,
+  "size": [
+   3840,
+   1920
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "era": "2026",
+  "id": "T4/20",
+  "xyz": [
+   -2935.3,
+   -962.71,
+   7.31
+  ],
+  "ypr": [
+   -99.358,
+   -0.273,
+   0.0
+  ],
+  "fov": [
+   60.631,
+   null
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - Runway: low camera under a jet taking off on the south (NW-SE) runway of Vice City International Airport, a pickup with a woman on its hood racing beside the landing gear, police cars behind, low sun on the left; Brickell skyline (Four Seasons tower) ahead, Coconut Grove towers on the right through the gear.",
+  "notes": "SOLVE 2026-10-17 (Alexandre: south runway of VCIA, wants more precision than the eyeballed placement). Camera constrained to the runway: V16 centreline from (-3590.3, -549.2) bearing 122.15 deg (45 m wide), 2 m above the game heightmap (ground 5.3). Fitted together: (1) skyline: 16 tower tops read on a contrast-enhanced crop (Four Seasons 1878/565, Brickell Arch 1630/695, One Broadway-1450 Brickell 2090/680, Infinity 2200/640, left Brickell cluster 1145-1500/695-720, Ritz-Carlton / Park Grove Coconut Grove 3112-3605/765-800) + 3 sky gaps, vs the max elevation of all mesh edges per azimuth; (2) runway vanishing point u 3300 (pavement joint line (1400,1775)-(2350,1360), parallel to the runway); (3) horizon v 945 (far ground line). Result: 0.27 deg down, hfov 60.6, heading 99.4 deg (21 deg left of the runway axis), position 775 m from the NW threshold, 1.6 m south of the centreline; tower residuals <= 20 px except towers absent from the meshes. Along-runway uncertainty ~+-75 m (cost plateau 700-850 m; skyline is ~2 km away), lateral ~+-10 m. Grass islands of the V16 tried as a ground constraint: shapes differ from the game, not used."
  }
 }
