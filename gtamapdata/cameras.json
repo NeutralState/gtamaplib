@@ -6821,5 +6821,32 @@
   ],
   "source": "Trailer 4 (launch trailer, 2026) - Vice Beach at Night: dusk view from above the South Pointe beach looking NW up Shore Dr (Ocean Drive): Lummus-style park and beach in the foreground, lit art-deco hotels (Cortez, Boulevard, Breakwater, \"Hotel Dixon\" sign = Hotel Victor), Old City Hall lit crown, Flamingo South Beach tower behind, Akoya and Jade Ocean (North Vice Beach) on the right edge.",
   "notes": "BEACH-FIT 2026-10-17 V5 (Alexandre: \"fit aussi le relief de la plage\"): the sand of the beach/park was segmented in the frame (night sand is purple-grey, B > 30 and B - G > 5; vegetation G >= B) and compared with the V16 sand/vegetation classes draped on the game heightmap (/api/terrain3d hd, dune ridge 5.5 m, beach 3.5 m); jointly fitted with the far-tower observations (Nelder-Mead): (2101.7, 204.66, 46.8) yaw 35.41 pitch -6.54 fov 49.17. Sand mismatch 0.40 -> 0.24 (mse of the soft mask), towers chi 1.58 -> 0.99 (<= 26 px: Akoya top). This departs from the 3D-view slider tweak of V4 (pitch -7.22): with the true heightmap (not flat z 2) the beach and the towers agree on a pose 35 m further SE and 4 m lower. | RELIEF-FIT 2026-10-17 V4 (Alexandre: the terrain lines up with an extra yaw -1.03 / pitch -0.17 in the 3D view, but then the rest stops fitting): a rotation alone cannot fit both, so the position was refitted. 273 ground points of the terrain as aligned by Alexandre (V3 position, yaw 34.98, pitch -7.65, fov 51.4; ground at z 2) + the far tower observations (Flamingo South Beach roof, Old City Hall crown, Akoya L/R/top, Jade Ocean L/top, Council Towers North top), solved together: (2086.14, 237.73, 50.87) yaw 35.88 pitch -7.22 fov 51.07. Ground median 16 px (max 48) vs 75 px for V3; towers <= 31 px. Not used, kept as checks: Council Towers North left/right (-80/-67 px: that mesh fills the whole V16 lot, wider than the building) and the sign tower read as Hotel Victor (-104 px: identification doubtful). | RELIEF-FIX 2026-10-17 V3 (Alexandre, 3D view: the terrain needs pitch -0.78 deg vs V2 to line up): pitch fixed at -7.48, x, y, z, yaw, fov refitted on the same 11 silhouette/roof observations: (2082.98, 237.13, 52.13) yaw 36.01 fov 51.4, chi 1.51 (residuals <= 37 px at 3840: Council Towers N top +37, Hotel Victor +37, Jade Ocean -28). V2 pose (buildings only, chi 0.9): (2084.94, 226.39, 47.13) ypr (35.52, -6.70) fov 50.05. | REFIT 2026-10-17 V2 (Alexandre: the North Vice Beach towers must be in the frame - Akoya and the tall one = Jade Ocean - and V1 was off the relief): least squares on silhouette edges and roofs: Council Towers North left/right/top (360, 1080, 430), Akoya left/right/top (3516, 3648, 288), Jade Ocean left/top (3725, 160), Flamingo South Beach tallest roof (1172, 205), Old City Hall crown (1260, 487), Hotel Victor sign tower (3560, 615, loose). All residuals within their sigmas (chi 0.9; max 24 px = Akoya top), position sd ~7 m, z sd 1.6 m, yaw 0.3 deg, fov 0.6 deg. Pose moved from V1 (2185.73, 126.89, 60.96) ypr (37.59, -6.14) fov 40.24, which left Akoya/Jade ~4 deg outside the right edge and leaned on a vertical sign wrongly read as the Hotel Breakwater fin. Yanis map marker T4/46 (eyeballed) is ~30 m SE of this pose."
+ },
+ "Jason in a Helicopter (T4)": {
+  "player": null,
+  "size": [
+   3840,
+   1920
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "era": "2026",
+  "id": "T4/41",
+  "xyz": [
+   -649.28,
+   435.34,
+   268.54
+  ],
+  "ypr": [
+   -58.8,
+   -15.84,
+   -18.88
+  ],
+  "fov": [
+   68.05,
+   null
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - Jason in a Helicopter: night, Jason on the skid of a helicopter banking over Bayside/Edgewater, looking NE across Biscayne Bay at Vice Beach; Akoya, Jade Ocean and the Blue/Green Diamond towers on the far shore, the Arsht-style Galina Ballet Opera House and Knight Concert Hall (lit striped roofs, Catalan Blvd between them) below, I-404 lights at the bottom.",
+  "notes": "PROVISIONAL 2026-10-17 (Alexandre: area west of Catalan Blvd / I-404, Akoya + Jade in the background; Galina and Knight Concert Hall with the gap between them; the major road at the bottom): least squares on the roof tops of Jade Ocean (1607,71), Akoya (1421,66), Green Diamond (1975,263), Blue Diamond (2053,290) (aviation lights, sigma 8 px) + Galina roof (630,1470) and Knight Concert Hall roof (1190,1410) (sigma 30-35): all within 1 sigma (Knight 23/-40 px). Strong roll -18.9 deg (banking). Weak: the distance along the Galina/Knight ray (the solution family runs from (-700,350,320) to (-850,150,500)); the foreground towers (Opera Tower / The Grand / Marriott / 1800 Club meshes) do not agree with Galina (adding their red lights moves Galina by 180 px) - their identification or meshes are unverified."
  }
 }
