@@ -116,6 +116,18 @@ SPEC = {
     '1800 Club': {'poly': 2718, 'color': '#93c5fd', 'groups': [([0, 1], 152.0), ([2], 157.0), ([3], 150.0)], 'vault': ([0, 1], 6.3, (0.29, -0.96)), 'drum': ([3], 6.5),
         'src': 'plan V16 2718 (4 volumes); hauteurs LUES dans Rialto Causeway with Raul (1) (pose V4, 4.3 px/m): toit cintre de la dalle 152 -> 159.5 (LM 1800 Club 159.5), '
                'tour ronde 150 + edicule 156.5, aile sud 157'},
+    # [ARSHT-V1 2026-10-17, Alexandre: "refais les meshes de Galina et Knight Concert Hall"] the GTADB-MESH-V1 versions extruded the whole V16
+    # lot to the IRL height; in Jason in a Helicopter (T4/41) both roofs are lit terraced fans. Volumes = V16 interior strokes; the arc
+    # (2704 region 4 = pedestrian bridge over Catalan Blvd) is not a building and is left out. Ground ~2.8-3.0 m.
+    'Galina Ballet Opera House': {'poly': 2704, 'color': '#e7e5e4', 'groups': [([5], 50.8), ([3], 40.0), ([6], 42.5), ([2], 31.0), ([1], 22.0), ([7], 14.0),
+                                                                              ([0], 24.0), ([11], 14.0), ([9, 10], 18.0)],
+        'src': 'IRL Adrienne Arsht Center (Ziff Ballet Opera House); main hall / fly tower (region 5) 50.8 = ground + 48.0 m IRL (OSM); the three nested '
+               'west terraces of the V16 (regions 1, 2, 3 + skylight 6) stepped 22 / 31 / 40 (+2.5) m ESTIMATED from the lit terraced roof seen in T4/41; '
+               'north block (0) 24 m, south wing (11) and band (7) 14 m, octagonal rotunda (9, 10) 18 m ESTIMATED; the arc bridge (region 4) left out'},
+    'Knight Concert Hall': {'poly': 2702, 'color': '#e7e5e4', 'groups': [([2], 49.4), ([8], 53.0), ([1], 40.0), ([4], 36.0), ([0], 30.0), ([3], 32.0), ([6], 24.0),
+                                                                        ([5], 18.0), ([7], 14.0)],
+        'src': 'IRL Knight Concert Hall; hall (region 2) 49.4 = ground + 46.4 m IRL (OSM), roof box (8) +3.6 m; the west bands (3, 6, 5) stepped 32 / 24 / 18 m '
+               'and the east bands (1, 4) 40 / 36 m ESTIMATED from the lit terraced roof seen in T4/41; north block (0) 30 m and south band (7) 14 m ESTIMATED'},
     'The Floridian': {'poly': 3606, 'color': '#fcd34d', 'wedge': ('Speaking with Brian at Effluvia (3)', 1514, 1640), 'groups': [([0], 98.5)],
         'src': 'tour = parcelle V16 3606 restreinte au secteur vu dans Effluvia (3) (x 1514-1640); toit 98.5 m LU (LM The Floridian 96.5)'},
 }
