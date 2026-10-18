@@ -55,17 +55,17 @@
   "id": "L1/3",
   "player": null,
   "xyz": [
-   -234.093,
-   -278.617,
-   9.323
+   -264.7,
+   -218.9,
+   8.1
   ],
   "ypr": [
-   259.288,
-   -12.635,
-   1.289
+   257.42,
+   -12.46,
+   1.37
   ],
   "fov": [
-   63.311,
+   62.62,
    null
   ],
   "size": [
@@ -74,13 +74,12 @@
   ],
   "source": "2021-07-09 15-18-02 [1]",
   "constraint_class": "D_no_ground_truth",
-  "notes": "AMPHI 2026-09-04: clic 'Continuum (S)' re-etiquete (N) (tour 32 px a gauche du tooltip S = tour nord); grues 6 et 7-ambigu exclues (les grues visibles sont 2x plus rapprochees que les 9 tooltips: etiquetage indecidable d'ici); orientation re-resolue a position fixe (tooltip Alexandre): mediane 5.3->4.7 px, Portofino <1 px. | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | POSITION ALEXANDRE 2026-09-02: x,y = tooltip (-244.2,-244.8), sol 3.4, estrades -> z = sol+8 = 11.4 (les 8 clics sont a 1.4-2.2 km et ne contraignent pas z: residu plat de +2 a +25 m, a ajuster au slider si besoin). Orientation+fov re-solves: mediane 9.5 px, max 15. Ancienne pose (-367.9,-151.8,-9.6) etait sous le sol. Backup cameras.json.bak_amphi_0902 | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 18.8 m), residu mediane 4.7->3.5 px | ",
-  "pose_verified": null,
-  "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +11.4 -38.2 -1.8 m, d(ypr) +1.32 +0.21 -0.16 deg, dfov -0.30; edges 8.91 -> 2.86 sigma, landmark RMS 12.69' -> 12.77' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +3.2 -5.7 +0.9 m, d(ypr) +0.13 -0.16 -0.04 deg, dfov +0.39; edges 5.09 -> 3.25 sigma, landmark RMS 12.77' -> 13.24' | MVS-GUARD 2026-10-10: pose REVERTED to before MVS - cumulative drift 46.3 m (limit 40 m). | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +10.1 -33.8 -2.1 m, d(ypr) +1.11 +0.10 -0.25 deg, dfov +0.08; edges 6.18 -> 1.84 sigma, landmark RMS 12.69' -> 12.4'",
+  "notes": "AMPHI-V3 2026-10-18 (Alexandre: \"solve once and for all\"): the 10 marks are all 1.4-2.2 km away -> they fix the ORIENTATION (far rms ~5 px at 1920; position-flat over +-100 m) but not the position, which is why the bundle had dragged the camera 34 m south of the bowl. Position: (1) the round stage (deck ellipse centre, pixel 1280/265) is at bearing 114.2 deg from the camera = the line through the V17 bowl centre (-223.7, -237.3); (2) Alexandre's X placed in Vice City 11 (Megamundo) where Jason stands, ray-cast to the ground = (-272, -216), lies 0.3 m from that line; (3) distance along the line: Jason scale (1.8 m, 5.7 m away) gives the camera 2.0 m above the concourse, the nearest seat row (pitch 0.53 m) is 6.9 m away -> camera on the outer concourse just behind the V17 outer row (r1 38.5 m) -> 45 m from the bowl centre (range 36 m from the stage-wall distance to 53 m at Alexandre's X). Pose (-264.7, -218.9, 8.1) ypr (257.42, -12.46, 1.37) hfov 62.62; locked SOLVED so the solvers keep it. Previous pose [-234.093, -278.617, 9.323] ypr [259.288, -12.635, 1.289] fov [63.311, None]. | AMPHI 2026-09-04: clic 'Continuum (S)' re-etiquete (N) (tour 32 px a gauche du tooltip S = tour nord); grues 6 et 7-ambigu exclues (les grues visibles sont 2x plus rapprochees que les 9 tooltips: etiquetage indecidable d'ici); orientation re-resolue a position fixe (tooltip Alexandre): mediane 5.3->4.7 px, Portofino <1 px. | BA-DOWNTOWN-4 2026-09-03 (bundle zone; ancres tooltips xy \u03c30.5 m z libre: Portofino x3, grues x9, Port J-K, Continuum S; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-3 2026-09-03 (bundle zone + tooltips figes: 3 pics Portofino + 9 grues du port, ponderes x3; 30 coins V16 \u03c32.5 m; classes HUD respectees) | BA-DOWNTOWN-2 2026-09-03 (bundle zone + 3 pics Portofino tooltips figes/ponderes x3 + 30 coins V16 \u03c32.5 m) | POSITION ALEXANDRE 2026-09-02: x,y = tooltip (-244.2,-244.8), sol 3.4, estrades -> z = sol+8 = 11.4 (les 8 clics sont a 1.4-2.2 km et ne contraignent pas z: residu plat de +2 a +25 m, a ajuster au slider si besoin). Orientation+fov re-solves: mediane 9.5 px, max 15. Ancienne pose (-367.9,-151.8,-9.6) etait sous le sol. Backup cameras.json.bak_amphi_0902 | BA-DOWNTOWN 2026-09-02 (bundle zone Vice City/Vice Beach: 231 landmarks, 23 cams libres, 24 coins V16 comme controle a 2.5 m, perte robuste): pose ajustee (deplacement 18.8 m), residu mediane 4.7->3.5 px | ",
+  "pose_verified": "SOLVED 2026-10-18 - stage-line solve (far-field orientation + round-stage bearing + bowl rim distance), user X from Vice City 11 on the same line (0.3 m)",
   "_mvs_origin": [
-   -244.2,
-   -244.8,
-   11.4
+   -264.7,
+   -218.9,
+   8.1
   ]
  },
  "Diner (NE)": {
