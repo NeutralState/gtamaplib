@@ -154,7 +154,7 @@
     <span class="lchip on" id="ly-cams" title="Camera frustums (color = confidence tier)">Cameras</span>
     <span class="lchip on" id="ly-lms" title="Triangulated landmarks (blue = z-constrained)">Landmarks</span></div>
   <div class="grp"><div class="sect">Base map</div>
-    <span class="lchip" id="ly-v16" title="YANIS V16 community map">YANIS V16</span>
+    <span class="lchip" id="ly-v16" title="YANIS V17 community map">YANIS V17</span>
     <span class="lchip" id="ly-leakmap" title="Full leak map (composite over yanis)">Leak map</span></div>
   <div class="grp"><div class="sect">Building colors</div>
     <span class="lchip btn" id="ly-scolor" title="Cycle: realistic facades / roof height / mesh color">Clay</span></div>
@@ -983,7 +983,7 @@ const data = await (await fetch('/api/scene3d')).json();
       const BANDS = [[8750, 9800], [-8700, -8450]];
       let mapWater = () => true;
       try {
-        const s0v = localStorage.getItem('ui.tileSrc') || 'yanis,16';
+        const s0v = localStorage.getItem('ui.tileSrc') || 'yanis,17';
         const srcQ = s0v !== 'yanis,14'
           ? `&src=${encodeURIComponent(s0v)}&v=${encodeURIComponent(s0v + '.8')}` : '';
         const strips = [];
@@ -1393,7 +1393,7 @@ const data = await (await fetch('/api/scene3d')).json();
       // terrain par uniform (uUseDrape bascule sans recompilation — la lecon
       // [DRAPE-MAT] reglee par construction).
       terraUni.uDrape.value = drapeTex;
-      let s0 = localStorage.getItem('ui.tileSrc') || 'yanis,16';
+      let s0 = localStorage.getItem('ui.tileSrc') || 'yanis,17';
       if (s0 === 'yanis') s0 = 'yanis,14'; if (s0 === 'leak') s0 = 'leak,1';
       const srcQ = s0 !== 'yanis,14' ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.8')}` : '';
       const t0x = Math.floor((16384 + x0) / MPX / 256), t1x = Math.floor((16384 + x1) / MPX / 256);
@@ -2550,11 +2550,12 @@ const ground = new THREE.Mesh(
   new THREE.MeshBasicMaterial({ map: gtex, color: 0x6e737f }));  // [STANDOUT-V1] sol assombri: frustums/meshes ressortent
 ground.position.set(groundCx, groundCy, -0.8);
 layers.ground.add(ground);
+(() => { try { if (!localStorage.getItem('ui.tileSrcV17')) { const c = localStorage.getItem('ui.tileSrc'); if (!c || c === 'yanis,16') localStorage.setItem('ui.tileSrc', 'yanis,17'); localStorage.setItem('ui.tileSrcV17', '1'); } } catch (e) {} })();   // [TILES-SRC-V17] one-time switch of the default basemap V16 -> V17
 // [LEAK-TILES-3D] meme bascule que calib (localStorage partage 'ui.tileSrc');
 // la pyramide leak,1 v3 est un composite leak-sur-yanis a bords adoucis.
 function loadGroundTiles() {
   // [TILE-SOURCES-V1] meme cle que calib; valeurs legacy migrees
-  let s0 = localStorage.getItem('ui.tileSrc') || 'yanis,16';
+  let s0 = localStorage.getItem('ui.tileSrc') || 'yanis,17';
   if (s0 === 'leak') s0 = 'leak,1';
   if (s0 === 'yanis') s0 = 'yanis,14';
   const src = s0 !== 'yanis,14'
@@ -2569,14 +2570,14 @@ function loadGroundTiles() {
   }
 }
 loadGroundTiles();
-// [BASEMAP-V16] trois sources exclusives: yanis,16 (defaut depuis 2026-09-13) / leak,1 / yanis,14
+// [BASEMAP-V16] trois sources exclusives: yanis,17 (defaut depuis 2026-10-18; yanis,16 avant) / leak,1 / yanis,14
 {
   const chipLeak = document.getElementById('ly-leakmap');
   const chipV16 = document.getElementById('ly-v16');
   const sync = () => {
-    const s = localStorage.getItem('ui.tileSrc') || 'yanis,16';
+    const s = localStorage.getItem('ui.tileSrc') || 'yanis,17';
     chipLeak.classList.toggle('on', s.startsWith('leak'));
-    chipV16.classList.toggle('on', s === 'yanis,16');
+    chipV16.classList.toggle('on', s === 'yanis,17');
   };
   const setSrc = src => {
     localStorage.setItem('ui.tileSrc', src);
@@ -2589,7 +2590,7 @@ loadGroundTiles();
   chipLeak.addEventListener('click', () =>
     setSrc(chipLeak.classList.contains('on') ? 'yanis,14' : 'leak,1'));
   chipV16.addEventListener('click', () =>
-    setSrc(chipV16.classList.contains('on') ? 'yanis,14' : 'yanis,16'));
+    setSrc(chipV16.classList.contains('on') ? 'yanis,14' : 'yanis,17'));
 }
 
 // ── [POSE-COPY] pose camera live (bas-gauche): vole jusqu'a repliquer une
@@ -3674,7 +3675,7 @@ window.__camScreen = name => {
   terraUni.uDetail.value = tex;
   let labels = []; fetch('/threejs/_v16_labels.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : []).then(L => { labels = L; }).catch(() => {});
   let cur = null, loading = 0;
-  const srcQ = () => { let s0 = localStorage.getItem('ui.tileSrc') || 'yanis,16'; if (s0 === 'yanis') s0 = 'yanis,14'; if (s0 === 'leak') s0 = 'leak,1'; return s0 !== 'yanis,14' ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.8')}` : ''; };
+  const srcQ = () => { let s0 = localStorage.getItem('ui.tileSrc') || 'yanis,17'; if (s0 === 'yanis') s0 = 'yanis,14'; if (s0 === 'leak') s0 = 'leak,1'; return s0 !== 'yanis,14' ? `&src=${encodeURIComponent(s0)}&v=${encodeURIComponent(s0 + '.8')}` : ''; };
   const inpaint = (x0, yTop) => {                        // meme effacement des libelles que la carte generale (pixels du texte seulement)
     for (const r of labels) {
       const X0 = Math.max(1, Math.floor((r[0] - x0) / MPX) - 1), X1 = Math.min(WIN - 2, Math.ceil((r[2] - x0) / MPX) + 1);

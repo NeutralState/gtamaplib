@@ -27,8 +27,9 @@ REPO_ROOT = os.path.dirname(TOOL_DIR)
 # (minimap cams, crop map des LMs, export): yanis,16 (V16 calquee sur la leak)
 # des que sa pyramide existe, sinon yanis,14. Override: GTAMAP_TILES_SRC=leak,1
 _TILES_ROOT = os.path.join(REPO_ROOT, 'vendor', 'gtadb.org', 'maps', 'tiles', '6')
-TILES_SRC = os.environ.get('GTAMAP_TILES_SRC') or (
-    'yanis,16' if os.path.isdir(os.path.join(_TILES_ROOT, 'yanis,16')) else 'yanis,14')
+# [TILES-SRC-V17, 2026-10-18] yanis,17 (gtadb, 1 m/px, z6 upsampled locally) first when present.
+TILES_SRC = os.environ.get('GTAMAP_TILES_SRC') or next(
+    (d for d in ('yanis,17', 'yanis,16') if os.path.isdir(os.path.join(_TILES_ROOT, d))), 'yanis,14')
 TILES_DIR = os.path.join(_TILES_ROOT, TILES_SRC)
 
 sys.path.insert(0, GTAMAP_DIR)
