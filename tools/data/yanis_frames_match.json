@@ -1,0 +1,779 @@
+{
+ "yanis_ids": [
+  "T1/01",
+  "T1/02",
+  "T1/06",
+  "T1/07",
+  "T1/09",
+  "T1/10",
+  "T1/11",
+  "T1/12",
+  "T1/14",
+  "T1/15",
+  "T1/16",
+  "T1/17",
+  "T1/18",
+  "T1/20",
+  "T1/21",
+  "T1/25",
+  "T1/26",
+  "T1/27",
+  "T1/29",
+  "T1/30",
+  "T1/36",
+  "T1/40",
+  "T1/42",
+  "T1/46",
+  "T2/01",
+  "T2/02",
+  "T2/08",
+  "T2/12",
+  "T2/13",
+  "T2/14",
+  "T2/15",
+  "T2/16",
+  "T2/20",
+  "T2/21",
+  "T2/24",
+  "T2/26",
+  "T2/29",
+  "T2/30",
+  "T2/33",
+  "T2/34",
+  "T2/35",
+  "T2/36",
+  "T2/37",
+  "T2/38",
+  "T2/39",
+  "T2/40",
+  "T2/41",
+  "T2/46",
+  "T2/47",
+  "T2/51",
+  "T2/52",
+  "T2/54",
+  "T2/56",
+  "T2/57",
+  "T2/58",
+  "T2/59",
+  "T2/60",
+  "T2/61",
+  "T2/64",
+  "T2/65",
+  "T2/66",
+  "T2/67",
+  "T2/68",
+  "T2/71",
+  "T2/74",
+  "T2/75",
+  "T2/77",
+  "T2/78",
+  "T2/79",
+  "T2/80",
+  "S2/02",
+  "S2/03",
+  "S2/04",
+  "S2/05",
+  "S2/06",
+  "S2/08",
+  "S2/09",
+  "S2/14",
+  "S2/16",
+  "S2/18",
+  "S2/26",
+  "S2/27",
+  "S2/31",
+  "S2/32",
+  "S2/34",
+  "S2/35",
+  "S2/37",
+  "S2/38",
+  "S2/39",
+  "S2/40",
+  "S2/41",
+  "S2/42",
+  "S2/44",
+  "S2/45",
+  "S2/46",
+  "S2/48",
+  "S2/47",
+  "S2/50",
+  "S2/51",
+  "S2/54",
+  "S2/55",
+  "S2/56",
+  "S2/57",
+  "S2/59",
+  "S2/62",
+  "S2/64",
+  "S2/66",
+  "S2/68",
+  "S2/70",
+  "S2/71",
+  "S2/72",
+  "S2/73",
+  "S2/74",
+  "S2/80",
+  "S2/75",
+  "S2/76",
+  "S2/79",
+  "S2/81",
+  "S2/85",
+  "S2/86",
+  "S3/01",
+  "S3/02",
+  "S3/12",
+  "S3/13",
+  "S3/15",
+  "S3/17",
+  "S3/19",
+  "S3/20",
+  "S3/24",
+  "S3/27",
+  "S3/31",
+  "S3/39",
+  "S3/55",
+  "T3/01",
+  "T3/40",
+  "T3/41",
+  "T3/42",
+  "T3/43",
+  "T3/44",
+  "T3/45",
+  "T3/47",
+  "T3/48",
+  "T3/50",
+  "T3/62",
+  "T3/64",
+  "T3/65",
+  "T3/66",
+  "T3/67",
+  "T3/69",
+  "T3/70",
+  "T3/71",
+  "T3/73",
+  "T3/74",
+  "T3/75",
+  "T3/76",
+  "T3/77",
+  "T3/78",
+  "T3/86",
+  "T3/87",
+  "T3/88",
+  "T3/93",
+  "T3/94",
+  "T3/96",
+  "T3/106",
+  "T3/112",
+  "T3/123",
+  "T3/124",
+  "T3/126",
+  "T3/138",
+  "T3/139",
+  "T3/140",
+  "T3/141",
+  "T3/142",
+  "T3/143",
+  "T3/144",
+  "T3/146",
+  "T3/149",
+  "T3/151",
+  "T3/152",
+  "T3/153",
+  "T3/156",
+  "T3/157",
+  "T3/159",
+  "T3/160",
+  "T3/162",
+  "T3/163",
+  "T3/164",
+  "T3/166",
+  "T3/167",
+  "T3/168",
+  "T3/169",
+  "T3/171",
+  "T3/172",
+  "T3/173",
+  "T3/174",
+  "T3/190",
+  "T3/191",
+  "T3/192",
+  "T3/193",
+  "T3/194",
+  "T3/197",
+  "T3/201",
+  "T3/238",
+  "T3/239",
+  "T3/240",
+  "T3/241",
+  "T3/244",
+  "T3/247",
+  "T3/250",
+  "S3/68",
+  "S3/74",
+  "S3/75",
+  "S3/83",
+  "S3/84",
+  "S3/88",
+  "S3/89",
+  "S3/92",
+  "S3/93",
+  "S3/99",
+  "S4/01",
+  "S4/03",
+  "S4/04",
+  "S4/05",
+  "S4/13",
+  "S4/18",
+  "S4/19",
+  "S4/20",
+  "S4/23",
+  "T4/01",
+  "T4/02",
+  "T4/06",
+  "T4/07",
+  "T4/09",
+  "T4/10",
+  "T4/11",
+  "T4/14",
+  "T4/20",
+  "T4/21",
+  "T4/25",
+  "T4/26",
+  "T4/28",
+  "T4/30",
+  "T4/32",
+  "T4/34",
+  "T4/36",
+  "T4/37",
+  "T4/39",
+  "T4/40",
+  "T4/46",
+  "A2/08",
+  "A2/09",
+  "A1/01",
+  "A2/01",
+  "A2/02",
+  "A2/03",
+  "A2/04",
+  "A2/05",
+  "A2/06",
+  "A3/03",
+  "A4/19"
+ ],
+ "matched": {
+  "Prison": "T1/1",
+  "Vice Beach (B)": "T1/6",
+  "Brickell": "T1/7",
+  "Beach": "T1/10",
+  "Convertible": "T1/12",
+  "Handshake": "T1/15",
+  "Venetian Islands": "T1/16",
+  "Ocean Drive (NW)": "T1/17",
+  "Rooftop Party": "T1/20",
+  "Vice City Sign": "T1/21",
+  "Donuts": "T1/25",
+  "Dancing": "T1/26",
+  "Gas Station (Alligator)": "T1/27",
+  "Interchange": "T1/30",
+  "High Rollerz": "T1/42",
+  "Uncle Jack's": "T1/46",
+  "Key Lento": "T2/1",
+  "House (Keys)": "T2/2",
+  "Highway (Peacock Bay) (A)": "T2/12",
+  "Beach Gym": "T2/13",
+  "Little Haiti": "T2/15",
+  "Prison Tower": "T2/16",
+  "Pier (Sea)": "T2/29",
+  "Yacht (1)": "T2/37",
+  "Yacht (2)": "T2/38",
+  "Empty Lot near Metro Station": "T2/52",
+  "Starlet Motel": "T2/54",
+  "Explosion": "T2/58",
+  "Park (Mobile Phone)": "T2/59",
+  "Dominion Hotel": "T2/64",
+  "Television": "T2/67",
+  "Jet Ski": "T2/71",
+  "Truck (2)": "T2/74",
+  "Chase (1)": "T2/77",
+  "Skyline": "T2/80",
+  "Jason Duval 02 (Car)": "S2/2",
+  "Jason Duval 03 (Boat)": "S2/3",
+  "Jason Duval 05 (Machine Gun)": "S2/5",
+  "Lucia Caminos 02 (Pool)": "S2/8",
+  "Raul Bautista 03 (Motorboat)": "S2/31",
+  "Vice City 01 (Vice City Sign)": "S2/37",
+  "Vice City 02 (Hotel)": "S2/38",
+  "Vice City 03 (Basketball)": "S2/39",
+  "Vice City 04 (Gang Members)": "S2/40",
+  "Vice City 05 (Vice Beach)": "S2/41",
+  "Vice City 06 (Ocean Drive)": "S2/42",
+  "Vice City 08 (Ferris Wheel)": "S2/44",
+  "Vice City 09 (La Perle)": "S2/45",
+  "Leonida Keys 01 (Airplane) (X)": "S2/46",
+  "Leonida Keys 02 (Sidewalk)": "S2/47",
+  "Leonida Keys 05 (Boats)": "S2/50",
+  "Port Gellhorn 01 (Starlet Motel)": "S2/51",
+  "Port Gellhorn 05 (Fire)": "S2/55",
+  "Ambrosia 01 (Bikers)": "S2/56",
+  "Ambrosia 02 (Panorama)": "S2/57",
+  "Ambrosia 04 (Fires)": "S2/59",
+  "Grassrivers 04 (Police Chase)": "S2/64",
+  "Mount Kalaga National Park 04 (Mountain Pass) (X)": "S2/68",
+  "Vice City Postcard": "S2/71",
+  "Leonida Keys Postcard (X)": "S2/72",
+  "Ambrosia Postcard (X)": "S2/74",
+  "Port Vice City (A)": "S3/1",
+  "Green Sports Car": "S3/2",
+  "Jason's Safehouse Vehicles (X)": "S3/17",
+  "Crest Kayak": "S3/19",
+  "Shitzu Squalo 01 (Bay)": "S3/27",
+  "Stock 305 Clothing Store 01 (Van)": "S3/31",
+  "Vintage Vice City Pack 02 (Port)": "S3/55",
+  "Speaking with Brian at Effluvia (1)": "T3/93",
+  "Rialto Causeway with Raul (1)": "T3/143",
+  "Kayaking in the Vice River (Extended Look)": "T3/159",
+  "Throwing Stuff from an Overpass": "T3/163",
+  "Vice Beach Panorama (Extended Look)": "T3/238",
+  "Rooftop Pool": "T3/239",
+  "Sunrise over Vice City (Extended Look)": "T3/250",
+  "Vice City 10 (Pegassi Towers)": "S3/88",
+  "Vice City 11 (Megamundo)": "S3/89",
+  "Port Gellhorn 06 (Trailer Park)": "S3/92",
+  "Grassrivers 05 (Sunrise RV Park)": "S3/93",
+  "Shoreline [Gameinformer]": "S4/1",
+  "Water Tower [Gameinformer]": "S4/3",
+  "Thunderstorm [Gameinformer]": "S4/5",
+  "Oceanarium": "S4/18",
+  "Skyline at Night (T4)": "T4/7",
+  "Skyline with Ferris Wheel (T4)": "T4/10",
+  "Runway (T4)": "T4/20",
+  "Vice Beach at Night (T4)": "T4/46",
+  "Chase (2) (B)": "T2/78",
+  "Mount Kalaga (Postcard)": "S2/76"
+ },
+ "reassign": {
+  "Hank's Waffle (Bocamar Bridge)": "T3/251",
+  "Speaking with Brian at Effluvia (2)": "S4/24",
+  "Speaking with Brian at Effluvia (3)": "S4/25"
+ },
+ "new": {
+  "Flamingos": {
+   "id": "T1/9",
+   "player": null,
+   "xyz": [
+    -3118.0,
+    -4012.0,
+    2.24
+   ],
+   "ypr": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    55.0,
+    null
+   ],
+   "size": [
+    3840,
+    2160
+   ],
+   "source": "Trailer 1 [?]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker T1/09 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 0 deg / fov 55 deg read on his V (LOW confidence: cluttered marker, fov set to 55). Needs markings + solve."
+  },
+  "Strip Club (Mondays)": {
+   "id": "T1/14",
+   "player": null,
+   "xyz": [
+    -690.0,
+    1205.0,
+    4.74
+   ],
+   "ypr": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    55.0,
+    null
+   ],
+   "size": [
+    3840,
+    2160
+   ],
+   "source": "Trailer 1 [?]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker T1/14 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; INTERIOR (Jack of Hearts strip club): marker drawn in the interior inset, position = the strip-club leak cams, heading unknown. Needs markings + solve."
+  },
+  "Prison (Gate) Reverse": {
+   "id": "T2/20",
+   "player": null,
+   "xyz": [
+    -2695.8,
+    -2947.4,
+    13.74
+   ],
+   "ypr": [
+    114.0,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    55.0,
+    null
+   ],
+   "size": [
+    3840,
+    1728
+   ],
+   "source": "Trailer 2 [?]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker T2/20 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 246 deg / fov 55 deg read on his V (LOW confidence: cluttered marker, fov set to 55). Needs markings + solve."
+  },
+  "Veranda (1)": {
+   "id": "T2/26",
+   "player": null,
+   "xyz": [
+    -2277.5,
+    -5260.3,
+    2.95
+   ],
+   "ypr": [
+    74.5,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    55.0,
+    null
+   ],
+   "size": [
+    3840,
+    1728
+   ],
+   "source": "Trailer 2 [?]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker T2/26 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 286 deg / fov 55 deg read on his V (LOW confidence: cluttered marker, fov set to 55). Needs markings + solve."
+  },
+  "Car (Jason & Lucia)": {
+   "id": "T2/39",
+   "player": null,
+   "xyz": [
+    -6177.1,
+    4498.8,
+    16.28
+   ],
+   "ypr": [
+    345.5,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    55.0,
+    null
+   ],
+   "size": [
+    3840,
+    1728
+   ],
+   "source": "Trailer 2 [?]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker T2/39 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 14 deg / fov 55 deg read on his V (LOW confidence: cluttered marker, fov set to 55). Needs markings + solve."
+  },
+  "Visitor Center": {
+   "id": "T2/40",
+   "player": null,
+   "xyz": [
+    -2689.6,
+    -4733.7,
+    4.79
+   ],
+   "ypr": [
+    225.0,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    68.0,
+    null
+   ],
+   "size": [
+    3840,
+    1728
+   ],
+   "source": "Trailer 2 [?]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker T2/40 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 135 deg / fov 68 deg read on his V. Needs markings + solve."
+  },
+  "Wall (Down)": {
+   "id": "T2/46",
+   "player": null,
+   "xyz": [
+    -1324.3,
+    647.6,
+    5.01
+   ],
+   "ypr": [
+    246.5,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    55.0,
+    null
+   ],
+   "size": [
+    3840,
+    1728
+   ],
+   "source": "Trailer 2 [?]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker T2/46 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 114 deg / fov 55 deg read on his V (LOW confidence: cluttered marker, fov set to 55). Needs markings + solve."
+  },
+  "Pickup Truck (Night)": {
+   "id": "T2/61",
+   "player": null,
+   "xyz": [
+    -1026.6,
+    -2736.8,
+    4.91
+   ],
+   "ypr": [
+    20,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    45.0,
+    null
+   ],
+   "size": [
+    3840,
+    1728
+   ],
+   "source": "Trailer 2 [?]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker T2/61 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 340 deg / fov 45 deg read on his V. Needs markings + solve."
+  },
+  "Strip Club (Sundays)": {
+   "id": "T2/66",
+   "player": null,
+   "xyz": [
+    -690.0,
+    1205.0,
+    4.74
+   ],
+   "ypr": [
+    0.0,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    55.0,
+    null
+   ],
+   "size": [
+    3840,
+    1728
+   ],
+   "source": "Trailer 2 [?]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker T2/66 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; INTERIOR (Jack of Hearts strip club): marker drawn in the interior inset, position = the strip-club leak cams, heading unknown. Needs markings + solve."
+  },
+  "Jason Duval 04 (Ocean Drive)": {
+   "id": "S2/4",
+   "player": null,
+   "xyz": [
+    2004.8,
+    579.6,
+    5.39
+   ],
+   "ypr": [
+    154.5,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    73.0,
+    null
+   ],
+   "size": [
+    3840,
+    2160
+   ],
+   "source": "Screenshot 1 \u2014 Jason Duval 04 [1]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker S2/04 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 206 deg / fov 73 deg read on his V. Needs markings + solve."
+  },
+  "Lucia Caminos 03 (Hoodwinks)": {
+   "id": "S2/9",
+   "player": null,
+   "xyz": [
+    -649.0,
+    1154.3,
+    4.8
+   ],
+   "ypr": [
+    72.5,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    55.0,
+    null
+   ],
+   "size": [
+    3840,
+    2160
+   ],
+   "source": "Screenshot 1 \u2014 Lucia Caminos 03 [1]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker S2/09 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 288 deg / fov 55 deg read on his V (LOW confidence: cluttered marker, fov set to 55). Needs markings + solve."
+  },
+  "Boobie Ike 02 (Jack of Hearts, Exterior)": {
+   "id": "S2/18",
+   "player": null,
+   "xyz": [
+    -717.1,
+    1164.5,
+    4.74
+   ],
+   "ypr": [
+    221.5,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    55.0,
+    null
+   ],
+   "size": [
+    3840,
+    2160
+   ],
+   "source": "Screenshot 1 \u2014 Boobie Ike 02 [1]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker S2/18 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 138 deg / fov 55 deg read on his V (LOW confidence: cluttered marker, fov set to 55). Needs markings + solve."
+  },
+  "Real Dimez 02 (Dancing)": {
+   "id": "S2/26",
+   "player": null,
+   "xyz": [
+    -677.3,
+    1262.1,
+    4.42
+   ],
+   "ypr": [
+    305.5,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    55.0,
+    null
+   ],
+   "size": [
+    3840,
+    2160
+   ],
+   "source": "Screenshot 1 \u2014 Real Dimez 02 [1]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker S2/26 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 54 deg / fov 55 deg read on his V (LOW confidence: cluttered marker, fov set to 55). Needs markings + solve."
+  },
+  "Real Dimez 03 (Car)": {
+   "id": "S2/27",
+   "player": null,
+   "xyz": [
+    -693.8,
+    1174.6,
+    4.81
+   ],
+   "ypr": [
+    196.0,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    55.0,
+    null
+   ],
+   "size": [
+    3840,
+    2160
+   ],
+   "source": "Screenshot 1 \u2014 Real Dimez 03 [1]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker S2/27 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 164 deg / fov 55 deg read on his V (LOW confidence: cluttered marker, fov set to 55). Needs markings + solve."
+  },
+  "Leonida Keys 03 (The Rusty Anchor)": {
+   "id": "S2/48",
+   "player": null,
+   "xyz": [
+    -2222.7,
+    -5262.4,
+    4.02
+   ],
+   "ypr": [
+    112.5,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    53.0,
+    null
+   ],
+   "size": [
+    3840,
+    2160
+   ],
+   "source": "Screenshot 1 \u2014 Leonida Keys 03 [1]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker S2/48 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 248 deg / fov 53 deg read on his V. Needs markings + solve."
+  },
+  "Mount Kalaga National Park 06 (River)": {
+   "id": "S2/70",
+   "player": null,
+   "xyz": [
+    -4545.9,
+    7451.3,
+    3.61
+   ],
+   "ypr": [
+    249.5,
+    0.0,
+    0.0
+   ],
+   "fov": [
+    53.0,
+    null
+   ],
+   "size": [
+    3840,
+    2160
+   ],
+   "source": "Screenshot 1 \u2014 Mount Kalaga National Park 06 [1]",
+   "constraint_class": "D_no_ground_truth",
+   "pose_verified": null,
+   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker S2/70 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 110 deg / fov 53 deg read on his V. Needs markings + solve."
+  }
+ },
+ "_src": "Yanis V17 \"Frames reference\" panel (260 thumbnails) matched to frames/ by SIFT+RANSAC (>=20 inliers, >=2x runner-up), sibling frames and false positives (Metro (SE) (C)) checked by eye; 2026-10-18"
+}
