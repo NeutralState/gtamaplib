@@ -7079,17 +7079,17 @@
   "id": "T2/39",
   "player": null,
   "xyz": [
-   -6177.1,
-   4498.8,
-   16.28
+   -6175.8,
+   4519.0,
+   16.4
   ],
   "ypr": [
-   345.5,
+   -0.0,
    0.0,
    0.0
   ],
   "fov": [
-   55.0,
+   10.0,
    null
   ],
   "size": [
@@ -7099,7 +7099,7 @@
   "source": "Trailer 2 [?]",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker T2/39 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 14 deg / fov 55 deg read on his V (LOW confidence: cluttered marker, fov set to 55). Needs markings + solve."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker T2/39 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 14 deg / fov 55 deg read on his V (LOW confidence: cluttered marker, fov set to 55). Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 0 / hfov 10 read by eye on the V of his V17 marker T2/39 (was 14 / 55.0) ; position moved to his dot (-6175.8, 4519.0), was (-6177.1, 4498.8), z = heightmap + 1.7 ; LOW confidence (cluttered marker)."
  },
  "Visitor Center": {
   "id": "T2/40",
@@ -7729,17 +7729,17 @@
   "id": "T4/36",
   "player": null,
   "xyz": [
-   500.0,
-   -1500.0,
-   6.88
+   0.3,
+   -912.9,
+   5.7
   ],
   "ypr": [
-   0,
+   63.0,
    0.0,
    0.0
   ],
   "fov": [
-   55.0,
+   35.0,
    null
   ],
   "size": [
@@ -7749,7 +7749,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - Lucia on a rooftop at sunset, crane behind (Yanis cell N12; his marker was NOT found on the map: position = cell centre, +-500 m); GTAVI_Launch_Trailer.mp4 t=63.60 s (frame 1908), letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/36 (corr 0.986); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/36 (corr 0.986); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 297 / hfov 35 read by eye on the V of his V17 marker T4/36 (was 0 / 55.0) ; position moved to his dot (0.3, -912.9), was (500.0, -1500.0), z = heightmap + 1.7."
  },
  "Night Street Race": {
   "id": "T4/37",
@@ -8067,17 +8067,17 @@
   "id": "T2/41",
   "player": null,
   "xyz": [
-   -650.0,
-   465.0,
-   4.85
+   -643.8,
+   472.2,
+   4.88
   ],
   "ypr": [
-   0,
+   92.0,
    0.0,
    0.0
   ],
   "fov": [
-   55.0,
+   67.0,
    null
   ],
   "size": [
@@ -8087,7 +8087,7 @@
   "source": "Trailer 2 [3011] - queue outside the \"Nine\" nightclub (Yanis M14, next to T1/18); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=100.37 s, letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/41 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/41 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 268 / hfov 67 read by eye on the V of his V17 marker T2/41 (was 0 / 55.0) ; position moved to his dot (-643.8, 472.2), was (-650.0, 465.0), z = heightmap + 1.7."
  },
  "Kitchen (Old Woman)": {
   "id": "T2/47",
@@ -8119,17 +8119,17 @@
   "id": "T2/51",
   "player": null,
   "xyz": [
-   1968.0,
-   589.0,
-   4.89
+   1973.7,
+   584.0,
+   4.87
   ],
   "ypr": [
-   0,
+   161.0,
    0.0,
    0.0
   ],
   "fov": [
-   55.0,
+   42.0,
    null
   ],
   "size": [
@@ -8139,7 +8139,7 @@
   "source": "Trailer 2 [3334] - shooting from a yellow car at night (Yanis O14, Grape St / Shore Dr); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=111.13 s, letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/51 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/51 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 199 / hfov 42 read by eye on the V of his V17 marker T2/51 (was 0 / 55.0) ; position moved to his dot (1973.7, 584.0), was (1968.0, 589.0), z = heightmap + 1.7 ; LOW confidence (cluttered marker)."
  },
  "Living Room (Lucia)": {
   "id": "T2/56",
@@ -8982,12 +8982,12 @@
    16.4
   ],
   "ypr": [
-   85.5,
+   60.0,
    0.0,
    0.0
   ],
   "fov": [
-   55.0,
+   60.0,
    null
   ],
   "size": [
@@ -8997,7 +8997,7 @@
   "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=691.5 s, letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/94 (corr 0.992); position = his marker dot; heading 274 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/94 (corr 0.992); position = his marker dot; heading 274 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 300 / hfov 60 read by eye on the V of his V17 marker T3/94 (was 274 / 55.0)."
  },
  "Fight by the Car": {
   "id": "T3/96",
@@ -9008,12 +9008,12 @@
    16.4
   ],
   "ypr": [
-   85.5,
+   -120.0,
    0.0,
    0.0
   ],
   "fov": [
-   55.0,
+   60.0,
    null
   ],
   "size": [
@@ -9023,7 +9023,7 @@
   "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=696.5 s, letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/96 (corr 0.994); position = his marker dot; heading 274 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/96 (corr 0.994); position = his marker dot; heading 274 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 120 / hfov 60 read by eye on the V of his V17 marker T3/96 (was 274 / 55.0)."
  },
  "Convenience Store Robbery": {
   "id": "T3/106",

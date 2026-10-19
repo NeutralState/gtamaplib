@@ -12,7 +12,7 @@ Plans. V17 (gtadb tiles yanis,17 z6, 0.5 m/px, fetched 2026-10-15; tile frame ->
 - refinery: the V17 drawing equals the V16 one (overlay checked), so the V16 footprints are used: grey strips = pipe
   racks, rectangles = process units with their columns/vessels (small circles), small squares = pump/compressor houses;
   from the V16 raster: 6 crude tanks (d 23 m) and the red pipe corridors (incl. the tank-farm dike) + red blocks.
-- paper mill: MOVED in V17 (~60 m W, ~75 m N of the V16 footprints): main building 402 m2 + annex, warehouse 332 m2,
+- paper mill: MOVED in V17 (~60 m W, ~75 m N of the V16 footprints; built on the V17 drawing since V4): main building 402 m2 + annex, warehouse 332 m2,
   round tank d 19 m, 6 small round items (tools/data/draper_v17_mill.json).
 - rail bridge: the V17 rail line across the bay (bearing 135.0 deg, tools/data/draper_v17_rail.json), over water for
   490 m; the bascule span is at the deepest water, which is also the GTADB L597 point (s 470 m).
@@ -199,7 +199,11 @@ def mill():
     pulp/recovery band beside it, digesters, tank farm, evaporators, lime kiln, chip pile + inclined conveyor), scaled into
     the V17 lot; the V17 items are kept as anchors (square = recovery boiler, round = tank, rectangle = lime-kiln building,
     small rounds = stacks/vents). Lot frame: u along the lot (0..190 m, NE), v across (0..84 m, towards the SE rail)."""
-    D = json.load(open(MILL)); sh = D['v16_shift']                                  # [V3b] placed on the V16 drawing (shown in the app)
+    # [V4 2026-10-18] back on the V17 drawing (Alexandre: "la papermill remet a la position des traces sur v17"). The V3b
+    # placement on the V16 drawing (D['v16_shift']) is dropped; the V17 items in MILL were read with the old +9/+8 tile
+    # offset, which the V17 frame does not have (V17 tile frame = world frame), so they move by (-9, -8). Overlay check on
+    # the V17 tiles: tank, small rounds, notched square and kiln rectangle within ~0.5 m.
+    D = json.load(open(MILL)); sh = (-9.0, -8.0)
     mv = lambda p: [p[0] + sh[0], p[1] + sh[1]]
     for s_ in D['shapes']: s_['ring'] = [mv(q) for q in s_['ring']]; s_['centre'] = mv(s_['centre'])
     D['stacks'] = [[x + sh[0], y + sh[1], r] for x, y, r in D['stacks']]; D['lot'] = {k: (mv(v) if isinstance(v, list) else v) for k, v in D['lot'].items()}
@@ -264,8 +268,8 @@ def mill():
         if r >= 1.0: st.cyl([x, y], 2.0, gs, gs + 70.0, 16); st.cyl([x, y], 2.4, gs + 67.0, gs + 70.0, 16)
         else: st.cyl([x, y], 0.9, gs, gs + 26.0, 10)
     base = ('PORT-GELLHORN-V3 2026-10-15 (Alexandre: "la papeterie est trop simple, fais-la comme la vraie et place-la environ ou on a draw sur Yanis"): '
-            'GTADB L536 / L1201 = IRL WestRock Paper Mill (Panama City; closed 2022). Placed on the V16 drawing (Alexandre: "pas a son emplacement de la map de Yanis"; '
-            'V17 moved the same drawing by (-57.5, +71.6) m and the rail to the other side). Layout of the IRL mill (Esri World Imagery: long paper-machine hall along '
+            'GTADB L536 / L1201 = IRL WestRock Paper Mill (Panama City; closed 2022). Placed on the V17 drawing (V4 2026-10-18, Alexandre: "remet a la position des traces sur v17"; '
+            'the V3b copy on the V16 drawing was 66.8 m E / 63.8 m S of it). Layout of the IRL mill (Esri World Imagery: long paper-machine hall along '
             'the site, recovery band beside it, digesters, tank farm, evaporators, lime kiln, chip pile + conveyor) scaled into the V17 lot (190 x 84 m, long axis NE); '
             'drawn items kept as anchors: square = recovery boiler, round = liquor tank, rectangle = lime-kiln building, small rounds = stacks/vents. '
             'NOT on the map (IRL composition, positions in the lot ESTIMATED): ')
