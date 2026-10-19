@@ -862,6 +862,7 @@ class Handler(BaseHTTPRequestHandler):
                     'hfov': hfov,
                     'size': list(cam_data['size']) if cam_data.get('size') else None,
                     'source': cam_data.get('source'),
+                    'id': cam_data.get('id'),   # [SERIES-V1] client categories = Yanis series from the ID
                     'type': _classify_cam(name),
                     'color': color,
                     'n_pixels': len(cam_pixels),

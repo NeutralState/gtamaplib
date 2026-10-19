@@ -310,14 +310,15 @@ header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(
 .cam-filter-chip:hover{color:var(--text)}
 .cam-filter-chip.on{background:var(--surface)}
 .cam-filter-chip[data-type=LEAK].on{border-color:var(--mid);color:var(--text)}
-.cam-filter-chip[data-type="Trailer 1"].on{border-color:var(--blue);color:var(--blue)}
-.cam-filter-chip[data-type="Trailer 2"].on{border-color:var(--green);color:var(--green)}
-.cam-filter-chip[data-type=screenshots].on{border-color:var(--purple);color:var(--purple)}
-.cam-filter-chip[data-type="Screenshot 1"].on{border-color:var(--purple);color:var(--purple)} /* [SS-SPLIT-V1] */
-.cam-filter-chip[data-type="Screenshot 2"].on{border-color:#e879f9;color:#e879f9}
-.cam-filter-chip[data-type="Screenshot 3"].on{border-color:#f472b6;color:#f472b6} /* [T3-S3-V1] */
-.cam-filter-chip[data-type="Build 2026"].on{border-color:#fb923c;color:#fb923c} /* [BUILD-2026] frames de la carte 2026 (HUD debug), map differente du leak 2022 */
-.cam-filter-chip[data-type="Trailer 3"].on{border-color:#2dd4bf;color:#2dd4bf} /* [T3-S3-V1] Extended Look */
+.cam-filter-chip[data-type=T1].on{border-color:var(--blue);color:var(--blue)}
+.cam-filter-chip[data-type=T2].on{border-color:var(--green);color:var(--green)}
+.cam-filter-chip[data-type=S2].on{border-color:#f87171;color:#f87171}
+.cam-filter-chip[data-type=S3].on{border-color:#fb923c;color:#fb923c}
+.cam-filter-chip[data-type=T3].on{border-color:#60a5fa;color:#60a5fa}
+.cam-filter-chip[data-type=S4].on{border-color:#a78bfa;color:#a78bfa}
+.cam-filter-chip[data-type=T4].on{border-color:#22c55e;color:#22c55e}
+.cam-filter-chip[data-type=A].on{border-color:#4ade80;color:#4ade80}
+.cam-filter-chip[data-type=B26].on{border-color:#fbbf24;color:#fbbf24} /* [SERIES-V1] colours follow the Yanis V17 marker colours */
 /* [LEAK-TYPE-V1] sous-chips classe (A=vert anchor ... D=rouge libre) + tag liste */
 #leak-class-chips{margin-top:2px}
 .cam-filter-chip[data-lclass=A].on{border-color:#4ade80;color:#4ade80}
@@ -671,14 +672,16 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
     <div class="ls-header">
       <input id="cam-search" placeholder="Search camera..." autocomplete="off" />
       <div class="ls-filter-chips">
-        <button class="cam-filter-chip on" data-type="LEAK">LEAK</button>
-        <button class="cam-filter-chip on" data-type="Trailer 1">T1</button>
-        <button class="cam-filter-chip on" data-type="Trailer 2">T2</button>
-        <button class="cam-filter-chip on" data-type="Screenshot 1">S1</button><!-- [SS-SPLIT-V1] -->
-        <button class="cam-filter-chip on" data-type="Screenshot 2">S2</button>
-        <button class="cam-filter-chip on" data-type="Screenshot 3">S3</button><!-- [T3-S3-V1] derniers screenshots -->
-        <button class="cam-filter-chip on" data-type="Build 2026" title="Build 2026 / cyberleak (Moose Trap debug HUD, prison biplane video, VCIA Night): the map changed since the 2022 leak, separate category">2026</button><!-- [BUILD-2026] -->
-        <button class="cam-filter-chip on" data-type="Trailer 3">T3</button><!-- [T3-S3-V1] Extended Look -->
+        <button class="cam-filter-chip on" data-type="LEAK" title="2021-22 leak (debug HUD)">LEAK</button>
+        <button class="cam-filter-chip on" data-type="T1" title="Trailer 1">T1</button>
+        <button class="cam-filter-chip on" data-type="T2" title="Trailer 2">T2</button>
+        <button class="cam-filter-chip on" data-type="S2" title="Trailer 2 content-drop screenshots">S2</button>
+        <button class="cam-filter-chip on" data-type="S3" title="Pre-order bonus / Ultimate Edition screenshots">S3</button>
+        <button class="cam-filter-chip on" data-type="T3" title="An Extended Look">T3</button>
+        <button class="cam-filter-chip on" data-type="S4" title="Preview / magazine screenshots">S4</button>
+        <button class="cam-filter-chip on" data-type="T4" title="Launch trailer">T4</button>
+        <button class="cam-filter-chip on" data-type="A" title="Artworks">A</button>
+        <button class="cam-filter-chip on" data-type="B26" title="Build 2026 / cyberleak (debug HUD 2026, prison biplane video, VCIA night)">2026</button>   <!-- [SERIES-V1 2026-10-18] chips = Yanis V17 series (from the camera ID) -->
       </div>
       <div class="ls-filter-chips" id="leak-class-chips" title="LEAK sub-filter by constraint class (A=full HUD pose ... D=nothing locked)"><!-- [LEAK-TYPE-V1] -->
         <button class="cam-filter-chip on" data-lclass="A">A</button>
@@ -992,23 +995,8 @@ function updateClassLabel() {
     const xcls = cls.startsWith('X_');
     el.style.color = xcls ? '#6b7280' : '#f59e0b'; el.style.borderColor = xcls ? '#6b7280' : '#f59e0b';
   } else {
-    const src = cam.source || '';
-    let t = 'Screenshot';
-    if (src.startsWith('Trailer 1')) t = 'Trailer 1';
-    else if (src.startsWith('Trailer 3')) t = 'Trailer 3 (Extended Look)'; // [T3-S3-V1]
-    else if (src.startsWith('Trailer')) t = 'Trailer 2';
-    else if (src.startsWith('Screenshot 1')) t = 'Screenshot 1';   // [SS-SPLIT-V1]
-    else if (src.startsWith('Screenshot 2')) t = 'Screenshot 2';
-    else if (src.startsWith('Screenshot 3')) t = 'Screenshot 3';   // [T3-S3-V1]
-    else if (src.startsWith('Build 2026')) t = 'Build 2026';       // [BUILD-2026]
-    el.textContent = t;
-    if (t === 'Trailer 1') { el.style.color='var(--blue)'; el.style.borderColor='var(--blue)'; }
-    else if (t === 'Trailer 2') { el.style.color='var(--green)'; el.style.borderColor='var(--green)'; }
-    else if (t.startsWith('Trailer 3')) { el.style.color='#2dd4bf'; el.style.borderColor='#2dd4bf'; }
-    else if (t === 'Screenshot 2') { el.style.color='#e879f9'; el.style.borderColor='#e879f9'; }
-    else if (t === 'Screenshot 3') { el.style.color='#f472b6'; el.style.borderColor='#f472b6'; }
-    else if (t === 'Build 2026') { el.style.color='#fb923c'; el.style.borderColor='#fb923c'; }   // [BUILD-2026]
-    else { el.style.color='var(--violet)'; el.style.borderColor='var(--violet)'; }
+    const k = camSeries(cam), sv = CAM_SERIES[k] || CAM_SERIES.other;   // [SERIES-V1]
+    el.textContent = (cam.id ? cam.id + ' · ' : '') + sv[0]; el.style.color = sv[1]; el.style.borderColor = sv[1];
   }
 }
 window.currentCam = null;  // [MULTICAM-STEP21] initial expose
@@ -1198,7 +1186,7 @@ const NUM_IDS = {x:'num-x',y:'num-y',z:'num-z',yaw:'num-yaw',pitch:'num-pitch',r
 // ── Init ───────────────────────────────────────────────────────────────────
 // State for cam picker
 let allCams = [];
-const camFilters = { 'LEAK': true, 'Trailer 1': true, 'Trailer 2': true, 'Trailer 3': true, 'Screenshot 1': true, 'Screenshot 2': true, 'Screenshot 3': true, 'Build 2026': true, 'screenshots': true }; // [T3-S3-V1] // [SS-SPLIT-V1] // [BUILD-2026]
+const camFilters = { LEAK: true, T1: true, T2: true, S2: true, S3: true, T3: true, S4: true, T4: true, A: true, B26: true, other: true };   // [SERIES-V1] // [T3-S3-V1] // [SS-SPLIT-V1] // [BUILD-2026]
 let camSearchQ = '';
 // [LEAK-TYPE-V1] sous-filtre des leaks par classe de contrainte + tri campagne
 const leakClassFilters = { A: true, B: true, C: true, Cm: true, D: true, X: true };
@@ -1215,20 +1203,18 @@ function leakClassOf(c) {
   return null;
 }
 
-function getCamType(c) {
-  const src = c.source || '';
-  if (src.startsWith('Build 2026')) return 'Build 2026';   // [BUILD-2026] avant la regle LEAK
-  if (/^\d{4}-\d{2}-\d{2}/.test(src)) return 'LEAK';
-  if (/^L\d/.test(c.id || '')) return 'LEAK'; // [L2-PANORAMA] leaks sans date de source (id L2/...)
-  if (src.startsWith('Trailer 1')) return 'Trailer 1';
-  if (src.startsWith('Trailer 2') || src === 'Trailer 2') return 'Trailer 2';
-  if (src.startsWith('Trailer 3')) return 'Trailer 3'; // [T3-S3-V1] Extended Look
-  if (src.startsWith('Trailer')) return 'Trailer 2'; // fallback to T2 group
-  if (src.startsWith('Screenshot 1')) return 'Screenshot 1';   // [SS-SPLIT-V1]
-  if (src.startsWith('Screenshot 2')) return 'Screenshot 2';
-  if (src.startsWith('Screenshot 3')) return 'Screenshot 3';   // [T3-S3-V1]
-  return 'screenshots';
+// [SERIES-V1 2026-10-18] category = Yanis V17 series, read from the camera ID (cameras.json follows his numbering)
+const CAM_SERIES = { LEAK: ['LEAK', 'var(--text)'], T1: ['Trailer 1', 'var(--blue)'], T2: ['Trailer 2', 'var(--green)'], S2: ['Screenshot (T2 drop)', '#f87171'],
+  S3: ['Screenshot (pre-order)', '#fb923c'], T3: ['Extended Look', '#60a5fa'], S4: ['Screenshot (preview)', '#a78bfa'], T4: ['Launch Trailer', '#22c55e'],
+  A: ['Artwork', '#4ade80'], B26: ['Build 2026', '#fbbf24'], other: ['Other', 'var(--violet)'] };
+function camSeries(c) {
+  const id = c.id || '', p = id.split('/')[0];
+  if (/^L\d/.test(p) || /^\d{4}-\d{2}-\d{2}/.test(c.source || '')) return 'LEAK';
+  if (/^A\d/.test(p)) return 'A';
+  if (CAM_SERIES[p]) return p;
+  return 'other';
 }
+function getCamType(c) { return camSeries(c); }
 
 function renderCamDropdown() {
   const dd = document.getElementById('cam-dropdown');
@@ -1954,19 +1940,7 @@ async function init() {
     'screenshots': 'var(--violet)', // purple
   };
 
-  function getCamTypeForMap(c) {
-    // Match the existing getCamType() logic in the cam-picker. We can't
-    // call that one directly because it's defined later in the file as a
-    // top-level function — order is fine at runtime but we want this code
-    // to be self-contained for clarity.
-    const src = c.source || '';
-    if (/^\d{4}-\d{2}-\d{2}/.test(src)) return 'LEAK';
-    if (/^L\d/.test(c.id || '')) return 'LEAK'; // [L2-PANORAMA]
-    if (src.startsWith('Trailer 1')) return 'Trailer 1';
-    if (src.startsWith('Trailer 2') || src === 'Trailer 2') return 'Trailer 2';
-    if (src.startsWith('Trailer')) return 'Trailer 2';
-    return 'screenshots';
-  }
+  function getCamTypeForMap(c) { return (CAM_SERIES[camSeries(c)] || CAM_SERIES.other)[0]; }   // [SERIES-V1]
 
   // Phase 5.1: yaw fix (-sin) + lighter style
   // Frustum geometry — convention matches server.py /api/generate_map:
