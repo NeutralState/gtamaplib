@@ -1744,11 +1744,7 @@ for (const fr of Object.values(_clips3d)) {
   fr.sort((a, b) => (a.clip_order ?? 0) - (b.clip_order ?? 0));
   const rep = fr.find(c => c.n_pixels > 0) || fr[0];
   for (const c of fr) c._clipHidden = c !== rep;
-  rep._clipLabel = (rep.clip_title || rep.clip) + ' (' + fr.length + ' frames)';
-  const pg = new THREE.BufferGeometry();
-  pg.setAttribute('position', new THREE.Float32BufferAttribute(fr.flatMap(c => c.xyz), 3));
-  const pl = new THREE.Line(pg, new THREE.LineDashedMaterial({ color: 0xfbbf24, dashSize: 40, gapSize: 25, transparent: true, opacity: 0.8, depthTest: false }));
-  pl.computeLineDistances(); pl.renderOrder = 11; layers.cams.add(pl);
+  rep._clipLabel = rep.clip_title || rep.clip;   // [CL-CLIPS-V2] discreet: no flight path, no frame count
 }
 // ── frustums: un LineSegments par tier (perf: 174 cams en 5 draws) ──
 const byTier = {};
@@ -3195,19 +3191,16 @@ if (window.__pendingPoint) { window.__focusPoint(window.__pendingPoint); window.
     let _lastClip = null;
     for (const c of cams) {
       if (f && !c.name.toLowerCase().includes(f) && !((c.clip_title || '').toLowerCase().includes(f))) continue;
-      const _grp = c.clip && _clipN[c.clip] > 1;
-      if (_grp && c.clip !== _lastClip) {
-        const h = document.createElement('div'); h.className = 'cam-it';
-        h.style.cssText = 'font-weight:700;color:#fbbf24;cursor:default';
-        h.textContent = (c.clip_title || c.clip) + ' · ' + _clipN[c.clip] + ' frames'; list.appendChild(h);
-      }
+      const _grp = false;
+      if (c.clip && _clipN[c.clip] > 1 && c._clipHidden) continue;   // [CL-CLIPS-V2] one row per clip (its main frame)
       _lastClip = c.clip || null;
       const it = document.createElement('div');
       it.className = 'cam-it';
       it.innerHTML = `<span class="tdot" style="background:${hex(c.tier)}"></span>` +
                      `<span class="nm"></span>` +
                      (c.pose_verified ? '<span class="ck">&#10003;</span>' : '');
-      it.querySelector('.nm').textContent = _grp ? '↳ ' + ((c.id || '').split('-').slice(1).join('-') || c.name) : c.name;
+      if (c._clipLabel) it.title = c.name;
+      it.querySelector('.nm').textContent = c._clipLabel ? c._clipLabel : _grp ? '↳ ' + ((c.id || '').split('-').slice(1).join('-') || c.name) : c.name;
       if (_grp) { it.style.paddingLeft = '18px'; if (!(c.n_pixels > 0)) it.style.opacity = '0.45'; it.title = c.name; }
       it.addEventListener('click', () => {
         syncToCam(c.name);

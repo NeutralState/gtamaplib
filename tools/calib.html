@@ -1222,6 +1222,11 @@ function clipMembers(clip) {
   return allCams.filter(x => clipOf(x) === clip)
     .sort((a, b) => ((a.clip_order ?? 0) - (b.clip_order ?? 0)) || a.name.localeCompare(b.name));
 }
+function clipTitle(mem) {   // clip_title from the server, else the common start of the frame names
+  if (mem[0].clip_title) return mem[0].clip_title;
+  let p = mem[0].name; for (const x of mem) while (!x.name.startsWith(p)) p = p.slice(0, -1);
+  p = p.replace(/[\s(]+$/, '').replace(/\s+v$/, ''); return p || clipOf(mem[0]);
+}
 function clipStep(dir) {   // select previous / next frame of the current camera's clip
   const cur = allCams.find(x => x.name === currentCam); const clip = cur && clipOf(cur);
   if (!clip) return;
@@ -1260,7 +1265,7 @@ function renderCamDropdown() {
         <span class="cam-opt-tag">${indent ? '' : t}${lc ? ' <b class="leak-class-tag lc-' + lc + '">' + lc + '</b>' : ''}${indent ? '' : ' · '}${c.n_pixels}px / ${c.n_independent} indep</span>
       </div>`;
     };
-    // [CL-CLIPS-V1] group clip frames under one header row (in the position of the clip's first frame)
+    // [CL-CLIPS-V2] one plain row per clip (looks like any camera); frame stepper only once the clip is selected
     const html = [], done = new Set();
     for (const c of filtered) {
       const clip = clipOf(c);
@@ -1268,17 +1273,14 @@ function renderCamDropdown() {
       if (!clip || mem.length < 2) { html.push(row(c, false)); continue; }
       if (done.has(clip)) continue;
       done.add(clip);
-      const inF = mem.filter(x => filtered.includes(x));
-      const vis = inF.filter(x => clipShowEmpty || x.n_pixels > 0 || x.name === currentCam);
-      const hidden = inF.length - vis.length;
-      const hasCur = inF.some(x => x.name === currentCam);
-      const open = (clip in clipOpen) ? clipOpen[clip] : (hasCur || !!camSearchQ);
-      const px = inF.reduce((n, x) => n + (x.n_pixels || 0), 0);
-      html.push(`<div class="cam-opt clip-head" data-clip="${clip}" data-open="${open ? 1 : 0}" style="font-weight:600">
-        <span style="color:#fbbf24">${open ? '▾' : '▸'}</span> ${mem[0].clip_title || clip} <span style="color:var(--dim);font-weight:400">· ${vis.length} frames${hidden ? ` <a data-clip-empty="1" style="text-decoration:underline;cursor:pointer">+${hidden} empty</a>` : ''}</span>
-        ${hasCur ? '<span style="float:right"><a data-clip-step="-1" title="previous frame" style="cursor:pointer;padding:0 6px">‹</a><a data-clip-step="1" title="next frame" style="cursor:pointer;padding:0 6px">›</a></span>' : ''}
-        <span class="cam-opt-tag">${clip} · Cyberleak · ${px}px</span></div>`);
-      if (open) for (const x of vis) html.push(row(x, true));
+      const fr = mem.filter(x => clipShowEmpty || x.n_pixels > 0 || x.name === currentCam);
+      const cur = mem.find(x => x.name === currentCam);
+      const target = cur || fr[0] || mem[0];
+      const px = mem.reduce((n, x) => n + (x.n_pixels || 0), 0);
+      const step = cur ? `<span class="clip-step" style="margin-left:6px;color:var(--mid)"><a data-clip-step="-1" style="cursor:pointer;padding:0 4px">‹</a>${(cur.id || '').split('-').slice(1).join('-')} <span style="color:var(--dim)">${fr.indexOf(cur) + 1}/${fr.length}</span><a data-clip-step="1" style="cursor:pointer;padding:0 4px">›</a></span>` : '';
+      html.push(`<div class="cam-opt${cur ? ' selected' : ''}" data-name="${target.name.replace(/"/g, '&quot;')}" title="${clip} · ${mem.length} frames">
+        ${clipTitle(mem)}${step}
+        <span class="cam-opt-tag">CL · ${px}px</span></div>`);
     }
     dd.innerHTML = html.join('');
   }
@@ -1300,11 +1302,8 @@ async function init() {
   renderCamDropdown();
   camSearch.addEventListener('input', e => { camSearchQ = e.target.value; renderCamDropdown(); });
   camDropdown.addEventListener('click', e => {
-    if (e.target.closest('[data-clip-empty]')) { clipShowEmpty = !clipShowEmpty; renderCamDropdown(); return; }   // [CL-CLIPS-V1]
-    const head = e.target.closest('.clip-head[data-clip]');
-    const st = e.target.closest('[data-clip-step]');
-    if (st) { clipStep(+st.dataset.clipStep); return; }
-    if (head) { const k = head.dataset.clip; clipOpen[k] = head.dataset.open !== '1'; renderCamDropdown(); return; }
+    const st = e.target.closest('[data-clip-step]');   // [CL-CLIPS-V2]
+    if (st) { e.stopPropagation(); clipStep(+st.dataset.clipStep); return; }
     const opt = e.target.closest('.cam-opt[data-name]');
     if (!opt) return;
     const name = opt.dataset.name;
@@ -2200,24 +2199,27 @@ async function init() {
     selRayGroup.setAttribute('id', 'sel-lm-rays-layer');
     window.mapOverlay.appendChild(selRayGroup);
 
-    // [CL-CLIPS-V1] one path per cyberleak clip; frames = small dots; empty frames hidden unless 'show empty'
+    // [CL-CLIPS-V2] cyberleak clips: one marker per clip (first marked frame); the other frames + a faint path appear only
+    // while one of the clip's frames is selected (see updateMapSelectionStyle)
     const _byName = {}; (typeof allCams !== 'undefined' ? allCams : []).forEach(x => { _byName[x.name] = x; });
     const _clipOfMap = c => clipOf(Object.assign({}, _byName[c.name] || {}, c));
-    const _clips = {};
+    const _clips = {}, _clipMain = {};
     for (const c of window.mapData.cameras) { const k = c.xyz && _clipOfMap(c); if (k) (_clips[k] = _clips[k] || []).push(c); }
     for (const [k, fr] of Object.entries(_clips)) {
       if (fr.length < 2) continue;
       fr.sort((a, b) => (((_byName[a.name] || {}).clip_order ?? 0) - ((_byName[b.name] || {}).clip_order ?? 0)));
+      _clipMain[k] = (fr.find(c => c.n_pixels > 0) || fr[0]).name;
       const pl = document.createElementNS(SVG_NS, 'polyline');
       pl.setAttribute('points', fr.map(c => window.worldToSvg(c.xyz[0], c.xyz[1]).join(',')).join(' '));
-      pl.setAttribute('fill', 'none'); pl.setAttribute('stroke', '#fbbf24'); pl.setAttribute('stroke-width', String(FRUSTUM_LINE_WIDTH * 1.4));
-      pl.setAttribute('stroke-dasharray', '60 40'); pl.setAttribute('opacity', '0.75'); pl.setAttribute('pointer-events', 'none');
+      pl.setAttribute('fill', 'none'); pl.setAttribute('stroke', '#fbbf24'); pl.setAttribute('stroke-width', String(FRUSTUM_LINE_WIDTH * 0.6));
+      pl.setAttribute('stroke-dasharray', '30 30'); pl.setAttribute('opacity', '0.45'); pl.setAttribute('pointer-events', 'none');
+      pl.setAttribute('class', 'clip-extra'); pl.dataset.clip = k; pl.style.display = 'none';
       camsGroup.appendChild(pl);
     }
+    window._mapClipOf = _clipOfMap;
     for (const c of window.mapData.cameras) {
       if (!c.xyz) continue;  // shouldn't happen since /api/map_data filters
-      const _ck = _clipOfMap(c), _isFrame = !!(_ck && (_clips[_ck] || []).length > 1);
-      if (_isFrame && !clipShowEmpty && !(c.n_pixels > 0) && c.name !== mapSelectedCamName) continue;
+      const _ck = _clipOfMap(c), _isFrame = !!(_ck && (_clips[_ck] || []).length > 1) && _clipMain[_ck] !== c.name;
       const type = getCamTypeForMap(c);
       // [MAP-DESIGN-V1] fill = tier (qualite), pas type; le frustum garde
       // la couleur tier aussi pour la coherence.
@@ -2234,6 +2236,7 @@ async function init() {
       const camGroup = document.createElementNS(SVG_NS, 'g');
       camGroup.setAttribute('class', 'cam-group');
       camGroup.dataset.camName = c.name;
+      if (_isFrame) { camGroup.classList.add('clip-extra'); camGroup.dataset.clip = _ck; camGroup.style.display = 'none'; }   // [CL-CLIPS-V2]
 
       // Frustum fill (very light triangle between apex and the two edges).
       const fill = document.createElementNS(SVG_NS, 'polygon');
@@ -2438,6 +2441,10 @@ async function init() {
 
   function updateMapSelectionStyle() {
     if (!window.mapOverlay) return;
+    // [CL-CLIPS-V2] show the other frames + path of the selected camera's clip only
+    const _selC = (typeof allCams !== 'undefined' ? allCams : []).find(x => x.name === mapSelectedCamName);
+    const _selClip = _selC && window._mapClipOf ? window._mapClipOf(_selC) : null;
+    window.mapOverlay.querySelectorAll('.clip-extra').forEach(el => { el.style.display = (_selClip && el.dataset.clip === _selClip) ? '' : 'none'; });
     window.mapOverlay.querySelectorAll('g.cam-group').forEach(g => {
       const sel = g.dataset.camName === mapSelectedCamName;
       g.classList.toggle('selected', sel);
