@@ -733,6 +733,11 @@ class Handler(BaseHTTPRequestHandler):
                 # au-dela du z max de la source (ou hors emprise): fallback yanis
                 tile_path = os.path.join(TILES_DIR, z_dir, f'{z_in},{y},{x}.jpg')
             if not os.path.exists(tile_path):
+                # [TILES-SRC-V17] V17 is published on a smaller extent than V16: outside it (open sea / map margins)
+                # fall back to the V16 tile (frames differ by 9/8 m, invisible at the margins)
+                _v16 = os.path.join(_TILES_ROOT, 'yanis,16', z_dir, f'{z_in},{y},{x}.jpg')
+                if os.path.exists(_v16): tile_path = _v16
+            if not os.path.exists(tile_path):
                 self.send_response(404)
                 self.end_headers()
                 return
@@ -762,6 +767,7 @@ class Handler(BaseHTTPRequestHandler):
                         continue
                     entry = {
                         'name': name, 'xyz': cd['xyz'],
+                        'id': cd.get('id'), 'clip': cd.get('clip'), 'clip_title': cd.get('clip_title'), 'clip_order': cd.get('clip_order'),   # [CL-CLIPS-V1]
                         'ypr': list(cd['ypr']) if cd.get('ypr') else None,   # [POSE-EDIT] yaw absolu pour le Save
                         'tier': (_ct.get(name) or {}).get('tier'),
                         'pose_verified': cd.get('pose_verified'),          # [POSE-VERIFIED-V1]
@@ -863,6 +869,7 @@ class Handler(BaseHTTPRequestHandler):
                     'size': list(cam_data['size']) if cam_data.get('size') else None,
                     'source': cam_data.get('source'),
                     'id': cam_data.get('id'),   # [SERIES-V1] client categories = Yanis series from the ID
+                    'clip': cam_data.get('clip'), 'clip_title': cam_data.get('clip_title'), 'clip_order': cam_data.get('clip_order'),   # [CL-CLIPS-V1]
                     'type': _classify_cam(name),
                     'color': color,
                     'n_pixels': len(cam_pixels),
@@ -1200,6 +1207,7 @@ class Handler(BaseHTTPRequestHandler):
                     'size': list(data['size']) if data.get('size') else None,
                     'source': data.get('source'),
                     'id': data.get('id'),  # [L2-PANORAMA] L*/T*/S* — le client tague LEAK sur id L* meme sans date
+                    'clip': data.get('clip'), 'clip_title': data.get('clip_title'), 'clip_order': data.get('clip_order'),   # [CL-CLIPS-V1]
                     # V2: is_leak now means "xyz is HUD-locked". The
                     # constraint_class field exposes the granular V2 class
                     # for richer client-side handling.

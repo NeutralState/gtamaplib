@@ -1736,6 +1736,20 @@ const data = await (await fetch('/api/scene3d')).json();
   }
 })();
 
+// [CL-CLIPS-V1 2026-10-18] cyberleak clips: one frustum (first marked frame) + one flight path per clip
+const _clips3d = {};
+for (const c of data.cameras) if (c.clip) (_clips3d[c.clip] = _clips3d[c.clip] || []).push(c);
+for (const fr of Object.values(_clips3d)) {
+  if (fr.length < 2) continue;
+  fr.sort((a, b) => (a.clip_order ?? 0) - (b.clip_order ?? 0));
+  const rep = fr.find(c => c.n_pixels > 0) || fr[0];
+  for (const c of fr) c._clipHidden = c !== rep;
+  rep._clipLabel = (rep.clip_title || rep.clip) + ' (' + fr.length + ' frames)';
+  const pg = new THREE.BufferGeometry();
+  pg.setAttribute('position', new THREE.Float32BufferAttribute(fr.flatMap(c => c.xyz), 3));
+  const pl = new THREE.Line(pg, new THREE.LineDashedMaterial({ color: 0xfbbf24, dashSize: 40, gapSize: 25, transparent: true, opacity: 0.8, depthTest: false }));
+  pl.computeLineDistances(); pl.renderOrder = 11; layers.cams.add(pl);
+}
 // ── frustums: un LineSegments par tier (perf: 174 cams en 5 draws) ──
 const byTier = {};
 for (const c of data.cameras) {
@@ -1750,7 +1764,7 @@ for (const [tier, cams] of Object.entries(byTier)) {
     const [x, y, z] = c.xyz;
     camPickPositions.push(x, y, z);
     camPickRefs.push(c);
-    if (!c.corners) continue;
+    if (!c.corners || c._clipHidden) continue;   // [CL-CLIPS-V1]
     const tips = c.corners.map(d => [x + d[0] * FRUSTUM_LEN,
                                      y + d[1] * FRUSTUM_LEN,
                                      z + d[2] * FRUSTUM_LEN]);
@@ -3168,7 +3182,9 @@ if (window.__pendingPoint) { window.__focusPoint(window.__pendingPoint); window.
   const list = document.getElementById('cam-list');
   const search = document.getElementById('cam-search');
   const details = document.getElementById('cam-details');
-  const cams = [...data.cameras].sort((a, b) => a.name.localeCompare(b.name));
+  const _ck = c => c.clip ? (c.clip_title || c.clip) : c.name;   // [CL-CLIPS-V1] clip frames listed together under their clip
+  const cams = [...data.cameras].sort((a, b) => _ck(a).localeCompare(_ck(b)) || ((a.clip_order ?? 0) - (b.clip_order ?? 0)) || a.name.localeCompare(b.name));
+  const _clipN = {}; for (const c of cams) if (c.clip) _clipN[c.clip] = (_clipN[c.clip] || 0) + 1;
   document.getElementById('cam-count').textContent = cams.length;
   const hex = t => '#' + TIER_COLORS[t || 'unverified'].toString(16).padStart(6, '0');
   const rows = new Map();
@@ -3176,14 +3192,23 @@ if (window.__pendingPoint) { window.__focusPoint(window.__pendingPoint); window.
     list.innerHTML = '';
     rows.clear();
     const f = (filter || '').toLowerCase();
+    let _lastClip = null;
     for (const c of cams) {
-      if (f && !c.name.toLowerCase().includes(f)) continue;
+      if (f && !c.name.toLowerCase().includes(f) && !((c.clip_title || '').toLowerCase().includes(f))) continue;
+      const _grp = c.clip && _clipN[c.clip] > 1;
+      if (_grp && c.clip !== _lastClip) {
+        const h = document.createElement('div'); h.className = 'cam-it';
+        h.style.cssText = 'font-weight:700;color:#fbbf24;cursor:default';
+        h.textContent = (c.clip_title || c.clip) + ' · ' + _clipN[c.clip] + ' frames'; list.appendChild(h);
+      }
+      _lastClip = c.clip || null;
       const it = document.createElement('div');
       it.className = 'cam-it';
       it.innerHTML = `<span class="tdot" style="background:${hex(c.tier)}"></span>` +
                      `<span class="nm"></span>` +
                      (c.pose_verified ? '<span class="ck">&#10003;</span>' : '');
-      it.querySelector('.nm').textContent = c.name;
+      it.querySelector('.nm').textContent = _grp ? '↳ ' + ((c.id || '').split('-').slice(1).join('-') || c.name) : c.name;
+      if (_grp) { it.style.paddingLeft = '18px'; if (!(c.n_pixels > 0)) it.style.opacity = '0.45'; it.title = c.name; }
       it.addEventListener('click', () => {
         syncToCam(c.name);
         if (window.self !== window.top)
@@ -3234,6 +3259,7 @@ if (window.__pendingPoint) { window.__focusPoint(window.__pendingPoint); window.
     const [W, H] = realSize();
     const cand = [];
     for (const c of camPickRefs) {
+      if (c._clipHidden) continue;   // [CL-CLIPS-V1] one label per clip
       const dx = c.xyz[0] - camera.position.x, dy = c.xyz[1] - camera.position.y,
             dz = c.xyz[2] - camera.position.z;
       const d2 = dx*dx + dy*dy + dz*dz;
@@ -3249,7 +3275,7 @@ if (window.__pendingPoint) { window.__focusPoint(window.__pendingPoint); window.
       if (!el) {
         el = document.createElement('div');
         el.className = 'cam3d-label';
-        el.textContent = c.name;
+        el.textContent = c._clipLabel || c.name;
         layer.appendChild(el);
         els.set(c.name, el);
       }

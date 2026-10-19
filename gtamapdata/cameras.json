@@ -5569,7 +5569,7 @@
   "notes": "YANIS-IDS-V1 2026-10-18: id T3/5 -> T3/238 (Yanis V17 frame numbering). | POSITION APPROX 2026-09-17: estimation initiale = position de Vice Beach (A) (T1/6, meme point de vue au-dessus de la plage) montee a 110 m; Loews Miami Beach (1957,1147) a droite du centre, roue Skyviews (34,132) a gauche; a resoudre avec les clics"
  },
  "The Moose Trap (Roller Coaster) (2026)": {
-  "id": "B26/1",
+  "id": "CL/5",
   "player": [
    -231.1,
    834.9,
@@ -5597,10 +5597,13 @@
   "era": "2026",
   "constraint_class": "A_full_hud",
   "pose_verified": null,
-  "notes": "HUD-2026 2026-09-18: pose prise telle quelle du HUD de debug (C = camera, Dir = pitch/roll/heading GTA -> yaw 360-124.8=235.2, Fov = vertical); convention verifiee: la skyline Downtown (SEFC, Marina Blue a 6-7 km) se projette a x 2870-2990 = bord droit du cadre comme dans l'image. CARTE 2026 != LEAK 2022: a cet endroit la V16/leak montrent Mount Kalaga NP / Fairyland Forest (collines 118-190 m) alors que le build 2026 y a un parc plat en bord d'eau -> categorie a part (era 2026), ne pas utiliser pour le relief ni pour les landmarks 2022; le joueur P (-231.1,834.9,3.0) tombe a 0.1 m du sol heightmap (frame commune confirmee)"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/1 -> CL/5 (cyberleak clip CL/5 \"The Moose Trap (Roller Coaster)\"). | HUD-2026 2026-09-18: pose prise telle quelle du HUD de debug (C = camera, Dir = pitch/roll/heading GTA -> yaw 360-124.8=235.2, Fov = vertical); convention verifiee: la skyline Downtown (SEFC, Marina Blue a 6-7 km) se projette a x 2870-2990 = bord droit du cadre comme dans l'image. CARTE 2026 != LEAK 2022: a cet endroit la V16/leak montrent Mount Kalaga NP / Fairyland Forest (collines 118-190 m) alors que le build 2026 y a un parc plat en bord d'eau -> categorie a part (era 2026), ne pas utiliser pour le relief ni pour les landmarks 2022; le joueur P (-231.1,834.9,3.0) tombe a 0.1 m du sol heightmap (frame commune confirmee)",
+  "clip": "CL/5",
+  "clip_title": "The Moose Trap (Roller Coaster)",
+  "clip_order": 0.0
  },
  "Prison (Aerial) (Biplane)": {
-  "id": "B26/80",
+  "id": "CL/2-aerial",
   "player": null,
   "xyz": [
    -2088.204,
@@ -5623,17 +5626,20 @@
   "source": "Build 2026 \u2014 Cyberleak: Prison (Aerial) (Biplane) (1913x956 video capture with crypto overlay; aerial view from a biplane south of the prison looking north: prison bottom left, Homestead water tower on the left, canal, fields, WDNA FM mast on the right, Vice City on the right horizon)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/80 -> B26/80 (Yanis V17 frame numbering). | CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | SOLVE 2026-09-18b (canal V16 + chateau d'eau + pied du mat, tours en contrainte douce): rives du canal 1-10 px, chateau d'eau 2 px, mat 34 px; la leak map confirme le canal V16 a 5-10 m pres. Depuis cette pose, les tours ouest (1,5,6) tombent 15-20 m au sud des coins V16, les tours est (3,4) sur les coins. A affiner avec l'autoroute devant la prison (clics) et les 2 autres captures aeriennes. | POSITION APPROX 2026-09-18: estimation initiale a resoudre avec les clics (6 tours de la prison vues de haut, chateau d'eau, mat WDNA FM, canal); frame fournie par Alexandre pour trancher la position des Prison Towers",
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/80 -> CL/2-aerial (cyberleak clip CL/2 \"Prison (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/80 -> B26/80 (Yanis V17 frame numbering). | CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | SOLVE 2026-09-18b (canal V16 + chateau d'eau + pied du mat, tours en contrainte douce): rives du canal 1-10 px, chateau d'eau 2 px, mat 34 px; la leak map confirme le canal V16 a 5-10 m pres. Depuis cette pose, les tours ouest (1,5,6) tombent 15-20 m au sud des coins V16, les tours est (3,4) sur les coins. A affiner avec l'autoroute devant la prison (clics) et les 2 autres captures aeriennes. | POSITION APPROX 2026-09-18: estimation initiale a resoudre avec les clics (6 tours de la prison vues de haut, chateau d'eau, mat WDNA FM, canal); frame fournie par Alexandre pour trancher la position des Prison Towers",
   "era": "2026",
   "note": "PRISON-V1 2026-09-30: pose recalee sur les 6 tours (sommet = LM Prison Tower n, pied = sol sous le polygone V16 de la tour, lus dans l image) + chateau d eau Homestead: rms 5.2 px (etait 23 px sur les clics). Pose precedente [[-2023.71, -2742.96, 234.6], [78.565, -5.52, 2.113], 65.76] |  | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +4.1 +26.7 +17.1 m, d(ypr) +0.68 -0.08 -1.33 deg, dfov +1.52; edges None -> None sigma, landmark RMS 108.11' -> 26.18' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +2.8 +1.3 +1.8 m, d(ypr) +0.15 -0.15 +0.03 deg, dfov -0.28; edges None -> None sigma, landmark RMS 26.18' -> 25.96' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +4.0 +1.2 +1.1 m, d(ypr) +0.16 -0.10 +0.05 deg, dfov -0.40; edges None -> None sigma, landmark RMS 25.96' -> 25.7'",
   "_mvs_origin": [
    -2099.12,
    -2751.34,
    175.54
-  ]
+  ],
+  "clip": "CL/2",
+  "clip_title": "Prison (Video)",
+  "clip_order": 0.0
  },
  "Prison (Video) f100": {
-  "id": "B26/82",
+  "id": "CL/2-f100",
   "player": null,
   "xyz": [
    -2487.45,
@@ -5656,11 +5662,14 @@
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) f100 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 at t=10.83 s, 1920x1080, crypto overlay; 7.5-13.7 s sequence = camera orbiting the biplane above the prison)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/82 -> B26/82 (Yanis V17 frame numbering). | CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | SOLVE JOINT-PRISON v5 2026-09-19: orientation de f140 imposee = alignement du relief par Alexandre apres rechargement (yaw -1.20 / pitch +0.64 sur la pose v4), position libre -> cams video deplacees de 11-13 m, points video 3.2 px, sol 5.1 px, tours <= 5.4 m | SOLVE JOINT-PRISON v4 2026-09-19: + crete lointaine (alignement des montagnes par Alexandre sur f140: yaw +1.18 / pitch +0.90) et rives/routes V16 (poids faible); les cams video se deplacent de 9-16 m / 0.8-1.25 deg, fov 89.7, tours <= 4 m | SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM.",
-  "era": "2026"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/82 -> CL/2-f100 (cyberleak clip CL/2 \"Prison (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/82 -> B26/82 (Yanis V17 frame numbering). | CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | SOLVE JOINT-PRISON v5 2026-09-19: orientation de f140 imposee = alignement du relief par Alexandre apres rechargement (yaw -1.20 / pitch +0.64 sur la pose v4), position libre -> cams video deplacees de 11-13 m, points video 3.2 px, sol 5.1 px, tours <= 5.4 m | SOLVE JOINT-PRISON v4 2026-09-19: + crete lointaine (alignement des montagnes par Alexandre sur f140: yaw +1.18 / pitch +0.90) et rives/routes V16 (poids faible); les cams video se deplacent de 9-16 m / 0.8-1.25 deg, fov 89.7, tours <= 4 m | SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM.",
+  "era": "2026",
+  "clip": "CL/2",
+  "clip_title": "Prison (Video)",
+  "clip_order": 10.83
  },
  "Prison (Video) f140": {
-  "id": "B26/83",
+  "id": "CL/2-f140",
   "player": null,
   "xyz": [
    -2444.215,
@@ -5683,17 +5692,20 @@
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) f140 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 at t=12.17 s, 1920x1080, crypto overlay; 7.5-13.7 s sequence = camera orbiting the biplane above the prison)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/83 -> B26/83 (Yanis V17 frame numbering). | CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | SOLVE JOINT-PRISON v5 2026-09-19: orientation de f140 imposee = alignement du relief par Alexandre apres rechargement (yaw -1.20 / pitch +0.64 sur la pose v4), position libre -> cams video deplacees de 11-13 m, points video 3.2 px, sol 5.1 px, tours <= 5.4 m | SOLVE JOINT-PRISON v4 2026-09-19: + crete lointaine (alignement des montagnes par Alexandre sur f140: yaw +1.18 / pitch +0.90) et rives/routes V16 (poids faible); les cams video se deplacent de 9-16 m / 0.8-1.25 deg, fov 89.7, tours <= 4 m | SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM.",
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/83 -> CL/2-f140 (cyberleak clip CL/2 \"Prison (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/83 -> B26/83 (Yanis V17 frame numbering). | CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | SOLVE JOINT-PRISON v5 2026-09-19: orientation de f140 imposee = alignement du relief par Alexandre apres rechargement (yaw -1.20 / pitch +0.64 sur la pose v4), position libre -> cams video deplacees de 11-13 m, points video 3.2 px, sol 5.1 px, tours <= 5.4 m | SOLVE JOINT-PRISON v4 2026-09-19: + crete lointaine (alignement des montagnes par Alexandre sur f140: yaw +1.18 / pitch +0.90) et rives/routes V16 (poids faible); les cams video se deplacent de 9-16 m / 0.8-1.25 deg, fov 89.7, tours <= 4 m | SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM.",
   "era": "2026",
   "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -3.4 +3.6 +5.9 m, d(ypr) -0.08 -0.64 -0.10 deg, dfov +0.52; edges None -> None sigma, landmark RMS 9.4' -> 2.8'",
   "_mvs_origin": [
    -2440.77,
    -3244.1,
    195.66
-  ]
+  ],
+  "clip": "CL/2",
+  "clip_title": "Prison (Video)",
+  "clip_order": 12.17
  },
  "Prison (Video) f180": {
-  "id": "B26/84",
+  "id": "CL/2-f180",
   "player": null,
   "xyz": [
    -2403.37,
@@ -5716,17 +5728,20 @@
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) f180 (GTA_6_plane_video_POLL_upload.ee_mirror_1.MP4 at t=13.50 s, 1920x1080, crypto overlay; 7.5-13.7 s sequence = camera orbiting the biplane above the prison)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/84 -> B26/84 (Yanis V17 frame numbering). | CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | SOLVE JOINT-PRISON v5 2026-09-19: orientation de f140 imposee = alignement du relief par Alexandre apres rechargement (yaw -1.20 / pitch +0.64 sur la pose v4), position libre -> cams video deplacees de 11-13 m, points video 3.2 px, sol 5.1 px, tours <= 5.4 m | SOLVE JOINT-PRISON v4 2026-09-19: + crete lointaine (alignement des montagnes par Alexandre sur f140: yaw +1.18 / pitch +0.90) et rives/routes V16 (poids faible); les cams video se deplacent de 9-16 m / 0.8-1.25 deg, fov 89.7, tours <= 4 m | SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM.",
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/84 -> CL/2-f180 (cyberleak clip CL/2 \"Prison (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/84 -> B26/84 (Yanis V17 frame numbering). | CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | SOLVE JOINT-PRISON v5 2026-09-19: orientation de f140 imposee = alignement du relief par Alexandre apres rechargement (yaw -1.20 / pitch +0.64 sur la pose v4), position libre -> cams video deplacees de 11-13 m, points video 3.2 px, sol 5.1 px, tours <= 5.4 m | SOLVE JOINT-PRISON v4 2026-09-19: + crete lointaine (alignement des montagnes par Alexandre sur f140: yaw +1.18 / pitch +0.90) et rives/routes V16 (poids faible); les cams video se deplacent de 9-16 m / 0.8-1.25 deg, fov 89.7, tours <= 4 m | SOLVE JOINT-PRISON 2026-09-19: bundle conjoint video biplan (25 images f088-f185, fov partage 90.2 deg, clics Alexandre propages par suivi LK) + Prison + Tennis Stadium (4K) + Grassrivers 02/05 (poses figees); residus video mediane 0.6-2.9 px, cams sol <= 9.5 px | POSITION APPROX 2026-09-19: pose issue du bundle video (suivi LK des 6 sommets de tours + chateau d'eau sur 98 images, rms 1.7 px) mais fov/echelle indetermines par la video seule (50-105 deg equivalents); fov mis a 70 arbitrairement. A resoudre par clics sur des points connus a plusieurs profondeurs: sommet+pied du chateau d'eau, extremites du pont sur le canal, intersections de routes (Alt-clic V16), pied du mat WDNA FM.",
   "era": "2026",
   "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +2.5 -4.0 +1.3 m, d(ypr) -0.09 -0.08 -0.04 deg, dfov -0.50; edges None -> None sigma, landmark RMS 3.25' -> 2.14'",
   "_mvs_origin": [
    -2405.9,
    -3157.8,
    192.72
-  ]
+  ],
+  "clip": "CL/2",
+  "clip_title": "Prison (Video)",
+  "clip_order": 13.5
  },
  "VCIA Night (Runway)": {
-  "id": "B26/85",
+  "id": "CL/4",
   "player": null,
   "xyz": [
    -2023.373,
@@ -5749,14 +5764,17 @@
   "source": "Build 2026 \u2014 Cyberleak: VCIA Night (Runway) (video frame 8305, night: VCIA diagonal runway 12/30 seen from its SE end toward the NW, edge lights, green threshold and red runway end, lit terminal on the right, parked plane bottom right; black bars top/bottom)",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/85 -> B26/85 (Yanis V17 frame numbering). | CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | VCIA-V6 ANNULE 2026-09-20: forcer Titan America (clic (1361,370) vs projection (1459,378), 98 px) casse tout (piste 4 px, fov +7, roll -4) -> clic ou landmark Titan America douteux, exclu du solve; pose v5 conservee (le clic tour deplace de 0.6 px ne change rien: 0.7 px) | SOLVE VCIA-V6 2026-09-20: clic tour deplace par Alexandre a [572.6, 395.9] + Titan America (cimenterie, 1.9 km) + piste + prior POV: piste 4.0 px, tour 0.1 px, Titan 62.4 px | SOLVE VCIA-V5 2026-09-20: Watson Bay Water Tower (feu du sommet a (572,396), 3.6 km, tour fixee via G02+pontons) en point fort + piste V16 sur les traces + prior POV 0.5 deg: piste 1.4 px, tour 0.1 px, dyaw +0.45 vs POV | (v4 'annule' etait une erreur de ponderation: en v3 le feu tombait deja a 5 px) | VCIA-V4 ANNULE 2026-09-20: le point lumineux a (572,396) est 45 px trop bas pour etre le sommet (50.7 m) de la Watson Bay Water Tower a 3.6 km -> pas la tour (ou pas son sommet); pose v3 conservee | SOLVE VCIA-V4 2026-09-20: + Watson Bay Water Tower (feu au sommet a (572,396), 3.6 km) comme point, piste V16 sur les traces, orientation POV d'Alexandre en prior 0.3 deg: piste 0.7 px, tour 45.0 px, hfov 92.0 | SOLVE VCIA-V3 2026-09-19: orientation = alignement du lointain par Alexandre dans le POV (yaw -8.27 / pitch +3.93 sur la v2, tenue a 0.05 deg), position et fov libres contre la piste V16 + traces: cam descendue de 46 m (182 -> 141 m), hfov 96.9 -> 91.2, bords de piste 1.9 px; routes/eau V16 restent 40-60 px a cote des traces (decalage carte probable, comme a la prison); pad V16 (76 m x 150 m) plus petit que dans le jeu. | SOLVE VCIA-V2 2026-09-19: traces d'Alexandre (piste + pad en rouge, route en jaune, eau en bleu) contre la geometrie V16 (bords de piste 43 m, pad 76 m sur 150 m, routes, eau): bords de piste 2 px, coins du pad 18-29 px (pad V16 plus court/etroit que dans le jeu ?), routes/eau decalees de 20-40 px; hfov 97 (grand angle), roll -2; precision ~15 m. Prochaine etape: coins V16 du pad (Alt-clic) et coins du terminal. | SOLVE VCIA-V1 2026-09-19: pose initiale sur la geometrie V16 de la piste (bout SE 2 coins, seuil decale 2 coins, extremite NW, 2 lignes de feux de bord), rms 7.7 px, roll -8.8 (a verifier); precision ~10 m; a affiner par clics (coins du terminal, hangars, avion) et tooltips V16",
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/85 -> CL/4 (cyberleak clip CL/4 \"VCIA Night (Runway)\"). | YANIS-IDS-V1 2026-10-18: id S3/85 -> B26/85 (Yanis V17 frame numbering). | CYBERLEAK 2026-09-20: source = cyberleak (build 2026, meme fuite que le HUD debug de The Moose Trap), pas un screenshot officiel; la carte peut differer du leak 2022 (a garder en tete pour les decalages canal/autoroute a la prison et routes/eau a VCIA) | VCIA-V6 ANNULE 2026-09-20: forcer Titan America (clic (1361,370) vs projection (1459,378), 98 px) casse tout (piste 4 px, fov +7, roll -4) -> clic ou landmark Titan America douteux, exclu du solve; pose v5 conservee (le clic tour deplace de 0.6 px ne change rien: 0.7 px) | SOLVE VCIA-V6 2026-09-20: clic tour deplace par Alexandre a [572.6, 395.9] + Titan America (cimenterie, 1.9 km) + piste + prior POV: piste 4.0 px, tour 0.1 px, Titan 62.4 px | SOLVE VCIA-V5 2026-09-20: Watson Bay Water Tower (feu du sommet a (572,396), 3.6 km, tour fixee via G02+pontons) en point fort + piste V16 sur les traces + prior POV 0.5 deg: piste 1.4 px, tour 0.1 px, dyaw +0.45 vs POV | (v4 'annule' etait une erreur de ponderation: en v3 le feu tombait deja a 5 px) | VCIA-V4 ANNULE 2026-09-20: le point lumineux a (572,396) est 45 px trop bas pour etre le sommet (50.7 m) de la Watson Bay Water Tower a 3.6 km -> pas la tour (ou pas son sommet); pose v3 conservee | SOLVE VCIA-V4 2026-09-20: + Watson Bay Water Tower (feu au sommet a (572,396), 3.6 km) comme point, piste V16 sur les traces, orientation POV d'Alexandre en prior 0.3 deg: piste 0.7 px, tour 45.0 px, hfov 92.0 | SOLVE VCIA-V3 2026-09-19: orientation = alignement du lointain par Alexandre dans le POV (yaw -8.27 / pitch +3.93 sur la v2, tenue a 0.05 deg), position et fov libres contre la piste V16 + traces: cam descendue de 46 m (182 -> 141 m), hfov 96.9 -> 91.2, bords de piste 1.9 px; routes/eau V16 restent 40-60 px a cote des traces (decalage carte probable, comme a la prison); pad V16 (76 m x 150 m) plus petit que dans le jeu. | SOLVE VCIA-V2 2026-09-19: traces d'Alexandre (piste + pad en rouge, route en jaune, eau en bleu) contre la geometrie V16 (bords de piste 43 m, pad 76 m sur 150 m, routes, eau): bords de piste 2 px, coins du pad 18-29 px (pad V16 plus court/etroit que dans le jeu ?), routes/eau decalees de 20-40 px; hfov 97 (grand angle), roll -2; precision ~15 m. Prochaine etape: coins V16 du pad (Alt-clic) et coins du terminal. | SOLVE VCIA-V1 2026-09-19: pose initiale sur la geometrie V16 de la piste (bout SE 2 coins, seuil decale 2 coins, extremite NW, 2 lignes de feux de bord), rms 7.7 px, roll -8.8 (a verifier); precision ~10 m; a affiner par clics (coins du terminal, hangars, avion) et tooltips V16",
   "era": "2026",
   "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -26.6 -8.3 -12.4 m, d(ypr) -0.03 +0.06 +0.06 deg, dfov +0.55; edges None -> None sigma, landmark RMS 32.11' -> 9.98' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -5.0 -1.8 -2.9 m, d(ypr) -0.04 +0.06 -0.03 deg, dfov +0.20; edges None -> None sigma, landmark RMS 9.98' -> 9.15'",
   "_mvs_origin": [
    -1991.8,
    -1309.1,
    136.6
-  ]
+  ],
+  "clip": "CL/4",
+  "clip_title": "VCIA Night (Runway)",
+  "clip_order": 0.0
  },
  "Prison (Video) v091 (Wing)": {
   "player": null,
@@ -5782,14 +5800,17 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v091 (biplane video t=3.03 s, wing POV: Hamlet, WDNA mast, Homestead water tower, Downtown skyline)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/86 -> B26/86 (Yanis V17 frame numbering). | SOLVE 2026-09-24b: + Hamlet Interchange (1) (tooltip, cote droit), 12 clics, hfov 106.7, rms 12.9 | SOLVE 2026-09-24: 11 clics d Alexandre (tours 1/5/6, chateau d eau, mat WDNA, Four Seasons SE/SW, 4 intersections tooltip Hamlet) fov libre -> hfov 106.2, rms 11.2 px; ancre du plan A (frames 0-91) pour l orthophoto | POSITION APPROX 2026-09-24: pose provisoire (odometrie/PnP) a verrouiller par les clics d Alexandre pour l orthophoto; fov incertain",
-  "id": "B26/86",
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/86 -> CL/2-v091 (cyberleak clip CL/2 \"Prison (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/86 -> B26/86 (Yanis V17 frame numbering). | SOLVE 2026-09-24b: + Hamlet Interchange (1) (tooltip, cote droit), 12 clics, hfov 106.7, rms 12.9 | SOLVE 2026-09-24: 11 clics d Alexandre (tours 1/5/6, chateau d eau, mat WDNA, Four Seasons SE/SW, 4 intersections tooltip Hamlet) fov libre -> hfov 106.2, rms 11.2 px; ancre du plan A (frames 0-91) pour l orthophoto | POSITION APPROX 2026-09-24: pose provisoire (odometrie/PnP) a verrouiller par les clics d Alexandre pour l orthophoto; fov incertain",
+  "id": "CL/2-v091",
   "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -2.3 -2.6 +1.9 m, d(ypr) -0.21 -0.28 -0.26 deg, dfov -0.64; edges 3.64 -> 3.58 sigma, landmark RMS 46.17' -> 47.11'",
   "_mvs_origin": [
    -2754.67,
    -3637.66,
    185.47
-  ]
+  ],
+  "clip": "CL/2",
+  "clip_title": "Prison (Video)",
+  "clip_order": 3.03
  },
  "Prison (Video) v250": {
   "player": null,
@@ -5815,8 +5836,11 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v250 (biplane video t=8.33 s, chase cam: prison bottom left, water tower, WDNA mast, interchange)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/87 -> B26/87 (Yanis V17 frame numbering). | SOLVE 2026-09-24b: 9 clics (6 tours, chateau d eau, mat, tooltip 82 Intersection (1)), fov LIBRE -> hfov 74.1 (la chase-cam zoome pendant le plan: 89.7 a la frame 325), rms 7.2 px | SOLVE 2026-09-24: 8 clics d Alexandre (6 tours, chateau d eau, mat WDNA), fov 89.677 (chase-cam), rms 33.3 px; ancre du plan B (frames 92-312) | POSITION APPROX 2026-09-24: pose provisoire (odometrie/PnP) a verrouiller par les clics d Alexandre pour l orthophoto; fov incertain",
-  "id": "B26/87"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/87 -> CL/2-v250 (cyberleak clip CL/2 \"Prison (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/87 -> B26/87 (Yanis V17 frame numbering). | SOLVE 2026-09-24b: 9 clics (6 tours, chateau d eau, mat, tooltip 82 Intersection (1)), fov LIBRE -> hfov 74.1 (la chase-cam zoome pendant le plan: 89.7 a la frame 325), rms 7.2 px | SOLVE 2026-09-24: 8 clics d Alexandre (6 tours, chateau d eau, mat WDNA), fov 89.677 (chase-cam), rms 33.3 px; ancre du plan B (frames 92-312) | POSITION APPROX 2026-09-24: pose provisoire (odometrie/PnP) a verrouiller par les clics d Alexandre pour l orthophoto; fov incertain",
+  "id": "CL/2-v250",
+  "clip": "CL/2",
+  "clip_title": "Prison (Video)",
+  "clip_order": 8.33
  },
  "Prison (Video) v600": {
   "player": null,
@@ -5842,8 +5866,11 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v600 (biplane video t=20.0 s, chase cam: ponds and interchange east of the prison, Southside in the background)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/88 -> B26/88 (Yanis V17 frame numbering). | SOLVE 2026-09-24: 8 clics (Canal Bridge (1) tooltip + landmarks; WDNA FM exclu, quasi hors champ), fov libre -> hfov 70.1, rms 3.9 px | POSITION APPROX 2026-09-24: pose odometrie (derive possible 10-20 m, 6.5 s apres la derniere ancre 405); a verrouiller par des tooltips (coins de bassins, intersections cote est)",
-  "id": "B26/88"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/88 -> CL/2-v600 (cyberleak clip CL/2 \"Prison (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/88 -> B26/88 (Yanis V17 frame numbering). | SOLVE 2026-09-24: 8 clics (Canal Bridge (1) tooltip + landmarks; WDNA FM exclu, quasi hors champ), fov libre -> hfov 70.1, rms 3.9 px | POSITION APPROX 2026-09-24: pose odometrie (derive possible 10-20 m, 6.5 s apres la derniere ancre 405); a verrouiller par des tooltips (coins de bassins, intersections cote est)",
+  "id": "CL/2-v600",
+  "clip": "CL/2",
+  "clip_title": "Prison (Video)",
+  "clip_order": 20.0
  },
  "Prison (Video) v160": {
   "player": null,
@@ -5869,14 +5896,17 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v160 (biplane video t=5.3 s, chase cam toward the SW: Grassrivers, industrial area in the right foreground)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/89 -> B26/89 (Yanis V17 frame numbering). | SOLVE 2026-09-24: 4 tooltips d Alexandre (Dirt Middle (1-2), Grassrivers Bridge (1), Watson Bay Bridge (1)) + horizon mer lu sur la frame (y=466, roulis ~0), fov libre -> hfov 85.0, rms 4.3 px; Dirt (1) exclu (predit 53 px plus haut que le clic, quelle que soit la config: lot conteneurs different du petit circuit V16 ou coin ambigu); pose a 4 points quasi alignes N-S + 1 point profond: fov/distance encore fragiles (+-10 deg / +-60 m) | POSITION APPROX 2026-09-24: pose odometrie (frame 160, ancre(s) 250; fov estime par la VO, derive possible 10-30 m); cam provisoire pour les tooltips/clics d Alexandre",
-  "id": "B26/89",
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/89 -> CL/2-v160 (cyberleak clip CL/2 \"Prison (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/89 -> B26/89 (Yanis V17 frame numbering). | SOLVE 2026-09-24: 4 tooltips d Alexandre (Dirt Middle (1-2), Grassrivers Bridge (1), Watson Bay Bridge (1)) + horizon mer lu sur la frame (y=466, roulis ~0), fov libre -> hfov 85.0, rms 4.3 px; Dirt (1) exclu (predit 53 px plus haut que le clic, quelle que soit la config: lot conteneurs different du petit circuit V16 ou coin ambigu); pose a 4 points quasi alignes N-S + 1 point profond: fov/distance encore fragiles (+-10 deg / +-60 m) | POSITION APPROX 2026-09-24: pose odometrie (frame 160, ancre(s) 250; fov estime par la VO, derive possible 10-30 m); cam provisoire pour les tooltips/clics d Alexandre",
+  "id": "CL/2-v160",
   "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +6.4 -3.0 +3.7 m, d(ypr) -0.48 -0.52 -0.27 deg, dfov -1.24; edges None -> None sigma, landmark RMS 12.06' -> 5.61' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +4.6 -1.9 +1.0 m, d(ypr) -0.31 -0.13 -0.20 deg, dfov -0.76; edges None -> None sigma, landmark RMS 5.61' -> 3.55' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +2.7 -1.1 +0.5 m, d(ypr) -0.18 -0.06 -0.12 deg, dfov -0.43; edges None -> None sigma, landmark RMS 3.55' -> 2.48'",
   "_mvs_origin": [
    -2719.22,
    -3491.05,
    179.24
-  ]
+  ],
+  "clip": "CL/2",
+  "clip_title": "Prison (Video)",
+  "clip_order": 5.3
  },
  "Prison (Video) v500": {
   "player": null,
@@ -5902,8 +5932,11 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v500 (biplane video t=16.7 s, chase cam toward the WNW: prison, canal, Homestead water tower on the left)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/90 -> B26/90 (Yanis V17 frame numbering). | SOLVE 2026-09-24: 8 clics d Alexandre (6 tours, chateau d eau Homestead, Canal Bridge (1) tooltip), fov libre -> hfov 76.0, rms 3.0 px; deplacement de 26 m vs la pose odometrie (fondu 405/600) | POSITION APPROX 2026-09-24: pose odometrie (frame 500, ancre(s) 405 et 600 (fondu); fov estime par la VO, derive possible 10-30 m); cam provisoire pour les tooltips/clics d Alexandre",
-  "id": "B26/90"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/90 -> CL/2-v500 (cyberleak clip CL/2 \"Prison (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/90 -> B26/90 (Yanis V17 frame numbering). | SOLVE 2026-09-24: 8 clics d Alexandre (6 tours, chateau d eau Homestead, Canal Bridge (1) tooltip), fov libre -> hfov 76.0, rms 3.0 px; deplacement de 26 m vs la pose odometrie (fondu 405/600) | POSITION APPROX 2026-09-24: pose odometrie (frame 500, ancre(s) 405 et 600 (fondu); fov estime par la VO, derive possible 10-30 m); cam provisoire pour les tooltips/clics d Alexandre",
+  "id": "CL/2-v500",
+  "clip": "CL/2",
+  "clip_title": "Prison (Video)",
+  "clip_order": 16.7
  },
  "Prison (Video) v680": {
   "player": null,
@@ -5929,8 +5962,11 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v680 (biplane video t=22.7 s, chase cam toward the east: ponds/reservoirs, interchange, Southside in the background)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/91 -> B26/91 (Yanis V17 frame numbering). | POSITION APPROX 2026-09-24: pose odometrie depuis v600 (80 frames, derive possible 10-20 m, fov VO); cam provisoire pour les tooltips d Alexandre cote est (coins de bassins, intersections)",
-  "id": "B26/91"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/91 -> CL/2-v680 (cyberleak clip CL/2 \"Prison (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/91 -> B26/91 (Yanis V17 frame numbering). | POSITION APPROX 2026-09-24: pose odometrie depuis v600 (80 frames, derive possible 10-20 m, fov VO); cam provisoire pour les tooltips d Alexandre cote est (coins de bassins, intersections)",
+  "id": "CL/2-v680",
+  "clip": "CL/2",
+  "clip_title": "Prison (Video)",
+  "clip_order": 22.7
  },
  "Prison (Video) v310": {
   "player": null,
@@ -5956,8 +5992,11 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Prison (Video) v310 (biplane video t=10.3 s, chase cam toward the north: prison on the left, interchange 61 and ponds/reservoirs on the right, end of shot B)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/92 -> B26/92 (Yanis V17 frame numbering). | SOLVE 2026-09-24: 14 clics d Alexandre (WDNA FM, Four Seasons SW/SE, Prison Tower (3), 10 coins de bassins tooltips), fov libre -> hfov 82.1, rms 7.5 px (landmarks 2.5-3.4 px, bassins 4-13 px); exclus: Bassin (1) (59 px horizontal, autre coin?), Hamlet Interchange (1) (60 px vertical: pont sureleve, ancre au sol), Bassin (7) (23 px) | POSITION APPROX 2026-09-24: pose odometrie depuis v250 (60 frames, derive possible 5-15 m, fov VO); cam provisoire pour les tooltips d Alexandre: bassins (a ~1 km, x 1400-1600 y ~760), echangeur 61, prison",
-  "id": "B26/92"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/92 -> CL/2-v310 (cyberleak clip CL/2 \"Prison (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/92 -> B26/92 (Yanis V17 frame numbering). | SOLVE 2026-09-24: 14 clics d Alexandre (WDNA FM, Four Seasons SW/SE, Prison Tower (3), 10 coins de bassins tooltips), fov libre -> hfov 82.1, rms 7.5 px (landmarks 2.5-3.4 px, bassins 4-13 px); exclus: Bassin (1) (59 px horizontal, autre coin?), Hamlet Interchange (1) (60 px vertical: pont sureleve, ancre au sol), Bassin (7) (23 px) | POSITION APPROX 2026-09-24: pose odometrie depuis v250 (60 frames, derive possible 5-15 m, fov VO); cam provisoire pour les tooltips d Alexandre: bassins (a ~1 km, x 1400-1600 y ~760), echangeur 61, prison",
+  "id": "CL/2-v310",
+  "clip": "CL/2",
+  "clip_title": "Prison (Video)",
+  "clip_order": 10.3
  },
  "Biplane (Video) v0900": {
   "player": null,
@@ -5983,14 +6022,17 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0900 (biplane video t=30 s, chase cam approaching Downtown, bay on the right)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/93 -> B26/93 (Yanis V17 frame numbering). | SOLVE 2026-09-25 (v2): 13 clics dont Point (4) au sol, fov libre -> hfov 94.9, rms 5.9 px | SOLVE 2026-09-25: 12 clics d Alexandre (Four Seasons x3, SEFC, Two/Three Tequesta, Asia Brickell Key, Park Grove x3, Infinity x2), fov libre -> hfov 91.2, rms 5.0 px | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
-  "id": "B26/93",
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/93 -> CL/1-v0900 (cyberleak clip CL/1 \"Biplane (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/93 -> B26/93 (Yanis V17 frame numbering). | SOLVE 2026-09-25 (v2): 13 clics dont Point (4) au sol, fov libre -> hfov 94.9, rms 5.9 px | SOLVE 2026-09-25: 12 clics d Alexandre (Four Seasons x3, SEFC, Two/Three Tequesta, Asia Brickell Key, Park Grove x3, Infinity x2), fov libre -> hfov 91.2, rms 5.0 px | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
+  "id": "CL/1-v0900",
   "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -16.9 -8.3 +2.8 m, d(ypr) -0.04 -0.04 -0.02 deg, dfov -0.64; edges 2.88 -> 2.63 sigma, landmark RMS 17.93' -> 18.49'",
   "_mvs_origin": [
    -1837.68,
    -2345.54,
    188.33
-  ]
+  ],
+  "clip": "CL/1",
+  "clip_title": "Biplane (Video)",
+  "clip_order": 30.0
  },
  "Biplane (Video) v1080": {
   "player": null,
@@ -6016,8 +6058,11 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1080 (biplane video t=36 s, chase cam above the bay: marinas, islands, Downtown on the left)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/94 -> B26/94 (Yanis V17 frame numbering). | SOLVE 2026-09-25: 5 clics en 2 grappes (Four Seasons x2, Park Grove x3), fov libre -> hfov 47.8, rms 1.4 px; FOV NON CONTRAINT (2 grappes): a fov 80 la cam recule de 300 m; il faut 1-2 tours distinctes de plus | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
-  "id": "B26/94"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/94 -> CL/1-v1080 (cyberleak clip CL/1 \"Biplane (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/94 -> B26/94 (Yanis V17 frame numbering). | SOLVE 2026-09-25: 5 clics en 2 grappes (Four Seasons x2, Park Grove x3), fov libre -> hfov 47.8, rms 1.4 px; FOV NON CONTRAINT (2 grappes): a fov 80 la cam recule de 300 m; il faut 1-2 tours distinctes de plus | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
+  "id": "CL/1-v1080",
+  "clip": "CL/1",
+  "clip_title": "Biplane (Video)",
+  "clip_order": 36.0
  },
  "Biplane (Video) v1380": {
   "player": null,
@@ -6043,14 +6088,17 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1380 (biplane video t=46 s, chase cam between the Brickell towers)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/95 -> B26/95 (Yanis V17 frame numbering). | SOLVE 2026-09-26: fov FIXE 106.7 (camera aile droite, = v0770/v0820), rms 7.7 px | SOLVE 2026-09-25 (corrige): fov LIBRE -> hfov 120.6, rms 4.0 px (aile droite, meme camera que v0770 ~126) | SOLVE 2026-09-25: 6 clics (Four Seasons x3, SEFC, Infinity x2 = 3 points distincts), fov FIXE 106.7 (meme camera POV aile que v091) -> rms 7.7 px (hfov 106.7); fov libre donnerait 120.6 mais non contraint; Three Tequesta cliques hors image exclus | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
-  "id": "B26/95",
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/95 -> CL/1-v1380 (cyberleak clip CL/1 \"Biplane (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/95 -> B26/95 (Yanis V17 frame numbering). | SOLVE 2026-09-26: fov FIXE 106.7 (camera aile droite, = v0770/v0820), rms 7.7 px | SOLVE 2026-09-25 (corrige): fov LIBRE -> hfov 120.6, rms 4.0 px (aile droite, meme camera que v0770 ~126) | SOLVE 2026-09-25: 6 clics (Four Seasons x3, SEFC, Infinity x2 = 3 points distincts), fov FIXE 106.7 (meme camera POV aile que v091) -> rms 7.7 px (hfov 106.7); fov libre donnerait 120.6 mais non contraint; Three Tequesta cliques hors image exclus | POSITION APPROX 2026-09-24: orientee/positionnee grossierement sur les coins du toit Four Seasons cliques par Alexandre (fov 80 fixe, roulis 0, altitude a priori 220 m): ordre de grandeur seulement, il faut 5+ tours reparties | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
+  "id": "CL/1-v1380",
   "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +9.2 +12.2 +0.9 m, d(ypr) -1.50 -0.08 +0.09 deg, dfov +3.06; edges 3.42 -> 1.55 sigma, landmark RMS 28.38' -> 27.11' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +5.6 +6.4 +0.0 m, d(ypr) -0.68 -0.14 +0.16 deg, dfov +1.47; edges 1.84 -> 1.16 sigma, landmark RMS 27.11' -> 27.46' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +4.0 +4.7 -0.4 m, d(ypr) -0.40 -0.03 +0.10 deg, dfov +0.91; edges 1.82 -> 1.31 sigma, landmark RMS 27.46' -> 27.8'",
   "_mvs_origin": [
    -1365.78,
    -1663.65,
    207.16
-  ]
+  ],
+  "clip": "CL/1",
+  "clip_title": "Biplane (Video)",
+  "clip_order": 46.0
  },
  "Biplane (Video) v1980": {
   "player": null,
@@ -6076,8 +6124,11 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v1980 (biplane video t=66 s, high POV above Downtown, interchanges)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/96 -> B26/96 (Yanis V17 frame numbering). | SOLVE 2026-09-25: 6 clics (SPC S, SEFC, Akoya, Citigroup x3 dont SW derive), fov libre -> hfov 67.9, rms 2.9 px (solve multi-depart) | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
-  "id": "B26/96"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/96 -> CL/1-v1980 (cyberleak clip CL/1 \"Biplane (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/96 -> B26/96 (Yanis V17 frame numbering). | SOLVE 2026-09-25: 6 clics (SPC S, SEFC, Akoya, Citigroup x3 dont SW derive), fov libre -> hfov 67.9, rms 2.9 px (solve multi-depart) | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
+  "id": "CL/1-v1980",
+  "clip": "CL/1",
+  "clip_title": "Biplane (Video)",
+  "clip_order": 66.0
  },
  "Biplane (Video) v2580": {
   "player": null,
@@ -6103,8 +6154,11 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2580 (biplane video t=86 s, chase cam, towers and waterfront)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/97 -> B26/97 (Yanis V17 frame numbering). | SOLVE 2026-09-25: 10 clics (roue, Hard Rock, Vizcayne S x3, Marina Blue x3, Loft Downtown II, Opera Tower); Akoya exclu (44 px), fov libre -> hfov 84.3, rms 9.6 px (solve multi-depart) | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
-  "id": "B26/97"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/97 -> CL/1-v2580 (cyberleak clip CL/1 \"Biplane (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/97 -> B26/97 (Yanis V17 frame numbering). | SOLVE 2026-09-25: 10 clics (roue, Hard Rock, Vizcayne S x3, Marina Blue x3, Loft Downtown II, Opera Tower); Akoya exclu (44 px), fov libre -> hfov 84.3, rms 9.6 px (solve multi-depart) | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
+  "id": "CL/1-v2580",
+  "clip": "CL/1",
+  "clip_title": "Biplane (Video)",
+  "clip_order": 86.0
  },
  "Biplane (Video) v3000": {
   "player": null,
@@ -6130,8 +6184,11 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v3000 (biplane video t=100 s, high POV above Downtown)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/98 -> B26/98 (Yanis V17 frame numbering). | SOLVE 2026-09-25: 5 clics (Opera Tower, Akoya, Quantum N/S, 1800 Club), fov libre -> hfov 87.9, rms 5.2 px (solve multi-depart) | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
-  "id": "B26/98"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/98 -> CL/1-v3000 (cyberleak clip CL/1 \"Biplane (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/98 -> B26/98 (Yanis V17 frame numbering). | SOLVE 2026-09-25: 5 clics (Opera Tower, Akoya, Quantum N/S, 1800 Club), fov libre -> hfov 87.9, rms 5.2 px (solve multi-depart) | POSITION APPROX 2026-09-24: pose DEVINEE (a la louche, Downtown a 200-300 m), cam provisoire pour les clics d Alexandre (sommets de tours); segment Downtown de la video biplan, essai ortho/meshs",
+  "id": "CL/1-v3000",
+  "clip": "CL/1",
+  "clip_title": "Biplane (Video)",
+  "clip_order": 100.0
  },
  "Biplane (Video) v0770": {
   "player": null,
@@ -6157,14 +6214,17 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0770 (biplane video t=25.7 s, right wing POV: Southside and the highway bottom left, Downtown on the horizon, shot 701-843)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/99 -> B26/99 (Yanis V17 frame numbering). | SOLVE 2026-09-25 (v4): 14 clics dont Point (1-4) et Southside Intersection (1-2), fov FIXE 106.7 (= aile gauche v091; les Points au loin + les intersections ne sont coherents qu a ~106): rms 9.2 px; le 88.8 precedent etait un artefact de 2 intersections + tours | SOLVE 2026-09-25 (v3): 10 clics dont 2 tooltips d intersections Southside a 250 m (Alexandre), fov libre -> hfov 88.8, rms 5.5 px: les points proches levent la degenerescence altitude/fov (106.7 et 126 etaient faux) | SOLVE 2026-09-25 (corrige): fov LIBRE -> hfov 126.0, rms 2.9 px; verifie par superposition des routes/autoroute V16 au sol sur la frame (le fov 106.7 de l aile gauche ne colle pas: la camera de l aile droite est plus large) | SOLVE 2026-09-25: 8 clics d Alexandre (Park Grove x3, Four Seasons x2, Infinity x2, SEFC), fov FIXE 106.7 (POV aile) -> rms 4.0 px; coherent a 58 m avec l interpolation des chaines VO 700/844 (fov libre donnerait 126 et 180 m d ecart, non retenu) | POSITION APPROX 2026-09-25: position extrapolee de la chaine VO (frame 700 + cap), cap devine, fov 106.7 suppose (POV aile comme v091); cam provisoire pour les clics d Alexandre (tours Downtown + tooltips Southside/autoroute) -> comble le trou Southside entre les frames 700 et 844",
-  "id": "B26/99",
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/99 -> CL/1-v0770 (cyberleak clip CL/1 \"Biplane (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/99 -> B26/99 (Yanis V17 frame numbering). | SOLVE 2026-09-25 (v4): 14 clics dont Point (1-4) et Southside Intersection (1-2), fov FIXE 106.7 (= aile gauche v091; les Points au loin + les intersections ne sont coherents qu a ~106): rms 9.2 px; le 88.8 precedent etait un artefact de 2 intersections + tours | SOLVE 2026-09-25 (v3): 10 clics dont 2 tooltips d intersections Southside a 250 m (Alexandre), fov libre -> hfov 88.8, rms 5.5 px: les points proches levent la degenerescence altitude/fov (106.7 et 126 etaient faux) | SOLVE 2026-09-25 (corrige): fov LIBRE -> hfov 126.0, rms 2.9 px; verifie par superposition des routes/autoroute V16 au sol sur la frame (le fov 106.7 de l aile gauche ne colle pas: la camera de l aile droite est plus large) | SOLVE 2026-09-25: 8 clics d Alexandre (Park Grove x3, Four Seasons x2, Infinity x2, SEFC), fov FIXE 106.7 (POV aile) -> rms 4.0 px; coherent a 58 m avec l interpolation des chaines VO 700/844 (fov libre donnerait 126 et 180 m d ecart, non retenu) | POSITION APPROX 2026-09-25: position extrapolee de la chaine VO (frame 700 + cap), cap devine, fov 106.7 suppose (POV aile comme v091); cam provisoire pour les clics d Alexandre (tours Downtown + tooltips Southside/autoroute) -> comble le trou Southside entre les frames 700 et 844",
+  "id": "CL/1-v0770",
   "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -15.7 -9.0 +5.9 m, d(ypr) +0.27 -0.27 -0.06 deg, dfov -0.91; edges 3.25 -> 1.02 sigma, landmark RMS 32.27' -> 31.17' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -8.0 -3.7 +3.0 m, d(ypr) +0.08 -0.12 +0.02 deg, dfov -0.35; edges 3.46 -> 1.37 sigma, landmark RMS 31.17' -> 31.24'",
   "_mvs_origin": [
    -2042.45,
    -2602.74,
    184.01
-  ]
+  ],
+  "clip": "CL/1",
+  "clip_title": "Biplane (Video)",
+  "clip_order": 25.666666666666668
  },
  "Biplane (Video) v0820": {
   "player": null,
@@ -6190,14 +6250,17 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v0820 (biplane video t=27.3 s, right wing POV, shot 701-843: Southside in the foreground)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/100 -> B26/100 (Yanis V17 frame numbering). | SOLVE 2026-09-25 (v4): 12 clics, fov FIXE 106.7 (meme camera que v0770): rms 9.5 px | SOLVE 2026-09-25: 9 clics d Alexandre (Southside Intersection (1) tooltip, Park Grove x2, Four Seasons x2, Infinity x2, SEFC, SPC), fov FIXE 88.8 (= v0770, meme camera aile droite) -> rms 7.8 px; la VO depuis v0770 arrive a 12 m de cette pose (validation independante) | POSITION APPROX 2026-09-25: pose VO depuis v0770 (fov libre 126), cam provisoire pour les tooltips d intersections de Southside d Alexandre",
-  "id": "B26/100",
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/100 -> CL/1-v0820 (cyberleak clip CL/1 \"Biplane (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/100 -> B26/100 (Yanis V17 frame numbering). | SOLVE 2026-09-25 (v4): 12 clics, fov FIXE 106.7 (meme camera que v0770): rms 9.5 px | SOLVE 2026-09-25: 9 clics d Alexandre (Southside Intersection (1) tooltip, Park Grove x2, Four Seasons x2, Infinity x2, SEFC, SPC), fov FIXE 88.8 (= v0770, meme camera aile droite) -> rms 7.8 px; la VO depuis v0770 arrive a 12 m de cette pose (validation independante) | POSITION APPROX 2026-09-25: pose VO depuis v0770 (fov libre 126), cam provisoire pour les tooltips d intersections de Southside d Alexandre",
+  "id": "CL/1-v0820",
   "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +9.3 +3.8 -3.4 m, d(ypr) -0.08 +0.19 -0.09 deg, dfov +0.67; edges 3.73 -> 1.26 sigma, landmark RMS 32.51' -> 32.74' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -3.5 -2.7 +1.1 m, d(ypr) +0.07 -0.01 -0.07 deg, dfov -0.13; edges 3.43 -> 3.18 sigma, landmark RMS 32.74' -> 33.54'",
   "_mvs_origin": [
    -1994.51,
    -2526.58,
    196.44
-  ]
+  ],
+  "clip": "CL/1",
+  "clip_title": "Biplane (Video)",
+  "clip_order": 27.333333333333332
  },
  "Biplane Night (Vice Beach)": {
   "player": null,
@@ -6223,8 +6286,11 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Vice Beach) (night video capture with crypto overlay, 2000x1066 after letterbox removal; chase cam behind a yellow biplane above north Vice Beach looking east: Blue Diamond and Green Diamond (lit pyramid tops), Jade Ocean on the left, canal in the foreground, sea in the background)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/101 -> B26/101 (Yanis V17 frame numbering). | SOLVE 2026-09-26: 7 clics d Alexandre (Green/Blue Diamond, Tresor Tower, Jade Ocean, Akoya, Vice Beach Bridge (1), Vice Beach Intersection (1) - ces 2 derniers = tooltips), xyz+ypr+fov libres: residus 1-9 px (pont 36 px avant correction du tablier), hfov 81.7; camera au sud des points, regard NNE | AJOUT 2026-09-26 (Alexandre): POSE PROVISOIRE - ajustee sur les 2 sommets pyramidaux (Blue Diamond a droite, Green Diamond a gauche) avec altitude 160 m, roulis 0 et fov 84.3 (autres frames biplan) FIXES; distance le long de la visee non contrainte. A raffiner avec les clics d Alexandre (la grande tour a eclairage rouge a gauche n est probablement PAS Jade Ocean: fit incoherent)",
-  "id": "B26/101"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/101 -> CL/3-vicebeach (cyberleak clip CL/3 \"Biplane Night (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/101 -> B26/101 (Yanis V17 frame numbering). | SOLVE 2026-09-26: 7 clics d Alexandre (Green/Blue Diamond, Tresor Tower, Jade Ocean, Akoya, Vice Beach Bridge (1), Vice Beach Intersection (1) - ces 2 derniers = tooltips), xyz+ypr+fov libres: residus 1-9 px (pont 36 px avant correction du tablier), hfov 81.7; camera au sud des points, regard NNE | AJOUT 2026-09-26 (Alexandre): POSE PROVISOIRE - ajustee sur les 2 sommets pyramidaux (Blue Diamond a droite, Green Diamond a gauche) avec altitude 160 m, roulis 0 et fov 84.3 (autres frames biplan) FIXES; distance le long de la visee non contrainte. A raffiner avec les clics d Alexandre (la grande tour a eclairage rouge a gauche n est probablement PAS Jade Ocean: fit incoherent)",
+  "id": "CL/3-vicebeach",
+  "clip": "CL/3",
+  "clip_title": "Biplane Night (Video)",
+  "clip_order": 100.0
  },
  "Biplane Night (Video) Last": {
   "player": null,
@@ -6250,14 +6316,17 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Video) Last (last frame of GTA_6_plane_NIGHT_upload.ee_mirror_1.mp4, t=109 s, 1920x960 after letterbox removal; biplane wing POV above north Vice Beach looking north: Jade Ocean, Green/Blue Diamond (pyramids) and hotels on the left, beach and sea on the right)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/102 -> B26/102 (Yanis V17 frame numbering). | SOLVE 2026-09-26: 6 clics d Alexandre (Green/Blue Diamond, Jade Ocean, Akoya, Tresor Tower, Vice Beach Point (1) tooltip), xyz+ypr+fov libres: residus 4-17 px, hfov 106.6 (POV aile) | POSE PROVISOIRE 2026-09-26: 3 sommets (pyramide droite = Blue Diamond, gauche = Green Diamond, Jade Ocean) avec fov 81.7 fixe (meme video que Biplane Night (Vice Beach)); 3 points pour 6 inconnues = juste determine, residus 2-7 px NON significatifs -> a confirmer par des clics (sol, plage, hotels) | AJOUT 2026-09-26 (Alexandre): pose provisoire sur 3 sommets (Jade Ocean, 2 pyramides), fov = Biplane Night (Vice Beach) (meme video)",
-  "id": "B26/102",
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/102 -> CL/3-last (cyberleak clip CL/3 \"Biplane Night (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/102 -> B26/102 (Yanis V17 frame numbering). | SOLVE 2026-09-26: 6 clics d Alexandre (Green/Blue Diamond, Jade Ocean, Akoya, Tresor Tower, Vice Beach Point (1) tooltip), xyz+ypr+fov libres: residus 4-17 px, hfov 106.6 (POV aile) | POSE PROVISOIRE 2026-09-26: 3 sommets (pyramide droite = Blue Diamond, gauche = Green Diamond, Jade Ocean) avec fov 81.7 fixe (meme video que Biplane Night (Vice Beach)); 3 points pour 6 inconnues = juste determine, residus 2-7 px NON significatifs -> a confirmer par des clics (sol, plage, hotels) | AJOUT 2026-09-26 (Alexandre): pose provisoire sur 3 sommets (Jade Ocean, 2 pyramides), fov = Biplane Night (Vice Beach) (meme video)",
+  "id": "CL/3-last",
   "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) +0.4 -1.8 -1.2 m, d(ypr) +0.09 -0.12 +0.62 deg, dfov -0.21; edges None -> None sigma, landmark RMS 34.16' -> 29.22'",
   "_mvs_origin": [
    1913.9,
    1752.22,
    105.47
-  ]
+  ],
+  "clip": "CL/3",
+  "clip_title": "Biplane Night (Video)",
+  "clip_order": 109.0
  },
  "Biplane Night (Video) v086": {
   "player": null,
@@ -6283,14 +6352,17 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Video) v086 (GTA_6_plane_NIGHT_upload.ee_mirror_1.mp4 at t=86 s (1:26), letterbox removed; chase cam behind the biplane above the Venetian Islands looking north: 1000 Venetian Way on the left, residential islands in the foreground, lit port area on the horizon)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/103 -> B26/103 (Yanis V17 frame numbering). | SOLVE V3 2026-09-26: 9 tooltips d Alexandre Venetian (1)-(3),(5)-(10), residus 1-27 px (nuit), hfov 71.7, roulis 0; horizon heightmap juste au-dessus des lumieres, meshs lointains (Ambrosia) sur l horizon. La V2 contrainte par la bande de lumieres etait fausse (la bande n est pas l horizon du terrain). Venetian (4) exclu (clic incoherent) | SOLVE 2026-09-26: tooltips Venetian (1),(2),(3),(5) d Alexandre, xyz+ypr+fov libres: residus 0.5-5 px, hfov 71.8; Venetian (4) exclu (son clic tombe a (650,1308), 220 m du tooltip (445,1232): clic ou tooltip a verifier) | POSE ALIGNEE 2026-09-26 sur 1000 Venetian Way (identifie par Alexandre): coin de toit SW (landmark), coin de toit E (V16 s24), pied SW; fov 81.7 fixe; 3 points = juste determine -> provisoire, le mesh 1000 Venetian Way tombe sur la tour; en attente des tooltips d Alexandre | AJOUT 2026-09-26 (Alexandre): POSE DEVINEE (a la louche) pour les clics; la grue du port (Waning Sands) serait visible a l horizon",
-  "id": "B26/103",
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/103 -> CL/3-v086 (cyberleak clip CL/3 \"Biplane Night (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/103 -> B26/103 (Yanis V17 frame numbering). | SOLVE V3 2026-09-26: 9 tooltips d Alexandre Venetian (1)-(3),(5)-(10), residus 1-27 px (nuit), hfov 71.7, roulis 0; horizon heightmap juste au-dessus des lumieres, meshs lointains (Ambrosia) sur l horizon. La V2 contrainte par la bande de lumieres etait fausse (la bande n est pas l horizon du terrain). Venetian (4) exclu (clic incoherent) | SOLVE 2026-09-26: tooltips Venetian (1),(2),(3),(5) d Alexandre, xyz+ypr+fov libres: residus 0.5-5 px, hfov 71.8; Venetian (4) exclu (son clic tombe a (650,1308), 220 m du tooltip (445,1232): clic ou tooltip a verifier) | POSE ALIGNEE 2026-09-26 sur 1000 Venetian Way (identifie par Alexandre): coin de toit SW (landmark), coin de toit E (V16 s24), pied SW; fov 81.7 fixe; 3 points = juste determine -> provisoire, le mesh 1000 Venetian Way tombe sur la tour; en attente des tooltips d Alexandre | AJOUT 2026-09-26 (Alexandre): POSE DEVINEE (a la louche) pour les clics; la grue du port (Waning Sands) serait visible a l horizon",
+  "id": "CL/3-v086",
   "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -4.6 +0.3 -1.4 m, d(ypr) -0.34 +0.30 -0.36 deg, dfov +0.76; edges None -> None sigma, landmark RMS 11.95' -> 8.38'",
   "_mvs_origin": [
    760.9,
    936.41,
    145.81
-  ]
+  ],
+  "clip": "CL/3",
+  "clip_title": "Biplane Night (Video)",
+  "clip_order": 86.0
  },
  "Throwing Stuff from an Overpass": {
   "player": null,
@@ -6525,8 +6597,11 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2811 (biplane video t=93.7 s, wing POV above Downtown: C. Clyde Atkins Courthouse (V16 2583, helipad) + twin-cylinder tower (V16 2582))",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/104 -> B26/104 (Yanis V17 frame numbering). | SOLVE 2026-10-03: 4 tooltips V16 d Alexandre (Courthouse Block Intersection SW/NW/NE/SE), fov libre -> hfov 115.0, residus <= 4 px, prior roulis 0. Mesures: Courthouse (V16 2583) toit 19.3 m au-dessus du sol (z 22.7, coin SW), tour a cylindres (V16 2582) 48.2/52.6 m au-dessus du sol (z 51.2/55.6).",
-  "id": "B26/104"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/104 -> CL/1-v2811 (cyberleak clip CL/1 \"Biplane (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/104 -> B26/104 (Yanis V17 frame numbering). | SOLVE 2026-10-03: 4 tooltips V16 d Alexandre (Courthouse Block Intersection SW/NW/NE/SE), fov libre -> hfov 115.0, residus <= 4 px, prior roulis 0. Mesures: Courthouse (V16 2583) toit 19.3 m au-dessus du sol (z 22.7, coin SW), tour a cylindres (V16 2582) 48.2/52.6 m au-dessus du sol (z 51.2/55.6).",
+  "id": "CL/1-v2811",
+  "clip": "CL/1",
+  "clip_title": "Biplane (Video)",
+  "clip_order": 93.7
  },
  "Biplane (Video) v2370": {
   "player": null,
@@ -6552,14 +6627,17 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane (Video) v2370 (biplane video t=79.0 s, wing POV: whole I-97/I-404 interchange in the foreground, stadium (white dome) and adjoining building on the horizon)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/105 -> B26/105 (Yanis V17 frame numbering). | SOLVE 2026-10-03: 3 tooltips d Alexandre (Downtown Intersection) + 4 clics Stephen P. Clark + centre du dome du stade (z~45, sigma 8) + appariement des rues V16 (chamfer, mediane 2.5 px); ROULIS LIBRE (l avion vire: -9.5 deg; le prior roulis 0 faussait le pitch), fov libre 110.7. Residus: clics 0-20 px sauf Downtown Intersection (-779,-4) 59 px (bord bas, a reverifier). Provisoire.",
-  "id": "B26/105",
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/105 -> CL/1-v2370 (cyberleak clip CL/1 \"Biplane (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/105 -> B26/105 (Yanis V17 frame numbering). | SOLVE 2026-10-03: 3 tooltips d Alexandre (Downtown Intersection) + 4 clics Stephen P. Clark + centre du dome du stade (z~45, sigma 8) + appariement des rues V16 (chamfer, mediane 2.5 px); ROULIS LIBRE (l avion vire: -9.5 deg; le prior roulis 0 faussait le pitch), fov libre 110.7. Residus: clics 0-20 px sauf Downtown Intersection (-779,-4) 59 px (bord bas, a reverifier). Provisoire.",
+  "id": "CL/1-v2370",
   "note": "MVS-V1 2026-10-09: global multi-view solve, d(xyz) -2.8 +20.9 +1.2 m, d(ypr) +0.72 -0.22 +0.08 deg, dfov +1.28; edges 1.12 -> 0.63 sigma, landmark RMS 103.18' -> 81.04' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -3.7 +13.1 +2.9 m, d(ypr) +0.26 -0.47 +0.33 deg, dfov +1.09; edges 0.75 -> 0.6 sigma, landmark RMS 81.04' -> 74.32' | MVS-V1 2026-10-09: global multi-view solve, d(xyz) +7.0 +11.0 +2.9 m, d(ypr) +1.09 -0.37 +0.29 deg, dfov -0.34; edges None -> None sigma, landmark RMS 74.32' -> 71.08' | MVS-GUARD 2026-10-10: pose REVERTED to before MVS - cumulative drift 44.9 m (limit 40 m). | MVS-V1 2026-10-09: global multi-view solve, d(xyz) -3.7 +22.5 +4.0 m, d(ypr) +0.70 -0.54 +0.34 deg, dfov +1.38; edges 1.05 -> 0.49 sigma, landmark RMS 103.18' -> 80.02'",
   "_mvs_origin": [
    -788.61,
    -386.22,
    180.53
-  ]
+  ],
+  "clip": "CL/1",
+  "clip_title": "Biplane (Video)",
+  "clip_order": 79.0
  },
  "Character Switch in Vice Beach (A)": {
   "id": "T3/7",
@@ -6722,8 +6800,11 @@
    null
   ],
   "source": "Build 2026 \u2014 Cyberleak: Biplane Night (Video) v084 (GTA_6_plane_NIGHT_upload.ee_mirror_1.mp4 at t=84.0 s (1:24), HDR10 PQ/BT.2020 tone-mapped to SDR and colour-matched to the v086 frame, letterbox removed; same chase cam as v086, 2 s earlier, looking north over the Venetian Islands: the lit Pier Sixty-Six tower (Waning Sands) on the horizon, right of centre)",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/106 -> B26/106 (Yanis V17 frame numbering). | AJOUT 2026-10-13 (Alexandre: \"ajoute la frame 84 s dans l outil de calibration\"): second view of the Pier Sixty-Six tower for a two-ray triangulation with v086 (~2 s of flight apart). POSE DEVINEE: xyz, roll and fov copied from v086 (MVS pose); yaw/pitch set so the V16 tower top (358.9, 3482.9, 57) lands on the lit structure seen at ~(1622, 430) -> to be solved from clicks on known landmarks (1000 Venetian Way etc.).",
-  "id": "B26/106"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/106 -> CL/3-v084 (cyberleak clip CL/3 \"Biplane Night (Video)\"). | YANIS-IDS-V1 2026-10-18: id S3/106 -> B26/106 (Yanis V17 frame numbering). | AJOUT 2026-10-13 (Alexandre: \"ajoute la frame 84 s dans l outil de calibration\"): second view of the Pier Sixty-Six tower for a two-ray triangulation with v086 (~2 s of flight apart). POSE DEVINEE: xyz, roll and fov copied from v086 (MVS pose); yaw/pitch set so the V16 tower top (358.9, 3482.9, 57) lands on the lit structure seen at ~(1622, 430) -> to be solved from clicks on known landmarks (1000 Venetian Way etc.).",
+  "id": "CL/3-v084",
+  "clip": "CL/3",
+  "clip_title": "Biplane Night (Video)",
+  "clip_order": 84.0
  },
  "Pier Sixty-Six TV ad (Gamestore)": {
   "player": null,
@@ -6749,8 +6830,11 @@
    null
   ],
   "source": "Build 2026 \u2014 video14-gamestore.mp4 (Alexandre, 2026-10-13) at t=76.3 s (frame 189 of the 70 s cut): an in-game TV ad (subtitles \"...side effects: nausea, depression, emotional distance\") playing on the TV of the game store; the TV picture was tone-mapped from HDR10 and metrically rectified from two orthogonal vanishing points of the store (TV-wall horizontals x world verticals, game f 1035 px) to a 16:9 1280x720 frame (right ~8 % cut). Residential street with Spanish-style houses, a woman in red on the sidewalk, the Pier Sixty-Six tower (Waning Sands) behind the houses.",
-  "notes": "YANIS-IDS-V1 2026-10-18: id S3/107 -> B26/107 (Yanis V17 frame numbering). | ROAD-FIT 2026-10-13 (Alexandre: \"les ray de la route sont 0 alignes avec la route\"): pose fitted to the street itself: both curbs read on the rectified frame (far (100,222)(450,240)(900,305)(1150,318), near (100,262)(450,278)(900,345)(1150,360)) against the V16 loop edges, plus the tower column (x 895) and, weakly, its row (y 60); free: position along the loop, offset from the road centre, yaw, pitch, roll (bounded +-1 deg: verticals are vertical), road half-width, camera height. Started from the north and the west arcs, both converge to the NW corner of the loop: road centre (-14.1, 3671.1), camera 22 m behind it at (-29.2, 3686.9), 439 m from the tower; curb RMS 12 px (mostly the x 450 points, partly hidden), tower on its pixel. Previous pose xyz [5.98, 3693.78, 5.65] ypr [250.128, -6.799, 0.0]. MOVED 2026-10-13 to the NORTH arc of the loop (Yanis: \"the angle of the houses doesnt match like that, its probably on the northern part of the loop\"): the street vanishing point had been taken from an ill-conditioned segment fit (x -40740 -> street face-on, tower 99 deg from it -> west side). Measured by hand on the grass strip between street and sidewalk, the street CURVES across the frame (slope 0.04 left, 0.08-0.09 right) and its right part converges to x ~-610: tower ~55 deg clockwise from the road-left direction (f 1290), which on the V16 loop fits its north arc at road centre (9.3, 3686.5), ~405 m from the tower (Alexandre's first estimate was (10, 3700)). Camera on the outer sidewalk 8 m from the road centre, 2 m above ground, yaw/pitch so the tower lands where it is seen (x 895, y 60). Previous (west side) pose xyz [-49.48, 3624.39, 5.9] ypr [261.87, -7.136, 0.0]. AJOUT 2026-10-13 (Alexandre: \"go fais le placement approximatif quand meme\"): POSE APPROXIMATIVE, low confidence. Street = the V16 loop road around the small lake west of I-97 (Alexandre's hint; the houses of the fan drawing he shared were NOT used, not ground truth). Ad camera f ~1290 px (hfov 52.8) chosen from the tower width (~30 m <-> 95 px) and the across-street garage door (~2.4 m <-> 70 px, ~44 m away); the VP-based estimate (2809 px) was ill-conditioned (street seen nearly face-on). In the image the tower is 99 deg clockwise from the road-left direction; along the V16 loop this only fits the WEST side, best at road centre (-41.6, 3623.0) (424 m from the tower), alternative (-27, 3512) (387 m) ~110 m further south; camera on the outer sidewalk 8 m from the road centre, 2 m above ground; yaw/pitch set so the tower lands where it is seen (x 895, y 60). A variant fitting the two road edges instead (18 m from the centre, pitch -11) put the tower 91 px too high and was rejected by Alexandre (\"fit bien mieux que la derniere\"): the road edges of this pose project ~80-150 px lower than the asphalt, so the vertical scale of the rectified TV picture stays uncertain. Roll 0. Useful as a rough direction to Pier Sixty-Six from the WNW; to be refined by clicks.",
-  "id": "B26/107"
+  "notes": "CL-CLIPS-V1 2026-10-18: id B26/107 -> CL/6 (cyberleak clip CL/6 \"Pier Sixty-Six TV ad (Gamestore)\"). | YANIS-IDS-V1 2026-10-18: id S3/107 -> B26/107 (Yanis V17 frame numbering). | ROAD-FIT 2026-10-13 (Alexandre: \"les ray de la route sont 0 alignes avec la route\"): pose fitted to the street itself: both curbs read on the rectified frame (far (100,222)(450,240)(900,305)(1150,318), near (100,262)(450,278)(900,345)(1150,360)) against the V16 loop edges, plus the tower column (x 895) and, weakly, its row (y 60); free: position along the loop, offset from the road centre, yaw, pitch, roll (bounded +-1 deg: verticals are vertical), road half-width, camera height. Started from the north and the west arcs, both converge to the NW corner of the loop: road centre (-14.1, 3671.1), camera 22 m behind it at (-29.2, 3686.9), 439 m from the tower; curb RMS 12 px (mostly the x 450 points, partly hidden), tower on its pixel. Previous pose xyz [5.98, 3693.78, 5.65] ypr [250.128, -6.799, 0.0]. MOVED 2026-10-13 to the NORTH arc of the loop (Yanis: \"the angle of the houses doesnt match like that, its probably on the northern part of the loop\"): the street vanishing point had been taken from an ill-conditioned segment fit (x -40740 -> street face-on, tower 99 deg from it -> west side). Measured by hand on the grass strip between street and sidewalk, the street CURVES across the frame (slope 0.04 left, 0.08-0.09 right) and its right part converges to x ~-610: tower ~55 deg clockwise from the road-left direction (f 1290), which on the V16 loop fits its north arc at road centre (9.3, 3686.5), ~405 m from the tower (Alexandre's first estimate was (10, 3700)). Camera on the outer sidewalk 8 m from the road centre, 2 m above ground, yaw/pitch so the tower lands where it is seen (x 895, y 60). Previous (west side) pose xyz [-49.48, 3624.39, 5.9] ypr [261.87, -7.136, 0.0]. AJOUT 2026-10-13 (Alexandre: \"go fais le placement approximatif quand meme\"): POSE APPROXIMATIVE, low confidence. Street = the V16 loop road around the small lake west of I-97 (Alexandre's hint; the houses of the fan drawing he shared were NOT used, not ground truth). Ad camera f ~1290 px (hfov 52.8) chosen from the tower width (~30 m <-> 95 px) and the across-street garage door (~2.4 m <-> 70 px, ~44 m away); the VP-based estimate (2809 px) was ill-conditioned (street seen nearly face-on). In the image the tower is 99 deg clockwise from the road-left direction; along the V16 loop this only fits the WEST side, best at road centre (-41.6, 3623.0) (424 m from the tower), alternative (-27, 3512) (387 m) ~110 m further south; camera on the outer sidewalk 8 m from the road centre, 2 m above ground; yaw/pitch set so the tower lands where it is seen (x 895, y 60). A variant fitting the two road edges instead (18 m from the centre, pitch -11) put the tower 91 px too high and was rejected by Alexandre (\"fit bien mieux que la derniere\"): the road edges of this pose project ~80-150 px lower than the asphalt, so the vertical scale of the rectified TV picture stays uncertain. Roll 0. Useful as a rough direction to Pier Sixty-Six from the WNW; to be refined by clicks.",
+  "id": "CL/6",
+  "clip": "CL/6",
+  "clip_title": "Pier Sixty-Six TV ad (Gamestore)",
+  "clip_order": 0.0
  },
  "Skyline with Ferris Wheel": {
   "player": null,

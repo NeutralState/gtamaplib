@@ -318,7 +318,7 @@ header{display:flex;align-items:center;gap:10px;padding:8px 14px;background:var(
 .cam-filter-chip[data-type=S4].on{border-color:#a78bfa;color:#a78bfa}
 .cam-filter-chip[data-type=T4].on{border-color:#22c55e;color:#22c55e}
 .cam-filter-chip[data-type=A].on{border-color:#4ade80;color:#4ade80}
-.cam-filter-chip[data-type=B26].on{border-color:#fbbf24;color:#fbbf24} /* [SERIES-V1] colours follow the Yanis V17 marker colours */
+.cam-filter-chip[data-type=CL].on{border-color:#fbbf24;color:#fbbf24} /* [SERIES-V1] colours follow the Yanis V17 marker colours */
 /* [LEAK-TYPE-V1] sous-chips classe (A=vert anchor ... D=rouge libre) + tag liste */
 #leak-class-chips{margin-top:2px}
 .cam-filter-chip[data-lclass=A].on{border-color:#4ade80;color:#4ade80}
@@ -681,7 +681,7 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
         <button class="cam-filter-chip on" data-type="S4" title="Preview / magazine screenshots">S4</button>
         <button class="cam-filter-chip on" data-type="T4" title="Launch trailer">T4</button>
         <button class="cam-filter-chip on" data-type="A" title="Artworks">ART</button>
-        <button class="cam-filter-chip on" data-type="B26" title="Cyberleak / build 2026 (debug HUD 2026, prison biplane video, VCIA night)">CL</button>   <!-- [SERIES-V1 2026-10-18] chips = Yanis V17 series (from the camera ID) -->
+        <button class="cam-filter-chip on" data-type="CL" title="Cyberleak / build 2026 (debug HUD 2026, prison biplane video, VCIA night)">CL</button>   <!-- [SERIES-V1 2026-10-18] chips = Yanis V17 series (from the camera ID) -->
       </div>
       <div class="ls-filter-chips" id="leak-class-chips" title="LEAK sub-filter by constraint class (A=full HUD pose ... D=nothing locked)"><!-- [LEAK-TYPE-V1] -->
         <button class="cam-filter-chip on" data-lclass="A">A</button>
@@ -1186,7 +1186,7 @@ const NUM_IDS = {x:'num-x',y:'num-y',z:'num-z',yaw:'num-yaw',pitch:'num-pitch',r
 // ── Init ───────────────────────────────────────────────────────────────────
 // State for cam picker
 let allCams = [];
-const camFilters = { LEAK: true, T1: true, T2: true, S2: true, S3: true, T3: true, S4: true, T4: true, A: true, B26: true, other: true };   // [SERIES-V1] // [T3-S3-V1] // [SS-SPLIT-V1] // [BUILD-2026]
+const camFilters = { LEAK: true, T1: true, T2: true, S2: true, S3: true, T3: true, S4: true, T4: true, A: true, CL: true, other: true };   // [SERIES-V1] // [T3-S3-V1] // [SS-SPLIT-V1] // [BUILD-2026]
 let camSearchQ = '';
 // [LEAK-TYPE-V1] sous-filtre des leaks par classe de contrainte + tri campagne
 const leakClassFilters = { A: true, B: true, C: true, Cm: true, D: true, X: true };
@@ -1206,7 +1206,7 @@ function leakClassOf(c) {
 // [SERIES-V1 2026-10-18] category = Yanis V17 series, read from the camera ID (cameras.json follows his numbering)
 const CAM_SERIES = { LEAK: ['LEAK', 'var(--text)'], T1: ['Trailer 1', 'var(--blue)'], T2: ['Trailer 2', 'var(--green)'], S2: ['Screenshot (T2 drop)', '#f87171'],
   S3: ['Screenshot (pre-order)', '#fb923c'], T3: ['Extended Look', '#60a5fa'], S4: ['Screenshot (preview)', '#a78bfa'], T4: ['Launch Trailer', '#22c55e'],
-  A: ['Artwork', '#4ade80'], B26: ['Cyberleak', '#fbbf24'], other: ['Other', 'var(--violet)'] };
+  A: ['Artwork', '#4ade80'], CL: ['Cyberleak', '#fbbf24'], other: ['Other', 'var(--violet)'] };
 function camSeries(c) {
   const id = c.id || '', p = id.split('/')[0];
   if (/^L\d/.test(p) || /^\d{4}-\d{2}-\d{2}/.test(c.source || '')) return 'LEAK';
@@ -1215,6 +1215,21 @@ function camSeries(c) {
   return 'other';
 }
 function getCamType(c) { return camSeries(c); }
+// [CL-CLIPS-V1 2026-10-18] long cyberleak clips: one row per clip, frames inside (each frame stays its own camera)
+function clipOf(c) { return c.clip || ((c.id || '').startsWith('CL/') ? (c.id || '').split('-')[0] : null); }
+const clipOpen = {}; let clipShowEmpty = false;
+function clipMembers(clip) {
+  return allCams.filter(x => clipOf(x) === clip)
+    .sort((a, b) => ((a.clip_order ?? 0) - (b.clip_order ?? 0)) || a.name.localeCompare(b.name));
+}
+function clipStep(dir) {   // select previous / next frame of the current camera's clip
+  const cur = allCams.find(x => x.name === currentCam); const clip = cur && clipOf(cur);
+  if (!clip) return;
+  const fr = clipMembers(clip).filter(x => clipShowEmpty || x.n_pixels > 0 || x.name === currentCam);
+  const i = fr.findIndex(x => x.name === currentCam); const nx = fr[i + dir];
+  if (!nx) return;
+  camSel.value = nx.name; camSel.dispatchEvent(new Event('change'));
+}
 
 function renderCamDropdown() {
   const dd = document.getElementById('cam-dropdown');
@@ -1234,16 +1249,38 @@ function renderCamDropdown() {
   if (filtered.length === 0) {
     dd.innerHTML = '<div class="cam-opt" style="color:var(--dim);cursor:default">No cams match</div>';
   } else {
-    dd.innerHTML = filtered.map(c => {
+    const row = (c, indent) => {
       const t = getCamType(c);
       const cls = c.has_image ? 'cam-opt' : 'cam-opt no-image';
       const sel = c.name === currentCam ? ' selected' : '';
       const lc = t === 'LEAK' ? leakClassOf(c) : null; // [LEAK-TYPE-V1]
-      return `<div class="${cls}${sel}" data-name="${c.name.replace(/"/g, '&quot;')}">
-        ${c.name}${c.has_image ? '' : ' ✗'}
-        <span class="cam-opt-tag">${t}${lc ? ' <b class="leak-class-tag lc-' + lc + '">' + lc + '</b>' : ''} · ${c.n_pixels}px / ${c.n_independent} indep</span>
+      const label = indent ? (c.id || '').split('-').slice(1).join('-') || c.name : c.name;
+      return `<div class="${cls}${sel}${indent ? ' clip-frame' : ''}" data-name="${c.name.replace(/"/g, '&quot;')}" title="${c.name.replace(/"/g, '&quot;')}">
+        ${indent ? '<span style="color:var(--dim)">↳ </span>' : ''}${label}${c.has_image ? '' : ' ✗'}
+        <span class="cam-opt-tag">${indent ? '' : t}${lc ? ' <b class="leak-class-tag lc-' + lc + '">' + lc + '</b>' : ''}${indent ? '' : ' · '}${c.n_pixels}px / ${c.n_independent} indep</span>
       </div>`;
-    }).join('');
+    };
+    // [CL-CLIPS-V1] group clip frames under one header row (in the position of the clip's first frame)
+    const html = [], done = new Set();
+    for (const c of filtered) {
+      const clip = clipOf(c);
+      const mem = clip ? clipMembers(clip) : [];
+      if (!clip || mem.length < 2) { html.push(row(c, false)); continue; }
+      if (done.has(clip)) continue;
+      done.add(clip);
+      const inF = mem.filter(x => filtered.includes(x));
+      const vis = inF.filter(x => clipShowEmpty || x.n_pixels > 0 || x.name === currentCam);
+      const hidden = inF.length - vis.length;
+      const hasCur = inF.some(x => x.name === currentCam);
+      const open = (clip in clipOpen) ? clipOpen[clip] : (hasCur || !!camSearchQ);
+      const px = inF.reduce((n, x) => n + (x.n_pixels || 0), 0);
+      html.push(`<div class="cam-opt clip-head" data-clip="${clip}" data-open="${open ? 1 : 0}" style="font-weight:600">
+        <span style="color:#fbbf24">${open ? '▾' : '▸'}</span> ${mem[0].clip_title || clip} <span style="color:var(--dim);font-weight:400">· ${vis.length} frames${hidden ? ` <a data-clip-empty="1" style="text-decoration:underline;cursor:pointer">+${hidden} empty</a>` : ''}</span>
+        ${hasCur ? '<span style="float:right"><a data-clip-step="-1" title="previous frame" style="cursor:pointer;padding:0 6px">‹</a><a data-clip-step="1" title="next frame" style="cursor:pointer;padding:0 6px">›</a></span>' : ''}
+        <span class="cam-opt-tag">${clip} · Cyberleak · ${px}px</span></div>`);
+      if (open) for (const x of vis) html.push(row(x, true));
+    }
+    dd.innerHTML = html.join('');
   }
 }
 
@@ -1263,6 +1300,11 @@ async function init() {
   renderCamDropdown();
   camSearch.addEventListener('input', e => { camSearchQ = e.target.value; renderCamDropdown(); });
   camDropdown.addEventListener('click', e => {
+    if (e.target.closest('[data-clip-empty]')) { clipShowEmpty = !clipShowEmpty; renderCamDropdown(); return; }   // [CL-CLIPS-V1]
+    const head = e.target.closest('.clip-head[data-clip]');
+    const st = e.target.closest('[data-clip-step]');
+    if (st) { clipStep(+st.dataset.clipStep); return; }
+    if (head) { const k = head.dataset.clip; clipOpen[k] = head.dataset.open !== '1'; renderCamDropdown(); return; }
     const opt = e.target.closest('.cam-opt[data-name]');
     if (!opt) return;
     const name = opt.dataset.name;
@@ -2158,8 +2200,24 @@ async function init() {
     selRayGroup.setAttribute('id', 'sel-lm-rays-layer');
     window.mapOverlay.appendChild(selRayGroup);
 
+    // [CL-CLIPS-V1] one path per cyberleak clip; frames = small dots; empty frames hidden unless 'show empty'
+    const _byName = {}; (typeof allCams !== 'undefined' ? allCams : []).forEach(x => { _byName[x.name] = x; });
+    const _clipOfMap = c => clipOf(Object.assign({}, _byName[c.name] || {}, c));
+    const _clips = {};
+    for (const c of window.mapData.cameras) { const k = c.xyz && _clipOfMap(c); if (k) (_clips[k] = _clips[k] || []).push(c); }
+    for (const [k, fr] of Object.entries(_clips)) {
+      if (fr.length < 2) continue;
+      fr.sort((a, b) => (((_byName[a.name] || {}).clip_order ?? 0) - ((_byName[b.name] || {}).clip_order ?? 0)));
+      const pl = document.createElementNS(SVG_NS, 'polyline');
+      pl.setAttribute('points', fr.map(c => window.worldToSvg(c.xyz[0], c.xyz[1]).join(',')).join(' '));
+      pl.setAttribute('fill', 'none'); pl.setAttribute('stroke', '#fbbf24'); pl.setAttribute('stroke-width', String(FRUSTUM_LINE_WIDTH * 1.4));
+      pl.setAttribute('stroke-dasharray', '60 40'); pl.setAttribute('opacity', '0.75'); pl.setAttribute('pointer-events', 'none');
+      camsGroup.appendChild(pl);
+    }
     for (const c of window.mapData.cameras) {
       if (!c.xyz) continue;  // shouldn't happen since /api/map_data filters
+      const _ck = _clipOfMap(c), _isFrame = !!(_ck && (_clips[_ck] || []).length > 1);
+      if (_isFrame && !clipShowEmpty && !(c.n_pixels > 0) && c.name !== mapSelectedCamName) continue;
       const type = getCamTypeForMap(c);
       // [MAP-DESIGN-V1] fill = tier (qualite), pas type; le frustum garde
       // la couleur tier aussi pour la coherence.
@@ -2239,7 +2297,7 @@ async function init() {
       const circle = document.createElementNS(SVG_NS, 'circle');
       circle.setAttribute('cx', String(sx));
       circle.setAttribute('cy', String(sy));
-      circle.setAttribute('r', String(markerRadius(c)));   // [MAP-DESIGN-V1] taille = n_pixels
+      circle.setAttribute('r', String(_isFrame ? markerRadius(c) * 0.5 : markerRadius(c)));   // [MAP-DESIGN-V1] taille = n_pixels; [CL-CLIPS-V1] clip frames = small dots
       circle.setAttribute('fill', color);
       // [MAP-DESIGN-V1] anneau blanc = HUD-locked (ground truth)
       circle.setAttribute('stroke', c.hud_locked ? '#ffffff' : '#000');
@@ -3024,6 +3082,7 @@ async function init() {
 camSel.addEventListener('change', async () => {
   currentCam = camSel.value || null;
   window.currentCam = currentCam;  // [MULTICAM-STEP21] expose for projection overlay
+  try { renderCamDropdown(); } catch (e) {}   // [CL-CLIPS-V1] keep clip headers / frame stepper in sync
   updateClassLabel();  // [CLASS-LABEL]
   // [MESH-FRONTEND-V2] Reload procedural building edges for the new cam
   if (typeof loadProceduralMeshes === 'function') loadProceduralMeshes();
