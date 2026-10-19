@@ -8186,5 +8186,1799 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/79 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+ },
+ "Night Walk (Jason & Lucia)": {
+  "id": "T3/1",
+  "player": null,
+  "xyz": [
+   -1302.2,
+   627.1,
+   4.37
+  ],
+  "ypr": [
+   137.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   61.0,
+   null
+  ],
+  "size": [
+   3840,
+   1969
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=9.1 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/01 (corr 0.978); position = his marker dot; heading 222 / fov 61 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Robbery (Floor)": {
+  "id": "T3/40",
+  "player": null,
+  "xyz": [
+   -1321.3,
+   635.4,
+   4.79
+  ],
+  "ypr": [
+   130.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2159
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=353.5 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/40 (corr 0.979); position = his marker dot; heading 230 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Tow Truck": {
+  "id": "T3/41",
+  "player": null,
+  "xyz": [
+   -2717.6,
+   4264.2,
+   25.33
+  ],
+  "ypr": [
+   96.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   70.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=365.7 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/41 (corr 0.996); position = his marker dot; heading 264 / fov 70 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Lowrider": {
+  "id": "T3/42",
+  "player": null,
+  "xyz": [
+   -4552.2,
+   3518.9,
+   25.39
+  ],
+  "ypr": [
+   270.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   60.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=370.5 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/42 (corr 0.993); position = his marker dot; heading 90 / fov 60 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Delivery Trucks": {
+  "id": "T3/43",
+  "player": null,
+  "xyz": [
+   -511.1,
+   1117.9,
+   3.74
+  ],
+  "ypr": [
+   277.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   61.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=382.5 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/43 (corr 0.995); position = his marker dot; heading 82 / fov 61 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Fridge (Lucia's Apartment)": {
+  "id": "T3/44",
+  "player": null,
+  "xyz": [
+   -500.0,
+   1500.0,
+   4.65
+  ],
+  "ypr": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=383.0 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/44 (corr 0.988); position = his marker dot (none: interior); INTERIOR: position = Yanis M15 (Interior) inset (Lucia's apartment), cell centre +-500 m (ESTIMATED), heading unknown; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Lucia's Bedroom (Overhead)": {
+  "id": "T3/45",
+  "player": null,
+  "xyz": [
+   -500.0,
+   1500.0,
+   4.65
+  ],
+  "ypr": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=385.2 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/45 (corr 0.980); position = his marker dot (none: interior); INTERIOR: position = Yanis M15 (Interior) inset (Lucia's apartment), cell centre +-500 m (ESTIMATED), heading unknown; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Lucia's Bedroom": {
+  "id": "T3/47",
+  "player": null,
+  "xyz": [
+   -500.0,
+   1500.0,
+   4.65
+  ],
+  "ypr": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=391.4 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/47 (corr 0.971); position = his marker dot (none: interior); INTERIOR: position = Yanis M15 (Interior) inset (Lucia's apartment), cell centre +-500 m (ESTIMATED), heading unknown; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Lucia Trying On Clothes": {
+  "id": "T3/48",
+  "player": null,
+  "xyz": [
+   -500.0,
+   1500.0,
+   4.65
+  ],
+  "ypr": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=406.3 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/48 (corr 0.981); position = his marker dot (none: interior); INTERIOR: position = Yanis M15 (Interior) inset (Lucia's apartment), cell centre +-500 m (ESTIMATED), heading unknown; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Lucia's Apartment (Living Room)": {
+  "id": "T3/50",
+  "player": null,
+  "xyz": [
+   -500.0,
+   1500.0,
+   4.65
+  ],
+  "ypr": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=433.4 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/50 (corr 0.962); position = his marker dot (none: interior); INTERIOR: position = Yanis M15 (Interior) inset (Lucia's apartment), cell centre +-500 m (ESTIMATED), heading unknown; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Apartment Building": {
+  "id": "T3/62",
+  "player": null,
+  "xyz": [
+   -463.5,
+   1257.7,
+   4.8
+  ],
+  "ypr": [
+   287.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=479.3 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/62 (corr 0.991); position = his marker dot; heading 73 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Convertible on the Highway": {
+  "id": "T3/64",
+  "player": null,
+  "xyz": [
+   -184.7,
+   1045.2,
+   1.7
+  ],
+  "ypr": [
+   188.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=519.8 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/64 (corr 0.987); position = his marker dot; heading 172 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Hanging from the Bridge": {
+  "id": "T3/65",
+  "player": null,
+  "xyz": [
+   -161.9,
+   1028.2,
+   1.7
+  ],
+  "ypr": [
+   260.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   28.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=541.3 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/65 (corr 0.980); position = his marker dot; heading 100 / fov 28 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Night Street Brawl": {
+  "id": "T3/66",
+  "player": null,
+  "xyz": [
+   1956.4,
+   372.5,
+   5.05
+  ],
+  "ypr": [
+   165.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   37.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=542.0 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/66 (corr 0.989); position = his marker dot; heading 194 / fov 37 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Strip Mall": {
+  "id": "T3/67",
+  "player": null,
+  "xyz": [
+   -1664.9,
+   -2098.3,
+   6.6
+  ],
+  "ypr": [
+   154.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   71.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=546.4 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/67 (corr 0.992); position = his marker dot; heading 206 / fov 71 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Gun on the Beach Road": {
+  "id": "T3/69",
+  "player": null,
+  "xyz": [
+   2010.7,
+   730.4,
+   6.02
+  ],
+  "ypr": [
+   90.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2042
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=550.3 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/69 (corr 0.997); position = his marker dot; heading 270 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Burning Cars": {
+  "id": "T3/70",
+  "player": null,
+  "xyz": [
+   -494.9,
+   1214.0,
+   5.33
+  ],
+  "ypr": [
+   264.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   39.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=554.1 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/70 (corr 0.896); position = his marker dot; heading 96 / fov 39 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Motel Courtyard": {
+  "id": "T3/71",
+  "player": null,
+  "xyz": [
+   -2693.8,
+   -3191.8,
+   8.15
+  ],
+  "ypr": [
+   84.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=555.0 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/71 (corr 0.996); position = his marker dot; heading 276 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Backyard Pool": {
+  "id": "T3/73",
+  "player": null,
+  "xyz": [
+   -2813.5,
+   -3345.5,
+   6.19
+  ],
+  "ypr": [
+   314.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   81.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=565.2 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/73 (corr 0.983); position = his marker dot; heading 46 / fov 81 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Armored Truck Robbery": {
+  "id": "T3/74",
+  "player": null,
+  "xyz": [
+   -867.2,
+   1008.6,
+   4.6
+  ],
+  "ypr": [
+   306.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=570.3 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/74 (corr 0.923); position = his marker dot; heading 54 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Rooftop View": {
+  "id": "T3/75",
+  "player": null,
+  "xyz": [
+   1454.5,
+   1308.4,
+   4.81
+  ],
+  "ypr": [
+   32.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=571.2 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/75 (corr 0.995); position = his marker dot; heading 328 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Effluvia Rooftop (Crowd)": {
+  "id": "T3/76",
+  "player": null,
+  "xyz": [
+   1470.0,
+   1278.0,
+   3.48
+  ],
+  "ypr": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=573.3 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/76 (corr 0.990); position = his marker dot (none: interior); INTERIOR: position = Effluvia (ESTIMATED), heading unknown; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Effluvia Rooftop (Couple)": {
+  "id": "T3/77",
+  "player": null,
+  "xyz": [
+   1470.0,
+   1278.0,
+   3.48
+  ],
+  "ypr": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=595.1 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/77 (corr 0.990); position = his marker dot (none: interior); INTERIOR: position = Effluvia (ESTIMATED), heading unknown; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Arrest on the Balcony": {
+  "id": "T3/78",
+  "player": null,
+  "xyz": [
+   -2681.8,
+   -4763.7,
+   4.41
+  ],
+  "ypr": [
+   108.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   72.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=622.0 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/78 (corr 0.996); position = his marker dot; heading 252 / fov 72 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Effluvia Bar": {
+  "id": "T3/86",
+  "player": null,
+  "xyz": [
+   1470.0,
+   1278.0,
+   3.48
+  ],
+  "ypr": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=639.5 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/86 (corr 0.986); position = his marker dot (none: interior); INTERIOR: position = Effluvia (ESTIMATED), heading unknown; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Effluvia Lounge": {
+  "id": "T3/87",
+  "player": null,
+  "xyz": [
+   1470.0,
+   1278.0,
+   3.48
+  ],
+  "ypr": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=643.1 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/87 (corr 0.991); position = his marker dot (none: interior); INTERIOR: position = Effluvia (ESTIMATED), heading unknown; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Effluvia Dinner": {
+  "id": "T3/88",
+  "player": null,
+  "xyz": [
+   1470.0,
+   1278.0,
+   3.48
+  ],
+  "ypr": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=647.0 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/88 (corr 0.991); position = his marker dot (none: interior); INTERIOR: position = Effluvia (ESTIMATED), heading unknown; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Diner Entrance": {
+  "id": "T3/94",
+  "player": null,
+  "xyz": [
+   -6176.2,
+   4518.8,
+   16.4
+  ],
+  "ypr": [
+   85.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=691.5 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/94 (corr 0.992); position = his marker dot; heading 274 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Fight by the Car": {
+  "id": "T3/96",
+  "player": null,
+  "xyz": [
+   -6176.2,
+   4518.8,
+   16.4
+  ],
+  "ypr": [
+   85.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=696.5 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/96 (corr 0.994); position = his marker dot; heading 274 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Convenience Store Robbery": {
+  "id": "T3/106",
+  "player": null,
+  "xyz": [
+   -2741.7,
+   -3354.9,
+   6.39
+  ],
+  "ypr": [
+   24.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   95.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=727.9 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/106 (corr 0.941); position = his marker dot; heading 336 / fov 95 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Driving along the Bay": {
+  "id": "T3/112",
+  "player": null,
+  "xyz": [
+   498.5,
+   987.1,
+   1.7
+  ],
+  "ypr": [
+   241.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   25.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=754.4 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/112 (corr 0.997); position = his marker dot; heading 118 / fov 25 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Taxi Passenger": {
+  "id": "T3/123",
+  "player": null,
+  "xyz": [
+   1693.6,
+   -135.9,
+   5.11
+  ],
+  "ypr": [
+   265.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   63.0,
+   null
+  ],
+  "size": [
+   3840,
+   1693
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=822.8 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/123 (corr 0.992); position = his marker dot; heading 94 / fov 63 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Police Shootout": {
+  "id": "T3/124",
+  "player": null,
+  "xyz": [
+   1433.6,
+   453.5,
+   6.16
+  ],
+  "ypr": [
+   92.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   70.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=848.6 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/124 (corr 0.998); position = his marker dot; heading 268 / fov 70 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Black Sedan": {
+  "id": "T3/126",
+  "player": null,
+  "xyz": [
+   1410.4,
+   1253.1,
+   4.65
+  ],
+  "ypr": [
+   220.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   62.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=876.9 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/126 (corr 0.926); position = his marker dot; heading 140 / fov 62 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Police Chase (Vice Beach)": {
+  "id": "T3/138",
+  "player": null,
+  "xyz": [
+   1744.7,
+   1521.2,
+   6.86
+  ],
+  "ypr": [
+   256.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=937.2 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/138 (corr 0.952); position = his marker dot; heading 104 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Highway Driving": {
+  "id": "T3/139",
+  "player": null,
+  "xyz": [
+   1681.5,
+   1647.8,
+   8.01
+  ],
+  "ypr": [
+   296.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=942.0 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/139 (corr 0.995); position = his marker dot; heading 64 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Police Car at the Intersection": {
+  "id": "T3/140",
+  "player": null,
+  "xyz": [
+   1735.9,
+   1239.1,
+   6.63
+  ],
+  "ypr": [
+   275.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   65.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=944.3 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/140 (corr 0.990); position = his marker dot; heading 84 / fov 65 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Burning Car (Parking Garage)": {
+  "id": "T3/141",
+  "player": null,
+  "xyz": [
+   100.3,
+   1191.5,
+   4.52
+  ],
+  "ypr": [
+   139.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   35.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=966.6 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/141 (corr 0.974); position = his marker dot; heading 220 / fov 35 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Van (Parking Garage)": {
+  "id": "T3/142",
+  "player": null,
+  "xyz": [
+   29.3,
+   1152.5,
+   4.11
+  ],
+  "ypr": [
+   200.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   64.0,
+   null
+  ],
+  "size": [
+   3840,
+   2094
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=974.6 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/142 (corr 0.985); position = his marker dot; heading 160 / fov 64 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Aerial Tennis Courts": {
+  "id": "T3/144",
+  "player": null,
+  "xyz": [
+   48.3,
+   1112.2,
+   5.32
+  ],
+  "ypr": [
+   197.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   27.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=995.0 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/144 (corr 0.997); position = his marker dot; heading 162 / fov 27 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Street Deal": {
+  "id": "T3/146",
+  "player": null,
+  "xyz": [
+   -329.6,
+   1523.9,
+   4.72
+  ],
+  "ypr": [
+   118.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   48.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1005.1 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/146 (corr 0.987); position = his marker dot; heading 242 / fov 48 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Sidewalk by the Van": {
+  "id": "T3/149",
+  "player": null,
+  "xyz": [
+   -339.2,
+   1515.6,
+   4.7
+  ],
+  "ypr": [
+   313.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1018.0 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/149 (corr 0.997); position = his marker dot; heading 47 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Scooter Rider": {
+  "id": "T3/151",
+  "player": null,
+  "xyz": [
+   -382.7,
+   1652.0,
+   4.66
+  ],
+  "ypr": [
+   344.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1027.0 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/151 (corr 0.997); position = his marker dot; heading 16 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Airboat in the Swamp": {
+  "id": "T3/152",
+  "player": null,
+  "xyz": [
+   -4316.5,
+   2241.2,
+   4.74
+  ],
+  "ypr": [
+   91.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1031.7 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/152 (corr 0.997); position = his marker dot; heading 269 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Stilt House": {
+  "id": "T3/153",
+  "player": null,
+  "xyz": [
+   -2336.9,
+   -5527.9,
+   3.08
+  ],
+  "ypr": [
+   43.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1034.8 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/153 (corr 0.994); position = his marker dot; heading 316 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Jumping off the Dock": {
+  "id": "T3/156",
+  "player": null,
+  "xyz": [
+   -2947.3,
+   -6690.2,
+   1.7
+  ],
+  "ypr": [
+   58.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   89.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1043.1 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/156 (corr 0.973); position = his marker dot; heading 302 / fov 89 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Jet Ski at Sunset": {
+  "id": "T3/157",
+  "player": null,
+  "xyz": [
+   560.5,
+   970.2,
+   1.7
+  ],
+  "ypr": [
+   27.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1046.0 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/157 (corr 0.968); position = his marker dot; heading 333 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Club Entrance": {
+  "id": "T3/160",
+  "player": null,
+  "xyz": [
+   -701.6,
+   1181.7,
+   4.82
+  ],
+  "ypr": [
+   305.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   58.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1057.2 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/160 (corr 0.978); position = his marker dot; heading 55 / fov 58 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Street Race (Circuit)": {
+  "id": "T3/162",
+  "player": null,
+  "xyz": [
+   -6870.8,
+   1983.5,
+   25.38
+  ],
+  "ypr": [
+   12.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1063.5 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/162 (corr 0.985); position = his marker dot; heading 348 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Strip Mall Parking": {
+  "id": "T3/164",
+  "player": null,
+  "xyz": [
+   -1138.9,
+   1012.5,
+   8.57
+  ],
+  "ypr": [
+   112.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   93.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1070.0 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/164 (corr 0.996); position = his marker dot; heading 248 / fov 93 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Motorcycle at the Crosswalk": {
+  "id": "T3/166",
+  "player": null,
+  "xyz": [
+   1492.5,
+   1801.7,
+   8.14
+  ],
+  "ypr": [
+   142.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   92.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1085.6 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/166 (corr 0.996); position = his marker dot; heading 218 / fov 92 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Sidewalk Cafe": {
+  "id": "T3/167",
+  "player": null,
+  "xyz": [
+   1648.4,
+   911.6,
+   7.3
+  ],
+  "ypr": [
+   74.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   77.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1096.4 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/167 (corr 0.979); position = his marker dot; heading 286 / fov 77 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Traffic on Ocean Drive": {
+  "id": "T3/168",
+  "player": null,
+  "xyz": [
+   1997.2,
+   490.0,
+   5.64
+  ],
+  "ypr": [
+   183.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2114
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1104.9 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/168 (corr 0.994); position = his marker dot; heading 176 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Beach Umbrellas": {
+  "id": "T3/169",
+  "player": null,
+  "xyz": [
+   2194.3,
+   1060.0,
+   5.02
+  ],
+  "ypr": [
+   43.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1110.0 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/169 (corr 0.990); position = his marker dot; heading 317 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Dirt Bikes": {
+  "id": "T3/171",
+  "player": null,
+  "xyz": [
+   -4266.0,
+   4472.0,
+   44.7
+  ],
+  "ypr": [
+   356.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   77.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1116.8 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/171 (corr 0.995); position = his marker dot; heading 4 / fov 77 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Night Drive": {
+  "id": "T3/172",
+  "player": null,
+  "xyz": [
+   -414.2,
+   197.9,
+   4.7
+  ],
+  "ypr": [
+   103.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2105
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1122.1 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/172 (corr 0.966); position = his marker dot; heading 256 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Night Explosion": {
+  "id": "T3/173",
+  "player": null,
+  "xyz": [
+   -410.3,
+   307.6,
+   4.7
+  ],
+  "ypr": [
+   179.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   69.0,
+   null
+  ],
+  "size": [
+   3840,
+   2024
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1126.6 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/173 (corr 0.994); position = his marker dot; heading 180 / fov 69 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Skydiving over Vice City": {
+  "id": "T3/174",
+  "player": null,
+  "xyz": [
+   1589.8,
+   2496.9,
+   4.5
+  ],
+  "ypr": [
+   94.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1130.2 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/174 (corr 0.995); position = his marker dot; heading 266 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Driving into the Water": {
+  "id": "T3/190",
+  "player": null,
+  "xyz": [
+   -2563.9,
+   -137.5,
+   5.99
+  ],
+  "ypr": [
+   160.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1208.3 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/190 (corr 0.983); position = his marker dot; heading 200 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Purple Tower at Night": {
+  "id": "T3/191",
+  "player": null,
+  "xyz": [
+   -256.4,
+   -344.4,
+   5.93
+  ],
+  "ypr": [
+   0.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2155
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1215.2 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/191 (corr 0.995); position = his marker dot; heading 360 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Party Car": {
+  "id": "T3/192",
+  "player": null,
+  "xyz": [
+   2028.7,
+   804.1,
+   6.08
+  ],
+  "ypr": [
+   128.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   66.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1216.6 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/192 (corr 0.982); position = his marker dot; heading 232 / fov 66 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Pool Party": {
+  "id": "T3/193",
+  "player": null,
+  "xyz": [
+   2031.1,
+   35.8,
+   4.54
+  ],
+  "ypr": [
+   35.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   68.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1220.9 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/193 (corr 0.996); position = his marker dot; heading 325 / fov 68 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Street Racer at Dusk": {
+  "id": "T3/194",
+  "player": null,
+  "xyz": [
+   -1544.8,
+   460.1,
+   5.38
+  ],
+  "ypr": [
+   7.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   77.0,
+   null
+  ],
+  "size": [
+   3840,
+   2106
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1223.9 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/194 (corr 0.943); position = his marker dot; heading 352 / fov 77 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Megamundo Tower": {
+  "id": "T3/197",
+  "player": null,
+  "xyz": [
+   -371.4,
+   -277.9,
+   5.39
+  ],
+  "ypr": [
+   282.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1231.9 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/197 (corr 0.988); position = his marker dot; heading 78 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Nightclub Street": {
+  "id": "T3/201",
+  "player": null,
+  "xyz": [
+   -445.0,
+   -315.5,
+   4.79
+  ],
+  "ypr": [
+   86.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   25.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1247.7 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/201 (corr 0.995); position = his marker dot; heading 274 / fov 25 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Fishing Boat": {
+  "id": "T3/240",
+  "player": null,
+  "xyz": [
+   -2224.4,
+   -6295.7,
+   1.7
+  ],
+  "ypr": [
+   344.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   41.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1552.0 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/240 (corr 0.998); position = his marker dot; heading 16 / fov 41 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Bar (Port Gellhorn)": {
+  "id": "T3/241",
+  "player": null,
+  "xyz": [
+   -6358.4,
+   3673.8,
+   12.74
+  ],
+  "ypr": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1554.1 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/241 (corr 0.962); position = his marker dot (none: interior); INTERIOR: position = Delights (Port Gellhorn) (ESTIMATED), heading unknown; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Trailer Park Party": {
+  "id": "T3/244",
+  "player": null,
+  "xyz": [
+   -5346.6,
+   3461.6,
+   68.41
+  ],
+  "ypr": [
+   159.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   34.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1558.7 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/244 (corr 0.995); position = his marker dot; heading 201 / fov 34 read on his V; z = heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Car Meet": {
+  "id": "T3/247",
+  "player": null,
+  "xyz": [
+   667.2,
+   -1905.1,
+   5.28
+  ],
+  "ypr": [
+   286.5,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 3 (Extended Look) - GTAVI_An_Extended_Look.mp4 (rockstargames.com/VI/media) t=1567.1 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/247 (corr 0.993); position = his marker dot; heading 74 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve."
  }
 }
