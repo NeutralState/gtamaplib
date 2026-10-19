@@ -5452,7 +5452,7 @@
   "pose_verified": null,
   "notes": "YANIS-IDS-V1 2026-10-18: id S2/79 -> S3/92 (Yanis V17 frame numbering). | POSE A2 2026-09-06: crete (ligne bleue, 11.7 px) + rive + chateau d eau en AZIMUT (ancre forte: dx 0 px) ; reservoir '145000 L' hors solve (objet different du rond V16); xyz (-6773.0,4002.6,15.8) yaw 185.28 fov 59.6 | POSE A 2026-09-06 (retour): crete + rive V16 + chateau d eau (34 px); la pose B (tour+reservoir a 1 px) mettait la cam au bord de la lagune avec l'eau plein cadre -> impossible (vue 3D d'Alexandre). Le reservoir clique ici n'est PAS le rond V16 (-6683.7,3837.6): clic detache vers 'Fire Water Tank (145000 L)' sans position | SOLVE 2026-09-06e: crete (ligne bleue Alexandre, arbres 17 m) + rive proche du canal (ligne eau) + chateau d eau + reservoir; xyz (-6744.3,3927.6,19.4) fov 63.8 | POSE 2026-09-06g (provisoire): crete + rive canal + chateau d eau recale sur le disque V16; residus crete 11 px, rive 27 px, tour 34 px; le tooltip reservoir reste incompatible (+303 px): identite du reservoir a confirmer en jeu | POSE A 2026-09-06f (provisoire): crete (ligne bleue, arbres 12.6 m, rms 10 px) + rive du canal V16 (ligne eau, rms 25 px) + sommet chateau d eau (2 px); centre tour 20 px; le tooltip reservoir (-6683.7,3837.6) est incompatible (6 deg) avec le canal: identite du reservoir a confirmer par Alexandre | 2026-09-06d: retour a la pose 'relief' (fov 60.5, pitch -2.47 cales par Alexandre dans la vue 3D, point Alexandre, z 20 par le sommet du chateau d eau); la variante 'tour' (fov 53.9, centre de tour a 0 px) contredit le relief et met le canal trop pres; ecarts restants: centre tour 15 px (z implique 24.8 vs 26.3), reservoir 5.6 m lateral | SOLVE 2026-09-06c: chateau d eau (sommet+centre) + reservoir tooltip (z libre), prior position Alexandre sigma 20 m; xyz (-6779.6,3977.1,21.0) fov 53.9 | 2026-09-06b: z 21.1 m et fov 53.8 deduits de l'ecart vertical sommet/centre du chateau d eau (11.0 m sur 122 px) a la position d'Alexandre; yaw 188.7 coherent avec le relief; position xy toujours approximative, reservoir sans position | 2026-09-06: pitch d'Alexandre (+5.78 dans la vue 3D, le relief lointain colle) conserve, yaw ajuste pour passer par le clic du chateau d eau (position et z toujours approximatifs) | POSITION APPROX Alexandre 2026-09-06 (-6776.9,3979.1, sol z 3.5; cam en hauteur, z init 20), orientation visee sur le chateau d eau ouest; a resoudre librement apres clics | AJOUT 2026-09-06 (fichier ~/Downloads/Port_Gellhorn_06.jpg, 3840x2160, converti PNG): pose INITIALE arbitraire (500 m SE du chateau d eau ouest, visee dessus), a resoudre des que les clics sont poses"
  },
- "Sunrise over Vice City (Extended Look)": {
+ "Sunrise over Vice City": {
   "id": "T3/250",
   "player": null,
   "xyz": [
@@ -5484,7 +5484,7 @@
    153.1
   ]
  },
- "Kayaking in the Vice River (Extended Look)": {
+ "Kayaking in the Vice River": {
   "id": "T3/159",
   "player": null,
   "xyz": [
@@ -5510,7 +5510,7 @@
   "pose_verified": null,
   "notes": "YANIS-IDS-V1 2026-10-18: id T3/3 -> T3/159 (Yanis V17 frame numbering). | POSITION APPROX 2026-09-17: estimation initiale (riviere a l'ouest de Downtown, regard vers l'ENE le long de la riviere) a resoudre avec les clics; la minimap du frame donne la position sur un coude de la riviere"
  },
- "Parachute Jump over Vice Beach (Extended Look)": {
+ "Parachute Jump over Vice Beach": {
   "id": "T3/4",
   "player": null,
   "xyz": [
@@ -5542,7 +5542,7 @@
    143.3
   ]
  },
- "Vice Beach Panorama (Extended Look)": {
+ "Vice Beach Panorama": {
   "id": "T3/238",
   "player": null,
   "xyz": [
@@ -6752,7 +6752,7 @@
   "notes": "YANIS-IDS-V1 2026-10-18: id S3/107 -> B26/107 (Yanis V17 frame numbering). | ROAD-FIT 2026-10-13 (Alexandre: \"les ray de la route sont 0 alignes avec la route\"): pose fitted to the street itself: both curbs read on the rectified frame (far (100,222)(450,240)(900,305)(1150,318), near (100,262)(450,278)(900,345)(1150,360)) against the V16 loop edges, plus the tower column (x 895) and, weakly, its row (y 60); free: position along the loop, offset from the road centre, yaw, pitch, roll (bounded +-1 deg: verticals are vertical), road half-width, camera height. Started from the north and the west arcs, both converge to the NW corner of the loop: road centre (-14.1, 3671.1), camera 22 m behind it at (-29.2, 3686.9), 439 m from the tower; curb RMS 12 px (mostly the x 450 points, partly hidden), tower on its pixel. Previous pose xyz [5.98, 3693.78, 5.65] ypr [250.128, -6.799, 0.0]. MOVED 2026-10-13 to the NORTH arc of the loop (Yanis: \"the angle of the houses doesnt match like that, its probably on the northern part of the loop\"): the street vanishing point had been taken from an ill-conditioned segment fit (x -40740 -> street face-on, tower 99 deg from it -> west side). Measured by hand on the grass strip between street and sidewalk, the street CURVES across the frame (slope 0.04 left, 0.08-0.09 right) and its right part converges to x ~-610: tower ~55 deg clockwise from the road-left direction (f 1290), which on the V16 loop fits its north arc at road centre (9.3, 3686.5), ~405 m from the tower (Alexandre's first estimate was (10, 3700)). Camera on the outer sidewalk 8 m from the road centre, 2 m above ground, yaw/pitch so the tower lands where it is seen (x 895, y 60). Previous (west side) pose xyz [-49.48, 3624.39, 5.9] ypr [261.87, -7.136, 0.0]. AJOUT 2026-10-13 (Alexandre: \"go fais le placement approximatif quand meme\"): POSE APPROXIMATIVE, low confidence. Street = the V16 loop road around the small lake west of I-97 (Alexandre's hint; the houses of the fan drawing he shared were NOT used, not ground truth). Ad camera f ~1290 px (hfov 52.8) chosen from the tower width (~30 m <-> 95 px) and the across-street garage door (~2.4 m <-> 70 px, ~44 m away); the VP-based estimate (2809 px) was ill-conditioned (street seen nearly face-on). In the image the tower is 99 deg clockwise from the road-left direction; along the V16 loop this only fits the WEST side, best at road centre (-41.6, 3623.0) (424 m from the tower), alternative (-27, 3512) (387 m) ~110 m further south; camera on the outer sidewalk 8 m from the road centre, 2 m above ground; yaw/pitch set so the tower lands where it is seen (x 895, y 60). A variant fitting the two road edges instead (18 m from the centre, pitch -11) put the tower 91 px too high and was rejected by Alexandre (\"fit bien mieux que la derniere\"): the road edges of this pose project ~80-150 px lower than the asphalt, so the vertical scale of the rectified TV picture stays uncertain. Roll 0. Useful as a rough direction to Pier Sixty-Six from the WNW; to be refined by clicks.",
   "id": "B26/107"
  },
- "Skyline with Ferris Wheel (T4)": {
+ "Skyline with Ferris Wheel": {
   "player": null,
   "size": [
    3840,
@@ -6779,7 +6779,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - Skyline with Ferris Wheel: sunset from the water, Watson Island marina in the foreground, the Skyviews-style observation wheel (Bayside) on the right, Southeast Financial Center and the One Miami condos on the left, the two Vizcayne towers right of the wheel.",
   "notes": "SOLVE 2026-10-17: landmarks named by Alexandre (Southeast Financial Center, One Miami E/W on the left, Vizcayne N/S right of the wheel, marina in the foreground). Least squares on 8 image points vs mesh tops: SEFC antenna tips (1190,193), One Miami E/W roofs, Wells Fargo Center, 50 Biscayne, Vizcayne North, wheel rim top and hub; residual offsets read on per-mesh hull overlays. RMS 15.7 px at 3840 px. z fixed at 2.5 m (boat deck; the near shoreline depression gives ~130 m to the Watson Island piers, consistent). Position along the view axis is the weak direction (sd ~65 m). Camera on the water ~40 m off the SW shore of Star Island, ~620 m ENE of the wheel; matches Yanis map marker T4/10 (eyeballed) within a few tens of metres. The wheel is seen ~18 deg off its normal (61.1 deg), as in the frame."
  },
- "Skyline at Night (T4)": {
+ "Skyline at Night": {
   "player": null,
   "size": [
    3840,
@@ -6806,7 +6806,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - Skyline at Night: high view from off the Mid-Beach shore looking SW at Fontainebleau-style towers (curved block with the \"L\" sign, round Tresor tower on the right), Biscayne Bay and the downtown skyline with the lit observation wheel behind.",
   "notes": "YANIS-IDS-V1 2026-10-18: id T4/07 -> T4/7 (Yanis V17 frame numbering). | SOLVE 2026-10-17: Southeast Financial Center (antenna at (2486,36), pointed out by Alexandre just left of the wheel) and the wheel hub (2603,372) fix the orientation; position, height and fov from a grid search + Nelder-Mead on the chamfer between ~100 red aviation lights detected in the frame and the roof vertices of all meshes taller than 70 m, plus the Tresor Tower centre (3350, ~1420). Final anchor residuals 2-5 px (SEFC, wheel) and 17 px (Tresor base, estimated). Camera ~97 m above the sea just NE of the tip of the sand spit, the same place as Yanis map marker T4/07 (eyeballed). Near low/mid-rise meshes (Sorrento, Soho Beach House, Albany) are procedural and do not match the game massing; the pose does not rely on them."
  },
- "Vice Beach at Night (T4)": {
+ "Vice Beach at Night": {
   "player": null,
   "size": [
    3840,
@@ -6833,7 +6833,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - Vice Beach at Night: dusk view from above the South Pointe beach looking NW up Shore Dr (Ocean Drive): Lummus-style park and beach in the foreground, lit art-deco hotels (Cortez, Boulevard, Breakwater, \"Hotel Dixon\" sign = Hotel Victor), Old City Hall lit crown, Flamingo South Beach tower behind, Akoya and Jade Ocean (North Vice Beach) on the right edge.",
   "notes": "BEACH-FIT 2026-10-17 V5 (Alexandre: \"fit aussi le relief de la plage\"): the sand of the beach/park was segmented in the frame (night sand is purple-grey, B > 30 and B - G > 5; vegetation G >= B) and compared with the V16 sand/vegetation classes draped on the game heightmap (/api/terrain3d hd, dune ridge 5.5 m, beach 3.5 m); jointly fitted with the far-tower observations (Nelder-Mead): (2101.7, 204.66, 46.8) yaw 35.41 pitch -6.54 fov 49.17. Sand mismatch 0.40 -> 0.24 (mse of the soft mask), towers chi 1.58 -> 0.99 (<= 26 px: Akoya top). This departs from the 3D-view slider tweak of V4 (pitch -7.22): with the true heightmap (not flat z 2) the beach and the towers agree on a pose 35 m further SE and 4 m lower. | RELIEF-FIT 2026-10-17 V4 (Alexandre: the terrain lines up with an extra yaw -1.03 / pitch -0.17 in the 3D view, but then the rest stops fitting): a rotation alone cannot fit both, so the position was refitted. 273 ground points of the terrain as aligned by Alexandre (V3 position, yaw 34.98, pitch -7.65, fov 51.4; ground at z 2) + the far tower observations (Flamingo South Beach roof, Old City Hall crown, Akoya L/R/top, Jade Ocean L/top, Council Towers North top), solved together: (2086.14, 237.73, 50.87) yaw 35.88 pitch -7.22 fov 51.07. Ground median 16 px (max 48) vs 75 px for V3; towers <= 31 px. Not used, kept as checks: Council Towers North left/right (-80/-67 px: that mesh fills the whole V16 lot, wider than the building) and the sign tower read as Hotel Victor (-104 px: identification doubtful). | RELIEF-FIX 2026-10-17 V3 (Alexandre, 3D view: the terrain needs pitch -0.78 deg vs V2 to line up): pitch fixed at -7.48, x, y, z, yaw, fov refitted on the same 11 silhouette/roof observations: (2082.98, 237.13, 52.13) yaw 36.01 fov 51.4, chi 1.51 (residuals <= 37 px at 3840: Council Towers N top +37, Hotel Victor +37, Jade Ocean -28). V2 pose (buildings only, chi 0.9): (2084.94, 226.39, 47.13) ypr (35.52, -6.70) fov 50.05. | REFIT 2026-10-17 V2 (Alexandre: the North Vice Beach towers must be in the frame - Akoya and the tall one = Jade Ocean - and V1 was off the relief): least squares on silhouette edges and roofs: Council Towers North left/right/top (360, 1080, 430), Akoya left/right/top (3516, 3648, 288), Jade Ocean left/top (3725, 160), Flamingo South Beach tallest roof (1172, 205), Old City Hall crown (1260, 487), Hotel Victor sign tower (3560, 615, loose). All residuals within their sigmas (chi 0.9; max 24 px = Akoya top), position sd ~7 m, z sd 1.6 m, yaw 0.3 deg, fov 0.6 deg. Pose moved from V1 (2185.73, 126.89, 60.96) ypr (37.59, -6.14) fov 40.24, which left Akoya/Jade ~4 deg outside the right edge and leaned on a vertical sign wrongly read as the Hotel Breakwater fin. Yanis map marker T4/46 (eyeballed) is ~30 m SE of this pose."
  },
- "Jason in a Helicopter (T4)": {
+ "Jason in a Helicopter": {
   "player": null,
   "size": [
    3840,
@@ -6860,7 +6860,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - Jason in a Helicopter: night, Jason on the skid of a helicopter banking over Bayside/Edgewater, looking NE across Biscayne Bay at Vice Beach; Akoya, Jade Ocean and the Blue/Green Diamond towers on the far shore, the Arsht-style Galina Ballet Opera House and Knight Concert Hall (lit striped roofs, Catalan Blvd between them) below, I-404 lights at the bottom.",
   "notes": "REFIT 2026-10-17 V3 (Alexandre labelled Opera / The Grand / Marriott in the foreground, then approved the overlay: \"OUIIII\"): roof centres Opera Tower (717,440), The Grand (960,455), Marriott Miami Biscayne Bay (1196,730) (sigma 25-30; these meshes are multi-cam verified) + Jade Ocean / Akoya / Green Diamond / Blue Diamond roof lights (sigma 8) + Galina / Knight Concert Hall (sigma 80: both meshes are whole-lot extrusions, their lit terraced roofs are not the lot centroid): (-862.89, 252.54, 378.75) ypr (-58.06, -16.25, -19.26) fov 62.75; far towers <= 8 px, foreground towers <= 62 px, Galina/Knight 110-190 px (mesh limits). Position sd ~45 m, z ~20 m. V2 (halls only): (-680.39, 416.7, 285.49) ypr (-58.8, -15.97, -18.84) fov 67.39. | REFIT 2026-10-17 V2 (Alexandre circled the Galina Ballet Opera House and the Knight Concert Hall roofs in the frame): Galina (731,1472), Knight (1227,1387) (sigma 25) + Jade Ocean / Akoya / Green Diamond / Blue Diamond roof lights (sigma 8): single solution (-680.39, 416.7, 285.49) ypr (-58.8, -15.97, -18.84) fov 67.39, all residuals <= 16 px (chi 0.35); the two near halls now fix the distance (V1 family degeneracy gone). Not used: the foreground tower meshes (Opera Tower / The Grand / Marriott) and the I-404 light band, which disagree (unverified). | PROVISIONAL 2026-10-17 (Alexandre: area west of Catalan Blvd / I-404, Akoya + Jade in the background; Galina and Knight Concert Hall with the gap between them; the major road at the bottom): least squares on the roof tops of Jade Ocean (1607,71), Akoya (1421,66), Green Diamond (1975,263), Blue Diamond (2053,290) (aviation lights, sigma 8 px) + Galina roof (630,1470) and Knight Concert Hall roof (1190,1410) (sigma 30-35): all within 1 sigma (Knight 23/-40 px). Strong roll -18.9 deg (banking). Weak: the distance along the Galina/Knight ray (the solution family runs from (-700,350,320) to (-850,150,500)); the foreground towers (Opera Tower / The Grand / Marriott / 1800 Club meshes) do not agree with Galina (adding their red lights moves Galina by 180 px) - their identification or meshes are unverified."
  },
- "Runway (T4)": {
+ "Runway": {
   "player": null,
   "size": [
    3840,
@@ -7303,7 +7303,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker S2/70 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 110 deg / fov 53 deg read on his V. Needs markings + solve."
  },
- "Truck with Jet Ski (T4)": {
+ "Truck with Jet Ski": {
   "id": "T4/1",
   "player": null,
   "xyz": [
@@ -7329,7 +7329,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/01 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
  },
- "Brian's Marina (T4)": {
+ "Brian's Marina": {
   "id": "T4/2",
   "player": null,
   "xyz": [
@@ -7355,7 +7355,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/02 (corr 0.994); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 40.0 m. Needs markings + solve."
  },
- "Seaplane at the Dock (T4)": {
+ "Seaplane at the Dock": {
   "id": "T4/6",
   "player": null,
   "xyz": [
@@ -7381,7 +7381,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/06 (corr 0.997); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
  },
- "Iguana (T4)": {
+ "Iguana": {
   "id": "T4/9",
   "player": null,
   "xyz": [
@@ -7407,7 +7407,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/09 (corr 0.992); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.0 m. Needs markings + solve."
  },
- "Lucia and Jason in a Convertible (T4)": {
+ "Lucia and Jason in a Convertible": {
   "id": "T4/11",
   "player": null,
   "xyz": [
@@ -7433,7 +7433,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/11 (corr 0.992); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
  },
- "Jason by the Window at Night (T4)": {
+ "Jason by the Window at Night": {
   "id": "T4/14",
   "player": null,
   "xyz": [
@@ -7459,7 +7459,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/14 (corr 0.969); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
  },
- "Jason and Lucia by the Red Car (T4)": {
+ "Jason and Lucia by the Red Car": {
   "id": "T4/21",
   "player": null,
   "xyz": [
@@ -7485,7 +7485,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/21 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
  },
- "Green Sports Car on Ocean Drive (T4)": {
+ "Green Sports Car on Ocean Drive": {
   "id": "T4/25",
   "player": null,
   "xyz": [
@@ -7511,7 +7511,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/25 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
  },
- "Dirt Bike on the Overpass (T4)": {
+ "Dirt Bike on the Overpass": {
   "id": "T4/26",
   "player": null,
   "xyz": [
@@ -7537,7 +7537,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/26 (corr 0.996); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
  },
- "Explosion behind Jason (T4)": {
+ "Explosion behind Jason": {
   "id": "T4/28",
   "player": null,
   "xyz": [
@@ -7563,7 +7563,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/28 (corr 0.990); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
  },
- "Biplane over the Beach (T4)": {
+ "Biplane over the Beach": {
   "id": "T4/30",
   "player": null,
   "xyz": [
@@ -7589,7 +7589,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/30 (corr 0.996); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 35.0 m. Needs markings + solve."
  },
- "Napping in the Chair (T4)": {
+ "Napping in the Chair": {
   "id": "T4/32",
   "player": null,
   "xyz": [
@@ -7615,7 +7615,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/32 (corr 0.993); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
  },
- "Explosion on the Highway (T4)": {
+ "Explosion on the Highway": {
   "id": "T4/34",
   "player": null,
   "xyz": [
@@ -7641,7 +7641,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/34 (corr 0.984); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
  },
- "Lucia on the Rooftop at Sunset (T4)": {
+ "Lucia on the Rooftop at Sunset": {
   "id": "T4/36",
   "player": null,
   "xyz": [
@@ -7667,7 +7667,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/36 (corr 0.986); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
  },
- "Night Street Race (T4)": {
+ "Night Street Race": {
   "id": "T4/37",
   "player": null,
   "xyz": [
@@ -7693,7 +7693,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/37 (corr 0.983); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.0 m. Needs markings + solve."
  },
- "Balcony at Sunset (T4)": {
+ "Balcony at Sunset": {
   "id": "T4/39",
   "player": null,
   "xyz": [
@@ -7719,7 +7719,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/39 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
  },
- "Falling from the Glass Tower (T4)": {
+ "Falling from the Glass Tower": {
   "id": "T4/40",
   "player": null,
   "xyz": [
@@ -7797,7 +7797,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame already in frames/, matched by eye to Yanis V17 thumbnail T2/14; pose = his marker (eyeballed by him), z = heightmap + 1.7 m; heading / FOV read on his V (approximate). Needs markings + solve."
  },
- "Bedroom (Jason & Lucia) (T2)": {
+ "Bedroom (Jason & Lucia)": {
   "id": "T2/21",
   "player": null,
   "xyz": [
@@ -7823,7 +7823,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/21 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
  },
- "Masked Robber (T2)": {
+ "Masked Robber": {
   "id": "T2/24",
   "player": null,
   "xyz": [
@@ -7849,7 +7849,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/24 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
  },
- "Brian's Boat Works (T2)": {
+ "Brian's Boat Works": {
   "id": "T2/30",
   "player": null,
   "xyz": [
@@ -7875,7 +7875,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/30 (checked by eye); position from his marker / cell, heading 250, fov 55 placeholder. Needs markings + solve."
  },
- "Kitchen (Jason & Lucia) (T2)": {
+ "Kitchen (Jason & Lucia)": {
   "id": "T2/33",
   "player": null,
   "xyz": [
@@ -7901,7 +7901,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/33 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
  },
- "Bar Patron (The Rusty Anchor) (T2)": {
+ "Bar Patron (The Rusty Anchor)": {
   "id": "T2/34",
   "player": null,
   "xyz": [
@@ -7927,7 +7927,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/34 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
  },
- "Bar Counter (The Rusty Anchor) (T2)": {
+ "Bar Counter (The Rusty Anchor)": {
   "id": "T2/35",
   "player": null,
   "xyz": [
@@ -7953,7 +7953,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/35 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
  },
- "Dancing at the Bar (The Rusty Anchor) (T2)": {
+ "Dancing at the Bar (The Rusty Anchor)": {
   "id": "T2/36",
   "player": null,
   "xyz": [
@@ -7979,7 +7979,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/36 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
  },
- "Nightclub Queue (T2)": {
+ "Nightclub Queue": {
   "id": "T2/41",
   "player": null,
   "xyz": [
@@ -8005,7 +8005,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/41 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
  },
- "Kitchen (Old Woman) (T2)": {
+ "Kitchen (Old Woman)": {
   "id": "T2/47",
   "player": null,
   "xyz": [
@@ -8031,7 +8031,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/47 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
  },
- "Shooting from the Car (T2)": {
+ "Shooting from the Car": {
   "id": "T2/51",
   "player": null,
   "xyz": [
@@ -8057,7 +8057,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/51 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
  },
- "Living Room (Lucia) (T2)": {
+ "Living Room (Lucia)": {
   "id": "T2/56",
   "player": null,
   "xyz": [
@@ -8083,7 +8083,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/56 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
  },
- "Lucia on the Couch (T2)": {
+ "Lucia on the Couch": {
   "id": "T2/57",
   "player": null,
   "xyz": [
@@ -8109,7 +8109,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/57 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
  },
- "Napping on the Couch (T2)": {
+ "Napping on the Couch": {
   "id": "T2/68",
   "player": null,
   "xyz": [
@@ -8135,7 +8135,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/68 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
  },
- "Lap Dance (Delights) (T2)": {
+ "Lap Dance (Delights)": {
   "id": "T2/75",
   "player": null,
   "xyz": [
@@ -8161,7 +8161,7 @@
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/75 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
  },
- "Brian's Workshop (T2)": {
+ "Brian's Workshop": {
   "id": "T2/79",
   "player": null,
   "xyz": [
