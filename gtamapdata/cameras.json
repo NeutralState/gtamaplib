@@ -7302,5 +7302,499 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the frames that already exist; follow Yanis): pose = Yanis V17 marker S2/70 (eyeballed by him), position read on the dot, z = game heightmap + 1.7 m; heading 110 deg / fov 53 deg read on his V. Needs markings + solve."
+ },
+ "Truck with Jet Ski (T4)": {
+  "id": "T4/1",
+  "player": null,
+  "xyz": [
+   -2134.3,
+   -5123.4,
+   8.25
+  ],
+  "ypr": [
+   182,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   50.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - pickup towing a jet ski on the highway past \"The Keys\" billboard; GTAVI_Launch_Trailer.mp4 t=3.27 s (frame 98), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/01 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Brian's Marina (T4)": {
+  "id": "T4/2",
+  "player": null,
+  "xyz": [
+   -2388.1,
+   -5748.2,
+   41.97
+  ],
+  "ypr": [
+   125,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   46.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - aerial view of Brian's Marina boat storage over the bay (height ESTIMATED 40 m); GTAVI_Launch_Trailer.mp4 t=5.13 s (frame 154), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/02 (corr 0.994); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 40.0 m. Needs markings + solve."
+ },
+ "Seaplane at the Dock (T4)": {
+  "id": "T4/6",
+  "player": null,
+  "xyz": [
+   -2581.1,
+   -5760.5,
+   2.78
+  ],
+  "ypr": [
+   352,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - Jason on a dock watching a seaplane, bridge in the background; GTAVI_Launch_Trailer.mp4 t=14.40 s (frame 432), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/06 (corr 0.997); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Iguana (T4)": {
+  "id": "T4/9",
+  "player": null,
+  "xyz": [
+   -1128.6,
+   -1409.4,
+   3.84
+  ],
+  "ypr": [
+   345,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   40.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - iguana on a road barrier, green highway sign behind; GTAVI_Launch_Trailer.mp4 t=21.37 s (frame 641), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/09 (corr 0.992); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.0 m. Needs markings + solve."
+ },
+ "Lucia and Jason in a Convertible (T4)": {
+  "id": "T4/11",
+  "player": null,
+  "xyz": [
+   -25.4,
+   -474.5,
+   1.7
+  ],
+  "ypr": [
+   195,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   50.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - Lucia and Jason in a red convertible, towers behind; GTAVI_Launch_Trailer.mp4 t=27.27 s (frame 818), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/11 (corr 0.992); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Jason by the Window at Night (T4)": {
+  "id": "T4/14",
+  "player": null,
+  "xyz": [
+   1204.6,
+   -139.4,
+   1.7
+  ],
+  "ypr": [
+   60,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   60.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - Jason in a dark room by an open window, city lights outside; GTAVI_Launch_Trailer.mp4 t=32.77 s (frame 983), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/14 (corr 0.969); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Jason and Lucia by the Red Car (T4)": {
+  "id": "T4/21",
+  "player": null,
+  "xyz": [
+   -956.1,
+   7084.5,
+   6.85
+  ],
+  "ypr": [
+   132,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   80.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - Jason and Lucia leaning on a red sports car, shipping containers behind; GTAVI_Launch_Trailer.mp4 t=41.60 s (frame 1248), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/21 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Green Sports Car on Ocean Drive (T4)": {
+  "id": "T4/25",
+  "player": null,
+  "xyz": [
+   1988.7,
+   566.7,
+   5.28
+  ],
+  "ypr": [
+   76,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   59.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - green sports car drifting in front of a Spanish-style hotel; GTAVI_Launch_Trailer.mp4 t=47.23 s (frame 1417), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/25 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Dirt Bike on the Overpass (T4)": {
+  "id": "T4/26",
+  "player": null,
+  "xyz": [
+   -973.1,
+   -655.9,
+   4.68
+  ],
+  "ypr": [
+   88,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - dirt bike wheelie on an elevated road, round tower behind; GTAVI_Launch_Trailer.mp4 t=49.20 s (frame 1476), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/26 (corr 0.996); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Explosion behind Jason (T4)": {
+  "id": "T4/28",
+  "player": null,
+  "xyz": [
+   -906.3,
+   53.4,
+   4.72
+  ],
+  "ypr": [
+   10,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   70.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - Jason on a rooftop at night, explosion and skyline behind; GTAVI_Launch_Trailer.mp4 t=54.03 s (frame 1621), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/28 (corr 0.990); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Biplane over the Beach (T4)": {
+  "id": "T4/30",
+  "player": null,
+  "xyz": [
+   2209.0,
+   444.9,
+   36.19
+  ],
+  "ypr": [
+   20,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - crop-duster biplane trailing pink smoke over a crowded beach, towers behind (height ESTIMATED 35 m); GTAVI_Launch_Trailer.mp4 t=55.80 s (frame 1674), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/30 (corr 0.996); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 35.0 m. Needs markings + solve."
+ },
+ "Napping in the Chair (T4)": {
+  "id": "T4/32",
+  "player": null,
+  "xyz": [
+   -2351.0,
+   -5527.0,
+   3.03
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - man asleep in a chair by a window (INTERIOR, Yanis K8 (Interior) = Jason's House (Keys) inset; position = that house, heading unknown); GTAVI_Launch_Trailer.mp4 t=58.73 s (frame 1762), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/32 (corr 0.993); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Explosion on the Highway (T4)": {
+  "id": "T4/34",
+  "player": null,
+  "xyz": [
+   -397.6,
+   -1091.4,
+   1.7
+  ],
+  "ypr": [
+   10,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   60.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - gunman on a stair rail, explosion on the road below at night; GTAVI_Launch_Trailer.mp4 t=61.37 s (frame 1841), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/34 (corr 0.984); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Lucia on the Rooftop at Sunset (T4)": {
+  "id": "T4/36",
+  "player": null,
+  "xyz": [
+   500.0,
+   -1500.0,
+   6.88
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - Lucia on a rooftop at sunset, crane behind (Yanis cell N12; his marker was NOT found on the map: position = cell centre, +-500 m); GTAVI_Launch_Trailer.mp4 t=63.60 s (frame 1908), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/36 (corr 0.986); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Night Street Race (T4)": {
+  "id": "T4/37",
+  "player": null,
+  "xyz": [
+   -611.5,
+   -970.3,
+   3.98
+  ],
+  "ypr": [
+   315,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   68.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - street race at night under a green highway sign, downtown towers; GTAVI_Launch_Trailer.mp4 t=64.73 s (frame 1942), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/37 (corr 0.983); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.0 m. Needs markings + solve."
+ },
+ "Balcony at Sunset (T4)": {
+  "id": "T4/39",
+  "player": null,
+  "xyz": [
+   2030.6,
+   1581.0,
+   5.19
+  ],
+  "ypr": [
+   192,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   45.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - Lucia and Jason embracing on a balcony at sunset over the sea; GTAVI_Launch_Trailer.mp4 t=67.90 s (frame 2037), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/39 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Falling from the Glass Tower (T4)": {
+  "id": "T4/40",
+  "player": null,
+  "xyz": [
+   -590.1,
+   -949.3,
+   2.53
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   60.0,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - looking up a glass tower, window shattering; GTAVI_Launch_Trailer.mp4 t=69.23 s (frame 2077), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/40 (corr 0.994); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+ },
+ "Nightclub": {
+  "id": "T1/18",
+  "player": null,
+  "xyz": [
+   -778.0,
+   472.0,
+   4.54
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   2160
+  ],
+  "source": "Trailer 1 [?]",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame already in frames/, matched by eye to Yanis V17 thumbnail T1/18; pose = his marker (eyeballed by him), z = heightmap + 1.7 m; INTERIOR (nightclub): position = Yanis marker on the club building, heading unknown. Needs markings + solve."
+ },
+ "Door (Store)": {
+  "id": "T2/14",
+  "player": null,
+  "xyz": [
+   -2828.0,
+   -6333.0,
+   3.26
+  ],
+  "ypr": [
+   310,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   60.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [?]",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame already in frames/, matched by eye to Yanis V17 thumbnail T2/14; pose = his marker (eyeballed by him), z = heightmap + 1.7 m; heading / FOV read on his V (approximate). Needs markings + solve."
  }
 }
