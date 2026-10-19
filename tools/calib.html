@@ -680,8 +680,8 @@ body:not(.view-map):not(.view-view3d) #proj-toggle{display:inline-flex !importan
         <button class="cam-filter-chip on" data-type="T3" title="An Extended Look">T3</button>
         <button class="cam-filter-chip on" data-type="S4" title="Preview / magazine screenshots">S4</button>
         <button class="cam-filter-chip on" data-type="T4" title="Launch trailer">T4</button>
-        <button class="cam-filter-chip on" data-type="A" title="Artworks">A</button>
-        <button class="cam-filter-chip on" data-type="B26" title="Build 2026 / cyberleak (debug HUD 2026, prison biplane video, VCIA night)">2026</button>   <!-- [SERIES-V1 2026-10-18] chips = Yanis V17 series (from the camera ID) -->
+        <button class="cam-filter-chip on" data-type="A" title="Artworks">Art</button>
+        <button class="cam-filter-chip on" data-type="B26" title="Cyberleak / build 2026 (debug HUD 2026, prison biplane video, VCIA night)">CL</button>   <!-- [SERIES-V1 2026-10-18] chips = Yanis V17 series (from the camera ID) -->
       </div>
       <div class="ls-filter-chips" id="leak-class-chips" title="LEAK sub-filter by constraint class (A=full HUD pose ... D=nothing locked)"><!-- [LEAK-TYPE-V1] -->
         <button class="cam-filter-chip on" data-lclass="A">A</button>
@@ -1206,7 +1206,7 @@ function leakClassOf(c) {
 // [SERIES-V1 2026-10-18] category = Yanis V17 series, read from the camera ID (cameras.json follows his numbering)
 const CAM_SERIES = { LEAK: ['LEAK', 'var(--text)'], T1: ['Trailer 1', 'var(--blue)'], T2: ['Trailer 2', 'var(--green)'], S2: ['Screenshot (T2 drop)', '#f87171'],
   S3: ['Screenshot (pre-order)', '#fb923c'], T3: ['Extended Look', '#60a5fa'], S4: ['Screenshot (preview)', '#a78bfa'], T4: ['Launch Trailer', '#22c55e'],
-  A: ['Artwork', '#4ade80'], B26: ['Build 2026', '#fbbf24'], other: ['Other', 'var(--violet)'] };
+  A: ['Artwork', '#4ade80'], B26: ['Cyberleak', '#fbbf24'], other: ['Other', 'var(--violet)'] };
 function camSeries(c) {
   const id = c.id || '', p = id.split('/')[0];
   if (/^L\d/.test(p) || /^\d{4}-\d{2}-\d{2}/.test(c.source || '')) return 'LEAK';
