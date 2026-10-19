@@ -7796,5 +7796,395 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame already in frames/, matched by eye to Yanis V17 thumbnail T2/14; pose = his marker (eyeballed by him), z = heightmap + 1.7 m; heading / FOV read on his V (approximate). Needs markings + solve."
+ },
+ "Bedroom (Jason & Lucia) (T2)": {
+  "id": "T2/21",
+  "player": null,
+  "xyz": [
+   -2351.0,
+   -5527.0,
+   3.03
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [2195] - INTERIOR: bedroom, \"Rockstar Games presents\" title (Yanis K8 = Keys; position = Jason's House (Keys), ESTIMATED); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=73.17 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/21 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+ },
+ "Masked Robber (T2)": {
+  "id": "T2/24",
+  "player": null,
+  "xyz": [
+   -822.0,
+   -1191.0,
+   5.29
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [2328] - masked robber in a red-lit store (Yanis marker M12, SE 4th St); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=77.60 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/24 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+ },
+ "Brian's Boat Works (T2)": {
+  "id": "T2/30",
+  "player": null,
+  "xyz": [
+   -2272.0,
+   -5262.0,
+   3.16
+  ],
+  "ypr": [
+   110,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [2553] - Brian's Boat Works & Marine hangar at night (Yanis K8; position near his T2/29 marker); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=85.10 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/30 (checked by eye); position from his marker / cell, heading 250, fov 55 placeholder. Needs markings + solve."
+ },
+ "Kitchen (Jason & Lucia) (T2)": {
+  "id": "T2/33",
+  "player": null,
+  "xyz": [
+   -2351.0,
+   -5527.0,
+   3.03
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [2674] - INTERIOR: kitchen (Yanis K8 (Interior) = Jason's house inset; position ESTIMATED = Jason's House (Keys)); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=89.13 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/33 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+ },
+ "Bar Patron (The Rusty Anchor) (T2)": {
+  "id": "T2/34",
+  "player": null,
+  "xyz": [
+   -2222.7,
+   -5262.4,
+   4.02
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [2710] - INTERIOR: bar (Yanis K8 (Interior); position ESTIMATED = The Rusty Anchor); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=90.33 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/34 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+ },
+ "Bar Counter (The Rusty Anchor) (T2)": {
+  "id": "T2/35",
+  "player": null,
+  "xyz": [
+   -2222.7,
+   -5262.4,
+   4.02
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [2751] - INTERIOR: bar counter \"Hurricane Roxy\" (position ESTIMATED = The Rusty Anchor); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=91.70 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/35 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+ },
+ "Dancing at the Bar (The Rusty Anchor) (T2)": {
+  "id": "T2/36",
+  "player": null,
+  "xyz": [
+   -2222.7,
+   -5262.4,
+   4.02
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [2786] - INTERIOR: dancing in the bar (position ESTIMATED = The Rusty Anchor); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=92.87 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/36 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+ },
+ "Nightclub Queue (T2)": {
+  "id": "T2/41",
+  "player": null,
+  "xyz": [
+   -650.0,
+   465.0,
+   4.85
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [3011] - queue outside the \"Nine\" nightclub (Yanis M14, next to T1/18); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=100.37 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/41 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+ },
+ "Kitchen (Old Woman) (T2)": {
+  "id": "T2/47",
+  "player": null,
+  "xyz": [
+   -2828.0,
+   -6333.0,
+   3.26
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [3183] - INTERIOR (Yanis K7 (Interior); position ESTIMATED = the K7 store of T2/14); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=106.10 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/47 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+ },
+ "Shooting from the Car (T2)": {
+  "id": "T2/51",
+  "player": null,
+  "xyz": [
+   1968.0,
+   589.0,
+   4.89
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [3334] - shooting from a yellow car at night (Yanis O14, Grape St / Shore Dr); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=111.13 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/51 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+ },
+ "Living Room (Lucia) (T2)": {
+  "id": "T2/56",
+  "player": null,
+  "xyz": [
+   -2351.0,
+   -5527.0,
+   3.03
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [3491] - INTERIOR: living room (Yanis K8 (Interior); position ESTIMATED = Jason's House (Keys)); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=116.37 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/56 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+ },
+ "Lucia on the Couch (T2)": {
+  "id": "T2/57",
+  "player": null,
+  "xyz": [
+   -2351.0,
+   -5527.0,
+   3.03
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [3537] - INTERIOR (Yanis K8 (Interior); position ESTIMATED = Jason's House (Keys)); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=117.90 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/57 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+ },
+ "Napping on the Couch (T2)": {
+  "id": "T2/68",
+  "player": null,
+  "xyz": [
+   -2351.0,
+   -5527.0,
+   3.03
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [4139] - INTERIOR: living room (Yanis K8 (Interior); position ESTIMATED = Jason's House (Keys)); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=137.97 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/68 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+ },
+ "Lap Dance (Delights) (T2)": {
+  "id": "T2/75",
+  "player": null,
+  "xyz": [
+   -6358.4,
+   3673.8,
+   12.74
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [4382] - INTERIOR (Yanis H17 (Interior) = Delights cabaret; position ESTIMATED = Port Gellhorn 04 (Delights)); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=146.07 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/75 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
+ },
+ "Brian's Workshop (T2)": {
+  "id": "T2/79",
+  "player": null,
+  "xyz": [
+   -2272.0,
+   -5262.0,
+   3.16
+  ],
+  "ypr": [
+   0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "size": [
+   3840,
+   1728
+  ],
+  "source": "Trailer 2 [4571] - INTERIOR: Brian's workshop (Yanis K8 (Interior); position ESTIMATED = Brian's Boat Works); GTAVI_Trailer_2.mp4 (rockstargames.com/VI/media) t=152.37 s, letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Trailer 2 and matched to Yanis V17 thumbnail T2/79 (checked by eye); position from his marker / cell, heading unknown, fov 55 placeholder. Needs markings + solve."
  }
 }
