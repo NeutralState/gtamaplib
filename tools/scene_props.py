@@ -292,8 +292,8 @@ def keys_bridges():
                     P.append(dict(k='quad', p=[A(w, 0), B_(w, 0), B_(w, depth + parapet), A(w, depth + parapet)], color=self.col))   # fascia + parapet
         def bent(self, s, zb, w0, w1, ncol=2, col=1.2, zw=0.0, cap=1.4, tie=12.0, footing=1.5):
             z = zb(s); m = 0.18 * (w1 - w0)
-            for w in np.linspace(w0 + m, w1 - m, ncol): self.box(s, w, zw, col, col, z - cap - zw)
-            self.box(s, (w0 + w1) / 2, z - cap, 1.8, w1 - w0 - 0.6, cap)
+            for w in (np.linspace(w0 + m, w1 - m, ncol) if ncol > 1 else [(w0 + w1) / 2]): self.box(s, w, zw, col, col, z - cap - zw)
+            self.box(s, (w0 + w1) / 2, z - cap, 1.8, (w1 - w0 - 0.6) if ncol > 1 else 6.0, cap)
             self.box(s, (w0 + w1) / 2, zw - 0.5, 4.4, w1 - w0 - 2 * m + 3.6, footing + 0.5, '#b0aca4')
         def abutment(self, s, zb, w0, w1, back):
             z = zb(s) + 1.8; self.box(s + back / 2, (w0 + w1) / 2, 0.0, abs(back), w1 - w0, max(z - 1.0, 1.0), '#b8b4ac')
@@ -711,7 +711,124 @@ def convertible_bridge():
                 nolamp=[[[-150, -450], [70, -505], [70, -545], [-150, -490]]])   # bridge in view: no lamp on the frame (u 1700-3000 shows the towers)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge]
+def _roundabout_sign(path, W=960, H=1040):
+    """the T4/09 'roundabout ahead' guide sign redrawn sharp (the frame is out of focus): approach from the east arm; straight =
+    the west arm to the Grassrivers Visitor Center (GTADB L625; Alexandre), left = US 1 South (Key Lento), right = US 1 North
+    (Hamlet). Florida-style green
+    panel, white border, US 1 shields. Directions from the map (the arms the ramps serve are ESTIMATED)."""
+    from PIL import Image, ImageDraw, ImageFont
+    GRN, WHT, BLK = (0, 106, 58), (246, 246, 240), (20, 20, 20)
+    F = '/System/Library/Fonts/Supplemental/DIN Condensed Bold.ttf'
+    font = lambda s: ImageFont.truetype(F, s) if os.path.exists(F) else ImageFont.load_default()
+    im = Image.new('RGB', (W, H), GRN); d = ImageDraw.Draw(im)
+    d.rounded_rectangle([14, 14, W - 15, H - 15], radius=44, outline=WHT, width=14)
+    cx, cy, R, w = 640, 590, 112, 40                                       # roundabout diagram
+    d.ellipse([cx - R, cy - R, cx + R, cy + R], outline=WHT, width=w)
+    d.rectangle([cx - 26, cy + R - 6, cx + 26, H - 70], fill=WHT)          # approach
+    def arm(x0, y0, x1, y1, head):
+        d.line([x0, y0, x1, y1], fill=WHT, width=w)
+        d.polygon(head, fill=WHT)
+    arm(cx, cy - R, cx, 300, [(cx - 52, 312), (cx + 52, 312), (cx, 236)])                     # straight
+    arm(cx - R, cy, 470, cy, [(482, cy - 52), (482, cy + 52), (408, cy)])                     # left
+    arm(cx + R, cy, 830, cy, [(818, cy - 52), (818, cy + 52), (892, cy)])                     # right
+    def shield(x, y, s, txt):
+        pts = [(x, y + 0.18 * s), (x + 0.12 * s, y), (x + 0.32 * s, y + 0.07 * s), (x + 0.5 * s, y), (x + 0.68 * s, y + 0.07 * s),
+               (x + 0.88 * s, y), (x + s, y + 0.18 * s), (x + 0.94 * s, y + 0.75 * s), (x + 0.5 * s, y + 1.05 * s), (x + 0.06 * s, y + 0.75 * s)]
+        d.polygon(pts, fill=WHT, outline=BLK); f = font(int(0.78 * s)); tw = d.textlength(txt, font=f)
+        d.text((x + s / 2 - tw / 2, y + 0.16 * s), txt, fill=BLK, font=f)
+    ctext = lambda x, y, t, s: d.text((x - d.textlength(t, font=font(s)) / 2, y), t, fill=WHT, font=font(s))
+    ctext(cx, 52, 'Grassrivers', 96); ctext(cx, 146, 'Visitor Center', 74)                     # straight
+    shield(52, 380, 120, '1'); d.text((190, 398), 'SOUTH', fill=WHT, font=font(84)); d.text((60, 520), 'Key Lento', fill=WHT, font=font(92))  # left
+    shield(694, 706, 86, '1'); d.text((790, 718), 'NORTH', fill=WHT, font=font(58)); ctext(808, 810, 'Hamlet', 84)                         # right
+    im.save(path)
+
+
+def iguana_roundabout():
+    """T4/09 Iguana — east arm of the Keys US 1 roundabout, under the US 1 Hamlet Viaduct (pose SOLVED). Dressing read on the
+    frame (golden hour): the green 'roundabout ahead' sign (u 1100-1580, v 540-1060, ~3.6 m wide ->
+    55 m), the street-light pole at the left edge (base v 1480 -> 29 m), a second street light (u 750) and a wooden utility pole
+    with its cross-arm (u 1010), the white building at the left edge, the car ahead (tyres v 1520), the yellow transverse road
+    bars (v 1570..1805), dark trees left of the sign and palms beyond the viaduct on the right. Distances ESTIMATED (one view).
+    The sign face is redrawn sharp with the map's directions (_roundabout_sign)."""
+    V = View('Iguana'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]; o = V.o
+    def ground_at(u, v):
+        g = T(o[0], o[1])
+        for _ in range(4):
+            p = V.on_plane_z(u, v, g); g = T(p[0], p[1])
+        return p
+    def along(u, D):                                                       # horizontal point D m along the column u, on the ground
+        d = V.ray(u, 1300.0); d2 = d[:2] / np.linalg.norm(d[:2]); q = o[:2] + d2 * D; return np.r_[q, T(q[0], q[1])]
+    def zat(v, D, u=1920.0):                                               # height of frame row v at horizontal distance D
+        d = V.ray(u, v); return float(o[2] + d[2] / np.linalg.norm(d[:2]) * D)
+    head = math.radians(-CAMS['Iguana']['ypr'][0]); fwd = np.array([math.sin(head), math.cos(head)]); side = np.array([fwd[1], -fwd[0]])
+    AZ = math.degrees(head) % 360
+    # the road straight ahead (frame: asphalt from the iguana to the car; the V17 drape has water there): asphalt apron
+    RJ = json.load(open(os.path.join(THIS, 'threejs', '_v16_roads.json'))) if os.path.exists(os.path.join(THIS, 'threejs', '_v16_roads.json')) else None
+    zr0 = None
+    if RJ:                                                                 # height of the drawn V16 road ribbon under the camera
+        best = min(((math.hypot(q[0] - o[0], q[1] - o[1]), q[2]) for r in RJ['road'] for q in r['p'] if abs(q[0] - o[0]) < 30 and abs(q[1] - o[1]) < 30), default=None)
+        zr0 = best[1] if best else None
+    g0 = max(T(o[0], o[1]) + 0.33, (zr0 or -99) + 0.34 + 0.05)             # just above the ribbon (view3d lifts streets 0.34 m)
+    for d0 in np.arange(2.0, 70.0, 4.0):
+        a0, a1 = o[:2] + fwd * d0, o[:2] + fwd * (d0 + 4.0)
+        q = [a0 - side * 7.0, a0 + side * 9.0, a1 + side * 9.0, a1 - side * 7.0]
+        P.append(dict(k='quad', p=[r2([*x, g0]) for x in q], color='#3c3d3f', e=0.0))
+    # yellow transverse bars across the road (frame rows 1570, 1650, 1730, 1805)
+    for v in (1570, 1650, 1730, 1805):
+        c = V.on_plane_z(1150, v, g0 + 0.05); a, b = c[:2] - side * 2.2, c[:2] + side * 2.2
+        zr = g0 + 0.05                                                    # on the apron
+        P.append(dict(k='quad', p=[r2([*(a - fwd * 0.35), zr]), r2([*(b - fwd * 0.35), zr]), r2([*(b + fwd * 0.35), zr]), r2([*(a + fwd * 0.35), zr])], color='#d9a632', e=0.15))
+    # the car ahead (rear at the tyre row v 1520, roof v 1130)
+    c = ground_at(1080, 1520); D = float(np.linalg.norm(c[:2] - o[:2])); hc = zat(1130, D, 1080) - c[2]
+    cc = c[:2] + fwd * 2.2
+    P.append(dict(k='box', c=r2([cc[0], cc[1], c[2] + 0.25]), s=[4.6, 2.0, round(max(1.2, hc - 0.25), 2)], az=round(AZ, 1), color='#1d2430'))
+    P.append(dict(k='box', c=r2([cc[0], cc[1], c[2]]), s=[3.2, 1.9, 0.35], az=round(AZ, 1), color='#101318'))
+    # street-light pole at the left edge (base v 1480, head at v ~400)
+    b = ground_at(142, 1480); Db = float(np.linalg.norm(b[:2] - o[:2])); zh = zat(400, Db, 142)
+    P.append(dict(k='cyl', a=r2(b), b=r2([b[0], b[1], zh + 1.2]), r=0.14, color='#c9c6bd'))
+    arm = b[:2] + side * -1.6
+    P.append(dict(k='cyl', a=r2([b[0], b[1], zh]), b=r2([arm[0], arm[1], zh]), r=0.08, color='#c9c6bd'))
+    P.append(dict(k='box', c=r2([arm[0], arm[1], zh - 0.15]), s=[0.7, 0.35, 0.15], az=round(AZ, 1), color='#e8e4d8'))
+    # second street light (u 750, head v 400) and the wooden utility pole with its cross-arm (u 1010, top v 430, arm v 460)
+    for u, D, vt, col, rr in ((750, 62.0, 400, '#b9b6ae', 0.14), (1010, 70.0, 430, '#6b5a45', 0.17)):
+        g = along(u, D); zt = zat(vt, D, u)
+        P.append(dict(k='cyl', a=r2(g), b=r2([g[0], g[1], zt]), r=rr, color=col))
+        if col == '#6b5a45':
+            za = zat(460, D, u); P.append(dict(k='cyl', a=r2([*(g[:2] - side * 1.1), za]), b=r2([*(g[:2] + side * 1.1), za]), r=0.09, color=col))
+            nxt = along(u - 600, D + 25); P.append(dict(k='line', pts=[r2([g[0], g[1], za]), r2([nxt[0], nxt[1], za - 0.6])], color='#2a2622', opacity=0.6))
+        else:
+            P.append(dict(k='box', c=r2([g[0], g[1], zt]), s=[0.8, 0.35, 0.18], az=round(AZ, 1), color='#e8e4d8'))
+    # green 'roundabout ahead' sign: vertical panel facing the camera at ~55 m, texture cut from the frame
+    D = 55.0; n = -fwd; p0 = along(1340, D)
+    BL, BR = V.on_vplane(1100, 1060, p0, n), V.on_vplane(1580, 1060, p0, n); TL, TR = V.on_vplane(1100, 540, p0, n), V.on_vplane(1580, 540, p0, n)
+    _roundabout_sign(os.path.join(THIS, 'threejs', '_prop_iguana_sign.png'))   # redrawn with the map's directions (Alexandre)
+    P.append(dict(k='tex', p=[r2(q) for q in (BL, BR, TR, TL)], img='_prop_iguana_sign.png'))
+    P.append(dict(k='box', c=r2(np.r_[(BL[:2] + BR[:2]) / 2 - n * 0.15, BL[2] - 0.1]), s=[float(np.linalg.norm(BR[:2] - BL[:2])) + 0.2, 0.2, float(TL[2] - BL[2]) + 0.2], az=round(AZ + 90, 1), color='#2c3a30'))
+    for t in (0.22, 0.78):
+        q = BL[:2] + (BR[:2] - BL[:2]) * t - n[:2] * 0.3; g = T(q[0], q[1])
+        P.append(dict(k='cyl', a=r2([q[0], q[1], g]), b=r2([q[0], q[1], BL[2]]), r=0.09, color='#9ea3a6'))
+    # white building at the left edge (u 0..300, top v 580) ~45 m
+    D = 60.0; g = along(90, D); zt = zat(600, D, 90)
+    cb = g[:2] - side * 2.5                                                # mostly off the left edge
+    P.append(dict(k='box', c=r2([cb[0], cb[1], g[2]]), s=[5.0, 6.0, round(zt - g[2], 2)], az=round(AZ, 1), color='#e6e1d6'))
+    # dark trees left of the sign (u 300..1000, crowns v 700..1300) and palms beyond the viaduct (u 2300..3800, tops v 300..500)
+    rng = np.random.default_rng(9)
+    for u in np.arange(300, 1050, 70):
+        D = rng.uniform(85, 120); g = along(u, D); top = zat(rng.uniform(690, 760), D, u); rr = rng.uniform(2.8, 3.8)
+        P.append(dict(k='blob', c=r2([g[0], g[1], top - rr * 0.8]), r=[round(rr, 1), round(rr, 1), round(rr * 0.8, 1)], color=['#3b4a2c', '#46552f', '#33422a'][int(rng.integers(3))]))
+        P.append(dict(k='cyl', a=r2(g), b=r2([g[0], g[1], top - rr]), r=0.3, color='#3d3126'))
+    for u in (2480, 2950, 3420, 3760):
+        D = rng.uniform(80, 115); g = along(u, D); top = zat(rng.uniform(300, 480), D, u)
+        P.append(dict(k='palm', a=r2(g), h=round(max(7.0, top - g[2]), 1), lean_az=round(rng.uniform(0, 360), 0), lean=0.06))
+    for u in np.arange(2250, 3850, 120):
+        D = rng.uniform(95, 130); g = along(u, D); top = zat(rng.uniform(560, 720), D, u); rr = rng.uniform(2.8, 3.8)
+        P.append(dict(k='blob', c=r2([g[0], g[1], top - rr * 0.8]), r=[round(rr, 1), round(rr, 1), round(rr * 0.75, 1)], color=['#56662f', '#62723a', '#4b5a2c'][int(rng.integers(3))]))
+    nolamp = [[[o[0] + 20, o[1] + 45], [o[0] - 180, o[1] + 45], [o[0] - 180, o[1] - 70], [o[0] + 20, o[1] - 70]]]
+    return dict(scene='T4/09 Iguana', camera='Iguana', note=iguana_roundabout.__doc__.split('\n')[0], props=P,
+                nolamp=[[r2(q)[:2] for q in poly] for poly in nolamp])
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout]
 
 
 def main():

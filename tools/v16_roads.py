@@ -34,7 +34,7 @@ def strokes():
     return json.load(open(CACHE))['strokes']
 
 
-def deck_grid(hwy_only=True):
+def deck_grid(hwy_only=True, only=None):
     """hauteur du TABLIER (ponts/viaducs/bretelles) sur une grille de 4 m.
     [ROADS-V2] seulement les aretes quasi horizontales (pente < 8 %): les pylones et haubans (Sunshine Skyway...) sont
     ignores; par case, le niveau le plus frequent (bins de 1 m) = le tablier, pas le max (sommet des pylones)."""
@@ -43,6 +43,7 @@ def deck_grid(hwy_only=True):
     for n, m in M.items():
         if not any(w in n for w in DECK_WORDS): continue
         if not hwy_only and n in HWY_ONLY: continue
+        if only is not None and n not in only: continue
         for a, b in m.get('world_edges') or []:
             a, b = np.array(a, float), np.array(b, float)
             L = np.linalg.norm(b[:2] - a[:2])
@@ -82,7 +83,10 @@ def is_tunnel(R, tol=15.0):
 
 
 def main():
-    S = strokes(); GH = deck_grid(); GS = deck_grid(hwy_only=False)
+    S = strokes(); GH = deck_grid(); GS = deck_grid(hwy_only=False); GO = deck_grid(only=HWY_ONLY)
+    def own_deck(x, y, r=2):                                # a HWY_ONLY viaduct deck (it carries its own roadway) within r cells (8 m)
+        i, j = int(x // CELL), int(y // CELL)
+        return any(GO.get((i + dx, j + dy), -1e9) > float(RR.ground(x, y)) + 3.0 for dx in range(-r, r + 1) for dy in range(-r, r + 1))
     def deck_z(x, y, c='hwy'):
         best = None; G = GS if c == 'road' else GH          # lane markings ride with the highway
         for dx in (-1, 0, 1):
@@ -149,7 +153,19 @@ def main():
         if wetZ is not None:
             for q, wz in zip(P, wetZ):
                 if wz > q[3] + 0.5: q[2] = round(max(q[2], float(wz)), 2)
-        out[c].append({'w': float(s['width'] or 4), 'p': [q[:3] for q in P]})
+        e = {'w': float(s['width'] or 4), 'p': [q[:3] for q in P]}
+        if c in ('hwy', 'mark_w', 'mark_y') and GO:              # [US1-HAMLET-V1] the viaduct mesh is the roadway there: not drawn
+            hid = [own_deck(q[0], q[1]) for q in P]
+            if any(hid):
+                rr = []; i = 0
+                while i < len(hid):
+                    if hid[i]:
+                        j = i
+                        while j + 1 < len(hid) and hid[j + 1]: j += 1
+                        rr.append([i, j]); i = j + 1
+                    else: i += 1
+                e['hide'] = rr
+        out[c].append(e)
     json.dump(out, open(OUT, 'w'), separators=(',', ':'))
     print({k: len(v) for k, v in out.items()}, 'points sur tablier:', n_el, '-> %s (%.0f ko)' % (OUT, os.path.getsize(OUT) / 1024))
 

@@ -3894,9 +3894,13 @@ window.__camScreen = name => {
     };
     for (const r of R.small) ribbon(r.p, Math.max(4, r.w), ASPH.small, 0.30, false, false, true);
     for (const r of R.road) ribbon(r.p, Math.max(6, r.w), ASPH.road, 0.34, true, false, true);
-    for (const r of R.hwy) ribbon(r.p, Math.max(8, r.w), ASPH.hwy, 0.38, true, false);
-    for (const r of R.mark_w) ribbon(r.p, 0.35, WHITE, 0.42, true, true);
-    for (const r of R.mark_y) ribbon(r.p, 0.30, YEL, 0.42, true, false);
+    // [US1-HAMLET-V1] r.hide = point ranges carried by a viaduct mesh's own roadway (tools/v16_roads.py): not drawn
+    const vis = r => { if (!r.hide) return [r.p]; const out = []; let a = 0;
+      for (const [i0, i1] of r.hide) { if (i0 - a >= 2) out.push(r.p.slice(a, i0)); a = i1 + 1; }
+      if (r.p.length - a >= 2) out.push(r.p.slice(a)); return out; };
+    for (const r of R.hwy) for (const p of vis(r)) ribbon(p, Math.max(8, r.w), ASPH.hwy, 0.38, true, false);
+    for (const r of R.mark_w) for (const p of vis(r)) ribbon(p, 0.35, WHITE, 0.42, true, true);
+    for (const r of R.mark_y) for (const p of vis(r)) ribbon(p, 0.30, YEL, 0.42, true, false);
     const g = new THREE.BufferGeometry();
     g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3));
     g.setAttribute('normal', new THREE.Float32BufferAttribute(N, 3));
