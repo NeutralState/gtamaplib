@@ -977,8 +977,8 @@ def red_car_terminal():
 
 def green_car_edison():
     """T4/25 Green Sports Car on Ocean Drive — NE corner of the Grape St / Shore Dr intersection, looking WSW at the north facade
-    of the Edison Hotel (Alexandre; its neighbour the Breakwater is south of it). Pose: the Edison's NE corner (V17) pinned at u 270
-    and its base. The facade is a texture cut from the frame and put on the plane of the Edison's north facade (the yellow arcade, the white
+    of the Edison Hotel (Alexandre; its neighbour the Breakwater is south of it). Pose: the Edison's NE corner (V17) pinned at u 1060
+    (Alexandre) and its base. The facade is a texture cut from the frame and put on the plane of the Edison's north facade (the yellow arcade, the white
     tower), plus the asphalt of Grape St with its crosswalk and the near curb, the green trash can (the palms are in the facade
     texture). ESTIMATED."""
     V = View('Green Sports Car on Ocean Drive'); o = V.o; P = []; r2 = lambda a: [round(float(v), 2) for v in a]
@@ -987,9 +987,11 @@ def green_car_edison():
     p0 = NE + n * 0.3                                                       # the Edison's north facade (Grape St)
     img = cv2.imread(os.path.join(REPO, 'frames', 'Green Sports Car on Ocean Drive.png'))
     head = math.radians(-CAMS['Green Sports Car on Ocean Drive']['ypr'][0]); vf = np.array([math.sin(head), math.cos(head)])
-    # three panels of the upper frame: beyond the corner (u 0-270, ~30 m), the Edison north facade (u 270-2100, on its plane),
-    # the rest of Grape St to the west (u 2100-3840, ~24 m); each placed so that it covers its own frame pixels from the camera
-    for i, (u0, u1, plane) in enumerate(((0, 270, (o[:2] + vf * 14.0, vf)), (270, 2100, (p0, n)), (2100, 3840, (o[:2] + vf * 24.0, vf)))):
+    # three panels of the upper frame, each covering its own frame pixels from the camera: the Edison's east facade (Shore Dr, left
+    # of the corner at u 1060), its north facade (Grape St, from the corner to its NW corner), the rest of Grape St to the west (~24 m)
+    SEc = np.array([1964.0, 579.0]); ne = np.array([1.0, 0.0])                       # east facade plane x ~1963.5, normal +x (camera side)
+    uNW = float(np.clip(V.W / 2 + (V.R.T @ np.r_[NW - o[:2], T(NW[0], NW[1]) - o[2]])[0] / (V.R.T @ np.r_[NW - o[:2], T(NW[0], NW[1]) - o[2]])[1] / V.th * V.W / 2, 1200, 3700))
+    for i, (u0, u1, plane) in enumerate(((0, 1060, (NE + ne * 0.3, ne)), (1060, int(uNW), (p0, n)), (int(uNW), 3840, (o[:2] + vf * 24.0, vf)))):
         nm = '_prop_edison_facade_%d.png' % i
         if img is not None: cv2.imwrite(os.path.join(THIS, 'threejs', nm), img[0:900, u0:u1])
         q0, nn = plane; c = [V.on_vplane(u, v, q0, nn) for u, v in ((u0, 900), (u1 - 1, 900), (u1 - 1, 0), (u0, 0))]
