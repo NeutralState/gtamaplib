@@ -976,19 +976,24 @@ def red_car_terminal():
 
 
 def green_car_edison():
-    """T4/25 Green Sports Car on Ocean Drive — north sidewalk of Grape St at Shore Dr, looking SSE at the north facade of the
-    Edison Hotel (Alexandre; its neighbour the Breakwater is south of it). Pose from the facade corners (NE u 270, NW u 2590) and
-    base. The facade is a texture cut from the frame and put on the plane of the Edison's north facade (the yellow arcade, the white
+    """T4/25 Green Sports Car on Ocean Drive — NE corner of the Grape St / Shore Dr intersection, looking WSW at the north facade
+    of the Edison Hotel (Alexandre; its neighbour the Breakwater is south of it). Pose: the Edison's NE corner (V17) pinned at u 270
+    and its base. The facade is a texture cut from the frame and put on the plane of the Edison's north facade (the yellow arcade, the white
     tower), plus the asphalt of Grape St with its crosswalk and the near curb, the green trash can (the palms are in the facade
     texture). ESTIMATED."""
     V = View('Green Sports Car on Ocean Drive'); o = V.o; P = []; r2 = lambda a: [round(float(v), 2) for v in a]
-    NE, NW = np.array([1975.1, 586.8]), np.array([1938.4, 592.1]); n = np.array([NW[1] - NE[1], -(NW[0] - NE[0])]); n /= np.linalg.norm(n)
+    NE, NW = np.array([1963.0, 602.0]), np.array([1939.0, 602.0]); n = np.array([NW[1] - NE[1], -(NW[0] - NE[0])]); n /= np.linalg.norm(n)
     if n @ (o[:2] - NE) < 0: n = -n
     p0 = NE + n * 0.3                                                       # the Edison's north facade (Grape St)
     img = cv2.imread(os.path.join(REPO, 'frames', 'Green Sports Car on Ocean Drive.png'))
-    if img is not None: cv2.imwrite(os.path.join(THIS, 'threejs', '_prop_edison_facade.png'), img[0:900, 0:3840])
-    BL, BR = V.on_vplane(0, 900, p0, n), V.on_vplane(3839, 900, p0, n); TL, TR = V.on_vplane(0, 0, p0, n), V.on_vplane(3839, 0, p0, n)
-    P.append(dict(k='tex', p=[r2(q) for q in (BL, BR, TR, TL)], img='_prop_edison_facade.png'))
+    head = math.radians(-CAMS['Green Sports Car on Ocean Drive']['ypr'][0]); vf = np.array([math.sin(head), math.cos(head)])
+    # three panels of the upper frame: beyond the corner (u 0-270, ~30 m), the Edison north facade (u 270-2100, on its plane),
+    # the rest of Grape St to the west (u 2100-3840, ~24 m); each placed so that it covers its own frame pixels from the camera
+    for i, (u0, u1, plane) in enumerate(((0, 270, (o[:2] + vf * 14.0, vf)), (270, 2100, (p0, n)), (2100, 3840, (o[:2] + vf * 24.0, vf)))):
+        nm = '_prop_edison_facade_%d.png' % i
+        if img is not None: cv2.imwrite(os.path.join(THIS, 'threejs', nm), img[0:900, u0:u1])
+        q0, nn = plane; c = [V.on_vplane(u, v, q0, nn) for u, v in ((u0, 900), (u1 - 1, 900), (u1 - 1, 0), (u0, 0))]
+        P.append(dict(k='tex', p=[r2(q) for q in c], img=nm))
     zr = o[2] - 0.8                                                       # road level under the eye
     Z = lambda q, dz=0.0: r2([q[0], q[1], max(zr, T(q[0], q[1]) + 0.06) + dz])   # never under the terrain
     fwd = np.array([math.sin(math.radians(-CAMS['Green Sports Car on Ocean Drive']['ypr'][0])), math.cos(math.radians(-CAMS['Green Sports Car on Ocean Drive']['ypr'][0]))])
@@ -1005,7 +1010,8 @@ def green_car_edison():
     q = o[:2] + fwd * 3.0 - side * 3.2                                    # trash can (left)
     P.append(dict(k='cyl', a=r2([q[0], q[1], zr]), b=r2([q[0], q[1], zr + 1.1]), r=0.35, color='#1f4a32'))
     return dict(scene='T4/25 Green Sports Car (Edison Hotel, Grape St)', camera='Green Sports Car on Ocean Drive', note=green_car_edison.__doc__.split('\n')[0], props=P,
-                clear=[[[1930, 593], [1980, 586], [1985, 640], [1930, 645]]])   # V16 boxes between the camera and the Edison (Grape St)
+                clear=[[[1945, 598], [1985, 598], [1985, 625], [1945, 625]]],   # V16 boxes between the camera and the Edison (Grape St; #1422 = the V16 Edison box)
+                nolamp=[[[1915, 596], [1985, 596], [1985, 630], [1915, 630]]])
 
 
 SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison]
