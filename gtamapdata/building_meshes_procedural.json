@@ -1044465,12 +1044465,12 @@
     [
      -87.83,
      -1042.08,
-     79.41
+     53.0
     ],
     [
      -91.83,
      -1065.68,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044482,7 +1044482,7 @@
     [
      -87.83,
      -1042.08,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044501,12 +1044501,12 @@
     [
      -91.83,
      -1065.68,
-     79.41
+     53.0
     ],
     [
      -51.43,
      -1075.68,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044518,7 +1044518,7 @@
     [
      -91.83,
      -1065.68,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044537,12 +1044537,12 @@
     [
      -51.43,
      -1075.68,
-     79.41
+     53.0
     ],
     [
      -29.23,
      -1115.08,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044554,7 +1044554,7 @@
     [
      -51.43,
      -1075.68,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044573,12 +1044573,12 @@
     [
      -29.23,
      -1115.08,
-     79.41
+     53.0
     ],
     [
      -18.63,
      -1111.68,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044590,7 +1044590,7 @@
     [
      -29.23,
      -1115.08,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044609,12 +1044609,12 @@
     [
      -18.63,
      -1111.68,
-     79.41
+     53.0
     ],
     [
      -6.23,
      -1102.08,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044626,7 +1044626,7 @@
     [
      -18.63,
      -1111.68,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044645,12 +1044645,12 @@
     [
      -6.23,
      -1102.08,
-     79.41
+     53.0
     ],
     [
      -7.03,
      -1100.08,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044662,7 +1044662,7 @@
     [
      -6.23,
      -1102.08,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044681,12 +1044681,12 @@
     [
      -7.03,
      -1100.08,
-     79.41
+     53.0
     ],
     [
      -36.43,
      -1052.68,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044698,7 +1044698,7 @@
     [
      -7.03,
      -1100.08,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044717,12 +1044717,12 @@
     [
      -36.43,
      -1052.68,
-     79.41
+     53.0
     ],
     [
      -56.23,
      -1048.08,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044734,7 +1044734,7 @@
     [
      -36.43,
      -1052.68,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044753,12 +1044753,12 @@
     [
      -56.23,
      -1048.08,
-     79.41
+     53.0
     ],
     [
      -70.83,
      -1041.88,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044770,7 +1044770,7 @@
     [
      -56.23,
      -1048.08,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044789,12 +1044789,12 @@
     [
      -70.83,
      -1041.88,
-     79.41
+     53.0
     ],
     [
      -87.83,
      -1042.08,
-     79.41
+     53.0
     ]
    ],
    [
@@ -1044806,12 +1044806,12 @@
     [
      -70.83,
      -1041.88,
-     79.41
+     53.0
     ]
    ]
   ],
   "_credit": "identification: GTA VI Landmarks Data (CC BY 4.0) https://map.gtadb.org; plan: V16; height: OpenStreetMap (ODbL)",
-  "note": "GTADB-MESH-V1 2026-10-08: Brickell Key One (GTADB L128 = IRL Brickell Key One). tower = V16 region 85 of lot 23 (2545 m2, OSM footprint 3562 m2), podium removed 2026-10-08 (the V16 lot is 50x the IRL footprint: a whole block or island, not a podium). Height 72.9 m = IRL (OpenStreetMap way 117631353 \"Brickell Key I\"), game/IRL height ratio checked on 40 measured meshes: median 1.04, IQR 0.91-1.24. Ground 7.4 (heightmap). Not visible in any reliable camera (identification + IRL height only). | MVS-V1 2026-10-09: global multi-view solve (4 cameras): plan shifted (-4.2, +2.7) m, height x0.988; edges 6.24 -> 4.56 sigma.",
+  "note": "GTADB-MESH-V1 2026-10-08: Brickell Key One (GTADB L128 = IRL Brickell Key One). tower = V16 region 85 of lot 23 (2545 m2, OSM footprint 3562 m2), podium removed 2026-10-08 (the V16 lot is 50x the IRL footprint: a whole block or island, not a podium). Height 72.9 m = IRL (OpenStreetMap way 117631353 \"Brickell Key I\"), game/IRL height ratio checked on 40 measured meshes: median 1.04, IQR 0.91-1.24. Ground 7.4 (heightmap). Not visible in any reliable camera (identification + IRL height only). | MVS-V1 2026-10-09: global multi-view solve (4 cameras): plan shifted (-4.2, +2.7) m, height x0.988; edges 6.24 -> 4.56 sigma. | T4-11-HEIGHT 2026-10-20: roof lowered 79.4 -> 53.0 m: on T4/11 (Lucia and Jason in a Convertible, SOLVED from the I-397 bridge) the roofline sits at v~640 (u 3150-3330) with sky above it, where the IRL height put the roof at v~350. ESTIMATED (one frame, blurred; distance from the V16 plan).",
   "name_game": null,
   "name_irl": "Brickell Key One"
  },

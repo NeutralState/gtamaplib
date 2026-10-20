@@ -14,7 +14,8 @@ Primitives (tools/threejs/scene_props.json, drawn by view3d [SCENE-PROPS-V1]):
   blob  {c: [x,y,z], r: [rx, ry, rz], color}     bushes / tree crowns
   palm  {a: [x,y,z], h, lean_az, lean}           palm (trunk + fronds)
 A scene may also list 'replace': mesh names whose wireframe view3d no longer draws (rebuilt here as solids), and 'clear' polygons [[x,y]...]: view3d does not extrude the V16 massing footprints whose centroid falls
-inside (e.g. V16 boxes that land on a modelled road).
+inside (e.g. V16 boxes that land on a modelled road), and 'nolamp' polygons: no generic view3d streetlight inside (where a
+SOLVED frame shows none).
 Usage: python3 tools/scene_props.py            (writes tools/threejs/scene_props.json and the _prop_*.png textures)
 """
 import json, math, os, sys
@@ -668,7 +669,49 @@ def arsht_night():
     return dict(scene='S2/44 Vice City 08 (Arsht Center at night)', camera='Vice City 08 (Ferris Wheel)', note=arsht_night.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night]
+def convertible_bridge():
+    """T4/11 Lucia and Jason in a Convertible — westbound on the I-397 bridge, Brickell Key across the water (pose SOLVED on
+    the Pegassi Towers). The car fills the lower half of the frame; behind it: the bridge deck at z 6 (V16 has the westbound
+    carriageway at z 0.3), its median and south parapets, and the trees of the Brickell Key north shore (crown tops read on
+    the frame: v ~930-950 under the far tower at u 2120-2310, v ~660-700 through the windshield at u 2950-3450; between
+    them, hidden by Jason, ESTIMATED). Shore distance per column from the V17 water mask."""
+    from yanis_markers import crop as _c
+    V = View('Lucia and Jason in a Convertible'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]; o = V.o
+    # bridge: hwy 99 (westbound) / hwy 100 (eastbound) centrelines of tools/threejs/_v16_roads.json, deck z 6.0
+    yw = lambda x: -472.9 - 0.2557 * (x + 43.8); ye = lambda x: -487.8 - 0.2550 * (x + 46.2); ZD = 6.0
+    xs = np.arange(-160.0, 81.0, 20.0)
+    for x0_, x1_ in zip(xs[:-1], xs[1:]):
+        P.append(dict(k='quad', p=[r2([x0_, yw(x0_) + 7.0, ZD]), r2([x1_, yw(x1_) + 7.0, ZD]), r2([x1_, ye(x1_) - 7.0, ZD]), r2([x0_, ye(x0_) - 7.0, ZD])], color='#55585c'))
+        for y_ in (yw, ye):                                                  # dashed lane lines (3 lanes each way)
+            for off in (-2.0, 2.0):
+                P.append(dict(k='quad', p=[r2([x0_, y_(x0_) + off - 0.08, ZD + 0.02]), r2([x0_ + 3, y_(x0_ + 3) + off - 0.08, ZD + 0.02]), r2([x0_ + 3, y_(x0_ + 3) + off + 0.08, ZD + 0.02]), r2([x0_, y_(x0_) + off + 0.08, ZD + 0.02])], color='#e8e6e0'))
+    az = math.degrees(math.atan2(1.0, -0.2557)); L = float(np.hypot(240.0, 240.0 * 0.2557))
+    for yy in (lambda x: (yw(x) + ye(x)) / 2, lambda x: ye(x) - 6.8):       # median + south parapets (concrete, 0.9 m: the frame sees the sea horizon over them)
+        c = np.array([-40.0, yy(-40.0)]); P.append(dict(k='box', c=r2([c[0], c[1], ZD]), s=[round(L, 1), 0.45, 0.9], az=round(az, 1), color='#b9b6ae'))
+    # Brickell Key north-shore trees
+    x0, y0 = o[0] - 200, o[1] - 900; M = cv2.cvtColor(_c(x0, y0, x0 + 600, y0 + 900), cv2.COLOR_BGR2HSV).astype(int)
+    water = (M[..., 0] >= 88) & (M[..., 0] <= 118) & (M[..., 1] > 70)
+    def shore(u):
+        d = V.ray(u, 1100); d2 = d[:2] / np.linalg.norm(d[:2])
+        for s_ in range(120, 880):
+            x, y = o[0] + d2[0] * s_, o[1] + d2[1] * s_
+            if not water[int(y0 + 900 - y), int(x - x0)]: return float(s_), d2
+        return 400.0, d2
+    def vtop(u): return np.interp(u, [1800, 2120, 2310, 2950, 3200, 3450, 3700], [950, 935, 940, 700, 665, 690, 700])
+    GREEN = ['#5f7048', '#687a4e', '#55663f', '#73835a']; rng = np.random.default_rng(11)
+    for u in np.arange(1780, 3720, 55):                                      # broad crowns (shade trees), the trunk mostly hidden
+        D, d2 = shore(u); D += rng.uniform(12, 35); b = o[:2] + d2 * D; g = max(T(b[0], b[1]), 2.0)
+        ht = float((V.o + V.ray(u, vtop(u)) / np.linalg.norm(V.ray(u, vtop(u))[:2]) * D)[2]) - g
+        ht = float(np.clip(ht, 7.0, 14.0)); rr = rng.uniform(4.0, 5.8)
+        P.append(dict(k='cyl', a=r2([b[0], b[1], g]), b=r2([b[0], b[1], g + ht - rr]), r=0.4, color='#4a3d33'))
+        for k in range(3):
+            dc = rng.normal(0, rr * 0.35, 3) * [1, 1, 0.4]
+            P.append(dict(k='blob', c=r2([b[0] + dc[0], b[1] + dc[1], g + ht - rr * 0.95 + dc[2]]), r=[round(rr * rng.uniform(0.8, 1.05), 1)] * 2 + [round(rr * 0.75, 1)], color=GREEN[int(rng.integers(4))]))
+    return dict(scene='T4/11 Lucia and Jason in a Convertible', camera='Lucia and Jason in a Convertible', note=convertible_bridge.__doc__.split('\n')[0], props=P,
+                nolamp=[[[-150, -450], [70, -505], [70, -545], [-150, -490]]])   # bridge in view: no lamp on the frame (u 1700-3000 shows the towers)
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge]
 
 
 def main():

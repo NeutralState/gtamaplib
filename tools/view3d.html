@@ -3931,6 +3931,9 @@ window.__camScreen = name => {
     // chaussee, tete sodium allumee la nuit (les flaques au sol existent deja dans le shader des routes)
     {
       const L = [];
+      // [SCENE-PROPS-V1] 'nolamp' polygons of tools/threejs/scene_props.json: no generic lamp where a SOLVED frame shows none
+      const NL = []; try { const r = await fetch('/threejs/scene_props.json', { cache: 'no-store' }); if (r.ok) for (const sc of (await r.json()).scenes || []) NL.push(...(sc.nolamp || [])); } catch (e) {}
+      const inNL = (x, y) => NL.some(P => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; });
       const place = (pts, w, hgt, lift, deckable) => {
         let acc = 20, side = 1;
         for (let i = 1; i < pts.length; i++) {
@@ -3939,6 +3942,7 @@ window.__camScreen = name => {
           const nx = -(y1 - y0) / sl, ny = (x1 - x0) / sl;
           for (const sd of (w > 16 ? [1, -1] : [side])) {
             const off = w / 2 + 1.2, x = x1 + nx * off * sd, y = y1 + ny * off * sd;
+            if (inNL(x, y)) continue;
             const g = gz(x, y), el = deckable && z1 - Math.max(g, 0) > 2.5, z = el ? z1 : Math.max(g, 0) + lift;
             L.push([x, y, z, Math.atan2(-ny * sd, -nx * sd), hgt]);
           }
