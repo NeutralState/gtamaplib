@@ -841,7 +841,109 @@ def iguana_roundabout():
                 nolamp=[[r2(q)[:2] for q in poly] for poly in nolamp])
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout]
+# ---- generic wide-body jet (plane frame: origin = main-gear axle centre on the ground, x forward, y left, z up) [T4/20]
+JET_D=dict(L_nose=34.0,L_tail=-40.0,R_fus=3.1,z_fus=5.6,                       # fuselage
+       wing_root_le=8.0,wing_root_chord=13.0,wing_span=32.0,sweep=31.0,tip_chord=3.2,z_wing=4.3,dihedral=6.0,wing_t=0.9,
+       eng_y=11.5,eng_x=5.5,eng_len=6.5,eng_r=1.45,eng_z=2.3,eng2_y=20.5,eng2_x=0.0,
+       gear_y=5.6,gear_wheel_r=0.66,gear_wb=1.5,gear_wt=1.5,
+       fair=[(7.5,0.55),(12.5,0.5),(17.5,0.45),(22.5,0.4)],
+       fin_h=10.0,stab_span=10.0)
+def _jet_build(D):
+    P=[]   # list of (kind, dict) in plane coords
+    # fuselage: cylinder segments (nose taper, tail cone up-swept)
+    xs=np.linspace(D['L_tail'],D['L_nose'],30)
+    def rad(x):
+        if x>D['L_nose']-8: return D['R_fus']*math.sqrt(max(0.02,1-((x-(D['L_nose']-8))/8)**2))
+        if x<D['L_tail']+14: return D['R_fus']*max(0.25,(x-D['L_tail'])/14)
+        return D['R_fus']
+    def zc(x): return D['z_fus']+(max(0,(D['L_tail']+14)-x)/14)*1.8
+    for a,b in zip(xs[:-1],xs[1:]):
+        m=(a+b)/2; P.append(('cyl',dict(a=(a,0,zc(a)),b=(b,0,zc(b)),r=rad(m),color='#e7e8ea')))
+    # wings (each side): quad slab (upper and lower surface) + leading/trailing
+    for sg in (1,-1):
+        y0=D['R_fus']*0.9; y1=D['wing_span']
+        def le(y): return D['wing_root_le']-(y-y0)*math.tan(math.radians(D['sweep']))
+        def ch(y): return D['wing_root_chord']+(D['tip_chord']-D['wing_root_chord'])*(y-y0)/(y1-y0)
+        def zw(y): return D['z_wing']+(y-y0)*math.tan(math.radians(D['dihedral']))
+        ys=np.linspace(y0,y1,7)
+        for ya,yb in zip(ys[:-1],ys[1:]):
+            for dz,col in ((0,'#cfd2d6'),(D['wing_t'],'#dfe1e4')):
+                P.append(('quad',dict(p=[(le(ya),sg*ya,zw(ya)+dz),(le(yb),sg*yb,zw(yb)+dz),(le(yb)-ch(yb),sg*yb,zw(yb)+dz*0.6),(le(ya)-ch(ya),sg*ya,zw(ya)+dz*0.6)],color=col)))
+            P.append(('quad',dict(p=[(le(ya),sg*ya,zw(ya)),(le(yb),sg*yb,zw(yb)),(le(yb),sg*yb,zw(yb)+D['wing_t']),(le(ya),sg*ya,zw(ya)+D['wing_t'])],color='#bfc2c6')))
+        # engine nacelles + pylons (inboard, outboard)
+        for ye,xe in ((D['eng_y'],D['eng_x']),(D.get('eng2_y',0),D.get('eng2_x',0))):
+            if not ye: continue
+            ze=D.get('eng_z_%d'%int(ye),zw(ye)-D['eng_r']-0.9)
+            P.append(('cyl',dict(a=(xe+D['eng_len']/2,sg*ye,ze),b=(xe-D['eng_len']/2,sg*ye,ze),r=D['eng_r'],color='#d9dbde')))
+            P.append(('cyl',dict(a=(xe-D['eng_len']/2,sg*ye,ze),b=(xe-D['eng_len']/2-1.6,sg*ye,ze),r=D['eng_r']*0.55,color='#7d8186')))
+            P.append(('box',dict(c=(xe-1.0,sg*ye,ze+D['eng_r']*0.7),s=(5.5,0.5,zw(ye)-ze-D['eng_r']*0.7+0.3),color='#c9ccd0')))
+        # flap-track fairings (canoes) under the trailing edge
+        for yf,rf in D['fair']:
+            xt=le(yf)-ch(yf); P.append(('cyl',dict(a=(xt+2.0,sg*yf,zw(yf)-0.2),b=(xt-2.8,sg*yf,zw(yf)-0.5),r=rf*1.4,color='#c3c6ca')))
+        # main gear: strut, bogie, 4 wheels
+        yg=D['gear_y']; r=D['gear_wheel_r']
+        P.append(('cyl',dict(a=(0,sg*yg,r+0.2),b=(0.6,sg*yg,zw(yg)),r=0.28,color='#9a9ea3')))
+        P.append(('cyl',dict(a=(0.2,sg*yg,zw(yg)-0.6),b=(-1.6,sg*(yg+1.2),zw(yg)+0.2),r=0.12,color='#8a8e93')))
+        P.append(('box',dict(c=(0,sg*yg,r-0.15),s=(D['gear_wb']+0.8,0.35,0.3),color='#6d7176')))
+        for dx in (-D['gear_wb']/2,D['gear_wb']/2):
+            for dy in (-D['gear_wt']/2,D['gear_wt']/2):
+                P.append(('cyl',dict(a=(dx,sg*(yg+dy)-0.22,r),b=(dx,sg*(yg+dy)+0.22,r),r=r,color='#262729')))
+    # body gear (747-like): 2 bogies under the fuselage, behind the wing gear
+    if D.get('body_gear'):
+        for sg in (1,-1):
+            yb=D['body_gear_y']; xb=D['body_gear_x']; r=D['gear_wheel_r']
+            P.append(('cyl',dict(a=(xb,sg*yb,r+0.2),b=(xb,sg*yb,D['z_fus']-D['R_fus']*0.8),r=0.26,color='#9a9ea3')))
+            P.append(('box',dict(c=(xb,sg*yb,r-0.15),s=(D['gear_wb']+0.8,0.35,0.3),color='#6d7176')))
+            for dx in (-D['gear_wb']/2,D['gear_wb']/2):
+                for dy in (-D['gear_wt']/2,D['gear_wt']/2):
+                    P.append(('cyl',dict(a=(xb+dx,sg*(yb+dy)-0.22,r),b=(xb+dx,sg*(yb+dy)+0.22,r),r=r,color='#262729')))
+    # tail: fin + stabilisers
+    xt=D['L_tail']+6
+    P.append(('quad',dict(p=[(xt+8,0,zc(xt+8)+D['R_fus']*0.6),(xt,0,zc(xt)+D['R_fus']*0.5),(xt-3,0,zc(xt)+D['fin_h']),(xt+1.5,0,zc(xt)+D['fin_h'])],color='#d8dadd')))
+    for sg in (1,-1):
+        P.append(('quad',dict(p=[(xt+6,0,zc(xt)),(xt+0,sg*D['stab_span'],zc(xt)+0.8),(xt-2.5,sg*D['stab_span'],zc(xt)+0.8),(xt-1,0,zc(xt))],color='#d0d3d6')))
+    # nose gear
+    P.append(('cyl',dict(a=(D['L_nose']-9,0,0.5),b=(D['L_nose']-9,0,D['z_fus']-D['R_fus']),r=0.2,color='#9a9ea3')))
+    for dy in (-0.4,0.4): P.append(('cyl',dict(a=(D['L_nose']-9,dy-0.15,0.5),b=(D['L_nose']-9,dy+0.15,0.5),r=0.5,color='#262729')))
+    return P
+def _jet_world(P,X,Y,G,psi,pitch=0.0):
+    h=math.radians(psi); t=math.radians(pitch); f=np.array([math.sin(h),math.cos(h)]); l=np.array([-f[1],f[0]])
+    def W(p):
+        x,y,z=p; x2=x*math.cos(t)-z*math.sin(t); z2=x*math.sin(t)+z*math.cos(t)
+        q=np.array([X,Y])+f*x2+l*y; return [round(float(q[0]),2),round(float(q[1]),2),round(float(G+z2),2)]
+    out=[]
+    for k,d in P:
+        e=dict(d); e['k']=k
+        if k=='cyl': e['a']=W(d['a']); e['b']=W(d['b'])
+        elif k=='quad': e['p']=[W(p) for p in d['p']]
+        elif k=='box':
+            c=W(d['c']); e['c']=[c[0],c[1],round(c[2]-d['s'][2]/2,2)]; e['s']=[float(v) for v in d['s']]; e['az']=round(psi,1)
+        out.append(e)
+    return out
+
+
+def runway_jet():
+    """T4/20 Runway (pose SOLVED): the camera rides low under the right wing of a twin-engine wide-body taking off toward the NW
+    (heading 302 = the runway reversed: the pickup racing beside the gear faces the camera), looking aft. Generic jet primitives
+    placed on the frame: right main gear at u 3015 (12.5 m), engine at the left edge (u 0..1000), flap-track fairings u 1660..2180 and
+    2580..2840, fuselage belly at the right edge; the pickup (u 1900..2560, tyres v 1300). Sizes ESTIMATED (one view)."""
+    V = View('Runway'); o = V.o; P = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    D = dict(JET_D); D.update(dict(z_wing=3.6, dihedral=5.0, sweep=37.0, wing_root_le=9.0, wing_root_chord=14.0, wing_span=32.0, tip_chord=4.0,
+             R_fus=3.2, z_fus=6.6, eng_y=20.0, eng_x=-3.5, eng_r=1.75, eng_len=7.2, eng_z_20=3.1, eng2_y=0, gear_y=5.5, gear_wheel_r=0.62,
+             gear_wt=1.3, body_gear=0, fair=[(7.0, 0.55), (11.0, 0.5), (26.0, 0.4)]))
+    psi = 302.15; h = math.radians(psi); l = np.array([-math.cos(h), math.sin(h)])
+    d = V.ray(3015, 960.0); d2 = d[:2] / np.linalg.norm(d[:2]); gR = o[:2] + d2 * 12.5   # the right main gear
+    axle = gR + l * D['gear_y']; G = T(axle[0], axle[1])
+    P += _jet_world(_jet_build(D), axle[0], axle[1], G, psi)
+    # the pickup racing beside the gear, facing the camera (tyres v 1300 at u 2230)
+    c = V.on_plane_z(2230, 1300, T(o[0], o[1])); az = (psi + 180) % 360
+    P.append(dict(k='box', c=r2([c[0], c[1], c[2] + 0.35]), s=[5.4, 2.0, 1.1], az=round(az, 1), color='#d8d6d0'))
+    f = np.array([math.sin(math.radians(az)), math.cos(math.radians(az))])
+    q = c[:2] - f * 0.6; P.append(dict(k='box', c=r2([q[0], q[1], c[2] + 1.45]), s=[2.4, 1.9, 0.8], az=round(az, 1), color='#c9c7c1'))
+    return dict(scene='T4/20 Runway (jet + pickup)', camera='Runway', note=runway_jet.__doc__.split('\n')[0], props=P)
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet]
 
 
 def main():
