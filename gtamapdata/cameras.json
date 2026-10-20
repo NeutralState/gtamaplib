@@ -7548,9 +7548,9 @@
   "id": "T4/21",
   "player": null,
   "xyz": [
-   -956.1,
-   7084.5,
-   6.85
+   -931.4,
+   7109.2,
+   6.8
   ],
   "ypr": [
    135.0,
@@ -7568,7 +7568,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - Jason and Lucia leaning on a red sports car, shipping containers behind; GTAVI_Launch_Trailer.mp4 t=41.60 s (frame 1248), letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/21 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 225 / hfov 90 read by eye on the V of his V17 marker T4/21 (was 228 / 80.0)."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/21 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 225 / hfov 90 read by eye on the V of his V17 marker T4/21 (was 228 / 80.0). | CHECK 2026-10-20 (tour scene 10): Yanis heading 225 / hfov 90 consistent with the frame: sun at the right edge (late afternoon, W), the elevated I-297 (V16 hwy 301/303, deck z ~20, 65 m) as the berm behind Lucia (tops v ~600 for pitch 0), the overhead guide signs over the ramp (hwy 302, 135 m) at u 1470-1760. Close-up: not solvable further (characters fill the frame). ESTIMATED. | BERM 2026-10-20: moved 35 m NE along the view axis (Yanis's dot sat at the foot of the I-297 embankment, which rises to 18 m within 40 m in every direction of the view): the frame has flat yard in front and the berm tops at v ~600 (= 14 m above the eye at ~74 m), the right container stacks on flat ground at 17-21 m. Heading 225 / hfov 90 kept. ESTIMATED."
  },
  "Green Sports Car on Ocean Drive": {
   "id": "T4/25",

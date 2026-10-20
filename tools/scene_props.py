@@ -939,7 +939,43 @@ def runway_jet():
     return dict(scene='T4/20 Runway (jet)', camera='Runway', note=runway_jet.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet]
+def red_car_terminal():
+    """T4/21 Jason and Lucia by the Red Car — NW corner of the M21 container terminal, looking SW at the elevated I-297 (pose:
+    Yanis's heading, moved 35 m into the yard; checked: the sun sits at the right edge, the berm behind Lucia, ~74 m, 14 m above the eye, tops at
+    v ~600, and the overhead guide signs over the I-297 ramp ~135 m away at u 1470-1760, v 480-540). Dressing read on the frame:
+    the container stacks on the right (3 high, rows ~280 px -> ~18-21 m), smaller stacks far left in the yard, the sign gantry.
+    Close-up: the tour shows the full frame on arrival. Distances ESTIMATED."""
+    V = View('Jason and Lucia by the Red Car'); o = V.o; P = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    g0 = T(o[0], o[1])
+    def along(u, D):
+        d = V.ray(u, 960.0); d2 = d[:2] / np.linalg.norm(d[:2]); q = o[:2] + d2 * D; return q, d2
+    COLS = ['#c9cbcc', '#bfc2c4', '#8a4b3c', '#9c5a46', '#d2d3d1', '#7b4335']; rng = np.random.default_rng(21)
+    def stack(u, D, n_hi, n_wide, az):
+        q, d2 = along(u, D); side = np.array([d2[1], -d2[0]])
+        for i in range(n_wide):
+            c = q + side * (i - (n_wide - 1) / 2) * 2.5
+            for k in range(n_hi):
+                P.append(dict(k='box', c=r2([c[0], c[1], g0 + k * 2.6]), s=[12.2, 2.44, 2.55], az=round(az, 1), color=COLS[int(rng.integers(len(COLS)))]))
+    head = (-CAMS['Jason and Lucia by the Red Car']['ypr'][0]) % 360
+    for u, D, hi, wide in ((2950, 21.0, 3, 3), (3350, 19.0, 3, 3), (3750, 18.0, 3, 3)):    # right: 3 high (tops v ~260-320 at ~19 m)
+        stack(u, D, hi, wide, (head + 90) % 360)
+    for u, D, hi, wide in ((520, 60.0, 2, 4), (650, 62.0, 2, 3)):                          # far left, in the yard
+        stack(u, D, hi, wide, head)
+    # overhead sign gantry over the I-297 ramp (V16 hwy 302, deck z ~21) at ~135 m, signs u 1470-1760, v 480-540
+    q, d2 = along(1610, 135.0); side = np.array([d2[1], -d2[0]]); zd = 21.0
+    for sx in (-9.0, 9.0):
+        a = q + side * sx; P.append(dict(k='cyl', a=r2([a[0], a[1], zd]), b=r2([a[0], a[1], zd + 8.0]), r=0.3, color='#8f949a'))
+    a, b = q - side * 9.0, q + side * 9.0
+    P.append(dict(k='cyl', a=r2([a[0], a[1], zd + 7.6]), b=r2([b[0], b[1], zd + 7.6]), r=0.25, color='#8f949a'))
+    for sx, col in ((-4.2, '#1f6b3f'), (0.6, '#1f6b3f'), (5.0, '#c9a227')):
+        c = q + side * sx; n = -d2
+        A, B = c - side * 2.1, c + side * 2.1
+        P.append(dict(k='quad', p=[r2([A[0] - n[0] * 0.3, A[1] - n[1] * 0.3, zd + 5.4]), r2([B[0] - n[0] * 0.3, B[1] - n[1] * 0.3, zd + 5.4]),
+                                   r2([B[0] - n[0] * 0.3, B[1] - n[1] * 0.3, zd + 8.2]), r2([A[0] - n[0] * 0.3, A[1] - n[1] * 0.3, zd + 8.2])], color=col, e=0.1))
+    return dict(scene='T4/21 Jason and Lucia by the Red Car', camera='Jason and Lucia by the Red Car', note=red_car_terminal.__doc__.split('\n')[0], props=P)
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal]
 
 
 def main():
