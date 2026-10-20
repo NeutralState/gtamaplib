@@ -714,7 +714,7 @@ def convertible_bridge():
 def _roundabout_sign(path, W=1700, H=1000):
     """the T4/09 'roundabout ahead' guide sign redrawn sharp (the frame is out of focus; its right half is behind the iguana):
     approach from the east arm; straight = the west arm to the Grassrivers Visitor Center (GTADB L625; Alexandre), left = US 1
-    South (Key Lento), right = US 1 North (Hamlet). Layout read on the visible left half: shield + text top-left, the destination
+    South (Key Lento, Goose Key with the airport pictogram; Alexandre), right = US 1 North (Hamlet). Layout read on the visible left half: shield + text top-left, the destination
     of the straight arm above the diagram, the diagram a little left of the centre. Florida-style green panel, white border."""
     from PIL import Image, ImageDraw, ImageFont
     GRN, WHT, BLK = (0, 106, 58), (246, 246, 240), (20, 20, 20)
@@ -737,7 +737,13 @@ def _roundabout_sign(path, W=1700, H=1000):
         d.text((x + s / 2 - tw / 2, y + 0.16 * s), txt, fill=BLK, font=f)
     ctext = lambda x, y, t, s: d.text((x - d.textlength(t, font=font(s)) / 2, y), t, fill=WHT, font=font(s))
     ctext(cx, 56, 'Grassrivers', 100); ctext(cx, 152, 'Visitor Center', 78)                    # straight
-    shield(60, 80, 130, '1'); d.text((206, 100), 'SOUTH', fill=WHT, font=font(96)); d.text((60, 400), 'Key Lento', fill=WHT, font=font(104))   # left
+    shield(60, 80, 130, '1'); d.text((206, 100), 'SOUTH', fill=WHT, font=font(96)); d.text((60, 270), 'Key Lento', fill=WHT, font=font(104))   # left
+    def plane(x, y, s):                                                    # airport pictogram (airplane seen from above, nose up)
+        P = lambda pts: [(x + s * a, y + s * b) for a, b in pts]
+        d.polygon(P([(0.46, 0.0), (0.54, 0.0), (0.58, 0.12), (0.58, 0.36), (1.0, 0.6), (1.0, 0.7), (0.58, 0.56), (0.57, 0.82),
+                     (0.72, 0.94), (0.72, 1.0), (0.5, 0.94), (0.28, 1.0), (0.28, 0.94), (0.43, 0.82), (0.42, 0.56), (0.0, 0.7),
+                     (0.0, 0.6), (0.42, 0.36), (0.42, 0.12)]), fill=WHT)
+    plane(60, 405, 88); d.text((168, 396), 'Goose Key', fill=WHT, font=font(92))                                                    # left (airport)
     shield(1040, 420, 130, '1'); d.text((1190, 440), 'NORTH', fill=WHT, font=font(96)); d.text((1040, 580), 'Hamlet', fill=WHT, font=font(110))  # right
     im.save(path)
 
