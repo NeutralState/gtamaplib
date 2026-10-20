@@ -711,35 +711,34 @@ def convertible_bridge():
                 nolamp=[[[-150, -450], [70, -505], [70, -545], [-150, -490]]])   # bridge in view: no lamp on the frame (u 1700-3000 shows the towers)
 
 
-def _roundabout_sign(path, W=960, H=1040):
-    """the T4/09 'roundabout ahead' guide sign redrawn sharp (the frame is out of focus): approach from the east arm; straight =
-    the west arm to the Grassrivers Visitor Center (GTADB L625; Alexandre), left = US 1 South (Key Lento), right = US 1 North
-    (Hamlet). Florida-style green
-    panel, white border, US 1 shields. Directions from the map (the arms the ramps serve are ESTIMATED)."""
+def _roundabout_sign(path, W=1700, H=1000):
+    """the T4/09 'roundabout ahead' guide sign redrawn sharp (the frame is out of focus; its right half is behind the iguana):
+    approach from the east arm; straight = the west arm to the Grassrivers Visitor Center (GTADB L625; Alexandre), left = US 1
+    South (Key Lento), right = US 1 North (Hamlet). Layout read on the visible left half: shield + text top-left, the destination
+    of the straight arm above the diagram, the diagram a little left of the centre. Florida-style green panel, white border."""
     from PIL import Image, ImageDraw, ImageFont
     GRN, WHT, BLK = (0, 106, 58), (246, 246, 240), (20, 20, 20)
     F = '/System/Library/Fonts/Supplemental/DIN Condensed Bold.ttf'
     font = lambda s: ImageFont.truetype(F, s) if os.path.exists(F) else ImageFont.load_default()
     im = Image.new('RGB', (W, H), GRN); d = ImageDraw.Draw(im)
     d.rounded_rectangle([14, 14, W - 15, H - 15], radius=44, outline=WHT, width=14)
-    cx, cy, R, w = 640, 590, 112, 40                                       # roundabout diagram
+    cx, cy, R, w = 700, 600, 118, 42                                       # roundabout diagram (frame: ring at u ~1450 of 1100..1980)
     d.ellipse([cx - R, cy - R, cx + R, cy + R], outline=WHT, width=w)
-    d.rectangle([cx - 26, cy + R - 6, cx + 26, H - 70], fill=WHT)          # approach
+    d.rectangle([cx - 27, cy + R - 6, cx + 27, H - 60], fill=WHT)          # approach
     def arm(x0, y0, x1, y1, head):
-        d.line([x0, y0, x1, y1], fill=WHT, width=w)
-        d.polygon(head, fill=WHT)
-    arm(cx, cy - R, cx, 300, [(cx - 52, 312), (cx + 52, 312), (cx, 236)])                     # straight
-    arm(cx - R, cy, 470, cy, [(482, cy - 52), (482, cy + 52), (408, cy)])                     # left
-    arm(cx + R, cy, 830, cy, [(818, cy - 52), (818, cy + 52), (892, cy)])                     # right
+        d.line([x0, y0, x1, y1], fill=WHT, width=w); d.polygon(head, fill=WHT)
+    arm(cx, cy - R, cx, 318, [(cx - 54, 330), (cx + 54, 330), (cx, 252)])                     # straight
+    arm(cx - R, cy, 500, cy, [(512, cy - 54), (512, cy + 54), (436, cy)])                     # left
+    arm(cx + R, cy, 900, cy, [(888, cy - 54), (888, cy + 54), (964, cy)])                     # right
     def shield(x, y, s, txt):
         pts = [(x, y + 0.18 * s), (x + 0.12 * s, y), (x + 0.32 * s, y + 0.07 * s), (x + 0.5 * s, y), (x + 0.68 * s, y + 0.07 * s),
                (x + 0.88 * s, y), (x + s, y + 0.18 * s), (x + 0.94 * s, y + 0.75 * s), (x + 0.5 * s, y + 1.05 * s), (x + 0.06 * s, y + 0.75 * s)]
         d.polygon(pts, fill=WHT, outline=BLK); f = font(int(0.78 * s)); tw = d.textlength(txt, font=f)
         d.text((x + s / 2 - tw / 2, y + 0.16 * s), txt, fill=BLK, font=f)
     ctext = lambda x, y, t, s: d.text((x - d.textlength(t, font=font(s)) / 2, y), t, fill=WHT, font=font(s))
-    ctext(cx, 52, 'Grassrivers', 96); ctext(cx, 146, 'Visitor Center', 74)                     # straight
-    shield(52, 380, 120, '1'); d.text((190, 398), 'SOUTH', fill=WHT, font=font(84)); d.text((60, 520), 'Key Lento', fill=WHT, font=font(92))  # left
-    shield(694, 706, 86, '1'); d.text((790, 718), 'NORTH', fill=WHT, font=font(58)); ctext(808, 810, 'Hamlet', 84)                         # right
+    ctext(cx, 56, 'Grassrivers', 100); ctext(cx, 152, 'Visitor Center', 78)                    # straight
+    shield(60, 80, 130, '1'); d.text((206, 100), 'SOUTH', fill=WHT, font=font(96)); d.text((60, 400), 'Key Lento', fill=WHT, font=font(104))   # left
+    shield(1040, 420, 130, '1'); d.text((1190, 440), 'NORTH', fill=WHT, font=font(96)); d.text((1040, 580), 'Hamlet', fill=WHT, font=font(110))  # right
     im.save(path)
 
 
@@ -798,13 +797,14 @@ def iguana_roundabout():
             nxt = along(u - 600, D + 25); P.append(dict(k='line', pts=[r2([g[0], g[1], za]), r2([nxt[0], nxt[1], za - 0.6])], color='#2a2622', opacity=0.6))
         else:
             P.append(dict(k='box', c=r2([g[0], g[1], zt]), s=[0.8, 0.35, 0.18], az=round(AZ, 1), color='#e8e4d8'))
-    # green 'roundabout ahead' sign: vertical panel facing the camera at ~55 m, texture cut from the frame
-    D = 55.0; n = -fwd; p0 = along(1340, D)
-    BL, BR = V.on_vplane(1100, 1060, p0, n), V.on_vplane(1580, 1060, p0, n); TL, TR = V.on_vplane(1100, 540, p0, n), V.on_vplane(1580, 540, p0, n)
+    # green 'roundabout ahead' sign: vertical panel facing the camera at ~55 m; its left edge u 1100 and top/bottom v 540/1060 are on
+    # the frame, its right half is behind the iguana (the diagram, u ~1450, sits left of its centre): right edge ~ u 1980
+    D = 55.0; n = -fwd; p0 = along(1540, D)
+    BL, BR = V.on_vplane(1100, 1060, p0, n), V.on_vplane(1980, 1060, p0, n); TL, TR = V.on_vplane(1100, 540, p0, n), V.on_vplane(1980, 540, p0, n)
     _roundabout_sign(os.path.join(THIS, 'threejs', '_prop_iguana_sign.png'))   # redrawn with the map's directions (Alexandre)
     P.append(dict(k='tex', p=[r2(q) for q in (BL, BR, TR, TL)], img='_prop_iguana_sign.png'))
     P.append(dict(k='box', c=r2(np.r_[(BL[:2] + BR[:2]) / 2 - n * 0.15, BL[2] - 0.1]), s=[float(np.linalg.norm(BR[:2] - BL[:2])) + 0.2, 0.2, float(TL[2] - BL[2]) + 0.2], az=round(AZ + 90, 1), color='#2c3a30'))
-    for t in (0.22, 0.78):
+    for t in (0.18, 0.82):
         q = BL[:2] + (BR[:2] - BL[:2]) * t - n[:2] * 0.3; g = T(q[0], q[1])
         P.append(dict(k='cyl', a=r2([q[0], q[1], g]), b=r2([q[0], q[1], BL[2]]), r=0.09, color='#9ea3a6'))
     # white building at the left edge (u 0..300, top v 580) ~45 m
