@@ -7651,17 +7651,17 @@
   "id": "T4/30",
   "player": null,
   "xyz": [
-   2209.0,
-   444.9,
-   36.19
+   2266.13,
+   660.09,
+   32.4
   ],
   "ypr": [
-   20,
-   0.0,
-   0.0
+   160.394,
+   -3.668,
+   -1.433
   ],
   "fov": [
-   55.0,
+   31.769,
    null
   ],
   "size": [
@@ -7671,7 +7671,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - crop-duster biplane trailing pink smoke over a crowded beach, towers behind (height ESTIMATED 35 m); GTAVI_Launch_Trailer.mp4 t=55.80 s (frame 1674), letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/30 (corr 0.996); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 35.0 m. Needs markings + solve."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/30 (corr 0.996); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 35.0 m. Needs markings + solve. | T4-VIDEO-FIT 2026-10-19 (Alexandre: make the T4 tour perfect for a YouTube video): solved on the frame, looking SOUTH down the beach (Yanis's V read as NNW was wrong): Portofino Tower silhouette (both edges), Continuum on South Beach tower right edge, 8 waterline points vs the V17 coastline; residual rms 2.3 px (3840 px frame). hfov 31.8 (telephoto), 32 m above the beach, ~230 m N of Yanis's dot. The left white tower in the frame is the 2nd Continuum tower, NOT in our meshes; the mid-rise meshes in front do not match the frame (model to fix)."
  },
  "Napping in the Chair": {
   "id": "T4/32",
