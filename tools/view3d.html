@@ -1296,7 +1296,7 @@ const data = await (await fetch('/api/scene3d')).json();
           float lum = uUseDrape > 0.5 ? (0.90 + 0.14 * diffD)
                                       : (amb + 1.00 * diff + 0.12 * back);
           // [NIGHT-V1] la nuit: lumiere effondree, teinte clair-de-lune
-          lum *= 1.0 - 0.80 * uNight;
+          lum *= 1.0 - (uUseDrape > 0.5 ? 0.92 : 0.80) * uNight;   // [SCENE-PROPS-V1] the (mostly white) V17 drape stayed pale at night: much darker, as on the night frames
           vec3 lit = base * lum;
           lit *= mix(vec3(1.0), vec3(0.60, 0.68, 0.98), uNight);
           // city lights: les pixels URBAINS de la map (gris neutre) s'allument.
@@ -4914,6 +4914,7 @@ window.__camScreen = name => {
   const sync = () => { chip.classList.toggle('on', on); G.visible = on; };
   chip.addEventListener('click', () => { on = !on; try { localStorage.setItem('ui.props3d', on ? '1' : '0'); } catch (e) {} sync(); });
   sync();
+  const glowMats = {};
   const mats = {}, mat = (col, side) => mats[col + (side || '')] || (mats[col + (side || '')] = new THREE.MeshStandardMaterial({ color: new THREE.Color(col), emissive: new THREE.Color(col), emissiveIntensity: 0.32, roughness: 0.85, metalness: 0.0, side: side || THREE.FrontSide }));   // part auto-lumineuse: les toits / sols horizontaux restaient trop sombres sous l'eclairage de la scene
   // geometries non texturees regroupees par materiau (des milliers de pieces de ponts -> quelques draw calls)
   const batches = new Map();
@@ -4954,8 +4955,14 @@ window.__camScreen = name => {
         const g = new THREE.BufferGeometry().setFromPoints(p.pts.map(V)); G.add(new THREE.Line(g, new THREE.LineBasicMaterial({ color: new THREE.Color(p.color), transparent: p.opacity !== undefined, opacity: p.opacity ?? 1 })));
       } else if (p.k === 'tex') {
         const tex = loader.load('/threejs/' + p.img + '?v=' + ver); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
-        const m = new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: new THREE.Color(1, 1, 1), emissiveIntensity: 0.55, roughness: 0.9, side: THREE.DoubleSide, alphaTest: p.alpha ? 0.5 : 0, transparent: false });
+        const m = p.glow ? new THREE.MeshBasicMaterial({ map: tex, color: new THREE.Color(1, 1, 1).multiplyScalar(p.glow), toneMapped: false, side: THREE.DoubleSide, alphaTest: p.alpha ? 0.5 : 0 })
+          : new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: new THREE.Color(1, 1, 1), emissiveIntensity: 0.55, roughness: 0.9, side: THREE.DoubleSide, alphaTest: p.alpha ? 0.5 : 0, transparent: false });
         add(quadGeo(p.p, true), m, false);
+      } else if (p.k === 'glow') {                                          // neon / light tube: unlit, over-bright -> bloom of the cinematic render
+        const c = new THREE.Color(p.color).multiplyScalar(p.i || 2.0);
+        const m = glowMats[p.color + (p.i || 2)] || (glowMats[p.color + (p.i || 2)] = new THREE.MeshBasicMaterial({ color: c, toneMapped: false }));
+        for (let j = 0; j + 1 < p.pts.length; j++) add(cylGeo(p.pts[j], p.pts[j + 1], p.r || 0.25, 6), m, false);
+        if (p.ball) for (const q of p.pts) { const g = new THREE.SphereGeometry(p.r || 0.25, 8, 6); g.translate(q[0], q[1], q[2]); add(g, m, false); }
       } else if (p.k === 'blob') {
         const g = new THREE.IcosahedronGeometry(1, p.smooth ? 4 : 1); g.scale(p.r[0], p.r[1], p.r[2]);
         if (p.az !== undefined) g.rotateZ(Math.atan2(Math.cos(p.az * Math.PI / 180), Math.sin(p.az * Math.PI / 180)));   // rx along the azimuth az

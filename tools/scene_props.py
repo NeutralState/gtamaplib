@@ -428,7 +428,61 @@ def radio_towers():
     return dict(scene='Radio towers (WDNA FM + lattice)', camera=None, note=radio_towers.__doc__.split('\n')[0], props=P, replace=['WDNA FM'])
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers]
+def _key_bright(crop, thr=150):
+    """alpha mask of a bright neon glyph (frame crop)."""
+    g = crop.max(axis=2).astype(int); a = (np.clip((g - thr) * 4, 0, 255)).astype(np.uint8)
+    return np.dstack([crop, cv2.GaussianBlur(a, (3, 3), 0)])
+
+
+def skyline_night():
+    """T4/7 Skyline at Night — Mid-Beach at night, drone 97 m above the sand spit looking SW at downtown (pose SOLVED on
+    the far field). The near hotel = the V17 lot of 'Sorrento Tower' (re-fitted by tools/fit_fontainebleau.py, roof 64 m);
+    its neon (4 teal vertical strips on the east face, teal crown arch, two cyan glyph signs), the magenta-lit beach
+    pavilion north of it, the pool deck and the dark tree canopy of the foreground, all back-projected from the frame
+    (planes: east face x 2020, north face y 1962, ground)."""
+    V = View('Skyline at Night'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    E = lambda u, v: V.on_vplane(u, v, (2020.3, 1930), (1, 0)); N = lambda u, v: V.on_vplane(u, v, (1980, 1962.3), (0, 1))
+    TEAL, CYAN, MAG = '#3ef2d0', '#9fe8ff', '#ff4fd8'
+    for u in (1810, 1862, 1918, 1978):                                     # vertical neon strips (east face, roof down ~45 m)
+        P.append(dict(k='glow', pts=[r2(E(u, 748)), r2(E(u, 965))], r=0.35, color=TEAL, i=2.2))
+    arch = [(2210, 756), (2282, 724), (2400, 694), (2500, 674), (2620, 660)]   # crown arch top edge
+    A = [E(u, v) if u <= 2282 else N(u, v) for u, v in arch]
+    P.append(dict(k='glow', pts=[r2(q) for q in A], r=0.45, color=TEAL, i=2.4))
+    for q0, q1 in zip(A[:-1], A[1:]):                                      # crown screen wall (roof -> arch)
+        P.append(dict(k='quad', p=[r2([q0[0], q0[1], 64.0]), r2([q1[0], q1[1], 64.0]), r2(q1), r2(q0)], color='#1e2a2c'))
+    fr = cv2.imread(os.path.join(REPO, 'frames', 'Skyline at Night.png'))
+    for nm, (u0, v0, u1, v1) in (('_prop_fb_sign1.png', (2668, 590, 2720, 710)), ('_prop_fb_sign2.png', (2480, 776, 2532, 916))):
+        if fr is not None: cv2.imwrite(os.path.join(THIS, 'threejs', nm), _key_bright(fr[v0:v1, u0:u1]))
+        P.append(dict(k='tex', p=[r2(N(u0, v1)), r2(N(u1, v1)), r2(N(u1, v0)), r2(N(u0, v0))], img=nm, alpha=True, glow=1.8))
+    # beach pavilion lit magenta (frame u 2800..3840, v 1580..1900)
+    zg = 4.5
+    G = lambda u, v, z=zg: V.on_plane_z(u, v, z)
+    a0, a1, b1, b0 = G(2830, 1880), G(3840, 1880), G(3840, 1640), G(2830, 1640)
+    for q in (a0, a1, b1, b0): pass
+    c_ = (a0 + a1 + b1 + b0) / 4; d_ = (a1 - a0)[:2]; Lp = np.linalg.norm(d_); az = math.degrees(math.atan2(d_[0], d_[1])); Wp = np.linalg.norm((b0 - a0)[:2])
+    P.append(dict(k='box', c=r2([c_[0], c_[1], zg]), s=[round(Lp, 1), round(Wp, 1), 7.0], az=round(az, 1), color='#3a2236'))
+    for t in np.linspace(0, 1, 9):
+        q = a0 + (a1 - a0) * t; P.append(dict(k='glow', pts=[r2([q[0], q[1], zg]), r2([q[0], q[1], zg + 7.2])], r=0.18, color=MAG, i=2.6))
+    for e0, e1 in ((a0, a1), (b0, b1), (a0, b0), (a1, b1)):
+        P.append(dict(k='glow', pts=[r2([*e0[:2], zg + 7.2]), r2([*e1[:2], zg + 7.2])], r=0.15, color=MAG, i=2.6))
+    # pool deck (frame u 1500..1700, v 1810..1920) + warm path lights
+    pa, pb, pc, pd = G(1510, 1915, 4.6), G(1700, 1915, 4.6), G(1700, 1815, 4.6), G(1510, 1815, 4.6)
+    P.append(dict(k='quad', p=[r2(pa), r2(pb), r2(pc), r2(pd)], color='#1f9bd9'))
+    P.append(dict(k='glow', pts=[r2(pa), r2(pb), r2(pc), r2(pd), r2(pa)], r=0.2, color='#6fd3ff', i=1.6))
+    rng = np.random.default_rng(4); tones = ['#16221a', '#1b2a1d', '#213222', '#121c15']
+    for _ in range(260):                                                   # dark canopy of the foreground (frame bottom-left)
+        u = rng.uniform(-200, 1900); v = rng.uniform(1230, 2000)
+        if u > 1450 and v < 1500: continue
+        q = G(u, v); r = rng.uniform(3.5, 6.5)
+        P.append(dict(k='blob', c=r2([q[0], q[1], zg + rng.uniform(5, 11)]), r=[r, r, r * 0.8], color=tones[int(rng.integers(4))]))
+    for _ in range(60):                                                    # warm garden / path lights under the trees
+        u = rng.uniform(100, 1800); v = rng.uniform(1250, 1950); q = G(u, v, zg + 0.6)
+        P.append(dict(k='glow', pts=[r2(q)], r=0.6, color=['#ffd27a', '#ffb85c', '#fff1c4'][int(rng.integers(3))], i=2.2, ball=True))
+    clear = [[[1934, 1893], [2024, 1893], [2024, 1966], [1934, 1966]]]
+    return dict(scene='T4/7 Skyline at Night', camera='Skyline at Night', note=skyline_night.__doc__.split('\n')[0], props=P, clear=clear)
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night]
 
 
 def main():
