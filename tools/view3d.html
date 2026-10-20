@@ -4055,8 +4055,12 @@ window.__camScreen = name => {
       small: { lift: 0.30, v: [6, 9], dens: 1 / 300, deck: false, minW: 4, truck: 0 },
     };
     const paths = [];
+    // [TRAFFIC-AIRSIDE 2026-10-20] no traffic on the VCIA runways / taxiways (Alexandre): strokes mostly inside the airfield
+    const AIRSIDE = [[-3720, -140], [-2020, -140], [-2020, -1560], [-2230, -1560], [-3720, -610]];
+    const inAir = (x, y) => { let c = false; for (let i = 0, j = AIRSIDE.length - 1; i < AIRSIDE.length; j = i++) { const [xi, yi] = AIRSIDE[i], [xj, yj] = AIRSIDE[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
+    const airside = p => { let k = 0, m = 0; for (let i = 0; i < p.length; i += Math.max(1, Math.floor(p.length / 10))) { m++; if (inAir(p[i][0], p[i][1])) k++; } return k > m / 2; };
     for (const k of ['hwy', 'road', 'small']) for (const r of R[k] || []) {
-      const p = r.p, n = p.length; if (n < 2) continue; const c = CL[k];
+      const p = r.p, n = p.length; if (n < 2 || airside(p)) continue; const c = CL[k];
       const X = new Float32Array(n), Y = new Float32Array(n), Z = new Float32Array(n), S = new Float32Array(n);
       let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
       for (let i = 0; i < n; i++) {
