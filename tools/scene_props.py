@@ -454,17 +454,44 @@ def skyline_night():
     for nm, (u0, v0, u1, v1) in (('_prop_fb_sign1.png', (2668, 590, 2720, 710)), ('_prop_fb_sign2.png', (2480, 776, 2532, 916))):
         if fr is not None: cv2.imwrite(os.path.join(THIS, 'threejs', nm), _key_bright(fr[v0:v1, u0:u1]))
         P.append(dict(k='tex', p=[r2(N(u0, v1)), r2(N(u1, v1)), r2(N(u1, v0)), r2(N(u0, v0))], img=nm, alpha=True, glow=1.8))
-    # beach pavilion lit magenta (frame u 2800..3840, v 1580..1900)
+    # balcony slabs on the hotel's east and north faces (one per 3.2 m floor, as on the frame)
+    for z in np.arange(8.4, 63.0, 3.2):
+        P.append(dict(k='box', c=[2020.6, 1929.5, round(float(z), 2)], s=[65.0, 1.4, 0.28], az=0.0, color='#6d6f73'))
+        P.append(dict(k='box', c=[1979.0, 1962.6, round(float(z), 2)], s=[82.0, 1.4, 0.28], az=90.0, color='#6d6f73'))
+    # pink-lit arcade (2-storey, 6 arches) + glass pergola north of the hotel (frame u 2950..3840, v 1600..1910):
+    # front base on the ground at v 1905, arch tops / roof back-projected on that vertical plane (16.6 / 18.7 m)
     zg = 4.5
     G = lambda u, v, z=zg: V.on_plane_z(u, v, z)
-    a0, a1, b1, b0 = G(2830, 1880), G(3840, 1880), G(3840, 1640), G(2830, 1640)
-    for q in (a0, a1, b1, b0): pass
-    c_ = (a0 + a1 + b1 + b0) / 4; d_ = (a1 - a0)[:2]; Lp = np.linalg.norm(d_); az = math.degrees(math.atan2(d_[0], d_[1])); Wp = np.linalg.norm((b0 - a0)[:2])
-    P.append(dict(k='box', c=r2([c_[0], c_[1], zg]), s=[round(Lp, 1), round(Wp, 1), 7.0], az=round(az, 1), color='#3a2236'))
-    for t in np.linspace(0, 1, 9):
-        q = a0 + (a1 - a0) * t; P.append(dict(k='glow', pts=[r2([q[0], q[1], zg]), r2([q[0], q[1], zg + 7.2])], r=0.18, color=MAG, i=2.6))
-    for e0, e1 in ((a0, a1), (b0, b1), (a0, b0), (a1, b1)):
-        P.append(dict(k='glow', pts=[r2([*e0[:2], zg + 7.2]), r2([*e1[:2], zg + 7.2])], r=0.15, color=MAG, i=2.6))
+    A0, A1 = G(2990, 1905), G(3480, 1905); ea = (A1 - A0)[:2]; La = np.linalg.norm(ea); ea /= La; na = np.array([-ea[1], ea[0]])
+    if (V.o[:2] - A0[:2]) @ na < 0: na = -na                               # na: towards the camera (front)
+    aza = math.degrees(math.atan2(ea[0], ea[1])); D = 12.0; HT = 12.0
+    at = lambda s_, w_, z: [*(A0[:2] + ea * s_ - na * w_), z]
+    P.append(dict(k='box', c=r2(at(La / 2, D / 2, zg)), s=[round(La, 1), D, HT], az=round(aza, 1), color='#5e4459'))      # body (soft pink wash)
+    P.append(dict(k='box', c=r2(at(La / 2, D / 2, zg + HT)), s=[round(La + 0.6, 1), D + 0.6, 0.7], az=round(aza, 1), color='#8d6c86'))   # parapet
+    for j in range(7):                                                     # piers, softly uplit (no neon: the frame shows a wash)
+        s_ = La * j / 6; P.append(dict(k='box', c=r2(at(s_, -0.4, zg)), s=[1.1, 1.0, HT], az=round(aza, 1), color='#9c7894'))
+        P.append(dict(k='glow', pts=[r2(at(s_, -1.0, zg + 0.3))], r=0.35, color='#f3c6ea', i=1.3, ball=True))
+        if j < 6:
+            for zz in (zg + 1.5, zg + 4.6):                                # windows behind the arches (2 floors), mostly dark
+                w0, w1 = s_ + 1.2, s_ + La / 6 - 1.2
+                P.append(dict(k='quad', p=[r2(at(w0, -0.05, zz)), r2(at(w1, -0.05, zz)), r2(at(w1, -0.05, zz + 2.2)), r2(at(w0, -0.05, zz + 2.2))], color=['#c9a98a', '#2a1e28', '#2a1e28'][(j + int(zz)) % 3]))
+    # glass pergola: thin dark steel, faintly lit glass, soft lamps at the post feet
+    Q = [G(3470, 1800, 13.0), G(3840, 1800, 13.0), G(3840, 1610, 13.0), G(3470, 1610, 13.0)]
+    for q in Q:
+        P.append(dict(k='cyl', a=r2([q[0], q[1], zg]), b=r2([q[0], q[1], 13.0]), r=0.3, color='#7b6476'))
+        P.append(dict(k='glow', pts=[r2([q[0], q[1], zg + 0.4])], r=0.45, color='#f6d6ef', i=1.4, ball=True))
+    for t in np.linspace(0, 1, 7):
+        a_, b_ = Q[0] + (Q[1] - Q[0]) * t, Q[3] + (Q[2] - Q[3]) * t; P.append(dict(k='cyl', a=r2(a_), b=r2(b_), r=0.1, color='#6e5a6a'))
+    for t in np.linspace(0, 1, 5):
+        a_, b_ = Q[0] + (Q[3] - Q[0]) * t, Q[1] + (Q[2] - Q[1]) * t; P.append(dict(k='cyl', a=r2(a_), b=r2(b_), r=0.1, color='#6e5a6a'))
+    P.append(dict(k='quad', p=[r2(q + [0, 0, 0.1]) for q in Q], color='#57434f'))
+    # forecourt: dark drive, lit roundabout planter, pool cabanas, palms in front
+    rb = G(3250, 1560); P.append(dict(k='blob', c=r2([rb[0], rb[1], zg + 1.0]), r=[5, 5, 1.2], color='#2b3a24'))
+    P.append(dict(k='glow', pts=[r2([rb[0] + 6 * math.cos(t), rb[1] + 6 * math.sin(t), zg + 0.3]) for t in np.linspace(0, 2 * math.pi, 17)], r=0.12, color='#ffd9a0', i=1.6))
+    for u in (3020, 3110, 3200):
+        q = G(u, 1905, zg); P.append(dict(k='box', c=r2([*(q[:2] + na * 6), zg]), s=[3.2, 3.2, 2.6], az=round(aza, 1), color='#5b4436'))
+    for u, v in ((2600, 1890), (2700, 1870), (2820, 1880), (2560, 1800)):
+        q = G(u, v); P.append(dict(k='palm', a=r2(q), h=11.0, lean_az=200.0, lean=0.06))
     # pool deck (frame u 1500..1700, v 1810..1920) + warm path lights
     pa, pb, pc, pd = G(1510, 1915, 4.6), G(1700, 1915, 4.6), G(1700, 1815, 4.6), G(1510, 1815, 4.6)
     P.append(dict(k='quad', p=[r2(pa), r2(pb), r2(pc), r2(pd)], color='#1f9bd9'))
@@ -482,7 +509,23 @@ def skyline_night():
     return dict(scene='T4/7 Skyline at Night', camera='Skyline at Night', note=skyline_night.__doc__.split('\n')[0], props=P, clear=clear)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night]
+def aviation_lights():
+    """Red obstacle lights on the roof corners of every solid taller than 60 m (all night scenes; the T4/7 frame shows
+    dozens of them on the skyline). Corners = the 4 extreme vertices of the top layer of tools/mesh_solids.py."""
+    import mesh_solids
+    P = []
+    for name, so in mesh_solids.cached().items():
+        if so['zmax'] - so['zmin'] < 60 or not so['layers']: continue
+        top = so['layers'][-1]; pts = np.array([q for pp in top['polys'] for q in pp['outer']], float)
+        if len(pts) < 3: continue
+        c = pts.mean(0); idx = {int(np.argmax(pts @ d)) for d in np.array([[1, 1], [1, -1], [-1, 1], [-1, -1]], float)}
+        for i in idx:
+            q = pts[i] + (c - pts[i]) * 0.04
+            P.append(dict(k='glow', pts=[[round(q[0], 2), round(q[1], 2), round(top['z1'] + 1.2, 2)]], r=0.9, color='#ff2020', i=2.4, ball=True))
+    return dict(scene='Aviation lights (towers > 60 m)', camera=None, note=aviation_lights.__doc__.split('\\n')[0], props=P)
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights]
 
 
 def main():
