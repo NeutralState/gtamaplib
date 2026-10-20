@@ -3372,7 +3372,9 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
     capIdx.textContent = `${String(c.pose_verified || '').split(' — ')[0]}  ·  ${i + 1} / ${list.length}`;
   }
   let srcMap = null;
+  let fullFrame = new Set();                                            // [TOUR-STYLE-V1] close-ups: frame fully opaque (tools/threejs/tour_styles.json)
   async function start() {
+    try { const j = await (await fetch('/threejs/tour_styles.json', { cache: 'no-store' })).json(); fullFrame = new Set(j.fullframe || []); } catch (e) {}
     if (!srcMap) { try { const d = await (await fetch('/api/map_data')).json(); srcMap = {}; for (const c of d.cameras || []) srcMap[c.name] = c.source || ''; } catch (e) { srcMap = {}; } }
     const okc = c => c && c.corners && c.xyz && c.xyz[2] < 1500;
     const pl = (window.__tourList ? window.__tourList() : []).map(n => camPickRefs.find(c => c.name === n)).filter(okc);   // [TOUR-PICK-V3] ordre de la playlist
@@ -3410,7 +3412,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
       camera.position.lerpVectors(from.pos, to.pos, e); camera.position.z += Math.sin(Math.PI * e) * to.lift;
       camera.quaternion.slerpQuaternions(from.quat, to.quat, ease(Math.min(1, k * 1.15)));
       camera.fov = from.fov + (to.fov - from.fov) * e; camera.near = 0.5; camera.updateProjectionMatrix();
-      if (k >= 1) { phase = 'show'; t = 0; img.style.opacity = '0.92'; cap.style.opacity = '1'; }
+      if (k >= 1) { phase = 'show'; t = 0; img.style.opacity = fullFrame.has(list[i].name) ? '1' : '0.92'; cap.style.opacity = '1'; }   // [TOUR-STYLE-V1]
     } else if (phase === 'show') {
       if (!paused && t > (window.__tourHold ? window.__tourHold() : 3.6)) { phase = 'fade'; t = 0; img.style.opacity = '0'; cap.style.opacity = '0'; }
     } else if (phase === 'fade') {
