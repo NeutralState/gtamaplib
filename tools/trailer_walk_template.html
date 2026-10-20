@@ -1,0 +1,443 @@
+<title>GTA VI Trailer Walk</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<!-- [WALK-V1 2026-10-19] page template for tools/trailer_walk.py (data is inlined at build time; do not open directly) -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;800&family=Instrument+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;600&display=swap">
+<style>
+/* Layout: one-screen survey tool. Stage (frame over the render) left, dossier + mini map right, contact strip of frames below. */
+:root {
+  --bg: #0d1315; --panel: #151e21; --line: #26343a; --fg: #e4ece9; --muted: #8b9d9b; --accent: #f2a65a;
+  --mark-click: #f2a65a; --mark-proj: #5fd4e8; --stage: #0a0f11;
+  --map-bg: #10181b; --map-ink: #3b4c52; --map-dot: #56696f;
+  --t-anchor: #a78bfa; --t-high: #4ade80; --t-medium: #fbbf24; --t-low: #fb923c; --t-unverified: #8a9396;
+  --f-display: 'Big Shoulders Display', 'Arial Narrow', 'Helvetica Neue', sans-serif;
+  --f-body: 'Instrument Sans', -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --f-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
+  color-scheme: dark;
+}
+@media (prefers-color-scheme: light) { :root:not([data-theme="dark"]) {
+  --bg: #e9efed; --panel: #fbfdfc; --line: #cfdad7; --fg: #142024; --muted: #556866; --accent: #b25e14;
+  --mark-click: #e8862b; --mark-proj: #13b5d1; --stage: #c9d4d2;
+  --map-bg: #f1f5f4; --map-ink: #b5c5c2; --map-dot: #8fa3a0;
+  --t-anchor: #7c5cd6; --t-high: #1f9d55; --t-medium: #b7860b; --t-low: #c2560f; --t-unverified: #6b7476;
+  color-scheme: light; } }
+:root[data-theme="light"] {
+  --bg: #e9efed; --panel: #fbfdfc; --line: #cfdad7; --fg: #142024; --muted: #556866; --accent: #b25e14;
+  --mark-click: #e8862b; --mark-proj: #13b5d1; --stage: #c9d4d2;
+  --map-bg: #f1f5f4; --map-ink: #b5c5c2; --map-dot: #8fa3a0;
+  --t-anchor: #7c5cd6; --t-high: #1f9d55; --t-medium: #b7860b; --t-low: #c2560f; --t-unverified: #6b7476;
+  color-scheme: light; }
+
+html, body { height: 100%; }
+body { background: var(--bg); color: var(--fg); font-family: var(--f-body); font-size: 14px; line-height: 1.45;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  box-sizing: border-box; }
+*, *::before, *::after { box-sizing: border-box; }
+.app { height: 100%; display: grid; grid-template-rows: auto minmax(0, 1fr) auto; gap: 10px; padding-block: 12px; }
+header { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+h1 { margin: 0; font-family: var(--f-display); font-weight: 800; font-size: 28px; letter-spacing: .02em; text-transform: uppercase; line-height: 1; }
+h1 span { color: var(--accent); }
+.tagline { color: var(--muted); font-size: 13px; min-width: 0; }
+.main { display: grid; grid-template-columns: minmax(0, 1fr) 320px; gap: 12px; min-height: 0; }
+
+/* stage */
+.stage-wrap { position: relative; min-height: 0; background: var(--stage); border-radius: 6px; overflow: hidden; display: grid; place-items: center; }
+.stage { position: relative; }
+.stage canvas, .stage img, .stage svg { position: absolute; inset: 0; width: 100%; height: 100%; display: block; }
+.stage .sky { position: absolute; inset: 0; background: linear-gradient(#8fb3c9 0%, #cfd9d8 52%, #dfe2da 100%); }
+.stage img { object-fit: fill; pointer-events: none; transition: opacity .12s; }
+.stage svg { pointer-events: none; overflow: visible; }
+.stage-hud { position: absolute; left: 10px; top: 10px; display: flex; gap: 6px; flex-wrap: wrap; pointer-events: none; }
+.hud-chip { font: 600 11px var(--f-mono); padding: 3px 7px; border-radius: 4px; background: rgb(8 12 14 / .72); color: #e4ece9; letter-spacing: .03em; }
+.nav-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 40px; height: 64px; border: 0; border-radius: 6px;
+  background: rgb(8 12 14 / .55); color: #f3f6f5; font-size: 22px; cursor: pointer; }
+.nav-btn:hover { background: rgb(8 12 14 / .8); }
+.nav-btn.prev { left: 8px; } .nav-btn.next { right: 8px; }
+.loading { position: absolute; inset: 0; display: grid; place-items: center; color: var(--muted); font: 12px var(--f-mono); }
+
+/* side */
+aside { display: flex; flex-direction: column; gap: 12px; min-height: 0; overflow-y: auto; }
+.dossier { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px; display: flex; flex-direction: column; gap: 10px; }
+.cid { font-family: var(--f-display); font-weight: 800; font-size: 44px; line-height: .9; letter-spacing: .01em; }
+.cname { font-size: 16px; font-weight: 600; text-wrap: balance; }
+.csrc { color: var(--muted); font-size: 13px; }
+.chips { display: flex; gap: 6px; flex-wrap: wrap; }
+.chip { font: 600 11px var(--f-mono); text-transform: uppercase; letter-spacing: .06em; padding: 3px 7px; border-radius: 4px; border: 1px solid currentColor; }
+dl.facts { display: grid; grid-template-columns: auto 1fr; gap: 3px 12px; margin: 0; font-size: 12.5px; }
+dl.facts dt { color: var(--muted); }
+dl.facts dd { margin: 0; font-family: var(--f-mono); font-variant-numeric: tabular-nums; min-width: 0; overflow-wrap: anywhere; }
+.controls { display: flex; flex-direction: column; gap: 9px; }
+.row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+label.slider { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px; font-size: 12.5px; }
+label.slider output { font: 12px var(--f-mono); min-width: 3.5ch; text-align: right; color: var(--muted); }
+input[type=range] { accent-color: var(--accent); width: 100%; }
+.toggle { font: 500 12px var(--f-body); padding: 5px 10px; border-radius: 5px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; }
+.toggle[aria-pressed="true"] { color: var(--fg); border-color: var(--accent); }
+.toggle:focus-visible, .nav-btn:focus-visible, .strip button:focus-visible, .mapbox button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.legend i { display: inline-block; width: 10px; height: 10px; border-radius: 50%; vertical-align: -1px; margin-right: 5px; }
+.legend .lc { border: 2px solid var(--mark-click); } .legend .lp { background: var(--mark-proj); }
+.mapbox { background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 10px; display: flex; flex-direction: column; gap: 8px; }
+.mapbox .row { justify-content: space-between; }
+.mapbox h2 { margin: 0; font: 600 11px var(--f-mono); text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+#map { width: 100%; aspect-ratio: 1 / 1; max-width: 100%; display: block; border-radius: 4px; background: var(--map-bg); cursor: pointer; }
+.help, .credits { font-size: 12px; color: var(--muted); }
+.help p, .credits p { margin: 0 0 6px; }
+.credits a, .help a { color: var(--fg); }
+kbd { font: 11px var(--f-mono); border: 1px solid var(--line); border-radius: 3px; padding: 0 4px; }
+
+/* contact strip */
+.strip { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: thin; }
+.strip button { flex: 0 0 auto; width: 128px; padding: 0; border: 2px solid transparent; border-radius: 5px; background: var(--panel); color: var(--fg); cursor: pointer; text-align: left; overflow: hidden; }
+.strip button img { display: block; width: 100%; aspect-ratio: 16 / 9; object-fit: cover; }
+.strip button span { display: flex; justify-content: space-between; gap: 4px; padding: 3px 6px; font: 600 11px var(--f-mono); }
+.strip button span b { width: 8px; height: 8px; border-radius: 50%; align-self: center; flex: 0 0 auto; }
+.strip button[aria-current="true"] { border-color: var(--accent); }
+
+@media (max-width: 900px) {
+  html, body { height: auto; }
+  .app { height: auto; grid-template-rows: auto auto auto; }
+  .main { grid-template-columns: minmax(0, 1fr); }
+  .stage-wrap { height: 62vw; min-height: 220px; }
+  aside { overflow: visible; }
+  header { order: -2; } .strip { order: -1; }
+  #map { aspect-ratio: 4 / 3; }
+}
+@media (prefers-reduced-motion: reduce) { .stage img { transition: none; } }
+</style>
+
+<div class="app">
+  <header>
+    <h1>GTA VI <span>Trailer Walk</span></h1>
+    <div class="tagline" id="tagline">Official trailer frames and screenshots, each placed at its solved camera over the community 3D model of Leonida.</div>
+  </header>
+  <div class="main">
+    <div class="stage-wrap" id="wrap">
+      <div class="stage" id="stage">
+        <div class="sky"></div>
+        <canvas id="gl"></canvas>
+        <img id="frame" alt="">
+        <svg id="marks" xmlns="http://www.w3.org/2000/svg"></svg>
+        <div class="stage-hud" id="hud"></div>
+      </div>
+      <button class="nav-btn prev" id="prev" aria-label="Previous camera">‹</button>
+      <button class="nav-btn next" id="next" aria-label="Next camera">›</button>
+      <div class="loading" id="loading">Building the city model…</div>
+    </div>
+    <aside>
+      <section class="dossier" aria-live="polite">
+        <div class="row" style="justify-content:space-between;align-items:flex-end">
+          <div class="cid" id="cid">–</div>
+          <div class="csrc" id="cpos" style="font-family:var(--f-mono)"></div>
+        </div>
+        <div>
+          <div class="cname" id="cname"></div>
+          <div class="csrc" id="csrc"></div>
+        </div>
+        <div class="chips" id="chips"></div>
+        <dl class="facts" id="facts"></dl>
+      </section>
+      <section class="dossier controls">
+        <label class="slider" for="opacity">Frame <input type="range" id="opacity" min="0" max="100" value="55"><output id="opv">55%</output></label>
+        <div class="row">
+          <button class="toggle" id="t-marks" aria-pressed="true">Landmarks</button>
+          <button class="toggle" id="t-wire" aria-pressed="true">Wireframes</button>
+          <button class="toggle" id="t-grid" aria-pressed="true">Grid</button>
+        </div>
+        <div class="legend"><span><i class="lc"></i>clicked in the frame</span><span><i class="lp"></i>3D landmark at this pose</span></div>
+      </section>
+      <section class="mapbox">
+        <div class="row"><h2>Where it was shot</h2>
+          <button class="toggle" id="t-zoom" aria-pressed="false">Whole map</button></div>
+        <canvas id="map" aria-label="Mini map of camera positions"></canvas>
+      </section>
+      <section class="help">
+        <p>The frame sits on top of a render from the solved camera. Lower the frame opacity to compare it with the model. A ring is where a mapper marked a landmark in the frame; the dot is where that landmark's 3D position lands with this pose, so a short line means a tight fit.</p>
+        <p><kbd>←</kbd> <kbd>→</kbd> step through cameras · <kbd>F</kbd> frame on/off · <kbd>L</kbd> landmarks</p>
+      </section>
+      <section class="credits">
+        <p>Poses, landmarks and building meshes: the gtamaplib community mapping project. Frame IDs follow Yanis's V17 numbering on <a href="https://map.gtadb.org" target="_blank" rel="noopener">map.gtadb.org</a>. Landmark positions include GTADB landmarks data, licensed <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>.</p>
+        <p>Frames © Rockstar Games, shown as small thumbnails for reference. Fan project, not affiliated with Rockstar Games. The model has buildings only: no terrain, so hills and ground detail are missing. <span id="gen"></span></p>
+      </section>
+    </aside>
+  </div>
+  <nav class="strip" id="strip" aria-label="Cameras"></nav>
+</div>
+
+<script>window.WALK = /*__WALK_DATA__*/null;</script>
+<script type="module">
+import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js';
+
+const D = window.WALK;
+const cams = D.cams;
+const $ = id => document.getElementById(id);
+const css = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+const slug = c => c.name.replace(/[^A-Za-z0-9]+/g, '-').replace(/^-|-$/g, '');
+const TIER = { anchor: 'Anchor', high: 'High', medium: 'Medium', low: 'Low', unverified: 'Unverified' };
+const fmt = (v, d = 0) => v.toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d });
+let idx = 0, showMarks = true, frameHidden = false;
+
+// ── renderer ──
+const canvas = $('gl');
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true, logarithmicDepthBuffer: true });
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+renderer.setClearColor(0x000000, 0);
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0xd5dcd8, 2500, 14000);
+const camera = new THREE.PerspectiveCamera(40, 16 / 9, 0.5, 40000);
+camera.up.set(0, 0, 1);
+scene.add(new THREE.HemisphereLight(0xe6eef2, 0x4a5258, 1.5));
+const sun = new THREE.DirectionalLight(0xfff2e0, 2.2); sun.position.set(-0.45, -0.6, 0.66); scene.add(sun);
+
+const sea = new THREE.Mesh(new THREE.PlaneGeometry(80000, 80000), new THREE.MeshLambertMaterial({ color: 0x5f6c68 }));   // sea level; land is missing (no terrain)
+sea.position.set(-3000, 2000, -0.05); scene.add(sea);
+const grid = new THREE.GridHelper(16000, 64, 0x9fb7bc, 0x9fb7bc);
+grid.rotation.x = Math.PI / 2; grid.material.transparent = true; grid.material.opacity = 0.28; grid.material.fog = true;
+scene.add(grid);
+
+const clay = new THREE.Color(0xd9d5cc), tmp = new THREE.Color();
+function tint(hex, k) { return tmp.set(hex).lerp(clay, k).clone(); }
+
+function buildSolids() {
+  const P = [], C = [], E = [];
+  const push3 = (arr, x, y, z) => arr.push(x, y, z);
+  for (const s of Object.values(D.solids)) {
+    const col = tint(s.c, 0.62);
+    const tri = (a, b, c) => { P.push(...a, ...b, ...c); for (let k = 0; k < 3; k++) C.push(col.r, col.g, col.b); };
+    for (const [z0, z1, polys] of s.L) {
+      for (const rings of polys) {
+        const vrings = rings.map(f => { const r = []; for (let i = 0; i < f.length; i += 2) r.push(new THREE.Vector2(f[i], f[i + 1])); return r; });
+        for (const r of vrings) {
+          const n = r.length;
+          for (let i = 0; i < n; i++) {
+            const a = r[i], b = r[(i + 1) % n];
+            tri([a.x, a.y, z0], [b.x, b.y, z0], [b.x, b.y, z1]); tri([a.x, a.y, z0], [b.x, b.y, z1], [a.x, a.y, z1]);
+            push3(E, a.x, a.y, z1); push3(E, b.x, b.y, z1);
+            // vertical edge only at real corners (contours are dense)
+            const p = r[(i - 1 + n) % n], u = a.clone().sub(p).normalize(), w = b.clone().sub(a).normalize();
+            if (Math.abs(u.x * w.y - u.y * w.x) > 0.5) { push3(E, a.x, a.y, z0); push3(E, a.x, a.y, z1); }
+          }
+        }
+        if (vrings[0].length >= 3) {
+          const faces = THREE.ShapeUtils.triangulateShape(vrings[0].map(v => v.clone()), vrings.slice(1).map(r => r.map(v => v.clone())));
+          const all = [].concat(...vrings);
+          for (const [i, j, k] of faces) tri([all[i].x, all[i].y, z1], [all[j].x, all[j].y, z1], [all[k].x, all[k].y, z1]);
+        }
+      }
+    }
+    if (s.fv && s.ff) for (let t = 0; t < s.ff.length; t += 3) {
+      const v = i => [s.fv[3 * i], s.fv[3 * i + 1], s.fv[3 * i + 2]];
+      tri(v(s.ff[t]), v(s.ff[t + 1]), v(s.ff[t + 2]));
+    }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3));
+  g.setAttribute('color', new THREE.Float32BufferAttribute(C, 3));
+  g.computeVertexNormals();
+  const m = new THREE.Mesh(g, new THREE.MeshLambertMaterial({ vertexColors: true, side: THREE.DoubleSide,
+    polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }));
+  scene.add(m);
+  const eg = new THREE.BufferGeometry(); eg.setAttribute('position', new THREE.Float32BufferAttribute(E, 3));
+  scene.add(new THREE.LineSegments(eg, new THREE.LineBasicMaterial({ color: 0x3a4246, transparent: true, opacity: 0.55 })));
+}
+
+let wire;
+function buildWire() {
+  const W = D.wire, bin = s => Uint8Array.from(atob(s), ch => ch.charCodeAt(0)).buffer;
+  const qi = new Int32Array(bin(W.pos)), ind = new Uint16Array(bin(W.idx));
+  const pos = new Float32Array(qi.length); for (let i = 0; i < qi.length; i++) pos[i] = qi[i] / W.q;
+  const col = new Float32Array(qi.length).fill(0.8);
+  for (const [, hex, i0, n] of W.meshes) {
+    const c = tmp.set(hex).lerp(new THREE.Color(0xffffff), 0.25);
+    for (let k = i0; k < i0 + n; k++) { const v = ind[k]; col[3 * v] = c.r; col[3 * v + 1] = c.g; col[3 * v + 2] = c.b; }
+  }
+  const g = new THREE.BufferGeometry();
+  g.setAttribute('position', new THREE.BufferAttribute(pos, 3));
+  g.setAttribute('color', new THREE.BufferAttribute(col, 3));
+  g.setIndex(new THREE.BufferAttribute(ind, 1));
+  wire = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ vertexColors: true }));
+  scene.add(wire);
+}
+
+// ── pose: same construction as view3d enterPOV (corner rays computed by the lib) ──
+const V = a => new THREE.Vector3(...a);
+function poseFromCorners(c) {
+  const [tl, tr, br, bl] = c.corners.map(V);
+  const right = tr.clone().sub(tl).normalize(), up = tl.clone().sub(bl).normalize();
+  const z = new THREE.Vector3().crossVectors(right, up).normalize();
+  const y = new THREE.Vector3().crossVectors(z, right).normalize();
+  const vfov = THREE.MathUtils.radToDeg(tl.clone().add(tr).normalize().angleTo(bl.clone().add(br).normalize()));
+  const fwd = tl.clone().add(tr).add(br).add(bl).normalize();
+  return { right, y, z, vfov, fwd, L: tl.clone().add(bl).normalize(), R: tr.clone().add(br).normalize() };
+}
+
+// ── stage sizing: the stage box has the frame's aspect, the render uses the frame's vfov -> the image is angularly exact ──
+function layout() {
+  const c = cams[idx], wrap = $('wrap'), a = c.size[0] / c.size[1];
+  const W = wrap.clientWidth, H = wrap.clientHeight;
+  let w = Math.min(W, H * a), h = w / a;
+  const st = $('stage'); st.style.width = w + 'px'; st.style.height = h + 'px';
+  renderer.setSize(w, h, false);
+  camera.aspect = a; camera.updateProjectionMatrix();
+  $('marks').setAttribute('viewBox', `0 0 ${w} ${h}`);
+  drawMarks(w, h); render();
+}
+function render() { renderer.render(scene, camera); }
+
+function drawMarks(w, h) {
+  const svg = $('marks'), c = cams[idx];
+  if (!showMarks) { svg.innerHTML = ''; return; }
+  const cl = css('--mark-click'), pj = css('--mark-proj');
+  const r = Math.max(3, Math.min(6, w / 220));
+  let s = '';
+  for (const o of c.obs) {
+    const [name, ox, oy, px, py] = o, X = ox * w, Y = oy * h;
+    const t = `<title>${name.replace(/&/g, '&amp;').replace(/</g, '&lt;')}</title>`;
+    if (px !== undefined && px > -0.5 && px < 1.5 && py > -0.5 && py < 1.5) {
+      s += `<line x1="${X}" y1="${Y}" x2="${px * w}" y2="${py * h}" stroke="${pj}" stroke-width="1.2" opacity=".9"/>`;
+      s += `<circle cx="${px * w}" cy="${py * h}" r="${r * 0.55}" fill="${pj}">${t}</circle>`;
+    }
+    s += `<circle cx="${X}" cy="${Y}" r="${r}" fill="none" stroke="${cl}" stroke-width="1.6">${t}</circle>`;
+  }
+  svg.innerHTML = s;
+}
+
+function compass(d) { return (THREE.MathUtils.radToDeg(Math.atan2(d.x, d.y)) + 360) % 360; }
+const DIRS = ['N', 'NNE', 'NE', 'ENE', 'E', 'ESE', 'SE', 'SSE', 'S', 'SSW', 'SW', 'WSW', 'W', 'WNW', 'NW', 'NNW'];
+
+function show(i, push = true) {
+  idx = (i + cams.length) % cams.length;
+  const c = cams[idx], p = poseFromCorners(c);
+  camera.position.set(...c.xyz);
+  camera.quaternion.setFromRotationMatrix(new THREE.Matrix4().makeBasis(p.right, p.y, p.z));
+  camera.fov = p.vfov;
+  grid.position.set(Math.round(c.xyz[0] / 250) * 250, Math.round(c.xyz[1] / 250) * 250, 0.05);
+  $('frame').src = c.thumb; $('frame').alt = `${c.id} ${c.name}`;
+  const hd = compass(p.fwd);
+  $('cid').textContent = c.id;
+  $('cpos').textContent = `${idx + 1} / ${cams.length}`;
+  $('cname').textContent = c.name;
+  $('csrc').textContent = [c.src, c.frame].filter(Boolean).join(' · ');
+  const tc = `var(--t-${c.tier})`;
+  $('chips').innerHTML = `<span class="chip" style="color:${tc}">${TIER[c.tier] || c.tier} tier</span>` +
+    (c.status ? `<span class="chip" style="color:var(--accent)">${c.status}</span>` : '');
+  const pitch = THREE.MathUtils.radToDeg(Math.asin(Math.max(-1, Math.min(1, p.fwd.z))));
+  const rows = [
+    ['Position', `${fmt(c.xyz[0])}, ${fmt(c.xyz[1])} m`],
+    ['Height', `${fmt(c.xyz[2], 1)} m above sea`],
+    ['Looking', `${DIRS[Math.round(hd / 22.5) % 16]} ${fmt(hd)}°, pitch ${fmt(pitch, 1)}°`],
+    ['Field of view', `${fmt(c.hfov, 1)}° × ${fmt(p.vfov, 1)}°`],
+    ['Fit', c.rms != null ? `${fmt(c.rms, 1)}′ RMS over ${c.obs.length} marks` : 'checked against building meshes'],
+  ];
+  $('facts').innerHTML = rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('');
+  $('hud').innerHTML = `<span class="hud-chip">${c.id}</span><span class="hud-chip">${c.size[0]}×${c.size[1]}</span>`;
+  document.querySelectorAll('.strip button').forEach((b, k) => b.setAttribute('aria-current', k === idx ? 'true' : 'false'));
+  const cur = $('strip').children[idx]; if (cur) cur.scrollIntoView({ block: 'nearest', inline: 'center', behavior: push ? 'smooth' : 'auto' });
+  if (push) { try { history.replaceState(null, '', '#' + slug(c)); } catch (e) {} }
+  layout(); drawMap();
+}
+
+// ── mini map ──
+const mapC = $('map'), mctx = mapC.getContext('2d');
+let mapAll = false, mapView = null;
+const footprints = [];
+for (const s of Object.values(D.solids)) if (s.L.length) for (const rings of s.L[0][2]) footprints.push(rings[0]);
+const bounds = (() => { let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+  for (const [x, y] of D.landmarks) { x0 = Math.min(x0, x); x1 = Math.max(x1, x); y0 = Math.min(y0, y); y1 = Math.max(y1, y); }
+  return { x0, y0, x1, y1 }; })();
+let wire2d = null;
+function drawMap() {
+  const dpr = Math.min(devicePixelRatio || 1, 2), W = mapC.clientWidth, H = mapC.clientHeight;
+  if (!W) return;
+  mapC.width = W * dpr; mapC.height = H * dpr; mctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  const c = cams[idx], p = poseFromCorners(c);
+  let cx, cy, span;
+  if (mapAll) { cx = (bounds.x0 + bounds.x1) / 2; cy = (bounds.y0 + bounds.y1) / 2; span = Math.max(bounds.x1 - bounds.x0, (bounds.y1 - bounds.y0) * W / H) * 1.04; }
+  else { cx = c.xyz[0]; cy = c.xyz[1]; span = 3200; }
+  const s = W / span, X = x => (x - cx) * s + W / 2, Y = y => (cy - y) * s + H / 2;
+  mapView = { X, Y, s };
+  mctx.fillStyle = css('--map-bg'); mctx.fillRect(0, 0, W, H);
+  // landmarks: faint dots that trace the mapped parts of Leonida
+  mctx.fillStyle = css('--map-dot');
+  for (const [x, y] of D.landmarks) { const u = X(x), v = Y(y); if (u > -2 && u < W + 2 && v > -2 && v < H + 2) mctx.fillRect(u - 0.75, v - 0.75, 1.5, 1.5); }
+  // wireframe structures (bridges, viaducts) seen from above
+  if (!wire2d) { const W2 = D.wire, bin = t => Uint8Array.from(atob(t), ch => ch.charCodeAt(0)).buffer;
+    wire2d = { q: new Int32Array(bin(W2.pos)), i: new Uint16Array(bin(W2.idx)), k: W2.q }; }
+  mctx.strokeStyle = css('--map-ink'); mctx.lineWidth = 1; mctx.beginPath();
+  const { q, i: ii, k } = wire2d;
+  for (let e = 0; e < ii.length; e += 2) {
+    const a = ii[e] * 3, b = ii[e + 1] * 3;
+    mctx.moveTo(X(q[a] / k), Y(q[a + 1] / k)); mctx.lineTo(X(q[b] / k), Y(q[b + 1] / k));
+  }
+  mctx.stroke();
+  // building footprints
+  mctx.fillStyle = css('--map-ink');
+  for (const f of footprints) {
+    mctx.beginPath(); mctx.moveTo(X(f[0]), Y(f[1]));
+    for (let j = 2; j < f.length; j += 2) mctx.lineTo(X(f[j]), Y(f[j + 1]));
+    mctx.closePath(); mctx.fill();
+  }
+  // view wedge
+  const reach = mapAll ? span * 0.06 : 1300;
+  const acc = css('--accent');
+  mctx.beginPath(); mctx.moveTo(X(c.xyz[0]), Y(c.xyz[1]));
+  for (const d of [p.L, p.R]) { const n = Math.hypot(d.x, d.y) || 1; mctx.lineTo(X(c.xyz[0] + d.x / n * reach), Y(c.xyz[1] + d.y / n * reach)); }
+  mctx.closePath(); mctx.globalAlpha = 0.28; mctx.fillStyle = acc; mctx.fill(); mctx.globalAlpha = 1;
+  mctx.strokeStyle = acc; mctx.lineWidth = 1.5; mctx.stroke();
+  // every camera of the walk
+  for (const [k2, o] of cams.entries()) {
+    const u = X(o.xyz[0]), v = Y(o.xyz[1]);
+    if (u < -6 || u > W + 6 || v < -6 || v > H + 6) continue;
+    mctx.beginPath(); mctx.arc(u, v, k2 === idx ? 5.5 : 3.5, 0, Math.PI * 2);
+    mctx.fillStyle = css(`--t-${o.tier}`); mctx.fill();
+    mctx.lineWidth = k2 === idx ? 2.5 : 1; mctx.strokeStyle = k2 === idx ? acc : css('--map-bg'); mctx.stroke();
+  }
+  // scale bar
+  const bar = mapAll ? 2000 : 500;
+  mctx.fillStyle = css('--muted'); mctx.font = '10px ' + css('--f-mono');
+  mctx.fillRect(10, H - 14, bar * s, 2); mctx.fillText(bar >= 1000 ? `${bar / 1000} km` : `${bar} m`, 10, H - 19);
+  mctx.fillText('N ↑', W - 30, 16);
+}
+mapC.addEventListener('click', ev => {
+  if (!mapView) return;
+  const r = mapC.getBoundingClientRect(), mx = ev.clientX - r.left, my = ev.clientY - r.top;
+  let best = -1, bd = 14;
+  cams.forEach((o, k) => { const d = Math.hypot(mapView.X(o.xyz[0]) - mx, mapView.Y(o.xyz[1]) - my); if (d < bd) { bd = d; best = k; } });
+  if (best >= 0) show(best);
+});
+
+// ── strip, controls, keys ──
+$('strip').innerHTML = cams.map((c, k) =>
+  `<button type="button" data-k="${k}" title="${c.id} · ${c.name.replace(/"/g, '&quot;')}"><img src="${c.thumb}" alt="" loading="lazy"><span>${c.id}<b style="background:var(--t-${c.tier})"></b></span></button>`).join('');
+$('strip').addEventListener('click', ev => { const b = ev.target.closest('button'); if (b) show(+b.dataset.k); });
+$('prev').onclick = () => show(idx - 1);
+$('next').onclick = () => show(idx + 1);
+const op = $('opacity');
+const applyOp = () => { $('opv').textContent = op.value + '%'; $('frame').style.opacity = frameHidden ? 0 : op.value / 100; };
+op.addEventListener('input', () => { frameHidden = false; applyOp(); });
+const tog = (id, fn) => { const b = $(id); b.addEventListener('click', () => { const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', on); fn(on); }); };
+tog('t-marks', on => { showMarks = on; layout(); });
+tog('t-wire', on => { if (wire) wire.visible = on; render(); });
+tog('t-grid', on => { grid.visible = on; render(); });
+tog('t-zoom', on => { mapAll = on; drawMap(); });
+addEventListener('keydown', ev => {
+  if (ev.metaKey || ev.ctrlKey || ev.altKey || /INPUT|TEXTAREA/.test(ev.target.tagName)) return;
+  if (ev.key === 'ArrowRight') { show(idx + 1); ev.preventDefault(); }
+  else if (ev.key === 'ArrowLeft') { show(idx - 1); ev.preventDefault(); }
+  else if (ev.key === 'f' || ev.key === 'F') { frameHidden = !frameHidden; applyOp(); }
+  else if (ev.key === 'l' || ev.key === 'L') $('t-marks').click();
+});
+new ResizeObserver(() => { layout(); drawMap(); }).observe($('wrap'));
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { drawMap(); layout(); });
+new MutationObserver(() => { drawMap(); layout(); }).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+
+$('gen').textContent = `Exported ${D.generated}, ${cams.length} cameras.`;
+const start = () => {
+  const h = decodeURIComponent((location.hash || '').slice(1));
+  const k = cams.findIndex(c => slug(c) === h);
+  show(k >= 0 ? k : 0, false); applyOp();
+};
+start();   // frame, dossier and map first; the model follows
+setTimeout(() => { buildSolids(); buildWire(); $('loading').hidden = true; render(); }, 30);
+</script>
