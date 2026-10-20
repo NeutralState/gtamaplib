@@ -1006,7 +1006,78 @@ def green_car_edison():
                 nolamp=[[[1915, 596], [1985, 596], [1985, 630], [1915, 630]]])
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison]
+def bike_viaduct():
+    """T4/26 Dirt Bike on the Overpass — telephoto from the north bank of the Miami River (pose: Yanis's position, heading on Infinity
+    at Brickell, Alexandre) at the elevated rail viaduct ~100 m away (V17 double pink line, bottom of its curve at (-1000, -748)):
+    the deck (top from the railing row v ~1090), the near railing, the box girder and two piers, two trains (one per track, their
+    ends at u 1050 / 2900 where the bike rides between them), ESTIMATED sizes (the out-of-focus palm in the
+    foreground is not modelled)."""
+    V = View('Dirt Bike on the Overpass'); o = V.o; P = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    CL = np.array([(-1120, -706), (-1100, -715), (-1080, -724), (-1060, -733), (-1040, -742), (-1020, -747.5), (-1000, -748),
+                   (-980, -745), (-960, -736), (-940, -721), (-920, -706)], float)
+    S_ = np.r_[0, np.cumsum(np.linalg.norm(np.diff(CL, axis=0), axis=1))]
+    def at(s, w):
+        i = int(np.clip(np.searchsorted(S_, s), 1, len(S_) - 1)); a, b = CL[i - 1], CL[i]; u = (b - a) / np.linalg.norm(b - a)
+        nrm = np.array([-u[1], u[0]]); return a + (b - a) * (s - S_[i - 1]) / (S_[i] - S_[i - 1]) + nrm * w, u, nrm
+    # the near (camera-side) edge: sign of the normal toward the camera
+    _, u0, n0 = at(S_[-1] / 2, 0); near = 1.0 if n0 @ (o[:2] - at(S_[-1] / 2, 0)[0]) > 0 else -1.0
+    HW = 5.2                                                                # half width of the double-track deck
+    sc = float(S_[np.argmin(np.linalg.norm(CL - (o[:2] + (CL[6] - o[:2])), axis=1))])
+    pe, ue, ne_ = at(S_[6], near * HW); q = V.on_vplane(1920, 1090, pe, ne_ * near)   # railing top row at the centre column
+    ZT = float(q[2]) - 1.1                                                  # deck top
+    G = lambda x, y: max(T(x, y), 0.0)
+    for s0 in np.arange(0, S_[-1] - 4, 4.0):
+        a0, ua, na = at(s0, 0); a1, ub, nb = at(s0 + 4, 0)
+        L = lambda p, w, z: r2([*(p[0] + p[2] * w), z])
+        A, B = at(s0, -HW), at(s0, HW); C, D = at(s0 + 4, HW), at(s0 + 4, -HW)
+        P.append(dict(k='quad', p=[r2([*A[0], ZT]), r2([*B[0], ZT]), r2([*C[0], ZT]), r2([*D[0], ZT])], color='#5a5650'))     # deck top
+        P.append(dict(k='quad', p=[r2([*A[0], ZT - 2.2]), r2([*B[0], ZT - 2.2]), r2([*C[0], ZT - 2.2]), r2([*D[0], ZT - 2.2])], color='#4a463f'))   # soffit
+        for w in (-HW, HW):
+            E0, E1 = at(s0, w)[0], at(s0 + 4, w)[0]
+            P.append(dict(k='quad', p=[r2([*E0, ZT - 2.2]), r2([*E1, ZT - 2.2]), r2([*E1, ZT + 0.15]), r2([*E0, ZT + 0.15])], color='#3e3730'))    # girder face
+        for w in (near * (HW - 0.2),):                                      # railing: top rail, mid rail, posts
+            E0, E1 = at(s0, w)[0], at(s0 + 4, w)[0]
+            for zz in (ZT + 1.1, ZT + 0.55): P.append(dict(k='cyl', a=r2([*E0, zz]), b=r2([*E1, zz]), r=0.05, color='#3b3833'))
+            P.append(dict(k='cyl', a=r2([*E0, ZT]), b=r2([*E0, ZT + 1.1]), r=0.05, color='#3b3833'))
+        for w in (-2.4, 2.4):                                               # rails
+            for dw in (-0.72, 0.72):
+                E0, E1 = at(s0, w + dw)[0], at(s0 + 4, w + dw)[0]
+                P.append(dict(k='cyl', a=r2([*E0, ZT + 0.2]), b=r2([*E1, ZT + 0.2]), r=0.06, color='#8a8478'))
+    for s0 in np.arange(10, S_[-1], 34.0):                                  # piers
+        c = at(s0, 0)[0]; g = G(*c)
+        P.append(dict(k='box', c=r2([c[0], c[1], g]), s=[2.4, 3.2, round(ZT - 2.2 - g, 2)], az=0.0, color='#6d665c'))
+    # trains: left on the near track ending at the frame column u 1050, right on the far track starting at u 2900
+    def s_at(u):
+        best = min(np.arange(0, S_[-1], 0.5), key=lambda s: abs(((at(s, 0)[0] - o[:2]) @ np.array([V.R[0, 0], V.R[1, 0]])) / max(1e-6, (at(s, 0)[0] - o[:2]) @ np.array([V.R[0, 1], V.R[1, 1]])) - ((u + 0.5) / V.W * 2 - 1) * V.th))
+        return float(best)
+    sl, sr = s_at(640), s_at(2900)                                      # left end: the near corner sits ~400 px right of the s point
+    dirL = -1.0 if sl > sr else 1.0                                        # the left train extends away from the gap
+    for (s_end, w, sgn) in ((sl, near * 2.4, -dirL), (sr, -near * 2.4, dirL)):
+        for k in range(3):
+            sa, sb = s_end + sgn * (k * 23.5 + 0.5), s_end + sgn * (k * 23.5 + 23.0)
+            c = at((sa + sb) / 2, w)[0]; u = at((sa + sb) / 2, 0)[1]; az = math.degrees(math.atan2(u[0], u[1]))
+            P.append(dict(k='box', c=r2([c[0], c[1], ZT + 0.35]), s=[22.5, 3.1, 3.5], az=round(az, 1), color='#b9b8b0'))        # stainless body
+            P.append(dict(k='box', c=r2([c[0], c[1], ZT + 1.25]), s=[22.4, 3.14, 0.18], az=round(az, 1), color='#3d6fa0'))      # blue stripe
+            for wx in np.arange(-9.5, 10.0, 2.4):                                                                                    # windows
+                wq = c + u * wx; P.append(dict(k='box', c=r2([wq[0], wq[1], ZT + 2.05]), s=[1.5, 3.16, 0.85], az=round(az, 1), color='#2b333b'))
+            P.append(dict(k='box', c=r2([c[0], c[1], ZT + 0.0]), s=[18.0, 2.6, 0.4], az=round(az, 1), color='#2a2724'))        # bogies / skirt
+    # Infinity at Brickell's round north drum with its balcony rings (frame: drum u 1272..2508; the mesh solid is a plain shaft)
+    def hit_y(u, y):
+        d = V.ray(u, 960.0); t = (y - o[1]) / d[1]; return o[:2] + d[:2] * t
+    A, B_ = hit_y(1272, -1368.0), hit_y(2508, -1368.0); rad = float(np.linalg.norm(B_ - A)) / 2
+    cc = (A + B_) / 2 + np.array([0.0, -rad])                               # the drum's north face just in front of the mesh shaft
+    for z in np.arange(30.0, 172.0, 3.4):
+        P.append(dict(k='cyl', a=r2([cc[0], cc[1], z]), b=r2([cc[0], cc[1], z + 2.6]), r=round(rad - 0.9, 2), color='#55606a'))    # glass
+        P.append(dict(k='cyl', a=r2([cc[0], cc[1], z + 2.6]), b=r2([cc[0], cc[1], z + 3.4]), r=round(rad + 0.3, 2), color='#f2ede2'))  # balcony slab
+    P.append(dict(k='cyl', a=r2([cc[0], cc[1], 172.0]), b=r2([cc[0], cc[1], 175.6]), r=round(rad + 0.8, 2), color='#e8e2d6'))
+    for k in range(24):                                                     # helipad railing posts
+        t = 2 * math.pi * k / 24; q = cc + rad * 0.9 * np.array([math.cos(t), math.sin(t)])
+        P.append(dict(k='cyl', a=r2([q[0], q[1], 175.6]), b=r2([q[0], q[1], 176.8]), r=0.08, color='#6b6b6b'))
+    return dict(scene='T4/26 Dirt Bike on the Overpass (rail viaduct)', camera='Dirt Bike on the Overpass', note=bike_viaduct.__doc__.split('\n')[0], props=P,
+                nolamp=[[[-1130, -690], [-910, -690], [-910, -770], [-1130, -770]]])
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct]
 
 
 def main():
