@@ -540,7 +540,72 @@ def aviation_lights():
     return dict(scene='Aviation lights (towers > 60 m)', camera=None, note=aviation_lights.__doc__.split('\\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights]
+def brickell_metromover():
+    """T4/9 Iguana — SW 9th Ave (Brickell) looking NNE at the Metromover guideway (pose SOLVED on its underside line and a
+    pier, telephoto). Guideway on the V17 pink loop (south leg, centre of the two rails), underside 12.1 m and deck
+    6.5 m from the fit, deck 1.6 m thick, round piers d 2.2 m with a cap every ~30 m (one at the frame's pier), the station
+    (V17 blue strip, 9 m) as a wider deck; the 'roundabout ahead' sign textured from the frame (2.4 m wide -> 80 m away),
+    the avenue with the yellow speed-hump bars, utility / lamp poles, the car ahead (1.9 m wide -> 50 m) and trees.
+    Sizes are ESTIMATED from the frame (one view)."""
+    V = View('Iguana'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    CL = np.array([[-1340, -1460], [-1335, -1490], [-1300, -1505], [-1250, -1533], [-1200, -1539], [-1150, -1552.5], [-1100, -1565], [-1050, -1562], [-1010, -1540], [-995, -1500]], float)
+    t = np.linspace(0, 1, 30); seg = np.vstack([CL[i] + (CL[i + 1] - CL[i]) * t[:, None] for i in range(len(CL) - 1)])
+    keep = [0]
+    for i in range(1, len(seg)):
+        if np.linalg.norm(seg[i] - seg[keep[-1]]) >= 5.0: keep.append(i)
+    seg = seg[keep]; HG, WD, TH = 12.08, 6.49, 1.6; CON = '#cfcbc2'
+    for a, b in zip(seg[:-1], seg[1:]):
+        d = b - a; L = np.linalg.norm(d); az = math.degrees(math.atan2(d[0], d[1])); c = (a + b) / 2
+        P.append(dict(k='box', c=r2([c[0], c[1], HG]), s=[round(L + 0.4, 2), WD, TH], az=round(az, 1), color=CON))
+        P.append(dict(k='box', c=r2([c[0], c[1], HG + TH]), s=[round(L + 0.4, 2), 0.35, 0.9], az=round(az, 1), color='#b9b5ad'))   # centre guide beam
+    cum = np.r_[0, np.cumsum(np.linalg.norm(np.diff(seg, axis=0), axis=1))]
+    s0 = cum[int(0.5 * (len(cum) - 1))]                                    # the frame's pier (fit tp = 0.5)
+    for sp in np.arange(s0 % 30.0, cum[-1], 30.0):
+        q = np.array([np.interp(sp, cum, seg[:, 0]), np.interp(sp, cum, seg[:, 1])]); g = T(*q)
+        P.append(dict(k='cyl', a=r2([q[0], q[1], g]), b=r2([q[0], q[1], HG - 1.2]), r=1.1, color=CON))
+        j = min(int(np.searchsorted(cum, sp)), len(seg) - 1); d = seg[min(j, len(seg) - 1)] - seg[max(j - 1, 0)]
+        az = math.degrees(math.atan2(d[0], d[1])) + 90
+        P.append(dict(k='box', c=r2([q[0], q[1], HG - 1.4]), s=[WD + 0.6, 2.4, 1.4], az=round(az, 1), color=CON))
+    for a, b in (((-1298, -1483), (-1260, -1501)), ((-1245, -1508), (-1205, -1529))):   # station (V17 blue strip)
+        a, b = np.array(a, float), np.array(b, float); d = b - a; az = math.degrees(math.atan2(d[0], d[1])); c = (a + b) / 2
+        P.append(dict(k='box', c=r2([c[0], c[1], HG - 0.6]), s=[round(np.linalg.norm(d), 1), 10.0, 0.6], az=round(az, 1), color='#bfc4c6'))
+        P.append(dict(k='box', c=r2([c[0], c[1], HG + 4.6]), s=[round(np.linalg.norm(d), 1), 11.0, 0.5], az=round(az, 1), color='#9aa3a8'))
+    # the avenue (camera -> roundabout), yellow speed-hump bars at the frame bottom
+    g0 = V.o[2] - 0.5
+    A0 = V.o[:2]; dirr = np.array([math.sin(math.radians(34)), math.cos(math.radians(34))]); nr = np.array([dirr[1], -dirr[0]])
+    at = lambda s_, l_: A0 + dirr * s_ + nr * l_
+    P.append(dict(k='quad', p=[r2([*at(-10, -7), g0 + 0.03]), r2([*at(140, -7), g0 + 0.03]), r2([*at(140, 7), g0 + 0.03]), r2([*at(-10, 7), g0 + 0.03])], color='#3a3b3d'))
+    for v in (1290, 1360, 1440):
+        q = V.on_plane_z(1920, v, g0); sq = (q[:2] - A0) @ dirr
+        for l0 in np.arange(-6, 6, 1.6):
+            P.append(dict(k='quad', p=[r2([*at(sq, l0), g0 + 0.06]), r2([*at(sq + 0.8, l0), g0 + 0.06]), r2([*at(sq + 0.8, l0 + 0.8), g0 + 0.06]), r2([*at(sq, l0 + 0.8), g0 + 0.06])], color='#e0a92a'))
+    # roundabout-ahead sign (frame u 1106..1580, v 536..1056): 2.4 m wide -> 80 m
+    f = V.W / 2 / V.th; D = 2.4 * f / 474.0
+    def at_d(u, v, D): d = V.ray(u, v); return V.o + d / np.linalg.norm(d[:2]) * D
+    fr = cv2.imread(os.path.join(REPO, 'frames', 'Iguana.png'))
+    if fr is not None: cv2.imwrite(os.path.join(THIS, 'threejs', '_prop_ig_sign.png'), fr[536:1057, 1106:1581])
+    BL, BR, TR, TL = at_d(1106, 1056, D), at_d(1580, 1056, D), at_d(1580, 536, D), at_d(1106, 536, D)
+    P.append(dict(k='tex', p=[r2(q) for q in (BL, BR, TR, TL)], img='_prop_ig_sign.png'))
+    for u in (1180, 1500):
+        q = at_d(u, 1056, D); P.append(dict(k='cyl', a=r2([q[0], q[1], T(q[0], q[1])]), b=r2(q), r=0.08, color='#9a9a9a'))
+    # car ahead (1.9 m wide -> 50 m), utility pole (u 980), lamp pole near left (u 120), trees
+    Dc = 1.9 * f / 600.0; q = at_d(1080, 1320, Dc)
+    P.append(dict(k='box', c=r2([q[0], q[1], g0]), s=[4.7, 1.9, 1.45], az=34.0, color='#1d2230'))
+    q = at_d(980, 430, 45); P.append(dict(k='cyl', a=r2([q[0], q[1], g0]), b=r2([q[0], q[1], g0 + 12]), r=0.18, color='#c9b48a'))
+    P.append(dict(k='cyl', a=r2([*(q[:2] - nr * 1.2), g0 + 11]), b=r2([*(q[:2] + nr * 1.2), g0 + 11]), r=0.08, color='#8a7a5a'))
+    q = at_d(120, 900, 9); P.append(dict(k='cyl', a=r2([q[0], q[1], g0]), b=r2([q[0], q[1], g0 + 10]), r=0.16, color='#e7e7e2'))
+    rng = np.random.default_rng(9); tones = ['#2f4a24', '#3e5f2c', '#4d6b31', '#2a3d1e']
+    # trees where the frame has them: left of the sign (u 0..1050) and right of the guideway pier (u 2350..3840), 60-140 m
+    for u0, u1, kind in ((0, 1050, 'blob'), (2350, 3840, 'palm')):
+        for u in np.arange(u0, u1, 110):
+            q = at_d(u, 1300, rng.uniform(60, 140)); q = [q[0], q[1], g0]
+            if kind == 'palm' and rng.random() < 0.7: P.append(dict(k='palm', a=r2(q), h=round(rng.uniform(10, 14), 1), lean_az=0.0, lean=0.05))
+            else:
+                r = rng.uniform(2.5, 3.8); P.append(dict(k='blob', c=r2([q[0], q[1], g0 + rng.uniform(4, 7)]), r=[r, r, r * 0.8], color=tones[int(rng.integers(4))]))
+    return dict(scene='T4/9 Iguana (Brickell Metromover)', camera='Iguana', note=brickell_metromover.__doc__.split('\n')[0], props=P)
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover]
 
 
 def main():
