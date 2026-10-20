@@ -145,6 +145,7 @@
     <span class="lchip" id="ly-facadetex" title="Real facades from the game frames: each measured facade is rectified from the best daytime frame (and a night frame shows its lit windows at night); hidden parts keep the plain colour">Game facades</span>
     <span class="lchip on" id="ly-traffic"title="Traffic: animated cars and trucks on the V16 road network (headlights and tail lights at night) — visual only">Traffic</span>
     <span class="lchip on" id="ly-palms"title="Vegetation: palm rows along the beach promenade, parks and streets, forests on the hills (placed from the V16 map + height map)">Trees &amp; palms</span>
+    <span class="lchip on" id="ly-props" title="Scene props for the camera tour (tools/scene_props.py): roads, barriers, signs, poles, wires, bushes placed from the frames (positions ESTIMATED)">Scene props</span>
     <span class="lchip on" id="ly-cine" title="Cinematic rendering: ambient occlusion, bloom, color grading, vignette, MSAA">Cinematic rendering</span>
     <span class="lchip" id="ly-proj" title="Real GTA VI textures: the calibrated game frames are projected onto the building facades they see">Game textures</span>
     <span class="lchip on" id="ly-terrain" title="Real terrain (leak L16 height map)">Terrain</span>
@@ -3283,10 +3284,10 @@ if (window.__pendingPoint) { window.__focusPoint(window.__pendingPoint); window.
 
 // ── [VIEW3D-SHOT] export PNG: vue 3D + frame de la cam active en medaillon ──
 // [GRAB-V1] debug: rendu synchrone -> canvas 2D (marche meme quand l'onglet ne compose pas: verifs sans capture d'ecran)
-window.__grabFrame = (W = 960) => {
+window.__grabFrame = (W = 960, keepCam = false) => {        // keepCam: rendre la camera telle quelle (pose du tour / POV), sans repasser par les controles
   const [W0, H0] = realSize(), dpr0 = renderer.getPixelRatio();
   renderer.setPixelRatio(1); renderer.setSize(W, Math.round(W * H0 / W0), false);
-  controls.update(0.016);
+  if (!keepCam) controls.update(0.016);
   if (window.__refl) window.__refl.step();
   if (window.__cine) window.__cine.render(); else renderer.render(scene, camera);
   const out = document.createElement('canvas'); out.width = renderer.domElement.width; out.height = renderer.domElement.height;
@@ -3359,6 +3360,9 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
     i++; if (i >= list.length) { if (window.__tourLoop && !window.__tourLoop()) { stop(); return; } i = 0; }
     if (i < 0) i = list.length - 1;
     const c = list[i]; if (window.__tourMark) window.__tourMark(c.name);
+    // [TOUR-SUN-V1] lumiere de la scene (tools/threejs/tour_styles.json "sun": [az, el, haze]): interpolee pendant le vol
+    sunFrom = sunTo = null;
+    if (sunMap[c.name]) { const g = id => +document.getElementById(id).value; sunFrom = [g('env-az'), g('env-el'), g('env-haze')]; sunTo = sunMap[c.name]; }
     from = { pos: camera.position.clone(), quat: camera.quaternion.clone(), fov: camera.fov };
     to = poseOf(c);
     const d = from.pos.distanceTo(to.pos);
@@ -3372,9 +3376,13 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
     capIdx.textContent = `${String(c.pose_verified || '').split(' — ')[0]}  ·  ${i + 1} / ${list.length}`;
   }
   let srcMap = null;
-  let fullFrame = new Set();                                            // [TOUR-STYLE-V1] close-ups: frame fully opaque (tools/threejs/tour_styles.json)
+  let fullFrame = new Set();
+  let sunMap = {}, sunFrom = null, sunTo = null;
+  const setSun = (v, bake) => { const keep = window.__bakeShadows; if (!bake) window.__bakeShadows = null;
+    [['env-az', v[0]], ['env-el', v[1]], ['env-haze', v[2]]].forEach(([id, x]) => { const e = document.getElementById(id); e.value = Math.round(x); e.dispatchEvent(new Event('input')); });
+    window.__bakeShadows = keep; if (bake && keep) keep(); };                                            // [TOUR-STYLE-V1] close-ups: frame fully opaque (tools/threejs/tour_styles.json)
   async function start() {
-    try { const j = await (await fetch('/threejs/tour_styles.json', { cache: 'no-store' })).json(); fullFrame = new Set(j.fullframe || []); } catch (e) {}
+    try { const j = await (await fetch('/threejs/tour_styles.json', { cache: 'no-store' })).json(); fullFrame = new Set(j.fullframe || []); sunMap = j.sun || {}; } catch (e) {}
     if (!srcMap) { try { const d = await (await fetch('/api/map_data')).json(); srcMap = {}; for (const c of d.cameras || []) srcMap[c.name] = c.source || ''; } catch (e) { srcMap = {}; } }
     const okc = c => c && c.corners && c.xyz && c.xyz[2] < 1500;
     const pl = (window.__tourList ? window.__tourList() : []).map(n => camPickRefs.find(c => c.name === n)).filter(okc);   // [TOUR-PICK-V3] ordre de la playlist
@@ -3412,6 +3420,11 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
       camera.position.lerpVectors(from.pos, to.pos, e); camera.position.z += Math.sin(Math.PI * e) * to.lift;
       camera.quaternion.slerpQuaternions(from.quat, to.quat, ease(Math.min(1, k * 1.15)));
       camera.fov = from.fov + (to.fov - from.fov) * e; camera.near = 0.5; camera.updateProjectionMatrix();
+      if (sunTo && (k >= 1 || Math.floor(t / 0.25) !== Math.floor((t - dt) / 0.25))) {     // ~4 mises a jour / s, re-cuisson a l'arrivee
+        let daz = ((sunTo[0] - sunFrom[0] + 540) % 360) - 180;
+        setSun([(sunFrom[0] + daz * e + 360) % 360, sunFrom[1] + (sunTo[1] - sunFrom[1]) * e, sunFrom[2] + (sunTo[2] - sunFrom[2]) * e], k >= 1);
+        if (k >= 1) sunTo = null;
+      }
       if (k >= 1) { phase = 'show'; t = 0; img.style.opacity = fullFrame.has(list[i].name) ? '1' : '0.92'; cap.style.opacity = '1'; }   // [TOUR-STYLE-V1]
     } else if (phase === 'show') {
       if (!paused && t > (window.__tourHold ? window.__tourHold() : 3.6)) { phase = 'fade'; t = 0; img.style.opacity = '0'; cap.style.opacity = '0'; }
@@ -4880,6 +4893,60 @@ window.__camScreen = name => {
     }
   };
   window.__structs = Object.assign(window.__structs || {}, { wheel: !!wn, smokers: smokers.length, flares: flares.length });
+})();
+
+// ── [SCENE-PROPS-V1 2026-10-19] decor de scene du tour cinematique (tools/scene_props.py): chaussees, glissieres,
+// panneaux (texture decoupee dans la frame), poteaux + cables, portiques, buissons, palmiers — places en RETRO-PROJETANT
+// la frame depuis la pose de la cam, pour que la 3D ressemble a l'image quand le tour s'y pose (Alexandre: video YouTube) ──
+(() => {
+  const chip = document.getElementById('ly-props'); if (!chip) return;
+  const G = new THREE.Group(); G.name = 'scene-props'; scene.add(G);
+  let on = localStorage.getItem('ui.props3d') !== '0';
+  const sync = () => { chip.classList.toggle('on', on); G.visible = on; };
+  chip.addEventListener('click', () => { on = !on; try { localStorage.setItem('ui.props3d', on ? '1' : '0'); } catch (e) {} sync(); });
+  sync();
+  const mats = {}, mat = (col, side) => mats[col + (side || '')] || (mats[col + (side || '')] = new THREE.MeshStandardMaterial({ color: new THREE.Color(col), roughness: 0.85, metalness: 0.0, side: side || THREE.FrontSide }));
+  const add = (geo, m, shadow = true) => { const me = new THREE.Mesh(geo, m); me.castShadow = shadow; me.receiveShadow = true; G.add(me); return me; };
+  const V = a => new THREE.Vector3(a[0], a[1], a[2]);
+  const quadGeo = (p, uv) => { const g = new THREE.BufferGeometry();
+    g.setAttribute('position', new THREE.Float32BufferAttribute([...p[0], ...p[1], ...p[2], ...p[0], ...p[2], ...p[3]], 3));
+    if (uv) g.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1], 2));
+    g.computeVertexNormals(); return g; };
+  const cylGeo = (a, b, r, n = 8) => { const A = V(a), B = V(b), L = A.distanceTo(B); const g = new THREE.CylinderGeometry(r, r, L, n);
+    const q = new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0, 1, 0), B.clone().sub(A).normalize());
+    g.applyQuaternion(q); const m = A.clone().add(B).multiplyScalar(0.5); g.translate(m.x, m.y, m.z); return g; };
+  fetch('/threejs/scene_props.json', { cache: 'no-store' }).then(r => r.ok ? r.json() : null).then(J => {
+    if (!J) return; const loader = new THREE.TextureLoader(), ver = Date.now(); let n = 0;
+    for (const S of J.scenes || []) for (const p of S.props) {
+      n++;
+      if (p.k === 'quad') { const me = add(quadGeo(p.p), mat(p.color, THREE.DoubleSide), false); me.renderOrder = 1; }
+      else if (p.k === 'box') {
+        const [L, W, H] = p.s, a = p.az * Math.PI / 180, g = new THREE.BoxGeometry(L, W, H);
+        g.rotateZ(Math.atan2(Math.cos(a), Math.sin(a))); g.translate(p.c[0], p.c[1], p.c[2] + H / 2); add(g, mat(p.color));
+      } else if (p.k === 'cyl') add(cylGeo(p.a, p.b, p.r), mat(p.color));
+      else if (p.k === 'line') {
+        const g = new THREE.BufferGeometry().setFromPoints(p.pts.map(V)); G.add(new THREE.Line(g, new THREE.LineBasicMaterial({ color: new THREE.Color(p.color) })));
+      } else if (p.k === 'tex') {
+        const tex = loader.load('/threejs/' + p.img + '?v=' + ver); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
+        const m = new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: new THREE.Color(1, 1, 1), emissiveIntensity: 0.55, roughness: 0.9, side: THREE.DoubleSide });
+        add(quadGeo(p.p, true), m, false);
+      } else if (p.k === 'blob') {
+        const g = new THREE.IcosahedronGeometry(1, 1); g.scale(p.r[0], p.r[1], p.r[2]); g.translate(p.c[0], p.c[1], p.c[2]);
+        const m = mat(p.color); m.flatShading = true; add(g, m);
+      } else if (p.k === 'palm') {
+        const a = p.a, la = p.lean_az * Math.PI / 180, top = [a[0] + Math.sin(la) * p.lean * p.h, a[1] + Math.cos(la) * p.lean * p.h, a[2] + p.h];
+        add(cylGeo(a, top, 0.22, 6), mat('#6b5a45'));
+        for (let k = 0; k < 9; k++) {                                     // palmes retombantes
+          const t = k / 9 * Math.PI * 2 + 0.3, L = 3.6, d = [Math.sin(t), Math.cos(t)], s2 = [-d[1] * 0.45, d[0] * 0.45];
+          const mid = [top[0] + d[0] * L * 0.55, top[1] + d[1] * L * 0.55, top[2] + 0.5], tip = [top[0] + d[0] * L, top[1] + d[1] * L, top[2] - 1.4];
+          const g = new THREE.BufferGeometry();
+          g.setAttribute('position', new THREE.Float32BufferAttribute([...top, mid[0] + s2[0], mid[1] + s2[1], mid[2], ...tip, ...top, ...tip, mid[0] - s2[0], mid[1] - s2[1], mid[2]], 3));
+          g.computeVertexNormals(); add(g, mat(k % 2 ? '#3d6b2a' : '#2f5a22', THREE.DoubleSide));
+        }
+      }
+    }
+    window.__structs = Object.assign(window.__structs || {}, { sceneProps: n });
+  }).catch(() => {});
 })();
 
 // ── [PALMS-V1 2026-10-05] palmiers instancies, places d'apres la carte drapee (V16) ──

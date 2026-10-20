@@ -7391,13 +7391,13 @@
   "id": "T4/1",
   "player": null,
   "xyz": [
-   -2134.3,
-   -5123.4,
-   8.25
+   -2130.7,
+   -5122.85,
+   8.29
   ],
   "ypr": [
-   -171.0,
-   0.0,
+   169.0,
+   4.0,
    0.0
   ],
   "fov": [
@@ -7411,7 +7411,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - pickup towing a jet ski on the highway past \"The Keys\" billboard; GTAVI_Launch_Trailer.mp4 t=3.27 s (frame 98), letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/01 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 171 / hfov 71 read by eye on the V of his V17 marker T4/1 (was 178 / 50.0)."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/01 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 171 / hfov 71 read by eye on the V of his V17 marker T4/1 (was 178 / 50.0). | T4-VIDEO-FIT 2026-10-19 (Alexandre: the first scene of the tour must look like the frame): pose from the road geometry on the frame: vanishing point of the road (299, 1149 px) -> heading 191 with Yanis's hfov 71 (road az 160 on V17), pitch +4; camera 1.6 m above the road (ESTIMATED), over the left edge of the southbound carriageway whose centre is put on the V17 west band (barrier 12.6 m, lane line 8.3 m to the right, parallel to the road). Set dressing in tools/scene_props.py is back-projected from this pose."
  },
  "Brian's Marina": {
   "id": "T4/2",
