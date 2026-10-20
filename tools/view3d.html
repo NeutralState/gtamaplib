@@ -4966,6 +4966,10 @@ window.__camScreen = name => {
         const m = p.glow ? new THREE.MeshBasicMaterial({ map: tex, color: new THREE.Color(1, 1, 1).multiplyScalar(p.glow), toneMapped: false, side: THREE.DoubleSide, alphaTest: p.alpha ? 0.5 : 0 })
           : new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: new THREE.Color(1, 1, 1), emissiveIntensity: 0.55, roughness: 0.9, side: THREE.DoubleSide, alphaTest: p.alpha ? 0.5 : 0, transparent: false });
         add(quadGeo(p.p, true), m, false);
+      } else if (p.k === 'prism') {                                         // extruded footprint (relit copy of a solid's layer)
+        const sh = new THREE.Shape(p.poly.map(q => new THREE.Vector2(q[0], q[1])));
+        const g = new THREE.ExtrudeGeometry(sh, { depth: p.z1 - p.z0, bevelEnabled: false }); g.translate(0, 0, p.z0);
+        add(g, mat(p.color, undefined, p.e));
       } else if (p.k === 'glow') {                                          // neon / light tube: unlit, over-bright -> bloom of the cinematic render
         const c = new THREE.Color(p.color).multiplyScalar(p.i || 2.0);
         const m = glowMats[p.color + (p.i || 2)] || (glowMats[p.color + (p.i || 2)] = new THREE.MeshBasicMaterial({ color: c, toneMapped: false }));

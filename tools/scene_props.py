@@ -642,7 +642,33 @@ def ferris_marina():
     return dict(scene='T4/10 Skyline with Ferris Wheel', camera='Skyline with Ferris Wheel', note=ferris_marina.__doc__.split('\n')[0], props=P, clear=clear)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina]
+def arsht_night():
+    """S2/44 Vice City 08 (Ferris Wheel) — the Arsht Center at night seen from a downtown balcony (pose SOLVED, BA). On the
+    frame both halls are UPLIT (pale walls, few windows), which the generic night facades (dark + lit windows) miss:
+    relit copies of their solid layers (tools/mesh_solids.py), offset 0.3 m outwards: Galina Ballet Opera House pale
+    green with a cyan-lit crown, Knight Concert Hall pale grey with its warm glass foyer."""
+    import mesh_solids
+    S = mesh_solids.cached(); P = []
+    def relit(name, col, e, top=None, offs=0.3, edge='#dff3ea'):
+        so = S[name]; n = len(so['layers'])
+        for i, L in enumerate(so['layers']):
+            for pp in L['polys']:
+                q = np.array(pp['outer'], float); c = q.mean(0); d = q - c; r = np.linalg.norm(d, axis=1, keepdims=True); q = c + d * (1 + offs / np.maximum(r, 1))
+                cc, ee = (top if (top and i == n - 1) else (col, e))
+                P.append(dict(k='prism', poly=[[round(float(x), 2), round(float(y), 2)] for x, y in q], z0=round(L['z0'], 2), z1=round(L['z1'] + 0.05, 2), color=cc, e=ee))
+                ring = [[round(float(x), 2), round(float(y), 2), round(L['z1'] - 0.3, 2)] for x, y in np.vstack([q, q[:1]])]
+                P.append(dict(k='glow', pts=ring, r=0.12, color=edge, i=1.2))   # lit tier edge (as on the frame)
+    relit('Galina Ballet Opera House', '#6f8a80', 0.22, top=('#4f9a90', 0.45))
+    relit('Knight Concert Hall', '#7c8682', 0.18, edge='#f0eee4')
+    # warm glass foyer of the Knight hall (frame: yellow-lit glazed block on its west side) = its lowest layer, lit
+    L0 = S['Knight Concert Hall']['layers'][0]
+    for pp in L0['polys']:
+        q = np.array(pp['outer'], float); c = q.mean(0); q = c + (q - c) * 1.02
+        P.append(dict(k='prism', poly=[[round(float(x), 2), round(float(y), 2)] for x, y in q], z0=round(L0['z0'], 2), z1=round(L0['z0'] + 9.0, 2), color='#c9a64e', e=0.55))
+    return dict(scene='S2/44 Vice City 08 (Arsht Center at night)', camera='Vice City 08 (Ferris Wheel)', note=arsht_night.__doc__.split('\n')[0], props=P)
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night]
 
 
 def main():
