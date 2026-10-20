@@ -1031,10 +1031,17 @@ def bike_viaduct():
         L = lambda p, w, z: r2([*(p[0] + p[2] * w), z])
         A, B = at(s0, -HW), at(s0, HW); C, D = at(s0 + 4, HW), at(s0 + 4, -HW)
         P.append(dict(k='quad', p=[r2([*A[0], ZT]), r2([*B[0], ZT]), r2([*C[0], ZT]), r2([*D[0], ZT])], color='#5a5650'))     # deck top
-        P.append(dict(k='quad', p=[r2([*A[0], ZT - 2.2]), r2([*B[0], ZT - 2.2]), r2([*C[0], ZT - 2.2]), r2([*D[0], ZT - 2.2])], color='#4a463f'))   # soffit
-        for w in (-HW, HW):
+        P.append(dict(k='quad', p=[r2([*A[0], ZT - 0.45]), r2([*B[0], ZT - 0.45]), r2([*C[0], ZT - 0.45]), r2([*D[0], ZT - 0.45])], color='#4a4238'))   # slab soffit
+        for w in (-HW, HW):                                                 # slab edge (thin) + steel edge girder
             E0, E1 = at(s0, w)[0], at(s0 + 4, w)[0]
-            P.append(dict(k='quad', p=[r2([*E0, ZT - 2.2]), r2([*E1, ZT - 2.2]), r2([*E1, ZT + 0.15]), r2([*E0, ZT + 0.15])], color='#3e3730'))    # girder face
+            P.append(dict(k='quad', p=[r2([*E0, ZT - 0.45]), r2([*E1, ZT - 0.45]), r2([*E1, ZT + 0.15]), r2([*E0, ZT + 0.15])], color='#6a5e4e'))
+            P.append(dict(k='quad', p=[r2([*E0, ZT - 1.6]), r2([*E1, ZT - 1.6]), r2([*E1, ZT - 0.45]), r2([*E0, ZT - 0.45])], color='#2f2923'))
+        for ds in (0.0, 2.0):                                               # transverse floor beams under the slab (seen from below)
+            c0 = at(s0 + ds, 0)[0]; uu = at(s0 + ds, 0)[1]; az = math.degrees(math.atan2(uu[0], uu[1]))
+            P.append(dict(k='box', c=r2([c0[0], c0[1], ZT - 1.45]), s=[0.35, 2 * HW - 0.4, 1.0], az=round(az, 1), color='#3a332b'))
+        for w in (-3.4, -1.2, 1.2, 3.4):                                    # longitudinal stringers
+            E0, E1 = at(s0, w)[0], at(s0 + 4, w)[0]
+            P.append(dict(k='cyl', a=r2([*E0, ZT - 0.9]), b=r2([*E1, ZT - 0.9]), r=0.25, color='#332d26'))
         for w in (near * (HW - 0.2),):                                      # railing: top rail, mid rail, posts
             E0, E1 = at(s0, w)[0], at(s0 + 4, w)[0]
             for zz in (ZT + 1.1, ZT + 0.55): P.append(dict(k='cyl', a=r2([*E0, zz]), b=r2([*E1, zz]), r=0.05, color='#3b3833'))
@@ -1045,7 +1052,7 @@ def bike_viaduct():
                 P.append(dict(k='cyl', a=r2([*E0, ZT + 0.2]), b=r2([*E1, ZT + 0.2]), r=0.06, color='#8a8478'))
     for s0 in np.arange(10, S_[-1], 34.0):                                  # piers
         c = at(s0, 0)[0]; g = G(*c)
-        P.append(dict(k='box', c=r2([c[0], c[1], g]), s=[2.4, 3.2, round(ZT - 2.2 - g, 2)], az=0.0, color='#6d665c'))
+        P.append(dict(k='box', c=r2([c[0], c[1], g]), s=[2.4, 3.2, round(ZT - 1.9 - g, 2)], az=0.0, color='#5e564b'))
     # trains: left on the near track ending at the frame column u 1050, right on the far track starting at u 2900
     def s_at(u):
         best = min(np.arange(0, S_[-1], 0.5), key=lambda s: abs(((at(s, 0)[0] - o[:2]) @ np.array([V.R[0, 0], V.R[1, 0]])) / max(1e-6, (at(s, 0)[0] - o[:2]) @ np.array([V.R[0, 1], V.R[1, 1]])) - ((u + 0.5) / V.W * 2 - 1) * V.th))
@@ -1061,11 +1068,12 @@ def bike_viaduct():
             for wx in np.arange(-9.5, 10.0, 2.4):                                                                                    # windows
                 wq = c + u * wx; P.append(dict(k='box', c=r2([wq[0], wq[1], ZT + 2.05]), s=[1.5, 3.16, 0.85], az=round(az, 1), color='#2b333b'))
             P.append(dict(k='box', c=r2([c[0], c[1], ZT + 0.0]), s=[18.0, 2.6, 0.4], az=round(az, 1), color='#2a2724'))        # bogies / skirt
-    # Infinity at Brickell's round north drum with its balcony rings (frame: drum u 1272..2508; the mesh solid is a plain shaft)
+    # Infinity at Brickell's round north drum with its balcony rings (frame: drum u 1272..2508, aimed 100 px left to match the render; the mesh solid is a plain shaft)
     def hit_y(u, y):
         d = V.ray(u, 960.0); t = (y - o[1]) / d[1]; return o[:2] + d[:2] * t
-    A, B_ = hit_y(1272, -1368.0), hit_y(2508, -1368.0); rad = float(np.linalg.norm(B_ - A)) / 2
+    A, B_ = hit_y(1172, -1368.0), hit_y(2408, -1368.0); rad = float(np.linalg.norm(B_ - A)) / 2
     cc = (A + B_) / 2 + np.array([0.0, -rad])                               # the drum's north face just in front of the mesh shaft
+    cc = cc + np.array([V.R[0, 0], V.R[1, 0]]) * 8.0                        # measured on the render: 8 m to the camera's right
     for z in np.arange(30.0, 172.0, 3.4):
         P.append(dict(k='cyl', a=r2([cc[0], cc[1], z]), b=r2([cc[0], cc[1], z + 2.6]), r=round(rad - 0.9, 2), color='#55606a'))    # glass
         P.append(dict(k='cyl', a=r2([cc[0], cc[1], z + 2.6]), b=r2([cc[0], cc[1], z + 3.4]), r=round(rad + 0.3, 2), color='#f2ede2'))  # balcony slab
