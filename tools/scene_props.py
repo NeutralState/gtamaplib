@@ -573,7 +573,76 @@ def brickell_metromover():
     return dict(scene='Brickell Metromover (guideway)', camera=None, note=brickell_metromover.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover]
+def ferris_marina():
+    """T4/10 Skyline with Ferris Wheel — the Watson Island marina in front of downtown at sunset (pose SOLVED on the skyline).
+    Foreground placed per frame column: the V17 shoreline distance along each ray (96-137 m), heights from the frame
+    (top pixel at that distance): palm rows, the big tree, the steel boat-lift frame, the low marina building with its
+    white sign, utility poles and wires, moored boats and the floating dock. Silhouettes against the sun: dark tones."""
+    from yanis_markers import crop as _c
+    V = View('Skyline with Ferris Wheel'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]; o = V.o
+    x0, y0 = o[0] - 700, o[1] - 700; M = cv2.cvtColor(_c(x0, y0, x0 + 1400, y0 + 1400), cv2.COLOR_BGR2HSV).astype(int)
+    water = (M[..., 0] >= 88) & (M[..., 0] <= 118) & (M[..., 1] > 70)
+    def shore(u):
+        d = V.ray(u, 1250); d2 = d[:2] / np.linalg.norm(d[:2])
+        for s_ in range(10, 700):
+            x, y = o[0] + d2[0] * s_, o[1] + d2[1] * s_
+            if not water[int(y0 + 1400 - y), int(x - x0)]: return float(s_)
+        return 120.0
+    def at(u, v, D): d = V.ray(u, v); return o + d / np.linalg.norm(d[:2]) * D
+    def top(u, D, vtop): return float(at(u, vtop, D)[2])
+    DARK = ['#2a1d24', '#331f29', '#3a2430', '#24181f']; rng = np.random.default_rng(10)
+    # palms (u, top v)
+    for u, vt in ((40, 830), (180, 820), (330, 830), (470, 860), (600, 880), (730, 900), (1660, 990), (2430, 990), (2560, 1000),
+                  (2980, 950), (3200, 1000), (3330, 1010), (3620, 940), (3760, 920)):
+        D = shore(u) + rng.uniform(6, 14); b = at(u, 1250, D); g = max(T(b[0], b[1]), 1.0); h = top(u, D, vt) - g
+        P.append(dict(k='palm', a=r2([b[0], b[1], g]), h=round(max(6.0, h - 1.2), 1), lean_az=round(rng.uniform(0, 360), 0), lean=0.07))
+    # big tree (u 1750..2350, crown top v 760)
+    D = shore(2050) + 25; b = at(2050, 1250, D); g = max(T(b[0], b[1]), 1.0); H = top(2050, D, 760) - g
+    P.append(dict(k='cyl', a=r2([b[0], b[1], g]), b=r2([b[0], b[1], g + H * 0.45]), r=0.9, color='#2b1c22'))
+    for k in range(26):
+        uu = 1760 + 580 * rng.random(); vv = 780 + 320 * rng.random(); q = at(uu, vv, D + rng.normal(0, 4))
+        P.append(dict(k='blob', c=r2(q), r=[round(rng.uniform(2.2, 3.8), 1)] * 2 + [round(rng.uniform(1.8, 3.0), 1)], color=DARK[int(rng.integers(4))]))
+    # steel boat-lift frame (u 760..1290, top v 1040)
+    D = shore(1025) + 2; g = 1.2; Hf = top(1025, D, 1040) - g; cols = np.linspace(760, 1290, 7)
+    A = [at(u, 1250, D) for u in cols]
+    for q in A: P.append(dict(k='cyl', a=r2([q[0], q[1], g]), b=r2([q[0], q[1], g + Hf]), r=0.25, color='#2e2a2c'))
+    for z in (g + Hf, g + Hf - 1.0):
+        for q0, q1 in zip(A[:-1], A[1:]): P.append(dict(k='cyl', a=r2([q0[0], q0[1], z]), b=r2([q1[0], q1[1], z]), r=0.18, color='#2e2a2c'))
+    back = (A[-1] - A[0])[:2]; nb = np.array([-back[1], back[0]]) / np.linalg.norm(back)
+    if nb @ (A[0][:2] - o[:2]) < 0: nb = -nb
+    for q in A[::2]: P.append(dict(k='cyl', a=r2([q[0], q[1], g + Hf]), b=r2([q[0] + nb[0] * 8, q[1] + nb[1] * 8, g + Hf]), r=0.15, color='#2e2a2c'))
+    # low marina building (u 2150..2950, roof v 1170) + white sign (u 2780..2900, v 1170..1190)
+    D = shore(2550) + 30; a0, a1 = at(2150, 1250, D), at(2950, 1250, D); g = max(T(*a0[:2]), 1.0); Hb = top(2550, D, 1170) - g
+    d = (a1 - a0)[:2]; L = np.linalg.norm(d); az = math.degrees(math.atan2(d[0], d[1])); c = (a0 + a1)[:2] / 2 + nb * 7
+    P.append(dict(k='box', c=r2([c[0], c[1], g]), s=[round(L, 1), 14.0, round(Hb, 1)], az=round(az, 1), color='#2c2026'))
+    s0, s1 = at(2780, 1192, D - 0.2), at(2900, 1168, D - 0.2)
+    P.append(dict(k='quad', p=[r2([s0[0], s0[1], s0[2]]), r2([s1[0], s1[1], s0[2]]), r2([s1[0], s1[1], s1[2]]), r2([s0[0], s0[1], s1[2]])], color='#d9d4dc', e=0.6))
+    # utility poles + wires (u 3100, 3420, tops v 960)
+    pts = []
+    for u in (2720, 3100, 3420, 3720):
+        D = shore(u) + 12; b = at(u, 1250, D); g = max(T(b[0], b[1]), 1.0); h = top(u, D, 960) - g
+        P.append(dict(k='cyl', a=r2([b[0], b[1], g]), b=r2([b[0], b[1], g + h]), r=0.16, color='#2a2225')); pts.append(np.r_[b[:2], g + h - 0.6])
+    for q0, q1 in zip(pts[:-1], pts[1:]):
+        P.append(dict(k='line', pts=[r2(q0 + (q1 - q0) * t - [0, 0, 0.9 * 4 * t * (1 - t)]) for t in np.linspace(0, 1, 9)], color='#1c1418'))
+    # dark marina ground (the V17 drape is white there; backlit on the frame)
+    for u0 in np.arange(-300, 4100, 100):                                 # draped on the terrain (the island ground is at eye level:
+        for d0 in range(-6, 260, 8):                                       # a lifted cover would pass above the view rays)
+            Q = [at(u0, 1250, shore(u0) + d0), at(u0 + 100, 1250, shore(u0 + 100) + d0), at(u0 + 100, 1250, shore(u0 + 100) + d0 + 8), at(u0, 1250, shore(u0) + d0 + 8)]
+            if max(T(q[0], q[1]) for q in Q) < 0.4: continue
+            P.append(dict(k='quad', p=[r2([q[0], q[1], max(T(q[0], q[1]), 0.4) + 0.06]) for q in Q], color='#1e1519', e=0.0))
+    # floating dock + moored boats (water side of the shore)
+    for u0, u1 in ((0, 1500), (1500, 3840)):
+        q0, q1 = at(u0, 1250, shore(u0) - 4), at(u1, 1250, shore(u1) - 4)
+        P.append(dict(k='quad', p=[r2([q0[0], q0[1], 0.6]), r2([q1[0], q1[1], 0.6]), r2([q1[0] - nb[0] * 3, q1[1] - nb[1] * 3, 0.6]), r2([q0[0] - nb[0] * 3, q0[1] - nb[1] * 3, 0.6])], color='#3b2c32'))
+    for u, L in ((130, 9), (370, 11), (1400, 13), (2000, 9), (2250, 10), (2700, 12), (2920, 9), (3550, 10)):
+        q = at(u, 1250, shore(u) - 10); azb = math.degrees(math.atan2(nb[0], nb[1]))
+        P.append(dict(k='box', c=r2([q[0], q[1], 0.0]), s=[round(L * 0.75, 1), 2.6, 1.2], az=round(azb, 1), color='#4d3d47'))
+        P.append(dict(k='box', c=r2([q[0] - nb[0] * 0.8, q[1] - nb[1] * 0.8, 1.2]), s=[round(L * 0.3, 1), 2.0, 1.0], az=round(azb, 1), color='#5f4d58'))
+    clear = [[list(np.round(at(u, 1250, shore(u) + dd)[:2], 1)) for u, dd in ((900, -5), (3600, -5), (3600, 60), (900, 60))], [[455, 145], [485, 145], [485, 172], [455, 172]]]   # V16 boxes #1328, #1327
+    return dict(scene='T4/10 Skyline with Ferris Wheel', camera='Skyline with Ferris Wheel', note=ferris_marina.__doc__.split('\n')[0], props=P, clear=clear)
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina]
 
 
 def main():

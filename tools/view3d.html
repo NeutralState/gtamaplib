@@ -678,6 +678,7 @@ const terraUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uWaterOn:  { value: 0 },
 }]);
 const seaUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
+  uSeaTint:  { value: new THREE.Vector3(1, 1, 1) },   // [TOUR-GRADE-V1] per-scene sea tint (tour)
   uSunDir:   { value: new THREE.Vector3(0, 0, 1) },
   uTime:     { value: 0 },
   uHorizon:  { value: new THREE.Vector3(.7, .8, .9) },
@@ -1481,7 +1482,7 @@ const data = await (await fetch('/api/scene3d')).json();
       fragmentShader: `
         varying vec3 vPos;
         uniform vec3 uSunDir, uHorizon, uZenith, uSunColor;
-        uniform float uTime, uNight, uMapSea, uReflOn, uReflDbg, uWaterOn;
+        uniform float uTime, uNight, uMapSea, uReflOn, uReflDbg, uWaterOn; uniform vec3 uSeaTint;
         uniform sampler2D uWaterTex; uniform vec4 uWaterBounds; uniform vec3 uWaterMed;
         uniform vec4 uTerrBounds;
         uniform sampler2D uDepth, uDrape, uRefl;
@@ -1596,6 +1597,7 @@ const data = await (await fetch('/api/scene3d')).json();
           col *= mix(1.0, 0.30, uNight * uMapSea);   // [CINEMA-V1] la mer aux couleurs de la carte restait bleu vif la nuit
           col = mix(col, rcol, reflK * (1.0 - foam * 0.8));   // [REFLECT-V1] apres teintes de fond et nuit (le reflet porte deja sa lumiere)
           if (uReflDbg > 0.5) col = rcol;
+          col *= uSeaTint;                           // [TOUR-GRADE-V1]
           float aBase = mix((0.62 + 0.30 * fres) * mix(1.0, 0.55, shal), 0.97, uMapSea);
           float a = max(mix(aBase, 1.0, farBlend), foam * 0.85 * (1.0 - uMapSea));
           a *= mix(1.0, mapWater, uMapSea);
@@ -3293,6 +3295,10 @@ if (window.__pendingPoint) { window.__focusPoint(window.__pendingPoint); window.
 
 // ── [VIEW3D-SHOT] export PNG: vue 3D + frame de la cam active en medaillon ──
 // [GRAB-V1] debug: rendu synchrone -> canvas 2D (marche meme quand l'onglet ne compose pas: verifs sans capture d'ecran)
+window.__dbgPick = (nx, ny) => {                                   // [DEBUG] what is under a screen point (nx, ny in 0..1)
+  const rc = new THREE.Raycaster(); rc.setFromCamera(new THREE.Vector2(nx * 2 - 1, 1 - ny * 2), camera);
+  return rc.intersectObjects(scene.children, true).slice(0, 6).map(h => [h.object.name || h.object.type, (h.object.parent && h.object.parent.name) || '', Math.round(h.distance), h.point.toArray().map(v => Math.round(v * 10) / 10)]);
+};
 window.__grabFrame = (W = 960, keepCam = false) => {        // keepCam: rendre la camera telle quelle (pose du tour / POV), sans repasser par les controles
   const [W0, H0] = realSize(), dpr0 = renderer.getPixelRatio();
   renderer.setPixelRatio(1); renderer.setSize(W, Math.round(W * H0 / W0), false);
@@ -3371,6 +3377,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
     const c = list[i]; if (window.__tourMark) window.__tourMark(c.name);
     // [TOUR-SUN-V1] lumiere de la scene (tools/threejs/tour_styles.json "sun": [az, el, haze]): interpolee pendant le vol
     sunFrom = sunTo = null;
+    { const gr = gradeMap[c.name]; if (window.__setGrade) window.__setGrade(gr && gr.slice(0, 3), gr ? gr[3] : 0, gr && gr.length > 4 ? gr.slice(4, 7) : null); }
     if (sunMap[c.name]) { const g = id => +document.getElementById(id).value; sunFrom = [g('env-az'), g('env-el'), g('env-haze')]; sunTo = sunMap[c.name]; }
     from = { pos: camera.position.clone(), quat: camera.quaternion.clone(), fov: camera.fov };
     to = poseOf(c);
@@ -3386,12 +3393,12 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
   }
   let srcMap = null;
   let fullFrame = new Set();
-  let sunMap = {}, sunFrom = null, sunTo = null;
+  let sunMap = {}, sunFrom = null, sunTo = null, gradeMap = {};
   const setSun = (v, bake) => { const keep = window.__bakeShadows; if (!bake) window.__bakeShadows = null;
     [['env-az', v[0]], ['env-el', v[1]], ['env-haze', v[2]]].forEach(([id, x]) => { const e = document.getElementById(id); e.value = Math.round(x); e.dispatchEvent(new Event('input')); });
     window.__bakeShadows = keep; if (bake && keep) keep(); };                                            // [TOUR-STYLE-V1] close-ups: frame fully opaque (tools/threejs/tour_styles.json)
   async function start() {
-    try { const j = await (await fetch('/threejs/tour_styles.json', { cache: 'no-store' })).json(); fullFrame = new Set(j.fullframe || []); sunMap = j.sun || {}; } catch (e) {}
+    try { const j = await (await fetch('/threejs/tour_styles.json', { cache: 'no-store' })).json(); fullFrame = new Set(j.fullframe || []); sunMap = j.sun || {}; gradeMap = j.grade || {}; } catch (e) {}
     if (!srcMap) { try { const d = await (await fetch('/api/map_data')).json(); srcMap = {}; for (const c of d.cameras || []) srcMap[c.name] = c.source || ''; } catch (e) { srcMap = {}; } }
     const okc = c => c && c.corners && c.xyz && c.xyz[2] < 1500;
     const pl = (window.__tourList ? window.__tourList() : []).map(n => camPickRefs.find(c => c.name === n)).filter(okc);   // [TOUR-PICK-V3] ordre de la playlist
@@ -3411,6 +3418,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
   function stop() {
     if (!window.__tourOn) return;
     window.__tourOn = false; phase = null; btn.classList.remove('on');
+    if (window.__setGrade) window.__setGrade(null, 0);
     img.style.opacity = '0'; cap.style.opacity = '0';
     setTimeout(() => { if (!window.__tourOn) { img.style.display = 'none'; cap.style.display = 'none'; } }, 900);
     layers.cams.visible = camsWas;
@@ -5277,9 +5285,10 @@ const Cine = (() => {
                 // [ATMOS-V1] perspective aerienne
                 tDepth: { value: null }, uFar: { value: 50000 }, uPInv: { value: new THREE.Vector2(1, 1) }, uCamMat: { value: new THREE.Matrix3() },
                 uCamZ: { value: 100 }, uHor: { value: new THREE.Vector3(0.7, 0.75, 0.8) }, uSunC: { value: new THREE.Vector3(1, 1, 1) },
-                uSunD: { value: new THREE.Vector3(0, 0, 1) }, uB0: { value: 1.6e-4 }, uAtm: { value: 1 } },
+                uSunD: { value: new THREE.Vector3(0, 0, 1) }, uB0: { value: 1.6e-4 }, uAtm: { value: 1 },
+                uTint: { value: new THREE.Vector3(1, 1, 1) }, uTintMix: { value: 0 } },   // [TOUR-GRADE-V1] per-scene colour grade of the tour
     fragmentShader: `
-      varying vec2 vUv; uniform sampler2D tCol, tAO, tB1, tB2, tB3; uniform float uTime, uNight, uAO;
+      varying vec2 vUv; uniform sampler2D tCol, tAO, tB1, tB2, tB3; uniform float uTime, uNight, uAO; uniform vec3 uTint; uniform float uTintMix;
       uniform sampler2D tDepth; uniform float uFar, uCamZ, uB0, uAtm; uniform vec2 uPInv; uniform mat3 uCamMat; uniform vec3 uHor, uSunC, uSunD;
       vec3 shoulder(vec3 x) { return mix(x, 0.82 + 0.18 * (1.0 - exp(-(x - 0.82) / 0.18)), step(0.82, x)); }   // lineaire jusqu'a 0.82, epaule douce
       vec3 toSRGB(vec3 c) { return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c)); }
@@ -5308,11 +5317,13 @@ const Cine = (() => {
         vec3 s = toSRGB(clamp(c, 0.0, 1.0));
         float l = dot(s, vec3(0.2126, 0.7152, 0.0722));
         s = mix(vec3(l), s, 1.10);                                         // saturation
+        { float lt = dot(s, vec3(0.2126, 0.7152, 0.0722)); s = mix(s, uTint * (0.25 + 0.95 * lt) + (s - lt) * 0.35, uTintMix); }   // [TOUR-GRADE-V1] duotone towards the frame's dominant tint
         s = mix(s, s * s * (3.0 - 2.0 * s), 0.16);                         // contraste (courbe en S douce)
         vec2 q = vUv - 0.5; s *= 1.0 - 0.32 * dot(q, q) * 1.6;             // vignettage
         s += (h12(gl_FragCoord.xy + fract(uTime) * 61.0) - 0.5) * 0.012;   // grain
         gl_FragColor = vec4(clamp(s, 0.0, 1.0), 1.0);
       }` });
+  window.__setGrade = (tint, mix, sea) => { finalMat.uniforms.uTint.value.set(...(tint || [1, 1, 1])); finalMat.uniforms.uTintMix.value = mix || 0; seaUni.uSeaTint.value.set(...(sea || [1, 1, 1])); };
   function setSize(w, h) {
     W = w; H = h;
     [main, aoA, aoB, ...bl.flat()].forEach(r => r && r.dispose());
