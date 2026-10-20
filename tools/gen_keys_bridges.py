@@ -11,7 +11,8 @@ Key Lento): 7.7 m a 2B (sud) -> 24 m sur la travee de navigation 15B-16B (44 m) 
 nord (s 400); piles doubles (une par chaussee), 2 colonnes chacune, chevetre, entretoise a
 mi-hauteur si > 12 m, semelle a l'eau.
 
-Usage: PYTHONPATH=. python3 tools/gen_keys_bridges.py [--out brouillon.json] [--apply]
+Usage: PYTHONPATH=. python3 tools/gen_keys_bridges.py [--out brouillon.json] [--apply] [--only "Nom,Nom"]
+(--only: les autres meshes, retouches depuis par MVS, ne sont pas regeneres)
 """
 import json, os, sys, shutil
 import numpy as np
@@ -62,7 +63,7 @@ class Bridge:
     def bent(self, s, zb, w0, w1, ncol=2, col=1.2, zw=0.0, cap=1.4, tie=12.0, footing=1.5):
         """pile: ncol colonnes carrees sous une chaussee [w0,w1], chevetre, entretoise, semelle."""
         z = zb(s); ztop = z - 0.0; zcap = ztop - cap
-        m = 0.18 * (w1 - w0); ws = np.linspace(w0 + m, w1 - m, ncol); h = col / 2
+        m = 0.18 * (w1 - w0); ws = np.linspace(w0 + m, w1 - m, ncol) if ncol > 1 else [(w0 + w1) / 2]; h = col / 2
         for w in ws:
             cs = [(s - h, w - h), (s + h, w - h), (s + h, w + h), (s - h, w + h)]
             for (a, b) in cs: self.L(self.P(a, b, zw + footing), self.P(a, b, zcap))
@@ -74,7 +75,7 @@ class Bridge:
         for w in (w0 + 0.3, w1 - 0.3):
             for dd in (-0.9, 0.9): self.L(self.P(s + dd, w, zcap), self.P(s + dd, w, ztop))
         # entretoise a mi-hauteur
-        if zcap - zw > tie:
+        if zcap - zw > tie and len(ws) > 1:
             zt = zw + footing + 0.55 * (zcap - zw - footing)
             for zz in (zt - 0.5, zt + 0.5): self.L(self.P(s, ws[0], zz), self.P(s, ws[-1], zz))
         # semelle a l'eau
@@ -101,7 +102,7 @@ def lake_surprise(L):
                      (195.4, 22.2), (240, 20.7), (280, 18.5), (320, 14.5), (360, 11.5), (400, 9.5), (430, 7.0)])
     co = np.polyfit(prof[:, 0], prof[:, 1], 4)
     zb = lambda s: float(np.polyval(co, s))
-    S0, S1 = -252.0, 432.0
+    S0, S1 = -252.0, 213.0   # north: continues as the US 1 Hamlet Viaduct (US1-HAMLET-V1 = this axis' s 213; was a 432 abutment)
     # chaussees V16 (w relatif a l'axe des piles): ouest -14.5..-2.2, est -0.8..12.5
     decks = [(-14.5, -2.2), (-0.8, 12.5)]
     for w0, w1 in decks: br.deck(S0, S1, zb, w0, w1)
@@ -110,7 +111,7 @@ def lake_surprise(L):
     for s in piles:
         if S0 + 5 < s < S1 - 5:
             for w0, w1 in decks: br.bent(s, zb, w0, w1)
-    br.abutment(S0, zb, decks[0][0], decks[1][1], -25); br.abutment(S1, zb, decks[0][0], decks[1][1], 25)
+    br.abutment(S0, zb, decks[0][0], decks[1][1], -25)
     note = ('KEYS-BRIDGES-V1 2026-09-30 (demande Alexandre: meshes des ponts des Keys; pont de Thunderstorm [Gameinformer]): '
             'axe = droite des piles 2B..20B (tooltip-ligne Alexandre), chaussees V16 (deux tabliers -14.5..-2.2 / -0.8..12.5 m), '
             'culees s %.0f / %.0f (rives V16). Profil du dessous du tablier MESURE dans Thunderstorm [Gameinformer] (pose resolue sur '
@@ -275,16 +276,92 @@ def old_seven_mile(L, ZTOP=None, SPAN=None):
     return E, note, '#d6d3d1'
 
 
+# US 1 elevated north of the Lake Surprise Viaduct (Alexandre 2026-10-20): elevated and FLAT over the Keys roundabout, one steady
+# ramp down to an at-grade section around the toll plaza, one steady ramp up, flat again up to north of Hamlet ("pas une montagne
+# russe"). Height over the roundabout read on T4/09 Iguana (pose SOLVED on this deck).
+US1H_CUT = 139.3                 # Lake Surprise axis (s north from the centroid of piles 2B..20B): its deck ends here, underside 20.6 m
+US1H_Z = 20.6                    # flat deck underside (absolute): = Lake Surprise at the cut; T4/09 reads 20.8 over the roundabout
+US1H_GRADE = 0.06                # ramps (mean grade, cosine-shaped)
+US1H_GRADE_Y = (-4060.0, -3850.0)   # at-grade section (y): both sides of the toll plaza (~ -3960)
+US1H_PITCH, US1H_PHASE = 26.5, 21.0   # bents: pitch, and position from the roundabout end of the old V16 axis, read on T4/09
+
+
+def us1_hamlet_axis():
+    """axe: Lake Surprise (droite des piles) de US1H_CUT a son ancien bout nord (-2429.8,-4441.5), puis moyenne des voies V16 de la
+    US 1 (hwy 409-412, 431, 432/433, 434) jusqu'au nord de Hamlet (y -3240, avant l'echangeur V16 deja sureleve)."""
+    R = json.load(open(os.path.join(ROOT, 'tools', 'threejs', '_v16_roads.json')))
+    H = lambda i: np.array(R['hwy'][i]['p'])[:, :2]
+    c, u = np.array([-2279.3, -4766.6]), np.array([-0.42, 0.907]); u /= np.linalg.norm(u)
+    A = [c + u * s for s in np.arange(US1H_CUT, 358.3, 10.0)]
+    A.append(np.array([-2429.8, -4441.5]))
+    L4 = [H(i) for i in (409, 410, 411, 412)]
+    for y in np.arange(-4430, -4285, 10): A.append(np.mean([L[np.argmin(np.abs(L[:, 1] - y))] for L in L4], axis=0))
+    A += list(H(431)[1:])
+    a, b = H(432), H(433)
+    for y in np.arange(-4050, -3860, 12): A.append((a[np.argmin(np.abs(a[:, 1] - y))] + b[np.argmin(np.abs(b[:, 1] - y))]) / 2)
+    A += [p for p in H(434) if -3859 < p[1] < -3240]
+    A = np.array(A); keep = [0]
+    for i in range(1, len(A)):
+        if np.linalg.norm(A[i] - A[keep[-1]]) > 6: keep.append(i)
+    A = A[keep]
+    n0 = int((358.3 - US1H_CUT) // 10) + 1                                  # the Lake Surprise part stays straight
+    for _ in range(3): A[n0:-1] = 0.25 * A[n0 - 1:-2] + 0.5 * A[n0:-1] + 0.25 * A[n0 + 1:]
+    return A
+
+
+def us1_hamlet(L):
+    sys.path.insert(0, os.path.join(ROOT, 'tools'))
+    from horizon_resect import ground
+    A = us1_hamlet_axis(); br = Bridge(poly=A); S1 = float(br.S[-1])
+    sg = np.arange(0, S1 + 4, 4.0)
+    G0 = np.array([float(ground(np.array([br.frame(t)[0][0]]), np.array([br.frame(t)[0][1]]))[0]) for t in sg])
+    G = np.convolve(np.pad(G0, 15, mode='edge'), np.ones(31) / 31, mode='same')[15:-15]      # road at grade: ground smoothed 120 m
+    g0 = lambda s: float(np.interp(s, sg, G0)); g = lambda s: float(np.interp(s, sg, G))
+    yt = lambda y: float(sg[np.argmin([abs(br.frame(t)[0][1] - y) for t in sg])])
+    DEP = 1.4                                                                # deck depth (Lake Surprise after MVS)
+    top = US1H_Z + DEP
+    sa, sb = yt(US1H_GRADE_Y[0]), yt(US1H_GRADE_Y[1])                        # at grade between sa and sb
+    la, lb = (top - g(sa)) / US1H_GRADE, (top - g(sb)) / US1H_GRADE          # ramp lengths
+    cosr = lambda t: 0.5 - 0.5 * np.cos(np.pi * np.clip(t, 0, 1))
+    def zt(s):                                                               # deck top
+        if s <= sa - la: return top
+        if s <= sa: return top + (g(s) - top) * cosr((s - (sa - la)) / la)
+        if s <= sb: return g(s)
+        if s <= sb + lb: return g(s) + (top - g(s)) * cosr((s - sb) / lb)
+        return top
+    zb = lambda s: zt(s) - DEP
+    decks = [(-12.9, -1.2), (0.8, 13.5)]                                     # Lake Surprise deck edges (after MVS)
+    for a_, b_ in ((0.0, sa - 12), (sb + 12, S1)):                           # the last 12 m before grade: the road itself
+        for w0, w1 in decks: br.deck(a_, b_, zb, w0, w1, depth=DEP)
+    s_old0 = 358.3 - US1H_CUT                                                # old V16 axis start (Lake Surprise north end)
+    for s in s_old0 + US1H_PHASE + US1H_PITCH * np.arange(-20, 100):
+        if not (8 < s < S1 - 8) or zb(s) - g0(s) < 3.0: continue
+        for w0, w1 in decks: br.bent(s, zb, w0, w1, ncol=1, col=2.8, zw=g0(s), footing=0.8)
+    br.abutment(S1, zb, decks[0][0], decks[1][1], 25)
+    note = ('US1-HAMLET-V1 2026-10-20 (Alexandre: US 1 stays ELEVATED north of the Lake Surprise Viaduct, over the Keys roundabout, at '
+            'grade only around the toll plaza, elevated again up to north of Hamlet; flat sections, not a roller coaster. V16 / heightmap '
+            'have it at grade). Axis: Lake Surprise pier line from its s %.1f (its deck is cut there) to its old north end, then the mean '
+            'of the V16 US 1 lanes (hwy 409-412, 431, 432/433, 434) to y -3240 (%.0f m). Decks = Lake Surprise edges. Underside FLAT at '
+            '%.1f m (= Lake Surprise at the cut; MEASURED 20.8 over the roundabout on T4/09 Iguana, pose SOLVED on this deck: deck lower '
+            'silhouette + 3 bents, rms 4 px), one cosine ramp (mean %.0f%%) down to the at-grade section y %.0f..%.0f (toll plaza), one '
+            'ramp up, flat %.1f m again to the end (ESTIMATED: Alexandre "remonte autant nord que sud"). Bents: one 2.8 m column per deck '
+            'every %.1f m, positions read on T4/09 (ESTIMATED away from it).'
+            % (US1H_CUT, S1, US1H_Z, US1H_GRADE * 100, US1H_GRADE_Y[0], US1H_GRADE_Y[1], US1H_Z, US1H_PITCH))
+    return br.E, note, '#94a3b8'
+
+
 OSM_SEGS = [(-310, -104, 29.0), (-74, 42, 29.2), (70, 295, 27.1)]
 OSM_ZTOP, OSM_SPAN = 6.0, 10.0
 
 BUILDERS = {'Lake Surprise Viaduct': lake_surprise, 'New Bahia Honda Bridge': new_bahia_honda, 'Old Bahia Honda Bridge': old_bahia_honda,
-            'Seven Mile Bridge': seven_mile, 'Old Seven Mile Bridge': old_seven_mile}
+            'Seven Mile Bridge': seven_mile, 'Old Seven Mile Bridge': old_seven_mile, 'US 1 Hamlet Viaduct': us1_hamlet}
 
 if __name__ == '__main__':
     L = json.load(open(D('landmarks.json')))
     out = {}
+    only = sys.argv[sys.argv.index('--only') + 1].split(',') if '--only' in sys.argv else None   # e.g. --only "US 1 Hamlet Viaduct"
     for k, f in BUILDERS.items():
+        if only and k not in only: continue
         E, note, col = f(L); out[k] = {'color': col, 'world_edges': E, 'note': note, '_credit': CREDIT}
         print(k, len(E), 'aretes')
     if '--out' in sys.argv: json.dump(out, open(sys.argv[sys.argv.index('--out') + 1], 'w'))
