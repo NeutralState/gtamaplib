@@ -2183,11 +2183,16 @@ if (meshVerts.length) {
     window.__ships = [];
     // [BAYSIDE-V1] emprises remplacees par un modele dedie (amphitheatre: gradins, scene, promenade couverte)
     let BSrep = new Set(); try { const r = await fetch('/threejs/_bayside.json', { cache: 'no-store' }); if (r.ok) BSrep = new Set((await r.json()).replace || []); } catch (e) {}
+    // [SCENE-PROPS-V1] zones degagees par le decor des scenes du tour (chaussee de la US 1 a Key Lento...): les emprises V16
+    // dont le centroide y tombe ne sont pas extrudees (Alexandre: « le building sur la route c'est weird »)
+    let SPclear = []; try { const r = await fetch('/threejs/scene_props.json', { cache: 'no-store' }); if (r.ok) for (const sc of (await r.json()).scenes || []) SPclear.push(...(sc.clear || [])); } catch (e) {}
+    const inClear = O => { let x = 0, y = 0; for (const q of O) { x += q[0]; y += q[1]; } x /= O.length; y /= O.length;
+      return SPclear.some(P => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; }); };
     // [CRUISE-V1] paquebot a quai: emprise V16 sur l'eau (227 x 35 m, etrave pointue) qui se projette exactement sur le
     // paquebot blanc illumine de la frame Port Vice City (A), derriere la grue
     window.__cruise = [];
     const cruiseLike = m => { if (m.z > 0.5 || m.o.length < 12) return false; let x = 0, y = 0; for (const q of m.o) { x += q[0]; y += q[1]; } x /= m.o.length; y /= m.o.length; return Math.hypot(x - 362, y + 286) < 40; };
-    if (MS) MS.forEach((m, i) => { if (BSrep.has(i)) return; if (cruiseLike(m)) { window.__cruise.push(m); return; } if (shipLike(m)) { window.__ships.push(m); return; } const c = MC && MC[mkey(m.o)];
+    if (MS) MS.forEach((m, i) => { if (BSrep.has(i) || inClear(m.o)) return; if (cruiseLike(m)) { window.__cruise.push(m); return; } if (shipLike(m)) { window.__ships.push(m); return; } const c = MC && MC[mkey(m.o)];
       S['V16 building #' + (i + 1)] = { zmin: m.z, zmax: m.z + m.h, layers: [{ z0: m.z, z1: m.z + m.h, polys: [{ outer: m.o, holes: [] }] }], color: '#cfcfcf', _mass: 1, facade_color: c ? c.rgb : undefined }; });
     let massStart = -1;
     const pos = [], nor = [], col = [], ids = [], sty = [], gls = [], bas = [], tops = [], prj = [], acc = [], nls = [], nlz = [];
