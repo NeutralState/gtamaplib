@@ -7443,17 +7443,17 @@
   "id": "T4/6",
   "player": null,
   "xyz": [
-   -2581.1,
-   -5760.5,
-   2.78
+   -2571.03,
+   -5754.92,
+   4.25
   ],
   "ypr": [
-   -13.0,
-   0.0,
-   0.0
+   -13.384,
+   -7.08,
+   0.83
   ],
   "fov": [
-   62.0,
+   61.851,
    null
   ],
   "size": [
@@ -7462,8 +7462,8 @@
   ],
   "source": "Trailer 4 (launch trailer, 2026) - Jason on a dock watching a seaplane, bridge in the background; GTAVI_Launch_Trailer.mp4 t=14.40 s (frame 432), letterbox removed",
   "constraint_class": "D_no_ground_truth",
-  "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/06 (corr 0.997); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 13 / hfov 62 read by eye on the V of his V17 marker T4/6 (was 8 / 55.0)."
+  "pose_verified": "SOLVED 2026-10-20 - far-field (WDNA FM mast, Homestead Water Tower, Four Seasons) + Lake Surprise Viaduct skyline, height from the island waterline; rms 2.9 px (T4 video tour)",
+  "notes": "PROVISIONAL (until 2026-10-20) 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/06 (corr 0.997); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 13 / hfov 62 read by eye on the V of his V17 marker T4/6 (was 8 / 55.0). | T4-VIDEO-FIT 2026-10-19 (tour scene 3): solved on the Lake Surprise Viaduct skyline (deck top at 7 frame points, mesh profile measured in Thunderstorm), rms 1.6 px; camera on the seawall at Yanis's dot (+-8 m), 3.6 m above the water (prior: eye level over the dock, ESTIMATED), heading 14.4, pitch -6.6, hfov 58.7. | T4-VIDEO-FIT-2 2026-10-19: camera height from the man on the seawall (1.85 m tall at ~9 m: camera 2.4 m above the dock) and the floatplane (14.6 m span at ~44 m: floats ~6 m below the camera): camera 6.0 m above the water, dock top 3.6 m; re-solved on the viaduct skyline: heading 14.0, pitch -5.9, hfov 53.3, rms 1.5 px. | T4-SOLVE 2026-10-20 (Alexandre: calibrate first, mark SOLVED, then dress): solved on 16 constraints: Lake Surprise Viaduct deck skyline (7 points, ~1 km), WDNA FM mast top (3.3 km), Homestead Water Tower top (2.5 km), Four Seasons Hotel Miami edges (4.7 km; its top weighted low); camera height 4.25 m above the water from the mid-ground island waterline vs the V17 island (171-281 m) and the man on the seawall; position within 6 m of Yanis's dot (pier tip). rms 2.9 px on 3840 (<= 6.2 px = 0.1 deg). Heading 13.4, pitch -7.1, roll 0.8, hfov 61.9 (Yanis's V: 62)."
  },
  "Iguana": {
   "id": "T4/9",

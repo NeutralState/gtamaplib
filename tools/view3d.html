@@ -4960,7 +4960,7 @@ window.__camScreen = name => {
         const g = new THREE.IcosahedronGeometry(1, p.smooth ? 4 : 1); g.scale(p.r[0], p.r[1], p.r[2]);
         if (p.az !== undefined) g.rotateZ(Math.atan2(Math.cos(p.az * Math.PI / 180), Math.sin(p.az * Math.PI / 180)));   // rx along the azimuth az
         g.translate(p.c[0], p.c[1], p.c[2]);
-        const m = p.smooth ? new THREE.MeshStandardMaterial({ color: new THREE.Color(p.color), roughness: 0.45, metalness: 0.25 }) : mat(p.color); if (!p.smooth) m.flatShading = true; add(g, m);
+        const m = p.smooth ? new THREE.MeshStandardMaterial({ color: new THREE.Color(p.color), emissive: new THREE.Color(p.color), emissiveIntensity: 0.3, roughness: 0.45, metalness: 0.1 }) : mat(p.color); if (!p.smooth) m.flatShading = true; add(g, m);
       } else if (p.k === 'palm') {
         const a = p.a, la = p.lean_az * Math.PI / 180, top = [a[0] + Math.sin(la) * p.lean * p.h, a[1] + Math.cos(la) * p.lean * p.h, a[2] + p.h];
         add(cylGeo(a, top, 0.22, 6), mat('#6b5a45'));

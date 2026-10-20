@@ -234,9 +234,20 @@ def brians_marina():
         for v in (2010, 2120):
             q = V.on_plane_z(u, v, g); r = rng2.uniform(2.6, 3.6)
             P.append(dict(k='blob', c=r2([q[0], q[1], g + rng2.uniform(3.0, 4.5)]), r=[r, r, r * 0.8], color=tones[int(rng2.integers(4))]))
+    # tree mass BEHIND the shed (frame: dense crowns between the roof and the houses, u 300..2900, v 380..700)
+    dsh = float(np.linalg.norm(F(xm, (YN + YS) / 2) - V.o[:2]))
+    for u in np.arange(250, 3000, 110):
+        for v in (430, 520, 610, 690):
+            d = V.ray(u, v); d = d / np.linalg.norm(d[:2])
+            for _ in range(2):
+                D = dsh + rng2.uniform(22, 75); q = V.o + d * D; r = rng2.uniform(4.0, 6.5)
+                zc = max(g + r * 0.8, q[2] - r * 0.4)
+                if zc - g > 13: continue                                       # not taller than ~16 m trees
+                P.append(dict(k='blob', c=r2([q[0], q[1], zc]), r=[r, r, r * 0.85], color=tones[int(rng2.integers(4))]))
     L2 = [dict(k='quad', p=[[XE + 17.5, YS - 10, g + 0.07], [XE + 90, YS - 10, g + 0.07], [XE + 90, YN + 40, g + 0.07], [XE + 17.5, YN + 40, g + 0.07]], color='#2a2c2e')]
     P += _xform(L2, F, ROT)
     clear = [[list(np.round(F(x_, y_), 1)) for x_, y_ in ((XW - 6, YS - 14), (XE + 95, YS - 14), (XE + 95, YN + 45), (XW - 6, YN + 45))]]
+    clear.append([[-2672, -5919], [-2632, -5919], [-2632, -5879], [-2672, -5879]])   # V16 box #88: water on the frame (Alexandre: 'un building dans l'eau')
     return dict(scene='T4/2 Brian\'s Marina', camera="Brian's Marina", note=brians_marina.__doc__.split('\n')[0], props=P, clear=clear)
 
 
@@ -296,7 +307,80 @@ def keys_bridges():
     return dict(scene='Keys bridges (solids)', camera=None, note=keys_bridges.__doc__.split('\n')[0], props=P, replace=list(GB.BUILDERS))
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges]
+def seaplane_dock():
+    """T4/3 Seaplane at the Dock — the seawall of Brian's Marina looking north up Key Lento's bay at the Lake Surprise
+    Viaduct (pose solved on the viaduct skyline): concrete seawall + cleats, the 'Brian's' floatplane (DHC-2 Beaver-like,
+    9.5 m long / 14.6 m span), the wooden boardwalk and gazebo on the right, the palm trunk on the left, mangrove crowns
+    on the V17 islands in view. Positions back-projected from the frame (dock 1.9 m, floats 0.4 m above the water)."""
+    V = View('Seaplane at the Dock'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    ZD = 1.9                                                                # dock top: camera 2.4 m above the dock (man 1.85 m at ~7 m on the frame)
+    A, B = V.on_plane_z(580, 1484, ZD), V.on_plane_z(3800, 1780, ZD)                       # seawall edge (frame)
+    e = (B - A)[:2] / np.linalg.norm((B - A)[:2]); nb = np.array([-e[1], e[0]])          # nb: towards the camera (land)
+    if (V.o[:2] - A[:2]) @ nb < 0: nb = -nb
+    A2, B2 = A[:2] - e * 30, B[:2] + e * 30
+    P.append(dict(k='quad', p=[r2([*A2, ZD]), r2([*B2, ZD]), r2([*(B2 + nb * 14), ZD]), r2([*(A2 + nb * 14), ZD])], color='#9c9a93'))     # dock top
+    P.append(dict(k='quad', p=[r2([*A2, -1.0]), r2([*B2, -1.0]), r2([*B2, ZD]), r2([*A2, ZD])], color='#7d7b74'))                         # seawall face
+    P.append(dict(k='quad', p=[r2([*(A2 + nb * 0.0), ZD + 0.02]), r2([*(B2 + nb * 0.0), ZD + 0.02]), r2([*(B2 + nb * 0.45), ZD + 0.02]), r2([*(A2 + nb * 0.45), ZD + 0.02])], color='#b3b1a9'))   # cap stone
+    az_e = math.degrees(math.atan2(e[0], e[1]))
+    for u, v in ((1740, 1560), (3740, 1770)):                                             # cleats
+        q = V.on_plane_z(u, v, ZD); P.append(dict(k='box', c=r2([*(q[:2] + nb * 0.3), ZD]), s=[0.9, 0.22, 0.25], az=round(az_e, 1), color='#3a3b3c'))
+    # floatplane: tail (2300,1050) and nose (3040,1085) over the water at float height
+    # pose of the plane fitted on 5 frame points: wing tips (1970,830)/(3300,710) at 3.65 m, spinner (3030,890) 2.4 m,
+    # fin top (2300,660) 4.4 m, right float front tip (3200,1100) 0.5 m (Beaver: span 14.6, length 9.5)
+    from scipy.optimize import least_squares
+    obs = np.array([[1970, 830], [3300, 710], [3030, 890], [2300, 660], [3200, 1100]], float)
+    def pts(q):
+        cx, cy, a_ = q; dd = np.array([math.sin(math.radians(a_)), math.cos(math.radians(a_))]); ww = np.array([-dd[1], dd[0]]); c_ = np.array([cx, cy])
+        return np.array([[*(c_ + dd * 1.4 - ww * 7.3), 3.65], [*(c_ + dd * 1.4 + ww * 7.3), 3.65], [*(c_ + dd * 4.9), 2.4], [*(c_ - dd * 4.6), 4.4], [*(c_ + dd * 3.8 + ww * 1.3), 0.5]])
+    def proj(Q):
+        D = (Q - V.o) @ V.R; return np.c_[(D[:, 0] / D[:, 1] / V.th + 1) * 0.5 * V.W, (1 - (D[:, 2] / D[:, 1] / V.tv + 1) * 0.5) * V.H]
+    c0 = V.on_plane_z(2650, 1080, 0.4)[:2]
+    best = min((least_squares(lambda q: (proj(pts(q)) - obs).ravel() / 10, [c0[0], c0[1], a0]) for a0 in range(0, 360, 45)), key=lambda r: r.cost)
+    C = best.x[:2]; az = best.x[2] % 360; d = np.array([math.sin(math.radians(az)), math.cos(math.radians(az))]); w = np.array([-d[1], d[0]])
+    for side in (-1.3, 1.3):                                                              # floats
+        q = C + w * side; P.append(dict(k='blob', c=r2([*q, 0.45]), r=[4.6, 0.42, 0.42], az=round(az, 1), color='#f4f2ec', smooth=True))
+        for t in (-1.2, 1.4): P.append(dict(k='cyl', a=r2([*(q + d * t), 0.8]), b=r2([*(C + d * t), 2.1]), r=0.06, color='#9a9a96'))
+    P.append(dict(k='blob', c=r2([*(C + d * 0.4), 2.6]), r=[4.8, 0.75, 0.85], az=round(az, 1), color='#f1f0ec', smooth=True))           # fuselage
+    P.append(dict(k='box', c=r2([*(C + d * 1.6), 2.4]), s=[2.4, 1.5, 1.4], az=round(az, 1), color='#e8e7e2'))                            # cabin
+    P.append(dict(k='box', c=r2([*(C + d * 1.4), 3.65]), s=[1.7, 14.6, 0.16], az=round(az, 1), color='#f4f3ef'))                         # wing
+    P.append(dict(k='box', c=r2([*(C - d * 4.2), 2.9]), s=[1.3, 0.12, 1.9], az=round(az, 1), color='#1e3a5f'))                           # fin (dark blue)
+    P.append(dict(k='box', c=r2([*(C - d * 4.3), 2.85]), s=[1.0, 4.6, 0.1], az=round(az, 1), color='#f1f0ec'))                           # tailplane
+    P.append(dict(k='box', c=r2([*(C + d * 4.85), 2.0]), s=[0.12, 0.25, 1.9], az=round(az, 1), color='#2b2b2b'))                         # propeller
+    P.append(dict(k='quad', p=[r2([*(C + d * 3.4 + w * 0.77), 2.15]), r2([*(C - d * 2.8 + w * 0.77), 2.15]), r2([*(C - d * 2.8 + w * 0.77), 2.45]), r2([*(C + d * 3.4 + w * 0.77), 2.45])], color='#1e3a5f'))   # cheat line
+    # boardwalk + gazebo on the right (front edge (3100,700)-(3840,760))
+    Q0, Q1 = V.on_plane_z(3100, 700, 1.2), V.on_plane_z(3840, 760, 1.2); eb = (Q1 - Q0)[:2]; Lb = np.linalg.norm(eb); eb /= Lb; nbb = np.array([eb[1], -eb[0]])
+    if (nbb @ ((Q0[:2] - V.o[:2]))) < 0: nbb = -nbb                                      # away from the camera
+    Q1x = Q1[:2] + eb * 25
+    P.append(dict(k='quad', p=[r2([*Q0[:2], 1.2]), r2([*Q1x, 1.2]), r2([*(Q1x + nbb * 9), 1.2]), r2([*(Q0[:2] + nbb * 9), 1.2])], color='#6b5642'))
+    for t in np.arange(0, Lb + 25, 3.0):
+        q = Q0[:2] + eb * t; P.append(dict(k='cyl', a=r2([*q, -0.5]), b=r2([*q, 2.2]), r=0.13, color='#4e3f31'))
+    gz = V.on_plane_z(3700, 650, 1.2)[:2]                                     # gazebo base (frame)
+    for a_ in range(0, 360, 90):
+        q = gz + 2.6 * np.array([math.sin(math.radians(a_ + 45)), math.cos(math.radians(a_ + 45))]); P.append(dict(k='cyl', a=r2([*q, 1.2]), b=r2([*q, 3.9]), r=0.12, color='#e9e4da'))
+    P.append(dict(k='box', c=r2([*gz, 3.9]), s=[6.2, 6.2, 0.35], az=0.0, color='#2c3e57'))
+    P.append(dict(k='blob', c=r2([*gz, 4.3]), r=[3.2, 3.2, 1.3], color='#2c3e57'))
+    # palm trunk on the left, ~3.5 m from the camera (frame u 160..560)
+    q = V.o + V.ray(380, 1400) / np.linalg.norm(V.ray(380, 1400)[:2]) * 3.5
+    P.append(dict(k='cyl', a=r2([q[0], q[1], ZD]), b=r2([q[0] - 0.3, q[1], ZD + 11]), r=0.22, color='#6d5c48'))
+    # mangrove crowns on the V17 islands within 900 m in the view
+    from yanis_markers import crop as _c
+    R0 = 900; x0, y0 = V.o[0] - R0, V.o[1] - R0
+    M = cv2.cvtColor(_c(x0, y0, x0 + 2 * R0, y0 + 2 * R0), cv2.COLOR_BGR2HSV).astype(int)
+    isl = ((M[..., 0] >= 18) & (M[..., 0] <= 45) & (M[..., 1] > 50) & (M[..., 2] > 150))
+    rng = np.random.default_rng(3); tones = ['#2d4524', '#36532b', '#3f5f31', '#2a3e21']
+    for j in range(0, 2 * R0, 9):
+        for i in range(0, 2 * R0, 9):
+            if not isl[i, j]: continue
+            x, y = x0 + j + 0.5, y0 + 2 * R0 - i - 0.5; vv = np.array([x, y]) - V.o[:2]
+            if np.linalg.norm(vv) < 40: continue
+            fw = V.R @ np.array([0, 1, 0.0]); cosang = (vv @ fw[:2]) / np.linalg.norm(vv) / np.linalg.norm(fw[:2])
+            if cosang < math.cos(math.radians(40)): continue
+            r = rng.uniform(4.0, 6.5); P.append(dict(k='blob', c=r2([x + rng.normal(0, 2), y + rng.normal(0, 2), r * 0.7]), r=[r, r, r * 0.75], color=tones[int(rng.integers(4))]))
+    clear = [[[-2600, -5800], [-2480, -5800], [-2480, -5660], [-2600, -5660]]]          # V16 boxes #145/#146 (camera stood inside #145)
+    return dict(scene='T4/3 Seaplane at the Dock', camera='Seaplane at the Dock', note=seaplane_dock.__doc__.split('\n')[0], props=P, clear=clear)
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock]
 
 
 def main():
