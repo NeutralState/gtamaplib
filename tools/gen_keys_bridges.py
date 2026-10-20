@@ -283,7 +283,7 @@ US1H_CUT = 139.3                 # Lake Surprise axis (s north from the centroid
 US1H_Z = 20.6                    # flat deck underside (absolute): = Lake Surprise at the cut; T4/09 reads 20.8 over the roundabout
 US1H_GRADE = 0.06                # ramps (mean grade, cosine-shaped)
 US1H_GRADE_Y = (-4060.0, -3850.0)   # at-grade section (y): both sides of the toll plaza (~ -3960)
-US1H_PITCH, US1H_PHASE = 26.5, 21.0   # bents: pitch, and position from the roundabout end of the old V16 axis, read on T4/09
+US1H_PITCH, US1H_PHASE = 30.0, 48.3   # piers: pitch, and position from the old V16 axis start (T4/09: one pier in view, the next just off it)
 
 
 def us1_hamlet_axis():
@@ -336,7 +336,7 @@ def us1_hamlet(L):
     s_old0 = 358.3 - US1H_CUT                                                # old V16 axis start (Lake Surprise north end)
     for s in s_old0 + US1H_PHASE + US1H_PITCH * np.arange(-20, 100):
         if not (8 < s < S1 - 8) or zb(s) - g0(s) < 3.0: continue
-        for w0, w1 in decks: br.bent(s, zb, w0, w1, ncol=1, col=2.8, zw=g0(s), footing=0.8)
+        br.bent(s, zb, decks[0][0], decks[1][1], ncol=1, col=2.8, zw=g0(s), footing=0.8)   # one central column under both decks
     br.abutment(S1, zb, decks[0][0], decks[1][1], 25)
     note = ('US1-HAMLET-V1 2026-10-20 (Alexandre: US 1 stays ELEVATED north of the Lake Surprise Viaduct, over the Keys roundabout, at '
             'grade only around the toll plaza, elevated again up to north of Hamlet; flat sections, not a roller coaster. V16 / heightmap '
@@ -344,8 +344,8 @@ def us1_hamlet(L):
             'of the V16 US 1 lanes (hwy 409-412, 431, 432/433, 434) to y -3240 (%.0f m). Decks = Lake Surprise edges. Underside FLAT at '
             '%.1f m (= Lake Surprise at the cut; MEASURED 20.8 over the roundabout on T4/09 Iguana, pose SOLVED on this deck: deck lower '
             'silhouette + 3 bents, rms 4 px), one cosine ramp (mean %.0f%%) down to the at-grade section y %.0f..%.0f (toll plaza), one '
-            'ramp up, flat %.1f m again to the end (ESTIMATED: Alexandre "remonte autant nord que sud"). Bents: one 2.8 m column per deck '
-            'every %.1f m, positions read on T4/09 (ESTIMATED away from it).'
+            'ramp up, flat %.1f m again to the end (ESTIMATED: Alexandre "remonte autant nord que sud"). Piers: one central 2.8 m column '
+            'under both decks every %.1f m (T4/09 shows a single pier between the two lamp posts; ESTIMATED away from it).'
             % (US1H_CUT, S1, US1H_Z, US1H_GRADE * 100, US1H_GRADE_Y[0], US1H_GRADE_Y[1], US1H_Z, US1H_PITCH))
     return br.E, note, '#94a3b8'
 
