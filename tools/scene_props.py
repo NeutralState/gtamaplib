@@ -743,7 +743,10 @@ def _roundabout_sign(path, W=1700, H=1000):
         d.polygon(P([(0.46, 0.0), (0.54, 0.0), (0.58, 0.12), (0.58, 0.36), (1.0, 0.6), (1.0, 0.7), (0.58, 0.56), (0.57, 0.82),
                      (0.72, 0.94), (0.72, 1.0), (0.5, 0.94), (0.28, 1.0), (0.28, 0.94), (0.43, 0.82), (0.42, 0.56), (0.0, 0.7),
                      (0.0, 0.6), (0.42, 0.36), (0.42, 0.12)]), fill=WHT)
-    plane(60, 405, 88); d.text((168, 396), 'Goose Key', fill=WHT, font=font(92))                                                    # left (airport)
+    d.text((60, 396), 'Goose Key', fill=WHT, font=font(92))
+    bb = d.textbbox((60, 396), 'Goose Key', font=font(92)); ps = 84            # pictogram right of the name, centred on its cap height
+    capc = (bb[1] + d.textbbox((60, 396), 'G', font=font(92))[3]) / 2
+    plane(bb[2] + 24, capc - ps / 2, ps)                                                    # left (airport)
     shield(1040, 420, 130, '1'); d.text((1190, 440), 'NORTH', fill=WHT, font=font(96)); d.text((1040, 580), 'Hamlet', fill=WHT, font=font(110))  # right
     im.save(path)
 
