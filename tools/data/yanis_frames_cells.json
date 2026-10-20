@@ -1,0 +1,689 @@
+{
+ "_doc": "Grid cell of each frame, read on the \"Frames reference\" panel of Yanis V17 (2026-10-18). Cell letter c, row r -> world x0 = -3000 + 1000*(c - K), y0 = (r - 14)*1000, 1 km square. interior = drawn in an interior inset.",
+ "cells": {
+  "T1/02": {
+   "cell": "K11",
+   "interior": false
+  },
+  "T1/09": {
+   "cell": "J8",
+   "interior": false
+  },
+  "T1/11": {
+   "cell": "O13",
+   "interior": false
+  },
+  "T1/14": {
+   "cell": "M15",
+   "interior": true
+  },
+  "T1/18": {
+   "cell": "M14",
+   "interior": false
+  },
+  "T1/29": {
+   "cell": "M16",
+   "interior": false
+  },
+  "T1/36": {
+   "cell": "M18",
+   "interior": false
+  },
+  "T1/40": {
+   "cell": "M15",
+   "interior": false
+  },
+  "T2/08": {
+   "cell": "K8",
+   "interior": true
+  },
+  "T2/14": {
+   "cell": "K7",
+   "interior": false
+  },
+  "T2/20": {
+   "cell": "K11",
+   "interior": false
+  },
+  "T2/21": {
+   "cell": "K8",
+   "interior": false
+  },
+  "T2/24": {
+   "cell": "M12",
+   "interior": false
+  },
+  "T2/26": {
+   "cell": "K8",
+   "interior": false
+  },
+  "T2/30": {
+   "cell": "K8",
+   "interior": false
+  },
+  "T2/33": {
+   "cell": "K8",
+   "interior": true
+  },
+  "T2/34": {
+   "cell": "K8",
+   "interior": true
+  },
+  "T2/35": {
+   "cell": "K8",
+   "interior": true
+  },
+  "T2/36": {
+   "cell": "K8",
+   "interior": true
+  },
+  "T2/39": {
+   "cell": "G18",
+   "interior": false
+  },
+  "T2/40": {
+   "cell": "K9",
+   "interior": false
+  },
+  "T2/41": {
+   "cell": "M14",
+   "interior": false
+  },
+  "T2/46": {
+   "cell": "L14",
+   "interior": false
+  },
+  "T2/47": {
+   "cell": "K7",
+   "interior": true
+  },
+  "T2/51": {
+   "cell": "O14",
+   "interior": false
+  },
+  "T2/56": {
+   "cell": "K8",
+   "interior": true
+  },
+  "T2/57": {
+   "cell": "K8",
+   "interior": true
+  },
+  "T2/60": {
+   "cell": "M13",
+   "interior": false
+  },
+  "T2/61": {
+   "cell": "L11",
+   "interior": false
+  },
+  "T2/65": {
+   "cell": "O14",
+   "interior": false
+  },
+  "T2/66": {
+   "cell": "M15",
+   "interior": true
+  },
+  "T2/68": {
+   "cell": "K8",
+   "interior": true
+  },
+  "T2/75": {
+   "cell": "H17",
+   "interior": true
+  },
+  "T2/78": {
+   "cell": "G17",
+   "interior": false
+  },
+  "T2/79": {
+   "cell": "K8",
+   "interior": true
+  },
+  "S2/04": {
+   "cell": "O14",
+   "interior": false
+  },
+  "S2/06": {
+   "cell": "K8",
+   "interior": true
+  },
+  "S2/09": {
+   "cell": "M15",
+   "interior": false
+  },
+  "S2/14": {
+   "cell": "K8",
+   "interior": true
+  },
+  "S2/16": {
+   "cell": "K8",
+   "interior": false
+  },
+  "S2/18": {
+   "cell": "M15",
+   "interior": false
+  },
+  "S2/26": {
+   "cell": "M15",
+   "interior": false
+  },
+  "S2/27": {
+   "cell": "M15",
+   "interior": false
+  },
+  "S2/32": {
+   "cell": "O14",
+   "interior": false
+  },
+  "S2/34": {
+   "cell": "K8",
+   "interior": false
+  },
+  "S2/35": {
+   "cell": "K8",
+   "interior": false
+  },
+  "S2/48": {
+   "cell": "K8",
+   "interior": false
+  },
+  "S2/54": {
+   "cell": "G17",
+   "interior": false
+  },
+  "S2/62": {
+   "cell": "H10",
+   "interior": false
+  },
+  "S2/66": {
+   "cell": "K20",
+   "interior": false
+  },
+  "S2/70": {
+   "cell": "I21",
+   "interior": false
+  },
+  "S2/73": {
+   "cell": "G17",
+   "interior": false
+  },
+  "S2/80": {
+   "cell": "O14",
+   "interior": false
+  },
+  "S2/75": {
+   "cell": "J10",
+   "interior": false
+  },
+  "S2/76": {
+   "cell": "K21",
+   "interior": false
+  },
+  "S2/79": {
+   "cell": "O14",
+   "interior": false
+  },
+  "S2/81": {
+   "cell": "K8",
+   "interior": false
+  },
+  "S2/85": {
+   "cell": "M12",
+   "interior": false
+  },
+  "S2/86": {
+   "cell": "K8",
+   "interior": true
+  },
+  "S3/12": {
+   "cell": "M16",
+   "interior": false
+  },
+  "S3/13": {
+   "cell": "M16",
+   "interior": false
+  },
+  "S3/15": {
+   "cell": "M16",
+   "interior": false
+  },
+  "S3/20": {
+   "cell": "M11",
+   "interior": false
+  },
+  "S3/24": {
+   "cell": "K10",
+   "interior": false
+  },
+  "S3/39": {
+   "cell": "M15",
+   "interior": false
+  },
+  "T3/01": {
+   "cell": "L14",
+   "interior": false
+  },
+  "T3/40": {
+   "cell": "L14",
+   "interior": false
+  },
+  "T3/41": {
+   "cell": "K18",
+   "interior": false
+  },
+  "T3/42": {
+   "cell": "I17",
+   "interior": false
+  },
+  "T3/43": {
+   "cell": "M15",
+   "interior": false
+  },
+  "T3/44": {
+   "cell": "M15",
+   "interior": true
+  },
+  "T3/45": {
+   "cell": "M15",
+   "interior": true
+  },
+  "T3/47": {
+   "cell": "M15",
+   "interior": true
+  },
+  "T3/48": {
+   "cell": "M15",
+   "interior": true
+  },
+  "T3/50": {
+   "cell": "M15",
+   "interior": true
+  },
+  "T3/62": {
+   "cell": "M15",
+   "interior": false
+  },
+  "T3/64": {
+   "cell": "M15",
+   "interior": false
+  },
+  "T3/65": {
+   "cell": "M15",
+   "interior": false
+  },
+  "T3/66": {
+   "cell": "O14",
+   "interior": false
+  },
+  "T3/67": {
+   "cell": "L11",
+   "interior": false
+  },
+  "T3/69": {
+   "cell": "P14",
+   "interior": false
+  },
+  "T3/70": {
+   "cell": "M15",
+   "interior": false
+  },
+  "T3/71": {
+   "cell": "K10",
+   "interior": false
+  },
+  "T3/73": {
+   "cell": "K10",
+   "interior": false
+  },
+  "T3/74": {
+   "cell": "M15",
+   "interior": false
+  },
+  "T3/75": {
+   "cell": "O15",
+   "interior": false
+  },
+  "T3/76": {
+   "cell": "O15",
+   "interior": true
+  },
+  "T3/77": {
+   "cell": "O15",
+   "interior": true
+  },
+  "T3/78": {
+   "cell": "K9",
+   "interior": false
+  },
+  "T3/86": {
+   "cell": "O15",
+   "interior": true
+  },
+  "T3/87": {
+   "cell": "O15",
+   "interior": true
+  },
+  "T3/88": {
+   "cell": "O15",
+   "interior": true
+  },
+  "T3/94": {
+   "cell": "G18",
+   "interior": false
+  },
+  "T3/96": {
+   "cell": "G18",
+   "interior": false
+  },
+  "T3/106": {
+   "cell": "K10",
+   "interior": false
+  },
+  "T3/112": {
+   "cell": "N14",
+   "interior": false
+  },
+  "T3/123": {
+   "cell": "O13",
+   "interior": false
+  },
+  "T3/124": {
+   "cell": "O14",
+   "interior": false
+  },
+  "T3/126": {
+   "cell": "O15",
+   "interior": false
+  },
+  "T3/138": {
+   "cell": "O15",
+   "interior": false
+  },
+  "T3/139": {
+   "cell": "O15",
+   "interior": false
+  },
+  "T3/140": {
+   "cell": "O15",
+   "interior": false
+  },
+  "T3/141": {
+   "cell": "N15",
+   "interior": false
+  },
+  "T3/142": {
+   "cell": "N15",
+   "interior": false
+  },
+  "T3/144": {
+   "cell": "N15",
+   "interior": false
+  },
+  "T3/146": {
+   "cell": "M15",
+   "interior": false
+  },
+  "T3/149": {
+   "cell": "M15",
+   "interior": false
+  },
+  "T3/151": {
+   "cell": "M15",
+   "interior": false
+  },
+  "T3/152": {
+   "cell": "I16",
+   "interior": false
+  },
+  "T3/153": {
+   "cell": "K8",
+   "interior": false
+  },
+  "T3/156": {
+   "cell": "K7",
+   "interior": false
+  },
+  "T3/157": {
+   "cell": "N14",
+   "interior": false
+  },
+  "T3/160": {
+   "cell": "M15",
+   "interior": false
+  },
+  "T3/162": {
+   "cell": "G15",
+   "interior": false
+  },
+  "T3/164": {
+   "cell": "L15",
+   "interior": false
+  },
+  "T3/166": {
+   "cell": "O15",
+   "interior": false
+  },
+  "T3/167": {
+   "cell": "O14",
+   "interior": false
+  },
+  "T3/168": {
+   "cell": "O14",
+   "interior": false
+  },
+  "T3/169": {
+   "cell": "P15",
+   "interior": false
+  },
+  "T3/171": {
+   "cell": "I18",
+   "interior": false
+  },
+  "T3/172": {
+   "cell": "M14",
+   "interior": false
+  },
+  "T3/173": {
+   "cell": "M14",
+   "interior": false
+  },
+  "T3/174": {
+   "cell": "O16",
+   "interior": false
+  },
+  "T3/190": {
+   "cell": "K13",
+   "interior": false
+  },
+  "T3/192": {
+   "cell": "P14",
+   "interior": false
+  },
+  "T3/193": {
+   "cell": "P14",
+   "interior": false
+  },
+  "T3/194": {
+   "cell": "L14",
+   "interior": false
+  },
+  "T3/197": {
+   "cell": "M13",
+   "interior": false
+  },
+  "T3/201": {
+   "cell": "M13",
+   "interior": false
+  },
+  "T3/240": {
+   "cell": "K7",
+   "interior": false
+  },
+  "T3/241": {
+   "cell": "G17",
+   "interior": true
+  },
+  "T3/244": {
+   "cell": "H17",
+   "interior": false
+  },
+  "T3/247": {
+   "cell": "N12",
+   "interior": false
+  },
+  "S3/68": {
+   "cell": "N12",
+   "interior": false
+  },
+  "S3/74": {
+   "cell": "N14",
+   "interior": false
+  },
+  "S3/75": {
+   "cell": "M13",
+   "interior": false
+  },
+  "S3/83": {
+   "cell": "N13",
+   "interior": false
+  },
+  "S3/84": {
+   "cell": "L14",
+   "interior": false
+  },
+  "S3/99": {
+   "cell": "L15",
+   "interior": false
+  },
+  "S4/04": {
+   "cell": "K19",
+   "interior": false
+  },
+  "S4/13": {
+   "cell": "G18",
+   "interior": true
+  },
+  "S4/19": {
+   "cell": "M15",
+   "interior": false
+  },
+  "S4/20": {
+   "cell": "O14",
+   "interior": false
+  },
+  "S4/23": {
+   "cell": "H7",
+   "interior": false
+  },
+  "T4/01": {
+   "cell": "K8",
+   "interior": false
+  },
+  "T4/02": {
+   "cell": "K8",
+   "interior": false
+  },
+  "T4/06": {
+   "cell": "K8",
+   "interior": false
+  },
+  "T4/09": {
+   "cell": "L12",
+   "interior": false
+  },
+  "T4/11": {
+   "cell": "M13",
+   "interior": false
+  },
+  "T4/14": {
+   "cell": "O13",
+   "interior": false
+  },
+  "T4/21": {
+   "cell": "M21",
+   "interior": false
+  },
+  "T4/25": {
+   "cell": "O14",
+   "interior": false
+  },
+  "T4/26": {
+   "cell": "M13",
+   "interior": false
+  },
+  "T4/30": {
+   "cell": "P14",
+   "interior": false
+  },
+  "T4/32": {
+   "cell": "K8",
+   "interior": true
+  },
+  "T4/34": {
+   "cell": "M12",
+   "interior": false
+  },
+  "T4/36": {
+   "cell": "N12",
+   "interior": false
+  },
+  "T4/37": {
+   "cell": "M13",
+   "interior": false
+  },
+  "T4/39": {
+   "cell": "P15",
+   "interior": false
+  },
+  "T4/40": {
+   "cell": "M13",
+   "interior": false
+  },
+  "A2/08": {
+   "cell": "K8",
+   "interior": true
+  },
+  "A2/09": {
+   "cell": "P14",
+   "interior": false
+  },
+  "A1/01": {
+   "cell": "O14",
+   "interior": false
+  },
+  "A2/01": {
+   "cell": "N12",
+   "interior": false
+  },
+  "A2/02": {
+   "cell": "H17",
+   "interior": true
+  },
+  "A2/03": {
+   "cell": "K9",
+   "interior": false
+  },
+  "A2/04": {
+   "cell": "M15",
+   "interior": true
+  },
+  "A2/05": {
+   "cell": "M15",
+   "interior": false
+  },
+  "A2/06": {
+   "cell": "O14",
+   "interior": false
+  },
+  "A3/03": {
+   "cell": "I11",
+   "interior": false
+  },
+  "A4/19": {
+   "cell": "O16",
+   "interior": false
+  }
+ }
+}

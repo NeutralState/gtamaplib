@@ -7577,7 +7577,7 @@ window.addEventListener('load', () => {
   const card = document.getElementById('map-bcard');
   if (!view || !cv || !panel) return;
   const ctx = cv.getContext('2d');
-  const st = Object.assign({ style: 'color', bld: 1, cones: 1, cov: 0, labels: 1 },
+  const st = Object.assign({ style: 'color', bld: 1, cones: 1, cov: 0, labels: 1, ymk: 0, covMode: 'prec' },
     (() => { try { return JSON.parse(localStorage.getItem('ui.mapIntel') || '{}'); } catch (e) { return {}; } })());
   const save = () => { try { localStorage.setItem('ui.mapIntel', JSON.stringify(st)); } catch (e) {} };
   const TIER = { anchor: '#a78bfa', high: '#4ade80', medium: '#fbbf24', low: '#fb923c', unverified: '#6b7280' };
@@ -7619,7 +7619,50 @@ window.addEventListener('load', () => {
   };
   const s2w = (sx, sy) => { const m = window.mapTx; return window.svgToWorld((sx - m.tx) / m.scale, (sy - m.ty) / m.scale); };
   const mpp = () => 1 / window.mapTx.scale;      // metres par pixel ecran (1 unite SVG = 1 m)
-  // ── couverture: cones de 1.5 km accumules sur une grille monde de 10 m ──
+  // ── [COVERAGE-V2 2026-10-19] couverture ray-castee (tools/coverage_map.py): relief + batiments, precision 1 sigma par cellule
+  //    de 10 m; repli sur l'ancienne version naive (cones de 1.5 km) si les fichiers ne sont pas generes ──
+  const CV2 = { meta: null, cnt: null, code: null, cam: null, canv: {}, loading: false, failed: false };
+  const covSigma = g => g ? CV2.meta.sigma_code.base * Math.pow(CV2.meta.sigma_code.step, g) : Infinity;
+  const PREC = [[1, [157, 0, 255]], [3, [224, 17, 95]], [8, [251, 139, 36]], [20, [253, 231, 37]], [60, [110, 206, 88]], [150, [31, 158, 137]], [300, [40, 90, 160]]];
+  const COUNTC = [[40, 90, 160], [31, 158, 137], [110, 206, 88], [253, 231, 37], [251, 139, 36], [224, 17, 95]];   // 1, 2-3, 4-7, 8-15, 16-31, 32+ cams
+  const precCol = s => { if (s <= PREC[0][0]) return PREC[0][1]; for (let i = 0; i < PREC.length - 1; i++) { const [a, ca] = PREC[i], [b, cb] = PREC[i + 1]; if (s <= b) { const t = Math.log(s / a) / Math.log(b / a); return ca.map((v, k) => v + (cb[k] - v) * t); } } return PREC[PREC.length - 1][1]; };
+  async function loadCov2() {
+    if (CV2.meta || CV2.loading || CV2.failed) return; CV2.loading = true;
+    try {
+      const meta = await fetch('/threejs/_coverage.json', { cache: 'no-store' }).then(r => { if (!r.ok) throw 0; return r.json(); });
+      const px = async f => { const im = new Image(); im.src = '/threejs/' + f + '?v=' + encodeURIComponent(meta.generated); await im.decode();
+        const c = document.createElement('canvas'); c.width = im.width; c.height = im.height; const g = c.getContext('2d', { willReadFrequently: true }); g.drawImage(im, 0, 0); return g.getImageData(0, 0, c.width, c.height); };
+      const [a, b] = await Promise.all([px(meta.png), px(meta.cam_png)]);
+      const n = a.width * a.height; CV2.cnt = new Uint8Array(n); CV2.code = new Uint8Array(n); CV2.cam = new Uint16Array(n);
+      for (let i = 0; i < n; i++) { CV2.cnt[i] = a.data[4 * i]; CV2.code[i] = a.data[4 * i + 1]; CV2.cam[i] = b.data[4 * i] * 256 + b.data[4 * i + 1]; }
+      CV2.w = a.width; CV2.h = a.height; CV2.meta = meta;
+    } catch (e) { CV2.failed = true; }
+    CV2.loading = false; if (typeof syncAll === 'function') syncAll(); render();
+  }
+  function cov2Canvas(mode) {
+    if (CV2.canv[mode]) return CV2.canv[mode];
+    const c = document.createElement('canvas'); c.width = CV2.w; c.height = CV2.h; const g = c.getContext('2d'); const im = g.createImageData(CV2.w, CV2.h), d = im.data;
+    for (let i = 0; i < CV2.cnt.length; i++) {
+      const n = CV2.cnt[i]; if (!n) continue;
+      const col = mode === 'count' ? COUNTC[Math.min(COUNTC.length - 1, Math.floor(Math.log2(n)))] : precCol(covSigma(CV2.code[i]));
+      d[4 * i] = col[0]; d[4 * i + 1] = col[1]; d[4 * i + 2] = col[2]; d[4 * i + 3] = 175;
+    }
+    g.putImageData(im, 0, 0); return (CV2.canv[mode] = c);
+  }
+  const cov2At = (x, y) => {
+    if (!CV2.meta) return null; const G = CV2.meta.grid; const j = Math.floor((x - G.x0) / G.r), i = Math.floor((G.y1 - y) / G.r);
+    if (i < 0 || j < 0 || i >= CV2.h || j >= CV2.w) return null; const k = i * CV2.w + j; if (!CV2.cnt[k]) return { n: 0 };
+    const cam = CV2.cam[k] < 65535 ? CV2.meta.cameras[CV2.cam[k]] : null; return { n: CV2.cnt[k], s: covSigma(CV2.code[k]), cam };
+  };
+  // ── [YANIS-MARKERS-V1 2026-10-19] marqueurs V17 de Yanis vectorises (tools/yanis_markers.py) ──
+  const YM = { list: null, loading: false };
+  const YCOL = { T1: '#e11dd8', T2: '#06d6e8', S2: '#ef2222', T3: '#2846f0', T4: '#1f6b1f', S3: '#fb7a1e', S4: '#7e22ce', A: '#22c55e', L: '#eab308' };
+  async function loadYanis() {
+    if (YM.list || YM.loading) return; YM.loading = true;
+    try { const j = await fetch('/threejs/_yanis_markers.json', { cache: 'no-store' }).then(r => r.json()); YM.list = j.markers || []; } catch (e) { YM.list = []; }
+    YM.loading = false; render();
+  }
+  // ── couverture naive (repli): cones de 1.5 km accumules sur une grille monde de 10 m ──
   let covCanvas = null; const COV = { x0: -9600, y0: -8800, x1: 3200, y1: 12400, r: 10 };
   function buildCoverage() {
     const cams = (window.mapData && window.mapData.cameras) || [];
@@ -7658,10 +7701,17 @@ window.addEventListener('load', () => {
     const k = mpp();
     // couverture
     if (st.cov) {
-      if (!covCanvas) buildCoverage();
-      const p0 = w2s(COV.x0, COV.y1), p1 = w2s(COV.x1, COV.y0);
-      ctx.imageSmoothingEnabled = true; ctx.globalAlpha = 0.85;
-      ctx.drawImage(covCanvas, p0[0], p0[1], p1[0] - p0[0], p1[1] - p0[1]); ctx.globalAlpha = 1;
+      if (!CV2.meta && !CV2.failed) loadCov2();
+      if (CV2.meta) {
+        const G = CV2.meta.grid, p0 = w2s(G.x0, G.y1), p1 = w2s(G.x1, G.y0);
+        ctx.imageSmoothingEnabled = k > 6; ctx.globalAlpha = 0.9;
+        ctx.drawImage(cov2Canvas(st.covMode || 'prec'), p0[0], p0[1], p1[0] - p0[0], p1[1] - p0[1]); ctx.globalAlpha = 1;
+      } else if (CV2.failed) {
+        if (!covCanvas) buildCoverage();
+        const p0 = w2s(COV.x0, COV.y1), p1 = w2s(COV.x1, COV.y0);
+        ctx.imageSmoothingEnabled = true; ctx.globalAlpha = 0.85;
+        ctx.drawImage(covCanvas, p0[0], p0[1], p1[0] - p0[0], p1[1] - p0[1]); ctx.globalAlpha = 1;
+      }
     }
     // cones de vue
     const cams = (window.mapData && window.mapData.cameras) || [];
@@ -7722,6 +7772,33 @@ window.addEventListener('load', () => {
       ctx.strokeStyle = 'rgba(250,204,21,0.85)'; ctx.lineWidth = 1.4;
       for (const sgn of [-1, 1]) { const q = w2s(c.xyz[0] - Math.sin(yaw + sgn * half) * L, c.xyz[1] + Math.cos(yaw + sgn * half) * L); ctx.beginPath(); ctx.moveTo(o[0], o[1]); ctx.lineTo(q[0], q[1]); ctx.stroke(); }
     }
+    // [YANIS-MARKERS-V1] marqueurs de Yanis: point + V (couleur de serie), trait pointille vers notre cam si comparee
+    if (st.ymk) {
+      if (!YM.list) loadYanis();
+      const Lv = Math.max(14, Math.min(40 * k, 160));
+      ctx.lineCap = 'round';
+      for (const m of YM.list || []) {
+        if (m.inset || m.x < wx0 - 300 || m.x > wx1 + 300 || m.y < wy0 - 300 || m.y > wy1 + 300) continue;
+        const col = YCOL[m.series] || YCOL[m.series[0]] || '#ccc', o = w2s(m.x, m.y);
+        const ou = m.ours && m.ours.compare && m.ours.d_pos_m !== undefined ? m.ours : null;
+        if (ou && ou.compare === 'ok') {
+          const q = w2s(ou.x, ou.y); ctx.setLineDash([5, 4]); ctx.strokeStyle = 'rgba(255,255,255,.75)'; ctx.lineWidth = 1.4;
+          ctx.beginPath(); ctx.moveTo(o[0], o[1]); ctx.lineTo(q[0], q[1]); ctx.stroke(); ctx.setLineDash([]);
+        }
+        if (m.heading !== null && m.hfov !== null) {
+          ctx.strokeStyle = col; ctx.lineWidth = 2;
+          for (const sg of [-1, 1]) { const a = (m.heading + sg * m.hfov / 2) * Math.PI / 180; const q = w2s(m.x + Math.sin(a) * Lv, m.y + Math.cos(a) * Lv);
+            ctx.beginPath(); ctx.moveTo(o[0], o[1]); ctx.lineTo(q[0], q[1]); ctx.stroke(); }
+        }
+        ctx.beginPath(); ctx.arc(o[0], o[1], 4.5, 0, Math.PI * 2); ctx.fillStyle = col; ctx.fill();
+        ctx.lineWidth = 1.5; ctx.strokeStyle = m.ambiguous ? '#facc15' : '#fff'; ctx.stroke();
+        if (1 / k > 0.25) {
+          const t = m.id + (ou && ou.compare === 'ok' ? `  Δ ${ou.d_pos_m.toFixed(0)} m${ou.d_heading_deg !== undefined ? ` ${ou.d_heading_deg >= 0 ? '+' : ''}${ou.d_heading_deg.toFixed(0)}°` : ''}` : '');
+          ctx.font = '600 10.5px ui-monospace, monospace'; ctx.textAlign = 'left'; ctx.textBaseline = 'middle';
+          ctx.lineWidth = 3; ctx.strokeStyle = 'rgba(8,8,12,.85)'; ctx.strokeText(t, o[0] + 7, o[1] - 8); ctx.fillStyle = '#fff'; ctx.fillText(t, o[0] + 7, o[1] - 8);
+        }
+      }
+    }
     // etiquettes (plus gros d'abord, sans chevauchement)
     if (labels.length) {
       labels.sort((a, b) => b[1] - a[1]);
@@ -7769,6 +7846,10 @@ window.addEventListener('load', () => {
   panel.innerHTML = `<div class="ttl">Base</div><div class="row" id="mi-style"></div>
     <div class="ttl">Layers</div><div class="row" id="mi-lay"></div>
     <div id="mi-ramp" style="display:none"><div class="ramp"></div><div class="rampl"><span>0</span><span>60</span><span>110</span><span>170</span><span>260 m</span></div></div>
+    <div id="mi-cov" style="display:none"><div class="ttl">Coverage</div><div class="row" id="mi-covm"></div>
+      <div id="mi-covp"><div class="ramp" style="background:linear-gradient(90deg,#9d00ff,#e0115f,#fb8b24,#fde725,#6ece58,#1f9e89,#285aa0)"></div><div class="rampl"><span>1</span><span>3</span><span>8</span><span>20</span><span>60</span><span>150</span><span>300 m</span></div></div>
+      <div id="mi-covc" style="display:none"><div class="ramp" style="background:linear-gradient(90deg,#285aa0,#1f9e89,#6ece58,#fde725,#fb8b24,#e0115f)"></div><div class="rampl"><span>1</span><span>2</span><span>4</span><span>8</span><span>16</span><span>32+ cams</span></div></div>
+      <div id="mi-covs" class="rampl" style="margin-top:2px"></div></div>
     <input id="mi-q" type="text" placeholder="Find camera or building…" spellcheck="false" autocomplete="off"><div class="sugg" id="mi-sugg"></div>`;
   const mk = (row, key, val, label, title) => {
     const el = document.createElement('span'); el.className = 'ch'; el.textContent = label; el.title = title || '';
@@ -7783,7 +7864,8 @@ window.addEventListener('load', () => {
   syncs.push(mk(rs, 'style', 'gray', 'Gray', 'Grayscale base map (classic)'));
   syncs.push(mk(rl, 'bld', undefined, 'Buildings', '2.5D building volumes colored by roof height, with cast shadows'));
   syncs.push(mk(rl, 'cones', undefined, 'Cones', 'Field of view of every camera (confidence color); the selected camera in yellow'));
-  syncs.push(mk(rl, 'cov', undefined, 'Coverage', 'How many camera wedges (1.5 km) see each point — naive, no occlusion'));
+  syncs.push(mk(rl, 'cov', undefined, 'Coverage', 'What the posed cameras really see (rays vs terrain + buildings, 10 m cells) and how precisely: 1-sigma ground error from each pose\'s uncertainty, range and grazing angle (tools/coverage_map.py). Hover a cell for details.'));
+  syncs.push(mk(rl, 'ymk', undefined, 'Yanis', 'Yanis V17 markers as data (tools/yanis_markers.py): his dot + V in the series colour; dashed line = how far our solved pose is from his marker (label: distance, heading difference). Yellow ring = ambiguous dot.'));
   syncs.push(mk(rl, 'labels', undefined, 'Labels', 'Building names and heights when zoomed in'));
   // outil de mesure (non persistant): clic A, clic B -> distance, cap boussole, yaw (convention projet: 0 = nord, 90 = ouest)
   const meas = { on: false, pts: [] };
@@ -7795,7 +7877,15 @@ window.addEventListener('load', () => {
     addEventListener('keydown', e => { if (e.key === 'Escape' && meas.pts.length) { meas.pts = []; render(); } });
   }
   window.__mapMeasure = meas;
-  const syncAll = () => { syncs.forEach(f => f()); panel.querySelector('#mi-ramp').style.display = st.bld ? 'block' : 'none'; };
+  { const rm = panel.querySelector('#mi-covm');
+    syncs.push(mk(rm, 'covMode', 'prec', 'Precision', 'Best 1-sigma ground precision among the cameras that see the cell'));
+    syncs.push(mk(rm, 'covMode', 'count', 'Cameras', 'Number of cameras that see the cell')); }
+  const syncAll = () => {
+    syncs.forEach(f => f()); panel.querySelector('#mi-ramp').style.display = st.bld ? 'block' : 'none';
+    panel.querySelector('#mi-cov').style.display = st.cov ? 'block' : 'none';
+    const cnt = (st.covMode || 'prec') === 'count'; panel.querySelector('#mi-covp').style.display = cnt ? 'none' : 'block'; panel.querySelector('#mi-covc').style.display = cnt ? 'block' : 'none';
+    const sm = CV2.meta && CV2.meta.summary; panel.querySelector('#mi-covs').textContent = sm ? `land seen ${sm.land_seen_km2} / ${sm.land_km2} km² · ≤20 m ${sm.land_seen_under_20m_km2} · ≤5 m ${sm.land_seen_under_5m_km2}` : '';
+  };
   syncAll(); applyStyle();
   // ── recherche ──
   const q = panel.querySelector('#mi-q'), sug = panel.querySelector('#mi-sugg');
@@ -7842,9 +7932,19 @@ window.addEventListener('load', () => {
     for (let i = B.length - 1; i >= 0; i--) { const b = B[i]; if (x < b.bb[0] || x > b.bb[2] || y < b.bb[1] || y > b.bb[3]) continue; for (const L of b.layers) for (const p of L.polys) if (inPoly(x, y, p.outer)) return b; }
     return null;
   };
+  const covTip = document.createElement('div'); covTip.className = 'map-bcard'; covTip.style.cssText = 'display:none;pointer-events:none;bottom:auto;padding:6px 9px;font-size:10.5px';
+  view.appendChild(covTip);
   view.addEventListener('mousemove', e => {
     if (window.currentView !== 'map' || e.buttons) return;
     const r = view.getBoundingClientRect(); const b = hitB(e.clientX - r.left, e.clientY - r.top);
+    if (st.cov && CV2.meta) {
+      const w = s2w(e.clientX - r.left, e.clientY - r.top), c = cov2At(w[0], w[1]);
+      if (c && c.n) {
+        covTip.innerHTML = `seen by <b>${c.n}</b> camera${c.n > 1 ? 's' : ''} · best <b style="color:#fde725">±${c.s < 10 ? c.s.toFixed(1) : c.s.toFixed(0)} m</b>` +
+          (c.cam ? `<br><span style="color:#9ca3af">${c.cam.name.replace(/</g, '&lt;')} · ${c.cam.tier || 'unverified'} · pose ±${c.cam.sigma_pos_m} m / ${c.cam.sigma_ang_deg}°</span>` : '');
+        covTip.style.left = (e.clientX - r.left + 14) + 'px'; covTip.style.top = (e.clientY - r.top + 14) + 'px'; covTip.style.display = 'block';
+      } else covTip.style.display = 'none';
+    } else covTip.style.display = 'none';
     if (b !== hoverB) { hoverB = b; render(); }
   });
   view.addEventListener('mousedown', e => { downXY = [e.clientX, e.clientY]; });
