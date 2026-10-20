@@ -190,6 +190,7 @@
   <div class="sect" style="margin-top:10px">Tour playlist <span id="tour-count" style="color:var(--mid);margin-left:6px"></span></div>
   <div style="display:flex;gap:5px;flex-wrap:wrap;margin:4px 0 6px">
     <button type="button" class="tbtn" id="tour-addsolved" title="Append every solved camera that is not in the playlist yet">+ Solved</button>
+    <select class="tbtn" id="tour-trailer" title="[TOUR-TRAILER-V1] Replace the playlist with every scene of one trailer, in the trailer's order (Yanis numbering = order of appearance)"><option value="">Trailer…</option></select>
     <button type="button" class="tbtn" id="tour-route" title="Reorder the playlist as the shortest flight path, starting from the first camera">Nearest route</button>
     <button type="button" class="tbtn" id="tour-rev" title="Reverse the order">Reverse</button>
     <button type="button" class="tbtn" id="tour-clear" title="Empty the playlist (an empty playlist tours the solved cameras)">Clear</button>
@@ -3483,6 +3484,14 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
     };
     search.addEventListener('input', render);
     document.getElementById('tour-addsolved').addEventListener('click', () => { const inPl = new Set(pl); for (const c of cams()) if (solved(c) && !inPl.has(c.name)) pl.push(c.name); save(); });
+    // [TOUR-TRAILER-V1 2026-10-19] (Alexandre: "toutes les scenes du dernier trailer dans l'ordre") playlist = un trailer entier, ordre des IDs
+    {
+      const sel = document.getElementById('tour-trailer');
+      const LBL = { T1: 'Trailer 1', T2: 'Trailer 2', T3: 'Extended Look', T4: 'Trailer 4 (launch)' };
+      const ofT = k => cams().filter(c => new RegExp('^' + k + '/\\d+$').test(c.id || '')).sort((a, b) => +a.id.split('/')[1] - +b.id.split('/')[1]);
+      for (const k of ['T4', 'T3', 'T2', 'T1']) { const n = ofT(k).length; if (!n) continue; const o = document.createElement('option'); o.value = k; o.textContent = `${LBL[k]} — ${n} scenes`; sel.appendChild(o); }
+      sel.addEventListener('change', () => { const k = sel.value; sel.value = ''; if (!k) return; pl = ofT(k).map(c => c.name); save(); });
+    }
     document.getElementById('tour-route').addEventListener('click', route);
     document.getElementById('tour-rev').addEventListener('click', () => { pl.reverse(); save(); });
     document.getElementById('tour-clear').addEventListener('click', () => { pl = []; save(); });
