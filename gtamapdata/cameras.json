@@ -7469,17 +7469,17 @@
   "id": "T4/9",
   "player": null,
   "xyz": [
-   -1222.37,
-   -1634.17,
-   4.51
+   -1128.6,
+   -1409.4,
+   3.84
   ],
   "ypr": [
-   -41.117,
-   1.211,
-   -2.447
+   345.0,
+   0.0,
+   0.0
   ],
   "fov": [
-   13.927,
+   40.0,
    null
   ],
   "size": [
@@ -7488,8 +7488,7 @@
   ],
   "source": "Trailer 4 (launch trailer, 2026) - iguana on a road barrier, green highway sign behind; GTAVI_Launch_Trailer.mp4 t=21.37 s (frame 641), letterbox removed",
   "constraint_class": "D_no_ground_truth",
-  "pose_verified": "SOLVED 2026-10-20 - Metromover guideway underside (8 pts) + pier, rms 4.0 px; 180-deg alternative at 6.6 px rejected (see notes) (T4 video tour)",
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/09 (corr 0.992); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.0 m. Needs markings + solve. | T4-SOLVE 2026-10-20 (tour scene 5): the background is the Brickell Metromover guideway (V17 pink loop) crossing SW 9th Ave just south of the roundabout. Its underside is a straight line on the frame (8 points, auto-detected) + the round pier (u 2050, 2.2 m): camera on SW 9th Ave 128 m south of the roundabout centre, ~0.5 m above the road (iguana eye level), looking NNE up the avenue at the guideway (roundabout behind it, hence the 'roundabout ahead' sign); telephoto hfov 13.9, pitch +1.2, roll -2.5; guideway underside 12.1 m. rms 4.0 px. The 180-deg alternative (camera north of the roundabout looking SSW) fits at 6.6 px; this one is kept for the better fit, Yanis's heading (345 -> north) and the car ahead in the avenue axis."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/09 (corr 0.992); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.0 m. Needs markings + solve. | T4-SOLVE-REJECTED 2026-10-20 (tour scene 5; pose reverted to Yanis's marker): tried: the background is the Brickell Metromover guideway (V17 pink loop) crossing SW 9th Ave just south of the roundabout. Its underside is a straight line on the frame (8 points, auto-detected) + the round pier (u 2050, 2.2 m): camera on SW 9th Ave 128 m south of the roundabout centre, ~0.5 m above the road (iguana eye level), looking NNE up the avenue at the guideway (roundabout behind it, hence the 'roundabout ahead' sign); telephoto hfov 13.9, pitch +1.2, roll -2.5; guideway underside 12.1 m. rms 4.0 px. The 180-deg alternative (camera north of the roundabout looking SSW) fits at 6.6 px; this one is kept for the better fit, Yanis's heading (345 -> north) and the car ahead in the avenue axis. | REJECTED: at that place (both directions) the meshes put big towers in the view (1450 Brickell, Icon, Four Seasons looking N; Park Grove, Ritz-Carlton looking S) while the frame shows only sky and palms behind the overpass: the iguana is probably NOT in Brickell (Yanis's T4/09 marker doubtful). Location unknown."
  },
  "Lucia and Jason in a Convertible": {
   "id": "T4/11",
