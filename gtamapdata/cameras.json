@@ -7574,17 +7574,17 @@
   "id": "T4/25",
   "player": null,
   "xyz": [
-   2014.33,
-   573.58,
-   4.34
+   1938.7,
+   635.6,
+   4.74
   ],
   "ypr": [
-   -277.686,
-   -2.874,
+   -169.2,
+   -2.9,
    0.0
   ],
   "fov": [
-   58.651,
+   59.0,
    null
   ],
   "size": [
@@ -7594,7 +7594,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - green sports car drifting in front of a Spanish-style hotel; GTAVI_Launch_Trailer.mp4 t=47.23 s (frame 1417), letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/25 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | EDISON-FIT 2026-10-20 (Alexandre: the hotel is the Edison = Hotel Breakwater): camera in the park east of Shore Dr ~42 m from the hotel, looking W at its east facade: its two corners (u 270 / 2580) + the facade base (v ~875) with a frontal heading prior (the arcade arches are evenly spaced) and a low eye (~0.8 m). ESTIMATED: few constraints (one mesh, footprint only)."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/25 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | EDISON-FIT 2026-10-20 (Alexandre: the hotel is the Edison = Hotel Breakwater): camera in the park east of Shore Dr ~42 m from the hotel, looking W at its east facade: its two corners (u 270 / 2580) + the facade base (v ~875) with a frontal heading prior (the arcade arches are evenly spaced) and a low eye (~0.8 m). ESTIMATED: few constraints (one mesh, footprint only). | GRAPE-ST 2026-10-20 (Alexandre: the hotel is the Edison, NOT the Breakwater - neighbours; camera at Grape St / Shore Dr looking S): the readable Grape St plate and the rounded corner at the left edge = the Edison's NE corner at Grape St / Shore Dr; camera on the north sidewalk of Grape St (the car is in Grape St ~11 m ahead, its yellow centre line runs across the frame), looking S (heading 188) frontally at the Edison's north facade along Grape St (yellow arcade). NE corner at u 270, its base at v ~875 (pitch +2.7). Replaces the EDISON-FIT pose (which looked W at the east facade of the then-merged Breakwater/Edison mesh). ESTIMATED. | Refined: heading/pitch on the Edison north facade corners (NE u 270, NW u 2590, base v 875). | FIT 2026-10-20: camera on the north sidewalk of Grape St (8 m from its axis), position + heading + pitch fitted on the Edison north facade (NE corner u 270 + base v 875, NW corner u 2590 = end of the white tower): (1938.7, 635.6), heading 169 (SSE, Alexandre 'vers le sud est'), pitch -2.9, hfov 59 kept (Yanis). ESTIMATED."
  },
  "Dirt Bike on the Overpass": {
   "id": "T4/26",
