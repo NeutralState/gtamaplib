@@ -926,7 +926,7 @@ def runway_jet():
     """T4/20 Runway (pose SOLVED): the camera rides low under the right wing of a twin-engine wide-body taking off toward the NW
     (heading 302 = the runway reversed: the pickup racing beside the gear faces the camera), looking aft. Generic jet primitives
     placed on the frame: right main gear at u 3015 (12.5 m), engine at the left edge (u 0..1000), flap-track fairings u 1660..2180 and
-    2580..2840, fuselage belly at the right edge; the pickup (u 1900..2560, tyres v 1300). Sizes ESTIMATED (one view)."""
+    2580..2840, fuselage belly at the right edge. Sizes ESTIMATED (one view)."""
     V = View('Runway'); o = V.o; P = []; r2 = lambda a: [round(float(v), 2) for v in a]
     D = dict(JET_D); D.update(dict(z_wing=3.6, dihedral=5.0, sweep=37.0, wing_root_le=9.0, wing_root_chord=14.0, wing_span=32.0, tip_chord=4.0,
              R_fus=3.2, z_fus=6.6, eng_y=20.0, eng_x=-3.5, eng_r=1.75, eng_len=7.2, eng_z_20=3.1, eng2_y=0, gear_y=5.5, gear_wheel_r=0.62,
@@ -935,16 +935,8 @@ def runway_jet():
     d = V.ray(3015, 960.0); d2 = d[:2] / np.linalg.norm(d[:2]); gR = o[:2] + d2 * 12.5   # the right main gear
     axle = gR + l * D['gear_y']; G = T(axle[0], axle[1])
     P += _jet_world(_jet_build(D), axle[0], axle[1], G, psi)
-    # the pickup racing beside the gear, facing the camera: 2.0 m wide over u 1920..2560 -> ~11.5 m; its axis toward the camera
-    fpx = V.W / 2 / V.th; Dt = 2.0 * fpx / 640.0; d = V.ray(2240, 960.0); d2 = d[:2] / np.linalg.norm(d[:2]); c = o[:2] + d2 * (Dt + 2.7)
-    g = T(c[0], c[1]); az = (math.degrees(math.atan2(d2[0], d2[1])) + 180) % 360; f = -d2
-    P.append(dict(k='box', c=r2([c[0], c[1], g + 0.35]), s=[5.4, 1.95, 0.85], az=round(az, 1), color='#c8c6c0'))
-    q = c - f * 0.4; P.append(dict(k='box', c=r2([q[0], q[1], g + 1.2]), s=[2.2, 1.8, 0.7], az=round(az, 1), color='#b9b7b1'))
-    for sx in (-1.6, 1.6):
-        for sy in (-0.85, 0.85):
-            w = c + f * sx + np.array([-f[1], f[0]]) * sy
-            P.append(dict(k='cyl', a=r2([*(w - np.array([-f[1], f[0]]) * 0.15), g + 0.38]), b=r2([*(w + np.array([-f[1], f[0]]) * 0.15), g + 0.38]), r=0.38, color='#1e1f21'))
-    return dict(scene='T4/20 Runway (jet + pickup)', camera='Runway', note=runway_jet.__doc__.split('\n')[0], props=P)
+    # (no pickup: a box version spoiled the view, Alexandre; the frame shows it during the arrival)
+    return dict(scene='T4/20 Runway (jet)', camera='Runway', note=runway_jet.__doc__.split('\n')[0], props=P)
 
 
 SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet]
