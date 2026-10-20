@@ -7523,12 +7523,12 @@
   "xyz": [
    1204.6,
    -139.4,
-   1.7
+   25.0
   ],
   "ypr": [
-   58.0,
-   0.0,
-   0.0
+   -302.0,
+   -3.97,
+   -9.1
   ],
   "fov": [
    66.0,
@@ -7541,7 +7541,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - Jason in a dark room by an open window, city lights outside; GTAVI_Launch_Trailer.mp4 t=32.77 s (frame 983), letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/14 (corr 0.969); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 302 / hfov 66 read by eye on the V of his V17 marker T4/14 (was 300 / 60.0)."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/14 (corr 0.969); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 302 / hfov 66 read by eye on the V of his V17 marker T4/14 (was 300 / 60.0). | HELI-ESTIMATE 2026-10-20: the frame is a HELICOPTER cockpit (overhead switch panel, open side door), not a window: Yanis's dot is on the water of Government Cut by the Coast Guard base. Kept his position / heading 302 / hfov 66 (eyeballed). Measured: bank roll -9.1 and pitch -4.0 from the horizon (windshield v~655 at u 1250, side door v~1020 at u 3550); altitude 25 m = the lit Admiral Causeway (230-280 m away) at v 1210-1330 in the side door. ESTIMATED, not solvable from this frame (only the horizon and one blurred lit road are visible outside)."
  },
  "Jason and Lucia by the Red Car": {
   "id": "T4/21",
