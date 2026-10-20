@@ -163,13 +163,12 @@ def _xform(P, F, rot):
 
 def brians_marina():
     """T4/2 Brian's Marina — the dry-stack shed of Key Lento (its north gable is the 'Brian's Boat Works & Marina' door
-    of T2/30). Pose fit (tri fit 2026-10-19): the V17 blue-grey footprint shifted (+8.9, -13.1) m and rotated 28.6 deg,
-    eave 10.0 / ridge 13.3 m, consistent with the radio tower '102180 Overseas Hwy' and the Key Lento ray to the rooftop
-    letters. Props: gable shed, rooftop 'BRIAN'S MARINA' letters keyed out of the frame, the T2/30 gable sign, 5-level
+    of T2/30). Pose fit (T4-VIDEO-FIT-3 2026-10-19): the V17 blue-grey footprint shifted (+26.0, -57.1) m and turned 8.1 deg,
+    50 m long, eave 11.8 / ridge 15.6 m, with the radio tower '102180 Overseas Hwy' and the blimp landmarks (horizon). Props: gable shed, rooftop 'BRIAN'S MARINA' letters keyed out of the frame, the T2/30 gable sign, 5-level
     boat racks with boats, 'RENT A RACK' sign, parking lot, boats on trailers, palms, and the blimp in the sky."""
     V = View("Brian's Marina"); P = []
-    XW, XE, YN, YS = -2570.0, -2537.0, -5827.0, -5905.0; xm = (XW + XE) / 2; E, R = 10.02, 13.34
-    C0, SH, ROT = np.array([-2553.5, -5866.0]), np.array([8.93, -13.07]), 28.61
+    XW, XE, YN, YS = -2570.0, -2537.0, -5827.0, -5877.0; xm = (XW + XE) / 2; E, R = 11.81, 15.59
+    C0, SH, ROT = np.array([-2553.5, -5866.0]), np.array([25.99, -57.11]), 8.10
     ca, sa = math.cos(math.radians(ROT)), math.sin(math.radians(ROT))
     F = lambda x, y: C0 + np.array([[ca, -sa], [sa, ca]]) @ (np.array([x, y], float) - C0) + SH
     g = T(*F(xm, (YN + YS) / 2))
@@ -184,8 +183,8 @@ def brians_marina():
     bw = cv2.imread(os.path.join(REPO, 'frames', "Brian's Boat Works.png"))
     if bw is not None: cv2.imwrite(os.path.join(THIS, 'threejs', '_prop_brians_gable.png'), bw[12:349, 1836:2497])
     L.append(dict(k='tex', p=[[xm + 3.4, YN + 0.12, g + 8.0], [xm - 3.4, YN + 0.12, g + 8.0], [xm - 3.4, YN + 0.12, g + 11.5], [xm + 3.4, YN + 0.12, g + 11.5]], img='_prop_brians_gable.png'))
-    rng = np.random.default_rng(2); x0r, x1r = XE + 0.4, XE + 10.0; ys = np.arange(-5832.0, -5910.1, -6.5)
-    lv = [g + 0.4 + 2.15 * k for k in range(5)]                          # 5 levels under the 10 m eave
+    rng = np.random.default_rng(2); x0r, x1r = XE + 0.4, XE + 17.0; ys = np.arange(-5832.0, -5877.1, -6.5)
+    lv = [g + 0.4 + 2.5 * k for k in range(5)]                           # 5 levels under the 11.8 m eave
     for x_ in (x0r, x1r):
         for y_ in ys: L.append(dict(k='cyl', a=[x_, y_, g], b=[x_, y_, lv[-1] + 2.0], r=0.15, color='#3d4043'))
         for z_ in lv + [lv[-1] + 2.0]: L.append(dict(k='cyl', a=[x_, ys[0], z_], b=[x_, ys[-1], z_], r=0.1, color='#3d4043'))
@@ -229,7 +228,15 @@ def brians_marina():
     for dz_, side in ((rb * 0.9, 0), (-rb * 0.9, 0), (0, rb * 0.9), (0, -rb * 0.9)):
         w = np.array([-u_[1], u_[0]]) * side; P.append(dict(k='box', c=r2([tail[0] + w[0], tail[1] + w[1], bc[2] + dz_ - (0.3 * rb if dz_ > 0 else 0)]), s=[Lb * 0.12, 0.6 if side == 0 else rb * 0.7, rb * 0.7 if side == 0 else 0.6], az=round(ax % 360, 1), color='#9da2a8'))
     P.append(dict(k='box', c=r2([bc[0], bc[1], bc[2] - rb * 1.05]), s=[Lb * 0.14, rb * 0.35, rb * 0.3], az=round(ax % 360, 1), color='#6d7278'))
-    clear = [[list(np.round(F(x_, y_), 1)) for x_, y_ in ((XW - 6, YS - 14), (XE + 16, YS - 14), (XE + 16, YN + 6), (XW - 6, YN + 6))]]
+    # foreground: the frame's bottom edge is tree crowns (the camera looks over them), mid-ground a dark asphalt yard
+    rng2 = np.random.default_rng(22); tones = ['#2b3d22', '#344a27', '#3d552c', '#26361e']
+    for u in list(np.linspace(1750, 3950, 16)) + list(np.linspace(-150, 350, 4)):     # crowns whose tops just enter the bottom edge
+        for v in (2010, 2120):
+            q = V.on_plane_z(u, v, g); r = rng2.uniform(2.6, 3.6)
+            P.append(dict(k='blob', c=r2([q[0], q[1], g + rng2.uniform(3.0, 4.5)]), r=[r, r, r * 0.8], color=tones[int(rng2.integers(4))]))
+    L2 = [dict(k='quad', p=[[XE + 17.5, YS - 10, g + 0.07], [XE + 90, YS - 10, g + 0.07], [XE + 90, YN + 40, g + 0.07], [XE + 17.5, YN + 40, g + 0.07]], color='#2a2c2e')]
+    P += _xform(L2, F, ROT)
+    clear = [[list(np.round(F(x_, y_), 1)) for x_, y_ in ((XW - 6, YS - 14), (XE + 95, YS - 14), (XE + 95, YN + 45), (XW - 6, YN + 45))]]
     return dict(scene='T4/2 Brian\'s Marina', camera="Brian's Marina", note=brians_marina.__doc__.split('\n')[0], props=P, clear=clear)
 
 
