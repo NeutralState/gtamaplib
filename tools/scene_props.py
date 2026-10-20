@@ -380,7 +380,55 @@ def seaplane_dock():
     return dict(scene='T4/3 Seaplane at the Dock', camera='Seaplane at the Dock', note=seaplane_dock.__doc__.split('\n')[0], props=P, clear=clear)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock]
+def radio_towers():
+    """The two radio towers north of Key Lento seen in T4/3 (Alexandre: 'modelise les deux radio tower surtout WDNA'):
+    - WDNA FM: guyed mast on the mesh / landmark geometry (triangular lattice, legs ~5 m apart, 396 m + antenna to 409 m),
+      guy attachment levels of the mesh (215, 380, 390 m) + 100 / 300 m, 3 guy directions; anchor radii and the
+      orange/white paint bands are ESTIMATED (FAA practice);
+    - the self-supporting lattice tower left of it (T4/3 frame u 958, top v 365 -> bearing 357.1 deg, elevation +3.5 deg):
+      NOT in our data, distance unknown: placed at 2.2 km on that bearing (Hamlet), height 136 m to match the elevation
+      (ESTIMATED; a second view would fix it)."""
+    P = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    ORG, WHT = '#e0592b', '#efeeea'
+    # ---- WDNA FM
+    L3 = np.array([[-2522.5, -2299.0], [-2520.7, -2303.7], [-2525.7, -2302.7]]); C = L3.mean(0); z0, zt = 5.0, 396.3
+    band = lambda z: ORG if int((z - z0) / ((zt - z0) / 7)) % 2 == 0 else WHT
+    for k in range(3): P.append(dict(k='cyl', a=r2([*L3[k], z0]), b=r2([*L3[k], zt]), r=0.22, color='#c9c9c4'))
+    for z in np.arange(z0, zt, 6.0):
+        col = band(z)
+        for k in range(3):
+            a, b = L3[k], L3[(k + 1) % 3]
+            P.append(dict(k='cyl', a=r2([*a, z]), b=r2([*b, z]), r=0.12, color=col))
+            P.append(dict(k='cyl', a=r2([*a, z]), b=r2([*b, min(z + 6, zt)]), r=0.08, color=col))
+    P.append(dict(k='cyl', a=r2([*C, zt]), b=r2([-2527.2, -2301.8, 409.4]), r=0.35, color=WHT))      # top antenna
+    for z in (100, 200, 300, 396):
+        P.append(dict(k='box', c=r2([*C, z]), s=[1.2, 1.2, 0.8], az=0.0, color='#ff2a2a'))
+    zg = T(*C)
+    for i, a in enumerate((20.0, 140.0, 260.0)):
+        dd = np.array([math.sin(math.radians(a)), math.cos(math.radians(a))])
+        for z, R in ((100, 170), (215, 170), (300, 300), (390, 300)):
+            an = C + dd * R; P.append(dict(k='line', pts=[r2([*C, z]), r2([*an, max(T(*an), 0.0) + 1.0])], color='#b0b0b0', opacity=0.18))
+        for R in (170, 300):
+            an = C + dd * R; P.append(dict(k='box', c=r2([*an, max(T(*an), 0.0)]), s=[3, 3, 1.2], az=a, color='#a8a39a'))
+    # ---- lattice tower (ESTIMATED distance)
+    cam = np.array([-2571.03, -5754.92]); az = math.radians(357.07); D = 2200.0
+    B0 = cam + D * np.array([math.sin(az), math.cos(az)]); g = T(*B0); H = 4.25 + D * math.tan(math.radians(3.52)) - g
+    hw = lambda z: 5.0 + (0.75 - 5.0) * (z / H)
+    corners = lambda z: [B0 + np.array(v) * hw(z) for v in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+    lv = list(np.arange(0, H, 8.0)) + [H]
+    for za, zb in zip(lv[:-1], lv[1:]):
+        A_, B_ = corners(za), corners(zb); col = ORG if int(za / (H / 7)) % 2 == 0 else WHT
+        for k in range(4):
+            P.append(dict(k='cyl', a=r2([*A_[k], g + za]), b=r2([*B_[k], g + zb]), r=0.18, color=col))                       # legs
+            P.append(dict(k='cyl', a=r2([*A_[k], g + za]), b=r2([*B_[(k + 1) % 4], g + zb]), r=0.07, color=col))             # X bracing
+            P.append(dict(k='cyl', a=r2([*A_[(k + 1) % 4], g + za]), b=r2([*B_[k], g + zb]), r=0.07, color=col))
+            P.append(dict(k='cyl', a=r2([*B_[k], g + zb]), b=r2([*B_[(k + 1) % 4], g + zb]), r=0.07, color=col))             # horizontals
+    P.append(dict(k='cyl', a=r2([*B0, g + H]), b=r2([*B0, g + H + 8]), r=0.25, color=WHT))
+    P.append(dict(k='box', c=r2([*B0, g + H + 8]), s=[1, 1, 0.8], az=0.0, color='#ff2a2a'))
+    return dict(scene='Radio towers (WDNA FM + lattice)', camera=None, note=radio_towers.__doc__.split('\n')[0], props=P, replace=['WDNA FM'])
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers]
 
 
 def main():

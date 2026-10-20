@@ -4951,7 +4951,7 @@ window.__camScreen = name => {
         g.rotateZ(Math.atan2(Math.cos(a), Math.sin(a))); g.translate(p.c[0], p.c[1], p.c[2] + H / 2); add(g, mat(p.color));
       } else if (p.k === 'cyl') add(cylGeo(p.a, p.b, p.r), mat(p.color));
       else if (p.k === 'line') {
-        const g = new THREE.BufferGeometry().setFromPoints(p.pts.map(V)); G.add(new THREE.Line(g, new THREE.LineBasicMaterial({ color: new THREE.Color(p.color) })));
+        const g = new THREE.BufferGeometry().setFromPoints(p.pts.map(V)); G.add(new THREE.Line(g, new THREE.LineBasicMaterial({ color: new THREE.Color(p.color), transparent: p.opacity !== undefined, opacity: p.opacity ?? 1 })));
       } else if (p.k === 'tex') {
         const tex = loader.load('/threejs/' + p.img + '?v=' + ver); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
         const m = new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: new THREE.Color(1, 1, 1), emissiveIntensity: 0.55, roughness: 0.9, side: THREE.DoubleSide, alphaTest: p.alpha ? 0.5 : 0, transparent: false });
