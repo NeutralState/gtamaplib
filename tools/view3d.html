@@ -4905,15 +4905,16 @@ window.__camScreen = name => {
 // la frame depuis la pose de la cam, pour que la 3D ressemble a l'image quand le tour s'y pose (Alexandre: video YouTube) ──
 (() => {
   const chip = document.getElementById('ly-props'); if (!chip) return;
-  const G = new THREE.Group(); G.name = 'scene-props'; scene.add(G);
+  const G = new THREE.Group(); G.name = 'scene-props'; scene.add(G); window.__propsGroup = G;
   let on = localStorage.getItem('ui.props3d') !== '0';
   const sync = () => { chip.classList.toggle('on', on); G.visible = on; };
   chip.addEventListener('click', () => { on = !on; try { localStorage.setItem('ui.props3d', on ? '1' : '0'); } catch (e) {} sync(); });
   sync();
-  const mats = {}, mat = (col, side) => mats[col + (side || '')] || (mats[col + (side || '')] = new THREE.MeshStandardMaterial({ color: new THREE.Color(col), roughness: 0.85, metalness: 0.0, side: side || THREE.FrontSide }));
+  const mats = {}, mat = (col, side) => mats[col + (side || '')] || (mats[col + (side || '')] = new THREE.MeshStandardMaterial({ color: new THREE.Color(col), emissive: new THREE.Color(col), emissiveIntensity: 0.32, roughness: 0.85, metalness: 0.0, side: side || THREE.FrontSide }));   // part auto-lumineuse: les toits / sols horizontaux restaient trop sombres sous l'eclairage de la scene
   const add = (geo, m, shadow = true) => { const me = new THREE.Mesh(geo, m); me.castShadow = shadow; me.receiveShadow = true; G.add(me); return me; };
   const V = a => new THREE.Vector3(a[0], a[1], a[2]);
   const quadGeo = (p, uv) => { const g = new THREE.BufferGeometry();
+    if (!uv) { const a = V(p[0]), n = V(p[1]).sub(a).cross(V(p[2]).sub(a)); if (n.z < -1e-6) p = [p[0], p[3], p[2], p[1]]; }   // sols / toits: normale vers le haut (eclairage correct)
     g.setAttribute('position', new THREE.Float32BufferAttribute([...p[0], ...p[1], ...p[2], ...p[0], ...p[2], ...p[3]], 3));
     if (uv) g.setAttribute('uv', new THREE.Float32BufferAttribute([0, 0, 1, 0, 1, 1, 0, 0, 1, 1, 0, 1], 2));
     g.computeVertexNormals(); return g; };
@@ -4933,11 +4934,13 @@ window.__camScreen = name => {
         const g = new THREE.BufferGeometry().setFromPoints(p.pts.map(V)); G.add(new THREE.Line(g, new THREE.LineBasicMaterial({ color: new THREE.Color(p.color) })));
       } else if (p.k === 'tex') {
         const tex = loader.load('/threejs/' + p.img + '?v=' + ver); tex.colorSpace = THREE.SRGBColorSpace; tex.anisotropy = 8;
-        const m = new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: new THREE.Color(1, 1, 1), emissiveIntensity: 0.55, roughness: 0.9, side: THREE.DoubleSide });
+        const m = new THREE.MeshStandardMaterial({ map: tex, emissiveMap: tex, emissive: new THREE.Color(1, 1, 1), emissiveIntensity: 0.55, roughness: 0.9, side: THREE.DoubleSide, alphaTest: p.alpha ? 0.5 : 0, transparent: false });
         add(quadGeo(p.p, true), m, false);
       } else if (p.k === 'blob') {
-        const g = new THREE.IcosahedronGeometry(1, 1); g.scale(p.r[0], p.r[1], p.r[2]); g.translate(p.c[0], p.c[1], p.c[2]);
-        const m = mat(p.color); m.flatShading = true; add(g, m);
+        const g = new THREE.IcosahedronGeometry(1, p.smooth ? 4 : 1); g.scale(p.r[0], p.r[1], p.r[2]);
+        if (p.az !== undefined) g.rotateZ(Math.atan2(Math.cos(p.az * Math.PI / 180), Math.sin(p.az * Math.PI / 180)));   // rx along the azimuth az
+        g.translate(p.c[0], p.c[1], p.c[2]);
+        const m = p.smooth ? new THREE.MeshStandardMaterial({ color: new THREE.Color(p.color), roughness: 0.45, metalness: 0.25 }) : mat(p.color); if (!p.smooth) m.flatShading = true; add(g, m);
       } else if (p.k === 'palm') {
         const a = p.a, la = p.lean_az * Math.PI / 180, top = [a[0] + Math.sin(la) * p.lean * p.h, a[1] + Math.cos(la) * p.lean * p.h, a[2] + p.h];
         add(cylGeo(a, top, 0.22, 6), mat('#6b5a45'));

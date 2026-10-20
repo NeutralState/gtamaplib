@@ -141,7 +141,112 @@ def keys_entrance():
     return dict(scene='T4/1 Truck with Jet Ski', camera='Truck with Jet Ski', note=keys_entrance.__doc__.split('\n')[0], props=P, clear=clear)
 
 
-SCENES = [keys_entrance]
+def _key_letters(crop):
+    """alpha mask of the salmon/red sign letters (frame crop): red clearly above green and blue."""
+    b, g, r = [crop[..., i].astype(int) for i in range(3)]
+    a = ((r - g > 45) & (r - b > 35) & (r > 120)).astype(np.uint8) * 255
+    a = cv2.morphologyEx(a, cv2.MORPH_CLOSE, np.ones((3, 3), np.uint8)); a = cv2.GaussianBlur(a, (3, 3), 0)
+    return np.dstack([crop, a])
+
+
+def _xform(P, F, rot):
+    """move props built in a local (V17 footprint) frame into the world: F(x, y) -> world xy, boxes turn by -rot (compass)."""
+    m3 = lambda q: [round(float(v), 2) for v in (*F(q[0], q[1]), q[2])]
+    for p in P:
+        if p['k'] in ('quad', 'tex'): p['p'] = [m3(q) for q in p['p']]
+        elif p['k'] == 'box': p['c'] = m3(p['c']); p['az'] = round((p['az'] - rot) % 360, 2)
+        elif p['k'] == 'cyl': p['a'], p['b'] = m3(p['a']), m3(p['b'])
+        elif p['k'] == 'blob': p['c'] = m3(p['c'])
+        elif p['k'] == 'palm': p['a'] = m3(p['a'])
+    return P
+
+
+def brians_marina():
+    """T4/2 Brian's Marina — the dry-stack shed of Key Lento (its north gable is the 'Brian's Boat Works & Marina' door
+    of T2/30). Pose fit (tri fit 2026-10-19): the V17 blue-grey footprint shifted (+8.9, -13.1) m and rotated 28.6 deg,
+    eave 10.0 / ridge 13.3 m, consistent with the radio tower '102180 Overseas Hwy' and the Key Lento ray to the rooftop
+    letters. Props: gable shed, rooftop 'BRIAN'S MARINA' letters keyed out of the frame, the T2/30 gable sign, 5-level
+    boat racks with boats, 'RENT A RACK' sign, parking lot, boats on trailers, palms, and the blimp in the sky."""
+    V = View("Brian's Marina"); P = []
+    XW, XE, YN, YS = -2570.0, -2537.0, -5827.0, -5905.0; xm = (XW + XE) / 2; E, R = 10.02, 13.34
+    C0, SH, ROT = np.array([-2553.5, -5866.0]), np.array([8.93, -13.07]), 28.61
+    ca, sa = math.cos(math.radians(ROT)), math.sin(math.radians(ROT))
+    F = lambda x, y: C0 + np.array([[ca, -sa], [sa, ca]]) @ (np.array([x, y], float) - C0) + SH
+    g = T(*F(xm, (YN + YS) / 2))
+    L = []                                                                  # ---- shed + racks in the footprint frame
+    L.append(dict(k='box', c=[xm, (YN + YS) / 2, g], s=[YN - YS, XE - XW, E], az=0.0, color='#78aca6'))
+    o = 0.6
+    L.append(dict(k='quad', p=[[XW - o, YN + o, g + E - 0.3], [XW - o, YS - o, g + E - 0.3], [xm, YS - o, g + R], [xm, YN + o, g + R]], color='#cfd0cb'))
+    L.append(dict(k='quad', p=[[XE + o, YN + o, g + E - 0.3], [XE + o, YS - o, g + E - 0.3], [xm, YS - o, g + R], [xm, YN + o, g + R]], color='#d6d6d1'))
+    for yy in (YN, YS):
+        L.append(dict(k='quad', p=[[XW, yy, g + E], [XE, yy, g + E], [xm, yy, g + R - 0.2], [xm, yy, g + R - 0.2]], color='#78aca6'))
+    L.append(dict(k='quad', p=[[xm - 6, YN + 0.08, g], [xm + 6, YN + 0.08, g], [xm + 6, YN + 0.08, g + 7.6], [xm - 6, YN + 0.08, g + 7.6]], color='#1b1f22'))
+    bw = cv2.imread(os.path.join(REPO, 'frames', "Brian's Boat Works.png"))
+    if bw is not None: cv2.imwrite(os.path.join(THIS, 'threejs', '_prop_brians_gable.png'), bw[12:349, 1836:2497])
+    L.append(dict(k='tex', p=[[xm + 3.4, YN + 0.12, g + 8.0], [xm - 3.4, YN + 0.12, g + 8.0], [xm - 3.4, YN + 0.12, g + 11.5], [xm + 3.4, YN + 0.12, g + 11.5]], img='_prop_brians_gable.png'))
+    rng = np.random.default_rng(2); x0r, x1r = XE + 0.4, XE + 10.0; ys = np.arange(-5832.0, -5910.1, -6.5)
+    lv = [g + 0.4 + 2.15 * k for k in range(5)]                          # 5 levels under the 10 m eave
+    for x_ in (x0r, x1r):
+        for y_ in ys: L.append(dict(k='cyl', a=[x_, y_, g], b=[x_, y_, lv[-1] + 2.0], r=0.15, color='#3d4043'))
+        for z_ in lv + [lv[-1] + 2.0]: L.append(dict(k='cyl', a=[x_, ys[0], z_], b=[x_, ys[-1], z_], r=0.1, color='#3d4043'))
+    for y_ in ys:
+        for z_ in lv: L.append(dict(k='cyl', a=[x0r, y_, z_], b=[x1r, y_, z_], r=0.08, color='#3d4043'))
+    hulls = ['#ecece8', '#e6e3dc', '#d9d4c7', '#b9ab8f', '#a8977a', '#5a5a58', '#f0f0ee']
+    for ya, yb in zip(ys[:-1], ys[1:]):
+        for z_ in lv:
+            for yc in (ya - 1.65, yb + 1.65):
+                if rng.random() < 0.12: continue
+                Lb = rng.uniform(6.0, 8.0); col = hulls[int(rng.integers(len(hulls)))]
+                L.append(dict(k='box', c=[x1r - Lb / 2 + 0.6, yc, z_ + 0.12], s=[Lb, 2.2, 1.0], az=90.0, color=col))
+                if rng.random() < 0.5: L.append(dict(k='box', c=[x1r - Lb / 2 - 0.4, yc, z_ + 1.12], s=[Lb * 0.45, 1.7, 0.65], az=90.0, color='#f2f2f0' if col not in ('#b9ab8f', '#a8977a') else col))
+    L.append(dict(k='quad', p=[[XE + 10.5, YN - 25, g + 0.06], [XE + 38, YN - 25, g + 0.06], [XE + 38, YN + 32, g + 0.06], [XE + 10.5, YN + 32, g + 0.06]], color='#2e3032'))
+    L.append(dict(k='quad', p=[[XW - 6, YN, g + 0.05], [XE + 10.5, YN, g + 0.05], [XE + 10.5, YN + 32, g + 0.05], [XW - 6, YN + 32, g + 0.05]], color='#34363a'))
+    P += _xform(L, F, ROT)
+    rotv = lambda v: np.array([[ca, -sa], [sa, ca]]) @ np.array(v, float)
+    r2 = lambda a: [round(float(v), 2) for v in a]
+    # ---- frame-derived props (world): rooftop letters, RENT A RACK, trailers, palms
+    fr = cv2.imread(os.path.join(REPO, 'frames', "Brian's Marina.png"))
+    if fr is not None:
+        cv2.imwrite(os.path.join(THIS, 'threejs', '_prop_brians_letters.png'), _key_letters(fr[581:763, 994:1982]))
+        cv2.imwrite(os.path.join(THIS, 'threejs', '_prop_brians_rentarack.png'), fr[1452:1657, 996:1530])
+    n = rotv((1.0, 0.0)); p0 = F(xm + 4.0, YN)
+    BL, BR, TR, TL = (V.on_vplane(u, v, p0, n) for u, v in ((994, 762), (1981, 762), (1981, 581), (994, 581)))
+    P.append(dict(k='tex', p=[r2(q) for q in (BL, BR, TR, TL)], img='_prop_brians_letters.png', alpha=True))
+    for t in np.linspace(0.04, 0.96, 6):
+        q = BL + (BR - BL) * t - np.r_[n * 0.3, 0]; P.append(dict(k='cyl', a=r2([q[0], q[1], g + R - 1.2]), b=r2([q[0], q[1], TL[2]]), r=0.1, color='#4a4d50'))
+    q = [V.on_vplane(u, v, F(x1r + 0.35, YN), n) for u, v in ((996, 1656), (1529, 1656), (1529, 1452), (996, 1452))]
+    P.append(dict(k='tex', p=[r2(a) for a in q], img='_prop_brians_rentarack.png'))
+    for u, v, az in ((2700, 1480, 40.0), (2560, 1540, 45.0)):
+        q = V.on_plane_z(u, v, g + 0.6); P.append(dict(k='box', c=r2([q[0], q[1], g + 0.6]), s=[8.0, 2.6, 1.5], az=az, color='#efefec'))
+        P.append(dict(k='box', c=r2([q[0], q[1], g + 2.1]), s=[3.4, 2.1, 1.0], az=az, color='#e5ded0'))
+    for u, v, hgt in ((2050, 1360, 11.0), (2900, 1260, 13.0), (3100, 1230, 12.0), (3330, 1250, 13.5), (3580, 1230, 12.0), (560, 930, 10.0), (2860, 1460, 9.0)):
+        q = V.on_plane_z(u, v, g); P.append(dict(k='palm', a=r2(q), h=hgt, lean_az=300.0, lean=0.08))
+    # ---- the blimp (frame u 2664..2808, v 96..168): ~2 km out on its ray, side view -> axis across the view
+    d = V.ray(2736, 132); d2 = d[:2] / np.linalg.norm(d[:2]); bc = V.o + d / np.linalg.norm(d[:2]) * 2000.0
+    ax = math.degrees(math.atan2(d2[0], d2[1])) + 90.0; Lb = 2000.0 * (2808 - 2664) / (V.W / 2 / V.th); rb = Lb * 0.13
+    P.append(dict(k='blob', c=r2(bc), r=[round(Lb / 2, 1), round(rb, 1), round(rb, 1)], az=round(ax % 360, 1), color='#c9ccd1', smooth=True))
+    u_ = np.array([math.sin(math.radians(ax)), math.cos(math.radians(ax))]); tail = bc[:2] - u_ * Lb * 0.42
+    for dz_, side in ((rb * 0.9, 0), (-rb * 0.9, 0), (0, rb * 0.9), (0, -rb * 0.9)):
+        w = np.array([-u_[1], u_[0]]) * side; P.append(dict(k='box', c=r2([tail[0] + w[0], tail[1] + w[1], bc[2] + dz_ - (0.3 * rb if dz_ > 0 else 0)]), s=[Lb * 0.12, 0.6 if side == 0 else rb * 0.7, rb * 0.7 if side == 0 else 0.6], az=round(ax % 360, 1), color='#9da2a8'))
+    P.append(dict(k='box', c=r2([bc[0], bc[1], bc[2] - rb * 1.05]), s=[Lb * 0.14, rb * 0.35, rb * 0.3], az=round(ax % 360, 1), color='#6d7278'))
+    clear = [[list(np.round(F(x_, y_), 1)) for x_, y_ in ((XW - 6, YS - 14), (XE + 16, YS - 14), (XE + 16, YN + 6), (XW - 6, YN + 6))]]
+    return dict(scene='T4/2 Brian\'s Marina', camera="Brian's Marina", note=brians_marina.__doc__.split('\n')[0], props=P, clear=clear)
+
+
+def keys_landmarks():
+    """Key Lento landmarks seen from several tour scenes: the rectangular concrete radio tower '102180 Overseas Hwy'
+    (top triangulated from 4 cameras, z 40.3; seen in Key Lento, T4/2 ...) with its antenna mast. Footprint 3.8 x 3.8 m (width on the T4/2 frame) and the
+    floor bands are ESTIMATED from the Key Lento frame."""
+    P = []; x, y, ztop = -2633.6, -6018.4, 40.3; g = T(x, y)
+    P.append(dict(k='box', c=[x, y, round(g, 2)], s=[3.8, 3.8, round(ztop - g, 2)], az=0.0, color='#aaa59c'))
+    for zz in np.arange(g + 6, ztop - 2, 4.5):                            # darker window bands
+        P.append(dict(k='box', c=[x, y, round(float(zz), 2)], s=[3.9, 3.9, 0.7], az=0.0, color='#8a8c8d'))
+    P.append(dict(k='box', c=[x, y, round(ztop, 2)], s=[2.6, 2.6, 1.8], az=0.0, color='#8e8a82'))
+    P.append(dict(k='cyl', a=[x, y, round(ztop + 2.2, 2)], b=[x, y, round(ztop + 12.0, 2)], r=0.25, color='#cfcfcf'))
+    return dict(scene='Key Lento landmarks', camera=None, note=keys_landmarks.__doc__.split('\n')[0], props=P)
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks]
 
 
 def main():

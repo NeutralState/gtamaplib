@@ -7417,17 +7417,17 @@
   "id": "T4/2",
   "player": null,
   "xyz": [
-   -2388.1,
-   -5748.2,
-   41.97
+   -2437.11,
+   -5708.7,
+   24.11
   ],
   "ypr": [
-   129.0,
-   0.0,
-   0.0
+   139.35,
+   -3.997,
+   -2.085
   ],
   "fov": [
-   42.0,
+   25.982,
    null
   ],
   "size": [
@@ -7437,7 +7437,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - aerial view of Brian's Marina boat storage over the bay (height ESTIMATED 40 m); GTAVI_Launch_Trailer.mp4 t=5.13 s (frame 154), letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/02 (corr 0.994); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 40.0 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 231 / hfov 42 read by eye on the V of his V17 marker T4/2 (was 235 / 46.0)."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/02 (corr 0.994); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 40.0 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 231 / hfov 42 read by eye on the V of his V17 marker T4/2 (was 235 / 46.0). | T4-VIDEO-FIT 2026-10-19 (Alexandre: tour scene 2): solved on the dry-stack shed = the V17 blue-grey building whose north gable is the 'Brian's Boat Works & Marina' door of T2/30: north ridge apex, NW eave + ground, NE eave, 4 points of the east eave line vs the V17 footprint (x -2570..-2537, north wall y -5827); eave 15.1 m / ridge 19.9 m fitted (ESTIMATED); rms 2.5 px. Camera 26 m above ground, ~60 m WSW of Yanis's dot, hfov 54 (his V 42). | T4-VIDEO-FIT-2 2026-10-19: re-solved with the concrete radio tower '102180 Overseas Hwy' (top triangulated from 4 cams, z 40.3; axis at u 732, top above the frame) which fixes the scale: the earlier fit (eave 15 m, camera 26 m up, hfov 54) was a scale ambiguity. Shed = V17 blue-grey footprint shifted (+8.9, -13.1) m and rotated 28.6 deg (V17 schematic there; the Key Lento ray to the rooftop letters passes through it), eave 10.0 / ridge 13.3 m; rms 4.4 px. Camera 22 m above ground, hfov 26 (telephoto)."
  },
  "Seaplane at the Dock": {
   "id": "T4/6",
