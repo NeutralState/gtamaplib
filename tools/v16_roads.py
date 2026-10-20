@@ -21,6 +21,9 @@ CACHE = os.path.join(THIS, 'generated', 'v16_all_strokes.json')
 OUT = os.path.join(THIS, 'threejs', '_v16_roads.json')
 CLS = {'#535353': 'road', '#727272': 'hwy', '#636363': 'small', '#FAFAFA': 'mark_w', '#FFF4B0': 'mark_y'}
 DECK_WORDS = ('Bridge', 'Viaduct', 'Ramp', 'Interchange', 'Causeway', 'Overpass')
+# [US1-HAMLET-V1 2026-10-20] viaducts that only the HIGHWAY strokes ride: the streets and roundabouts under them stay on the ground
+# (the US 1 Hamlet Viaduct passes over the Keys roundabout and the Hamlet roads)
+HWY_ONLY = ('US 1 Hamlet Viaduct',)
 CELL = 4.0
 
 
@@ -31,7 +34,7 @@ def strokes():
     return json.load(open(CACHE))['strokes']
 
 
-def deck_grid():
+def deck_grid(hwy_only=True):
     """hauteur du TABLIER (ponts/viaducs/bretelles) sur une grille de 4 m.
     [ROADS-V2] seulement les aretes quasi horizontales (pente < 8 %): les pylones et haubans (Sunshine Skyway...) sont
     ignores; par case, le niveau le plus frequent (bins de 1 m) = le tablier, pas le max (sommet des pylones)."""
@@ -39,6 +42,7 @@ def deck_grid():
     Z = {}
     for n, m in M.items():
         if not any(w in n for w in DECK_WORDS): continue
+        if not hwy_only and n in HWY_ONLY: continue
         for a, b in m.get('world_edges') or []:
             a, b = np.array(a, float), np.array(b, float)
             L = np.linalg.norm(b[:2] - a[:2])
@@ -78,9 +82,9 @@ def is_tunnel(R, tol=15.0):
 
 
 def main():
-    S = strokes(); G = deck_grid()
-    def deck_z(x, y):
-        best = None
+    S = strokes(); GH = deck_grid(); GS = deck_grid(hwy_only=False)
+    def deck_z(x, y, c='hwy'):
+        best = None; G = GS if c == 'road' else GH          # lane markings ride with the highway
         for dx in (-1, 0, 1):
             for dy in (-1, 0, 1):
                 z = G.get((int(x // CELL) + dx, int(y // CELL) + dy))
@@ -103,7 +107,7 @@ def main():
         on_deck = False                                     # [DECK-RAMP] le trait touche-t-il un tablier (> sol + 2.5 m) quelque part ?
         if c in ('hwy', 'road', 'mark_w', 'mark_y'):
             for x, y in R:
-                dz = deck_z(x, y)
+                dz = deck_z(x, y, c)
                 if dz is not None:
                     try: g_ = max(0.0, float(RR.ground(x, y)))
                     except Exception: g_ = 0.0
@@ -113,7 +117,7 @@ def main():
             except Exception: g = 0.0
             z = g + 0.3
             if c in ('hwy', 'road', 'mark_w', 'mark_y'):
-                dz = deck_z(x, y)
+                dz = deck_z(x, y, c)
                 # [DECK-RAMP 2026-10-09] le tablier mesure est suivi jusqu'au sol (ses rampes descendent a sol + 0.3): seuil 2.5 m ->
                 # marche de 2.5 m au bout des rampes (Alexandre: « apres le bridge drop pas de meme »); 0.4 m pour un trait qui monte sur un tablier
                 if dz is not None and (dz - 1.0 > g + 2.5 or (on_deck and dz - 1.0 > g + 0.4)): z = dz - 1.0 + 0.05; n_el += 1; deck_hit = True
