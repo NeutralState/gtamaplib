@@ -935,11 +935,15 @@ def runway_jet():
     d = V.ray(3015, 960.0); d2 = d[:2] / np.linalg.norm(d[:2]); gR = o[:2] + d2 * 12.5   # the right main gear
     axle = gR + l * D['gear_y']; G = T(axle[0], axle[1])
     P += _jet_world(_jet_build(D), axle[0], axle[1], G, psi)
-    # the pickup racing beside the gear, facing the camera (tyres v 1300 at u 2230)
-    c = V.on_plane_z(2230, 1300, T(o[0], o[1])); az = (psi + 180) % 360
-    P.append(dict(k='box', c=r2([c[0], c[1], c[2] + 0.35]), s=[5.4, 2.0, 1.1], az=round(az, 1), color='#d8d6d0'))
-    f = np.array([math.sin(math.radians(az)), math.cos(math.radians(az))])
-    q = c[:2] - f * 0.6; P.append(dict(k='box', c=r2([q[0], q[1], c[2] + 1.45]), s=[2.4, 1.9, 0.8], az=round(az, 1), color='#c9c7c1'))
+    # the pickup racing beside the gear, facing the camera: 2.0 m wide over u 1920..2560 -> ~11.5 m; its axis toward the camera
+    fpx = V.W / 2 / V.th; Dt = 2.0 * fpx / 640.0; d = V.ray(2240, 960.0); d2 = d[:2] / np.linalg.norm(d[:2]); c = o[:2] + d2 * (Dt + 2.7)
+    g = T(c[0], c[1]); az = (math.degrees(math.atan2(d2[0], d2[1])) + 180) % 360; f = -d2
+    P.append(dict(k='box', c=r2([c[0], c[1], g + 0.35]), s=[5.4, 1.95, 0.85], az=round(az, 1), color='#c8c6c0'))
+    q = c - f * 0.4; P.append(dict(k='box', c=r2([q[0], q[1], g + 1.2]), s=[2.2, 1.8, 0.7], az=round(az, 1), color='#b9b7b1'))
+    for sx in (-1.6, 1.6):
+        for sy in (-0.85, 0.85):
+            w = c + f * sx + np.array([-f[1], f[0]]) * sy
+            P.append(dict(k='cyl', a=r2([*(w - np.array([-f[1], f[0]]) * 0.15), g + 0.38]), b=r2([*(w + np.array([-f[1], f[0]]) * 0.15), g + 0.38]), r=0.38, color='#1e1f21'))
     return dict(scene='T4/20 Runway (jet + pickup)', camera='Runway', note=runway_jet.__doc__.split('\n')[0], props=P)
 
 
