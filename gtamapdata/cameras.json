@@ -7574,17 +7574,17 @@
   "id": "T4/25",
   "player": null,
   "xyz": [
-   1988.7,
-   566.7,
-   5.28
+   2014.33,
+   573.58,
+   4.34
   ],
   "ypr": [
-   76,
-   0.0,
+   -277.686,
+   -2.874,
    0.0
   ],
   "fov": [
-   59.0,
+   58.651,
    null
   ],
   "size": [
@@ -7594,7 +7594,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - green sports car drifting in front of a Spanish-style hotel; GTAVI_Launch_Trailer.mp4 t=47.23 s (frame 1417), letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/25 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/25 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | EDISON-FIT 2026-10-20 (Alexandre: the hotel is the Edison = Hotel Breakwater): camera in the park east of Shore Dr ~42 m from the hotel, looking W at its east facade: its two corners (u 270 / 2580) + the facade base (v ~875) with a frontal heading prior (the arcade arches are evenly spaced) and a low eye (~0.8 m). ESTIMATED: few constraints (one mesh, footprint only)."
  },
  "Dirt Bike on the Overpass": {
   "id": "T4/26",

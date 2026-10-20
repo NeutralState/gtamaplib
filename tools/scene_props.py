@@ -975,7 +975,39 @@ def red_car_terminal():
     return dict(scene='T4/21 Jason and Lucia by the Red Car', camera='Jason and Lucia by the Red Car', note=red_car_terminal.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal]
+def green_car_edison():
+    """T4/25 Green Sports Car on Ocean Drive — Shore Dr at Grape St, looking W at the east facade of the Hotel Breakwater (IRL
+    Edison Hotel; Alexandre). Pose from the facade corners (u 270 / 2580) and base. The facade is a texture cut from the frame and
+    put on the plane of the mesh's east facade (the yellow arcade, the white tower), plus the asphalt of Shore Dr with its crosswalk
+    and the near curb, the green trash can (the palms are in the facade texture). ESTIMATED."""
+    V = View('Green Sports Car on Ocean Drive'); o = V.o; P = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    SE, NE = np.array([1971.5, 559.6]), np.array([1975.1, 586.8]); n = np.array([NE[1] - SE[1], -(NE[0] - SE[0])]); n /= np.linalg.norm(n)
+    if n @ (o[:2] - SE) < 0: n = -n
+    p0 = SE + n * 3.2                                                       # in front of the footprint's east bump (x 1976.4)
+    img = cv2.imread(os.path.join(REPO, 'frames', 'Green Sports Car on Ocean Drive.png'))
+    if img is not None: cv2.imwrite(os.path.join(THIS, 'threejs', '_prop_edison_facade.png'), img[0:900, 0:3840])
+    BL, BR = V.on_vplane(0, 900, p0, n), V.on_vplane(3839, 900, p0, n); TL, TR = V.on_vplane(0, 0, p0, n), V.on_vplane(3839, 0, p0, n)
+    P.append(dict(k='tex', p=[r2(q) for q in (BL, BR, TR, TL)], img='_prop_edison_facade.png'))
+    zr = o[2] - 0.8                                                       # road level under the eye
+    Z = lambda q, dz=0.0: r2([q[0], q[1], max(zr, T(q[0], q[1]) + 0.06) + dz])   # never under the terrain
+    fwd = np.array([math.sin(math.radians(-CAMS['Green Sports Car on Ocean Drive']['ypr'][0])), math.cos(math.radians(-CAMS['Green Sports Car on Ocean Drive']['ypr'][0]))])
+    side = np.array([fwd[1], -fwd[0]])
+    zg = max(zr, T(o[0], o[1]) + 0.06)
+    def G(u, v, dz=0.0):                                                   # frame pixel -> road plane, kept above the terrain
+        q = V.on_plane_z(u, v, zg); return r2([q[0], q[1], max(zg, T(q[0], q[1]) + 0.08) + dz])
+    for v0, v1 in ((1920, 1300), (1300, 1080), (1080, 960), (960, 905)):           # asphalt (frame rows), up to the far sidewalk
+        P.append(dict(k='quad', p=[G(-400, v0), G(4240, v0), G(4240, v1), G(-400, v1)], color='#4a4a4f'))
+    P.append(dict(k='quad', p=[G(-400, 1700, 0.15), G(1700, 1500, 0.15), G(1700, 1920, 0.15), G(-400, 1920, 0.15)], color='#7a6668'))   # near sidewalk
+    for i in range(9):                                                     # crosswalk across Grape St (frame u 640-1700, v 915-1010)
+        u0 = 640 + i * 120
+        P.append(dict(k='quad', p=[G(u0, 1010, 0.03), G(u0 + 60, 1010, 0.03), G(u0 + 60, 915, 0.03), G(u0, 915, 0.03)], color='#d8d8d2'))
+    q = o[:2] + fwd * 3.0 - side * 3.2                                    # trash can (left)
+    P.append(dict(k='cyl', a=r2([q[0], q[1], zr]), b=r2([q[0], q[1], zr + 1.1]), r=0.35, color='#1f4a32'))
+    return dict(scene='T4/25 Green Sports Car (Edison Hotel)', camera='Green Sports Car on Ocean Drive', note=green_car_edison.__doc__.split('\n')[0], props=P,
+                clear=[[[1977, 540], [2012, 540], [2012, 612], [1977, 612]]])   # V16 boxes between the camera and the Edison
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison]
 
 
 def main():
