@@ -985,17 +985,7 @@ def green_car_edison():
     NE, NW = np.array([1963.0, 602.0]), np.array([1939.0, 602.0]); n = np.array([NW[1] - NE[1], -(NW[0] - NE[0])]); n /= np.linalg.norm(n)
     if n @ (o[:2] - NE) < 0: n = -n
     p0 = NE + n * 0.3                                                       # the Edison's north facade (Grape St)
-    img = cv2.imread(os.path.join(REPO, 'frames', 'Green Sports Car on Ocean Drive.png'))
-    head = math.radians(-CAMS['Green Sports Car on Ocean Drive']['ypr'][0]); vf = np.array([math.sin(head), math.cos(head)])
-    # three panels of the upper frame, each covering its own frame pixels from the camera: the Edison's east facade (Shore Dr, left
-    # of the corner at u 1060), its north facade (Grape St, from the corner to its NW corner), the rest of Grape St to the west (~24 m)
-    SEc = np.array([1964.0, 579.0]); ne = np.array([1.0, 0.0])                       # east facade plane x ~1963.5, normal +x (camera side)
-    uNW = float(np.clip(V.W / 2 + (V.R.T @ np.r_[NW - o[:2], T(NW[0], NW[1]) - o[2]])[0] / (V.R.T @ np.r_[NW - o[:2], T(NW[0], NW[1]) - o[2]])[1] / V.th * V.W / 2, 1200, 3700))
-    for i, (u0, u1, plane) in enumerate(((0, 1060, (NE + ne * 0.3, ne)), (1060, int(uNW), (p0, n)), (int(uNW), 3840, (o[:2] + vf * 24.0, vf)))):
-        nm = '_prop_edison_facade_%d.png' % i
-        if img is not None: cv2.imwrite(os.path.join(THIS, 'threejs', nm), img[0:900, u0:u1])
-        q0, nn = plane; c = [V.on_vplane(u, v, q0, nn) for u, v in ((u0, 900), (u1 - 1, 900), (u1 - 1, 0), (u0, 0))]
-        P.append(dict(k='tex', p=[r2(q) for q in c], img=nm))
+    # (no frame texture pasted on the facades: Alexandre, 'une fausse image par dessus' makes no sense; to be rebuilt as geometry)
     zr = o[2] - 0.8                                                       # road level under the eye
     Z = lambda q, dz=0.0: r2([q[0], q[1], max(zr, T(q[0], q[1]) + 0.06) + dz])   # never under the terrain
     fwd = np.array([math.sin(math.radians(-CAMS['Green Sports Car on Ocean Drive']['ypr'][0])), math.cos(math.radians(-CAMS['Green Sports Car on Ocean Drive']['ypr'][0]))])
