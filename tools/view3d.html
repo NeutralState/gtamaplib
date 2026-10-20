@@ -4915,7 +4915,7 @@ window.__camScreen = name => {
   chip.addEventListener('click', () => { on = !on; try { localStorage.setItem('ui.props3d', on ? '1' : '0'); } catch (e) {} sync(); });
   sync();
   const glowMats = {};
-  const mats = {}, mat = (col, side) => mats[col + (side || '')] || (mats[col + (side || '')] = new THREE.MeshStandardMaterial({ color: new THREE.Color(col), emissive: new THREE.Color(col), emissiveIntensity: 0.32, roughness: 0.85, metalness: 0.0, side: side || THREE.FrontSide }));   // part auto-lumineuse: les toits / sols horizontaux restaient trop sombres sous l'eclairage de la scene
+  const mats = {}, mat = (col, side, e) => { const k = col + (side || '') + '|' + (e ?? ''); return mats[k] || (mats[k] = new THREE.MeshStandardMaterial({ color: new THREE.Color(col), emissive: new THREE.Color(col), emissiveIntensity: e ?? 0.32, roughness: 0.85, metalness: 0.0, side: side || THREE.FrontSide })); };   // p.e: self-light (washed / uplit surfaces at night)   // part auto-lumineuse: les toits / sols horizontaux restaient trop sombres sous l'eclairage de la scene
   // geometries non texturees regroupees par materiau (des milliers de pieces de ponts -> quelques draw calls)
   const batches = new Map();
   const add = (geo, m, shadow = true) => {
@@ -4946,11 +4946,11 @@ window.__camScreen = name => {
     if (!J) return; const loader = new THREE.TextureLoader(), ver = Date.now(); let n = 0;
     for (const S of J.scenes || []) for (const p of S.props) {
       n++;
-      if (p.k === 'quad') add(quadGeo(p.p), mat(p.color, THREE.DoubleSide), false);
+      if (p.k === 'quad') add(quadGeo(p.p), mat(p.color, THREE.DoubleSide, p.e), false);
       else if (p.k === 'box') {
         const [L, W, H] = p.s, a = p.az * Math.PI / 180, g = new THREE.BoxGeometry(L, W, H);
-        g.rotateZ(Math.atan2(Math.cos(a), Math.sin(a))); g.translate(p.c[0], p.c[1], p.c[2] + H / 2); add(g, mat(p.color));
-      } else if (p.k === 'cyl') add(cylGeo(p.a, p.b, p.r), mat(p.color));
+        g.rotateZ(Math.atan2(Math.cos(a), Math.sin(a))); g.translate(p.c[0], p.c[1], p.c[2] + H / 2); add(g, mat(p.color, undefined, p.e));
+      } else if (p.k === 'cyl') add(cylGeo(p.a, p.b, p.r), mat(p.color, undefined, p.e));
       else if (p.k === 'line') {
         const g = new THREE.BufferGeometry().setFromPoints(p.pts.map(V)); G.add(new THREE.Line(g, new THREE.LineBasicMaterial({ color: new THREE.Color(p.color), transparent: p.opacity !== undefined, opacity: p.opacity ?? 1 })));
       } else if (p.k === 'tex') {

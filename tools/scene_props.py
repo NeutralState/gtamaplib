@@ -466,25 +466,40 @@ def skyline_night():
     if (V.o[:2] - A0[:2]) @ na < 0: na = -na                               # na: towards the camera (front)
     aza = math.degrees(math.atan2(ea[0], ea[1])); D = 12.0; HT = 12.0
     at = lambda s_, w_, z: [*(A0[:2] + ea * s_ - na * w_), z]
-    P.append(dict(k='box', c=r2(at(La / 2, D / 2, zg)), s=[round(La, 1), D, HT], az=round(aza, 1), color='#5e4459'))      # body (soft pink wash)
-    P.append(dict(k='box', c=r2(at(La / 2, D / 2, zg + HT)), s=[round(La + 0.6, 1), D + 0.6, 0.7], az=round(aza, 1), color='#8d6c86'))   # parapet
-    for j in range(7):                                                     # piers, softly uplit (no neon: the frame shows a wash)
-        s_ = La * j / 6; P.append(dict(k='box', c=r2(at(s_, -0.4, zg)), s=[1.1, 1.0, HT], az=round(aza, 1), color='#9c7894'))
-        P.append(dict(k='glow', pts=[r2(at(s_, -1.0, zg + 0.3))], r=0.35, color='#f3c6ea', i=1.3, ball=True))
+    WALL = '#d8a9d2'                                                       # walls washed by the pink uplights (frame ~ RGB 205,150,200)
+    P.append(dict(k='box', c=r2(at(La / 2, D / 2, zg)), s=[round(La, 1), D, HT], az=round(aza, 1), color='#3a2a37', e=0.25))      # body, dark roof
+    P.append(dict(k='box', c=r2(at(La / 2, -0.3, zg + HT)), s=[round(La + 0.6, 1), 0.6, 0.6], az=round(aza, 1), color=WALL, e=0.8))      # front parapet only
+    P.append(dict(k='box', c=r2(at(La / 2, -0.6, zg + 3.6)), s=[round(La, 1), 1.6, 0.35], az=round(aza, 1), color=WALL, e=0.8))   # 1st-floor balcony slab
+    for j in range(7):
+        s_ = La * j / 6; P.append(dict(k='box', c=r2(at(s_, -0.5, zg)), s=[1.1, 1.2, HT - 2.6], az=round(aza, 1), color=WALL, e=1.0))
+        P.append(dict(k='glow', pts=[r2(at(s_, -1.2, zg + 0.25))], r=0.35, color='#ffd7f6', i=1.6, ball=True))
         if j < 6:
-            for zz in (zg + 1.5, zg + 4.6):                                # windows behind the arches (2 floors), mostly dark
-                w0, w1 = s_ + 1.2, s_ + La / 6 - 1.2
-                P.append(dict(k='quad', p=[r2(at(w0, -0.05, zz)), r2(at(w1, -0.05, zz)), r2(at(w1, -0.05, zz + 2.2)), r2(at(w0, -0.05, zz + 2.2))], color=['#c9a98a', '#2a1e28', '#2a1e28'][(j + int(zz)) % 3]))
-    # glass pergola: thin dark steel, faintly lit glass, soft lamps at the post feet
+            m0, m1 = s_ + 0.55, s_ + La / 6 - 0.55
+            arc = [at(m0 + (m1 - m0) * (1 - math.cos(t)) / 2, -0.5, zg + HT - 2.6 + 1.6 * math.sin(t)) for t in np.linspace(0, math.pi, 7)]
+            for q0, q1 in zip(arc[:-1], arc[1:]): P.append(dict(k='cyl', a=r2(q0), b=r2(q1), r=0.35, color=WALL, e=1.0))
+            for zz, col in ((zg + 0.6, '#f2cfa6'), (zg + 4.3, '#f6d9b8')):  # warm-lit glazing behind the arches, both floors
+                w0, w1 = s_ + 1.0, s_ + La / 6 - 1.0
+                P.append(dict(k='quad', p=[r2(at(w0, 0.05, zz)), r2(at(w1, 0.05, zz)), r2(at(w1, 0.05, zz + 2.6)), r2(at(w0, 0.05, zz + 2.6))], color=col, e=1.1))
+    # glass pergola: pale pink-lit frame and glass (as on the frame), soft lamps at the post feet
     Q = [G(3470, 1800, 13.0), G(3840, 1800, 13.0), G(3840, 1610, 13.0), G(3470, 1610, 13.0)]
     for q in Q:
-        P.append(dict(k='cyl', a=r2([q[0], q[1], zg]), b=r2([q[0], q[1], 13.0]), r=0.3, color='#7b6476'))
-        P.append(dict(k='glow', pts=[r2([q[0], q[1], zg + 0.4])], r=0.45, color='#f6d6ef', i=1.4, ball=True))
+        P.append(dict(k='cyl', a=r2([q[0], q[1], zg]), b=r2([q[0], q[1], 13.0]), r=0.35, color=WALL, e=1.0))
+        P.append(dict(k='glow', pts=[r2([q[0], q[1], zg + 0.4])], r=0.5, color='#fff0fb', i=1.8, ball=True))
     for t in np.linspace(0, 1, 7):
-        a_, b_ = Q[0] + (Q[1] - Q[0]) * t, Q[3] + (Q[2] - Q[3]) * t; P.append(dict(k='cyl', a=r2(a_), b=r2(b_), r=0.1, color='#6e5a6a'))
+        a_, b_ = Q[0] + (Q[1] - Q[0]) * t, Q[3] + (Q[2] - Q[3]) * t; P.append(dict(k='cyl', a=r2(a_), b=r2(b_), r=0.14, color=WALL, e=0.9))
     for t in np.linspace(0, 1, 5):
-        a_, b_ = Q[0] + (Q[3] - Q[0]) * t, Q[1] + (Q[2] - Q[1]) * t; P.append(dict(k='cyl', a=r2(a_), b=r2(b_), r=0.1, color='#6e5a6a'))
-    P.append(dict(k='quad', p=[r2(q + [0, 0, 0.1]) for q in Q], color='#57434f'))
+        a_, b_ = Q[0] + (Q[3] - Q[0]) * t, Q[1] + (Q[2] - Q[1]) * t; P.append(dict(k='cyl', a=r2(a_), b=r2(b_), r=0.14, color=WALL, e=0.9))
+    P.append(dict(k='quad', p=[r2(q - [0, 0, 0.1]) for q in Q], color='#7d5a78', e=0.6))
+    rng = np.random.default_rng(7)
+    # dark plaza ground around the arcade (the night drape there still read pale grey)
+    P.append(dict(k='quad', p=[r2(G(2300, 1930, zg + 0.04)), r2(G(3860, 1930, zg + 0.04)), r2(G(3860, 1380, zg + 0.04)), r2(G(2300, 1380, zg + 0.04))], color='#141114', e=0.0))
+    # foliage around the arcade (frame: palm rows in front, planters and palms behind, pink-lit trunks)
+    for u, v, hgt in ((2560, 1880, 10), (2640, 1860, 11), (2720, 1880, 10), (2800, 1870, 9), (2900, 1900, 10), (3580, 1880, 11), (3700, 1900, 10),
+                      (3050, 1560, 12), (3150, 1540, 13), (3390, 1560, 12), (3600, 1500, 12), (3760, 1460, 11)):
+        q = G(u, v); P.append(dict(k='palm', a=r2(q), h=hgt, lean_az=200.0, lean=0.06))
+        P.append(dict(k='glow', pts=[r2([q[0], q[1], zg + 0.3])], r=0.3, color='#ffc2ee', i=1.4, ball=True))
+    for u in np.arange(2520, 3000, 45):
+        q = G(u, 1915); r = rng.uniform(2.0, 3.0); P.append(dict(k='blob', c=r2([q[0], q[1], zg + 1.6]), r=[r, r, r * 0.7], color='#1d2a1c'))
     # forecourt: dark drive, lit roundabout planter, pool cabanas, palms in front
     rb = G(3250, 1560); P.append(dict(k='blob', c=r2([rb[0], rb[1], zg + 1.0]), r=[5, 5, 1.2], color='#2b3a24'))
     P.append(dict(k='glow', pts=[r2([rb[0] + 6 * math.cos(t), rb[1] + 6 * math.sin(t), zg + 0.3]) for t in np.linspace(0, 2 * math.pi, 17)], r=0.12, color='#ffd9a0', i=1.6))
@@ -505,7 +520,7 @@ def skyline_night():
     for _ in range(60):                                                    # warm garden / path lights under the trees
         u = rng.uniform(100, 1800); v = rng.uniform(1250, 1950); q = G(u, v, zg + 0.6)
         P.append(dict(k='glow', pts=[r2(q)], r=0.6, color=['#ffd27a', '#ffb85c', '#fff1c4'][int(rng.integers(3))], i=2.2, ball=True))
-    clear = [[[1934, 1893], [2024, 1893], [2024, 1966], [1934, 1966]]]
+    clear = [[[1934, 1893], [2024, 1893], [2024, 1966], [1934, 1966]], [[1960, 1950], [2030, 1950], [2030, 1990], [1960, 1990]]]   # + V16 box #1536 (dark slab not on the frame)
     return dict(scene='T4/7 Skyline at Night', camera='Skyline at Night', note=skyline_night.__doc__.split('\n')[0], props=P, clear=clear)
 
 
