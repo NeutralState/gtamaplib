@@ -1825,7 +1825,10 @@ layers.lms.add(new THREE.Points(lmGeoZc, new THREE.PointsMaterial({
 const MESH_FALLBACK = 0x67e8f9;
 const meshVerts = [], meshCols = [];
 const _c = new THREE.Color();
-for (const m of Object.values(data.meshes || {})) {
+const SP_REPLACED = new Set();                                          // [SCENE-PROPS-V1] meshes rebuilt as solids by tools/scene_props.py
+try { const r = await fetch('/threejs/scene_props.json', { cache: 'no-store' }); if (r.ok) for (const sc of (await r.json()).scenes || []) (sc.replace || []).forEach(n => SP_REPLACED.add(n)); } catch (e) {}
+for (const [mname, m] of Object.entries(data.meshes || {})) {
+  if (SP_REPLACED.has(mname)) continue;
   const list = m.world_edges || m;
   _c.set(m.color || MESH_FALLBACK);   // .set() fait deja le passage sRGB
   for (const e of list) {
@@ -2185,7 +2188,7 @@ if (meshVerts.length) {
     let BSrep = new Set(); try { const r = await fetch('/threejs/_bayside.json', { cache: 'no-store' }); if (r.ok) BSrep = new Set((await r.json()).replace || []); } catch (e) {}
     // [SCENE-PROPS-V1] zones degagees par le decor des scenes du tour (chaussee de la US 1 a Key Lento...): les emprises V16
     // dont le centroide y tombe ne sont pas extrudees (Alexandre: « le building sur la route c'est weird »)
-    let SPclear = []; try { const r = await fetch('/threejs/scene_props.json', { cache: 'no-store' }); if (r.ok) for (const sc of (await r.json()).scenes || []) SPclear.push(...(sc.clear || [])); } catch (e) {}
+    let SPclear = [], SPrep = new Set(); try { const r = await fetch('/threejs/scene_props.json', { cache: 'no-store' }); if (r.ok) for (const sc of (await r.json()).scenes || []) { SPclear.push(...(sc.clear || [])); (sc.replace || []).forEach(n => SPrep.add(n)); } } catch (e) {}
     const inClear = O => { let x = 0, y = 0; for (const q of O) { x += q[0]; y += q[1]; } x /= O.length; y /= O.length;
       return SPclear.some(P => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; }); };
     // [CRUISE-V1] paquebot a quai: emprise V16 sur l'eau (227 x 35 m, etrave pointue) qui se projette exactement sur le
@@ -2407,6 +2410,7 @@ if (meshVerts.length) {
       const pylons = [], cables = [];                                                     // [ROADS-V2] pylones de ponts: aretes quasi verticales et hautes -> caissons beton
       const DECK = /Bridge|Viaduct|Ramp|Interchange|Causeway|Overpass/;
       for (const [name, m] of Object.entries(data.meshes || {})) {
+        if (SPrep.has(name)) continue;                                   // [SCENE-PROPS-V1] rebuilt as solids (tools/scene_props.py)
         const so = S[name], isSolid = !!(so && (so.layers.length || (so.ff && so.ff.length)));
         cc2.set(m.color || 0x67e8f9);
         const solidish = isSolid || STRUCT_SOLID.test(name);
@@ -4911,7 +4915,23 @@ window.__camScreen = name => {
   chip.addEventListener('click', () => { on = !on; try { localStorage.setItem('ui.props3d', on ? '1' : '0'); } catch (e) {} sync(); });
   sync();
   const mats = {}, mat = (col, side) => mats[col + (side || '')] || (mats[col + (side || '')] = new THREE.MeshStandardMaterial({ color: new THREE.Color(col), emissive: new THREE.Color(col), emissiveIntensity: 0.32, roughness: 0.85, metalness: 0.0, side: side || THREE.FrontSide }));   // part auto-lumineuse: les toits / sols horizontaux restaient trop sombres sous l'eclairage de la scene
-  const add = (geo, m, shadow = true) => { const me = new THREE.Mesh(geo, m); me.castShadow = shadow; me.receiveShadow = true; G.add(me); return me; };
+  // geometries non texturees regroupees par materiau (des milliers de pieces de ponts -> quelques draw calls)
+  const batches = new Map();
+  const add = (geo, m, shadow = true) => {
+    if (m.map) { const me = new THREE.Mesh(geo, m); me.castShadow = shadow; me.receiveShadow = true; G.add(me); return me; }
+    const g = geo.index ? geo.toNonIndexed() : geo; if (!g.attributes.normal) g.computeVertexNormals();
+    const k = m.uuid + (shadow ? 's' : ''); const b = batches.get(k) || batches.set(k, { m, shadow, pos: [], nor: [] }).get(k);
+    b.pos.push(g.attributes.position.array); b.nor.push(g.attributes.normal.array); return null;
+  };
+  const flush = () => {
+    for (const b of batches.values()) {
+      const n = b.pos.reduce((a, x) => a + x.length, 0), P = new Float32Array(n), N = new Float32Array(n); let o = 0;
+      b.pos.forEach((x, i) => { P.set(x, o); N.set(b.nor[i], o); o += x.length; });
+      const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.BufferAttribute(P, 3)); g.setAttribute('normal', new THREE.BufferAttribute(N, 3));
+      const me = new THREE.Mesh(g, b.m); me.castShadow = b.shadow; me.receiveShadow = true; G.add(me);
+    }
+    batches.clear();
+  };
   const V = a => new THREE.Vector3(a[0], a[1], a[2]);
   const quadGeo = (p, uv) => { const g = new THREE.BufferGeometry();
     if (!uv) { const a = V(p[0]), n = V(p[1]).sub(a).cross(V(p[2]).sub(a)); if (n.z < -1e-6) p = [p[0], p[3], p[2], p[1]]; }   // sols / toits: normale vers le haut (eclairage correct)
@@ -4925,7 +4945,7 @@ window.__camScreen = name => {
     if (!J) return; const loader = new THREE.TextureLoader(), ver = Date.now(); let n = 0;
     for (const S of J.scenes || []) for (const p of S.props) {
       n++;
-      if (p.k === 'quad') { const me = add(quadGeo(p.p), mat(p.color, THREE.DoubleSide), false); me.renderOrder = 1; }
+      if (p.k === 'quad') add(quadGeo(p.p), mat(p.color, THREE.DoubleSide), false);
       else if (p.k === 'box') {
         const [L, W, H] = p.s, a = p.az * Math.PI / 180, g = new THREE.BoxGeometry(L, W, H);
         g.rotateZ(Math.atan2(Math.cos(a), Math.sin(a))); g.translate(p.c[0], p.c[1], p.c[2] + H / 2); add(g, mat(p.color));
@@ -4953,6 +4973,7 @@ window.__camScreen = name => {
         }
       }
     }
+    flush();
     window.__structs = Object.assign(window.__structs || {}, { sceneProps: n });
   }).catch(() => {});
 })();

@@ -13,7 +13,7 @@ Primitives (tools/threejs/scene_props.json, drawn by view3d [SCENE-PROPS-V1]):
   tex   {p: 4 corners (bl, br, tr, tl), img}     textured panel (image cut from the frame, gitignored like _fac_*.png)
   blob  {c: [x,y,z], r: [rx, ry, rz], color}     bushes / tree crowns
   palm  {a: [x,y,z], h, lean_az, lean}           palm (trunk + fronds)
-A scene may also list 'clear' polygons [[x,y]...]: view3d does not extrude the V16 massing footprints whose centroid falls
+A scene may also list 'replace': mesh names whose wireframe view3d no longer draws (rebuilt here as solids), and 'clear' polygons [[x,y]...]: view3d does not extrude the V16 massing footprints whose centroid falls
 inside (e.g. V16 boxes that land on a modelled road).
 Usage: python3 tools/scene_props.py            (writes tools/threejs/scene_props.json and the _prop_*.png textures)
 """
@@ -246,7 +246,50 @@ def keys_landmarks():
     return dict(scene='Key Lento landmarks', camera=None, note=keys_landmarks.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks]
+def keys_bridges():
+    """The 5 Keys bridges of tools/gen_keys_bridges.py as SOLIDS (Alexandre: the bridge behind scene 2 'looked exploded':
+    it was only drawn as wireframe + the flat V16 road ribbon on the water). Same geometry (axes, deck profiles, piers) as
+    the meshes, rebuilt with a Bridge subclass that emits slabs, parapets, columns, caps and footings; the meshes' own
+    wireframes are hidden in view3d ('replace')."""
+    import gen_keys_bridges as GB
+    P = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    class SB(GB.Bridge):
+        col = '#c9ccce'
+        def az(self, s): _, u, _ = self.frame(s); return math.degrees(math.atan2(u[0], u[1])) % 360
+        def box(self, s, w, z0, along, across, hgt, col=None):
+            q = self.P(s, w, z0); P.append(dict(k='box', c=r2(q), s=[round(along, 2), round(across, 2), round(hgt, 2)], az=round(self.az(s), 2), color=col or self.col))
+        def L(self, a, b):                                                  # leftover edges (trusses, arches): thin members
+            if abs(a[0] - b[0]) < 0.05 and abs(a[1] - b[1]) < 0.05 and min(a[2], b[2]) <= 0.1:
+                P.append(dict(k='box', c=r2([a[0], a[1], -0.5]), s=[1.4, 1.4, round(max(a[2], b[2]) + 0.5, 2)], az=0.0, color='#b8b4ac'))
+            else: P.append(dict(k='cyl', a=r2(a), b=r2(b), r=0.18, color='#8f8a82'))
+        def deck(self, s0, s1, zb, w0, w1, depth=1.8, parapet=1.0, step=10.0, frame=20.0):
+            ss = list(np.arange(s0, s1, step)) + [s1]
+            for a, b in zip(ss[:-1], ss[1:]):
+                za, zb_ = zb(a), zb(b)
+                A = lambda w, dz, s_=a, z=za: self.P(s_, w, z + dz); B_ = lambda w, dz, s_=b, z=zb_: self.P(s_, w, z + dz)
+                P.append(dict(k='quad', p=[A(w0, depth), B_(w0, depth), B_(w1, depth), A(w1, depth)], color='#5d6064'))   # road surface
+                P.append(dict(k='quad', p=[A(w0, 0), B_(w0, 0), B_(w1, 0), A(w1, 0)], color='#a9a8a3'))                   # soffit
+                for w in (w0, w1):
+                    P.append(dict(k='quad', p=[A(w, 0), B_(w, 0), B_(w, depth + parapet), A(w, depth + parapet)], color=self.col))   # fascia + parapet
+        def bent(self, s, zb, w0, w1, ncol=2, col=1.2, zw=0.0, cap=1.4, tie=12.0, footing=1.5):
+            z = zb(s); m = 0.18 * (w1 - w0)
+            for w in np.linspace(w0 + m, w1 - m, ncol): self.box(s, w, zw, col, col, z - cap - zw)
+            self.box(s, (w0 + w1) / 2, z - cap, 1.8, w1 - w0 - 0.6, cap)
+            self.box(s, (w0 + w1) / 2, zw - 0.5, 4.4, w1 - w0 - 2 * m + 3.6, footing + 0.5, '#b0aca4')
+        def abutment(self, s, zb, w0, w1, back):
+            z = zb(s) + 1.8; self.box(s + back / 2, (w0 + w1) / 2, 0.0, abs(back), w1 - w0, max(z - 1.0, 1.0), '#b8b4ac')
+    def pier_wall(br, s, zb, w, along=3.0, across=7.0, footing=1.5, zw=0.0):
+        z = zb(s) - 1.2; br.box(s, w, zw, along, across, z - zw); br.box(s, w, z, 3.2, 17.0, 1.2); br.box(s, w, zw - 0.5, 7.0, 12.0, footing + 0.5, '#b0aca4')
+    Bridge0, pw0 = GB.Bridge, GB.pier_wall
+    GB.Bridge, GB.pier_wall = SB, pier_wall
+    try:
+        L = json.load(open(os.path.join(REPO, 'gtamapdata', 'landmarks.json')))
+        for f in GB.BUILDERS.values(): f(L)
+    finally: GB.Bridge, GB.pier_wall = Bridge0, pw0
+    return dict(scene='Keys bridges (solids)', camera=None, note=keys_bridges.__doc__.split('\n')[0], props=P, replace=list(GB.BUILDERS))
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges]
 
 
 def main():
