@@ -7600,17 +7600,17 @@
   "id": "T4/26",
   "player": null,
   "xyz": [
-   -973.1,
-   -655.9,
-   4.68
+   -971.3,
+   -746.2,
+   16.0
   ],
   "ypr": [
-   88,
-   0.0,
+   -199.0,
+   11.6,
    0.0
   ],
   "fov": [
-   55.0,
+   9.4,
    null
   ],
   "size": [
@@ -7620,7 +7620,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - dirt bike wheelie on an elevated road, round tower behind; GTAVI_Launch_Trailer.mp4 t=49.20 s (frame 1476), letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/26 (corr 0.996); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/26 (corr 0.996); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | INFINITY 2026-10-20 (Alexandre: we look at Infinity at Brickell, its north facade; Yanis's heading 88 was wrong): the bike is on the elevated rail viaduct south of the Miami River (V17 pink line, trains on both tracks, the railing crosses the frame), looking SSW at Infinity ~700 m away. Fit on the Infinity mesh silhouette (left u 1272, right u 2508, helipad ring v 240) with the camera on that track (deck ~16 m): (-971.3, -746.2), heading 199, pitch +11.6, hfov 9.4 (telephoto). ESTIMATED: the position along the track trades off against hfov (not constrained)."
  },
  "Explosion behind Jason": {
   "id": "T4/28",
