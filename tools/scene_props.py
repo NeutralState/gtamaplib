@@ -1602,6 +1602,75 @@ def heli_jason():
     return dict(scene='T4/41 Jason in a Helicopter (the helicopter)', camera='Jason in a Helicopter', note=heli_jason.__doc__.split('\n')[0], props=P)
 
 
+def heli_cabin():
+    """T4/14 Jason by the Window at Night — inside a helicopter cabin (HELI-ESTIMATE pose: over Government Cut, 25 m, bank -9.1;
+    Alexandre: the "window" is the cabin of a helicopter). The cabin is built in the camera frame (x right, y forward, z up)
+    and placed with the pose: the front bulkhead 2.6 m ahead (its posts land on the frame's posts at u ~500 and ~1540, display
+    1920 x 960), with the pass-through to the cockpit (windshield, dark dash, seats), the overhead switch console with its
+    green-lit panel, the left panel with its dark cabinet and small lights, the riveted seams (row at v ~655), the right wall
+    with the open side door (edge at u ~1640) through which the 3D city shows. Jason, the pilot and the dog are not
+    modelled. ESTIMATED (scale from the cabin width, ~2.7 m)."""
+    V = View('Jason by the Window at Night'); P = []; r2 = lambda a: [round(float(v), 3) for v in a]
+    W = lambda x, y, z: V.o + V.R @ np.array([x, y, z], float)
+    f = V.W / 2 / V.th / 2.0                                                              # display focal (px)
+    YB, XR, ZC, ZF = 2.6, 1.0, 0.95, -1.35
+    def onB(u, v): return ((u - 960) * YB / f, YB, (480 - v) * YB / f)                     # display pixel -> point on the bulkhead
+    def quad(pts, color, e=0.22, op=None):
+        d = dict(k='quad', p=[r2(W(*q)) for q in pts], color=color, e=e)
+        if op is not None: d['opacity'] = op
+        P.append(d)
+    WALL, POST, DARK = '#262a28', '#1c1f1e', '#0b0c0c'
+    xl = onB(0, 0)[0] - 0.4; zt = ZC; zb = ZF
+    # front bulkhead with the cockpit pass-through (u 545-1000 from v 110 down)
+    xa, xb = onB(545, 0)[0], onB(1000, 0)[0]; zo = onB(0, 110)[2]
+    quad([(xl, YB, zb), (xa, YB, zb), (xa, YB, zt), (xl, YB, zt)], WALL)
+    quad([(xb, YB, zb), (XR, YB, zb), (XR, YB, zt), (xb, YB, zt)], WALL)
+    quad([(xa, YB, zo), (xb, YB, zo), (xb, YB, zt), (xa, YB, zt)], WALL)
+    for u0, u1 in ((480, 545), (1000, 1030), (1525, 1560)):                                # posts
+        a, b = onB(u0, 0)[0], onB(u1, 0)[0]; quad([(a, YB - 0.02, zb), (b, YB - 0.02, zb), (b, YB - 0.02, zt), (a, YB - 0.02, zt)], POST, 0.18)
+    # right wall with the open side door (edge at u ~1640 -> y = XR f / (u - 960))
+    yd = XR * f / (1640 - 960); zd = (480 - 70) * yd / f
+    quad([(XR, yd, zb), (XR, YB, zb), (XR, YB, zt), (XR, yd, zt)], POST, 0.2)
+    quad([(XR, -0.5, zd), (XR, yd, zd), (XR, yd, zt), (XR, -0.5, zt)], WALL)
+    quad([(XR, -0.5, zb), (XR, yd, zb), (XR, yd, zb - 0.1), (XR, -0.5, zb - 0.1)], WALL)
+    for z in np.linspace(zb + 0.2, zd - 0.05, 14):                                         # door-edge rivets
+        P.append(dict(k='blob', c=r2(W(XR - 0.01, yd + 0.04, z)), r=[0.006, 0.006, 0.006], color='#6d7370'))
+    quad([(xl, -0.5, zt), (XR, -0.5, zt), (XR, YB, zt), (xl, YB, zt)], DARK, 0.1)          # ceiling
+    quad([(xl, -0.5, zb), (XR, -0.5, zb), (XR, YB, zb), (xl, YB, zb)], DARK, 0.1)          # floor
+    quad([(xl, -0.5, zb), (xl, YB, zb), (xl, YB, zt), (xl, -0.5, zt)], WALL)               # left wall (off the frame)
+    # overhead switch console (u 560-880, v 0-120) hanging from the ceiling at y 2.3, green-lit left part
+    yc = 2.3; c0 = ((560 - 960) * yc / f, (880 - 960) * yc / f); cz = (480 - 120) * yc / f
+    P.append(dict(k='box', c=r2(W((c0[0] + c0[1]) / 2, yc, cz)), s=[0.25, c0[1] - c0[0], ZC - cz], az=float(np.degrees(np.arctan2(*(V.R @ [0, 1, 0])[:2]))), color='#161a18', e=0.2))
+    for i in range(6):
+        for j in range(3):
+            x = c0[0] + 0.05 + i * (c0[1] - c0[0] - 0.1) / 5; z = cz + 0.04 + j * 0.06
+            P.append(dict(k='glow', pts=[r2(W(x, yc - 0.13, z))], r=0.004, color='#7dff9a' if i < 2 else '#e8e0c0', i=1.2, ball=True))
+    # cockpit beyond the pass-through: windshield pillars, dark dash with a few lit gauges, seat backs
+    yw = 3.9; pw = [((u - 960) * yw / f) for u in (570, 920)]; zw0, zw1 = (480 - 330) * yw / f, (480 - 130) * yw / f
+    for x in pw: P.append(dict(k='cyl', a=r2(W(x, yw, zw0)), b=r2(W(x, yw, zw1)), r=0.04, color=POST))
+    P.append(dict(k='cyl', a=r2(W(pw[0], yw, zw1)), b=r2(W(pw[1], yw, zw1)), r=0.05, color=POST))
+    quad([(pw[0] - 0.3, yw - 0.3, zw0 - 0.9), (pw[1] + 0.4, yw - 0.3, zw0 - 0.9), (pw[1] + 0.4, yw - 0.2, zw0), (pw[0] - 0.3, yw - 0.2, zw0)], '#111413', 0.15)   # dash
+    for x in np.linspace(pw[0] + 0.1, pw[1] - 0.1, 5):
+        P.append(dict(k='glow', pts=[r2(W(x, yw - 0.22, zw0 - 0.12))], r=0.008, color='#9effc0', i=1.1, ball=True))
+    for x in (pw[0] + 0.25, pw[1] - 0.15):
+        P.append(dict(k='box', c=r2(W(x, 3.3, ZF + 0.3)), s=[0.5, 0.55, 1.25], az=float(np.degrees(np.arctan2(*(V.R @ [0, 1, 0])[:2]))), color='#141716', e=0.15))
+    # left bulkhead panel: dark cabinet (u 110-430, v 80-400) with small red / white lights
+    a, b = onB(110, 80), onB(430, 400)
+    quad([(a[0], YB - 0.03, b[2]), (b[0], YB - 0.03, b[2]), (b[0], YB - 0.03, a[2]), (a[0], YB - 0.03, a[2])], '#121514', 0.12)
+    for u, v in ((225, 125), (245, 140), (265, 155), (230, 175), (255, 190), (275, 205), (240, 222), (270, 228)):
+        q = onB(u, v); P.append(dict(k='glow', pts=[r2(W(q[0], YB - 0.05, q[2]))], r=0.004, color='#ff5a4a' if u % 2 else '#f0e8d8', i=1.2, ball=True))
+    # riveted seams of the bulkhead (row at v ~655, vertical seams) + a grab bar
+    zs = onB(0, 655)[2]
+    for x0, x1 in ((xl + 0.4, xa), (xb, XR)):
+        P.append(dict(k='line', pts=[r2(W(x0, YB - 0.025, zs)), r2(W(x1, YB - 0.025, zs))], color='#3e4441'))
+        for x in np.arange(x0 + 0.03, x1, 0.06): P.append(dict(k='blob', c=r2(W(x, YB - 0.03, zs + 0.025)), r=[0.006, 0.006, 0.006], color='#59605c'))
+    for u in (300, 1300):
+        x = onB(u, 0)[0]; P.append(dict(k='line', pts=[r2(W(x, YB - 0.025, zb)), r2(W(x, YB - 0.025, zt))], color='#3e4441'))
+    g0, g1 = onB(440, 690), onB(520, 690)
+    P.append(dict(k='cyl', a=r2(W(g0[0], YB - 0.08, g0[2])), b=r2(W(g1[0], YB - 0.08, g1[2])), r=0.015, color='#7c827f'))
+    return dict(scene='T4/14 Jason by the Window at Night (helicopter cabin)', camera='Jason by the Window at Night', note=heli_cabin.__doc__.split('\n')[0], props=P)
+
+
 def vice_beach_night():
     """T4/46 Vice Beach at Night — dusk over the South Pointe park and Ocean Drive (pose ESTIMATED, BEACH-FIT V5). The frame's
     lights are placed by casting their pixel rays on the 3D city (mesh solids, V16 massing, terrain; _raycaster): the
@@ -1926,7 +1995,7 @@ def portofino_detail():
     return dict(scene='Portofino Tower detail', camera='Biplane over the Beach', note=portofino_detail.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony, glass_tower_fall, heli_jason, vice_beach_night]
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony, glass_tower_fall, heli_jason, vice_beach_night, heli_cabin]
 
 
 def main():

@@ -2,7 +2,6 @@
  "_doc": "[TOUR-STYLE-V1 2026-10-19] Camera tour presentation per camera (view3d Cinematic > Camera tour). fullframe = close-ups / interiors whose frame cannot be matched to the 3D model (blurred or unmodelled surroundings): the tour flies to the camera's position and heading, then shows the real frame fully opaque instead of overlaid on the model (Alexandre, for the YouTube video). Truck with Jet Ski left the list once its scene props existed (tools/scene_props.py). Napping in the Chair left it once its room was rebuilt (scene_props napping_room, Alexandre 2026-10-21).",
  "fullframe": [
   "Iguana",
-  "Jason by the Window at Night",
   "Jason and Lucia by the Red Car"
  ],
  "sun": {
@@ -111,6 +110,11 @@
    290,
    -3,
    45
+  ],
+  "Jason by the Window at Night": [
+   300,
+   -14,
+   30
   ]
  },
  "grade": {
@@ -216,6 +220,12 @@
    0.72,
    1.0,
    0.4
+  ],
+  "Jason by the Window at Night": [
+   0.8,
+   0.5,
+   0.45,
+   0.3
   ]
  },
  "fog": {
