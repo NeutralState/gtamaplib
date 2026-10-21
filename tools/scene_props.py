@@ -15,7 +15,8 @@ Primitives (tools/threejs/scene_props.json, drawn by view3d [SCENE-PROPS-V1]):
   palm  {a: [x,y,z], h, lean_az, lean}           palm (trunk + fronds)
 A scene may also list 'bare_roof' (mesh names whose top gets no generic roof units / parapet in view3d), 'replace': mesh names whose wireframe view3d no longer draws (rebuilt here as solids), and 'clear' polygons [[x,y]...]: view3d does not extrude the V16 massing footprints whose centroid falls
 inside (e.g. V16 boxes that land on a modelled road), and 'nolamp' polygons: no generic view3d streetlight inside (where a
-SOLVED frame shows none).
+SOLVED frame shows none), and 'roadclear' polygons: the V16 road ribbons / markings are not drawn inside (where a scene rebuilt
+its own roadway, e.g. the T4/34 Bayside Dr divided deck).
 Usage: python3 tools/scene_props.py            (writes tools/threejs/scene_props.json and the _prop_*.png textures)
 """
 import json, math, os, sys
@@ -1236,7 +1237,8 @@ def napping_room():
 def bayside_bridge():
     """T4/34 Explosion on the Highway — Lucia leaning out of a helicopter over the Bayside Dr bridge at night (pose fitted on the
     road lines, cameras.json BAYSIDE-HELI-V1). The bridge was only a V16 road stroke at 6 m: rebuilt as a divided deck on the V17
-    road axis (az 274.7, centre y -1085 at x -520, shores x -622 / -414, carried on W to the junction at x -695): concrete deck (top 6.8, ESTIMATED), Jersey median
+    road axis (az 274.7, centre y -1085 at x -520, shores x -622 / -414; past the W shore it follows the bend of Bayside Dr
+    to az 285.5 down to the N-S avenue at x -712, Alexandre: « la route lead dans un building »): concrete deck (top 6.8, ESTIMATED), Jersey median
     0.61 m (fitted), yellow edge lines 2.18 m each side of it (fitted), dashed lane lines, white edge lines, parapets, piers every
     26 m. 22 m wide, not the 12.5 m V17 band: the wreck and the police cars back-project 8-10 m either side of the median (measured beats map).
     Back-projected from the frame (half-res px x 2) on the deck plane: the wreck (no explosion, Alexandre: « met pas l'explosion »), the police cars with their light bars on the right carriageway, the trees and blue-lit palms of the W shore (palms on the
@@ -1245,16 +1247,18 @@ def bayside_bridge():
     ZD = 6.8; A = np.array([-520.0, -1085.0]); az = math.radians(274.7)      # deck top 6.8: the V16 road ribbons render at 6.3-6.7 here
     d = np.array([math.sin(az), math.cos(az)]); n = np.array([d[1], -d[0]])                    # d: W along the bridge, n: right (N)
     at = lambda s, l, z: [A[0] + d[0] * s + n[0] * l, A[1] + d[1] * s + n[1] * l, z]
-    s0, s1 = (-414.0 - A[0]) / d[0], (-695.0 - A[0]) / d[0]                                  # E shore -> the W junction (the frame shows the divided road
-                                                                                             # with its median running on past the W shore, x -622)
+    s0, s1 = (-414.0 - A[0]) / d[0], (-622.0 - A[0]) / d[0]                                  # E and W shores
     AZ = round(math.degrees(az), 1); L = s1 - s0; sm = (s0 + s1) / 2
     quad = lambda p, col, e=None: P.append(dict(k='quad', p=[r2(q) for q in p], color=col, **({'e': e} if e is not None else {})))
+    def lines(at_, sa, sb, z):                                                       # asphalt, yellow / white edge lines, dashes
+        quad([at_(sa, -10.7, z + 0.02), at_(sb, -10.7, z + 0.02), at_(sb, 10.7, z + 0.02), at_(sa, 10.7, z + 0.02)], '#232427', 0.05)
+        for l, col, w in ((-2.18, '#d6ad2c', 0.15), (2.18, '#d6ad2c', 0.15), (-10.2, '#d8d8d2', 0.13), (10.2, '#d8d8d2', 0.13)):
+            quad([at_(sa, l - w / 2, z + 0.04), at_(sb, l - w / 2, z + 0.04), at_(sb, l + w / 2, z + 0.04), at_(sa, l + w / 2, z + 0.04)], col, 0.45)
+    # 1) the bridge: one straight deck on the V17 axis between the shores
     P.append(dict(k='box', c=r2(at(sm, 0, ZD - 1.3)), s=[round(L, 1), 22.4, 1.3], az=AZ, color='#7d7b76'))                       # deck
-    quad([at(s0, -10.7, ZD + 0.02), at(s1, -10.7, ZD + 0.02), at(s1, 10.7, ZD + 0.02), at(s0, 10.7, ZD + 0.02)], '#232427', 0.05)   # asphalt
+    lines(at, s0, s1, ZD)
     P.append(dict(k='box', c=r2(at(sm, 0, ZD)), s=[round(L, 1), 0.6, 0.32], az=AZ, color='#9a978f'))                              # Jersey median
     P.append(dict(k='box', c=r2(at(sm, 0, ZD + 0.32)), s=[round(L, 1), 0.22, 0.29], az=AZ, color='#9a978f'))
-    for l, col, w in ((-2.18, '#d6ad2c', 0.15), (2.18, '#d6ad2c', 0.15), (-10.2, '#d8d8d2', 0.13), (10.2, '#d8d8d2', 0.13)):
-        quad([at(s0, l - w / 2, ZD + 0.04), at(s1, l - w / 2, ZD + 0.04), at(s1, l + w / 2, ZD + 0.04), at(s0, l + w / 2, ZD + 0.04)], col, 0.45)
     for l in (-5.9, 5.9):                                                                                     # dashed lane lines
         t = s0 + 2.0
         while t < s1 - 3.0:
@@ -1264,6 +1268,30 @@ def bayside_bridge():
     s = s0 + 13.0
     while s < s1 - 6:
         P.append(dict(k='box', c=r2(at(s, 0, -2.0)), s=[1.4, 18.0, ZD - 1.3 + 2.0], az=AZ, color='#6e6c68')); s += 26.0      # piers
+    # 2) past the W shore Bayside Dr bends to az 285.5 (V17 band: centre y -1072.5 at x -630, -1028 at x -790) and runs to the
+    # junction with the N-S avenue (x -712); the divided road follows it, 4 m pieces coming down from the deck to ground + 0.35
+    # heading eased from 274.7 to 285.5 over the first 40 m (no kink at the bridge end), integrated every 0.5 m
+    B0 = np.array(at(s1, 0, 0)[:2]); SS = np.arange(0.0, 140.0, 0.5)
+    HD = np.radians(274.7 + (285.5 - 274.7) * np.clip(SS / 40.0, 0, 1) ** 1.0)
+    C2 = B0 + np.cumsum(np.c_[np.sin(HD), np.cos(HD)] * 0.5, axis=0) - np.array([math.sin(HD[0]), math.cos(HD[0])]) * 0.5
+    S2 = float(SS[np.argmin(np.abs(C2[:, 0] + 712.0))])
+    def at2(s_, l, z):
+        i = min(int(round(s_ / 0.5)), len(SS) - 1); h = HD[i]
+        return [C2[i, 0] + math.cos(h) * l, C2[i, 1] - math.sin(h) * l, z]
+    zg = lambda s_: max(T(*at2(s_, 0, 0)[:2]), 0.0) + 0.35
+    zz = lambda s_: max(zg(s_), ZD - 0.06 * s_)                                     # 6 % ramp down to the ground
+    t = 0.0
+    while t < S2:
+        tb = min(t + 2.0, S2); z = zz((t + tb) / 2); g = zg((t + tb) / 2) - 0.35; cm = at2((t + tb) / 2, 0, 0)
+        AZ2 = round(math.degrees(HD[min(int(round((t + tb) / 2 / 0.5)), len(SS) - 1)]), 1)
+        lines(at2, t, tb, z)
+        if z - g > 0.6: P.append(dict(k='box', c=r2([cm[0], cm[1], g]), s=[round(tb - t + 0.1, 2), 22.4, round(z - g, 2)], az=AZ2, color='#7d7b76'))
+        P.append(dict(k='box', c=r2([cm[0], cm[1], z]), s=[round(tb - t + 0.1, 2), 0.6, 0.32], az=AZ2, color='#9a978f'))
+        P.append(dict(k='box', c=r2([cm[0], cm[1], z + 0.32]), s=[round(tb - t + 0.1, 2), 0.22, 0.29], az=AZ2, color='#9a978f'))
+        for l in (-5.9, 5.9):
+            if int(t / 2) % 6 == 0: quad([at2(t, l - 0.065, z + 0.04), at2(t + 3.0, l - 0.065, z + 0.04), at2(t + 3.0, l + 0.065, z + 0.04), at2(t, l + 0.065, z + 0.04)], '#d8d8d2', 0.45)
+        t = tb
+    roadclear = [[r2(at(s0 - 4, -12.5, 0)[:2]), r2(at(s1, -12.5, 0)[:2]), r2(at2(S2, -12.5, 0)[:2]), r2(at2(S2, 12.5, 0)[:2]), r2(at(s1, 12.5, 0)[:2]), r2(at(s0 - 4, 12.5, 0)[:2])]]
     deck = lambda u, v, z=ZD: V.on_plane_z(u * 2, v * 2, z)
     w = deck(1000, 410); P.append(dict(k='box', c=r2(w), s=[4.4, 1.9, 1.2], az=AZ + 25, color='#1d1d1f'))                       # wreck
     # police cars on the right carriageway: body, white door panel, red / blue light bar
@@ -1286,7 +1314,7 @@ def bayside_bridge():
         q = V.on_plane_z(u * 2, v * 2, 9.8)
         P.append(dict(k='palm', a=r2(q), h=7.0, lean_az=0.0, lean=0.03))
         P.append(dict(k='glow', pts=[r2(q + [0.25, 0, 0.3]), r2(q + [0.25, 0, 3.8])], r=0.09, color='#3a5cff', i=2.5))
-    return dict(scene='T4/34 Explosion on the Highway (Bayside Dr bridge)', camera='Explosion on the Highway', note=bayside_bridge.__doc__.split('\n')[0], props=P)
+    return dict(scene='T4/34 Explosion on the Highway (Bayside Dr bridge)', camera='Explosion on the Highway', note=bayside_bridge.__doc__.split('\n')[0], props=P, roadclear=roadclear)
 
 
 def _obox(c, f, r, u, L, W, H, color):

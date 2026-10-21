@@ -3804,6 +3804,18 @@ window.__camScreen = name => {
     let R = null; try { const r = await fetch('/threejs/_v16_roads.json', { cache: 'no-store' }); if (r.ok) R = await r.json(); } catch (e) {}
     if (!R) return;
     window.__roadsData = R;                                              // [TRAFFIC-V1] le trafic roule sur le meme reseau
+    // [ROADCLEAR-V1 2026-10-21] 'roadclear' polygons of scene_props.json: a scene that rebuilt its own roadway (T4/34 Bayside Dr
+    // bridge, divided deck) hides the V16 ribbons and markings there (they poked through its deck) -> merged into r.hide
+    try {
+      const RC = []; const rr = await fetch('/threejs/scene_props.json', { cache: 'no-store' }); if (rr.ok) for (const sc of (await rr.json()).scenes || []) RC.push(...(sc.roadclear || []));
+      const inRC = (x, y) => RC.some(P => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; });
+      if (RC.length) for (const k of ['road', 'small', 'hwy', 'mark_w', 'mark_y']) for (const r of R[k] || []) {
+        const hid = r.p.map(q => inRC(q[0], q[1])); if (!hid.some(Boolean)) continue;
+        if (r.hide) for (const [i0, i1] of r.hide) for (let i = i0; i <= i1; i++) hid[i] = true;
+        const H = []; for (let i = 0; i < hid.length; i++) if (hid[i]) { let j = i; while (j + 1 < hid.length && hid[j + 1]) j++; H.push([i, j]); i = j; }
+        r.hide = H;
+      }
+    } catch (e) {}
     // [TUNNEL-V1 2026-10-06] tunnels (R.tunnel, non rendus): la heightmap du jeu creuse leur tranchee (-28 m) qui
     // apparaissait comme des trous d'eau dans le port. AFFICHAGE seulement: le terrain le long du tube est releve au
     // niveau du sol voisin (jamais abaisse; sous le chenal les voisins sont dans l'eau -> rien ne change).
@@ -3893,12 +3905,12 @@ window.__camScreen = name => {
         }
       }
     };
-    for (const r of R.small) ribbon(r.p, Math.max(4, r.w), ASPH.small, 0.30, false, false, true);
-    for (const r of R.road) ribbon(r.p, Math.max(6, r.w), ASPH.road, 0.34, true, false, true);
     // [US1-HAMLET-V1] r.hide = point ranges carried by a viaduct mesh's own roadway (tools/v16_roads.py): not drawn
     const vis = r => { if (!r.hide) return [r.p]; const out = []; let a = 0;
       for (const [i0, i1] of r.hide) { if (i0 - a >= 2) out.push(r.p.slice(a, i0)); a = i1 + 1; }
       if (r.p.length - a >= 2) out.push(r.p.slice(a)); return out; };
+    for (const r of R.small) for (const p of vis(r)) ribbon(p, Math.max(4, r.w), ASPH.small, 0.30, false, false, true);
+    for (const r of R.road) for (const p of vis(r)) ribbon(p, Math.max(6, r.w), ASPH.road, 0.34, true, false, true);
     for (const r of R.hwy) for (const p of vis(r)) ribbon(p, Math.max(8, r.w), ASPH.hwy, 0.38, true, false);
     for (const r of R.mark_w) for (const p of vis(r)) ribbon(p, 0.35, WHITE, 0.42, true, true);
     for (const r of R.mark_y) for (const p of vis(r)) ribbon(p, 0.30, YEL, 0.42, true, false);
