@@ -49409,8 +49409,8 @@
     1.0,
     0.645
    ],
-   "z0": 125.1,
-   "z1": 163.9,
+   "z0": 161.5,
+   "z1": 177.0,
    "top": 177.4,
    "pattern": "vertical",
    "n_px": 1796,
@@ -49419,7 +49419,8 @@
     "Vintage Vice City Outfits and Hairstyles 04 (Rooftop)",
     "Jason Duval 05 (Machine Gun)"
    ],
-   "_src": "MEASURED night frames (night_lights.py)"
+   "_src": "MEASURED night frames (night_lights.py)",
+   "_t4_28": "2026-10-21 (Alexandre: the green crown is not that big): band re-measured on T4/28 Explosion behind Jason (SOLVED, ~310 m): stripes v 440-605 -> z 161.7-178.6 (was 125.1-163.9)"
   },
   "name_game": "Arcadia Towers (S)",
   "name_irl": "Vizcayne South Condominium",
@@ -53266,8 +53267,8 @@
     1.0,
     0.603
    ],
-   "z0": 125.1,
-   "z1": 163.9,
+   "z0": 161.5,
+   "z1": 177.0,
    "top": 177.4,
    "pattern": "vertical",
    "n_px": 214,
@@ -53276,7 +53277,8 @@
     "Jason Duval 05 (Machine Gun)"
    ],
    "_src": "MEASURED night frames (night_lights.py)",
-   "_band_from": "Vizcayne South Condominium (JD05 shows two identical green crowns; North has only 214 px)"
+   "_band_from": "Vizcayne South Condominium (JD05 shows two identical green crowns; North has only 214 px)",
+   "_t4_28": "2026-10-21 (Alexandre: the green crown is not that big): band re-measured on T4/28 Explosion behind Jason (SOLVED, ~310 m): stripes v 440-605 -> z 161.7-178.6 (was 125.1-163.9)"
   },
   "name_game": "Arcadia Towers (N)",
   "name_irl": "Vizcayne North Condominium",
@@ -230924,7 +230926,24 @@
   },
   "name_game": null,
   "name_irl": "Marina Blue",
-  "gtadb": "L189"
+  "gtadb": "L189",
+  "night_light": {
+   "rgb": [
+    0.365,
+    0.604,
+    0.871
+   ],
+   "z0": 164.5,
+   "z1": 175.0,
+   "top": 175.1,
+   "pattern": "band",
+   "n_px": 5260,
+   "frac": null,
+   "cams": [
+    "Explosion behind Jason"
+   ],
+   "_src": "MEASURED 2026-10-21 on T4/28 (Alexandre: the top of Marina Blue glows blue): blue band v 551-602 at u 1319-1461 -> z 164.6-174.6, mean sRGB (93,154,222)"
+  }
  },
  "One Miami Condominium East": {
   "color": "#e2c290",
