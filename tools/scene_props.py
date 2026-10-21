@@ -1237,8 +1237,8 @@ def napping_room():
 def bayside_bridge():
     """T4/34 Explosion on the Highway — Lucia leaning out of a helicopter over the Bayside Dr bridge at night (pose fitted on the
     road lines, cameras.json BAYSIDE-HELI-V1). The bridge was only a V16 road stroke at 6 m: rebuilt as a divided deck on the V17
-    road axis (az 274.7, centre y -1085 at x -520, shores x -622 / -414; past the W shore it follows the bend of Bayside Dr
-    to az 285.5 down to the N-S avenue at x -712, Alexandre: « la route lead dans un building »): concrete deck (top 6.8, ESTIMATED), Jersey median
+    road axis (az 274.7, centre y -1085 at x -520, shores x -622 / -414; past the W shore a smooth curve joins the V16 Bayside Dr
+    road (Alexandre: « la route lead dans un building », « fit parfaitement avec la route plus loin »)): concrete deck (top 6.8, ESTIMATED), Jersey median
     0.61 m (fitted), yellow edge lines 2.18 m each side of it (fitted), dashed lane lines, white edge lines, parapets, piers every
     26 m. 22 m wide, not the 12.5 m V17 band: the wreck and the police cars back-project 8-10 m either side of the median (measured beats map).
     Back-projected from the frame (half-res px x 2) on the deck plane: the wreck (no explosion, Alexandre: « met pas l'explosion »), the police cars with their light bars on the right carriageway, the trees and blue-lit palms of the W shore (palms on the
@@ -1268,30 +1268,49 @@ def bayside_bridge():
     s = s0 + 13.0
     while s < s1 - 6:
         P.append(dict(k='box', c=r2(at(s, 0, -2.0)), s=[1.4, 18.0, ZD - 1.3 + 2.0], az=AZ, color='#6e6c68')); s += 26.0      # piers
-    # 2) past the W shore Bayside Dr bends to az 285.5 (V17 band: centre y -1072.5 at x -630, -1028 at x -790) and runs to the
-    # junction with the N-S avenue (x -712); the divided road follows it, 4 m pieces coming down from the deck to ground + 0.35
-    # heading eased from 274.7 to 285.5 over the first 40 m (no kink at the bridge end), integrated every 0.5 m
-    B0 = np.array(at(s1, 0, 0)[:2]); SS = np.arange(0.0, 140.0, 0.5)
-    HD = np.radians(274.7 + (285.5 - 274.7) * np.clip(SS / 40.0, 0, 1) ** 1.0)
-    C2 = B0 + np.cumsum(np.c_[np.sin(HD), np.cos(HD)] * 0.5, axis=0) - np.array([math.sin(HD[0]), math.cos(HD[0])]) * 0.5
-    S2 = float(SS[np.argmin(np.abs(C2[:, 0] + 712.0))])
-    def at2(s_, l, z):
-        i = min(int(round(s_ / 0.5)), len(SS) - 1); h = HD[i]
-        return [C2[i, 0] + math.cos(h) * l, C2[i, 1] - math.sin(h) * l, z]
-    zg = lambda s_: max(T(*at2(s_, 0, 0)[:2]), 0.0) + 0.35
-    zz = lambda s_: max(zg(s_), ZD - 0.06 * s_)                                     # 6 % ramp down to the ground
-    t = 0.0
-    while t < S2:
-        tb = min(t + 2.0, S2); z = zz((t + tb) / 2); g = zg((t + tb) / 2) - 0.35; cm = at2((t + tb) / 2, 0, 0)
-        AZ2 = round(math.degrees(HD[min(int(round((t + tb) / 2 / 0.5)), len(SS) - 1)]), 1)
-        lines(at2, t, tb, z)
-        if z - g > 0.6: P.append(dict(k='box', c=r2([cm[0], cm[1], g]), s=[round(tb - t + 0.1, 2), 22.4, round(z - g, 2)], az=AZ2, color='#7d7b76'))
-        P.append(dict(k='box', c=r2([cm[0], cm[1], z]), s=[round(tb - t + 0.1, 2), 0.6, 0.32], az=AZ2, color='#9a978f'))
-        P.append(dict(k='box', c=r2([cm[0], cm[1], z + 0.32]), s=[round(tb - t + 0.1, 2), 0.22, 0.29], az=AZ2, color='#9a978f'))
-        for l in (-5.9, 5.9):
-            if int(t / 2) % 6 == 0: quad([at2(t, l - 0.065, z + 0.04), at2(t + 3.0, l - 0.065, z + 0.04), at2(t + 3.0, l + 0.065, z + 0.04), at2(t, l + 0.065, z + 0.04)], '#d8d8d2', 0.45)
-        t = tb
-    roadclear = [[r2(at(s0 - 4, -12.5, 0)[:2]), r2(at(s1, -12.5, 0)[:2]), r2(at2(S2, -12.5, 0)[:2]), r2(at2(S2, 12.5, 0)[:2]), r2(at(s1, 12.5, 0)[:2]), r2(at(s0 - 4, 12.5, 0)[:2])]]
+    # 2) past the W shore the divided road joins the V16 Bayside Dr ribbon (14 m, drawn 0.34 above its points) that carries on to
+    # the N-S avenue: a cubic Hermite curve tangent to the bridge axis at the W shore and to the V16 road at its point (-683.9,
+    # -1050.5) (az 286), narrowing 22 -> 14 m, the median ending in a nose before the join, the level easing from the deck (6.8) to
+    # the V16 ribbon (3.2 + 0.34); continuous quad strips (Alexandre: « que la route curve smoothly et fit parfaitement »)
+    P0 = np.array(at(s1, 0, 0)[:2]); P1 = np.array([-683.9, -1050.5]); t1 = np.array([-11.5, 3.3]); t1 /= np.linalg.norm(t1)
+    Lc = float(np.linalg.norm(P1 - P0)); M0, M1 = d * Lc, t1 * Lc; ZJ = 3.2 + 0.34 + 0.01
+    TT = np.linspace(0, 1, 61)
+    def hermite(t):
+        h00, h10, h01, h11 = 2 * t**3 - 3 * t**2 + 1, t**3 - 2 * t**2 + t, -2 * t**3 + 3 * t**2, t**3 - t**2
+        dh = (6 * t**2 - 6 * t), (3 * t**2 - 4 * t + 1), (-6 * t**2 + 6 * t), (3 * t**2 - 2 * t)
+        c = h00 * P0 + h10 * M0 + h01 * P1 + h11 * M1; tg = dh[0] * P0 + dh[1] * M0 + dh[2] * P1 + dh[3] * M1
+        return c, tg / np.linalg.norm(tg)
+    CC, NN = [], []
+    for t in TT: c, tg = hermite(t); CC.append(c); NN.append(np.array([tg[1], -tg[0]]))
+    ease = lambda t: 0.5 - 0.5 * math.cos(math.pi * t)
+    ZC = [ZD + (ZJ - ZD) * ease(t) for t in TT]; HW = [10.7 + (7.0 - 10.7) * ease(t) for t in TT]
+    pt = lambda i, l, dz=0.0: [CC[i][0] + NN[i][0] * l, CC[i][1] + NN[i][1] * l, ZC[i] + dz]
+    def strip(lf, col, dz, e=None, i0=0, i1=len(TT) - 1):                     # lf(i) -> (l_left, l_right)
+        for i in range(i0, i1):
+            (a0, b0), (a1, b1) = lf(i), lf(i + 1)
+            quad([pt(i, a0, dz), pt(i + 1, a1, dz), pt(i + 1, b1, dz), pt(i, b0, dz)], col, e)
+    strip(lambda i: (-HW[i], HW[i]), '#232427', 0.02, 0.05)                                                     # asphalt
+    IM = int(0.8 * (len(TT) - 1))                                                                                # median ends here
+    for sg in (-1, 1):
+        strip(lambda i: (sg * 2.18 - 0.075, sg * 2.18 + 0.075), '#d6ad2c', 0.04, 0.45, 0, IM)                  # yellow
+        strip(lambda i: (sg * (HW[i] - 0.5) - 0.065, sg * (HW[i] - 0.5) + 0.065), '#d8d8d2', 0.04, 0.45)       # white edges
+        for i in range(0, len(TT) - 1, 3):                                                                       # dashes
+            l = lambda k: sg * (2.18 + HW[k] - 0.5) / 2
+            quad([pt(i, l(i) - 0.065, 0.04), pt(i + 1, l(i + 1) - 0.065, 0.04), pt(i + 1, l(i + 1) + 0.065, 0.04), pt(i, l(i) + 0.065, 0.04)], '#d8d8d2', 0.45)
+    for i in range(IM):                                                                                          # Jersey median: 2 faces + top
+        for sg in (-1, 1):
+            quad([pt(i, sg * 0.3, 0.0), pt(i + 1, sg * 0.3, 0.0), pt(i + 1, sg * 0.11, 0.61), pt(i, sg * 0.11, 0.61)], '#9a978f')
+        quad([pt(i, -0.11, 0.61), pt(i + 1, -0.11, 0.61), pt(i + 1, 0.11, 0.61), pt(i, 0.11, 0.61)], '#a29f97')
+    quad([pt(IM, -0.3, 0.0), pt(IM, 0.3, 0.0), pt(IM, 0.11, 0.61), pt(IM, -0.11, 0.61)], '#9a978f')              # nose
+    for i in range(len(TT) - 1):                                                                                 # deck flanks while raised
+        for sg in (-1, 1):
+            g0, g1 = T(*pt(i, sg * HW[i])[:2]), T(*pt(i + 1, sg * HW[i + 1])[:2])
+            if ZC[i] - g0 > 0.4 or ZC[i + 1] - g1 > 0.4:
+                quad([pt(i, sg * HW[i], 0.02), pt(i + 1, sg * HW[i + 1], 0.02), [*pt(i + 1, sg * HW[i + 1])[:2], g1 - 0.5], [*pt(i, sg * HW[i])[:2], g0 - 0.5]], '#7d7b76')
+    S2 = None
+    # stops short of the join (curve sample 54 of 60): the V16 ribbon resumes under the curve's end (overlap, no gap)
+    roadclear = [[r2(at(s0 - 4, -12.5, 0)[:2]), r2(at(s1, -12.5, 0)[:2])] + [r2(np.array(pt(i, -HW[i] - 1.5)[:2])) for i in range(0, 55, 6)] +
+                 [r2(np.array(pt(i, HW[i] + 1.5)[:2])) for i in range(54, -1, -6)] + [r2(at(s1, 12.5, 0)[:2]), r2(at(s0 - 4, 12.5, 0)[:2])]]
     deck = lambda u, v, z=ZD: V.on_plane_z(u * 2, v * 2, z)
     w = deck(1000, 410); P.append(dict(k='box', c=r2(w), s=[4.4, 1.9, 1.2], az=AZ + 25, color='#1d1d1f'))                       # wreck
     # police cars on the right carriageway: body, white door panel, red / blue light bar
