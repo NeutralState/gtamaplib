@@ -1142,7 +1142,55 @@ def beach_biplane():
             P.append(dict(k='cyl', a=r2([q[0] + dx, q[1] + dy, q[2]]), b=r2([q[0] + dx, q[1] + dy, q[2] + 2.2]), r=0.09, color='#9aa3a8'))
         P.append(dict(k='box', c=r2([q[0], q[1], q[2] + 2.2]), s=[3.0, 3.0, 2.2], az=0.0, color=body))
         P.append(dict(k='box', c=r2([q[0], q[1], q[2] + 4.4]), s=[3.6, 3.6, 0.35], az=0.0, color=roof))
+    P += _biplane(V)
+    # 101 Ocean Dr (the yellow-banded block left of the Royal Atlantic, Alexandre: « ce building est manquant »): the mesh was
+    # there but white; its facade is now the ochre grid of the frame, plus the cantilevered floor slabs of its east end
+    for k in range(9):
+        z = 15.0 + 3.6 * k
+        if z > 44.0: break
+        P.append(dict(k='box', c=[2031.6, 32.0, round(z - 0.3, 2)], s=[11.0, 1.8, 0.3], az=0.0, color='#d9cfb4'))
     return dict(scene='T4/30 Biplane over the Beach (South Beach)', camera='Biplane over the Beach', note=beach_biplane.__doc__.split('\n')[0], props=P)
+
+
+def _obox(c, f, r, u, L, W, H, color):
+    """oriented box (any attitude) as 6 quads: centre c, unit axes f / r / u, sizes L / W / H along them."""
+    c, f, r, u = (np.asarray(a, float) for a in (c, f, r, u))
+    q = lambda i, j, k: c + f * (i * L / 2) + r * (j * W / 2) + u * (k * H / 2)
+    F = [((1, -1, -1), (1, 1, -1), (1, 1, 1), (1, -1, 1)), ((-1, -1, -1), (-1, -1, 1), (-1, 1, 1), (-1, 1, -1)),
+         ((-1, 1, -1), (-1, 1, 1), (1, 1, 1), (1, 1, -1)), ((-1, -1, -1), (1, -1, -1), (1, -1, 1), (-1, -1, 1)),
+         ((-1, -1, 1), (1, -1, 1), (1, 1, 1), (-1, 1, 1)), ((-1, -1, -1), (-1, 1, -1), (1, 1, -1), (1, -1, -1))]
+    return [dict(k='quad', p=[[round(float(v), 2) for v in q(*ijk)] for ijk in face], color=color) for face in F]
+
+
+def _biplane(V):
+    """the T4/30 crop-duster biplane (Stearman type), back-projected from the frame: upper-wing span 1260 px -> ~49 m from the
+    camera (9.8 m span, 15 deg of yaw); engine centre (1465, 915), upper wing row 745, lower wing 950, wheels 1095; the fuselage runs
+    to the image left -> heading 0.5 (N up the beach), bank 0.9 deg left wing down (tips back-projected). The wing-walker and the
+    pink smoke are left out (Alexandre: « enleve la fumee rouge et la personne sur l'aile »). Shapes and sizes ESTIMATED."""
+    d = V.ray(1465, 915); d /= np.linalg.norm(d); P0 = V.o + d * 49.0
+    az = math.radians(0.5); ph = math.radians(0.9)
+    f = np.array([math.sin(az), math.cos(az), 0.0]); r = np.array([math.cos(az), -math.sin(az), 0.0]); z = np.array([0, 0, 1.0])
+    r, z = r * math.cos(ph) + z * math.sin(ph), z * math.cos(ph) - r * math.sin(ph)
+    W = lambda x, y, h: P0 + f * x + r * y + z * h; r2 = lambda a: [round(float(v), 2) for v in a]
+    MAR, RED, SIL, DK = '#5a1c22', '#8a2630', '#c8c4bc', '#1d1a19'; B = []
+    cyl = lambda a, b, rr, col: B.append(dict(k='cyl', a=r2(a), b=r2(b), r=rr, color=col))
+    cyl(W(0.05, 0, 0), W(-0.75, 0, 0), 0.6, DK)                                    # cowl + radial engine
+    cyl(W(0.12, 0, 0), W(0.0, 0, 0), 0.16, '#9a9a96')                              # hub
+    cyl(W(-0.75, 0, 0), W(-4.6, 0, 0.12), 0.56, SIL)                               # forward fuselage (bare metal)
+    cyl(W(-4.6, 0, 0.12), W(-7.0, 0, 0.35), 0.3, MAR)                              # tail cone
+    B += _obox(W(-0.95, 0, 1.23), f, r, z, 1.55, 9.8, 0.16, MAR)                  # upper wing
+    B += _obox(W(-1.05, 0, -0.25), f, r, z, 1.5, 9.4, 0.15, MAR)                  # lower wing
+    for s in (-1, 1):
+        B += _obox(W(-0.3, s * 4.85, 1.23), f, r, z, 0.35, 0.12, 0.17, RED)       # red wing-tip edges
+        for x in (-0.55, -1.45): cyl(W(x, s * 3.7, -0.2), W(x, s * 3.7, 1.16), 0.045, DK)            # interplane struts
+        cyl(W(-0.6, s * 0.35, 0.5), W(-0.7, s * 0.55, 1.16), 0.04, DK); cyl(W(-1.3, s * 0.35, 0.5), W(-1.2, s * 0.55, 1.16), 0.04, DK)   # cabane
+        cyl(W(-0.7, s * 0.3, -0.45), W(-0.55, s * 1.05, -1.35), 0.07, MAR)       # gear legs
+        B.append(dict(k='blob', c=r2(W(-0.55, s * 1.1, -1.35)), r=[0.13, 0.4, 0.4], az=round(math.degrees(math.atan2(r[0], r[1])), 1), color=DK, smooth=True))
+    B += _obox(W(-6.55, 0, 0.38), f, r, z, 0.95, 3.3, 0.07, MAR)                  # tailplane
+    B += _obox(W(-6.75, 0, 0.95), f, r, z, 1.05, 0.08, 1.15, MAR)                 # fin
+    B.append(dict(k='blob', c=r2(W(-2.3, 0, 0.62)), r=[0.5, 0.45, 0.28], color='#2a2422', smooth=True))   # front cockpit + pilot
+    cyl(W(-0.95, 0, 1.31), W(-0.95, 0, 2.7), 0.03, DK)                             # mast above the centre section
+    return B
 
 
 def beach_lifeguards():
@@ -1238,6 +1286,20 @@ def portofino_detail():
         acc = (acc + L) % 5.5
     for Ls, zz, d in ((O, main['z1'], 1.9), (OC, crown['z1'], 1.6)):                                       # cornice bands
         P.append(dict(k='prism', poly=[r2(q) for q in _offset(Ls, d)], z0=round(zz - 1.6, 2), z1=round(zz + 0.2, 2), color='#b8664f'))
+    # the terracotta diagonal down the central wing (T4/30 frame, full-res pixels: (3365, 165) -> (3300, 400), ~26 px wide),
+    # back-projected on the facade: 2D ray / footprint intersection, 1.7 m proud (in front of the balcony slabs)
+    V = View('Biplane over the Beach')
+    def on_face(u, v):
+        d = V.ray(u, v); best = None
+        for i in range(len(O)):
+            a, b = O[i], O[(i + 1) % len(O)]; M2 = np.array([[d[0], a[0] - b[0]], [d[1], a[1] - b[1]]])
+            if abs(np.linalg.det(M2)) < 1e-9: continue
+            t, s = np.linalg.solve(M2, a - V.o[:2])
+            if t > 0 and 0 <= s <= 1 and (best is None or t < best): best = t
+        return V.o + d * (best - 1.7 / np.linalg.norm(d[:2]))
+    for (ua, va), (ub, vb) in (((3365, 165), (3300, 400)), ((3462, 232), (3478, 300))):
+        Q = [on_face(ua - 13, va), on_face(ua + 13, va), on_face(ub + 13, vb), on_face(ub - 13, vb)]
+        P.append(dict(k='quad', p=[r2(q) for q in Q], color='#b25a45'))
     n = len(O)
     for i in range(n):                                                                                       # pilasters on the sharp corners
         a, b, c = O[i - 1], O[i], O[(i + 1) % n]
