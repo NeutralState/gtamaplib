@@ -1602,6 +1602,101 @@ def heli_jason():
     return dict(scene='T4/41 Jason in a Helicopter (the helicopter)', camera='Jason in a Helicopter', note=heli_jason.__doc__.split('\n')[0], props=P)
 
 
+def vice_beach_night():
+    """T4/46 Vice Beach at Night — dusk over the South Pointe park and Ocean Drive (pose ESTIMATED, BEACH-FIT V5). The frame's
+    lights are placed by casting their pixel rays on the 3D city (mesh solids, V16 massing, terrain; _raycaster): the
+    art-deco neons of Ocean Drive (the white/blue double tubes, the cyan bands, the pink, yellow, orange and magenta signs,
+    the vertical 'Hotel Dixon' sign and its orange strip, the green glow), the lit crown and porch of Old City Hall, the
+    floodlights behind, the lit tower crane on the left, the lamps of the park paths, and palms over the park. Neon sizes
+    from the frame, distances from the rays. ESTIMATED."""
+    V = View('Vice Beach at Night'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]; k = 2.0
+    hit = _raycaster(V)
+    def at(u, v, back=0.5):
+        p, kd = hit(u * k, v * k)
+        if p is None: return None
+        d = V.ray(u * k, v * k); d = d / np.linalg.norm(d); return p - d * back
+    def neon(pts, color, r=0.18, i=2.6):
+        Q = [at(u, v) for u, v in pts]
+        if any(q is None for q in Q): return
+        P.append(dict(k='glow', pts=[r2(q) for q in Q], r=r, color=color, i=i))
+    # Ocean Drive neons (display 1920 x 960 pixels of the frame)
+    neon([(845, 486), (845, 572)], '#dbe7ff', 0.25, 3.0); neon([(873, 486), (873, 572)], '#dbe7ff', 0.25, 3.0); neon([(845, 486), (859, 481), (873, 486)], '#9ab8ff', 0.2)
+    neon([(1023, 500), (1023, 532)], '#5aa0ff', 0.2); neon([(1099, 500), (1100, 520)], '#ff5fd0', 0.15); neon([(1077, 547), (1103, 546)], '#ff7fd8', 0.15)
+    for y in (553, 566, 578): neon([(667, y), (693, y - 1)], '#7ff5e0', 0.16)
+    for y in (545, 557, 569): neon([(737, y), (760, y - 1)], '#7ff5e0', 0.16)
+    neon([(607, 620), (647, 619)], '#ff59c8', 0.18); neon([(1103, 252), (1177, 252)], '#d24dff', 0.6); neon([(1103, 264), (1177, 264)], '#d24dff', 0.6)
+    neon([(1783, 315), (1783, 377)], '#f2e6ff', 0.3, 2.4); neon([(1795, 332), (1795, 387)], '#ff9a3a', 0.3, 2.4)
+    neon([(1645, 392), (1645, 452)], '#ff4fd0', 0.25, 3.0); neon([(1661, 392), (1661, 452)], '#ff4fd0', 0.25, 3.0); neon([(1645, 392), (1653, 386), (1661, 392)], '#ff4fd0', 0.2)
+    neon([(1439, 400), (1439, 473)], '#fff1c0', 0.2, 2.6)
+    for y in (460, 475, 490): neon([(1393, y), (1420, y - 2)], '#ff9a40', 0.2)
+    neon([(1533, 465), (1560, 464)], '#ff58d8', 0.18); neon([(1560, 380), (1600, 380)], '#9a7cff', 0.18); neon([(1745, 410), (1755, 425)], '#ffe0a0', 0.3)
+    neon([(1888, 404), (1906, 410)], '#3dff9a', 0.9, 2.2); neon([(1867, 250), (1900, 262)], '#d070ff', 0.7)
+    q = at(1608, 379)
+    if q is not None: P.append(dict(k='glow', pts=[r2(q), r2(q + [0, 0, 0.01])], r=0.35, color='#ff3030', i=3.0, ball=True))
+    # Old City Hall: lit crown and porch
+    neon([(605, 246), (630, 242), (655, 246)], '#ffe6a0', 0.6, 2.2); neon([(607, 270), (655, 270)], '#ffd98a', 0.5, 2.0); neon([(612, 362), (662, 362)], '#ffd98a', 0.5, 2.0)
+    # floodlights behind (no surface on their rays: placed 650 m out at their pixel)
+    for u, v, r in ((873, 268, 4.0), (1069, 272, 3.5), (823, 275, 1.6), (743, 270, 1.6)):
+        d = V.ray(u * k, v * k); q = V.o + d / np.linalg.norm(d) * 650
+        P.append(dict(k='glow', pts=[r2(q), r2(q + [0, 0, 0.01])], r=r, color='#fff4dc', i=3.0, ball=True))
+    # lit tower crane on the left (base = ground hit at u 112, mast top = the ray at v 222 over the base)
+    b = at(112, 480, 0.0)
+    if b is not None:
+        d = V.ray(112 * k, 222 * k); t = np.hypot(*(b[:2] - V.o[:2])) / np.hypot(d[0], d[1]); top = (V.o + d * t)[2]
+        _lattice_mast(P, b[0], b[1], float(T(b[0], b[1])), float(top), 2.2, '#c9802a')
+        P.append(dict(k='cyl', a=r2([b[0], b[1], top]), b=r2([b[0] - 28, b[1] + 22, top]), r=0.35, color='#c9802a'))
+        P.append(dict(k='glow', pts=[r2([b[0], b[1], top + 2])], r=0.5, color='#ff3030', i=3.0, ball=True))
+    # lamps of the park paths
+    for u, v in ((830, 668), (1200, 635), (1340, 622), (1520, 600), (1540, 640), (1410, 690), (1585, 668), (1730, 690), (1900, 522), (1880, 525),
+                 (1520, 668), (1170, 828), (1020, 830), (380, 830), (1600, 563), (1330, 665), (1046, 838), (1145, 832)):
+        g = at(u, v, 0.0)
+        if g is not None: P.append(dict(k='glow', pts=[r2(g + [0, 0, 3.6])], r=0.28, color='#ffd89a', i=2.6, ball=True))
+    # palms over the park (Lummus-style, dense on the frame)
+    rng = np.random.default_rng(46)
+    for _ in range(70):
+        u, v = rng.uniform(160, 1350), rng.uniform(570, 900); g = at(u, v, 0.0)
+        if g is not None and np.hypot(*(g[:2] - V.o[:2])) > 60:
+            P.append(dict(k='palm', a=r2(g), h=round(float(rng.uniform(8, 13)), 1), lean_az=round(float(rng.uniform(0, 360)), 0), lean=round(float(rng.uniform(0.03, 0.1)), 2)))
+    return dict(scene='T4/46 Vice Beach at Night (South Pointe park, Ocean Drive)', camera='Vice Beach at Night', note=vice_beach_night.__doc__.split('\n')[0], props=P)
+
+
+def _raycaster(V, R=1600.0):
+    """first hit of a frame pixel (full res) on the 3D city: mesh solids (tools/mesh_solids.py), V16 massing, then the
+    terrain; returns (point, kind). Polygons are pre-filtered to the camera's surroundings."""
+    import mesh_solids
+    S = mesh_solids.cached(); B = []
+    for so in S.values():
+        for L in so['layers']:
+            for pp in L['polys']:
+                q = np.array(pp['outer'], float)
+                if np.hypot(*(q.mean(0) - V.o[:2])) < R: B.append((q, float(L['z0']), float(L['z1'])))
+    for m in json.load(open(os.path.join(THIS, 'threejs', '_v16_massing.json'))):
+        q = np.array(m['o'], float)
+        if np.hypot(*(q.mean(0) - V.o[:2])) < R: B.append((q, float(m['z']), float(m['z']) + float(m['h'])))
+    BB = np.array([[q[:, 0].min(), q[:, 1].min(), q[:, 0].max(), q[:, 1].max()] for q, _, _ in B])
+    def inside(q, x, y):
+        xs, ys = q[:, 0], q[:, 1]; xj, yj = np.roll(xs, 1), np.roll(ys, 1)
+        return bool(np.sum(((ys > y) != (yj > y)) & (x < (xj - xs) * (y - ys) / (yj - ys + 1e-12) + xs)) % 2)
+    def hit(u, v, step=0.5):
+        d = V.ray(u, v); d = d / np.linalg.norm(d); o = V.o
+        e = o + d * R; lo = np.minimum(o[:2], e[:2]) - 1; hi = np.maximum(o[:2], e[:2]) + 1
+        cand = [i for i in np.where((BB[:, 2] >= lo[0]) & (BB[:, 0] <= hi[0]) & (BB[:, 3] >= lo[1]) & (BB[:, 1] <= hi[1]))[0]]
+        # keep the boxes the ray actually passes near (distance of the box centre to the ray line in plan)
+        n2 = np.array([-d[1], d[0]]) / max(1e-9, np.hypot(d[0], d[1]))
+        cand = [i for i in cand if abs((np.array([(BB[i, 0] + BB[i, 2]) / 2, (BB[i, 1] + BB[i, 3]) / 2]) - o[:2]) @ n2) < 0.75 * np.hypot(BB[i, 2] - BB[i, 0], BB[i, 3] - BB[i, 1]) + 2]
+        t = 1.0
+        while t < R:
+            p = o + d * t
+            for i in cand:
+                q, z0, z1 = B[i]
+                if z0 - 0.5 <= p[2] <= z1 and BB[i, 0] <= p[0] <= BB[i, 2] and BB[i, 1] <= p[1] <= BB[i, 3] and inside(q, p[0], p[1]):
+                    return o + d * max(1.0, t - step), 'building'
+            if p[2] <= T(p[0], p[1]): return p, 'ground'
+            t += step if t < 400 else 1.5
+        return None, None
+    return hit
+
+
 def _lattice_mast(P, x, y, z0, z1, w, col='#3b302c', az=0.0):
     """tower-crane mast: 4 chords, a tie ring every 4 m, X bracing (lines)."""
     a = math.radians(az); ex, ey = np.array([math.cos(a), -math.sin(a)]) * w / 2, np.array([math.sin(a), math.cos(a)]) * w / 2
@@ -1815,7 +1910,7 @@ def portofino_detail():
     return dict(scene='Portofino Tower detail', camera='Biplane over the Beach', note=portofino_detail.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony, glass_tower_fall, heli_jason]
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony, glass_tower_fall, heli_jason, vice_beach_night]
 
 
 def main():
