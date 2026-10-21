@@ -1337,6 +1337,81 @@ def bayside_bridge():
     return dict(scene='T4/34 Explosion on the Highway (Bayside Dr bridge)', camera='Explosion on the Highway', note=bayside_bridge.__doc__.split('\n')[0], props=P, roadclear=roadclear)
 
 
+def _race_signs(prefix):
+    """the three T4/37 overhead guide signs redrawn sharp (Florida green, white border): 'Shoreline / Amphitheater / Marina' with
+    a left arrow; 'EAST TO' + I-397 shield + toll 1A shield + 'Port VC/Keys' + down arrow; 'WEST TO' + I-397 + 'Downtown' + down
+    arrow (the frame cuts the last panel behind the mirror: its text is ESTIMATED)."""
+    from PIL import Image, ImageDraw, ImageFont
+    GRN, WHT, BLU, RED = (0, 106, 58), (246, 246, 240), (24, 52, 140), (190, 30, 40)
+    F = '/System/Library/Fonts/Supplemental/DIN Condensed Bold.ttf'
+    font = lambda s: ImageFont.truetype(F, s) if os.path.exists(F) else ImageFont.load_default()
+    def panel(W, H):
+        im = Image.new('RGB', (W, H), GRN); d = ImageDraw.Draw(im); d.rounded_rectangle([8, 8, W - 9, H - 9], radius=26, outline=WHT, width=8); return im, d
+    def ctext(d, W, y, s, sz):
+        f = font(sz); w = d.textlength(s, font=f); d.text(((W - w) / 2, y), s, font=f, fill=WHT)
+    def interstate(d, x, y, s, num):
+        d.rounded_rectangle([x, y + 0.18 * s, x + s, y + s], radius=int(0.25 * s), fill=BLU, outline=WHT, width=4)
+        d.rectangle([x + 4, y + 0.18 * s + 4, x + s - 4, y + 0.36 * s], fill=RED)
+        f = font(int(0.5 * s)); w = d.textlength(num, font=f); d.text((x + (s - w) / 2, y + 0.38 * s), num, font=f, fill=WHT)
+    def down(d, cx, y, s):
+        d.rectangle([cx - 0.09 * s, y, cx + 0.09 * s, y + 0.55 * s], fill=WHT); d.polygon([(cx - 0.32 * s, y + 0.5 * s), (cx + 0.32 * s, y + 0.5 * s), (cx, y + s)], fill=WHT)
+    im, d = panel(700, 420)                                                   # Shoreline / Amphitheater / Marina, left arrow
+    for k, s in enumerate(('Shoreline', 'Amphitheater', 'Marina')): ctext(d, 700, 30 + 92 * k, s, 92)
+    d.rectangle([300, 330, 470, 352], fill=WHT); d.polygon([(230, 341), (310, 300), (310, 382)], fill=WHT)
+    im.save(prefix + '_shoreline.png')
+    im, d = panel(560, 560)                                                   # EAST TO I-397 / toll 1A / Port VC/Keys, down arrow
+    f = font(80); d.text((40, 24), 'EAST', font=f, fill=WHT); d.text((380, 24), 'TO', font=f, fill=WHT)
+    interstate(d, 60, 120, 150, '397')
+    d.polygon([(380, 140), (470, 140), (490, 175), (470, 280), (425, 300), (380, 280), (360, 175)], fill=WHT)
+    f2 = font(46); d.text((392, 178), 'TOLL', font=font(30), fill=GRN); d.text((400, 210), '1A', font=f2, fill=GRN)
+    ctext(d, 560, 320, 'Port VC/Keys', 86); down(d, 280, 420, 120)
+    im.save(prefix + '_east397.png')
+    im, d = panel(520, 560)                                                   # WEST TO I-397 / Downtown, down arrow (ESTIMATED text)
+    f = font(80); d.text((40, 24), 'WEST', font=f, fill=WHT); d.text((360, 24), 'TO', font=f, fill=WHT)
+    interstate(d, 185, 120, 150, '397'); ctext(d, 520, 320, 'Downtown', 86); down(d, 260, 420, 120)
+    im.save(prefix + '_west397.png')
+
+
+def catalan_race():
+    """T4/37 Night Street Race — racing south on Catalan Blvd under the I-397 guide-sign gantry (pose ESTIMATED from Citigroup Center /
+    100 Biscayne Blvd / Pegassi Towers, cameras.json CATALAN-RACE-V2). Dressing back-projected from the frame:
+    the gantry ~42 m ahead (sign bottoms at 5.5 m clearance, ESTIMATED) with the three redrawn guide signs on it, the signal heads
+    of the next intersection (~75 m), the street lights on the left kerb and lane dashes. No cars and no people (Alexandre). Sizes ESTIMATED."""
+    V = View('Night Street Race'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]; k = 1.92
+    ZR = 3.34                                                              # V16 ribbon level (3.0 + 0.34) at the marker
+    A = V.o[:2].copy(); az = math.radians(167.5); d = np.array([math.sin(az), math.cos(az)]); n = np.array([d[1], -d[0]])   # road frame on the camera, along Catalan Blvd
+    at = lambda s, l, z: [A[0] + d[0] * s + n[0] * l, A[1] + d[1] * s + n[1] * l, z]
+    d3, n3 = np.r_[d, 0.0], np.r_[n, 0.0]
+    pre = os.path.join(THIS, 'threejs', '_prop_t437'); _race_signs(pre)
+    SG = 42.0; G0 = np.array(at(SG, 0, 0)[:2])
+    on_g = lambda u, v: V.on_vplane(u * k, v * k, G0, d)                     # the gantry plane (normal = road direction)
+    for (u0, v0, u1, v1), img in (((1025, 250, 1200, 355), 'shoreline'), ((1215, 228, 1340, 362), 'east397'), ((1352, 228, 1480, 362), 'west397')):
+        BL, BR, TR, TL = on_g(u0, v1), on_g(u1, v1), on_g(u1, v0), on_g(u0, v0)
+        P.append(dict(k='tex', p=[r2(q) for q in (BL, BR, TR, TL)], img='_prop_t437_%s.png' % img))
+        P.append(dict(k='box', c=r2((BL + BR) / 2 + d3 * 0.08), s=[round(float(np.linalg.norm(BR - BL)) + 0.2, 2), 0.12, round(float(TL[2] - BL[2]) + 0.2, 2)],
+                      az=round(math.degrees(az) + 90, 1), color='#5d6468'))                                 # panel back
+    zt = float(on_g(1215, 228)[2]) + 0.4
+    for l in (-11.5, 12.5): P.append(dict(k='cyl', a=r2(at(SG + 0.5, l, ZR)), b=r2(at(SG + 0.5, l, zt + 0.6)), r=0.35, color='#8a9094'))   # posts
+    for dz in (0.0, 0.9): P.append(dict(k='cyl', a=r2(at(SG + 0.5, -11.5, zt + dz)), b=r2(at(SG + 0.5, 12.5, zt + dz)), r=0.18, color='#8a9094'))   # truss chords
+    # signal heads of the next intersection (green), back-projected on the plane 75 m ahead
+    S2 = np.array(at(75.0, 0, 0)[:2])
+    for u, v in ((1040, 470), (1160, 470), (1280, 470), (1205, 555)):
+        q = V.on_vplane(u * k, v * k, S2, d)
+        P.append(dict(k='box', c=r2(q - [0, 0, 0.55]), s=[0.4, 0.4, 1.1], az=round(math.degrees(az), 1), color='#1a1c1e'))
+        P.append(dict(k='glow', pts=[r2(q - d3 * 0.25)], r=0.16, color='#36ff7a', i=3.0, ball=True))
+    for s in (40.0, 75.0): P.append(dict(k='cyl', a=r2(at(s, -11.0, ZR + 5.6)), b=r2(at(s, 6.0, ZR + 5.6)), r=0.12, color='#2a2c2e'))   # mast arms
+    # street lights on the left kerb (lamp heads at display (860, 150) / (1045, 150))
+    for u in (860, 1045):
+        q = V.on_vplane(u * k, 150 * k, at(0, -10.5, 0), n)
+        P.append(dict(k='cyl', a=r2([q[0], q[1], ZR]), b=r2(q), r=0.14, color='#3a3d40'))
+        P.append(dict(k='glow', pts=[r2(q)], r=0.35, color='#fff4d6', i=3.2, ball=True))
+    for l in (-3.6, 3.6):                                                                                     # lane dashes
+        for s in np.arange(4.0, 120.0, 12.0):
+            P.append(dict(k='quad', p=[r2(at(s, l - 0.07, ZR + 0.03)), r2(at(s + 3, l - 0.07, ZR + 0.03)), r2(at(s + 3, l + 0.07, ZR + 0.03)), r2(at(s, l + 0.07, ZR + 0.03))], color='#d8d8d2', e=0.4))
+    # no cars (Alexandre: « pas de voiture »)
+    return dict(scene='T4/37 Night Street Race (Catalan Blvd)', camera='Night Street Race', note=catalan_race.__doc__.split('\n')[0], props=P)
+
+
 def _lattice_mast(P, x, y, z0, z1, w, col='#3b302c', az=0.0):
     """tower-crane mast: 4 chords, a tie ring every 4 m, X bracing (lines)."""
     a = math.radians(az); ex, ey = np.array([math.cos(a), -math.sin(a)]) * w / 2, np.array([math.sin(a), math.cos(a)]) * w / 2
@@ -1550,7 +1625,7 @@ def portofino_detail():
     return dict(scene='Portofino Tower detail', camera='Biplane over the Beach', note=portofino_detail.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace]
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race]
 
 
 def main():

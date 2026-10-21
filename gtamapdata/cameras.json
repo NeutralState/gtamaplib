@@ -7756,17 +7756,17 @@
   "id": "T4/37",
   "player": null,
   "xyz": [
-   -611.5,
-   -970.3,
-   3.98
+   -440.0,
+   -10.0,
+   4.44
   ],
   "ypr": [
-   -48.0,
+   -168.0,
    0.0,
    0.0
   ],
   "fov": [
-   70.0,
+   44.0,
    null
   ],
   "size": [
@@ -7776,7 +7776,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - street race at night under a green highway sign, downtown towers; GTAVI_Launch_Trailer.mp4 t=64.73 s (frame 1942), letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/37 (corr 0.983); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.0 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 48 / hfov 70 read by eye on the V of his V17 marker T4/37 (was 45 / 68.0)."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/37 (corr 0.983); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.0 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 48 / hfov 70 read by eye on the V of his V17 marker T4/37 (was 45 / 68.0).| CATALAN-RACE-V2 2026-10-21 (Alexandre: southbound; the lit office tower ahead may be Citigroup Center; the purple tower is not Kaseya): occlusion-aware search with Citigroup Center imposed as the lit tower (frame u 1075-1363): the near right block = 100 Biscayne Blvd (left edge u 1555), the slender tower with the red light on the left = Pegassi Towers (u 259-403); camera (-440, -10), heading 168, hfov 44 (edges ~15 px). ESTIMATED: night frame, motion blur, tower tops out of frame; camera 16 m E of the V16 Catalan Blvd stroke."
  },
  "Balcony at Sunset": {
   "id": "T4/39",
