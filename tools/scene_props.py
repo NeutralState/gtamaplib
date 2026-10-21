@@ -1508,12 +1508,11 @@ def glass_tower_fall():
 def heli_jason():
     """T4/41 Jason in a Helicopter — the helicopter the camera rides on (Alexandre: « on met l'helico »). The camera is
     locked to it, so its left side is built in the camera frame and placed with the fitted pose: each painted region of the
-    frame (white cabin side, black stripe, yellow belly, white door frame, dark door opening, door glass, exhaust, the
-    anti-collision dome) is a polygon (the side and the belly with a designed light: vertex-coloured, lit bands and gold seam
+    frame (white cabin side, black stripe, yellow belly, rear door with its rounded window and the cabin behind it, the
+    cabin opening and the upper door track, exhaust, the anti-collision dome, the skid step and its pole) is a polygon (the side and the belly with a designed light: vertex-coloured, lit bands and gold seam
     highlight, TRI-VC-V1) traced on the frame (display 1920 x 960) and back-projected on the fuselage side, a
     plane through 4 depth anchors read from the frame (door post top 4.4 m, post foot 2.6 m, belly corner 1.15 m, cowling
-    corner 1.5 m; scale from Jason, seated ~1.3 m tall at ~4.5 m), plus the panel seams. The lit strip under Jason's feet
-    is a tower below, not the skid (Alexandre). Flat colours, no frame texture; Jason is not modelled. ESTIMATED."""
+    corner 1.5 m; scale from Jason, seated ~1.3 m tall at ~4.5 m), plus the panel seams. Flat colours, no frame texture; Jason is not modelled. ESTIMATED."""
     V = View('Jason in a Helicopter'); P = []; r2 = lambda a: [round(float(v), 3) for v in a]; k = 2.0
     A = np.array([(970, 190, 4.4), (1230, 640, 2.6), (1800, 920, 1.15), (1800, 80, 1.5)])
     cf = np.linalg.lstsq(np.c_[np.ones(4), A[:, 0], A[:, 1]], 1 / A[:, 2], rcond=None)[0]           # 1/Z linear in (u, v) = a plane
@@ -1535,28 +1534,49 @@ def heli_jason():
         for t in T: P.append(dict(k='tri', p=[r2(X(*q, f)) for q in t], colors=[hexc(q) for q in t]))
     white = lambda u, v: (0.55 + 0.42 * gl(u, v, (1060, 150), (1560, 330), 130) + 0.5 * gl(u, v, (1500, 600), (1910, 470), 70)
                           - 0.22 * gl(u, v, (980, 200), (1240, 640), 70) - 0.18 * gl(u, v, (1000, 160), (1300, 0), 90) - 0.2 * gl(u, v, (1150, 960), (1240, 700), 80))
-    shaded([(950, 180), (1210, 105), (1250, 0), (1920, 0), (1920, 960), (1100, 960), (1120, 670), (1035, 470), (1062, 380), (995, 250)], (150, 144, 132), white)
+    shaded([(950, 180), (1210, 105), (1250, 0), (1920, 0), (1920, 960), (1060, 960), (1228, 645), (1100, 400), (1000, 212), (962, 195)], (150, 144, 132), white)
     poly([(1180, 550), (1410, 545), (1520, 440), (1760, 205), (1920, 195), (1920, 400), (1480, 590), (1300, 600), (1190, 580)], '#16171a', 0.15, 0.995)
     gold = lambda u, v: (0.55 + 1.15 * gl(u, v, (1392, 660), (1632, 886), 26) + 0.45 * gl(u, v, (1392, 660), (1632, 886), 90)
                          + 0.25 * gl(u, v, (1700, 700), (1920, 680), 120) - 0.2 * gl(u, v, (1170, 960), (1260, 720), 90))
     shaded([(1240, 700), (1400, 672), (1920, 640), (1920, 960), (1170, 960)], (140, 104, 30), gold, 0.995, 5)
     poly([(1585, 0), (1840, 0), (1840, 55), (1730, 100), (1635, 112)], '#202224', 0.1, 0.995)          # engine intake / exhaust
-    poly([(940, 200), (995, 250), (1062, 380), (1035, 470), (920, 470), (880, 330)], '#0d0f12', 0.05, 1.04)   # door opening
-    # the cabin seen through the door glass (Alexandre: « c'est dans l'helico pas dehors »): far wall, seat back, bulkhead
-    poly([(925, 480), (1040, 460), (1130, 670), (1110, 960), (940, 960), (915, 700)], '#1f2327', 0.12, 1.45)
-    poly([(965, 560), (1050, 545), (1080, 760), (985, 790)], '#2f3338', 0.15, 1.3)
-    poly([(1000, 800), (1095, 780), (1100, 960), (1010, 960)], '#272a2e', 0.12, 1.3)
-    poly([(1060, 470), (1080, 468), (1105, 960), (1085, 960)], '#3a3e42', 0.15, 1.2)
-    for seg in (((945, 600), (1030, 520)), ((960, 760), (1090, 610)), ((975, 900), (1100, 760))):          # reflections on the glass
-        P.append(dict(k='line', pts=[r2(X(*seg[0], 1.015)), r2(X(*seg[1], 1.015))], color='#8fa4b0', opacity=0.5))
-    Q = [X(u, v, 1.02) for u, v in ((935, 490), (1035, 470), (1120, 670), (1100, 960), (950, 960), (925, 700))]; c = np.mean(Q, axis=0)   # door glass
+    # the front (Alexandre: « le devant est vraiment weird »): the cabin opening behind Jason, the upper sliding-door track, the
+    # rear door (white frame, rounded window) and the cabin seen through its window (« c'est dans l'helico pas dehors »)
+    poly([(895, 340), (962, 195), (1000, 212), (1100, 400), (992, 467), (950, 540), (902, 560), (880, 470)], '#0d0f12', 0.05, 1.04)
+    poly([(983, 214), (1000, 208), (1112, 392), (1096, 400)], '#3c4044', 0.2, 0.985)                           # upper door track
+    for a_, b_ in (((983, 214), (1096, 400)), ((1000, 208), (1112, 392))):
+        P.append(dict(k='line', pts=[r2(X(*a_, 0.984)), r2(X(*b_, 0.984))], color='#c9ccce'))
+    GL = [(1000, 505), (1045, 490), (1080, 520), (1100, 560), (1120, 660), (1095, 740), (1015, 930), (965, 925), (930, 880), (918, 700), (935, 600)]
+    DO = [(992, 467), (1050, 430), (1100, 400), (1165, 520), (1228, 645), (1150, 800), (1060, 960), (975, 960), (888, 960), (902, 660), (940, 560)]
+    poly(GL, '#1f2327', 0.12, 1.45)                                                                              # far cabin wall
+    poly([(965, 560), (1050, 545), (1080, 760), (985, 790)], '#2f3338', 0.15, 1.3)                               # seat back
+    poly([(1000, 800), (1080, 785), (1060, 900), (1000, 915)], '#272a2e', 0.12, 1.3)
+    for seg in (((945, 620), (1030, 530)), ((950, 770), (1090, 620)), ((975, 900), (1080, 770))):              # reflections on the glass
+        P.append(dict(k='line', pts=[r2(X(*seg[0], 0.995)), r2(X(*seg[1], 0.995))], color='#8fa4b0', opacity=0.5))
+    Q = [X(u, v, 0.996) for u, v in GL]; c = np.mean(Q, axis=0)                                                  # window glass
     for i in range(len(Q)): P.append(dict(k='quad', p=[r2(c), r2(Q[i]), r2(Q[(i + 1) % len(Q)]), r2(Q[(i + 1) % len(Q)])], color='#2a3a46', e=0.2, opacity=0.45))
-    poly([(890, 480), (935, 490), (925, 700), (950, 960), (905, 960)], '#9a9994', 0.18)                       # glass frame
+    door = lambda u, v: 0.62 + 0.4 * gl(u, v, (1100, 410), (1225, 645), 35) + 0.15 * gl(u, v, (1000, 470), (1100, 405), 30) - 0.12 * gl(u, v, (895, 660), (888, 955), 30)
+    hexd = lambda q: '#%02x%02x%02x' % tuple(int(min(255, max(0, x * door(*q)))) for x in (150, 144, 132))
+    for i in range(len(DO)):                                                                                     # door frame = ring outer/inner
+        o0, o1, i0, i1 = DO[i], DO[(i + 1) % len(DO)], GL[i], GL[(i + 1) % len(GL)]
+        for t in ((o0, o1, i1), (o0, i1, i0)):
+            P.append(dict(k='tri', p=[r2(X(*q, 0.985)) for q in t], colors=[hexd(q) for q in t]))
+    # the skid step (diamond plate, Jason's foot on it) and the black pole beside it (« la rail du bas »)
+    ST = [(732, 560, 4.6), (792, 560, 4.6), (788, 960, 4.2), (718, 960, 4.2)]
+    S3 = [V.o + V.ray(u * k, v * k) * z for u, v, z in ST]
+    P.append(dict(k='quad', p=[r2(q) for q in S3], color='#8f949b', e=0.35))
+    for v in range(572, 955, 16):                                                                                # diamond pattern
+        t = (v - 560) / 400.0; ul = 732 + (718 - 732) * t + 8; ur = 792 + (788 - 792) * t - 8; z = 4.6 + (4.2 - 4.6) * t - 0.01
+        for uu in np.arange(ul, ur - 6, 14):
+            P.append(dict(k='line', pts=[r2(V.o + V.ray(uu * k, v * k) * z), r2(V.o + V.ray((uu + 6) * k, (v - 6) * k) * z)], color='#c3c8ce'))
+    pa, pb = V.o + V.ray(718 * k, 548 * k) * 4.45, V.o + V.ray(651 * k, 960 * k) * 4.05
+    P.append(dict(k='cyl', a=r2(pa), b=r2(pb), r=0.03, color='#1d1f22'))
+    P.append(dict(k='blob', c=r2(pa), r=[0.035, 0.035, 0.035], color='#2a2d31', smooth=True))
     # panel seams and door frame edges (segments traced on the frame)
-    for seg in (((967, 183), (1085, 354)), ((1082, 397), (1227, 633)), ((1028, 259), (1158, 443)), ((900, 672), (1065, 387)), ((1006, 954), (1232, 640)),
+    for seg in (((967, 183), (1085, 354)), ((1082, 397), (1227, 633)), ((1028, 259), (1158, 443)), ((1006, 954), (1232, 640)),
                 ((1109, 849), (1223, 707)), ((1385, 671), (1619, 891)), ((1484, 589), (1910, 401)), ((1407, 558), (1519, 440)), ((1263, 540), (1401, 552)),
                 ((1421, 660), (1548, 683)), ((1643, 670), (1918, 651)), ((1649, 350), (1748, 229)), ((1578, 393), (1649, 348)), ((1345, 186), (1401, 63)),
-                ((1309, 175), (1351, 79)), ((1222, 119), (1274, 26)), ((1041, 486), (1122, 675)), ((1708, 732), (1744, 660)), ((1597, 910), (1706, 861))):
+                ((1309, 175), (1351, 79)), ((1222, 119), (1274, 26)), ((1708, 732), (1744, 660)), ((1597, 910), (1706, 861))):
         P.append(dict(k='line', pts=[r2(X(*seg[0], 0.99)), r2(X(*seg[1], 0.99))], color='#55595c'))
     poly([(1540, 185), (1690, 235), (1655, 470), (1500, 425)], '#6a6d6e', 0.14, 0.996)                         # rear cabin window (tinted)
     poly([(1880, 700), (1920, 690), (1920, 835), (1875, 830)], '#7d6a3a', 0.25, 0.994)                         # grille on the belly
