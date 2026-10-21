@@ -1339,8 +1339,8 @@ def bayside_bridge():
 
 def _race_signs(prefix):
     """the three T4/37 overhead guide signs redrawn sharp (Florida green, white border): 'Shoreline / Amphitheater / Marina' with
-    a left arrow; 'EAST TO' + I-397 shield + toll 1A shield + 'Port VC/Keys' + down arrow; 'WEST TO' + I-397 + 'Downtown' + down
-    arrow (the frame cuts the last panel behind the mirror: its text is ESTIMATED)."""
+    a left arrow; 'EAST TO' + I-397 shield + toll 1A shield + 'Port VC/Keys' + down arrow; 'West' + I-397 and I-97 shields (the junction
+    with I-97) + down arrow, butted against the East panel (Alexandre, from a sharper view of the gantry)."""
     from PIL import Image, ImageDraw, ImageFont
     GRN, WHT, BLU, RED = (0, 106, 58), (246, 246, 240), (24, 52, 140), (190, 30, 40)
     F = '/System/Library/Fonts/Supplemental/DIN Condensed Bold.ttf'
@@ -1366,9 +1366,9 @@ def _race_signs(prefix):
     f2 = font(46); d.text((392, 178), 'TOLL', font=font(30), fill=GRN); d.text((400, 210), '1A', font=f2, fill=GRN)
     ctext(d, 560, 320, 'Port VC/Keys', 86); down(d, 280, 420, 120)
     im.save(prefix + '_east397.png')
-    im, d = panel(520, 560)                                                   # WEST TO I-397 / Downtown, down arrow (ESTIMATED text)
-    f = font(80); d.text((40, 24), 'WEST', font=f, fill=WHT); d.text((360, 24), 'TO', font=f, fill=WHT)
-    interstate(d, 185, 120, 150, '397'); ctext(d, 520, 320, 'Downtown', 86); down(d, 260, 420, 120)
+    im, d = panel(620, 560)                                                   # West: I-397 + I-97 shields (junction), down arrow under 397
+    d.text((40, 24), 'West', font=font(80), fill=WHT)
+    interstate(d, 70, 130, 170, '397'); interstate(d, 330, 130, 170, '97'); down(d, 155, 360, 160)
     im.save(prefix + '_west397.png')
 
 
@@ -1385,7 +1385,7 @@ def catalan_race():
     pre = os.path.join(THIS, 'threejs', '_prop_t437'); _race_signs(pre)
     SG = 42.0; G0 = np.array(at(SG, 0, 0)[:2])
     on_g = lambda u, v: V.on_vplane(u * k, v * k, G0, d)                     # the gantry plane (normal = road direction)
-    for (u0, v0, u1, v1), img in (((1025, 250, 1200, 355), 'shoreline'), ((1215, 228, 1340, 362), 'east397'), ((1352, 228, 1480, 362), 'west397')):
+    for (u0, v0, u1, v1), img in (((1025, 250, 1200, 355), 'shoreline'), ((1215, 228, 1340, 362), 'east397'), ((1340, 228, 1488, 362), 'west397')):
         BL, BR, TR, TL = on_g(u0, v1), on_g(u1, v1), on_g(u1, v0), on_g(u0, v0)
         P.append(dict(k='tex', p=[r2(q) for q in (BL, BR, TR, TL)], img='_prop_t437_%s.png' % img))
         P.append(dict(k='box', c=r2((BL + BR) / 2 + d3 * 0.08), s=[round(float(np.linalg.norm(BR - BL)) + 0.2, 2), 0.12, round(float(TL[2] - BL[2]) + 0.2, 2)],
