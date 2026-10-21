@@ -3,8 +3,7 @@
  "fullframe": [
   "Iguana",
   "Jason by the Window at Night",
-  "Jason and Lucia by the Red Car",
-  "Balcony at Sunset"
+  "Jason and Lucia by the Red Car"
  ],
  "sun": {
   "_doc": "[TOUR-SUN-V1] per-camera sun for the tour: [azimuth deg (compass), elevation deg, haze %], read on the frame (ESTIMATED)",
@@ -92,6 +91,11 @@
    300,
    -14,
    30
+  ],
+  "Balcony at Sunset": [
+   120,
+   3,
+   55
   ]
  },
  "grade": {
@@ -172,6 +176,12 @@
    0.42,
    0.5,
    0.78,
+   0.35
+  ],
+  "Balcony at Sunset": [
+   1.0,
+   0.78,
+   0.6,
    0.35
   ]
  }

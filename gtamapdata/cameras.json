@@ -7782,17 +7782,17 @@
   "id": "T4/39",
   "player": null,
   "xyz": [
-   2030.6,
-   1581.0,
-   5.19
+   2034.0,
+   1579.0,
+   22.0
   ],
   "ypr": [
-   192,
-   0.0,
+   -145.0,
+   2.0,
    0.0
   ],
   "fov": [
-   45.0,
+   60.0,
    null
   ],
   "size": [
@@ -7802,7 +7802,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - Lucia and Jason embracing on a balcony at sunset over the sea; GTAVI_Launch_Trailer.mp4 t=67.90 s (frame 2037), letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/39 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/39 (corr 0.995); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve.| SEA-BALCONY-V1c 2026-10-21: heading 145 (inside Yanis's V, az 95-155): the coast must run from the near water's edge at the bottom-left to the palm strip receding on the right (at 125 the beach crossed the whole view); eye 22 m from the water's edge (~180 m on az 120); hotels to the S stay behind the partition on the right; sun of the frame at az ~120, el ~3. Pitch +2.0 from the sea horizon (row ~537/960). ESTIMATED."
  },
  "Falling from the Glass Tower": {
   "id": "T4/40",

@@ -1412,6 +1412,32 @@ def catalan_race():
     return dict(scene='T4/37 Night Street Race (Catalan Blvd)', camera='Night Street Race', note=catalan_race.__doc__.split('\n')[0], props=P)
 
 
+def sea_balcony():
+    """T4/39 Balcony at Sunset — a balcony of W South Beach over the sea (pose ESTIMATED, cameras.json SEA-BALCONY-V1c). The balcony
+    is back-projected from the frame: its wooden handrail (rows 955 at the left, 2.7 m away, to 695 at the right, 8.6 m: it runs
+    along the view, sea side on the left) on the plane 0.45 m below the eye, the glass railing under it, the floor slab, the
+    white partition wall closing it on the right (u 1770) and the balcony above seen only in the top-right corner. Lucia and
+    Jason are not modelled. Sizes ESTIMATED."""
+    V = View('Balcony at Sunset'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]; k = 1.92
+    ZE = float(V.o[2]); ZF = ZE - 1.6; ZR = ZE - 0.45
+    R = np.array([V.on_plane_z(u * k, v * k, ZR)[:2] for u, v in ((50, 955), (300, 925), (600, 895), (880, 868), (1500, 748), (1700, 722), (1900, 695))])
+    t = R[-1] - R[0]; t /= np.linalg.norm(t); a0 = R[0] - t * 4.0; a1 = V.on_plane_z(1770 * k, 960 * k, ZF)[:2]   # rail from the tower face to the wall
+    a1 = a0 + t * float((a1 - a0) @ t); RL = [a0 + (a1 - a0) * s for s in np.linspace(0, 1, 12)]
+    w = np.array([t[1], -t[0]]);  w = w if (V.o[:2] - a0) @ w > 0 else -w                                 # towards the inside of the balcony
+    slab = [a0, a1, a1 + w * 4.2, a0 + w * 4.2]
+    P.append(dict(k='prism', poly=[r2(q) for q in slab], z0=round(ZF - 0.3, 2), z1=round(ZF, 2), color='#d8cfc2', e=0.2))      # floor
+    for i in range(len(RL) - 1):
+        p, q = RL[i], RL[i + 1]
+        P.append(dict(k='cyl', a=r2([*p, ZR]), b=r2([*q, ZR]), r=0.055, color='#8a623e'))                                         # wooden handrail
+        P.append(dict(k='cyl', a=r2([*p, ZF + 0.06]), b=r2([*q, ZF + 0.06]), r=0.03, color='#9a9690'))
+        P.append(dict(k='cyl', a=r2([*p, ZF]), b=r2([*p, ZR]), r=0.03, color='#9a9690'))
+        P.append(dict(k='line', pts=[r2([*p, ZR - 0.08]), r2([*q, ZR - 0.08])], color='#e8e2da', opacity=0.5))
+    P.append(dict(k='box', c=r2((a1 + a1 + w * 4.2) / 2 + t * 0.15), s=[4.4, 0.3, 3.0], az=round(math.degrees(math.atan2(w[0], w[1])), 1), color='#ece8e2'))   # partition (right)
+    up = [a1 - t * 3.5, a1, a1 + w * 4.2, a1 - t * 3.5 + w * 4.2]                                         # balcony above, over the right part
+    P.append(dict(k='prism', poly=[r2(q) for q in up], z0=round(ZF + 2.9, 2), z1=round(ZF + 3.2, 2), color='#5a5652'))
+    return dict(scene='T4/39 Balcony at Sunset (W South Beach)', camera='Balcony at Sunset', note=sea_balcony.__doc__.split('\n')[0], props=P)
+
+
 def _lattice_mast(P, x, y, z0, z1, w, col='#3b302c', az=0.0):
     """tower-crane mast: 4 chords, a tie ring every 4 m, X bracing (lines)."""
     a = math.radians(az); ex, ey = np.array([math.cos(a), -math.sin(a)]) * w / 2, np.array([math.sin(a), math.cos(a)]) * w / 2
@@ -1625,7 +1651,7 @@ def portofino_detail():
     return dict(scene='Portofino Tower detail', camera='Biplane over the Beach', note=portofino_detail.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race]
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony]
 
 
 def main():
