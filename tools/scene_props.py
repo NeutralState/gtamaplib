@@ -1608,7 +1608,8 @@ def heli_cabin():
     and placed with the pose: the front bulkhead 2.6 m ahead (its posts land on the frame's posts at u ~500 and ~1540, display
     1920 x 960), with the pass-through to the cockpit (windshield, dark dash, seats), the overhead switch console with its
     green-lit panel, the left panel with its dark cabinet and small lights, the riveted seams (row at v ~655), the right wall
-    with the open side door (edge at u ~1640) through which the 3D city shows. Jason, the pilot and the dog are not
+    with the open side door (edge at u ~1640) through which the 3D city shows, and the lamp row of the Admiral Causeway in
+    the door. Jason, the pilot and the dog are not
     modelled. ESTIMATED (scale from the cabin width, ~2.7 m)."""
     V = View('Jason by the Window at Night'); P = []; r2 = lambda a: [round(float(v), 3) for v in a]
     W = lambda x, y, z: V.o + V.R @ np.array([x, y, z], float)
@@ -1619,7 +1620,7 @@ def heli_cabin():
         d = dict(k='quad', p=[r2(W(*q)) for q in pts], color=color, e=e)
         if op is not None: d['opacity'] = op
         P.append(d)
-    WALL, POST, DARK = '#262a28', '#1c1f1e', '#0b0c0c'
+    WALL, POST, DARK = '#161918', '#101312', '#070808'
     xl = onB(0, 0)[0] - 0.4; zt = ZC; zb = ZF
     # front bulkhead with the cockpit pass-through (u 545-1000 from v 110 down)
     xa, xb = onB(545, 0)[0], onB(1000, 0)[0]; zo = onB(0, 110)[2]
@@ -1668,6 +1669,10 @@ def heli_cabin():
         x = onB(u, 0)[0]; P.append(dict(k='line', pts=[r2(W(x, YB - 0.025, zb)), r2(W(x, YB - 0.025, zt))], color='#3e4441'))
     g0, g1 = onB(440, 690), onB(520, 690)
     P.append(dict(k='cyl', a=r2(W(g0[0], YB - 0.08, g0[2])), b=r2(W(g1[0], YB - 0.08, g1[2])), r=0.015, color='#7c827f'))
+    # the Admiral Causeway lamp row seen through the door (frame pixels, ~250 m out along their rays)
+    for u, v in ((1665, 612), (1705, 618), (1748, 624), (1795, 630), (1845, 638), (1895, 648)):
+        d = V.ray(u * 2, v * 2); q = V.o + d / np.linalg.norm(d) * 250
+        P.append(dict(k='glow', pts=[r2(q)], r=0.6, color='#ffe2a8', i=3.0, ball=True))
     return dict(scene='T4/14 Jason by the Window at Night (helicopter cabin)', camera='Jason by the Window at Night', note=heli_cabin.__doc__.split('\n')[0], props=P)
 
 
