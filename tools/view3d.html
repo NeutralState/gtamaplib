@@ -2190,7 +2190,7 @@ if (meshVerts.length) {
     let BSrep = new Set(); try { const r = await fetch('/threejs/_bayside.json', { cache: 'no-store' }); if (r.ok) BSrep = new Set((await r.json()).replace || []); } catch (e) {}
     // [SCENE-PROPS-V1] zones degagees par le decor des scenes du tour (chaussee de la US 1 a Key Lento...): les emprises V16
     // dont le centroide y tombe ne sont pas extrudees (Alexandre: « le building sur la route c'est weird »)
-    let SPclear = [], SPrep = new Set(); try { const r = await fetch('/threejs/scene_props.json', { cache: 'no-store' }); if (r.ok) for (const sc of (await r.json()).scenes || []) { SPclear.push(...(sc.clear || [])); (sc.replace || []).forEach(n => SPrep.add(n)); } } catch (e) {}
+    let SPclear = [], SPrep = new Set(), SPbare = new Set(); try { const r = await fetch('/threejs/scene_props.json', { cache: 'no-store' }); if (r.ok) for (const sc of (await r.json()).scenes || []) { SPclear.push(...(sc.clear || [])); (sc.replace || []).forEach(n => SPrep.add(n)); (sc.bare_roof || []).forEach(n => SPbare.add(n)); } } catch (e) {}   // bare_roof: no generic roof units / parapet (a tour camera stands there)
     const inClear = O => { let x = 0, y = 0; for (const q of O) { x += q[0]; y += q[1]; } x /= O.length; y /= O.length;
       return SPclear.some(P => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; }); };
     // [CRUISE-V1] paquebot a quai: emprise V16 sur l'eau (227 x 35 m, etrave pointue) qui se projette exactement sur le
@@ -2318,12 +2318,12 @@ if (meshVerts.length) {
           push(g.attributes.position.array, g.attributes.normal.array, id, st, so.zmin, false);
           g.dispose();
           if (!so._mass && st.kind === 2 && (st.balcony || !S[name].facade) && L.z1 - so.zmin > 12) ledges(pl.outer, Math.max(L.z0, so.zmin + 4.3), L.z1, st.s[3], id, st, so.zmin);
-          if (!so._mass && L === so.layers[so.layers.length - 1] && st.kind !== 4 && L.z1 - so.zmin > 10) {
+          if (!so._mass && !SPbare.has(name) && L === so.layers[so.layers.length - 1] && st.kind !== 4 && L.z1 - so.zmin > 10) {
             let ar = 0; const O = pl.outer; for (let k = 0; k < O.length; k++) { const a = O[k], b = O[(k + 1) % O.length]; ar += a[0] * b[1] - b[0] * a[1]; }
             if (Math.abs(ar) / 2 > 120) roofUnits(O, L.z1, id, st, so.zmin, Math.abs(ar) / 2, id * 17.3 + O.length);
           }
           // acrotere: muret de 1.1 m au bord du toit (terrasses et toits plats), sans fenetres
-          if (st.kind !== 4 && pl.outer.length >= 3 && L.z1 - so.zmin > 6) {
+          if (st.kind !== 4 && !(SPbare.has(name) && L === so.layers[so.layers.length - 1]) && pl.outer.length >= 3 && L.z1 - so.zmin > 6) {
             const O = pl.outer, P = [], N = [], z1 = L.z1, z2 = L.z1 + 1.1;
             let ar = 0; for (let k = 0; k < O.length; k++) { const a = O[k], b = O[(k + 1) % O.length]; ar += a[0] * b[1] - b[0] * a[1]; }
             const sg = ar > 0 ? 1 : -1;                 // normale vers l'exterieur quel que soit le sens du contour
@@ -3360,7 +3360,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
   const btn = document.getElementById('btn-tour');
   const img = document.getElementById('tour-frame'), cap = document.getElementById('tour-cap');
   const capName = document.getElementById('tour-name'), capSub = document.getElementById('tour-sub'), capIdx = document.getElementById('tour-idx');
-  let list = [], i = -1, phase = null, t = 0, from = null, to = null, camsWas = true;
+  let list = [], i = -1, phase = null, t = 0, from = null, to = null, camsWas = true, lmsWas = true;
   const poseOf = c => {
     const [tl, tr, br, bl] = c.corners.map(d => new THREE.Vector3(...d));
     const right = new THREE.Vector3().subVectors(tr, tl).normalize();
@@ -3412,6 +3412,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
     if (povPrev) { try { exitPOV(); } catch (e) {} }
     window.__tourOn = true; btn.classList.add('on'); i = -1;
     camsWas = layers.cams.visible; layers.cams.visible = false;
+    lmsWas = layers.lms.visible; layers.lms.visible = false;   // [TOUR-V1] landmark dots are survey markers, not scenery
     img.style.display = 'block'; cap.style.display = 'block';
     next();
   }
@@ -3421,7 +3422,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
     if (window.__setGrade) window.__setGrade(null, 0);
     img.style.opacity = '0'; cap.style.opacity = '0';
     setTimeout(() => { if (!window.__tourOn) { img.style.display = 'none'; cap.style.display = 'none'; } }, 900);
-    layers.cams.visible = camsWas;
+    layers.cams.visible = camsWas; layers.lms.visible = lmsWas;
     // rendre la main a la navigation sans saut: cible devant la camera, fov par defaut
     const dir = camera.getWorldDirection(new THREE.Vector3());
     const tgt = camera.position.clone().addScaledVector(dir, 250);

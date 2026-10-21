@@ -13,7 +13,7 @@ Primitives (tools/threejs/scene_props.json, drawn by view3d [SCENE-PROPS-V1]):
   tex   {p: 4 corners (bl, br, tr, tl), img}     textured panel (image cut from the frame, gitignored like _fac_*.png)
   blob  {c: [x,y,z], r: [rx, ry, rz], color}     bushes / tree crowns
   palm  {a: [x,y,z], h, lean_az, lean}           palm (trunk + fronds)
-A scene may also list 'replace': mesh names whose wireframe view3d no longer draws (rebuilt here as solids), and 'clear' polygons [[x,y]...]: view3d does not extrude the V16 massing footprints whose centroid falls
+A scene may also list 'bare_roof' (mesh names whose top gets no generic roof units / parapet in view3d), 'replace': mesh names whose wireframe view3d no longer draws (rebuilt here as solids), and 'clear' polygons [[x,y]...]: view3d does not extrude the V16 massing footprints whose centroid falls
 inside (e.g. V16 boxes that land on a modelled road), and 'nolamp' polygons: no generic view3d streetlight inside (where a
 SOLVED frame shows none).
 Usage: python3 tools/scene_props.py            (writes tools/threejs/scene_props.json and the _prop_*.png textures)
@@ -525,6 +525,9 @@ def skyline_night():
     return dict(scene='T4/7 Skyline at Night', camera='Skyline at Night', note=skyline_night.__doc__.split('\n')[0], props=P, clear=clear)
 
 
+AVI_SKIP = ('Stephen P. Clark Government Center',)
+
+
 def aviation_lights():
     """Red obstacle lights on the roof corners of every solid taller than 60 m (all night scenes; the T4/7 frame shows
     dozens of them on the skyline). Corners = the 4 extreme vertices of the top layer of tools/mesh_solids.py."""
@@ -532,6 +535,7 @@ def aviation_lights():
     P = []
     for name, so in mesh_solids.cached().items():
         if so['zmax'] - so['zmin'] < 60 or not so['layers']: continue
+        if name in AVI_SKIP: continue                                        # roofs a tour camera stands on (their own lights: scene props)
         top = so['layers'][-1]; pts = np.array([q for pp in top['polys'] for q in pp['outer']], float)
         if len(pts) < 3: continue
         c = pts.mean(0); idx = {int(np.argmax(pts @ d)) for d in np.array([[1, 1], [1, -1], [-1, 1], [-1, -1]], float)}
@@ -1085,7 +1089,33 @@ def bike_viaduct():
                 nolamp=[[[-1130, -690], [-910, -690], [-910, -770], [-1130, -770]]])
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct]
+def rooftop_explosion():
+    """T4/28 Explosion behind Jason — the helipad deck on top of the Stephen P. Clark Government Center at night (pose SOLVED on
+    Marina Blue + Vizcayne South). Read on the frame and back-projected on the deck plane (z 155.35): the deck edge ~8-11 m ahead with
+    its red perimeter lights (u 261 / 979 / 1633 / 2856), the steel grating walkway one level below beyond the edge, its red handrail
+    and the stair going down at the right. ESTIMATED (one view)."""
+    V = View('Explosion behind Jason'); o = V.o; P = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    ZD = 155.35                                                            # roof top (landmark 'Government Center (NW)')
+    L = [V.on_plane_z(u, v, ZD) for u, v in ((261, 1095), (979, 1145), (1633, 1107), (2856, 1225), (3300, 1280), (3840, 1330))]
+    ex = np.mean([q[0] for q in L])                                        # the deck's east edge (x ~ -902.5)
+    for y0 in np.arange(48.0, 90.0, 2.0):                                  # dark concrete deck, camera side of the edge
+        P.append(dict(k='quad', p=[r2([-905.4, y0, ZD + 0.03]), r2([ex, y0, ZD + 0.03]), r2([ex, y0 + 2, ZD + 0.03]), r2([-905.4, y0 + 2, ZD + 0.03])], color='#2b2b34', e=0.0))
+    P.append(dict(k='quad', p=[r2([ex, 60, ZD - 0.9]), r2([ex, 86, ZD - 0.9]), r2([ex, 86, ZD + 0.03]), r2([ex, 60, ZD + 0.03])], color='#24242c'))   # deck edge face
+    for q in L[:4]:                                                        # red perimeter lights
+        P.append(dict(k='glow', pts=[r2([ex - 0.2, q[1], ZD + 0.25])], r=0.07, color='#ff2030', i=2.2, ball=True))
+    for y0 in np.arange(60.0, 86.0, 2.0):                                  # grating walkway, one level below
+        P.append(dict(k='quad', p=[r2([ex, y0, ZD - 1.0]), r2([ex + 6, y0, ZD - 1.0]), r2([ex + 6, y0 + 2, ZD - 1.0]), r2([ex, y0 + 2, ZD - 1.0])], color='#3b3d44'))
+    for zz in (ZD + 0.1, ZD - 0.4):                                        # red handrail on the far side of the walkway (frame: right part only)
+        P.append(dict(k='cyl', a=r2([ex + 6, 44, zz]), b=r2([ex + 6, 60, zz]), r=0.04, color='#c2262e'))
+    for y0 in np.arange(44.0, 61.0, 1.5):
+        P.append(dict(k='cyl', a=r2([ex + 6, y0, ZD - 1.0]), b=r2([ex + 6, y0, ZD + 0.1]), r=0.03, color='#c2262e'))
+    for k in range(6):                                                     # stair going down at the right (frame u 3200-3500)
+        P.append(dict(k='box', c=r2([ex + 1.0 + k * 0.6, 72.0, ZD - 1.0 - k * 0.45]), s=[0.6, 1.4, 0.06], az=90.0, color='#55585f'))
+    return dict(scene='T4/28 Explosion behind Jason (Government Center roof)', camera='Explosion behind Jason', note=rooftop_explosion.__doc__.split('\n')[0], props=P,
+                nolamp=[[[-930, 40], [-830, 40], [-830, 100], [-930, 100]]], bare_roof=['Stephen P. Clark Government Center'])
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion]
 
 
 def main():
