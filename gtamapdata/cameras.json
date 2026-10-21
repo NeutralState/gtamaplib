@@ -7808,17 +7808,17 @@
   "id": "T4/40",
   "player": null,
   "xyz": [
-   -590.1,
-   -949.3,
-   2.53
+   -611.77,
+   -984.0,
+   20.96
   ],
   "ypr": [
-   -3.0,
-   0.0,
-   0.0
+   -8.61,
+   16.67,
+   14.74
   ],
   "fov": [
-   74.0,
+   71.34,
    null
   ],
   "size": [
@@ -7828,7 +7828,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - looking up a glass tower, window shattering; GTAVI_Launch_Trailer.mp4 t=69.23 s (frame 2077), letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/40 (corr 0.994); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 3 / hfov 74 read by eye on the V of his V17 marker T4/40 (was 0 / 60.0)."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/40 (corr 0.994); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 3 / hfov 74 read by eye on the V of his V17 marker T4/40 (was 0 / 60.0). | GLASS-TOWER-V1 2026-10-21 (Alexandre: Southeast Financial Center and Citigroup in the background): pitch 16.67 / roll 14.74 / hfov 71.34 from 3 vanishing points (59 segments, rms 0.8 deg; the 2 facade directions of the left tower are 90.6 deg apart, Icon Brickell's 71.9 deg off, both = their mesh orientations); heading 8.6 + height 21 m from the SEFC roof block and the Citigroup roof corner (resid ~14 px, haze); position 20 m from the S corner of the 701 Brickell glass tower (scale from its 3.0 m mullion grid). Camera in mid-air beside the tower (the fall). ESTIMATED."
  },
  "Nightclub": {
   "id": "T1/18",

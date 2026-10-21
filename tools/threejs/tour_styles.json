@@ -96,6 +96,11 @@
    120,
    3,
    55
+  ],
+  "Falling from the Glass Tower": [
+   20,
+   30,
+   90
   ]
  },
  "grade": {
@@ -183,6 +188,18 @@
    0.78,
    0.6,
    0.35
+  ],
+  "Falling from the Glass Tower": [
+   0.46,
+   0.56,
+   0.52,
+   0.7
+  ]
+ },
+ "fog": {
+  "Falling from the Glass Tower": [
+   15,
+   520
   ]
  }
 }

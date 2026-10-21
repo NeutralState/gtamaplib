@@ -1462,6 +1462,49 @@ def sea_balcony():
     return dict(scene='T4/39 Balcony at Sunset (W South Beach)', camera='Balcony at Sunset', note=sea_balcony.__doc__.split('\n')[0], props=P)
 
 
+def glass_tower_fall():
+    """T4/40 Falling from the Glass Tower — mid-air, 20 m SSE of the S corner of the 701 Brickell glass tower, looking up NNE at
+    the shattering window, Icon Brickell on the right, the Southeast Financial Center and Citigroup in the haze (pose ESTIMATED,
+    cameras.json GLASS-TOWER-V1). The two tower faces near the corner are dressed from the frame, back-projected on the faces: the
+    mullion grid (every 2.85 m from the corner), the 2.1 m bright floor bands every 7.5 m (30.75, 38.25, ...), the dark glass, the
+    lit ceiling lights of the floors, the broken pane (s 15.5-23.5 m along the E face, z 33-38) and a few glass shards in front
+    of it. The person, the helicopter and its searchlight are not modelled. Sizes ESTIMATED."""
+    V = View('Falling from the Glass Tower'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    C = np.array([-618.0, -965.0]); A = np.array([math.sin(math.radians(21)), math.cos(math.radians(21))]); B = np.array([-A[1], A[0]])
+    Z0, Z1 = 0.79, 150.79
+    for d, out, L, az in ((A, -B, 53.5, 21.0), (B, -A, 42.0, 291.0)):                                    # E face, S face
+        g = [C + out * 0.3, C + d * L + out * 0.3]
+        P.append(dict(k='quad', p=[r2([*g[0], Z0]), r2([*g[1], Z0]), r2([*g[1], Z1]), r2([*g[0], Z1])], color='#2a3638', e=0.22))
+        z = 30.75 - 7.5 * 3
+        while z < Z1 - 2.0:                                                                                 # floor bands
+            c = C + d * (L / 2) + out * 0.45
+            P.append(dict(k='box', c=r2([c[0], c[1], z]), s=[L + 0.4, 0.45, 2.1], az=az, color='#c4c8c4', e=0.3))
+            z += 7.5
+        s0 = 0.6
+        while s0 < L:                                                                                       # mullions
+            q = C + d * s0 + out * 0.36
+            P.append(dict(k='cyl', a=r2([q[0], q[1], Z0]), b=r2([q[0], q[1], Z1]), r=0.07, color='#8e9694'))
+            s0 += 2.85
+        for zl in (23.0, 37.9, 45.4):                                                                       # lit ceilings behind the glass
+            P.append(dict(k='glow', pts=[r2([*(C + d * 2.0 - out * 2.5), zl]), r2([*(C + d * (L - 3) - out * 2.5), zl])], r=0.07, color='#ffd890', i=1.5))
+    # the broken pane on the E face + shards
+    n = -B; h0, h1, zb, zt = 15.5, 23.5, 33.0, 38.1
+    p = lambda s, z, o=0.33: r2([*(C + A * s + n * o), z])
+    P.append(dict(k='quad', p=[p(h0, zb), p(h1, zb), p(h1, zt), p(h0, zt)], color='#101517', e=0.05))
+    rng = np.random.default_rng(40)
+    for i in range(18):                                                                                     # jagged edge teeth
+        t = i / 18
+        s_, z_ = (h0 + (h1 - h0) * t, zt) if i % 2 == 0 else (h0 + (h1 - h0) * t, zb)
+        dz = -rng.uniform(0.3, 1.1) if z_ == zt else rng.uniform(0.3, 1.1)
+        P.append(dict(k='quad', p=[p(s_, z_, 0.35), p(s_ + 0.45, z_, 0.35), p(s_ + 0.2, z_ + dz, 0.35), p(s_ + 0.2, z_ + dz, 0.35)], color='#8fa3a6', e=0.5))
+    for i in range(45):                                                                                     # flying shards
+        c = C + A * rng.uniform(h0 - 2, h1 + 4) + n * rng.uniform(0.5, 9.0); zc = rng.uniform(zb - 2, zt + 3); a = rng.uniform(0, 2 * math.pi)
+        w = rng.uniform(0.15, 0.55); e1 = np.array([math.cos(a), math.sin(a), rng.uniform(-0.6, 0.6)]) * w; e2 = np.array([-math.sin(a) * 0.4, math.cos(a) * 0.4, 0.8]) * w
+        q0 = np.array([c[0], c[1], zc])
+        P.append(dict(k='quad', p=[r2(q0), r2(q0 + e1), r2(q0 + e1 + e2), r2(q0 + e2 * 0.6)], color='#dbe7e9', e=0.9))
+    return dict(scene='T4/40 Falling from the Glass Tower (701 Brickell)', camera='Falling from the Glass Tower', note=glass_tower_fall.__doc__.split('\n')[0], props=P)
+
+
 def _lattice_mast(P, x, y, z0, z1, w, col='#3b302c', az=0.0):
     """tower-crane mast: 4 chords, a tie ring every 4 m, X bracing (lines)."""
     a = math.radians(az); ex, ey = np.array([math.cos(a), -math.sin(a)]) * w / 2, np.array([math.sin(a), math.cos(a)]) * w / 2
@@ -1675,7 +1718,7 @@ def portofino_detail():
     return dict(scene='Portofino Tower detail', camera='Biplane over the Beach', note=portofino_detail.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony]
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony, glass_tower_fall]
 
 
 def main():
