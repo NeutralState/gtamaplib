@@ -1639,13 +1639,29 @@ def vice_beach_night():
     for u, v, r in ((873, 268, 4.0), (1069, 272, 3.5), (823, 275, 1.6), (743, 270, 1.6)):
         d = V.ray(u * k, v * k); q = V.o + d / np.linalg.norm(d) * 650
         P.append(dict(k='glow', pts=[r2(q), r2(q + [0, 0, 0.01])], r=r, color='#fff4dc', i=3.0, ball=True))
-    # lit tower crane on the left (base = ground hit at u 112, mast top = the ray at v 222 over the base)
+    # lit tower crane on the left (Alexandre: « manque le truc perpendiculaire au top »): base = ground hit at u 112; mast to
+    # the jib at v 288; cat-head (apex) at v 218; horizontal lattice jib from u 20 to u 185, pendants from the apex, counterweight
+    # on the short side, cabin at the root, red lights. Points back-projected on the vertical plane through the mast facing the camera.
     b = at(112, 480, 0.0)
     if b is not None:
-        d = V.ray(112 * k, 222 * k); t = np.hypot(*(b[:2] - V.o[:2])) / np.hypot(d[0], d[1]); top = (V.o + d * t)[2]
-        _lattice_mast(P, b[0], b[1], float(T(b[0], b[1])), float(top), 2.2, '#c9802a')
-        P.append(dict(k='cyl', a=r2([b[0], b[1], top]), b=r2([b[0] - 28, b[1] + 22, top]), r=0.35, color='#c9802a'))
-        P.append(dict(k='glow', pts=[r2([b[0], b[1], top + 2])], r=0.5, color='#ff3030', i=3.0, ball=True))
+        dv = b[:2] - V.o[:2]; dv = dv / np.linalg.norm(dv)
+        C = lambda u, v: V.on_vplane(u * k, v * k, b[:2], dv)
+        root, apex, jl, jr = C(115, 288), C(112, 218), C(20, 288), C(185, 290)
+        zg = float(T(b[0], b[1])); YEL = '#d48c2a'
+        _lattice_mast(P, b[0], b[1], zg, float(root[2]), 2.0, YEL, float(math.degrees(math.atan2(dv[0], dv[1]))))
+        P.append(dict(k='cyl', a=r2([b[0], b[1], root[2]]), b=r2([b[0], b[1], apex[2]]), r=0.45, color=YEL))     # cat-head
+        for dz in (0.0, 1.6):                                                                                     # jib chords
+            P.append(dict(k='cyl', a=r2(jl + [0, 0, dz]), b=r2(jr + [0, 0, dz]), r=0.18, color=YEL))
+        n = 18
+        for t in range(n):                                                                                        # bracing
+            p0 = jl + (jr - jl) * (t / n); p1 = jl + (jr - jl) * ((t + 1) / n)
+            P.append(dict(k='line', pts=[r2(p0), r2(p1 + [0, 0, 1.6])], color=YEL))
+        for e in (jl + (jr - jl) * 0.08, jr - (jr - jl) * 0.05):                                                    # pendants
+            P.append(dict(k='line', pts=[r2([b[0], b[1], apex[2]]), r2(e + [0, 0, 1.6])], color='#8a6a3a'))
+        cw = C(93, 302); P.append(dict(k='box', c=r2([cw[0], cw[1], cw[2] - 2.5]), s=[6.0, 2.5, 4.0], az=float(math.degrees(math.atan2(jr[0] - jl[0], jr[1] - jl[1]))), color='#4a4644'))
+        cb = C(112, 305); P.append(dict(k='box', c=r2([cb[0], cb[1], cb[2] - 1.5]), s=[2.5, 2.5, 3.0], az=0.0, color='#6a5a40', e=0.4))
+        for q in (apex, jl, jr, C(88, 298)):
+            P.append(dict(k='glow', pts=[r2(q + [0, 0, 0.8])], r=0.6, color='#ff3030', i=3.0, ball=True))
     # lamps of the park paths
     for u, v in ((830, 668), (1200, 635), (1340, 622), (1520, 600), (1540, 640), (1410, 690), (1585, 668), (1730, 690), (1900, 522), (1880, 525),
                  (1520, 668), (1170, 828), (1020, 830), (380, 830), (1600, 563), (1330, 665), (1046, 838), (1145, 832)):
