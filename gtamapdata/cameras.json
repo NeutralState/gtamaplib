@@ -7704,17 +7704,17 @@
   "id": "T4/34",
   "player": null,
   "xyz": [
-   -397.6,
-   -1091.4,
-   1.7
+   -574.67,
+   -1084.77,
+   15.09
   ],
   "ypr": [
-   92.0,
-   0.0,
+   -268.706,
+   -11.026,
    0.0
   ],
   "fov": [
-   45.0,
+   54.272,
    null
   ],
   "size": [
@@ -7724,7 +7724,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - gunman on a stair rail, explosion on the road below at night; GTAVI_Launch_Trailer.mp4 t=61.37 s (frame 1841), letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/34 (corr 0.984); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 268 / hfov 45 read by eye on the V of his V17 marker T4/34 (was 350 / 60.0)."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/34 (corr 0.984); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 268 / hfov 45 read by eye on the V of his V17 marker T4/34 (was 350 / 60.0). | BAYSIDE-HELI-V1 2026-10-21 (Alexandre: Bayside Dr bridge confirmed; \u00ab elle est dans un helico \u00bb): camera in a helicopter hovering over the Bayside Dr bridge, looking W along it. Lateral offset (4.3 m left of the median), height (8.3 m above the deck, deck 6.0 ESTIMATED), heading 268.7, pitch -11.0 and hfov 54.3 FITTED on the two yellow lines and the Jersey-barrier ridge (11 points, rms 6.1 px) against the V17 road axis (az 274.7, centre y -1085 at x -520). Position ALONG the bridge is not observable from parallel lines: set 40 m W of the fit seed so the park trees on the left (bases row ~450, ~69 m) stand on the W shore (x -620) and the fenced sidewalk on the right (~119 m) falls just past the bridge's W end (ESTIMATED). Yanis's marker kept the xy area; his z (1.7, under the deck) was wrong. | BAYSIDE-HELI-V1b 2026-10-21 (Alexandre: \u00ab met pas l'explosion et place comme du monde \u00bb): position along the bridge now from the big lit tower on the left (The Four Ambassadors (N), V17 round footprint): its E edge lands on frame u ~450 only with the camera ~22 m further W (x -575); deck raised 6.0 -> 6.8 (the V16 road ribbons render at 6.3-6.7 there), camera +0.8 m with it (still 8.3 m above the deck)."
  },
  "Lucia on the Rooftop at Sunset": {
   "id": "T4/36",

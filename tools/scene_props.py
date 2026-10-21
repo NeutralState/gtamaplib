@@ -1233,6 +1233,62 @@ def napping_room():
     return dict(scene='T4/32 Napping in the Chair (Jason\'s House, Keys)', camera='Napping in the Chair', note=napping_room.__doc__.split('\n')[0], props=P)
 
 
+def bayside_bridge():
+    """T4/34 Explosion on the Highway — Lucia leaning out of a helicopter over the Bayside Dr bridge at night (pose fitted on the
+    road lines, cameras.json BAYSIDE-HELI-V1). The bridge was only a V16 road stroke at 6 m: rebuilt as a divided deck on the V17
+    road axis (az 274.7, centre y -1085 at x -520, shores x -622 / -414, carried on W to the junction at x -695): concrete deck (top 6.8, ESTIMATED), Jersey median
+    0.61 m (fitted), yellow edge lines 2.18 m each side of it (fitted), dashed lane lines, white edge lines, parapets, piers every
+    26 m. 22 m wide, not the 12.5 m V17 band: the wreck and the police cars back-project 8-10 m either side of the median (measured beats map).
+    Back-projected from the frame (half-res px x 2) on the deck plane: the wreck (no explosion, Alexandre: « met pas l'explosion »), the police cars with their light bars on the right carriageway, the trees and blue-lit palms of the W shore (palms on the
+    Four Ambassadors pool-deck podium, V16 box #626). Sizes ESTIMATED; Lucia and the helicopter are not modelled."""
+    V = View('Explosion on the Highway'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    ZD = 6.8; A = np.array([-520.0, -1085.0]); az = math.radians(274.7)      # deck top 6.8: the V16 road ribbons render at 6.3-6.7 here
+    d = np.array([math.sin(az), math.cos(az)]); n = np.array([d[1], -d[0]])                    # d: W along the bridge, n: right (N)
+    at = lambda s, l, z: [A[0] + d[0] * s + n[0] * l, A[1] + d[1] * s + n[1] * l, z]
+    s0, s1 = (-414.0 - A[0]) / d[0], (-695.0 - A[0]) / d[0]                                  # E shore -> the W junction (the frame shows the divided road
+                                                                                             # with its median running on past the W shore, x -622)
+    AZ = round(math.degrees(az), 1); L = s1 - s0; sm = (s0 + s1) / 2
+    quad = lambda p, col, e=None: P.append(dict(k='quad', p=[r2(q) for q in p], color=col, **({'e': e} if e is not None else {})))
+    P.append(dict(k='box', c=r2(at(sm, 0, ZD - 1.3)), s=[round(L, 1), 22.4, 1.3], az=AZ, color='#7d7b76'))                       # deck
+    quad([at(s0, -10.7, ZD + 0.02), at(s1, -10.7, ZD + 0.02), at(s1, 10.7, ZD + 0.02), at(s0, 10.7, ZD + 0.02)], '#232427', 0.05)   # asphalt
+    P.append(dict(k='box', c=r2(at(sm, 0, ZD)), s=[round(L, 1), 0.6, 0.32], az=AZ, color='#9a978f'))                              # Jersey median
+    P.append(dict(k='box', c=r2(at(sm, 0, ZD + 0.32)), s=[round(L, 1), 0.22, 0.29], az=AZ, color='#9a978f'))
+    for l, col, w in ((-2.18, '#d6ad2c', 0.15), (2.18, '#d6ad2c', 0.15), (-10.2, '#d8d8d2', 0.13), (10.2, '#d8d8d2', 0.13)):
+        quad([at(s0, l - w / 2, ZD + 0.04), at(s1, l - w / 2, ZD + 0.04), at(s1, l + w / 2, ZD + 0.04), at(s0, l + w / 2, ZD + 0.04)], col, 0.45)
+    for l in (-5.9, 5.9):                                                                                     # dashed lane lines
+        t = s0 + 2.0
+        while t < s1 - 3.0:
+            quad([at(t, l - 0.065, ZD + 0.04), at(t + 3.0, l - 0.065, ZD + 0.04), at(t + 3.0, l + 0.065, ZD + 0.04), at(t, l + 0.065, ZD + 0.04)], '#d8d8d2', 0.45); t += 12.0
+    for l in (-10.95, 10.95):
+        P.append(dict(k='box', c=r2(at(sm, l, ZD)), s=[round(L, 1), 0.35, 0.95], az=AZ, color='#8f8c85'))                         # parapets
+    s = s0 + 13.0
+    while s < s1 - 6:
+        P.append(dict(k='box', c=r2(at(s, 0, -2.0)), s=[1.4, 18.0, ZD - 1.3 + 2.0], az=AZ, color='#6e6c68')); s += 26.0      # piers
+    deck = lambda u, v, z=ZD: V.on_plane_z(u * 2, v * 2, z)
+    w = deck(1000, 410); P.append(dict(k='box', c=r2(w), s=[4.4, 1.9, 1.2], az=AZ + 25, color='#1d1d1f'))                       # wreck
+    # police cars on the right carriageway: body, white door panel, red / blue light bar
+    for (u, v), a in (((1590, 362), 0), ((1730, 332), -8), ((1445, 252), 4)):
+        q = deck(u, v)
+        P.append(dict(k='box', c=r2(q), s=[4.9, 1.95, 1.05], az=AZ + 180 + a, color='#141416'))
+        P.append(dict(k='box', c=r2(q + [0, 0, 1.05]), s=[2.4, 1.7, 0.42], az=AZ + 180 + a, color='#1a1a1c'))
+        for sgn, col in ((-1, '#ff2a2a'), (1, '#2a5cff')):
+            P.append(dict(k='glow', pts=[r2(q + [n[0] * sgn * 0.4, n[1] * sgn * 0.4, 1.55])], r=0.22, color=col, i=4.0, ball=True))
+    # W shore left of the road: broadleaf trees back-projected from their trunk bases on the ground (z 4; the one at u 560 held
+    # just N of the Four Ambassadors (N) tower, y -1096), crowns from their extents; two palms with the blue trunk uplights of the
+    # frame (u 265 / 360) standing on the tower's pool-deck podium (V16 box #626, top 9.8: on the ground their rays end inside the tower)
+    for (u, v), h, cr in (((560, 455), 10.0, 4.2), ((890, 335), 8.5, 3.6), ((1010, 310), 8.5, 3.4)):
+        q = V.on_plane_z(u * 2, v * 2, 4.0)
+        if u == 560: q = V.on_vplane(u * 2, v * 2, (0, -1096.0), (0, 1)); q[2] = T(q[0], q[1])
+        P.append(dict(k='cyl', a=r2(q), b=r2(q + [0, 0, h * 0.6]), r=0.25, color='#4a3a2a'))
+        for dx, dy, dz, k in ((0, 0, 0.72, 1.0), (1.2, 0.8, 0.62, 0.7), (-1.0, -0.9, 0.66, 0.75)):
+            P.append(dict(k='blob', c=r2(q + [dx, dy, h * dz]), r=[round(cr * k, 2), round(cr * k, 2), round(cr * k * 0.65, 2)], color='#3d6a2c'))
+    for u, v in ((265, 365), (360, 360)):
+        q = V.on_plane_z(u * 2, v * 2, 9.8)
+        P.append(dict(k='palm', a=r2(q), h=7.0, lean_az=0.0, lean=0.03))
+        P.append(dict(k='glow', pts=[r2(q + [0.25, 0, 0.3]), r2(q + [0.25, 0, 3.8])], r=0.09, color='#3a5cff', i=2.5))
+    return dict(scene='T4/34 Explosion on the Highway (Bayside Dr bridge)', camera='Explosion on the Highway', note=bayside_bridge.__doc__.split('\n')[0], props=P)
+
+
 def _obox(c, f, r, u, L, W, H, color):
     """oriented box (any attitude) as 6 quads: centre c, unit axes f / r / u, sizes L / W / H along them."""
     c, f, r, u = (np.asarray(a, float) for a in (c, f, r, u))
@@ -1391,7 +1447,7 @@ def portofino_detail():
     return dict(scene='Portofino Tower detail', camera='Biplane over the Beach', note=portofino_detail.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room]
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge]
 
 
 def main():
