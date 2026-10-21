@@ -1416,8 +1416,9 @@ def sea_balcony():
     """T4/39 Balcony at Sunset — a balcony of W South Beach over the sea (pose ESTIMATED, cameras.json SEA-BALCONY-V1c). The balcony
     is back-projected from the frame: its wooden handrail (rows 955 at the left, 2.7 m away, to 695 at the right, 8.6 m: it runs
     along the view, sea side on the left) on the plane 0.45 m below the eye, the glass railing under it, the floor slab, the
-    white partition wall closing it on the right (u 1770) and the balcony above seen only in the top-right corner. Lucia and
-    Jason are not modelled. Sizes ESTIMATED."""
+    white partition wall closing it on the right (u 1770), the translucent glass panels and the balcony above seen only in
+    the top-right corner; below it the dark tree canopy and the palms of the frame, and the yacht / boats on the sea (Alexandre:
+    « design plus comme la scene »). Lucia and Jason are not modelled. Sizes ESTIMATED."""
     V = View('Balcony at Sunset'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]; k = 1.92
     ZE = float(V.o[2]); ZF = ZE - 1.6; ZR = ZE - 0.45
     R = np.array([V.on_plane_z(u * k, v * k, ZR)[:2] for u, v in ((50, 955), (300, 925), (600, 895), (880, 868), (1500, 748), (1700, 722), (1900, 695))])
@@ -1432,7 +1433,30 @@ def sea_balcony():
         P.append(dict(k='cyl', a=r2([*p, ZF + 0.06]), b=r2([*q, ZF + 0.06]), r=0.03, color='#9a9690'))
         P.append(dict(k='cyl', a=r2([*p, ZF]), b=r2([*p, ZR]), r=0.03, color='#9a9690'))
         P.append(dict(k='line', pts=[r2([*p, ZR - 0.08]), r2([*q, ZR - 0.08])], color='#e8e2da', opacity=0.5))
-    P.append(dict(k='box', c=r2((a1 + a1 + w * 4.2) / 2 + t * 0.15), s=[4.4, 0.3, 3.0], az=round(math.degrees(math.atan2(w[0], w[1])), 1), color='#ece8e2'))   # partition (right)
+    wc = (a1 + a1 + w * 4.2) / 2 + t * 0.15
+    P.append(dict(k='box', c=r2([wc[0], wc[1], ZF]), s=[4.4, 0.3, 3.0], az=round(math.degrees(math.atan2(w[0], w[1])), 1), color='#ece8e2'))   # partition (right)
+    for i in range(len(RL) - 1):                                                                          # glass panels (translucent)
+        p, q = RL[i], RL[i + 1]
+        P.append(dict(k='quad', p=[r2([*p, ZF + 0.1]), r2([*q, ZF + 0.1]), r2([*q, ZR - 0.05]), r2([*p, ZR - 0.05])], color='#7f979c', e=0.15, opacity=0.35))
+    # tree canopy just under the balcony (frame: a dense mass of palms and dark broadleaf trees up to rows ~690-800 on the left, tall
+    # palms behind the rail on the right; Alexandre: « a plein de palms sur la vraie frame »)
+    rng = np.random.default_rng(39)
+    for u0, u1, v0, v1, n in ((0, 820, 700, 900, 34), (1440, 1800, 610, 700, 12)):
+        for _ in range(n):
+            u, v = rng.uniform(u0, u1), rng.uniform(v0, v1); zt = rng.uniform(10.5, 14.5)
+            q = V.on_plane_z(u * k, v * k, zt)
+            if np.hypot(*(q[:2] - V.o[:2])) > 250: continue
+            if rng.random() < 0.6:
+                P.append(dict(k='palm', a=r2([q[0], q[1], 2.0]), h=round(zt - 2.0, 1), lean_az=round(rng.uniform(0, 360), 0), lean=round(rng.uniform(0.03, 0.1), 2)))
+            else:
+                rr = rng.uniform(2.5, 3.8)
+                P.append(dict(k='blob', c=r2(q - [0, 0, rr * 0.5]), r=[rr, rr * 0.9, rr * 0.65], color='#26321e'))
+                P.append(dict(k='cyl', a=r2([q[0], q[1], 2.0]), b=r2(q - [0, 0, rr * 0.8]), r=0.3, color='#3b2f24'))
+    # boats on the sea (yacht at display (380, 630), small boats)
+    for (u, v), L, Wb in (((380, 632), 22.0, 6.0), ((300, 603), 8.0, 2.5), ((1560, 592), 10.0, 3.0), ((1765, 566), 14.0, 4.0)):
+        q = V.on_plane_z(u * k, v * k, 0.3)
+        P.append(dict(k='box', c=r2(q), s=[L, Wb, 2.2], az=60.0, color='#ece9e3'))
+        P.append(dict(k='box', c=r2(q + [0, 0, 2.2]), s=[L * 0.45, Wb * 0.8, 1.6], az=60.0, color='#d8d4cc'))
     up = [a1 - t * 3.5, a1, a1 + w * 4.2, a1 - t * 3.5 + w * 4.2]                                         # balcony above, over the right part
     P.append(dict(k='prism', poly=[r2(q) for q in up], z0=round(ZF + 2.9, 2), z1=round(ZF + 3.2, 2), color='#5a5652'))
     return dict(scene='T4/39 Balcony at Sunset (W South Beach)', camera='Balcony at Sunset', note=sea_balcony.__doc__.split('\n')[0], props=P)

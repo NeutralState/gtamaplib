@@ -5000,7 +5000,11 @@ window.__camScreen = name => {
     if (!J) return; const loader = new THREE.TextureLoader(), ver = Date.now(); let n = 0;
     for (const S of J.scenes || []) for (const p of S.props) {
       n++;
-      if (p.k === 'quad') add(quadGeo(p.p), mat(p.color, THREE.DoubleSide, p.e), false);
+      if (p.k === 'quad' && p.opacity !== undefined) {                       // [GLASS-QUAD-V1] translucent pane (glass railing): no depth write, no shadow
+        const key = 'glass' + p.color + p.opacity + (p.e ?? '');
+        const m = mats[key] || (mats[key] = Object.assign(mat(p.color, THREE.DoubleSide, p.e).clone(), { transparent: true, opacity: p.opacity, depthWrite: false, roughness: 0.15, metalness: 0.3 }));
+        add(quadGeo(p.p), m, false);
+      } else if (p.k === 'quad') add(quadGeo(p.p), mat(p.color, THREE.DoubleSide, p.e), false);
       else if (p.k === 'box') {
         const [L, W, H] = p.s, a = p.az * Math.PI / 180, g = new THREE.BoxGeometry(L, W, H);
         g.rotateZ(Math.atan2(Math.cos(a), Math.sin(a))); g.translate(p.c[0], p.c[1], p.c[2] + H / 2); add(g, mat(p.color, undefined, p.e));
