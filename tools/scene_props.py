@@ -1135,8 +1135,8 @@ def beach_biplane():
             P.append(dict(k='cyl', a=r2(q), b=r2([q[0], q[1], q[2] + 2.3]), r=0.04, color='#e8e8e2'))
             c2 = col if (col != '#d8e1e6' or i % 2) else '#3d6f8f'
             P.append(dict(k='blob', c=r2([q[0], q[1], q[2] + 2.25]), r=[1.2, 1.2, 0.35], color=c2))
-    # lifeguard tower (yellow roof) and the pink-roof kiosk
-    for (uh, vh), roof, body in (((1060, 600), '#e9c84a', '#6c8ea8'), ((1298, 548), '#e88fa0', '#f2efe8')):
+    # wooden lifeguard tower (yellow roof); the pink-roof station further S is V16 tower #1542, built by beach_lifeguards()
+    for (uh, vh), roof, body in (((1060, 600), '#e9c84a', '#6c8ea8'),):
         q = sand(2 * uh, 2 * vh)
         for dx, dy in ((-1.1, -1.1), (1.1, -1.1), (1.1, 1.1), (-1.1, 1.1)):
             P.append(dict(k='cyl', a=r2([q[0] + dx, q[1] + dy, q[2]]), b=r2([q[0] + dx, q[1] + dy, q[2] + 2.2]), r=0.09, color='#9aa3a8'))
@@ -1145,7 +1145,110 @@ def beach_biplane():
     return dict(scene='T4/30 Biplane over the Beach (South Beach)', camera='Biplane over the Beach', note=beach_biplane.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane]
+def beach_lifeguards():
+    """Vice Beach lifeguard towers — V16 draws them as 30 m2 octagons every ~110 m along the sand (x 2110-2217); view3d
+    extruded them as grey windowed boxes (Alexandre on T4/30: « les lifeguard tower c'est pas des buildings »). Rebuilt in
+    the Miami Beach style: pastel cabin on four stilts, glass band, hipped roof in a second colour, deck with railing,
+    ramp down to the sand on the land side, flag pole. #1542 = the white / pink-roof station of the T4/30 frame. Sizes ESTIMATED."""
+    MS = json.load(open(os.path.join(THIS, 'threejs', '_v16_massing.json')))
+    T8 = []
+    for i, m in enumerate(MS):
+        p = np.array(m['o'], float)
+        A = 0.5 * abs(p[:, 0] @ np.roll(p[:, 1], 1) - p[:, 1] @ np.roll(p[:, 0], 1))
+        if len(p) == 8 and 27 <= A <= 33 and m['z'] < 6: T8.append((i + 1, p.mean(0), m['z']))
+    T8.sort(key=lambda t: t[1][1])
+    PAL = [('#f6a9bd', '#5fc4d6'), ('#ffd166', '#ef6f8f'), ('#80d4c8', '#f7905f'), ('#c7aaf0', '#ffd166'),
+           ('#a6e36f', '#f6a9bd'), ('#f7905f', '#80d4c8'), ('#7fb8f0', '#ffe08a')]
+    P = []; clear = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    for j, (k, c, z0) in enumerate(T8):
+        a, b = T8[max(0, j - 1)][1], T8[min(len(T8) - 1, j + 1)][1]
+        t = (b - a) / max(1e-6, np.linalg.norm(b - a)); s = np.array([t[1], -t[0]])
+        if s[0] < 0: s = -s                                              # seaward = east
+        az = math.degrees(math.atan2(t[0], t[1]))
+        body, roof = ('#f4f1ea', '#e88fa0') if k == 1542 else PAL[k % len(PAL)]
+        L = lambda dt, ds, z: [c[0] + t[0] * dt + s[0] * ds, c[1] + t[1] * dt + s[1] * ds, z]
+        zd = z0 + 2.1; zc = zd + 0.25; zr = zc + 2.6
+        clear.append([r2(L(-5, -5, 0)[:2]), r2(L(5, -5, 0)[:2]), r2(L(5, 5, 0)[:2]), r2(L(-5, 5, 0)[:2])])
+        for dt, ds in ((-1.7, -1.7), (1.7, -1.7), (1.7, 1.7), (-1.7, 1.7)):
+            P.append(dict(k='cyl', a=r2(L(dt, ds, z0)), b=r2(L(dt, ds, zd)), r=0.12, color='#e6e1d6'))
+        P.append(dict(k='box', c=r2(L(0, 0.4, zd)), s=[4.4, 5.2, 0.25], az=az, color='#d8cfbd'))          # deck (wider on the sea side)
+        P.append(dict(k='box', c=r2(L(0, 0, zc)), s=[3.2, 3.2, 2.6], az=az, color=body))                    # cabin
+        P.append(dict(k='box', c=r2(L(0, 0, zc + 1.05)), s=[3.26, 3.26, 0.85], az=az, color='#2c3a46'))     # glass band
+        P.append(dict(k='box', c=r2(L(0, 0, zr)), s=[4.1, 4.1, 0.16], az=az, color=roof))                   # eave
+        ap = L(0, 0, zr + 1.15); E4 = [L(-2.05, -2.05, zr + 0.16), L(2.05, -2.05, zr + 0.16), L(2.05, 2.05, zr + 0.16), L(-2.05, 2.05, zr + 0.16)]
+        for q in range(4): P.append(dict(k='quad', p=[r2(E4[q]), r2(E4[(q + 1) % 4]), r2(ap), r2(ap)], color=roof))
+        for q in range(4):                                                                                  # deck railing
+            e0, e1 = [L(-2.2, -2.2, zd), L(2.2, -2.2, zd), L(2.2, 3.0, zd), L(-2.2, 3.0, zd)][q], [L(2.2, -2.2, zd), L(2.2, 3.0, zd), L(-2.2, 3.0, zd), L(-2.2, -2.2, zd)][q]
+            if q == 0: e0 = L(-1.0, -2.2, zd)                                                               # gap for the ramp
+            P.append(dict(k='cyl', a=r2([e0[0], e0[1], zd + 1.0]), b=r2([e1[0], e1[1], zd + 1.0]), r=0.04, color='#f4f2ee'))
+            P.append(dict(k='cyl', a=r2([e0[0], e0[1], zd]), b=r2([e0[0], e0[1], zd + 1.0]), r=0.05, color='#f4f2ee'))
+        bot0, bot1 = L(-2.2, -9.0, z0 + 0.05), L(-1.0, -9.0, z0 + 0.05); top0, top1 = L(-2.2, -2.2, zd + 0.12), L(-1.0, -2.2, zd + 0.12)
+        P.append(dict(k='quad', p=[r2(bot0), r2(bot1), r2(top1), r2(top0)], color='#d8cfbd'))                  # ramp to the land side
+        for e in (bot0, bot1):
+            tp = top0 if e is bot0 else top1
+            P.append(dict(k='cyl', a=r2([e[0], e[1], e[2] + 0.9]), b=r2([tp[0], tp[1], tp[2] + 0.9]), r=0.04, color='#f4f2ee'))
+        P.append(dict(k='cyl', a=r2(ap), b=r2([ap[0], ap[1], ap[2] + 2.4]), r=0.04, color='#d8d8d8'))         # flag pole + flag
+        P.append(dict(k='box', c=r2([ap[0] + t[0] * 0.5, ap[1] + t[1] * 0.5, ap[2] + 1.8]), s=[0.9, 0.04, 0.55], az=az, color='#e8c040' if j % 2 else '#d84040'))
+    return dict(scene='Vice Beach lifeguard towers', camera='Biplane over the Beach', note=beach_lifeguards.__doc__.split('\n')[0], props=P, clear=clear)
+
+
+def _offset(P, d):
+    """polygon P (n x 2) offset outward by d (miter, clamped)."""
+    P = np.asarray(P, float); n = len(P); A = 0.5 * np.sum(P[:, 0] * np.roll(P[:, 1], -1) - np.roll(P[:, 0], -1) * P[:, 1]); sg = 1 if A > 0 else -1
+    out = []
+    for i in range(n):
+        a, b, c = P[i - 1], P[i], P[(i + 1) % n]
+        e0 = (b - a) / max(1e-9, np.linalg.norm(b - a)); e1 = (c - b) / max(1e-9, np.linalg.norm(c - b))
+        n0 = sg * np.array([e0[1], -e0[0]]); n1 = sg * np.array([e1[1], -e1[0]]); m = n0 + n1
+        k = d / max(0.35, (m @ n0) / max(1e-9, np.linalg.norm(m))) if np.linalg.norm(m) > 1e-9 else d
+        out.append(b + (m / max(1e-9, np.linalg.norm(m))) * min(k, 3 * d))
+    return np.array(out)
+
+
+def portofino_detail():
+    """Portofino Tower — Alexandre's favourite building (« portofino 0 comme irl... je veux plus de detail »). Detail on the
+    measured Y solid (tools/mesh_solids.py, PORTOFINO-V2), after the IRL tower and the T4/30 frame: a white balcony slab every
+    floor (3.2 m) wrapping the facade with its railing line, terracotta pilasters on the corners of the Y, terracotta cornice bands
+    at the shoulder (126 m) and the roof (141.6 m), and the BREAK (Alexandre: « manque le break dans la tour »): two open floors
+    z 86.5-93.7 MEASURED on T4/30 (frame rows 165 / 118 on the facade plane), dark recess behind terracotta piers, no balconies,
+    a cornice above and below. The facade shader does the blue-grey glass ribbons. Slab depth ESTIMATED 1.4 m."""
+    import mesh_solids
+    so = mesh_solids.cached()['Portofino Tower']; P = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    main = [L for L in so['layers'] if L['z1'] - L['z0'] > 50][0]; crown = [L for L in so['layers'] if 10 < L['z1'] - L['z0'] < 50][0]
+    O = np.array(main['polys'][0]['outer'], float)[:, :2]; OC = np.array(crown['polys'][0]['outer'], float)[:, :2]
+    if np.allclose(O[0], O[-1]): O = O[:-1]
+    if np.allclose(OC[0], OC[-1]): OC = OC[:-1]
+    S1 = _offset(O, 1.4); RL = _offset(O, 1.32)
+    B0, B1 = 86.5, 93.7                         # the break: 2 open terracotta floors (T4/30 rows 165 / 118 on the facade plane)
+    z = main['z0'] + 3.2 * 2
+    while z < main['z1'] - 1.0:
+        if not (B0 - 0.5 < z < B1 + 0.5):
+            P.append(dict(k='prism', poly=[r2(q) for q in S1], z0=round(z - 0.22, 2), z1=round(z, 2), color='#eeeae2'))
+            P.append(dict(k='line', pts=[r2([q[0], q[1], z + 1.05]) for q in list(RL) + [RL[0]]], color='#f6f4f0'))
+        z += 3.2
+    P.append(dict(k='prism', poly=[r2(q) for q in _offset(O, 0.12)], z0=B0, z1=B1, color='#3a2a26'))      # dark recess behind the piers
+    for zz in (B0, B1):                                                                                     # cornices of the break
+        P.append(dict(k='prism', poly=[r2(q) for q in _offset(O, 1.1)], z0=round(zz - 0.55, 2), z1=round(zz + 0.15, 2), color='#b8664f'))
+    PO = _offset(O, 0.6); acc = 0.0
+    for i in range(len(PO)):                                                                                # terracotta piers every ~5.5 m
+        a, b = PO[i], PO[(i + 1) % len(PO)]; L = float(np.linalg.norm(b - a)); az = math.degrees(math.atan2(*(b - a)))
+        s = (5.5 - acc) % 5.5
+        while s < L:
+            q = a + (b - a) * s / L; P.append(dict(k='box', c=r2([q[0], q[1], B0]), s=[1.5, 1.0, round(B1 - B0, 2)], az=round(az, 1), color='#b8664f')); s += 5.5
+        acc = (acc + L) % 5.5
+    for Ls, zz, d in ((O, main['z1'], 1.9), (OC, crown['z1'], 1.6)):                                       # cornice bands
+        P.append(dict(k='prism', poly=[r2(q) for q in _offset(Ls, d)], z0=round(zz - 1.6, 2), z1=round(zz + 0.2, 2), color='#b8664f'))
+    n = len(O)
+    for i in range(n):                                                                                       # pilasters on the sharp corners
+        a, b, c = O[i - 1], O[i], O[(i + 1) % n]
+        e0, e1 = (b - a) / np.linalg.norm(b - a), (c - b) / np.linalg.norm(c - b)
+        if math.degrees(math.acos(np.clip(e0 @ e1, -1, 1))) < 35: continue
+        q = _offset(O, 0.5)[i]; az = math.degrees(math.atan2(*(e0 + e1)[::1]))
+        P.append(dict(k='box', c=r2([q[0], q[1], main['z0']]), s=[1.8, 1.8, round(main['z1'] - main['z0'] - 0.4, 2)], az=round(az, 1), color='#b8664f'))
+    return dict(scene='Portofino Tower detail', camera='Biplane over the Beach', note=portofino_detail.__doc__.split('\n')[0], props=P)
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail]
 
 
 def main():
