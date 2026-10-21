@@ -1509,7 +1509,8 @@ def heli_jason():
     """T4/41 Jason in a Helicopter — the helicopter the camera rides on (Alexandre: « on met l'helico »). The camera is
     locked to it, so its left side is built in the camera frame and placed with the fitted pose: each painted region of the
     frame (white cabin side, black stripe, yellow belly, white door frame, dark door opening, door glass, exhaust, the
-    anti-collision dome) is a polygon traced on the frame (display 1920 x 960) and back-projected on the fuselage side, a
+    anti-collision dome) is a polygon (the side and the belly with a designed light: vertex-coloured, lit bands and gold seam
+    highlight, TRI-VC-V1) traced on the frame (display 1920 x 960) and back-projected on the fuselage side, a
     plane through 4 depth anchors read from the frame (door post top 4.4 m, post foot 2.6 m, belly corner 1.15 m, cowling
     corner 1.5 m; scale from Jason, seated ~1.3 m tall at ~4.5 m), plus the panel seams. The lit strip under Jason's feet
     is a tower below, not the skid (Alexandre). Flat colours, no frame texture; Jason is not modelled. ESTIMATED."""
@@ -1522,11 +1523,23 @@ def heli_jason():
         Q = [X(u, v, f) for u, v in pts]; c = np.mean(Q, axis=0)
         for i in range(len(Q)):
             P.append(dict(k='quad', p=[r2(c), r2(Q[i]), r2(Q[(i + 1) % len(Q)]), r2(Q[(i + 1) % len(Q)])], color=color, e=e))
-    poly([(950, 180), (1210, 105), (1250, 0), (1920, 0), (1920, 960), (1100, 960), (1120, 670), (1035, 470), (1062, 380), (995, 250)], '#8f8d87', 0.16)
+    def gl(u, v, a, c, w):                                                                                 # gaussian band around segment a -> c
+        a = np.array(a, float); c = np.array(c, float); d = c - a; t = np.clip(((np.array([u, v]) - a) @ d) / (d @ d), 0, 1)
+        return math.exp(-(np.linalg.norm(np.array([u, v]) - a - d * t) / w) ** 2)
+    def shaded(pts, base, shade, f=1.0, lev=3):
+        """polygon fan-split into triangles, each subdivided lev times; vertex colour = base x shade(u, v) (designed light)."""
+        pts = [np.array(p, float) for p in pts]; c = np.mean(pts, axis=0); T = [(c, pts[i], pts[(i + 1) % len(pts)]) for i in range(len(pts))]
+        for _ in range(lev):
+            T = [t for a, b_, c_ in T for t in ((a, (a + b_) / 2, (a + c_) / 2), ((a + b_) / 2, b_, (b_ + c_) / 2), ((a + c_) / 2, (b_ + c_) / 2, c_), ((a + b_) / 2, (b_ + c_) / 2, (a + c_) / 2))]
+        hexc = lambda q: '#%02x%02x%02x' % tuple(int(min(255, max(0, x * shade(*q)))) for x in base)
+        for t in T: P.append(dict(k='tri', p=[r2(X(*q, f)) for q in t], colors=[hexc(q) for q in t]))
+    white = lambda u, v: (0.55 + 0.42 * gl(u, v, (1060, 150), (1560, 330), 130) + 0.5 * gl(u, v, (1500, 600), (1910, 470), 70)
+                          - 0.22 * gl(u, v, (980, 200), (1240, 640), 70) - 0.18 * gl(u, v, (1000, 160), (1300, 0), 90) - 0.2 * gl(u, v, (1150, 960), (1240, 700), 80))
+    shaded([(950, 180), (1210, 105), (1250, 0), (1920, 0), (1920, 960), (1100, 960), (1120, 670), (1035, 470), (1062, 380), (995, 250)], (150, 144, 132), white)
     poly([(1180, 550), (1410, 545), (1520, 440), (1760, 205), (1920, 195), (1920, 400), (1480, 590), (1300, 600), (1190, 580)], '#16171a', 0.15, 0.995)
-    poly([(1240, 700), (1400, 672), (1920, 640), (1920, 960), (1170, 960)], '#6c5113', 0.2, 0.995)
-    poly([(1375, 662), (1410, 645), (1645, 868), (1622, 905)], '#94741f', 0.35, 0.993)                         # lit gold highlight along the belly seam
-    poly([(1388, 657), (1400, 652), (1636, 878), (1628, 892)], '#b8922f', 0.45, 0.992)
+    gold = lambda u, v: (0.55 + 1.15 * gl(u, v, (1392, 660), (1632, 886), 26) + 0.45 * gl(u, v, (1392, 660), (1632, 886), 90)
+                         + 0.25 * gl(u, v, (1700, 700), (1920, 680), 120) - 0.2 * gl(u, v, (1170, 960), (1260, 720), 90))
+    shaded([(1240, 700), (1400, 672), (1920, 640), (1920, 960), (1170, 960)], (140, 104, 30), gold, 0.995, 5)
     poly([(1585, 0), (1840, 0), (1840, 55), (1730, 100), (1635, 112)], '#202224', 0.1, 0.995)          # engine intake / exhaust
     poly([(940, 200), (995, 250), (1062, 380), (1035, 470), (920, 470), (880, 330)], '#0d0f12', 0.05, 1.04)   # door opening
     # the cabin seen through the door glass (Alexandre: « c'est dans l'helico pas dehors »): far wall, seat back, bulkhead
@@ -1539,9 +1552,6 @@ def heli_jason():
     Q = [X(u, v, 1.02) for u, v in ((935, 490), (1035, 470), (1120, 670), (1100, 960), (950, 960), (925, 700))]; c = np.mean(Q, axis=0)   # door glass
     for i in range(len(Q)): P.append(dict(k='quad', p=[r2(c), r2(Q[i]), r2(Q[(i + 1) % len(Q)]), r2(Q[(i + 1) % len(Q)])], color='#2a3a46', e=0.2, opacity=0.45))
     poly([(890, 480), (935, 490), (925, 700), (950, 960), (905, 960)], '#9a9994', 0.18)                       # glass frame
-    # curvature: the cabin side darkens towards the roof and the belly (bands over the white base)
-    poly([(950, 180), (1210, 105), (1250, 0), (1500, 0), (1100, 230), (1000, 250)], '#7b7a75', 0.14, 0.998)
-    poly([(1250, 0), (1920, 0), (1920, 120), (1500, 0)], '#83827d', 0.14, 0.998)
     # panel seams and door frame edges (segments traced on the frame)
     for seg in (((967, 183), (1085, 354)), ((1082, 397), (1227, 633)), ((1028, 259), (1158, 443)), ((900, 672), (1065, 387)), ((1006, 954), (1232, 640)),
                 ((1109, 849), (1223, 707)), ((1385, 671), (1619, 891)), ((1484, 589), (1910, 401)), ((1407, 558), (1519, 440)), ((1263, 540), (1401, 552)),
@@ -1568,7 +1578,7 @@ def heli_jason():
             P.append(dict(k='blob', c=r2(q), r=[0.0045, 0.0045, 0.0045], color='#7c7e7e'))
     for u, v in ((1100, 235), (1150, 280), (1195, 330), (1245, 380), (1290, 425)):                          # vent slots
         poly([(u, v), (u + 22, v + 4), (u + 18, v + 40), (u - 4, v + 36)], '#101113', 0.05, 0.997)
-    q = X(1350, 630, 0.97); P.append(dict(k='blob', c=r2(q), r=[0.07, 0.07, 0.05], color='#8e9192', smooth=True))   # anti-collision dome
+    q = X(1350, 630, 0.97); P.append(dict(k='blob', c=r2(q), r=[0.07, 0.07, 0.05], color='#6f7273', smooth=True))   # anti-collision dome
     return dict(scene='T4/41 Jason in a Helicopter (the helicopter)', camera='Jason in a Helicopter', note=heli_jason.__doc__.split('\n')[0], props=P)
 
 
