@@ -7678,13 +7678,13 @@
   "id": "T4/32",
   "player": null,
   "xyz": [
-   -2351.0,
+   -2345.2,
    -5527.0,
-   3.03
+   2.9
   ],
   "ypr": [
-   0,
-   0.0,
+   -90.0,
+   -1.0,
    0.0
   ],
   "fov": [
@@ -7698,7 +7698,7 @@
   "source": "Trailer 4 (launch trailer, 2026) - man asleep in a chair by a window (INTERIOR, Yanis K8 (Interior) = Jason's House (Keys) inset; position = that house, heading unknown); GTAVI_Launch_Trailer.mp4 t=58.73 s (frame 1762), letterbox removed",
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
-  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/32 (corr 0.993); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve."
+  "notes": "PROVISIONAL 2026-10-18 (Alexandre: add the launch-trailer frames): frame extracted from the trailer and matched to Yanis V17 thumbnail T4/32 (corr 0.993); pose = his marker (position on the dot, heading/FOV read on his V, eyeballed by him), z = game heightmap + 1.7 m. Needs markings + solve. | INTERIOR-ROOM-V1 2026-10-21 (Alexandre: reconstruire la piece): ESTIMATED pose, nothing outside to measure (window blown out). Kept Yanis's house (Jason's House (Keys)), camera moved 5.8 m E so that the frame's back wall with the window is the house's E exterior wall x -2342 at 3.2 m; eye 0.9 m above the ground-floor slab (2.0) = just above the table (its top reads below the eye); heading 90 (unknown: chosen so the window faces out), pitch -1 (see INTERIOR-ROOM-V1b), roll 0 (table edge level), hfov 55 kept. Room dressing = tools/scene_props.py napping_room. | INTERIOR-ROOM-V1b 2026-10-21: pitch +5 -> -1: with the eye 0.12 m above the table top, the table's front edge (row 790) lands 0.7 m ahead only for a level camera; then the sill (row 270) sits 1.2 m above the floor and the sleeper's head ~1.15 m, and the window jambs stay vertical."
  },
  "Explosion on the Highway": {
   "id": "T4/34",

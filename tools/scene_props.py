@@ -1164,6 +1164,75 @@ def beach_biplane():
     return dict(scene='T4/30 Biplane over the Beach (South Beach)', camera='Biplane over the Beach', note=beach_biplane.__doc__.split('\n')[0], props=P)
 
 
+def napping_room():
+    """T4/32 Napping in the Chair — the living room of Jason's House (Keys), rebuilt around the camera (Alexandre: « reconstruire
+    la piece »). Nothing outside is measurable (blown-out window), so the pose is ESTIMATED (cameras.json INTERIOR-ROOM-V1): the
+    frame's back wall with the window = the house's E exterior wall (x -2342), eye 0.9 m above the slab (2.0). Everything is
+    BACK-PROJECTED from the frame (display px x 1.92) onto three planes: the panelled back wall (x -2342.25), the table top
+    (z 2.75) and the floor: dark wood panelling with grooves, the bright window (jambs u 2477 / 3696, mullion 2790, sill row 518),
+    the door / cabinet edge on the left (u 307, 960), the white cane leaning on the wall, the wicker armchair under the window,
+    the table with the red cup, burger, fries, paper box and game controller, a desk fan. The sleeper and the snake are not
+    modelled. Sizes ESTIMATED."""
+    V = View('Napping in the Chair'); P = []; r2 = lambda a: [round(float(v), 3) for v in a]; S = 1.92
+    XW, ZF, ZT, ZC = -2342.25, 2.0, 2.75, 4.6         # table top 0.15 m below the eye: the cup's width (~9 cm, 160 px) fixes it
+    wall = lambda u, v: V.on_vplane(u * S, v * S, (XW, 0.0), (1.0, 0.0))
+    tab = lambda u, v: V.on_plane_z(u * S, v * S, ZT)
+    yL, yR = float(wall(-200, 500)[1]), float(wall(2200, 500)[1])               # back wall beyond the frame edges
+    WOOD, GROOVE, TRIM = '#4a3524', '#2f2116', '#d8cc98'
+    quad = lambda p, col, e=None: P.append(dict(k='quad', p=[r2(q) for q in p], color=col, **({'e': e} if e is not None else {})))
+    quad([[XW, yL, ZF], [XW, yR, ZF], [XW, yR, ZC], [XW, yL, ZC]], WOOD, 0.22)                                # back wall
+    quad([[XW - 4.4, yL, ZF + 0.01], [XW, yL, ZF + 0.01], [XW, yR, ZF + 0.01], [XW - 4.4, yR, ZF + 0.01]], '#3b2d22', 0.1)   # floor
+    quad([[XW - 4.4, yL, ZC], [XW, yL, ZC], [XW, yR, ZC], [XW - 4.4, yR, ZC]], '#2c2119', 0.08)               # ceiling
+    for y in (yL, yR): quad([[XW - 4.4, y, ZF], [XW, y, ZF], [XW, y, ZC], [XW - 4.4, y, ZC]], WOOD, 0.16)     # side walls
+    # window: glass glowing (bloom), painted trim, mullion
+    wa, wb = wall(1290, 300), wall(1925, 300); zs = float(wall(1600, 270)[2]); zt = ZC - 0.15
+    ya, yb = float(wa[1]), float(wb[1])
+    quad([[XW - 0.02, ya, zs], [XW - 0.02, yb, zs], [XW - 0.02, yb, zt], [XW - 0.02, ya, zt]], '#fbf6ea', 2.6)
+    for y in (ya, yb, float(wall(1452, 300)[1])):
+        P.append(dict(k='box', c=r2([XW - 0.06, y, zs]), s=[0.09, 0.12, round(zt - zs, 2)], az=0.0, color=TRIM))
+    P.append(dict(k='box', c=r2([XW - 0.06, (ya + yb) / 2, zs - 0.08]), s=[abs(yb - ya) + 0.2, 0.16, 0.08], az=0.0, color=TRIM))   # sill
+    # panel grooves every 0.22 m (not across the window)
+    y = yL
+    while y > yR:
+        if not (yb - 0.05 < y < ya + 0.05):
+            P.append(dict(k='box', c=r2([XW - 0.02, y, ZF]), s=[0.02, 0.018, ZC - ZF], az=0.0, color=GROOVE))
+        y -= 0.22
+    # door / cabinet on the left: lighter frame strip and the panel junction
+    for u in (140, 500):
+        q = wall(u, 400); P.append(dict(k='box', c=r2([XW - 0.05, q[1], ZF]), s=[0.08, 0.07 if u == 500 else 0.12, ZC - ZF - 0.2], az=0.0, color='#7a5c3c' if u == 140 else '#3a2a1c'))
+    # white cane leaning on the wall (top at display (275, 230), shaft toward (205, 640))
+    top = wall(275, 230); low = wall(205, 640); d = low - top; t = (ZF - top[2]) / d[2]; foot = top + d * t
+    P.append(dict(k='cyl', a=r2([foot[0] - 0.05, foot[1], ZF]), b=r2(top - [0.03, 0, 0]), r=0.012, color='#eeeeea'))
+    # wicker armchair under the window (seat centre ~2.4 m ahead, 0.8 m right), back against the wall
+    cx, cy = XW - 0.55, float(V.o[1]) - 0.8
+    WK = '#6a4a2c'
+    P.append(dict(k='box', c=[cx, cy, ZF], s=[0.95, 0.85, 0.45], az=90.0, color=WK, e=0.12))
+    P.append(dict(k='box', c=[XW - 0.12, cy, ZF + 0.45], s=[0.95, 0.14, 0.6], az=90.0, color=WK, e=0.12))   # back under the sill
+    for s in (-1, 1): P.append(dict(k='box', c=[cx, cy + s * 0.44, ZF + 0.45], s=[0.1, 0.85, 0.32], az=90.0, color='#5c3f25', e=0.12))
+    P.append(dict(k='box', c=[cx - 0.05, cy, ZF + 0.45], s=[0.8, 0.72, 0.1], az=90.0, color='#3f3a2c', e=0.1))        # cushion
+    # table (front edge on display row 790, right end u 980), top z 2.78, 0.8 m deep
+    e0, e1 = tab(-100, 790), tab(980, 790)
+    tc = (e0 + e1) / 2 + np.array([0.4, 0, 0]); L = float(abs(e1[1] - e0[1]))
+    P.append(dict(k='box', c=r2([tc[0], tc[1], ZF]), s=[L, 0.8, ZT - ZF], az=0.0, color='#6e5139', e=0.42))
+    # on the table: back-projected contact points
+    cup = tab(490, 765); P.append(dict(k='cyl', a=r2(cup), b=r2(cup + [0, 0, 0.10]), r=0.045, color='#b2262a'))
+    P.append(dict(k='cyl', a=r2(cup + [0, 0, 0.10]), b=r2(cup + [0, 0, 0.11]), r=0.047, color='#efe9df'))
+    P.append(dict(k='cyl', a=r2(cup + [0, 0, 0.11]), b=r2(cup + [0.0, 0.0, 0.21]), r=0.004, color='#d8b860'))
+    bun = tab(430, 772); P.append(dict(k='blob', c=r2(bun + [0, 0, 0.035]), r=[0.06, 0.06, 0.035], color='#a8743c', smooth=True))
+    P.append(dict(k='blob', c=r2(bun + [0, 0, 0.02]), r=[0.063, 0.063, 0.012], color='#5a3a22', smooth=True))
+    pad = tab(720, 785); P.append(dict(k='blob', c=r2(pad + [0, 0, 0.022]), r=[0.07, 0.045, 0.022], color='#2a2a2d', smooth=True))
+    for s in (-1, 1): P.append(dict(k='blob', c=r2(pad + [0.03, s * 0.05, 0.02]), r=[0.035, 0.03, 0.02], color='#c9c9c9', smooth=True))
+    box = tab(645, 700); P.append(dict(k='box', c=r2(box), s=[0.2, 0.16, 0.07], az=0.0, color='#ece6da'))
+    fr = tab(300, 705); P.append(dict(k='blob', c=r2(fr + [0, 0, 0.03]), r=[0.1, 0.08, 0.035], color='#c4883a'))
+    bag = tab(60, 735); P.append(dict(k='blob', c=r2(bag + [0, 0, 0.06]), r=[0.1, 0.08, 0.07], color='#cdb48a'))
+    # desk fan at the far left (display (60, 580))
+    d = V.ray(60 * S, 580 * S); fc = V.o + d * (2.75 / d[0])                     # its small size puts it ~2.75 m ahead, by the wall
+    P.append(dict(k='box', c=r2([fc[0], fc[1], ZF]), s=[0.5, 0.45, round(fc[2] - 0.2 - ZF, 2)], az=0.0, color='#5b4431', e=0.18))   # cabinet under it
+    P.append(dict(k='cyl', a=r2(fc - [0, 0, 0.2]), b=r2(fc), r=0.012, color='#7d7f76'))
+    P.append(dict(k='cyl', a=r2(fc + [0.02, 0, 0]), b=r2(fc - [0.02, 0, 0]), r=0.12, color='#8a8d84'))
+    return dict(scene='T4/32 Napping in the Chair (Jason\'s House, Keys)', camera='Napping in the Chair', note=napping_room.__doc__.split('\n')[0], props=P)
+
+
 def _obox(c, f, r, u, L, W, H, color):
     """oriented box (any attitude) as 6 quads: centre c, unit axes f / r / u, sizes L / W / H along them."""
     c, f, r, u = (np.asarray(a, float) for a in (c, f, r, u))
@@ -1322,7 +1391,7 @@ def portofino_detail():
     return dict(scene='Portofino Tower detail', camera='Biplane over the Beach', note=portofino_detail.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail]
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room]
 
 
 def main():
