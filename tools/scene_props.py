@@ -1143,6 +1143,18 @@ def beach_biplane():
         P.append(dict(k='box', c=r2([q[0], q[1], q[2] + 2.2]), s=[3.0, 3.0, 2.2], az=0.0, color=body))
         P.append(dict(k='box', c=r2([q[0], q[1], q[2] + 4.4]), s=[3.6, 3.6, 0.35], az=0.0, color=roof))
     P += _biplane(V)
+    # the two tower cranes of the Fisher Island skyline (frame, half-res: mast u 310 / top row 228 / jib row 249 from u 248 to 345 over
+    # the 7634 Fisher Island Dr site; mast u 527 / top 228 / short jib row 245 over the Palazzo del Sol lot), back-projected on the
+    # vertical planes through those lots; ground from the heightmap. ESTIMATED depth (= the lot).
+    for (mx, my), g, ztop, zj, (ax, ay), (bx, by) in (((1959.0, -1361.8), 13.0, 43.7, 31.1, (1994.7, -1367.3), (1938.9, -1358.7)),
+                                                      ((1898.5, -1037.7), 4.8, 44.9, 36.2, (1904.5, -1039.0), (1892.1, -1036.3))):
+        for dx, dy in ((-0.8, -0.8), (0.8, -0.8), (0.8, 0.8), (-0.8, 0.8)):
+            P.append(dict(k='cyl', a=[mx + dx, my + dy, g], b=[mx + dx, my + dy, zj], r=0.12, color='#8a7f6a'))
+        P.append(dict(k='box', c=[mx, my, round(zj - 2.0, 2)], s=[2.2, 2.2, 2.0], az=0.0, color='#7a7062'))      # slewing unit + cab
+        P.append(dict(k='cyl', a=[ax, ay, zj], b=[bx, by, zj], r=0.45, color='#8a7f6a'))                      # jib + counter-jib
+        P.append(dict(k='cyl', a=[mx, my, zj], b=[mx, my, ztop], r=0.35, color='#8a7f6a'))                    # tower peak
+        P.append(dict(k='box', c=[bx + (mx - bx) * 0.15, by + (my - by) * 0.15, zj - 1.6], s=[3.0, 2.0, 1.6], az=0.0, color='#5e5850'))   # counterweight
+        P.append(dict(k='line', pts=[[ax, ay, zj], [mx, my, ztop], [bx, by, zj]], color='#8a7f6a'))         # pendant ties
     # 101 Ocean Dr (the yellow-banded block left of the Royal Atlantic, Alexandre: « ce building est manquant »): the mesh was
     # there but white; its facade is now the ochre grid of the frame, plus the cantilevered floor slabs of its east end
     for k in range(9):
