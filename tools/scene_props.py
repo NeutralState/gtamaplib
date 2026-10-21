@@ -1505,6 +1505,46 @@ def glass_tower_fall():
     return dict(scene='T4/40 Falling from the Glass Tower (701 Brickell)', camera='Falling from the Glass Tower', note=glass_tower_fall.__doc__.split('\n')[0], props=P)
 
 
+def heli_jason():
+    """T4/41 Jason in a Helicopter — the helicopter the camera rides on (Alexandre: « on met l'helico »). The camera is
+    locked to it, so its left side is built in the camera frame and placed with the fitted pose: each painted region of the
+    frame (white cabin side, black stripe, yellow belly, white door frame, dark door opening, door glass, exhaust, the
+    anti-collision dome) is a polygon traced on the frame (display 1920 x 960) and back-projected on the fuselage side, a
+    plane through 4 depth anchors read from the frame (door post top 4.4 m, post foot 2.6 m, belly corner 1.15 m, cowling
+    corner 1.5 m; scale from Jason, seated ~1.3 m tall at ~4.5 m), plus the panel seams. The lit strip under Jason's feet
+    is a tower below, not the skid (Alexandre). Flat colours, no frame texture; Jason is not modelled. ESTIMATED."""
+    V = View('Jason in a Helicopter'); P = []; r2 = lambda a: [round(float(v), 3) for v in a]; k = 2.0
+    A = np.array([(970, 190, 4.4), (1230, 640, 2.6), (1800, 920, 1.15), (1800, 80, 1.5)])
+    cf = np.linalg.lstsq(np.c_[np.ones(4), A[:, 0], A[:, 1]], 1 / A[:, 2], rcond=None)[0]           # 1/Z linear in (u, v) = a plane
+    Z = lambda u, v: 1.0 / (cf[0] + cf[1] * u + cf[2] * v)
+    X = lambda u, v, f=1.0: V.o + V.ray(u * k, v * k) * Z(u, v) * f
+    def poly(pts, color, e=0.35, f=1.0):
+        Q = [X(u, v, f) for u, v in pts]; c = np.mean(Q, axis=0)
+        for i in range(len(Q)):
+            P.append(dict(k='quad', p=[r2(c), r2(Q[i]), r2(Q[(i + 1) % len(Q)]), r2(Q[(i + 1) % len(Q)])], color=color, e=e))
+    poly([(950, 180), (1210, 105), (1250, 0), (1920, 0), (1920, 960), (1100, 960), (1120, 670), (1035, 470), (1062, 380), (995, 250)], '#d6d8d6', 0.4)
+    poly([(1180, 550), (1410, 545), (1520, 440), (1760, 205), (1920, 195), (1920, 400), (1480, 590), (1300, 600), (1190, 580)], '#16171a', 0.15, 0.995)
+    poly([(1240, 700), (1400, 672), (1920, 640), (1920, 960), (1170, 960)], '#b38a1c', 0.45, 0.995)
+    poly([(1620, 0), (1780, 0), (1760, 80), (1640, 95)], '#202224', 0.1, 0.995)                      # exhaust
+    poly([(940, 200), (995, 250), (1062, 380), (1035, 470), (920, 470), (880, 330)], '#0d0f12', 0.05, 1.04)   # door opening
+    Q = [X(u, v, 1.02) for u, v in ((935, 490), (1035, 470), (1120, 670), (1100, 960), (950, 960), (925, 700))]; c = np.mean(Q, axis=0)   # door glass
+    for i in range(len(Q)): P.append(dict(k='quad', p=[r2(c), r2(Q[i]), r2(Q[(i + 1) % len(Q)]), r2(Q[(i + 1) % len(Q)])], color='#2a3a46', e=0.2, opacity=0.55))
+    poly([(890, 480), (935, 490), (925, 700), (950, 960), (905, 960)], '#cfd2d0', 0.4)                       # glass frame
+    # curvature: the cabin side darkens towards the roof and the belly (bands over the white base)
+    poly([(950, 180), (1210, 105), (1250, 0), (1500, 0), (1100, 230), (1000, 250)], '#b9bcbb', 0.35, 0.998)
+    poly([(1250, 0), (1920, 0), (1920, 120), (1500, 0)], '#c4c7c6', 0.35, 0.998)
+    # panel seams and door frame edges (segments traced on the frame)
+    for seg in (((967, 183), (1085, 354)), ((1082, 397), (1227, 633)), ((1028, 259), (1158, 443)), ((900, 672), (1065, 387)), ((1006, 954), (1232, 640)),
+                ((1109, 849), (1223, 707)), ((1385, 671), (1619, 891)), ((1484, 589), (1910, 401)), ((1407, 558), (1519, 440)), ((1263, 540), (1401, 552)),
+                ((1421, 660), (1548, 683)), ((1643, 670), (1918, 651)), ((1649, 350), (1748, 229)), ((1578, 393), (1649, 348)), ((1345, 186), (1401, 63)),
+                ((1309, 175), (1351, 79)), ((1222, 119), (1274, 26)), ((1041, 486), (1122, 675)), ((1708, 732), (1744, 660)), ((1597, 910), (1706, 861))):
+        P.append(dict(k='line', pts=[r2(X(*seg[0], 0.99)), r2(X(*seg[1], 0.99))], color='#55595c'))
+    for u, v in ((1100, 235), (1150, 280), (1195, 330), (1245, 380), (1290, 425)):                          # vent slots
+        poly([(u, v), (u + 22, v + 4), (u + 18, v + 40), (u - 4, v + 36)], '#101113', 0.05, 0.997)
+    q = X(1350, 630, 0.97); P.append(dict(k='blob', c=r2(q), r=[0.07, 0.07, 0.05], color='#e9ecee', smooth=True))   # anti-collision dome
+    return dict(scene='T4/41 Jason in a Helicopter (the helicopter)', camera='Jason in a Helicopter', note=heli_jason.__doc__.split('\n')[0], props=P)
+
+
 def _lattice_mast(P, x, y, z0, z1, w, col='#3b302c', az=0.0):
     """tower-crane mast: 4 chords, a tie ring every 4 m, X bracing (lines)."""
     a = math.radians(az); ex, ey = np.array([math.cos(a), -math.sin(a)]) * w / 2, np.array([math.sin(a), math.cos(a)]) * w / 2
@@ -1718,7 +1758,7 @@ def portofino_detail():
     return dict(scene='Portofino Tower detail', camera='Biplane over the Beach', note=portofino_detail.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony, glass_tower_fall]
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony, glass_tower_fall, heli_jason]
 
 
 def main():
