@@ -932,7 +932,8 @@ def runway_jet():
     """T4/20 Runway (pose SOLVED): the camera rides low under the right wing of a twin-engine wide-body taking off toward the NW
     (heading 302 = the runway reversed: the pickup racing beside the gear faces the camera), looking aft. Generic jet primitives
     placed on the frame: right main gear at u 3015 (12.5 m), engine at the left edge (u 0..1000), flap-track fairings u 1660..2180 and
-    2580..2840, fuselage belly at the right edge. Sizes ESTIMATED (one view)."""
+    2580..2840, fuselage belly at the right edge; darkened (backlit, the sun low ahead-left), the grass island on the left, no
+    street lights on the airfield. Sizes ESTIMATED (one view)."""
     V = View('Runway'); o = V.o; P = []; r2 = lambda a: [round(float(v), 2) for v in a]
     D = dict(JET_D); D.update(dict(z_wing=3.6, dihedral=5.0, sweep=37.0, wing_root_le=9.0, wing_root_chord=14.0, wing_span=32.0, tip_chord=4.0,
              R_fus=3.2, z_fus=6.6, eng_y=20.0, eng_x=-3.5, eng_r=1.75, eng_len=7.2, eng_z_20=3.1, eng2_y=0, gear_y=5.5, gear_wheel_r=0.62,
@@ -940,9 +941,19 @@ def runway_jet():
     psi = 302.15; h = math.radians(psi); l = np.array([-math.cos(h), math.sin(h)])
     d = V.ray(3015, 960.0); d2 = d[:2] / np.linalg.norm(d[:2]); gR = o[:2] + d2 * 12.5   # the right main gear
     axle = gR + l * D['gear_y']; G = T(axle[0], axle[1])
-    P += _jet_world(_jet_build(D), axle[0], axle[1], G, psi)
+    J = _jet_world(_jet_build(D), axle[0], axle[1], G, psi)
+    def dim(c, f=0.5):                                                     # backlit (the sun is low ahead-left): the jet reads as a silhouette
+        c = c.lstrip('#'); return '#%02x%02x%02x' % tuple(int(int(c[i:i + 2], 16) * f) for i in (0, 2, 4))
+    for p in J:
+        if 'color' in p: p['color'] = dim(p['color'], 0.42 if p['color'].lower() not in ('#262729',) else 0.8)
+    P += J
+    # grass island left of the runway (frame display rows ~510-570 on the left, 1920 x 960)
+    gp = [V.on_plane_z(u * 2, v * 2, G) for u, v in ((-200, 512), (760, 518), (620, 548), (-200, 600))]
+    P.append(dict(k='quad', p=[r2([q[0], q[1], G + 0.08]) for q in gp], color='#55652f', e=0.15))
     # (no pickup: a box version spoiled the view, Alexandre; the frame shows it during the arrival)
-    return dict(scene='T4/20 Runway (jet)', camera='Runway', note=runway_jet.__doc__.split('\n')[0], props=P)
+    # no generic street lights on the airfield (Alexandre: « y a pas ça sur une piste d'un aéroport »): same airside outline as the traffic
+    AIRSIDE = [[-3720, -140], [-2020, -140], [-2020, -1560], [-2230, -1560], [-3720, -610]]
+    return dict(scene='T4/20 Runway (jet)', camera='Runway', note=runway_jet.__doc__.split('\n')[0], props=P, nolamp=[AIRSIDE])
 
 
 def red_car_terminal():
@@ -982,34 +993,85 @@ def red_car_terminal():
 
 
 def green_car_edison():
-    """T4/25 Green Sports Car on Ocean Drive — NE corner of the Grape St / Shore Dr intersection, looking WSW at the north facade
-    of the Edison Hotel (Alexandre; its neighbour the Breakwater is south of it). Pose: the Edison's NE corner (V17) pinned at u 1060
-    (Alexandre) and its base. The facade is a texture cut from the frame and put on the plane of the Edison's north facade (the yellow arcade, the white
-    tower), plus the asphalt of Grape St with its crosswalk and the near curb, the green trash can (the palms are in the facade
-    texture). ESTIMATED."""
-    V = View('Green Sports Car on Ocean Drive'); o = V.o; P = []; r2 = lambda a: [round(float(v), 2) for v in a]
-    NE, NW = np.array([1963.0, 602.0]), np.array([1939.0, 602.0]); n = np.array([NW[1] - NE[1], -(NW[0] - NE[0])]); n /= np.linalg.norm(n)
-    if n @ (o[:2] - NE) < 0: n = -n
-    p0 = NE + n * 0.3                                                       # the Edison's north facade (Grape St)
-    # (no frame texture pasted on the facades: Alexandre, 'une fausse image par dessus' makes no sense; to be rebuilt as geometry)
-    zr = o[2] - 0.8                                                       # road level under the eye
-    Z = lambda q, dz=0.0: r2([q[0], q[1], max(zr, T(q[0], q[1]) + 0.06) + dz])   # never under the terrain
-    fwd = np.array([math.sin(math.radians(-CAMS['Green Sports Car on Ocean Drive']['ypr'][0])), math.cos(math.radians(-CAMS['Green Sports Car on Ocean Drive']['ypr'][0]))])
-    side = np.array([fwd[1], -fwd[0]])
-    zg = max(zr, T(o[0], o[1]) + 0.06)
-    def G(u, v, dz=0.0):                                                   # frame pixel -> road plane, kept above the terrain
-        q = V.on_plane_z(u, v, zg); return r2([q[0], q[1], max(zg, T(q[0], q[1]) + 0.08) + dz])
-    for v0, v1 in ((1920, 1300), (1300, 1080), (1080, 960), (960, 905)):           # asphalt (frame rows), up to the far sidewalk
-        P.append(dict(k='quad', p=[G(-400, v0), G(4240, v0), G(4240, v1), G(-400, v1)], color='#4a4a4f'))
-    P.append(dict(k='quad', p=[G(-400, 1700, 0.15), G(1700, 1500, 0.15), G(1700, 1920, 0.15), G(-400, 1920, 0.15)], color='#7a6668'))   # near sidewalk
-    for i in range(9):                                                     # crosswalk across Grape St (frame u 640-1700, v 915-1010)
-        u0 = 640 + i * 120
-        P.append(dict(k='quad', p=[G(u0, 1010, 0.03), G(u0 + 60, 1010, 0.03), G(u0 + 60, 915, 0.03), G(u0, 915, 0.03)], color='#d8d8d2'))
-    q = o[:2] + fwd * 3.0 - side * 3.2                                    # trash can (left)
-    P.append(dict(k='cyl', a=r2([q[0], q[1], zr]), b=r2([q[0], q[1], zr + 1.1]), r=0.35, color='#1f4a32'))
+    """T4/25 Green Sports Car on Ocean Drive — NE corner of the Grape St / Shore Dr intersection, looking WSW at the Edison Hotel
+    (Alexandre; its neighbour the Breakwater is south of it). Pose: the Edison's NE corner lands at frame u ~500 / base v ~440
+    (display 1920 x 960), its NW corner at u ~1410. Rebuilt as geometry on the two faces of the Edison mesh (Alexandre: « faut que
+    tu modèles mieux »): the yellow arcade of the ground floor (arches every 3.3 m, heights back-projected on the faces: arcade
+    3.3 -> 6.5 m), the white cornice, the white upper floors with their paired windows; the palms of the Grape St sidewalk, the
+    pedestrian-signal pole and street light at the crosswalk, the yellow pedestrian-crossing sign, the white wall on
+    the right, the asphalt with its crosswalk and yellow centre line, the pink near sidewalk and its curb, the green trash can
+    in the foreground. People, the green car and the bus are not modelled. ESTIMATED."""
+    V = View('Green Sports Car on Ocean Drive'); o = V.o; P = []; r2 = lambda a: [round(float(v), 2) for v in a]; k = 2.0
+    zg = max(o[2] - 0.8, T(o[0], o[1]) + 0.06)
+    def G(u, v, dz=0.0):                                                   # display pixel -> road plane
+        q = V.on_plane_z(u * k, v * k, zg); return r2([q[0], q[1], max(zg, T(q[0], q[1]) + 0.08) + dz])
+    def ony(u, v, y): d = V.ray(u * k, v * k); return o + d * ((y - o[1]) / d[1])
+    # --- the Edison: north face (y 602, x 1939 -> 1964) and east face (x 1964, y 602 -> 579), outward offsets 0.12 m
+    Z0, ZA, ZC, ZT = 3.3, 6.5, 6.95, 26.5
+    YEL, WHT, ARCH, WIN, TRIM = '#d6ad45', '#e9e6df', '#2a2320', '#2c3540', '#f4f2ec'
+    faces = (((1964.0, 602.12), (1939.0, 602.12), np.array([0.0, 1.0])),     # north, from the NE corner going west
+             ((1964.12, 602.0), (1964.12, 579.0), np.array([1.0, 0.0])))     # east, from the NE corner going south
+    for (a, b, nrm) in faces:
+        a, b = np.array(a), np.array(b); L = float(np.linalg.norm(b - a)); t = (b - a) / L
+        P_ = lambda s, z, off=0.0: r2([*(a + t * s + nrm * off), z])
+        P.append(dict(k='quad', p=[P_(0, Z0), P_(L, Z0), P_(L, ZA), P_(0, ZA)], color=YEL, e=0.3))            # arcade band
+        P.append(dict(k='quad', p=[P_(0, ZC), P_(L, ZC), P_(L, ZT), P_(0, ZT)], color=WHT, e=0.3))            # upper floors
+        c = a + t * L / 2 + nrm * 0.2; az = float(np.degrees(np.arctan2(t[0], t[1])))
+        P.append(dict(k='box', c=r2([c[0], c[1], ZA]), s=[L + 0.5, 0.45, ZC - ZA], az=az, color=TRIM, e=0.3))   # cornice
+        P.append(dict(k='box', c=r2([c[0], c[1], ZT - 0.3]), s=[L + 0.4, 0.4, 0.5], az=az, color=TRIM, e=0.3))  # roof parapet
+        nb = int(L // 3.3)
+        for i in range(nb):                                                   # arches
+            sc = (i + 0.5) * L / nb; hw = 1.1; zs = ZA - 1.2
+            pts = [P_(sc - hw, Z0, 0.03), P_(sc + hw, Z0, 0.03), P_(sc + hw, zs, 0.03)]
+            for kk in range(1, 8):
+                ang = math.pi * kk / 8; pts.append(P_(sc + hw * math.cos(ang), zs + hw * 0.95 * math.sin(ang), 0.03))
+            pts.append(P_(sc - hw, zs, 0.03)); cc = P_(sc, (Z0 + zs) / 2, 0.03)
+            for q0, q1 in zip(pts, pts[1:] + pts[:1]): P.append(dict(k='quad', p=[cc, q0, q1, q1], color=ARCH, e=0.08))
+            for zz in np.arange(ZC + 0.9, ZT - 1.5, 3.2):                     # paired windows of the bay
+                for dx in (-0.65, 0.65):
+                    x0 = sc + dx - 0.42; x1 = sc + dx + 0.42
+                    P.append(dict(k='quad', p=[P_(x0, zz, 0.03), P_(x1, zz, 0.03), P_(x1, zz + 1.55, 0.03), P_(x0, zz + 1.55, 0.03)], color=WIN, e=0.12))
+                    P.append(dict(k='quad', p=[P_(x0 - 0.08, zz - 0.12, 0.02), P_(x1 + 0.08, zz - 0.12, 0.02), P_(x1 + 0.08, zz, 0.02), P_(x0 - 0.08, zz, 0.02)], color=TRIM, e=0.3))
+        for s0 in np.linspace(0, L, nb + 1):                                  # arcade piers (slightly proud)
+            q = a + t * s0 + nrm * 0.12
+            P.append(dict(k='box', c=r2([q[0], q[1], Z0]), s=[0.55, 0.3, ZA - Z0], az=az, color='#e0bb55', e=0.3))
+    # --- palms of the Grape St sidewalk (bases on y 605.5 under their trunks), street furniture
+    for u, y, h in ((640, 605.5, 13.0), (800, 605.5, 12.0), (1105, 605.5, 13.5), (1300, 605.5, 12.5), (1340, 605.8, 11.5),
+                    (1600, 606.0, 12.0), (1700, 606.0, 13.0), (1770, 606.0, 12.5), (1850, 606.0, 13.5)):
+        q = ony(u, 430, y); P.append(dict(k='palm', a=r2([q[0], q[1], Z0]), h=h, lean_az=200.0, lean=0.05))
+    b = G(950, 470); P.append(dict(k='cyl', a=r2([b[0], b[1], b[2]]), b=r2([b[0], b[1], b[2] + 3.4]), r=0.07, color='#3a3d3f'))   # ped signal pole
+    P.append(dict(k='box', c=r2([b[0], b[1], b[2] + 2.6]), s=[0.35, 0.35, 0.45], az=0.0, color='#2a2c2e'))
+    P.append(dict(k='glow', pts=[r2([b[0] + 0.2, b[1] + 0.12, b[2] + 2.85])], r=0.08, color='#ff4a2a', i=2.2, ball=True))
+    P.append(dict(k='cyl', a=r2([b[0] - 0.3, b[1], b[2]]), b=r2([b[0] - 0.3, b[1], b[2] + 8.5]), r=0.1, color='#5a5e60'))  # street light
+    P.append(dict(k='cyl', a=r2([b[0] - 0.3, b[1], b[2] + 8.5]), b=r2([b[0] + 1.6, b[1] + 1.2, b[2] + 8.7]), r=0.07, color='#5a5e60'))
+    s_ = G(1560, 545); P.append(dict(k='cyl', a=r2(s_), b=r2([s_[0], s_[1], s_[2] + 3.6]), r=0.05, color='#7a7e80'))     # crossing sign
+    d = V.ray(1560 * k, 480 * k); sd = np.array([d[1], -d[0], 0.0]); sd = sd / np.linalg.norm(sd)
+    top = np.array([s_[0], s_[1], s_[2] + 3.05]); hw = 0.38
+    P.append(dict(k='quad', p=[r2(top + [0, 0, hw]), r2(top + sd * hw), r2(top - [0, 0, hw]), r2(top - sd * hw)], color='#e8c21f', e=0.4))
+    P.append(dict(k='quad', p=[r2(top + sd * 0.22 - [0, 0, 0.55]), r2(top - sd * 0.22 - [0, 0, 0.55]), r2(top - sd * 0.22 - [0, 0, 0.85]), r2(top + sd * 0.22 - [0, 0, 0.85])], color='#e8c21f', e=0.4))
+    w0, w1 = G(1590, 550), G(1920, 552)                                       # white wall (right)
+    P.append(dict(k='quad', p=[r2(w0), r2(w1), r2([w1[0], w1[1], w1[2] + 0.5]), r2([w0[0], w0[1], w0[2] + 0.5])], color='#eceae4', e=0.3))
+    # (no hedge: Alexandre, « enlève ça »)
+    # --- ground: asphalt, crosswalk, yellow centre line, pink near sidewalk with its curb, trash can
+    for v0, v1 in ((960, 650), (650, 540), (540, 480), (480, 452)):
+        P.append(dict(k='quad', p=[G(-200, v0), G(2120, v0), G(2120, v1), G(-200, v1)], color='#5d5c60', e=0.2))
+    for i in range(9):
+        u0 = 330 + i * 58
+        P.append(dict(k='quad', p=[G(u0, 540, 0.03), G(u0 + 32, 540, 0.03), G(u0 + 24, 455, 0.03), G(u0 - 4, 455, 0.03)], color='#d8d8d2'))
+    for (u0, v0), (u1, v1) in (((1150, 598), (1520, 612)), ((1520, 612), (1920, 640))):
+        P.append(dict(k='quad', p=[G(u0, v0 - 3, 0.03), G(u1, v1 - 3, 0.03), G(u1, v1 + 3, 0.03), G(u0, v0 + 3, 0.03)], color='#d4a72c'))
+    curb = [(-200, 590), (330, 560), (560, 650), (820, 770), (1100, 960), (1200, 1060)]
+    P.append(dict(k='quad', p=[G(-200, 1060, 0.15), G(-200, 590, 0.15), G(330, 560, 0.15), G(560, 650, 0.15)], color='#8b7174'))
+    P.append(dict(k='quad', p=[G(-200, 1060, 0.15), G(560, 650, 0.15), G(820, 770, 0.15), G(1200, 1060, 0.15)], color='#8b7174'))
+    for (u0, v0), (u1, v1) in zip(curb, curb[1:]):
+        P.append(dict(k='quad', p=[G(u0, v0, 0.0), G(u1, v1, 0.0), G(u1, v1, 0.15), G(u0, v0, 0.15)], color='#a99a92'))
+    tc = G(205, 725, 0.15)                                                    # green trash can (frame u 90-320, v 300-690)
+    P.append(dict(k='cyl', a=r2(tc), b=r2([tc[0], tc[1], tc[2] + 0.82]), r=0.25, color='#1f4a32'))
+    P.append(dict(k='cyl', a=r2([tc[0], tc[1], tc[2] + 0.8]), b=r2([tc[0], tc[1], tc[2] + 0.87]), r=0.27, color='#173826'))
     return dict(scene='T4/25 Green Sports Car (Edison Hotel, Grape St)', camera='Green Sports Car on Ocean Drive', note=green_car_edison.__doc__.split('\n')[0], props=P,
                 clear=[[[1945, 598], [1985, 598], [1985, 625], [1945, 625]]],   # V16 boxes between the camera and the Edison (Grape St; #1422 = the V16 Edison box)
-                nolamp=[[[1915, 596], [1985, 596], [1985, 630], [1915, 630]]])
+                nolamp=[[[1915, 596], [1985, 596], [1985, 630], [1915, 630]]],
+                roadclear=[[[1915, 588], [1992, 588], [1992, 640], [1915, 640]]])   # the V16 ribbons (0.34 m up) covered this scene's crosswalk and sidewalk
 
 
 def bike_viaduct():
