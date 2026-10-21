@@ -16,7 +16,8 @@ Primitives (tools/threejs/scene_props.json, drawn by view3d [SCENE-PROPS-V1]):
 A scene may also list 'bare_roof' (mesh names whose top gets no generic roof units / parapet in view3d), 'replace': mesh names whose wireframe view3d no longer draws (rebuilt here as solids), and 'clear' polygons [[x,y]...]: view3d does not extrude the V16 massing footprints whose centroid falls
 inside (e.g. V16 boxes that land on a modelled road), and 'nolamp' polygons: no generic view3d streetlight inside (where a
 SOLVED frame shows none), and 'roadclear' polygons: the V16 road ribbons / markings are not drawn inside (where a scene rebuilt
-its own roadway, e.g. the T4/34 Bayside Dr divided deck).
+its own roadway, e.g. the T4/34 Bayside Dr divided deck), and 'cut_solids' {mesh: z}: while the tour shows that scene's camera,
+the solid is cut down to z (a tower still under construction in that frame, e.g. Asia Brickell Key in T4/36).
 Usage: python3 tools/scene_props.py            (writes tools/threejs/scene_props.json and the _prop_*.png textures)
 """
 import json, math, os, sys
@@ -526,7 +527,7 @@ def skyline_night():
     return dict(scene='T4/7 Skyline at Night', camera='Skyline at Night', note=skyline_night.__doc__.split('\n')[0], props=P, clear=clear)
 
 
-AVI_SKIP = ('Stephen P. Clark Government Center',)
+AVI_SKIP = ('Stephen P. Clark Government Center', 'Asia Brickell Key')   # Asia: a construction site (T4/36), its lights are on the cranes
 
 
 def aviation_lights():
@@ -1336,6 +1337,61 @@ def bayside_bridge():
     return dict(scene='T4/34 Explosion on the Highway (Bayside Dr bridge)', camera='Explosion on the Highway', note=bayside_bridge.__doc__.split('\n')[0], props=P, roadclear=roadclear)
 
 
+def _lattice_mast(P, x, y, z0, z1, w, col='#3b302c', az=0.0):
+    """tower-crane mast: 4 chords, a tie ring every 4 m, X bracing (lines)."""
+    a = math.radians(az); ex, ey = np.array([math.cos(a), -math.sin(a)]) * w / 2, np.array([math.sin(a), math.cos(a)]) * w / 2
+    C = [np.array([x, y]) + sx * ex + sy * ey for sx, sy in ((-1, -1), (1, -1), (1, 1), (-1, 1))]
+    r2 = lambda v: [round(float(t), 2) for t in v]
+    for c in C: P.append(dict(k='cyl', a=r2([c[0], c[1], z0]), b=r2([c[0], c[1], z1]), r=0.16, color=col))
+    z = z0
+    while z < z1 - 0.1:
+        zb = min(z + 4.0, z1)
+        P.append(dict(k='line', pts=[r2([*C[i % 4], z]) for i in range(5)], color=col))
+        for i in range(4):
+            P.append(dict(k='line', pts=[r2([*C[i], z]), r2([*C[(i + 1) % 4], zb])], color=col))
+            P.append(dict(k='line', pts=[r2([*C[(i + 1) % 4], z]), r2([*C[i], zb])], color=col))
+        z = zb
+
+
+def pegassi_terrace():
+    """T4/36 Lucia on the Rooftop at Sunset — a terrace of 3 Tequesta Point (our 'Pegassi Towers', Alexandre) at 179.3 m, looking
+    WNW over Brickell (pose fitted on the Southeast Financial Center, the Asia crane CC2 and the skyline, cameras.json
+    PEGASSI-TERRACE-V1). Asia Brickell Key is still a construction site below the terrace in this frame: the tour cuts its solid at
+    150 m for this scene (cut_solids) and its two tower cranes are built (right = landmark CC2, top 224.5, 4 m mast with the blue LED
+    strip of the frame on its face; left = back-projected on the site at u 283, ~110 m, top 213.5). The curved terrace edge and glass
+    railing are back-projected from the frame (rail top / floor edge rows), the planters on the left. Lucia is not modelled. ESTIMATED."""
+    V = View('Lucia on the Rooftop at Sunset'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]; k = 1.92
+    ZF = float(V.o[2]) - 1.6
+    # terrace edge: rail-top / floor-edge pixels back-projected, smoothed by a quadratic y(x)
+    pts = [V.on_plane_z(u * k, v * k, ZF + 1.1)[:2] for u, v in ((0, 505), (460, 515), (900, 545), (1370, 592), (1700, 640), (2000, 700))]
+    pts += [V.on_plane_z(u * k, v * k, ZF)[:2] for u, v in ((0, 690), (300, 705), (600, 735), (870, 760))]
+    pts = np.array(pts); cf = np.polyfit(pts[:, 0], pts[:, 1], 2)
+    XS = np.linspace(-48.0, -16.0, 24); EDGE = np.c_[XS, np.polyval(cf, XS)]
+    floor = [r2(q) for q in EDGE] + [[-16.0, -918.0], [-48.0, -918.0]]
+    P.append(dict(k='prism', poly=floor, z0=round(ZF - 0.45, 2), z1=round(ZF, 2), color='#5e4f4e', e=0.18))   # polished stone slab
+    for i in range(len(EDGE) - 1):                                                                        # glass railing: rails + posts
+        a, b = EDGE[i], EDGE[i + 1]
+        P.append(dict(k='cyl', a=r2([*a, ZF + 1.1]), b=r2([*b, ZF + 1.1]), r=0.035, color='#c9c2bb'))
+        P.append(dict(k='cyl', a=r2([*a, ZF + 0.08]), b=r2([*b, ZF + 0.08]), r=0.03, color='#8f8984'))
+        P.append(dict(k='cyl', a=r2([*a, ZF]), b=r2([*a, ZF + 1.1]), r=0.025, color='#8f8984'))
+        P.append(dict(k='line', pts=[r2([*a, ZF + 1.05]), r2([*b, ZF + 1.05])], color='#e9d8d0', opacity=0.5))
+    for (u, v), rr in (((25, 420), 0.16), ((60, 600), 0.2), ((110, 780), 0.24), ((30, 880), 0.22), ((150, 920), 0.2)):   # planter leaves, left edge
+        d = V.ray(u * k, v * k); q = V.o + d / np.linalg.norm(d) * 2.4
+        P.append(dict(k='blob', c=r2(q), r=[rr * 1.4, rr, rr * 0.8], color='#22301c'))
+    # the two tower cranes of the Asia Brickell Key site
+    d = V.ray(283 * 2, 300 * 2); d = d / np.linalg.norm(d[:2]); L = V.o[:2] + d[:2] * 110.0
+    for (x, y), top, w, led in (((-144.6, -855.8), 224.5, 4.0, True), ((float(L[0]), float(L[1])), 213.5, 3.2, False)):
+        _lattice_mast(P, x, y, 4.4, top, w, az=24.0)
+        P.append(dict(k='box', c=[x, y, top], s=[w + 0.6, w + 0.6, 3.0], az=24.0, color='#4a3c36'))      # slewing unit + cab
+        jb = np.array([math.sin(math.radians(60)), math.cos(math.radians(60))])
+        P.append(dict(k='cyl', a=r2([x - jb[0] * 18, y - jb[1] * 18, top + 3.5]), b=r2([x + jb[0] * 55, y + jb[1] * 55, top + 3.5]), r=0.6, color='#3b302c'))
+        if led:                                                                                                   # blue LED strip facing the camera
+            t = V.o[:2] - np.array([x, y]); t = t / np.linalg.norm(t)
+            P.append(dict(k='glow', pts=[r2([x + t[0] * (w / 2 + 0.2), y + t[1] * (w / 2 + 0.2), 164.5]), r2([x + t[0] * (w / 2 + 0.2), y + t[1] * (w / 2 + 0.2), 196.0])], r=0.18, color='#4a54ff', i=3.0))
+    return dict(scene='T4/36 Lucia on the Rooftop at Sunset (Pegassi Towers terrace)', camera='Lucia on the Rooftop at Sunset', note=pegassi_terrace.__doc__.split('\n')[0],
+                props=P, cut_solids={'Asia Brickell Key': 150.0}, bare_roof=['Asia Brickell Key'])
+
+
 def _obox(c, f, r, u, L, W, H, color):
     """oriented box (any attitude) as 6 quads: centre c, unit axes f / r / u, sizes L / W / H along them."""
     c, f, r, u = (np.asarray(a, float) for a in (c, f, r, u))
@@ -1494,7 +1550,7 @@ def portofino_detail():
     return dict(scene='Portofino Tower detail', camera='Biplane over the Beach', note=portofino_detail.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge]
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace]
 
 
 def main():

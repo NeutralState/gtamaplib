@@ -3375,6 +3375,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
     i++; if (i >= list.length) { if (window.__tourLoop && !window.__tourLoop()) { stop(); return; } i = 0; }
     if (i < 0) i = list.length - 1;
     const c = list[i]; if (window.__tourMark) window.__tourMark(c.name);
+    if (window.__cutSolids) window.__cutSolids(cutMap[c.name] || null);   // [CUT-SOLIDS-V1] per-scene building state (e.g. a tower still under construction)
     // [TOUR-SUN-V1] lumiere de la scene (tools/threejs/tour_styles.json "sun": [az, el, haze]): interpolee pendant le vol
     sunFrom = sunTo = null;
     { const gr = gradeMap[c.name]; if (window.__setGrade) window.__setGrade(gr && gr.slice(0, 3), gr ? gr[3] : 0, gr && gr.length > 4 ? gr.slice(4, 7) : null); }
@@ -3393,12 +3394,31 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
   }
   let srcMap = null;
   let fullFrame = new Set();
-  let sunMap = {}, sunFrom = null, sunTo = null, gradeMap = {};
+  let sunMap = {}, sunFrom = null, sunTo = null, gradeMap = {}, cutMap = {};
+  // [CUT-SOLIDS-V1 2026-10-21] scene_props 'cut_solids' {mesh name: z}: while the tour shows that scene's camera, the solid's
+  // vertices above z are pulled down to z (render and shadow): T4/36 shows Asia Brickell Key still under construction below the
+  // eye of the Pegassi terrace, the other cameras keep the measured 182 m structure
+  let cutSaved = null;
+  window.__cutSolids = cut => {
+    const S = window.__solids; if (!S) return;
+    const pa = S.mesh.geometry.attributes.position, A = pa.array;
+    if (cutSaved) { for (const [k, z] of cutSaved) A[k] = z; cutSaved = null; pa.needsUpdate = true; }
+    if (cut) {
+      cutSaved = []; const ia = S.mesh.geometry.attributes.aId.array;
+      for (const [name, zc] of Object.entries(cut)) {
+        const id = S.names.findIndex(e => (e && e.name) === name); if (id < 0) continue;
+        for (let v = 0; v < ia.length; v++) if (ia[v] === id && A[3 * v + 2] > zc) { cutSaved.push([3 * v + 2, A[3 * v + 2]]); A[3 * v + 2] = zc; }
+      }
+      pa.needsUpdate = true;
+    }
+    S.mesh.geometry.computeBoundingSphere(); renderer.shadowMap.needsUpdate = true; if (window.__bakeShadows) window.__bakeShadows();
+  };
   const setSun = (v, bake) => { const keep = window.__bakeShadows; if (!bake) window.__bakeShadows = null;
     [['env-az', v[0]], ['env-el', v[1]], ['env-haze', v[2]]].forEach(([id, x]) => { const e = document.getElementById(id); e.value = Math.round(x); e.dispatchEvent(new Event('input')); });
     window.__bakeShadows = keep; if (bake && keep) keep(); };                                            // [TOUR-STYLE-V1] close-ups: frame fully opaque (tools/threejs/tour_styles.json)
   async function start() {
     try { const j = await (await fetch('/threejs/tour_styles.json', { cache: 'no-store' })).json(); fullFrame = new Set(j.fullframe || []); sunMap = j.sun || {}; gradeMap = j.grade || {}; } catch (e) {}
+    try { cutMap = {}; for (const sc of (await (await fetch('/threejs/scene_props.json', { cache: 'no-store' })).json()).scenes || []) if (sc.cut_solids && sc.camera) cutMap[sc.camera] = sc.cut_solids; } catch (e) {}
     if (!srcMap) { try { const d = await (await fetch('/api/map_data')).json(); srcMap = {}; for (const c of d.cameras || []) srcMap[c.name] = c.source || ''; } catch (e) { srcMap = {}; } }
     const okc = c => c && c.corners && c.xyz && c.xyz[2] < 1500;
     const pl = (window.__tourList ? window.__tourList() : []).map(n => camPickRefs.find(c => c.name === n)).filter(okc);   // [TOUR-PICK-V3] ordre de la playlist
@@ -3420,6 +3440,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
     if (!window.__tourOn) return;
     window.__tourOn = false; phase = null; btn.classList.remove('on');
     if (window.__setGrade) window.__setGrade(null, 0);
+    if (window.__cutSolids) window.__cutSolids(null);
     img.style.opacity = '0'; cap.style.opacity = '0';
     setTimeout(() => { if (!window.__tourOn) { img.style.display = 'none'; cap.style.display = 'none'; } }, 900);
     layers.cams.visible = camsWas; layers.lms.visible = lmsWas;
