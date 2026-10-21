@@ -1115,7 +1115,37 @@ def rooftop_explosion():
                 nolamp=[[[-930, 40], [-830, 40], [-830, 100], [-930, 100]]], bare_roof=['Stephen P. Clark Government Center'])
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion]
+def beach_biplane():
+    """T4/30 Biplane over the Beach — South Beach seen from ~32 m up, looking S (pose SOLVED). Beach furniture back-projected on the
+    sand from the frame (half-res pixel lists x2): rows of blue-white umbrellas on the right, red-white umbrellas mid-beach, the
+    lifeguard tower (yellow roof) and the pink-roof kiosk. Sizes ESTIMATED (umbrella 2.4 m, tower 4.5 m)."""
+    V = View('Biplane over the Beach'); o = V.o; P = []; r2 = lambda a: [round(float(v), 2) for v in a]
+    def sand(u, v):
+        g = T(o[0], o[1])
+        for _ in range(4):
+            q = V.on_plane_z(u, v, g); g = max(T(q[0], q[1]), 0.6)
+        return q
+    BLUE = [(1270, 655), (1330, 645), (1390, 660), (1470, 645), (1550, 690), (1520, 740), (1610, 720), (1660, 690), (1720, 720), (1780, 650),
+            (1840, 660), (1870, 735), (1880, 775), (1640, 795), (1550, 760), (1480, 735), (1260, 715), (1330, 685), (1600, 625), (1820, 750),
+            (1700, 760), (1760, 780), (1420, 700), (1500, 680)]
+    RED = [(830, 520), (870, 540), (900, 530), (940, 550), (980, 535), (1000, 560), (860, 560), (1110, 525), (1150, 540), (1220, 540)]
+    for pts, col in ((BLUE, '#d8e1e6'), (RED, '#d9585a')):
+        for i, (uh, vh) in enumerate(pts):
+            q = sand(2 * uh, 2 * vh + 14)                                  # the pole foot is a little below the canopy centre
+            P.append(dict(k='cyl', a=r2(q), b=r2([q[0], q[1], q[2] + 2.3]), r=0.04, color='#e8e8e2'))
+            c2 = col if (col != '#d8e1e6' or i % 2) else '#3d6f8f'
+            P.append(dict(k='blob', c=r2([q[0], q[1], q[2] + 2.25]), r=[1.2, 1.2, 0.35], color=c2))
+    # lifeguard tower (yellow roof) and the pink-roof kiosk
+    for (uh, vh), roof, body in (((1060, 600), '#e9c84a', '#6c8ea8'), ((1298, 548), '#e88fa0', '#f2efe8')):
+        q = sand(2 * uh, 2 * vh)
+        for dx, dy in ((-1.1, -1.1), (1.1, -1.1), (1.1, 1.1), (-1.1, 1.1)):
+            P.append(dict(k='cyl', a=r2([q[0] + dx, q[1] + dy, q[2]]), b=r2([q[0] + dx, q[1] + dy, q[2] + 2.2]), r=0.09, color='#9aa3a8'))
+        P.append(dict(k='box', c=r2([q[0], q[1], q[2] + 2.2]), s=[3.0, 3.0, 2.2], az=0.0, color=body))
+        P.append(dict(k='box', c=r2([q[0], q[1], q[2] + 4.4]), s=[3.6, 3.6, 0.35], az=0.0, color=roof))
+    return dict(scene='T4/30 Biplane over the Beach (South Beach)', camera='Biplane over the Beach', note=beach_biplane.__doc__.split('\n')[0], props=P)
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane]
 
 
 def main():
