@@ -4096,8 +4096,13 @@ window.__camScreen = name => {
     const AIRSIDE = [[-3720, -140], [-2020, -140], [-2020, -1560], [-2230, -1560], [-3720, -610]];
     const inAir = (x, y) => { let c = false; for (let i = 0, j = AIRSIDE.length - 1; i < AIRSIDE.length; j = i++) { const [xi, yi] = AIRSIDE[i], [xj, yj] = AIRSIDE[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; };
     const airside = p => { let k = 0, m = 0; for (let i = 0; i < p.length; i += Math.max(1, Math.floor(p.length / 10))) { m++; if (inAir(p[i][0], p[i][1])) k++; } return k > m / 2; };
-    for (const k of ['hwy', 'road', 'small']) for (const r of R[k] || []) {
-      const p = r.p, n = p.length; if (n < 2 || airside(p)) continue; const c = CL[k];
+    // [TRAFFIC-HIDE 2026-10-21] no traffic on the hidden ranges (r.hide: carried by a viaduct mesh's own roadway, or a scene's
+    // roadclear): the cars drove there in the void beside the US 1 Hamlet Viaduct of T4/09 Iguana (Alexandre)
+    const parts = r => { if (!r.hide) return [r.p]; const out = []; let a = 0;
+      for (const [i0, i1] of r.hide) { if (i0 - a >= 2) out.push(r.p.slice(a, i0)); a = i1 + 1; }
+      if (r.p.length - a >= 2) out.push(r.p.slice(a)); return out; };
+    for (const k of ['hwy', 'road', 'small']) for (const r of R[k] || []) for (const p of parts(r)) {
+      const n = p.length; if (n < 2 || airside(p)) continue; const c = CL[k];
       const X = new Float32Array(n), Y = new Float32Array(n), Z = new Float32Array(n), S = new Float32Array(n);
       let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
       for (let i = 0; i < n; i++) {
