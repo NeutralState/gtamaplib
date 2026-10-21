@@ -3384,6 +3384,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
     if (sunMap[c.name]) { const g = id => +document.getElementById(id).value; sunFrom = [g('env-az'), g('env-el'), g('env-haze')]; sunTo = sunMap[c.name]; }
     from = { pos: camera.position.clone(), quat: camera.quaternion.clone(), fov: camera.fov };
     to = poseOf(c);
+    window.__trafficClear = [to.pos.x, to.pos.y, 35];   // [TRAFFIC-CLEAR 2026-10-21] no car within 35 m of the scene's camera (Iguana: one stopped in front of the lens)
     const d = from.pos.distanceTo(to.pos);
     to.dur = Math.max(2.4, Math.min(6.0, 1.6 + d / 900));
     to.lift = Math.min(900, d * 0.28);
@@ -3443,6 +3444,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
     window.__tourOn = false; phase = null; btn.classList.remove('on');
     if (window.__setGrade) window.__setGrade(null, 0);
     if (window.__cutSolids) window.__cutSolids(null);
+    window.__trafficClear = null;
     if (window.__fogOverride) { window.__fogOverride = null; document.getElementById('env-haze').dispatchEvent(new Event('input')); }
     img.style.opacity = '0'; cap.style.opacity = '0';
     setTimeout(() => { if (!window.__tourOn) { img.style.display = 'none'; cap.style.display = 'none'; } }, 900);
@@ -3485,6 +3487,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
   });
   canvas.addEventListener('pointerdown', () => stop());
   window.__tour = { start, stop };
+  window.__tourState = () => ({ phase, t, i, name: list[i] ? list[i].name : null, n: list.length, full: list[i] ? fullFrame.has(list[i].name) : false });   // [REC-V1] read by the video recorder
   // [TOUR-PICK-V3 2026-10-07] playlist ordonnee (memorisee): glisser-deposer / fleches pour l'ordre, x pour retirer, clic = voir la cam;
   // liste filtree en dessous pour ajouter; vide -> le tour fait les cams resolues. Migre l'ancienne selection (ui.tourSel).
   {
@@ -4186,6 +4189,7 @@ window.__camScreen = name => {
       if (!on) return;
       const night = lights.visible ? terraUni.uNight.value : 0; let nl = 0;
       const cx = camera.position.x, cy = camera.position.y;
+      const TC = window.__trafficClear, TR2 = TC ? TC[2] * TC[2] : 0;   // [TRAFFIC-CLEAR] no car parked in front of a tour camera
       const Rv = Math.min(9000, Math.max(2500, 3 * camera.position.distanceTo(controls.target))), R2 = Rv * Rv;
       const MC = cars.instanceMatrix.array, MT = trucks.instanceMatrix.array, CC = cars.instanceColor.array, CT = trucks.instanceColor.array;
       let nc = 0, nt = 0;
@@ -4204,6 +4208,7 @@ window.__camScreen = name => {
         const d = da[i], ux = dx / seg * d, uy = dy / seg * d, off = (la[i] + 0.5) * p.laneW * 0.9;
         const px = p.X[k] + dx * t + uy * off, py = p.Y[k] + dy * t - ux * off, pz = p.Z[k] + dz * t;
         if ((px - cx) * (px - cx) + (py - cy) * (py - cy) > R2) continue;
+        if (TC && (px - TC[0]) * (px - TC[0]) + (py - TC[1]) * (py - TC[1]) < TR2) continue;
         const sp = dz * d / Math.hypot(seg, dz), cp = Math.sqrt(1 - sp * sp);
         const truck = ty[i], M = truck ? MT : MC, o = (truck ? nt : nc) * 16;
         M[o] = ux * cp; M[o + 1] = uy * cp; M[o + 2] = sp; M[o + 3] = 0;
@@ -5450,13 +5455,20 @@ let orbitOn = false, _orbitPrevT = 0;
   });
 }
 const _orbitAxis = new THREE.Vector3(0, 0, 1);
+// [REC-V1 2026-10-21] video recorder: while window.__rec is set the animation loop stands still and the recorder drives
+// frameStep(dt, t) itself with a fixed step and a simulated clock (smooth 60 fps whatever the render time), then grabs the frame
 renderer.setAnimationLoop(() => {
-  sizeGuard();                                  // [POV-V4] auto-reparation de taille
-  if (flyAnim) flyAnim();                       // [VIEW3D-SYNC] vol vers la cam
-  sky.position.copy(camera.position);           // [BEAUTY-V1] le dome suit la camera
+  if (window.__rec) return;
   const _tSec = performance.now() / 1000;
   const _dt = Math.min(0.1, _tSec - _orbitPrevT);
   _orbitPrevT = _tSec;
+  frameStep(_dt, _tSec, true);
+});
+window.__recFrame = (dt, tSec) => frameStep(dt, tSec, false);
+function frameStep(_dt, _tSec, draw) {
+  sizeGuard();                                  // [POV-V4] auto-reparation de taille
+  if (flyAnim) flyAnim();                       // [VIEW3D-SYNC] vol vers la cam
+  sky.position.copy(camera.position);           // [BEAUTY-V1] le dome suit la camera
   if (orbitOn && !povPrev) {                    // [ORBIT-V1] ~70 s par tour
     const off = camera.position.clone().sub(controls.target);
     off.applyAxisAngle(_orbitAxis, _dt * 0.09);
@@ -5476,9 +5488,10 @@ renderer.setAnimationLoop(() => {
   if (window.__trafficStep) window.__trafficStep(_dt);   // [TRAFFIC-V1]
   if (window.__structTick) window.__structTick(_dt);     // [STRUCTS-V1]
   tiledCull();                                    // [PERF-V1] coupure en distance des instances par tuiles
+  if (!draw) return;                              // [REC-V1] the recorder renders through __grabFrame
   Refl.step();                                    // [REFLECT-V1]
   Cine.render();                                  // [CINEMA-V1]
-});
+}
 </script>
 </body>
 </html>
