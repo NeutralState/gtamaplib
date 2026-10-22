@@ -606,9 +606,14 @@ def ferris_marina():
     # big tree (u 1750..2350, crown top v 760)
     D = shore(2050) + 25; b = at(2050, 1250, D); g = max(T(b[0], b[1]), 1.0); H = top(2050, D, 760) - g
     P.append(dict(k='cyl', a=r2([b[0], b[1], g]), b=r2([b[0], b[1], g + H * 0.45]), r=0.9, color='#2b1c22'))
-    for k in range(26):
-        uu = 1760 + 580 * rng.random(); vv = 780 + 320 * rng.random(); q = at(uu, vv, D + rng.normal(0, 4))
-        P.append(dict(k='blob', c=r2(q), r=[round(rng.uniform(2.2, 3.8), 1)] * 2 + [round(rng.uniform(1.8, 3.0), 1)], color=DARK[int(rng.integers(4))]))
+    rt = np.random.default_rng(11)                                          # leafy crown: many small clumps (big facetted blobs read as rocks)
+    for k in range(72):
+        ang = rt.uniform(0, 2 * math.pi); rr = math.sqrt(rt.random())
+        uu = 2050 + 300 * rr * math.cos(ang); vv = 930 + 165 * rr * math.sin(ang) - 30 * (1 - rr); q = at(uu, vv, D + rt.normal(0, 4))
+        R0 = rt.uniform(1.0, 2.1); P.append(dict(k='blob', c=r2(q), r=[round(R0, 2), round(R0 * rt.uniform(0.8, 1.1), 2), round(R0 * rt.uniform(0.6, 0.85), 2)], color=DARK[int(rt.integers(4))]))
+    for ang in np.linspace(0.3, 2.84, 5):                                   # main limbs
+        tip = at(2050 + 230 * math.cos(ang), 1000 - 140 * math.sin(ang), D)
+        P.append(dict(k='cyl', a=r2([b[0], b[1], g + H * 0.42]), b=r2(tip), r=0.35, color='#2b1c22'))
     # steel boat-lift frame (u 760..1290, top v 1040)
     D = shore(1025) + 2; g = 1.2; Hf = top(1025, D, 1040) - g; cols = np.linspace(760, 1290, 7)
     A = [at(u, 1250, D) for u in cols]
