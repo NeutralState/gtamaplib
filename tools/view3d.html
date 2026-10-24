@@ -682,6 +682,7 @@ const seaUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uSurge:    { value: 0 },      // [HURRICANE-V1] storm surge (m above the sea); the sea plane is raised by it
   uArr:      { value: null },   // [HURRICANE-V1] arrival map (tools/hurricane_surge.py): level at which the sea reaches each heightmap cell
   uArrOn:    { value: 0 },
+  uStorm:    { value: 0 },      // [HURRICANE-V1] 0..1: dark grey-green churned sea, bigger waves, whitecaps
   uHmGeo:    { value: new THREE.Vector4(0.083188297, 1108.532, 938.091, 0) },   // heightmap: SC, ZX, ZY (u = ZX + x SC, v = ZY - y SC)
   uHmSize:   { value: new THREE.Vector2(1536, 1748) },
   uSunDir:   { value: new THREE.Vector3(0, 0, 1) },
@@ -1492,7 +1493,7 @@ const data = await (await fetch('/api/scene3d')).json();
         uniform sampler2D uWaterTex; uniform vec4 uWaterBounds; uniform vec3 uWaterMed;
         uniform vec4 uTerrBounds;
         uniform sampler2D uDepth, uDrape, uRefl;
-        uniform float uSurge, uArrOn; uniform sampler2D uArr; uniform vec4 uHmGeo; uniform vec2 uHmSize;
+        uniform float uSurge, uArrOn, uStorm; uniform sampler2D uArr; uniform vec4 uHmGeo; uniform vec2 uHmSize;
         uniform mat4 uReflMat;
         #include <common>
         #include <logdepthbuf_pars_fragment>
@@ -1543,6 +1544,7 @@ const data = await (await fetch('/api/scene3d')).json();
           gwave += vec2(sin(pw.x * 0.030 + t * 0.9) * 0.030, sin(pw.y * 0.041 + t * 0.7) * 0.041);
           gwave += vec2(cos((pw.x + pw.y) * 0.019 + t * 1.25)) * 0.019 * 0.7;
           gwave += vec2(sin(pw.x * 0.110 - t * 1.8) * 0.110, sin(pw.y * 0.089 + t * 2.1) * 0.089) * 0.22 * att;
+          gwave *= 1.0 + 2.2 * uStorm;                          // [HURRICANE-V1] storm swell
           vec3 n = normalize(vec3(-gwave * 7.0 * att, 1.0));
           vec3 V = normalize(cameraPosition - vPos);
           float fres = pow(1.0 - max(dot(n, V), 0.0), 3.0);
@@ -1615,6 +1617,12 @@ const data = await (await fetch('/api/scene3d')).json();
           col = mix(col, rcol, reflK * (1.0 - foam * 0.8));   // [REFLECT-V1] apres teintes de fond et nuit (le reflet porte deja sa lumiere)
           if (uReflDbg > 0.5) col = rcol;
           col *= uSeaTint;                           // [TOUR-GRADE-V1]
+          if (uStorm > 0.0) {                         // [HURRICANE-V1] storm sea: dark grey-green, wind-blown whitecaps
+            col = mix(col, srgb(vec3(0.20, 0.25, 0.25)) * (0.75 + 0.5 * fres) * mix(1.0, 0.35, uNight), 0.75 * uStorm);
+            vec2 ps = vec2(p.x * 0.55 + p.y * 0.84, p.y * 0.55 - p.x * 0.84);          // streaks stretched along the wind
+            float wc = smoothstep(0.74, 0.90, vn2(vec2(ps.x * 0.05, ps.y * 0.16) + vec2(t * 0.30, t * 0.10)) * 0.6 + vn2(vec2(ps.x * 0.17, ps.y * 0.5) - vec2(t * 0.45, 0.0)) * 0.4);
+            col = mix(col, vec3(0.78, 0.80, 0.80) * mix(1.0, 0.3, uNight), wc * 0.40 * uStorm * att);
+          }
           if (fl > 0.0) col = mix(col, srgb(vec3(0.33, 0.30, 0.24)) * mix(1.0, 0.4, uNight), 0.55 * smoothstep(0.0, 0.6, fl));   // [HURRICANE-V1] muddy flood water
           float aBase = mix((0.62 + 0.30 * fres) * mix(1.0, 0.55, shal), 0.97, uMapSea);
           float a = max(mix(aBase, 1.0, farBlend), foam * 0.85 * (1.0 - uMapSea));
@@ -2403,8 +2411,10 @@ if (meshVerts.length) {
         });
         solidsUni.uFrames.value = ftex; solidsUni.uOwners.value = otex;
         const pc = document.getElementById('ly-proj');
-        const setP = on => { solidsUni.uProjOn.value = on ? 1 : 0; pc.classList.toggle('on', on); try { localStorage.setItem('ui.proj3d.v2', on ? '1' : '0'); } catch (e) {} };
-        setP(localStorage.getItem('ui.proj3d.v2') === '1');   // off par defaut (Alexandre: « j'aime pas »); nouvelle cle: l'ancienne avait memorise « on »
+        const setP = on => { solidsUni.uProjOn.value = on ? 1 : 0; pc.classList.toggle('on', on); try { localStorage.setItem('ui.proj3d.v3', on ? '1' : '0'); } catch (e) {} };
+        setP(localStorage.getItem('ui.proj3d.v3') === '1');   // off par defaut (Alexandre: « j'aime pas »); [PROJ-OFF 2026-10-24] new key again: a browser kept
+        // « on » under v2 and painted a trailer frame on the Four Seasons (Alexandre: « enleve la structure weird sur le Four Seasons »)
+        window.__projOff = () => setP(false);
         pc.addEventListener('click', () => setP(!solidsUni.uProjOn.value));
         window.__proj = { meta: PM, ftex, otex };
       } catch (e) { console.warn('[FACADE-PROJ] textures', e); }
@@ -5475,7 +5485,7 @@ let orbitOn = false, _orbitPrevT = 0;
 }
 const _orbitAxis = new THREE.Vector3(0, 0, 1);
 // ── [HURRICANE-V1 2026-10-24] « What if a hurricane hit GTA 6 »: storm surge on the game terrain + storm atmosphere ──
-// window.__hurricane({surge: m, rain: 0..1, wind: deg (toward), lightning: 0..1}) — surge raises the sea plane, the sea shader only
+// window.__hurricane({surge: m, storm: 0..1, rain: 0..1, wind: deg (toward), lightning: 0..1}) — surge raises the sea plane, the sea shader only
 // floods the cells the sea really reaches (tools/hurricane_surge.py arrival map); rain = streaks in a box around the camera,
 // slanted by the wind; lightning = brief sky-light flashes. __hurricane(null) restores everything. Visual layer only.
 (() => {
@@ -5497,14 +5507,22 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
   window.__hurricane = async o => {
     state = o;
     if (!o) {
-      seaUni.uSurge.value = 0; if (window.__sea) window.__sea.position.z = 0;
+      seaUni.uSurge.value = 0; seaUni.uStorm.value = 0; if (window.__sea) window.__sea.position.z = 0;
       if (rain) rain.visible = false; if (window.__hemi && hemiBase !== null) window.__hemi.intensity = hemiBase; return 'off';
     }
     if ((o.surge || 0) > 0) await loadArr();
-    seaUni.uSurge.value = o.surge || 0; if (window.__sea) window.__sea.position.z = o.surge || 0;
+    seaUni.uSurge.value = o.surge || 0; if (window.__sea) window.__sea.position.z = o.surge || 0; seaUni.uStorm.value = o.storm ?? 0;
     if ((o.rain || 0) > 0 && !rain) makeRain();
     if (rain) { rain.visible = (o.rain || 0) > 0; rain.material.opacity = 0.12 + 0.33 * (o.rain || 0); }
     return 'on';
+  };
+  // free camera for the hurricane shots: position / target in world metres, vertical fov in degrees
+  window.__camSet = (p, t, fov = 50) => {
+    if (window.__tourOn) window.__tour.stop();
+    layers.cams.visible = false; layers.lms.visible = false;            // survey markers are not scenery
+    camera.position.set(p[0], p[1], p[2]); controls.target.set(t[0], t[1], t[2]);
+    if (controls._desPos) controls._desPos.copy(camera.position); if (controls._desTgt) controls._desTgt.copy(controls.target);
+    camera.fov = fov; camera.near = 1; camera.up.set(0, 0, 1); camera.lookAt(controls.target); camera.updateProjectionMatrix(); return 'ok';
   };
   window.__hurricaneStep = dt => {
     if (!state) return;
