@@ -629,6 +629,10 @@ function skyColors() {
   zen = L(zen, [0.012, 0.020, 0.060], night);
   hor = L(hor, [0.050, 0.070, 0.140], night);
   sun = L(sun, [0.100, 0.080, 0.060], night);
+  const st = window.__stormSky || 0;                   // [STORM-SKY-V1] hurricane overcast: slate sky, dim flat light
+  zen = L(zen, [0.13, 0.15, 0.17], st);
+  hor = L(hor, [0.27, 0.30, 0.31], st);
+  sun = L(sun, [0.30, 0.32, 0.33], st);
   return { zen: _lin(zen), hor: _lin(hor), sun: _lin(sun), night };
 }
 function sunDirVec() {   // vecteur VERS le soleil; az horaire depuis le nord (+y)
@@ -712,6 +716,9 @@ const skyUni = {
   uTime:     { value: 0 },
   uClouds:   { value: 1 },
   uNight:    { value: 0 },
+  uStorm:    { value: 0 },                            // [STORM-SKY-V1] 0..1 low overcast deck
+  uFlash:    { value: 0 },                            // lightning: cloud flash strength
+  uFlashDir: { value: new THREE.Vector3(1, 0, 0.2) },
 };
 // dome de ciel: suit la camera (repositionne chaque frame), pas de depth —
 // dessine en premier, tout le reste passe par-dessus.
@@ -729,7 +736,7 @@ const sky = new THREE.Mesh(
     fragmentShader: `
       varying vec3 vDir;
       uniform vec3 uZenith, uHorizon, uSunColor, uSunDir;
-      uniform float uTime, uClouds, uNight;
+      uniform float uTime, uClouds, uNight, uStorm, uFlash; uniform vec3 uFlashDir;
       float hs2(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
       float vn2(vec2 p) {
         vec2 i = floor(p), f = fract(p);
@@ -754,6 +761,21 @@ const sky = new THREE.Mesh(
           vec3 cc = mix(uSunColor, vec3(1.0), 0.45) * sunGlow;
           cc *= mix(1.0, 0.18, uNight);              // nuages sombres la nuit
           col = mix(col, cc, cov * horFade * 0.85);
+        }
+        // [STORM-SKY-V1] hurricane: a low, solid cloud deck (rolling dark bands + fast scud), no sun disc; lightning lights
+        // the deck from inside around uFlashDir
+        if (uStorm > 0.0) {
+          vec2 sp2 = d.xy / (max(d.z, 0.0) + 0.06) * 0.9;
+          vec2 dr = vec2(uTime * 0.020, uTime * 0.011);
+          float base = vn2(sp2 * 0.8 + dr) * 0.5 + vn2(sp2 * 2.1 + dr * 1.6) * 0.3 + vn2(sp2 * 5.3 + dr * 2.4) * 0.2;
+          float scud = smoothstep(0.55, 0.85, vn2(sp2 * 3.4 + dr * 4.0) * 0.6 + vn2(sp2 * 8.0 + dr * 5.0) * 0.4);
+          vec3 deck = mix(vec3(0.030, 0.034, 0.038), vec3(0.11, 0.12, 0.125), smoothstep(0.25, 0.80, base));
+          deck = mix(deck, vec3(0.018, 0.020, 0.022), scud * 0.7);
+          deck = mix(deck, uHorizon * 0.8, smoothstep(0.16, 0.0, d.z) * 0.7);   // grey rain haze at the horizon
+          deck *= mix(1.0, 0.25, uNight);
+          float fl = pow(max(dot(d, normalize(uFlashDir)), 0.0), 5.0) * (0.3 + 0.9 * base) + 0.035;
+          deck += vec3(0.75, 0.80, 1.0) * uFlash * fl;
+          col = mix(col, deck, uStorm * (d.z > -0.02 ? 1.0 : 0.0));
         }
         // [NIGHT-V1] etoiles: cellules hashees, scintillement, fondu au ras
         // de l'horizon — n'existent que la nuit
@@ -1618,7 +1640,7 @@ const data = await (await fetch('/api/scene3d')).json();
           if (uReflDbg > 0.5) col = rcol;
           col *= uSeaTint;                           // [TOUR-GRADE-V1]
           if (uStorm > 0.0) {                         // [HURRICANE-V1] storm sea: dark grey-green, wind-blown whitecaps
-            col = mix(col, srgb(vec3(0.20, 0.25, 0.25)) * (0.75 + 0.5 * fres) * mix(1.0, 0.35, uNight), 0.75 * uStorm);
+            col = mix(col, srgb(vec3(0.20, 0.25, 0.25)) * (0.75 + 0.5 * fres) * mix(1.0, 0.35, uNight), 0.9 * uStorm);
             vec2 ps = vec2(p.x * 0.55 + p.y * 0.84, p.y * 0.55 - p.x * 0.84);          // streaks stretched along the wind
             float wc = smoothstep(0.74, 0.90, vn2(vec2(ps.x * 0.05, ps.y * 0.16) + vec2(t * 0.30, t * 0.10)) * 0.6 + vn2(vec2(ps.x * 0.17, ps.y * 0.5) - vec2(t * 0.45, 0.0)) * 0.4);
             col = mix(col, vec3(0.78, 0.80, 0.80) * mix(1.0, 0.3, uNight), wc * 0.40 * uStorm * att);
@@ -2098,7 +2120,7 @@ if (meshVerts.length) {
     const sd = sunDirVec(); const { zen, hor, sun, night } = skyColors();
     const day = Math.max(0, Math.min(1, sd.z / 0.12));
     sunLight.color.setRGB(sun[0], sun[1], sun[2]);
-    sunLight.intensity = (window.__sunI ?? 3.4) * day * (1 - night);
+    sunLight.intensity = (window.__sunI ?? 3.4) * day * (1 - night) * (1 - 0.85 * (window.__stormSky || 0));   // [STORM-SKY-V1] overcast
     hemiLight.color.setRGB(zen[0] * 0.45 + 0.34, zen[1] * 0.45 + 0.34, zen[2] * 0.45 + 0.33);
     hemiLight.groundColor.setRGB(hor[0] * 0.5 + 0.06, hor[1] * 0.46 + 0.05, hor[2] * 0.40 + 0.04);
     hemiLight.intensity = 0.15 + (window.__hemiI ?? 0.15) * (1 - night);   // [FACADES-V3] l'environnement (IBL) fournit maintenant la lumiere du ciel
@@ -5388,9 +5410,9 @@ const Cine = (() => {
                 tDepth: { value: null }, uFar: { value: 50000 }, uPInv: { value: new THREE.Vector2(1, 1) }, uCamMat: { value: new THREE.Matrix3() },
                 uCamZ: { value: 100 }, uHor: { value: new THREE.Vector3(0.7, 0.75, 0.8) }, uSunC: { value: new THREE.Vector3(1, 1, 1) },
                 uSunD: { value: new THREE.Vector3(0, 0, 1) }, uB0: { value: 1.6e-4 }, uAtm: { value: 1 },
-                uTint: { value: new THREE.Vector3(1, 1, 1) }, uTintMix: { value: 0 } },   // [TOUR-GRADE-V1] per-scene colour grade of the tour
+                uTint: { value: new THREE.Vector3(1, 1, 1) }, uTintMix: { value: 0 }, uExpo: { value: 1 } },   // [TOUR-GRADE-V1] / uExpo [STORM-SKY-V1] per-scene colour grade of the tour
     fragmentShader: `
-      varying vec2 vUv; uniform sampler2D tCol, tAO, tB1, tB2, tB3; uniform float uTime, uNight, uAO; uniform vec3 uTint; uniform float uTintMix;
+      varying vec2 vUv; uniform sampler2D tCol, tAO, tB1, tB2, tB3; uniform float uTime, uNight, uAO; uniform vec3 uTint; uniform float uTintMix, uExpo;
       uniform sampler2D tDepth; uniform float uFar, uCamZ, uB0, uAtm; uniform vec2 uPInv; uniform mat3 uCamMat; uniform vec3 uHor, uSunC, uSunD;
       vec3 shoulder(vec3 x) { return mix(x, 0.82 + 0.18 * (1.0 - exp(-(x - 0.82) / 0.18)), step(0.82, x)); }   // lineaire jusqu'a 0.82, epaule douce
       vec3 toSRGB(vec3 c) { return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c)); }
@@ -5415,6 +5437,7 @@ const Cine = (() => {
         }
         vec3 bloom = texture2D(tB1, vUv).rgb * 0.5 + texture2D(tB2, vUv).rgb * 0.35 + texture2D(tB3, vUv).rgb * 0.3;
         c += bloom * mix(0.35, 0.9, uNight);
+        c *= uExpo;                                                        // [STORM-SKY-V1] storm exposure
         c = shoulder(max(c, 0.0));
         vec3 s = toSRGB(clamp(c, 0.0, 1.0));
         float l = dot(s, vec3(0.2126, 0.7152, 0.0722));
@@ -5463,7 +5486,7 @@ const Cine = (() => {
       U.uCamMat.value.setFromMatrix4(camera.matrixWorld); U.uCamZ.value = camera.position.z;
       U.uHor.value.copy(skyUni.uHorizon.value); U.uSunC.value.copy(skyUni.uSunColor.value); U.uSunD.value.copy(skyUni.uSunDir.value);
       const hz = (typeof ENV !== 'undefined' && ENV.haze != null) ? ENV.haze / 100 : 0.3;
-      U.uB0.value = (0.18 + 0.7 * hz) * 1e-4; U.uAtm.value = window.__atmosOff ? 0 : 1; }   // brume legere: garder les couleurs vives
+      U.uB0.value = (0.18 + 0.7 * hz) * 1e-4 * (1 + 16 * (window.__stormSky || 0)); U.uExpo.value = window.__stormExpo ?? 1; U.uAtm.value = window.__atmosOff ? 0 : 1; }   // brume legere: garder les couleurs vives
     pass(finalMat, null);
   }
   const chip = document.getElementById('ly-cine');
@@ -5501,19 +5524,51 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
     const g = new THREE.BufferGeometry(); rainV = new Float32Array(N * 6);
     for (let i = 0; i < N; i++) { const x = (Math.random() - 0.5) * BOX * 2, y = (Math.random() - 0.5) * BOX * 2, z = Math.random() * BOX; rainV.set([x, y, z, x, y, z - 1.6], i * 6); }
     g.setAttribute('position', new THREE.BufferAttribute(rainV, 3));
-    rain = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0xb8c4cc, transparent: true, opacity: 0.35, depthWrite: false }));
+    rain = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0xc8d2d8, transparent: true, opacity: 0.35, depthWrite: false, fog: false }));
     rain.frustumCulled = false; rain.name = 'hurricane-rain'; scene.add(rain);
   };
+  // [STORM-SKY-V1] lightning bolt: a jagged camera-facing ribbon (main channel + 2 branches) from the cloud deck to the ground,
+  // 1.5-4 km away inside the view, redrawn at each strike; additive and unlit so the bloom gives it its glow
+  let bolt = null;
+  const boltMat = new THREE.MeshBasicMaterial({ color: 0xdfe8ff, transparent: true, opacity: 1, blending: THREE.AdditiveBlending, depthWrite: false, fog: false, toneMapped: false, vertexColors: true });
+  const strike = () => {
+    const fw = new THREE.Vector3(); camera.getWorldDirection(fw); fw.z = 0; if (fw.lengthSq() < 1e-6) fw.set(0, 1, 0); fw.normalize();
+    const a = (Math.random() - 0.5) * 0.8, dist = 900 + 1300 * Math.random();
+    const dir = new THREE.Vector3(fw.x * Math.cos(a) - fw.y * Math.sin(a), fw.x * Math.sin(a) + fw.y * Math.cos(a), 0);
+    const base = camera.position.clone().addScaledVector(dir, dist); base.z = 0;
+    const path = (p0, n, len, spread) => { const pts = [p0.clone()]; let p = p0.clone();
+      for (let i = 0; i < n; i++) { p = p.clone(); p.z -= len / n; p.x += (Math.random() - 0.5) * spread; p.y += (Math.random() - 0.5) * spread; pts.push(p); } return pts; };
+    const top = base.clone(); top.z = 950;
+    const main = path(top, 18, 950, 75); main[main.length - 1].z = Math.max(0, main[main.length - 1].z);
+    const br = [main, path(main[5], 7, 320, 70), path(main[10], 5, 200, 60)];
+    const pos = [], col = [], view = new THREE.Vector3();
+    for (const [k, pts, w, c] of [[0, br[0], 6, 0.10], [0, br[0], 1.6, 1], [1, br[1], 0.9, 0.85], [2, br[2], 0.9, 0.85]]) {   // halo, core, branches (half-widths in px)
+      for (let i = 0; i < 6 * (pts.length - 1); i++) col.push(c, c, c);
+      for (let i = 0; i + 1 < pts.length; i++) {
+        const A = pts[i], B = pts[i + 1], s = B.clone().sub(A); view.copy(A).sub(camera.position);
+        const side = s.clone().cross(view).normalize().multiplyScalar(w * view.length() / 1160);   // ~px at 1920 px, 50 deg vfov
+        const a1 = A.clone().add(side), a2 = A.clone().sub(side), b1 = B.clone().add(side), b2 = B.clone().sub(side);
+        pos.push(a1.x, a1.y, a1.z, a2.x, a2.y, a2.z, b1.x, b1.y, b1.z, a2.x, a2.y, a2.z, b2.x, b2.y, b2.z, b1.x, b1.y, b1.z);
+      }
+    }
+    if (!bolt) { bolt = new THREE.Mesh(new THREE.BufferGeometry(), boltMat); bolt.frustumCulled = false; bolt.renderOrder = 5; bolt.name = 'hurricane-bolt'; scene.add(bolt); }
+    bolt.geometry.dispose(); bolt.geometry = new THREE.BufferGeometry(); bolt.geometry.setAttribute('position', new THREE.Float32BufferAttribute(pos, 3)); bolt.geometry.setAttribute('color', new THREE.Float32BufferAttribute(col, 3));
+    skyUni.uFlashDir.value.set(dir.x, dir.y, 0.25);
+  };
+  window.__strike = () => { nextFlash = 0; };       // force a strike on the next step (for the video timeline)
   window.__hurricane = async o => {
     state = o;
     if (!o) {
       seaUni.uSurge.value = 0; seaUni.uStorm.value = 0; if (window.__sea) window.__sea.position.z = 0;
-      if (rain) rain.visible = false; if (window.__hemi && hemiBase !== null) window.__hemi.intensity = hemiBase; return 'off';
+      window.__stormSky = 0; skyUni.uStorm.value = 0; skyUni.uFlash.value = 0; if (bolt) bolt.visible = false;
+      if (rain) rain.visible = false; hemiBase = null; applyEnv(); return 'off';            // applyEnv resets the sky light too
     }
     if ((o.surge || 0) > 0) await loadArr();
     seaUni.uSurge.value = o.surge || 0; if (window.__sea) window.__sea.position.z = o.surge || 0; seaUni.uStorm.value = o.storm ?? 0;
+    const sky0 = o.sky ?? o.storm ?? 0;
+    if (sky0 !== (window.__stormSky || 0)) { window.__stormSky = sky0; skyUni.uStorm.value = sky0; hemiBase = null; applyEnv(); }
     if ((o.rain || 0) > 0 && !rain) makeRain();
-    if (rain) { rain.visible = (o.rain || 0) > 0; rain.material.opacity = 0.12 + 0.33 * (o.rain || 0); }
+    if (rain) { rain.visible = (o.rain || 0) > 0; rain.material.opacity = 0.22 + 0.48 * (o.rain || 0); }
     return 'on';
   };
   // free camera for the hurricane shots: position / target in world metres, vertical fov in degrees
@@ -5533,16 +5588,19 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
       for (let i = 0; i < n; i++) {
         const o6 = i * 6; let x = rainV[o6] + wx, y = rainV[o6 + 1] + wy, z = rainV[o6 + 2] - dz;
         if (z < -BOX * 0.3 || Math.abs(x) > BOX || Math.abs(y) > BOX) { x = (Math.random() - 0.5) * BOX * 2; y = (Math.random() - 0.5) * BOX * 2; z = BOX * (0.4 + 0.6 * Math.random()); }
-        rainV[o6] = x; rainV[o6 + 1] = y; rainV[o6 + 2] = z; rainV[o6 + 3] = x - Math.sin(w) * 0.5; rainV[o6 + 4] = y - Math.cos(w) * 0.5; rainV[o6 + 5] = z + 1.6;
+        rainV[o6] = x; rainV[o6 + 1] = y; rainV[o6 + 2] = z; rainV[o6 + 3] = x - Math.sin(w) * 1.1; rainV[o6 + 4] = y - Math.cos(w) * 1.1; rainV[o6 + 5] = z + 3.4;
       }
       rain.position.copy(c); rain.geometry.attributes.position.needsUpdate = true;
     }
     if (window.__hemi && (state.lightning || 0) > 0) {
       if (hemiBase === null) hemiBase = window.__hemi.intensity;
       nextFlash -= dt;
-      if (nextFlash <= 0) { flashT = 0.32; nextFlash = (2.5 + 6 * Math.random()) / state.lightning; }
-      if (flashT > 0) { flashT -= dt; const k = flashT > 0.2 ? 1 : flashT > 0.12 ? 0.25 : flashT > 0.06 ? 0.8 : 0; window.__hemi.intensity = hemiBase + 6 * k; }
-      else window.__hemi.intensity = hemiBase;
+      if (nextFlash <= 0) { flashT = 0.36; nextFlash = (2.5 + 6 * Math.random()) / state.lightning; strike(); }
+      if (flashT > 0) {
+        flashT -= dt; const k = flashT > 0.24 ? 1 : flashT > 0.16 ? 0.2 : flashT > 0.08 ? 0.85 : flashT > 0 ? 0.3 : 0;
+        window.__hemi.intensity = hemiBase + 1.8 * k; skyUni.uFlash.value = 1.1 * k;
+        if (bolt) { bolt.visible = k > 0.25; boltMat.opacity = k; }
+      } else { window.__hemi.intensity = hemiBase; skyUni.uFlash.value = 0; if (bolt) bolt.visible = false; }
     }
   };
 })();
