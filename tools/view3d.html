@@ -679,6 +679,11 @@ const terraUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
 }]);
 const seaUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uSeaTint:  { value: new THREE.Vector3(1, 1, 1) },   // [TOUR-GRADE-V1] per-scene sea tint (tour)
+  uSurge:    { value: 0 },      // [HURRICANE-V1] storm surge (m above the sea); the sea plane is raised by it
+  uArr:      { value: null },   // [HURRICANE-V1] arrival map (tools/hurricane_surge.py): level at which the sea reaches each heightmap cell
+  uArrOn:    { value: 0 },
+  uHmGeo:    { value: new THREE.Vector4(0.083188297, 1108.532, 938.091, 0) },   // heightmap: SC, ZX, ZY (u = ZX + x SC, v = ZY - y SC)
+  uHmSize:   { value: new THREE.Vector2(1536, 1748) },
   uSunDir:   { value: new THREE.Vector3(0, 0, 1) },
   uTime:     { value: 0 },
   uHorizon:  { value: new THREE.Vector3(.7, .8, .9) },
@@ -1487,6 +1492,7 @@ const data = await (await fetch('/api/scene3d')).json();
         uniform sampler2D uWaterTex; uniform vec4 uWaterBounds; uniform vec3 uWaterMed;
         uniform vec4 uTerrBounds;
         uniform sampler2D uDepth, uDrape, uRefl;
+        uniform float uSurge, uArrOn; uniform sampler2D uArr; uniform vec4 uHmGeo; uniform vec2 uHmSize;
         uniform mat4 uReflMat;
         #include <common>
         #include <logdepthbuf_pars_fragment>
@@ -1518,6 +1524,15 @@ const data = await (await fetch('/api/scene3d')).json();
             mapWater = max(mapWater, txt);
           }
           if (uMapSea > 0.5 && mapWater < 0.02) discard;
+          // [HURRICANE-V1] the raised sea only floods the land the surge really reaches (connected to the sea): elsewhere it is under
+          // the terrain anyway, except closed basins below the level -> discarded; fl = flood depth over land (muddy water, no shore foam)
+          float fl = 0.0;
+          if (uSurge > 0.01 && uArrOn > 0.5) {
+            vec2 huv = vec2(uHmGeo.y + vPos.x * uHmGeo.x + 0.5, uHmGeo.z - vPos.y * uHmGeo.x + 0.5) / uHmSize;
+            float arr = texture2D(uArr, clamp(huv, 0.0, 1.0)).r * 255.0 * 0.025;
+            if (arr > uSurge + 0.04) discard;
+            fl = arr > 0.001 ? uSurge - arr : 0.0;
+          }
           // les vagues s'eteignent avec la distance: sans ca, les sinus
           // sous-pixel produisent un moire en grille sur tout l'ocean
           float att = 1.0 / (1.0 + dist * 0.002 + dist * dist * 3.5e-7);
@@ -1583,7 +1598,8 @@ const data = await (await fetch('/api/scene3d')).json();
           // animee qui leche la ligne de cote (bande 0..1.3 m) ──
           vec2 duv = (vPos.xy - uTerrBounds.xy) / (uTerrBounds.zw - uTerrBounds.xy);
           float inb = step(0.0, duv.x) * step(duv.x, 1.0) * step(0.0, duv.y) * step(duv.y, 1.0);
-          float wdepth = mix(63.75, texture2D(uDepth, clamp(duv, 0.0, 1.0)).r * 63.75, inb);
+          float wdepth = mix(63.75, texture2D(uDepth, clamp(duv, 0.0, 1.0)).r * 63.75, inb) + uSurge;   // [HURRICANE-V1] deeper by the surge
+          if (fl > 0.0) wdepth = max(fl, 0.15);
           float shal = (1.0 - smoothstep(0.0, 12.0, wdepth)) * (1.0 - farBlend);
           col = mix(col, mix(srgb(vec3(0.30, 0.66, 0.62)), mapBlue * 1.08, uMapSea), shal * 0.40);
           // [GROUND-V1] eau de Miami: turquoise sur les hauts-fonds, bleu plus profond au large (mode carte)
@@ -1599,6 +1615,7 @@ const data = await (await fetch('/api/scene3d')).json();
           col = mix(col, rcol, reflK * (1.0 - foam * 0.8));   // [REFLECT-V1] apres teintes de fond et nuit (le reflet porte deja sa lumiere)
           if (uReflDbg > 0.5) col = rcol;
           col *= uSeaTint;                           // [TOUR-GRADE-V1]
+          if (fl > 0.0) col = mix(col, srgb(vec3(0.33, 0.30, 0.24)) * mix(1.0, 0.4, uNight), 0.55 * smoothstep(0.0, 0.6, fl));   // [HURRICANE-V1] muddy flood water
           float aBase = mix((0.62 + 0.30 * fres) * mix(1.0, 0.55, shal), 0.97, uMapSea);
           float a = max(mix(aBase, 1.0, farBlend), foam * 0.85 * (1.0 - uMapSea));
           a *= mix(1.0, mapWater, uMapSea);
@@ -1609,6 +1626,7 @@ const data = await (await fetch('/api/scene3d')).json();
         }`}));
     sea.renderOrder = 2;                 // toujours apres le relief
     sea.name = 'terrain-sea';
+    window.__sea = sea;                  // [HURRICANE-V1]
     sea.frustumCulled = false;
     layers.terrain.add(sea);
     // [DRAPE-CHIP] APRES la creation de la mer (setDrape la reference — la
@@ -1872,6 +1890,7 @@ if (meshVerts.length) {
   const sunLight = new THREE.DirectionalLight(0xffffff, 2.0);
   const hemiLight = new THREE.HemisphereLight(0xbfd4ff, 0x4a4238, 0.8);
   scene.add(sunLight, sunLight.target, hemiLight);
+  window.__hemi = hemiLight;            // [HURRICANE-V1] lightning flashes
   renderer.shadowMap.enabled = true;
   renderer.shadowMap.type = THREE.PCFSoftShadowMap;
   renderer.shadowMap.autoUpdate = false;              // carte d'ombres recalculee seulement quand la vue/le soleil bougent
@@ -5455,6 +5474,61 @@ let orbitOn = false, _orbitPrevT = 0;
   });
 }
 const _orbitAxis = new THREE.Vector3(0, 0, 1);
+// ── [HURRICANE-V1 2026-10-24] « What if a hurricane hit GTA 6 »: storm surge on the game terrain + storm atmosphere ──
+// window.__hurricane({surge: m, rain: 0..1, wind: deg (toward), lightning: 0..1}) — surge raises the sea plane, the sea shader only
+// floods the cells the sea really reaches (tools/hurricane_surge.py arrival map); rain = streaks in a box around the camera,
+// slanted by the wind; lightning = brief sky-light flashes. __hurricane(null) restores everything. Visual layer only.
+(() => {
+  let arrTex = null, rain = null, rainV = null, state = null, flashT = 0, nextFlash = 3, hemiBase = null;
+  const N = 9000, BOX = 140;
+  const loadArr = () => new Promise(res => {
+    if (arrTex) return res(arrTex);
+    new THREE.TextureLoader().load('/threejs/_hurricane_arrival.png?v=' + Date.now(), t => {
+      t.flipY = false; t.magFilter = THREE.LinearFilter; t.minFilter = THREE.LinearFilter; t.generateMipmaps = false; t.colorSpace = THREE.NoColorSpace;
+      arrTex = t; seaUni.uArr.value = t; seaUni.uArrOn.value = 1; res(t); }, undefined, () => res(null));
+  });
+  const makeRain = () => {
+    const g = new THREE.BufferGeometry(); rainV = new Float32Array(N * 6);
+    for (let i = 0; i < N; i++) { const x = (Math.random() - 0.5) * BOX * 2, y = (Math.random() - 0.5) * BOX * 2, z = Math.random() * BOX; rainV.set([x, y, z, x, y, z - 1.6], i * 6); }
+    g.setAttribute('position', new THREE.BufferAttribute(rainV, 3));
+    rain = new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: 0xb8c4cc, transparent: true, opacity: 0.35, depthWrite: false }));
+    rain.frustumCulled = false; rain.name = 'hurricane-rain'; scene.add(rain);
+  };
+  window.__hurricane = async o => {
+    state = o;
+    if (!o) {
+      seaUni.uSurge.value = 0; if (window.__sea) window.__sea.position.z = 0;
+      if (rain) rain.visible = false; if (window.__hemi && hemiBase !== null) window.__hemi.intensity = hemiBase; return 'off';
+    }
+    if ((o.surge || 0) > 0) await loadArr();
+    seaUni.uSurge.value = o.surge || 0; if (window.__sea) window.__sea.position.z = o.surge || 0;
+    if ((o.rain || 0) > 0 && !rain) makeRain();
+    if (rain) { rain.visible = (o.rain || 0) > 0; rain.material.opacity = 0.12 + 0.33 * (o.rain || 0); }
+    return 'on';
+  };
+  window.__hurricaneStep = dt => {
+    if (!state) return;
+    if (rain && rain.visible) {
+      const w = (state.wind ?? 60) * Math.PI / 180, sp = 42, wx = Math.sin(w) * 14 * dt, wy = Math.cos(w) * 14 * dt, dz = sp * dt;
+      const c = camera.position, n = Math.round(N * Math.min(1, state.rain));
+      rain.geometry.setDrawRange(0, n * 2);
+      for (let i = 0; i < n; i++) {
+        const o6 = i * 6; let x = rainV[o6] + wx, y = rainV[o6 + 1] + wy, z = rainV[o6 + 2] - dz;
+        if (z < -BOX * 0.3 || Math.abs(x) > BOX || Math.abs(y) > BOX) { x = (Math.random() - 0.5) * BOX * 2; y = (Math.random() - 0.5) * BOX * 2; z = BOX * (0.4 + 0.6 * Math.random()); }
+        rainV[o6] = x; rainV[o6 + 1] = y; rainV[o6 + 2] = z; rainV[o6 + 3] = x - Math.sin(w) * 0.5; rainV[o6 + 4] = y - Math.cos(w) * 0.5; rainV[o6 + 5] = z + 1.6;
+      }
+      rain.position.copy(c); rain.geometry.attributes.position.needsUpdate = true;
+    }
+    if (window.__hemi && (state.lightning || 0) > 0) {
+      if (hemiBase === null) hemiBase = window.__hemi.intensity;
+      nextFlash -= dt;
+      if (nextFlash <= 0) { flashT = 0.32; nextFlash = (2.5 + 6 * Math.random()) / state.lightning; }
+      if (flashT > 0) { flashT -= dt; const k = flashT > 0.2 ? 1 : flashT > 0.12 ? 0.25 : flashT > 0.06 ? 0.8 : 0; window.__hemi.intensity = hemiBase + 6 * k; }
+      else window.__hemi.intensity = hemiBase;
+    }
+  };
+})();
+
 // [REC-V1 2026-10-21] video recorder: while window.__rec is set the animation loop stands still and the recorder drives
 // frameStep(dt, t) itself with a fixed step and a simulated clock (smooth 60 fps whatever the render time), then grabs the frame
 renderer.setAnimationLoop(() => {
@@ -5486,6 +5560,7 @@ function frameStep(_dt, _tSec, draw) {
   nanGuard();                                   // [NAN-GUARD] jamais un rendu avec une camera NaN
   if (window.__solidsTick) window.__solidsTick(); // [SOLIDS-V1] ombre qui suit la vue
   if (window.__trafficStep) window.__trafficStep(_dt);   // [TRAFFIC-V1]
+  if (window.__hurricaneStep) window.__hurricaneStep(_dt);   // [HURRICANE-V1]
   if (window.__structTick) window.__structTick(_dt);     // [STRUCTS-V1]
   tiledCull();                                    // [PERF-V1] coupure en distance des instances par tuiles
   if (!draw) return;                              // [REC-V1] the recorder renders through __grabFrame
