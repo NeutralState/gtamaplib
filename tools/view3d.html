@@ -1546,16 +1546,18 @@ const data = await (await fetch('/api/scene3d')).json();
             mapc = mix(mapc, mix(srgb(vec3(0.19, 0.59, 0.79)), srgb(vec3(0.12, 0.29, 0.45)), smoothstep(2.0, 20.0, wd0)), txt);
             mapWater = max(mapWater, txt);
           }
-          if (uMapSea > 0.5 && mapWater < 0.02) discard;
           // [HURRICANE-V1] the raised sea only floods the land the surge really reaches (connected to the sea): elsewhere it is under
           // the terrain anyway, except closed basins below the level -> discarded; fl = flood depth over land (muddy water, no shore foam)
-          float fl = 0.0;
+          float fl = 0.0, landFl = 0.0;
           if (uSurge > 0.01 && uArrOn > 0.5) {
             vec2 huv = vec2(uHmGeo.y + vPos.x * uHmGeo.x + 0.5, uHmGeo.z - vPos.y * uHmGeo.x + 0.5) / uHmSize;
             float arr = texture2D(uArr, clamp(huv, 0.0, 1.0)).r * 255.0 * 0.025;
             if (arr > uSurge + 0.04) discard;
             fl = arr > 0.001 ? uSurge - arr : 0.0;
+            landFl = step(0.001, arr);                  // flooded land: drawn even where the map is not water (map-colour mode)
           }
+          if (uMapSea > 0.5 && mapWater < 0.02 && landFl < 0.5) discard;
+          mapWater = max(mapWater, landFl);
           // les vagues s'eteignent avec la distance: sans ca, les sinus
           // sous-pixel produisent un moire en grille sur tout l'ocean
           float att = 1.0 / (1.0 + dist * 0.002 + dist * dist * 3.5e-7);
@@ -5512,7 +5514,7 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
 // floods the cells the sea really reaches (tools/hurricane_surge.py arrival map); rain = streaks in a box around the camera,
 // slanted by the wind; lightning = brief sky-light flashes. __hurricane(null) restores everything. Visual layer only.
 (() => {
-  let arrTex = null, rain = null, rainV = null, state = null, flashT = 0, nextFlash = 3, hemiBase = null;
+  let arrTex = null, rain = null, rainV = null, state = null, flashT = 0, nextFlash = 3, hemiBase = null, skyApplied = 0;
   const N = 9000, BOX = 140;
   const loadArr = () => new Promise(res => {
     if (arrTex) return res(arrTex);
@@ -5560,13 +5562,14 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
     state = o;
     if (!o) {
       seaUni.uSurge.value = 0; seaUni.uStorm.value = 0; if (window.__sea) window.__sea.position.z = 0;
-      window.__stormSky = 0; skyUni.uStorm.value = 0; skyUni.uFlash.value = 0; if (bolt) bolt.visible = false;
+      window.__stormSky = 0; skyApplied = 0; skyUni.uStorm.value = 0; skyUni.uFlash.value = 0; if (bolt) bolt.visible = false;
       if (rain) rain.visible = false; hemiBase = null; applyEnv(); return 'off';            // applyEnv resets the sky light too
     }
     if ((o.surge || 0) > 0) await loadArr();
     seaUni.uSurge.value = o.surge || 0; if (window.__sea) window.__sea.position.z = o.surge || 0; seaUni.uStorm.value = o.storm ?? 0;
-    const sky0 = o.sky ?? o.storm ?? 0;
-    if (sky0 !== (window.__stormSky || 0)) { window.__stormSky = sky0; skyUni.uStorm.value = sky0; hemiBase = null; applyEnv(); }
+    const sky0 = o.sky ?? o.storm ?? 0;                 // sky deck follows continuously; lights / env map / fog in 0.05 steps (applyEnv re-bakes)
+    window.__stormSky = sky0; skyUni.uStorm.value = sky0;
+    if (Math.abs(sky0 - skyApplied) >= 0.05 || ((sky0 === 0 || sky0 === 1) && sky0 !== skyApplied)) { skyApplied = sky0; hemiBase = null; applyEnv(); }
     if ((o.rain || 0) > 0 && !rain) makeRain();
     if (rain) { rain.visible = (o.rain || 0) > 0; rain.material.opacity = 0.22 + 0.48 * (o.rain || 0); }
     return 'on';
@@ -5594,7 +5597,7 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
     }
     if (window.__hemi && (state.lightning || 0) > 0) {
       if (hemiBase === null) hemiBase = window.__hemi.intensity;
-      nextFlash -= dt;
+      if (state.lightning >= 0.001) nextFlash -= dt;   // below 0.001: strikes only on __strike() (video timeline)
       if (nextFlash <= 0) { flashT = 0.36; nextFlash = (2.5 + 6 * Math.random()) / state.lightning; strike(); }
       if (flashT > 0) {
         flashT -= dt; const k = flashT > 0.24 ? 1 : flashT > 0.16 ? 0.2 : flashT > 0.08 ? 0.85 : flashT > 0 ? 0.3 : 0;
