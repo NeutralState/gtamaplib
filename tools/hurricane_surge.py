@@ -8,7 +8,7 @@ Buildings: mesh solids (tools/mesh_solids.py) + V16 massing boxes; a building fl
 flood and the water depth there exceeds 0.3 m.
 
 Outputs (tools/generated/hurricane/): surge_stats.json, flood_<level>m.png masks (uint8, heightmap grid), and arrival.png +
-arrival.json (the level at which the sea reaches each cell, 0.1 m units up to 25 m) used by view3d's sea shader to draw the surge;
+arrival.json (the level at which the sea reaches each cell, up to 74 m, see encode_arrival) used by view3d's sea shader;
 surge_curve.json: buildings flooded and % land per 0.1 m (video counters). ESTIMATED: the heightmap is the game's terrain (no levees, no drainage, still water).
 """
 import json, os, sys, numpy as np, cv2
@@ -85,20 +85,26 @@ def buildings():
     return out
 
 
-def arrival_map(sea, top=25.0, step=0.1):
-    """per cell: the lowest surge level (0.1 m steps) at which the connected flood reaches it; 255 = never (above top).
-    Written as arrival.png (uint8, value = level / 0.1, sea = 0) for view3d's sea shader."""
-    A = np.full(Z.shape, 255, np.uint8); A[sea] = 0
-    for lv in np.arange(step, top + 1e-6, step):
-        f = flood(lv, sea); A[f & (A == 255)] = int(round(lv / 0.1))
+def arrival_map(sea):
+    """per cell: the lowest sea level at which the connected flood reaches it (0.1 m steps to 20 m, 1 m steps to 74 m), inf = never;
+    sea = 0. Encoded for view3d's sea shader by encode_arrival()."""
+    A = np.full(Z.shape, np.inf, np.float32); A[sea] = 0
+    for lv in list(np.round(np.arange(0.1, 20.0001, 0.1), 2)) + list(np.arange(21.0, 74.01, 1.0)):
+        f = flood(lv, sea); A[f & np.isinf(A)] = lv
     return A
+
+
+def encode_arrival(A):
+    """uint8 arrival.png: v <= 200 -> v * 0.1 m (0-20 m), 201-254 -> 20 + (v - 200) m (21-74 m), 255 = never (above 74 m)."""
+    v = np.where(A <= 20.0, np.round(A / 0.1), 200 + np.round(A - 20.0))
+    return np.where(np.isfinite(A), np.clip(v, 0, 254), 255).astype(np.uint8)
 
 
 def main():
     sea = ocean_mask(); land = VALID & ~sea
-    A = arrival_map(sea); cv2.imwrite(os.path.join(OUT, 'arrival.png'), A)
-    cv2.imwrite(os.path.join(THIS, 'threejs', '_hurricane_arrival.png'), A)                       # served to view3d (gitignored, regenerated here)
-    json.dump({'w': int(Z.shape[1]), 'h': int(Z.shape[0]), 'SC': SC, 'ZX': ZX, 'ZY': ZY, 'unit_m': 0.1}, open(os.path.join(OUT, 'arrival.json'), 'w'))
+    A = arrival_map(sea); E = encode_arrival(A); cv2.imwrite(os.path.join(OUT, 'arrival.png'), E)
+    cv2.imwrite(os.path.join(THIS, 'threejs', '_hurricane_arrival.png'), E)                       # served to view3d (gitignored, regenerated here)
+    json.dump({'w': int(Z.shape[1]), 'h': int(Z.shape[0]), 'SC': SC, 'ZX': ZX, 'ZY': ZY, 'encoding': 'v<=200: v*0.1 m; 201-254: 20+(v-200) m; 255 never'}, open(os.path.join(OUT, 'arrival.json'), 'w'))
     P, R = regions()
     iv, iu = np.nonzero(land)
     cx, cy = cell_xy(iu, iv)
@@ -127,7 +133,7 @@ def main():
     json.dump(stats, open(os.path.join(OUT, 'surge_stats.json'), 'w'), indent=1)
     curve = []                                                   # per 0.1 m: [level, buildings flooded, % land] (from the arrival map)
     for lv in np.round(np.arange(0, 20.01, 0.1), 2):
-        f = (A > 0) & (A <= int(round(lv / 0.1))) & land if lv > 0 else np.zeros_like(land)
+        f = (A > 0) & (A <= lv + 1e-4) & land if lv > 0 else np.zeros_like(land)
         hit = f[bv, bu] & (lv - Z[bv, bu] > 0.3)
         curve.append([float(lv), int(hit.sum()), round(float(100.0 * f.sum() / land.sum()), 2)])
     json.dump(curve, open(os.path.join(OUT, 'surge_curve.json'), 'w'))
