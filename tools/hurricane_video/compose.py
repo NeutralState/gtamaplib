@@ -66,8 +66,8 @@ GONE = [('KEY LENTO', 8.7), ('WATSON BAY', 8.6), ('PEREGRINE BAY', 9.9), ('VICE 
         ('LEONARD COUNTY', 73.5), ('GELLHORN RACEWAY', 97.5), ('PORT GELLHORN', 106.0), ('KELLY COUNTY', 206.5)]
 GONE.sort(key=lambda g: g[1])
 BIG = {'VICE CITY': centre_block([('VICE CITY IS GONE', 104, SUNSET, IMP), ('+40 m', 60, NEON, IMP)], y0=120),
-       'PORT GELLHORN': centre_block([('PORT GELLHORN IS GONE', 96, SUNSET, IMP), ('+106 m', 60, NEON, IMP)], y0=120),
-       'KELLY COUNTY': centre_block([('ONLY THE NORTH HILLS ARE LEFT', 92, SUNSET, IMP), ('+207 m', 60, NEON, IMP)], y0=120)}
+       'PORT GELLHORN': centre_block([('PORT GELLHORN IS GONE', 84, SUNSET, IMP), ('+106 m', 60, NEON, IMP)], y0=120),
+       'KELLY COUNTY': centre_block([('ONLY THE HILLS ARE LEFT', 84, SUNSET, IMP), ('+207 m', 60, NEON, IMP)], y0=120)}
 F_G = ImageFont.truetype(IMP, 34); F_GH = ImageFont.truetype(IMP, 30); F_GL = ImageFont.truetype(FR, 28)
 def gone_panel(items, newest_alpha):
     w, rowh = 430, 50; h = 70 + rowh * len(items)
@@ -86,7 +86,7 @@ def hud(lv):
     im = Image.alpha_composite(im, gtext((HUD_W, HUD_H), (32, 118), ('+%.1f m' % lv) if lv < 10 else '+%d m' % int(lv), 96, SUNSET, anchor='lm', stroke=5))
     d = ImageDraw.Draw(im)
     d.text((34, 190), 'BUILDINGS UNDERWATER', font=F_LBL, fill=(255, 190, 220, 255)); d.text((HUD_W - 34, 182), '{:,}'.format(int(round(nb))), font=F_NUM, fill=(255, 240, 250, 255), anchor='ra')
-    d.text((34, 262), 'LAND LEFT', font=F_LBL, fill=(255, 190, 220, 255)); d.text((HUD_W - 34, 254), ('%.1f%%' % left) if left < 10 else '%d%%' % int(round(left)), font=F_NUM, fill=(255, 240, 250, 255), anchor='ra')
+    d.text((34, 262), 'LAND LEFT', font=F_LBL, fill=(255, 190, 220, 255)); d.text((HUD_W - 34, 254), ('<0.1%' if 0 < left < 0.05 else '%.1f%%' % left) if left < 10 else '%d%%' % int(round(left)), font=F_NUM, fill=(255, 240, 250, 255), anchor='ra')
     return to_ov(im)
 L_BEFORE = to_ov(gtext((360, 110), (180, 55), 'BEFORE', 60, NEON, stroke=6)); L_NOW = to_ov(gtext((300, 110), (150, 55), 'NOW', 60, SUNSET, stroke=6))
 TM = {}
