@@ -1,8 +1,8 @@
 """common.py — shared paths and helpers of the hurricane video scripts (tools/hurricane_video/).
-Renders go to tools/generated/hurricane/work/ (gitignored, NOT /tmp: a reboot wipes /tmp)."""
+Renders go to ~/gta6_hurricane_work (NOT /tmp: a reboot wipes it; NOT the repo: the Desktop is synced to iCloud)."""
 import os, numpy as np, cv2
 HERE = os.path.dirname(os.path.abspath(__file__)); TOOLS = os.path.dirname(HERE); REPO = os.path.dirname(TOOLS)
-WORK = os.path.join(TOOLS, 'generated', 'hurricane', 'work'); os.makedirs(WORK, exist_ok=True)
+WORK = os.path.expanduser('~/gta6_hurricane_work'); os.makedirs(WORK, exist_ok=True)
 TILES = os.path.join(REPO, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,17')
 W, H, FPS = 1920, 1080, 60
 DEEP = np.array([92, 40, 12], np.float32)          # BGR deep ocean
