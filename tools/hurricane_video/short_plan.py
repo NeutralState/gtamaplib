@@ -8,6 +8,8 @@ BEAT = 60.0 / 117.5; BAR = 4 * BEAT
 DROP = 0.116 + 160 * BEAT                     # 81.82 s in the track
 MUSIC = os.path.expanduser("~/Downloads/ES_Born in the 80's - Falcon Dives.mp3")
 M0 = DROP - 2 * BAR                           # track time at Short t = 0
+if os.environ.get('HV_MUSIC'):                # a track written on the Short's own grid (darksynth.py) starts at 0
+    MUSIC = os.environ['HV_MUSIC']; M0 = float(os.environ.get('HV_M0', '0'))
 S_SPACE = (0.0, 2 * BAR)                      # orbit + dive, 11 s of space.py squeezed into 2 bars
 S_TOP = (2 * BAR, 4 * BAR)                    # Downtown floods, top-down, 0 -> 5 m
 S_3D = (4 * BAR, 6 * BAR)                     # Brickell street level, view3d 40.5 -> 44.2 s (5 -> 8.9 m)
