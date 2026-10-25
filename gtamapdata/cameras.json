@@ -10065,5 +10065,31 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "notes": "PROVISIONAL 2026-10-18: frame extracted from the official Extended Look and matched to Yanis V17 thumbnail T3/247 (corr 0.993); position = his marker dot; heading 74 / fov 55 read on his V (LOW confidence); z = heightmap + 1.7 m. Needs markings + solve. | YANIS-V-FIT 2026-10-18 (Alexandre: take the direction from Yanis's marker): heading 27 / hfov 60 read by eye on the V of his V17 marker T3/247 (was 74 / 55.0)."
+ },
+ "Jason with a Rifle": {
+  "id": "T4/43",
+  "player": null,
+  "xyz": [
+   -1139.4,
+   -1980.0,
+   91.3
+  ],
+  "ypr": [
+   -33.2,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   35.9,
+   null
+  ],
+  "size": [
+   3840,
+   1920
+  ],
+  "source": "Trailer 4 (launch trailer, 2026) - Jason aiming a scoped sniper rifle at night from a rooftop, the Brickell skyline out of focus behind him (Four Seasons Hotel Miami = the green-lit tower behind the scope); frame given by Alexandre (Downloads, '[T4:43] Jason with a Rifle.png'), letterbox removed",
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "notes": "MARTI-EST 2026-10-25 (Alexandre: Marti's estimated position, 'plutot bonne'; building behind the scope = Four Seasons): Marti's map screenshot georeferenced on the V17 z4 tiles (SIFT + RANSAC similarity, 37 inliers, 0.849 m/px, rot 0.0, resid 0.2 m); his apex -> xy (-1139.4, -1980.0) = on the roof of Grove at Grand Bay (N tower, mesh top 90.3 m); his FOV edges at bearings 18.2 / 54.1 -> hfov 35.9 (kept: the Four Seasons slab, ~50 m wide at 752 m, spans ~0.106 of the frame width = same hfov). Heading 33.2 (Marti's centre 36.1) from the image evidence: Four Seasons (-830, -1295) at bearing 24.3 from the camera, its lit tower centred at x 995 / 3840 = 8.9 deg left of centre. z = roof 90.3 + 1.0 (sniper at the parapet). Pitch 0 / roll 0 not measurable (the whole background is bokeh). ESTIMATED."
  }
 }
