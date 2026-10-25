@@ -11,7 +11,7 @@ SPACE, TOP, REC = os.path.join(WORK, 'space_v'), os.path.join(WORK, 'top_v'), os
 HEAVY = ImageFont.truetype('/System/Library/Fonts/Avenir Next.ttc', 128, index=8)
 HEAVY_S = ImageFont.truetype('/System/Library/Fonts/Avenir Next.ttc', 92, index=8)
 B = SP.BEAT; BAR = SP.BAR
-CAPS = [(0.10, BAR, 'A HURRICANE'), (BAR, 2 * BAR - 0.12, 'HITS GTA 6'),
+CAPS = [(0.10, 2 * B, 'WHAT IF'), (2 * B, BAR + 2 * B, 'A HURRICANE'), (BAR + 2 * B, 2 * BAR - 0.12, 'HIT GTA 6?'),
         (2 * BAR + 0.08, 2 * BAR + 2 * B, 'DOWNTOWN'), (2 * BAR + 2 * B, 3 * BAR, 'VICE CITY'), (3 * BAR, 4 * BAR, 'UNDERWATER'),
         (4 * BAR + 0.08, 5 * BAR, 'KATRINA-LEVEL'), (5 * BAR, 6 * BAR, 'STORM SURGE'),
         (6 * BAR + 0.08, 7 * BAR, 'THE WHOLE MAP'), (8 * BAR, 8.8 * BAR, 'VICE CITY: GONE'), (8.8 * BAR, 10 * BAR, '54% UNDERWATER'),
