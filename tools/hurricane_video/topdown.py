@@ -5,10 +5,10 @@ Water: every cell the connected sea reaches at the level (arrival_hi.npy), colou
 showing through (drowned streets stay visible), foam on the moving waterline. K I: render chunk I of K (run at most 2 at once:
 8 GB of RAM)."""
 import sys, os, json, numpy as np, cv2
-from common import REPO, WORK, W, H, FPS, DEEP, tile_noise, ss, ease, lerp, elerp
+from common import REPO, WORK, W, H, FPS, DEEP, SUF, frames_override, tile_noise, ss, ease, lerp, elerp
 sys.path.insert(0, os.path.join(REPO, 'tools')); from horizon_resect import HM, SC, ZX, ZY
 SEG = sys.argv[1]; STRIDE = int(sys.argv[2]) if len(sys.argv) > 2 else 1
-OUT = os.path.join(WORK, 'top'); os.makedirs(OUT, exist_ok=True)
+OUT = os.path.join(WORK, 'top' + SUF); os.makedirs(OUT, exist_ok=True)
 z4 = np.load(os.path.join(WORK, '_ground.npz')); G4, G4X, G4Y = z4['g'], float(z4['x0']), float(z4['y0'])
 z2 = np.load(os.path.join(WORK, '_ground2.npz')); G2, G2X, G2Y = z2['g'], float(z2['x0']), float(z2['y0'])
 PYR = [G4]
@@ -86,7 +86,7 @@ if __name__ == '__main__':
     import time
     cv2.setNumThreads(2)
     t0s, t1s = (11.0, 23.0) if SEG == 'B' else (31.0, 57.2)
-    todo = list(range(int(round(t0s * FPS)), int(round(t1s * FPS)), STRIDE))
+    todo = frames_override(list(range(int(round(t0s * FPS)), int(round(t1s * FPS)), STRIDE)))
     tagc = ''
     if len(sys.argv) > 4: K, I = int(sys.argv[3]), int(sys.argv[4]); todo = todo[I::K]; tagc = '_%d' % I
     meta = []; tt = time.time()

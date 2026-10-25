@@ -4,7 +4,15 @@ import os, numpy as np, cv2
 HERE = os.path.dirname(os.path.abspath(__file__)); TOOLS = os.path.dirname(HERE); REPO = os.path.dirname(TOOLS)
 WORK = os.path.expanduser('~/gta6_hurricane_work'); os.makedirs(WORK, exist_ok=True)
 TILES = os.path.join(REPO, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,17')
-W, H, FPS = 1920, 1080, 60
+VERTICAL = bool(os.environ.get('HV_VERTICAL'))         # 9:16 Short renders (1080x1920) go to *_v folders
+W, H, FPS = (1080, 1920, 60) if VERTICAL else (1920, 1080, 60)
+SUF = '_v' if VERTICAL else ''
+def frames_override(todo):
+    """HV_FRAMES=a,b,c (or @file) restricts a render to the frames a Short actually uses"""
+    v = os.environ.get('HV_FRAMES')
+    if not v: return todo
+    if v.startswith('@'): v = open(v[1:]).read()
+    keep = set(int(x) for x in v.replace('\n', ',').split(',') if x.strip()); return [n for n in todo if n in keep]
 DEEP = np.array([92, 40, 12], np.float32)          # BGR deep ocean
 SHAL = np.array([178, 170, 62], np.float32)        # BGR shallow turquoise
 def tile_noise(n, g, seed):

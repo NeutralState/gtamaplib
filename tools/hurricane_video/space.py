@@ -4,9 +4,9 @@ Ground: V17 tiles z3 (4 m/px) for land (land = arrival map > 0, i.e. not open se
 Clouds: log-spiral rain bands, central dense overcast, ragged clear eye, swirled fbm; lit by the sun, with their shadow on the ground.
 Frames -> WORK/space/NNNNNN.jpg; the ground composite is cached in WORK/_ground.npz (also used by topdown.py)."""
 import sys, os, numpy as np, cv2
-from common import REPO, WORK, TILES, W, H, FPS, DEEP, SHAL, tile_noise, ss, ease, lerp
+from common import REPO, WORK, TILES, W, H, FPS, DEEP, SHAL, SUF, frames_override, tile_noise, ss, ease, lerp
 STRIDE = int(sys.argv[1]) if len(sys.argv) > 1 else 1
-OUT = os.path.join(WORK, 'space'); os.makedirs(OUT, exist_ok=True)
+OUT = os.path.join(WORK, 'space' + SUF); os.makedirs(OUT, exist_ok=True)
 DUR = 11.0; CACHE = os.path.join(WORK, '_ground.npz')
 def build_ground():
     if os.path.exists(CACHE):
@@ -92,7 +92,7 @@ def render(n):
 if __name__ == '__main__':
     import time
     cv2.setNumThreads(3)
-    N = int(DUR * FPS); todo = [n for n in range(0, N, STRIDE) if not os.path.exists(os.path.join(OUT, '%06d.jpg' % n))]
+    N = int(DUR * FPS); todo = frames_override([n for n in range(0, N, STRIDE) if not os.path.exists(os.path.join(OUT, '%06d.jpg' % n))])
     t0 = time.time()
     for k, n in enumerate(todo):
         render(n)
