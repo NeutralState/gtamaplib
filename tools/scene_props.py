@@ -2067,7 +2067,15 @@ def portofino_detail():
     return dict(scene='Portofino Tower detail', camera='Biplane over the Beach', note=portofino_detail.__doc__.split('\n')[0], props=P)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony, glass_tower_fall, heli_jason, vice_beach_night, heli_cabin]
+def mountain_pass():
+    """S2/68 Mount Kalaga National Park 04 (Mountain Pass) — route 50's red-rock gorge under the rail viaduct, route 70's tunnel next
+    to it: the screenshot shows no streetlight on these mountain roads (Alexandre: « y a pas de lamp post »). No props, only a
+    'nolamp' zone over the pass (route 50 from Mount Waffles to the viaduct, route 70 from its tunnel down to the river)."""
+    return dict(scene='S2/68 Mount Kalaga National Park 04 (Mountain Pass)', camera='Mountain Pass', note=mountain_pass.__doc__.split('\n')[0], props=[],
+                nolamp=[[[-5500, 5560], [-4620, 5560], [-4620, 4700], [-5500, 4700]]])
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony, glass_tower_fall, heli_jason, vice_beach_night, heli_cabin, mountain_pass]
 
 
 def main():
