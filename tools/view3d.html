@@ -680,6 +680,7 @@ const terraUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uWaterBounds: { value: new THREE.Vector4(0, 0, 1, 1) },
   uWaterMed: { value: new THREE.Vector3(0.264, 0.361, 0.391) },
   uWaterOn:  { value: 0 },
+  uNatGround: { value: 1 },     // [NATURE-GROUND-V1] procedural natural ground outside the towns (drape mode)
   uDryLvl:   { value: -1e5 },   // [DRY-LAND-V1] sea level of the flood views: land above it pops (brighter, saturated, warm waterline)
 }]);
 window.__terraUni = terraUni;   // [DRY-LAND-V1]
@@ -1157,7 +1158,7 @@ const data = await (await fetch('/api/scene3d')).json();
         uniform vec3 uSunDir;
         uniform sampler2D uDrape, uShadow, uDetail;
         uniform vec4 uDetailBounds; uniform float uDetailOn;
-        uniform float uUseDrape, uContours, uTime, uShadowOn, uClouds, uNight, uWaterOn, uDryLvl;
+        uniform float uUseDrape, uContours, uTime, uShadowOn, uClouds, uNight, uWaterOn, uDryLvl, uNatGround;
         uniform vec3 uGSand, uGGrass, uGPark, uGUrban, uGRoad;
         uniform sampler2D uWaterTex; uniform vec4 uWaterBounds; uniform vec3 uWaterMed;
         uniform vec4 uTerrBounds, uMeasBounds;
@@ -1205,7 +1206,7 @@ const data = await (await fetch('/api/scene3d')).json();
           float slope = clamp(1.0 - n.z, 0.0, 1.0);
           float dEdge = min(min(vPos.x - uTerrBounds.x, uTerrBounds.z - vPos.x),
                             min(vPos.y - uTerrBounds.y, uTerrBounds.w - vPos.y));
-          vec3 base;
+          vec3 base; float natW = 0.0;   // [NATURE-GROUND-V1] weight of the procedural natural ground
           if (uUseDrape > 0.5) {
             base = texture2D(uDrape, vUv).rgb;
             // [DETAIL-V1] pres de la camera: la meme carte a 1 m/px (4x plus nette), fondue sur les bords de la fenetre
@@ -1258,6 +1259,35 @@ const data = await (await fetch('/api/scene3d')).json();
                 // la mer 3D ajoute le reflet du ciel; ici (rives au-dessus de z=0, lacs) on l'approche pour que les deux se raccordent
                 vec3 wl = pow(mix(uWaterMed, wf.rgb, clamp(wf.a * 1.3, 0.0, 1.0)), vec3(2.2));
                 base = mix(base, wl * 1.15 + vec3(0.050, 0.068, 0.095), wW);
+              }
+              // [NATURE-GROUND-V1 2026-10-26] (Alexandre: the hills must look like the game, Dirt Bikes frame): outside the city the
+              // map is replaced by a real ground — no labels, no road strokes. Natural zone = the blurred map is green / tan with no
+              // urban grey around (mip 4 ~ 64 m and mip 6 ~ 256 m), above the beach. Materials from the game frames: dry olive grass,
+              // ochre dirt, pale tan / reddish rock on steep slopes, dark forest floor where the map says woods; roads and water stay.
+              if (uNatGround > 0.5 && vPos.z > 2.0) {
+                vec3 b4 = textureLod(uDrape, vUv, 4.0).rgb, b6 = textureLod(uDrape, vUv, 6.5).rgb;
+                float g4 = smoothstep(0.05, 0.14, max(b4.g, b4.r) - b4.b) * (1.0 - smoothstep(0.03, 0.10, b4.b - max(b4.r, b4.g)));
+                float g6 = smoothstep(0.06, 0.15, max(b6.g, b6.r) - b6.b);
+                float urb = (1.0 - smoothstep(0.04, 0.09, max(b6.r, max(b6.g, b6.b)) - min(b6.r, min(b6.g, b6.b))));   // grey = town
+                natW = g4 * g6 * (1.0 - urb) * smoothstep(2.0, 6.0, vPos.z) * (1.0 - wR) * (1.0 - smoothstep(0.03, 0.10, c.b - max(c.r, c.g)));
+                if (natW > 0.001) {
+                  vec2 q = vPos.xy; float dcam = distance(cameraPosition, vPos);
+                  float fN = 1.0 - smoothstep(150.0, 1800.0, dcam);
+                  float n1 = vnoise(q * 0.021), n2 = vnoise(q * 0.09 + 7.0), n3 = vnoise(q * 0.6 + 3.0), n4 = vnoise(q * 0.004);
+                  float woods = smoothstep(0.04, 0.10, b4.g - b4.r) * (0.55 + 0.45 * n4);          // map park/wood green = forest
+                  vec3 grass = srgb(vec3(0.43, 0.44, 0.24)) * (0.85 + 0.3 * n2);
+                  vec3 dryg  = srgb(vec3(0.58, 0.53, 0.33)) * (0.9 + 0.2 * n2);
+                  vec3 dirt  = srgb(vec3(0.64, 0.50, 0.35)) * (0.9 + 0.2 * n3 * fN);
+                  vec3 floor_ = srgb(vec3(0.19, 0.25, 0.13)) * (0.8 + 0.4 * n2);
+                  vec3 rockA = srgb(vec3(0.78, 0.68, 0.58)), rockB = srgb(vec3(0.66, 0.44, 0.34));
+                  vec3 rock = mix(rockA, rockB, smoothstep(0.35, 0.75, n1)) * (0.82 + 0.3 * vnoise(q * vec2(0.08, 0.5)) );   // banded strata
+                  vec3 g = mix(grass, dryg, smoothstep(0.45, 0.8, n1));
+                  g = mix(g, dirt, smoothstep(0.62, 0.82, n2) * 0.8);                                  // dirt patches
+                  g = mix(g, floor_, woods);
+                  float rk = smoothstep(0.16, 0.34, slope + (n2 - 0.5) * 0.12);
+                  g = mix(g, rock, rk);
+                  base = mix(base, g, natW);
+                }
               }
             }
             // [MAP-COLORS-V2 2026-09-26] la map telle quelle: plus de remplacement de l'eau par le fond marin (c'etait
@@ -1329,6 +1359,7 @@ const data = await (await fetch('/api/scene3d')).json();
           float diffD = max(dot(n, uSunDir), 0.0) * sh;
           float lum = uUseDrape > 0.5 ? (0.90 + 0.14 * diffD)
                                       : (amb + 1.00 * diff + 0.12 * back);
+          lum = mix(lum, 0.42 + 0.22 * clamp(n.z, 0.0, 1.0) + 0.95 * max(dot(n, uSunDir), 0.0) * mix(1.0, texture2D(uShadow, vUv).r, uShadowOn) * (1.0 - cl), natW);   // [NATURE-GROUND-V1] real relief shading
           // [NIGHT-V1] la nuit: lumiere effondree, teinte clair-de-lune
           lum *= 1.0 - (uUseDrape > 0.5 ? 0.92 : 0.80) * uNight;   // [SCENE-PROPS-V1] the (mostly white) V17 drape stayed pale at night: much darker, as on the night frames
           vec3 lit = base * lum;
