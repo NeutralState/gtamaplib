@@ -618,6 +618,13 @@ const ENV = Object.assign({ az: 215, el: 38, haze: 30 },
   JSON.parse(localStorage.getItem('ui.env3d') || '{}'));
 const _lin = c => c.map(v => Math.pow(v, 2.2));   // sRGB -> lineaire (les shaders travaillent en lineaire)
 // [NATURE-LOOK-V1] look presets for the natural-landscape shots (window.__natureLook = one of them; atmK -> window.__atmK)
+// [RAIL-BRIDGE-V1 2026-10-26] railway viaducts the V16 data does not have (no railways in 3D). Mount Kalaga National Park 04
+// (Mountain Pass): the purple rail line of the V17 map crosses the route 50 gorge at ~(-5127, 5160) (line fit on the map pixels,
+// direction ~ -44 deg); the screenshot shows a concrete deck at the gorge rim on two tall piers. Deck 76.5 m (the rail grade between
+// the ~76 m NW rim and the ~74 m SE rim; route 50 is at 62 m below). Defined here so the tree pass can keep the deck clear.
+window.__railBridges = [{ name: 'Mountain Pass rail viaduct', c: [-5127, 5161], u: [0.711, -0.703], s0: -72, s1: 138, z: 76.5, w: 7.5 }];
+window.__treeClear = (x, y) => window.__railBridges.some(B => { const dx = x - B.c[0], dy = y - B.c[1], s = dx * B.u[0] + dy * B.u[1], n = -dx * B.u[1] + dy * B.u[0];
+  return s > B.s0 - 6 && s < B.s1 + 6 && Math.abs(n) < B.w / 2 + 7; });
 window.__lookPresets = {
   nature: { hazeMix: 0.8, hazeCol: [0.78, 0.74, 0.68], desat: 0.18, warm: 0.6, atmK: 6, sky: 1 },     // ground level, fitted on Dirt Bikes
   aerial: { hazeMix: 0.7, hazeCol: [0.66, 0.72, 0.80], desat: 0.18, warm: 0.6, atmK: 2.5, sky: 1 },   // high shots: cool blue distance haze
@@ -5301,6 +5308,7 @@ window.__camScreen = name => {
         const x = x0 + (i + rnd(seed + 1) * step) * MPX, y = yTop - (j + rnd(seed + 2) * step) * MPX;
         const z = terrainZAt(x, y);
         if (z === null) continue;
+        if (window.__treeClear && window.__treeClear(x, y)) continue;   // [RAIL-BRIDGE-V1] no tree through the viaduct deck
         // [VEG-V2 2026-10-05] aussi en plaine: parcs (vert fonce V16) denses, gazons epars (berges, squares, rues) — avant: seulement > 25 m
         const park = near(...c, 151, 192, 116, 16), lawn = near(...c, 193, 217, 131, 16);
         let pz = z >= 25 ? Math.min(1, (z - 18) / 40) * (c[1] >= c[0] ? 0.85 : 0.45) : 0;   // [TREES-V2] denser hill forest (game frames)
@@ -5632,6 +5640,36 @@ let orbitOn = false, _orbitPrevT = 0;
   });
 }
 const _orbitAxis = new THREE.Vector3(0, 0, 1);
+// ── [RAIL-BRIDGE-V1 2026-10-26] build the viaducts of window.__railBridges: concrete deck + box girder, parapets, two rails, piers
+// down to the terrain every ~40 m (none within 14 m of a V16 road ribbon, so the road below passes between them) ──
+(async () => {
+  for (let t = 0; t < 120 && !(window.__hgrid && window.__terrain && window.__roadsData); t++) await new Promise(r => setTimeout(r, 500));
+  const G = window.__hgrid, R = window.__roadsData; if (!G || !window.__terrain) return;
+  const T3 = window.__terrain.THREE, grp = new T3.Group(); grp.name = 'rail-bridges'; window.__terrain.layers.meshes.add(grp);
+  const zAt = (x, y) => { const u = (x - G.x0) / G.step, v = (y - G.y0) / G.step, i = Math.floor(u), j = Math.floor(v), a = u - i, b = v - j, Z = (ii, jj) => G.Z[jj * G.nx + ii];
+    return Z(i, j) * (1 - a) * (1 - b) + Z(i + 1, j) * a * (1 - b) + Z(i, j + 1) * (1 - a) * b + Z(i + 1, j + 1) * a * b; };
+  const conc = new T3.MeshStandardMaterial({ color: 0xaaa59c, roughness: 0.85, metalness: 0.0 }), steel = new T3.MeshStandardMaterial({ color: 0x3b3431, roughness: 0.6, metalness: 0.4 });
+  const roadPts = []; for (const k of ['road', 'hwy', 'small']) for (const r of (R && R[k]) || []) for (const q of r.p) roadPts.push(q);
+  let nP = 0;
+  for (const B of window.__railBridges) {
+    const ang = Math.atan2(B.u[1], B.u[0]), at = (s, n) => [B.c[0] + B.u[0] * s - B.u[1] * n, B.c[1] + B.u[1] * s + B.u[0] * n];
+    const box = (s, n, L, Wd, Hh, zc, m) => { const g = new T3.BoxGeometry(L, Wd, Hh), me = new T3.Mesh(g, m); const [x, y] = at(s, n); me.position.set(x, y, zc); me.rotation.z = ang; grp.add(me); return me; };
+    const L = B.s1 - B.s0, sm = (B.s0 + B.s1) / 2;
+    box(sm, 0, L, B.w, 1.4, B.z - 0.7, conc);                                        // deck slab
+    box(sm, 0, L, B.w * 0.62, 2.4, B.z - 1.4 - 1.2, conc);                           // box girder
+    for (const sg of [-1, 1]) {
+      box(sm, sg * (B.w / 2 - 0.15), L, 0.3, 1.1, B.z + 0.55, conc);                  // parapets
+      box(sm, sg * 0.75, L, 0.12, 0.18, B.z + 0.09, steel);                          // rails (standard gauge 1.5 m)
+    }
+    for (let s = B.s0 + 34; s <= B.s1 - 30; s += 4) {
+      const [x, y] = at(s, 0); if (roadPts.some(q => Math.hypot(q[0] - x, q[1] - y) < 14)) continue;
+      const g = zAt(x, y), top = B.z - 3.8; if (top - g < 4) continue;
+      box(s, 0, 2.6, 5.2, top - g + 3, (top + g - 3) / 2, conc); box(s, 0, 3.4, 6.4, 1.0, top - 0.5, conc);   // pier + cap
+      nP++; s += 36;
+    }
+  }
+  window.__railBridgeInfo = { bridges: window.__railBridges.length, piers: nP };
+})();
 // ── [HURRICANE-V1 2026-10-24] « What if a hurricane hit GTA 6 »: storm surge on the game terrain + storm atmosphere ──
 // window.__hurricane({surge: m, storm: 0..1, rain: 0..1, wind: deg (toward), lightning: 0..1}) — surge raises the sea plane, the sea shader only
 // floods the cells the sea really reaches (tools/hurricane_surge.py arrival map); rain = streaks in a box around the camera,
