@@ -9,8 +9,9 @@ import short_plan as SP
 SR = 48000; BEAT = SP.BEAT; BAR = SP.BAR; NB = 11; D = NB * BAR + 1.5
 L = int(D * SR); t = np.arange(L) / SR
 OUT = sys.argv[1] if len(sys.argv) > 1 else os.path.join(SP.WORK, 'darksynth.wav')
-rng = np.random.default_rng(80)
-def midi(n): return 440.0 * 2 ** ((n - 69) / 12)
+rng = np.random.default_rng(int(os.environ.get('DS_SEED', '80')))
+TR = int(os.environ.get('DS_TRANSPOSE', '0'))            # semitones: one variant per Short
+def midi(n): return 440.0 * 2 ** ((n + TR - 69) / 12)
 def saw(f, n, detune=0.0, ph=0.0):
     tt = np.arange(n) / SR; x = 2 * ((tt * f * (1 + detune) + ph) % 1.0) - 1; return x
 def lp(x, fc, order=2):

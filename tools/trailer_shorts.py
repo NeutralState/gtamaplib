@@ -87,3 +87,53 @@ if __name__ == '__main__':
     info = json.load(open(TIMES)) if os.path.exists(TIMES) and '--locate' not in sys.argv else locate()
     want = [a for a in sys.argv[1:] if a.startswith('T4/')] or (list(info) if 'all' in sys.argv else [])
     for sid in want: print(make(sid, info[sid]))
+
+
+# ── v2 (viral edit, 2026-10-26): music with its drop on the reveal, own wipe + flash on the drop, hook text, loop length ──
+BPM_BAR = 4 * 60.0 / 117.5                             # darksynth.py grid: drop after 2 bars, Short = 3 bars (loops on the beat)
+def make_v2(sid, info, music, approach=3.3, out_name=None):
+    name = info['name']; frame = cv2.imread(os.path.join(REPO, 'frames', name + '.png'))
+    DROP = 2 * BPM_BAR; DUR = 3 * BPM_BAR; N = int(round(DUR * FPS))
+    t_fade = info['t0'] - 0.5; src0 = t_fade - approach              # stop before the tour's own dissolve starts
+    cap = cv2.VideoCapture(TOUR); cap.set(cv2.CAP_PROP_POS_FRAMES, int(round(src0 * FPS)))
+    src = []
+    for k in range(int(approach * FPS) + 2):
+        ok, f = cap.read()
+        if not ok: break
+        src.append(panel(f[60:860, 300:1500]))
+    src = src[:int(approach * FPS)]
+    HOOK = caption('GTA 6 TRAILER|vs MY 3D MAP', 88, 78)
+    WAIT = caption('WAIT FOR IT...', 96, BOT_Y - 12)
+    MATCH = caption('IT MATCHES', 128, BOT_Y - 12)
+    PLACE = caption(name.upper().replace(' AND ', ' & '), 58, BOT_Y + PH + 92, 8)
+    T_GAME, T_3D = tag('GTA 6 TRAILER'), tag('MY 3D MAP')
+    bg = np.full((H, W, 3), 14, np.float32)
+    vid = os.path.join(OUT, '_v.mp4')
+    ff = subprocess.Popen(['ffmpeg', '-y', '-loglevel', 'error', '-f', 'rawvideo', '-pix_fmt', 'bgr24', '-s', '%dx%d' % (W, H), '-r', str(FPS), '-i', '-',
+                           '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-pix_fmt', 'yuv420p', vid], stdin=subprocess.PIPE)
+    for n in range(N):
+        t = n / FPS; img = bg.copy(); z = 1.0 + 0.05 * t / DUR
+        real = panel(frame, z); img[TOP_Y:TOP_Y + PH] = real
+        three = src[min(len(src) - 1, int(t / DROP * (len(src) - 1)))] if t < DROP else src[-1]
+        w = min(1.0, max(0.0, (t - DROP) / 0.18))                       # wipe on the drop, left -> right
+        bot = three.copy(); xw = int(PW * w); bot[:, :xw] = real[:, :xw]
+        if 0 < xw < PW: bot[:, max(0, xw - 4):xw + 4] = 255
+        img[BOT_Y:BOT_Y + PH] = bot
+        fl = max(0.0, 1 - (t - DROP) / 0.22) if t >= DROP else 0.0       # white flash on the drop
+        if fl > 0: img = img * (1 - 0.55 * fl) + 255 * 0.55 * fl
+        if t >= DROP:                                                  # zoom punch
+            k = max(0.0, 1 - (t - DROP) / 0.3); s = 1 + 0.05 * k
+            if s > 1.001:
+                big = cv2.resize(img, (int(W * s), int(H * s))); x0 = (big.shape[1] - W) // 2; y0 = (big.shape[0] - H) // 2; img = big[y0:y0 + H, x0:x0 + W]
+        blend(img, HOOK, 0, 0, 1.0); blend(img, PLACE, 0, 0, 1.0)
+        blend(img, T_GAME, 24, TOP_Y + 20, 1.0); blend(img, T_3D, 24, BOT_Y + 20, 1.0 if t < DROP else 0.0)
+        if t < DROP: blend(img, WAIT, 0, 0, 0.55 + 0.45 * abs(np.sin(np.pi * t / (BPM_BAR / 4))))   # pulses on the beat
+        else: blend(img, MATCH, 0, 0, 1.0)
+        ff.stdin.write(np.clip(img, 0, 255).astype(np.uint8).tobytes())
+    ff.stdin.close(); ff.wait()
+    out = os.path.join(OUT, out_name or ('v2_%s_%s.mp4' % (sid.replace('/', '_'), re.sub(r'[^A-Za-z0-9]+', '_', name).strip('_'))))
+    fade = 0.08
+    subprocess.run(['ffmpeg', '-y', '-loglevel', 'error', '-i', vid, '-i', music, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-t', '%.3f' % DUR,
+                    '-af', 'afade=t=in:d=0.03,afade=t=out:st=%.3f:d=%.2f,loudnorm=I=-14:TP=-1.5' % (DUR - fade, fade), '-c:a', 'aac', '-b:a', '256k',
+                    '-dn', '-map_metadata', '-1', '-movflags', '+faststart', out], check=True)
+    os.remove(vid); return out
