@@ -71,12 +71,16 @@ def resample(R, step=6.0):
 # -28 m sur toute sa longueur, tube est sous le chenal a -16 m) -> ces polylignes vont dans out['tunnel'] (non rendues en 3D,
 # pas de lampadaires ni de trafic) au lieu d'etre montees en pont a 6 m au-dessus de l'eau (elles traversaient le paquebot).
 # Selection par extremites (tolerance 15 m): Port of Vice City tunnel (= PortMiami Tunnel IRL, Starfish Island -> Port VC, 2 tubes).
+# [MOUNTAIN-PASS-TUNNEL 2026-10-26] route 70 under the ridge between Mount Waffles and Mount Mountain: dashed on the V17 map from
+# (-4940, 5195) to (-4820, 5320); drawn over the crest it climbed to 110 m between 75 m portals (Alexandre: « c'est un tunnel »).
+# Its heightmap cutting is the real portal approach, not an artefact: 'fill': False (view3d does not raise the terrain along it).
 TUNNELS = [((323.0, 216.0), (517.0, -632.0)), ((289.0, 248.0), (517.0, -647.0))]
+TUNNELS_NOFILL = [((-4937.0, 5198.0), (-4806.0, 5332.0))]
 
 
-def is_tunnel(R, tol=15.0):
+def is_tunnel(R, tol=15.0, lst=None):
     a, b = R[0], R[-1]
-    for p, q in TUNNELS:
+    for p, q in (TUNNELS + TUNNELS_NOFILL if lst is None else lst):
         if (np.hypot(a[0] - p[0], a[1] - p[1]) < tol and np.hypot(b[0] - q[0], b[1] - q[1]) < tol) or \
            (np.hypot(a[0] - q[0], a[1] - q[1]) < tol and np.hypot(b[0] - p[0], b[1] - p[1]) < tol): return True
     return False
@@ -106,7 +110,9 @@ def main():
                 try: g = float(RR.ground(x, y))
                 except Exception: g = 0.0
                 P.append([round(float(x), 1), round(float(y), 1), round(min(g, 0.0) - 8.0, 2)])   # sous le lit / la tranchee
-            out['tunnel'].append({'w': float(s['width'] or 4), 'p': P, 'cls': c}); continue
+            e = {'w': float(s['width'] or 4), 'p': P, 'cls': c}
+            if is_tunnel(R, lst=TUNNELS_NOFILL): e['fill'] = False
+            out['tunnel'].append(e); continue
         P = []; deck_hit = False
         on_deck = False                                     # [DECK-RAMP] le trait touche-t-il un tablier (> sol + 2.5 m) quelque part ?
         if c in ('hwy', 'road', 'mark_w', 'mark_y'):
