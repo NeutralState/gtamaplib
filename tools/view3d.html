@@ -5271,6 +5271,14 @@ window.__camScreen = name => {
         let bank = false;
         if (greyish) for (const [di, dj] of [[2, 0], [-2, 0], [0, 2], [0, -2], [4, 0], [-4, 0], [0, 4], [0, -4], [5, 0], [-5, 0], [0, 5], [0, -5]]) { const ii = i + di, jj = j + dj; if (ii < 0 || jj < 0 || ii >= W2 || jj >= H2) continue; const kk = 4 * (jj * W2 + ii); if (isWater([all[kk], all[kk + 1], all[kk + 2]])) bank = true; }
         if (!bank && (isWater(c) || isRoad(c) || urbanPx || greyish || near(...c, 176, 176, 176, 8) || isSand(c) || near(...c, 255, 255, 255, 6))) continue;
+        // [ROAD-CLEAR-V1 2026-10-26] (Alexandre: clear the roads) no tree within ~12 m of a road: grey town roads, white country
+        // roads (255,255,255) and cream highways (251,252,212) of the V17 map, checked on a ring of 1-3 px (4 m/px) around the pixel
+        { let road = false;
+          for (let rr = 1; rr <= 3 && !road; rr++) for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+            const ii = i + di * rr, jj = j + dj * rr; if (ii < 0 || jj < 0 || ii >= W2 || jj >= H2) continue;
+            const kk = 4 * (jj * W2 + ii), cc = [all[kk], all[kk + 1], all[kk + 2]];
+            if (isRoad(cc) || near(...cc, 255, 255, 255, 8) || near(...cc, 251, 252, 212, 14)) { road = true; break; } }
+          if (road) continue; }
         const seed = j * 7919 + i * 104729;
         const x = x0 + (i + rnd(seed + 1) * step) * MPX, y = yTop - (j + rnd(seed + 2) * step) * MPX;
         const z = terrainZAt(x, y);
