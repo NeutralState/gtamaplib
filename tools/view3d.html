@@ -617,6 +617,11 @@ function nanGuard() {
 const ENV = Object.assign({ az: 215, el: 38, haze: 30 },
   JSON.parse(localStorage.getItem('ui.env3d') || '{}'));
 const _lin = c => c.map(v => Math.pow(v, 2.2));   // sRGB -> lineaire (les shaders travaillent en lineaire)
+// [NATURE-LOOK-V1] look presets for the natural-landscape shots (window.__natureLook = one of them; atmK -> window.__atmK)
+window.__lookPresets = {
+  nature: { hazeMix: 0.8, hazeCol: [0.78, 0.74, 0.68], desat: 0.18, warm: 0.6, atmK: 6, sky: 1 },     // ground level, fitted on Dirt Bikes
+  aerial: { hazeMix: 0.7, hazeCol: [0.66, 0.72, 0.80], desat: 0.18, warm: 0.6, atmK: 2.5, sky: 1 },   // high shots: cool blue distance haze
+};
 function skyColors() {
   // t: 0 = couchant (teintes chaudes), 1 = plein jour;
   // night: 0 = jour, 1 = nuit noire (el <= -6, crepuscule -6..+2)
@@ -3415,13 +3420,15 @@ window.__dbgPick = (nx, ny) => {                                   // [DEBUG] wh
 };
 window.__grabFrame = (W = 960, keepCam = false) => {        // keepCam: rendre la camera telle quelle (pose du tour / POV), sans repasser par les controles
   const [W0, H0] = realSize(), dpr0 = renderer.getPixelRatio();
-  renderer.setPixelRatio(1); renderer.setSize(W, Math.round(W * H0 / W0), false);
+  const asp = window.__grabAspect || W0 / H0, asp0 = camera.aspect;             // [GRAB-ASPECT-V1] fixed output aspect (e.g. 16/9) whatever the window size
+  renderer.setPixelRatio(1); renderer.setSize(W, Math.round(W / asp), false);
+  if (Math.abs(camera.aspect - asp) > 1e-6) { camera.aspect = asp; camera.updateProjectionMatrix(); }
   if (!keepCam) controls.update(0.016);
   if (window.__refl) window.__refl.step();
   if (window.__cine) window.__cine.render(); else renderer.render(scene, camera);
   const out = document.createElement('canvas'); out.width = renderer.domElement.width; out.height = renderer.domElement.height;
   out.getContext('2d').drawImage(renderer.domElement, 0, 0);
-  renderer.setPixelRatio(dpr0); resize();
+  renderer.setPixelRatio(dpr0); if (camera.aspect !== asp0) { camera.aspect = asp0; camera.updateProjectionMatrix(); } resize();
   return out;
 };
 document.getElementById('btn-shot').addEventListener('click', async () => {
@@ -5577,8 +5584,7 @@ const Cine = (() => {
       U.uHor.value.copy(skyUni.uHorizon.value); U.uSunC.value.copy(skyUni.uSunColor.value); U.uSunD.value.copy(skyUni.uSunDir.value);
       const hz = (typeof ENV !== 'undefined' && ENV.haze != null) ? ENV.haze / 100 : 0.3;
       U.uB0.value = (0.18 + 0.7 * hz) * 1e-4 * (1 + (window.__stormHaze ?? 16) * (window.__stormSky || 0)) * (window.__atmK ?? 1); U.uExpo.value = window.__stormExpo ?? 1;
-      { window.__lookPresets = window.__lookPresets || { nature: { hazeMix: 0.8, hazeCol: [0.78, 0.74, 0.68], desat: 0.18, warm: 0.6, atmK: 6, sky: 1 } };   // Dirt Bikes fit
-        const L = window.__natureLook; U.uAtmColMix.value = L ? L.hazeMix : 0; if (L) U.uAtmCol.value.set(...L.hazeCol); U.uDesat.value = L ? L.desat : 0; U.uWarm.value = L ? L.warm : 0; }   // [NATURE-LOOK-V1]
+      { const L = window.__natureLook; U.uAtmColMix.value = L ? L.hazeMix : 0; if (L) U.uAtmCol.value.set(...L.hazeCol); U.uDesat.value = L ? L.desat : 0; U.uWarm.value = L ? L.warm : 0; }   // [NATURE-LOOK-V1]
       U.uAtm.value = window.__atmosOff ? 0 : 1; }   // brume legere: garder les couleurs vives
     pass(finalMat, null);
   }
@@ -5704,6 +5710,9 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
   };
   // orbital shots: sea from the arrival map + one ocean colour, no aerial-perspective pass (it hazes only where depth is written)
   window.__orbit = async on => { if (on) await loadArr(); seaUni.uSpace.value = on ? 1 : 0; window.__atmosOff = !!on; return on ? 'orbit' : 'off'; };
+  // [NATURE-LOOK-V1] aerial shots: the sea writes depth, so the haze lands on the sea surface (not on the seabed under it,
+  // which drew the terrain crop as a pale rectangle out at sea)
+  window.__seaDepth = on => { if (window.__sea) { window.__sea.material.depthWrite = !!on; window.__sea.material.needsUpdate = true; } return !!on; };
   window.__camFar = (f, near = 1) => { camera.far = f; camera.near = near; camera.updateProjectionMatrix(); };   // orbital shots: near 200 m keeps the depth precision at 60 km
   window.__hurricane = async o => {
     state = o;
