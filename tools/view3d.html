@@ -583,6 +583,15 @@ function terrainZAt(x, y) {
   if (i < 0 || j < 0 || i >= g.nx || j >= g.ny) return null;
   const z = g.Z[j * g.nx + i]; return Number.isFinite(z) ? z : null;
 }
+// [ROAD-BENCH-V1 2026-10-26] bilinear ground for the road ribbons and their traffic: terrainZAt is the nearest 12 m node, so ribbons on
+// hillsides were 12 m stair steps (a jagged black slot, route 70 below the Mountain Pass tunnel)
+function terrainZBil(x, y) {
+  const G = window.__hgrid; if (!G) return null;
+  const u = (x - G.x0) / G.step, v = (y - G.y0) / G.step, i = Math.floor(u), j = Math.floor(v);
+  if (i < 0 || j < 0 || i >= G.nx - 1 || j >= G.ny - 1) return terrainZAt(x, y);
+  const a = u - i, b = v - j, Z = (ii, jj) => G.Z[jj * G.nx + ii], z = Z(i, j) * (1 - a) * (1 - b) + Z(i + 1, j) * a * (1 - b) + Z(i, j + 1) * (1 - a) * b + Z(i + 1, j + 1) * a * b;
+  return Number.isFinite(z) ? z : terrainZAt(x, y);
+}
 function camSanity() {
   const p = camera.position, t = controls.target;
   if (![p.x, p.y, p.z, t.x, t.y, t.z].every(Number.isFinite)) return;   // laisse nanGuard gerer
@@ -622,17 +631,21 @@ const _lin = c => c.map(v => Math.pow(v, 2.2));   // sRGB -> lineaire (les shade
 // (Mountain Pass): the purple rail line of the V17 map crosses the route 50 gorge at ~(-5127, 5160) (line fit on the map pixels,
 // direction ~ -44 deg); the screenshot shows a concrete deck at the gorge rim on two tall piers. Deck 76.5 m (the rail grade between
 // the ~76 m NW rim and the ~74 m SE rim; route 50 is at 62 m below). Defined here so the tree pass can keep the deck clear.
-window.__railBridges = [{ name: 'Mountain Pass rail viaduct', c: [-5127, 5161], u: [0.711, -0.703], s0: -72, s1: 138, z: 76.5, w: 7.5 }];
+window.__railBridges = [{ name: 'Mountain Pass rail viaduct', c: [-5127, 5161], u: [0.711, -0.703], s0: -72, s1: 161, z: 76.5, w: 7.5 }];   // s1 = the tunnel portal
 // [TRENCH-FILL-V1 2026-10-26] the game heightmap carves a trench along its tunnels (as at the Port of Vice City). Mountain Pass has
 // route 70's tunnel and the railway tunnels on both sides of the viaduct (dashed on the V17 map; Alexandre: « y a pas deux creux »).
 // Bridged smoothly side to side in the height grid itself (z = max(z, linear between the two rims)) before anything uses it.
-window.__trenchFills = [   // centrelines = the trench bottoms found in the heightmap (up to ~27 m off the V17 dashes)
-  { name: 'route 70 tunnel', r: 22, p: [[-4958, 5196], [-4940, 5210], [-4935, 5228], [-4924, 5239], [-4916, 5252], [-4908, 5265], [-4898, 5276],
+window.__trenchFills = [   // centrelines = the trench bottoms found in the heightmap (up to ~27 m off the V17 dashes), from inside the portals
+  { name: 'route 70 tunnel', r: 22, p: [[-4933, 5214], [-4935, 5228], [-4924, 5239], [-4916, 5252], [-4908, 5265], [-4898, 5276],
                                         [-4888, 5287], [-4876, 5296], [-4863, 5305], [-4846, 5310], [-4834, 5319], [-4822, 5326]] },
-  { name: 'Mountain Pass rail tunnel', r: 22, p: [[-5018, 5058], [-5007, 5043], [-4995, 5033], [-4968, 4997], [-4947, 4976], [-4938, 4952]] },
+  { name: 'Mountain Pass rail tunnel', r: 22, p: [[-5011, 5047], [-5007, 5043], [-4995, 5033], [-4968, 4997], [-4947, 4976], [-4938, 4952]] },
   { name: 'Mount Waffles rail tunnel', r: 20, p: [[-5410, 5274], [-5380, 5278], [-5350, 5279], [-5335, 5288], [-5305, 5278], [-5292, 5279]] },
 ];
-window.__treeClear = (x, y) => window.__railBridges.some(B => { const dx = x - B.c[0], dy = y - B.c[1], s = dx * B.u[0] + dy * B.u[1], n = -dx * B.u[1] + dy * B.u[0];
+// [TUNNEL-PORTAL-V1 2026-10-26] concrete portals where a V16 road stroke ends at a tunnel (Alexandre: « fait une tunnel entrance »):
+// route 70's tunnel under the Waffles / Mountain ridge (south and north portals = the ends of the strokes around the dashed V17 section)
+window.__tunnelPortals = [{ name: 'route 70 tunnel S', at: [-4937.2, 5197.7] }, { name: 'route 70 tunnel N', at: [-4806.2, 5332.3] },
+  { name: 'Mountain Pass rail tunnel W portal', at: [-5011.5, 5046.8], dir: [0.711, -0.703], z: 76.5, w: 7.5, rail: true }];   // the viaduct runs straight into it
+window.__treeClear = (x, y) => window.__tunnelPortals.some(P => Math.hypot(x - P.at[0], y - P.at[1]) < 20) || window.__railBridges.some(B => { const dx = x - B.c[0], dy = y - B.c[1], s = dx * B.u[0] + dy * B.u[1], n = -dx * B.u[1] + dy * B.u[0];
   return s > B.s0 - 6 && s < B.s1 + 6 && Math.abs(n) < B.w / 2 + 7; });
 window.__lookPresets = {
   nature: { hazeMix: 0.8, hazeCol: [0.78, 0.74, 0.68], desat: 0.18, warm: 0.6, atmK: 6, sky: 1 },     // ground level, fitted on Dirt Bikes
@@ -706,6 +719,9 @@ const terraUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uNatGround: { value: 1 },     // [NATURE-GROUND-V1] procedural natural ground outside the towns (drape mode)
   uCutBox:   { value: new THREE.Vector4(0, 0, 0, 0) },   // [GORGE-SHARPEN-V1] the coarse terrain is not drawn in this box (a 3 m mesh is)
   uCutOn:    { value: 0 },
+  uPortP:    { value: [0, 1, 2, 3].map(() => new THREE.Vector4()) },   // [TUNNEL-PORTAL-V1] barrels: centre xy + inbound dir
+  uPortS:    { value: [0, 1, 2, 3].map(() => new THREE.Vector4()) },   //   half width, length, z bottom, z top
+  uPortN:    { value: 0 },
   uDryLvl:   { value: -1e5 },   // [DRY-LAND-V1] sea level of the flood views: land above it pops (brighter, saturated, warm waterline)
 }]);
 window.__terraUni = terraUni;   // [DRY-LAND-V1]
@@ -1200,7 +1216,7 @@ const data = await (await fetch('/api/scene3d')).json();
         }`,
       fragmentShader: `
         varying vec3 vPos; varying vec3 vN; varying vec2 vUv; varying float vFine;
-        uniform vec4 uCutBox; uniform float uCutOn;
+        uniform vec4 uCutBox; uniform float uCutOn; uniform vec4 uPortP[4]; uniform vec4 uPortS[4]; uniform float uPortN;
         uniform vec3 uSunDir;
         uniform sampler2D uDrape, uShadow, uDetail;
         uniform vec4 uDetailBounds; uniform float uDetailOn;
@@ -1249,6 +1265,9 @@ const data = await (await fetch('/api/scene3d')).json();
         void main() {
           #include <logdepthbuf_fragment>
           if (uCutOn > 0.5 && vFine < 0.5 && vPos.x > uCutBox.x && vPos.y > uCutBox.y && vPos.x < uCutBox.z && vPos.y < uCutBox.w) discard;   // [GORGE-SHARPEN-V1]
+          for (int k = 0; k < 4; k++) { if (float(k) >= uPortN) break;   // [TUNNEL-PORTAL-V1] no ground inside a tunnel barrel (the opening shows the dark tube)
+            vec2 d = vPos.xy - uPortP[k].xy; float al = dot(d, uPortP[k].zw), ac = abs(d.x * uPortP[k].w - d.y * uPortP[k].z);
+            if (al > 0.0 && al < uPortS[k].y && ac < uPortS[k].x && vPos.z > uPortS[k].z && vPos.z < uPortS[k].w) discard; }
           vec3 n = normalize(vN);
           float slope = clamp(1.0 - n.z, 0.0, 1.0);
           float dEdge = min(min(vPos.x - uTerrBounds.x, uTerrBounds.z - vPos.x),
@@ -1337,6 +1356,7 @@ const data = await (await fetch('/api/scene3d')).json();
                   g = mix(g, dirt, smoothstep(0.62, 0.82, n2) * 0.8);                                  // dirt patches
                   g = mix(g, floor_, woods);
                   float rk = smoothstep(0.24, 0.42, slope + (n2 - 0.5) * 0.10) * (0.6 + 0.4 * smoothstep(0.3, 0.6, n1));   // only real cliffs, broken up
+                  rock = mix(rock, srgb(vec3(0.47, 0.42, 0.34)) * (0.8 + 0.35 * n3), 0.65 * step(0.5, vFine));   // [ROAD-BENCH-V1] fresh road / portal cuts: darker grey-brown rock
                   g = mix(g, rock, rk);
                   // [RED-ROCK-V1 2026-10-26] Mountain Pass (S2/68 Mount Kalaga National Park 04, camera ~(-4845, 5465) looking WSW):
                   // route 50 runs down a red-rock gorge = the ~33 m deep cut the game heightmap has along it (route 70 next to it is
@@ -1346,7 +1366,7 @@ const data = await (await fetch('/api/scene3d')).json();
                   float dPass = min(length(q - r0 - d01 * clamp(dot(q - r0, d01) / dot(d01, d01), 0.0, 1.0)),
                                 min(length(q - r1 - d12 * clamp(dot(q - r1, d12) / dot(d12, d12), 0.0, 1.0)),
                                     length(q - r2 - d23 * clamp(dot(q - r2, d23) / dot(d23, d23), 0.0, 1.0))));
-                  float pass = (1.0 - smoothstep(110.0, 200.0, dPass + (n1 - 0.5) * 60.0)) * step(0.5, vFine);   // the sharpened cliffs only; hillsides stay green
+                  float pass = (1.0 - smoothstep(50.0, 75.0, dPass + (n1 - 0.5) * 16.0)) * step(0.5, vFine);   // the route 50 cliffs only (not the route 70 bench); hillsides stay green
                   if (pass > 0.001) {
                     float band = 0.5 + 0.5 * sin(vPos.z * 0.55 + (n2 - 0.5) * 3.0) * (0.6 + 0.4 * n3);   // horizontal strata
                     vec3 red = mix(srgb(vec3(0.60, 0.33, 0.23)), srgb(vec3(0.72, 0.48, 0.33)), band);
@@ -4065,7 +4085,7 @@ window.__camScreen = name => {
     const lin = v => Math.pow(v, 2.2);
     const ASPH = { road: [0.25, 0.25, 0.26].map(lin), hwy: [0.38, 0.38, 0.39].map(lin), small: [0.34, 0.34, 0.35].map(lin) };   // gris asphalte (sRGB)
     const CONC = [0.80, 0.79, 0.76].map(lin), CONC2 = [0.72, 0.71, 0.68].map(lin), WHITE = [0.92, 0.92, 0.9].map(lin), YEL = [0.95, 0.78, 0.22].map(lin);
-    const gz = (x, y) => { const z = terrainZAt(x, y); return z === null ? 0 : z; };
+    const gz = (x, y) => { const z = terrainZBil(x, y); return z === null ? 0 : z; };   // [ROAD-BENCH-V1]
     const UP = [0, 0, 1];
     const CURB = [0.78, 0.77, 0.74].map(lin);
     const ribbon = (pts, w, col, lift, deckable, dash, curb = false) => {
@@ -4271,7 +4291,7 @@ window.__camScreen = name => {
     return m;
   }
   function build(R) {
-    const gz = (x, y) => { const z = terrainZAt(x, y); return z === null ? 0 : z; };
+    const gz = (x, y) => { const z = terrainZBil(x, y); return z === null ? 0 : z; };   // [ROAD-BENCH-V1]
     const CL = {   // dens = vehicules par metre et par voie-sens; v = [voie lente, voie rapide] m/s
       hwy: { lift: 0.38, v: [24, 32], dens: 1 / 80, deck: true, minW: 8, truck: 0.12 },
       road: { lift: 0.34, v: [10, 15], dens: 1 / 200, deck: true, minW: 6, truck: 0.03 },
@@ -5684,6 +5704,9 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
 // by a 3 m mesh (same terrain material) whose cross-profile is SHARPENED, not deepened: the floor stays at the road and the rim at the
 // heightmap's rim (within 48 m of the road); only the slope between them becomes a cliff with a ledged edge, each point moved at
 // most -14 / +12 m. Fades back to the heightmap 44-58 m from the road.
+// [ROAD-BENCH-V1] the same 3 m mesh also benches route 70 from its tunnel's south portal down to the river (~720 m): on the 12 m
+// grid that sidehill road (uphill bank 20-30 m higher) was half buried / half floating, a black jagged slot. Road bed under the
+// ribbon, uphill rock cut at ~70 deg, downhill fill at 45 deg, up to 13 m out; tapered over the last 40 m.
 (() => {
   const G0 = () => window.__hgrid;
   const zH = (x, y) => { const G = G0(), u = (x - G.x0) / G.step, v = (y - G.y0) / G.step, i = Math.floor(u), j = Math.floor(v), a = u - i, b = v - j, Z = (ii, jj) => G.Z[jj * G.nx + ii];
@@ -5691,25 +5714,40 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
   const hsh = (i, j) => { const t = Math.sin(i * 127.1 + j * 311.7) * 43758.5453; return t - Math.floor(t); };
   const vn = (x, y) => { const i = Math.floor(x), j = Math.floor(y), f = x - i, g = y - j, u = f * f * (3 - 2 * f), w = g * g * (3 - 2 * g);
     return (hsh(i, j) * (1 - u) + hsh(i + 1, j) * u) * (1 - w) + (hsh(i, j + 1) * (1 - u) + hsh(i + 1, j + 1) * u) * w; };
-  let L = null, BOX = null;
+  let L = null, L70 = null, BOX = null;
   const setup = () => {                                                  // route 50 through the cut (V16 ribbon: road z = cut floor)
     const R = window.__roadsData; if (!R || !G0()) return false;
     const r = (R.hwy || []).find(r => r.p.some(q => Math.hypot(q[0] + 4991, q[1] - 5250) < 8)); if (!r) return false;
     L = r.p.filter(q => q[0] > -5140 && q[0] < -4770 && q[1] > 5140 && q[1] < 5450);
-    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9; for (const q of L) { x0 = Math.min(x0, q[0]); y0 = Math.min(y0, q[1]); x1 = Math.max(x1, q[0]); y1 = Math.max(y1, q[1]); }
+    const r7 = (R.road || []).find(r => r.p.length > 100 && Math.hypot(r.p[r.p.length - 1][0] + 4937, r.p[r.p.length - 1][1] - 5198) < 6);   // route 70, ends at the portal
+    if (r7) { let acc = 0; L70 = [r7.p[r7.p.length - 1]]; for (let i = r7.p.length - 2; i >= 0 && acc < 720; i--) { acc += Math.hypot(r7.p[i][0] - r7.p[i + 1][0], r7.p[i][1] - r7.p[i + 1][1]); L70.push(r7.p[i]); } }
+    let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
+    const grow = (P, m) => { for (const q of P) { x0 = Math.min(x0, q[0] - m); y0 = Math.min(y0, q[1] - m); x1 = Math.max(x1, q[0] + m); y1 = Math.max(y1, q[1] + m); } };
+    grow(L, 66); if (L70) grow(L70, 40);
     const G = G0(), sn = (v, o, d) => o + G.step * (d < 0 ? Math.floor((v - o) / G.step) : Math.ceil((v - o) / G.step));   // box on the 12 m grid lines
-    BOX = [sn(x0 - 66, G.x0, -1), sn(y0 - 66, G.y0, -1), sn(x1 + 66, G.x0, 1), sn(y1 + 66, G.y0, 1)];
+    BOX = [sn(x0, G.x0, -1), sn(y0, G.y0, -1), sn(x1, G.x0, 1), sn(y1, G.y0, 1)];
     return true;
   };
-  const near = (x, y) => { let b = null;                                 // distance, side, along, floor z, local normal
+  const near = (x, y, L = L0()) => { let b = null;                      // distance, side, along, floor z, local normal
     for (let i = 0; i < L.length - 1; i++) { const a = L[i], c = L[i + 1], dx = c[0] - a[0], dy = c[1] - a[1], l2 = dx * dx + dy * dy || 1;
       const t = Math.max(0, Math.min(1, ((x - a[0]) * dx + (y - a[1]) * dy) / l2)), px = a[0] + dx * t, py = a[1] + dy * t, d = Math.hypot(x - px, y - py);
       if (!b || d < b.d) { const ln = Math.sqrt(l2); b = { d, i, t, zf: a[2] + (c[2] - a[2]) * t, nx: -dy / ln, ny: dx / ln, side: Math.sign((x - px) * -dy + (y - py) * dx) || 1, px, py, end: (i === 0 && t === 0) || (i === L.length - 2 && t === 1) }; } }
     return b; };
-  const sharp = (x, y) => {
+  const L0 = () => L;
+  const bench = (x, y, z) => {                                           // [ROAD-BENCH-V1]
+    if (!L70) return z; const b = near(x, y, L70); if (b.end || b.d > 22) return z;
+    let acc = 0; for (let i = L70.length - 1; i > b.i + 1; i--) acc += Math.hypot(L70[i][0] - L70[i - 1][0], L70[i][1] - L70[i - 1][1]);
+    const wT = Math.min(1, (acc + Math.hypot(L70[b.i + 1][0] - b.px, L70[b.i + 1][1] - b.py)) / 40);   // taper at the far end
+    const zr = Math.max(zH(b.px, b.py), 0) + 0.34 - 0.3, dw = 8.5; let zb;   // the ribbon as drawn: bilinear ground + 0.34 lift
+    if (b.d < dw) zb = zr - (b.d < 7.2 ? 0.9 : 0.2);                      // road bed under the 14 m ribbon, shoulder
+    else zb = Math.min(Math.max(z, zr - 1.0 * (b.d - dw)), zr + 0.6 + 2.6 * (b.d - dw));   // fill 45 deg below, rock cut ~70 deg above
+    return z + (zb - z) * wT;
+  };
+  const sharp = (x, y) => bench(x, y, sharp50(x, y));
+  const sharp50 = (x, y) => {
     const z0 = zH(x, y), b = near(x, y); if (b.end || b.d > 60) return z0;
     let zr = -1e9; for (let o = 12; o <= 48; o += 6) zr = Math.max(zr, zH(b.px + b.side * b.nx * o, b.py + b.side * b.ny * o));   // rim of the cut on this side
-    const zf = b.zf - 0.3, H = Math.min(zr, zf + 45) - zf; if (H < 8) return z0;                      // no cut on this side: untouched
+    const zf = Math.min(b.zf, Math.max(zH(b.px, b.py), 0) + 0.38) - 0.3, H = Math.min(zr, zf + 45) - zf; if (H < 8) return z0;   // floor under the ribbon as drawn; no cut on this side: untouched
     const t = Math.max(0, Math.min(1, (z0 - zf) / H));
     const al = (b.i + b.t) * 6, nz = vn(al / 9, b.side * 3) - 0.5, nz2 = vn(al / 3.5, z0 / 6 + b.side * 7) - 0.5;
     const c = 0.45 + nz * 0.18, k = 0.12 + nz2 * 0.05;                    // where the cliff stands on the old slope, how sharp
@@ -5739,8 +5777,49 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
     g.setAttribute('aFine', new T3.BufferAttribute(fine, 1)); g.setIndex(new T3.BufferAttribute(idx, 1)); g.computeVertexNormals();
     const me = new T3.Mesh(g, tm.material); me.name = 'gorge-sharpen'; me.receiveShadow = tm.receiveShadow; tm.parent.add(me);
     window.__terraUni.uCutBox.value.set(BOX[0], BOX[1], BOX[2], BOX[3]); window.__terraUni.uCutOn.value = 1;
-    window.__gorgeSharpen = { box: BOX, verts: NX * NY, pts: L.length };
+    window.__gorgeSharpen = { box: BOX, verts: NX * NY, pts: L.length, pts70: L70 ? L70.length : 0 };
   })();
+})();
+// ── [TUNNEL-PORTAL-V1] build the portals of window.__tunnelPortals: headwall (two piers + lintel + coping), wing walls, a dark
+// barrel 40 m into the hill and the roadway running in. Facing = the road stroke ending there (last point minus the one before). ──
+(async () => {
+  for (let t = 0; t < 120 && !(window.__hgrid && window.__terrain && window.__roadsData); t++) await new Promise(r => setTimeout(r, 500));
+  const R = window.__roadsData; if (!R || !window.__terrain) return;
+  const T3 = window.__terrain.THREE, grp = new T3.Group(); grp.name = 'tunnel-portals'; window.__terrain.layers.meshes.add(grp);
+  const conc = new T3.MeshStandardMaterial({ color: 0xa8a297, roughness: 0.9, metalness: 0 }), dark = new T3.MeshStandardMaterial({ color: 0x0d0c0b, roughness: 1, metalness: 0, side: T3.BackSide });
+  const asph = new T3.MeshStandardMaterial({ color: 0x2b2a29, roughness: 0.95, metalness: 0 });
+  let n = 0;
+  const holes = [];
+  for (const P of window.__tunnelPortals) {
+    let best = null;
+    if (P.dir) best = { r: { w: P.w, p: [[P.at[0] - P.dir[0], P.at[1] - P.dir[1], P.z], [P.at[0], P.at[1], P.z]] }, e: 1 };
+    else
+    for (const k of ['road', 'hwy', 'small']) for (const r of R[k] || []) for (const e of [0, r.p.length - 1]) {
+      const q = r.p[e], d = Math.hypot(q[0] - P.at[0], q[1] - P.at[1]); if (d < 6 && (!best || d < best.d)) best = { d, r, e, k };
+    }
+    if (!best) continue;
+    const p = best.r.p, e = best.e, q0 = p[e], q1 = p[e === 0 ? Math.min(4, p.length - 1) : Math.max(0, e - 4)];
+    let ux = q0[0] - q1[0], uy = q0[1] - q1[1]; const l = Math.hypot(ux, uy) || 1; ux /= l; uy /= l;   // into the tunnel
+    const w = Math.max(6, best.r.w), zR = P.z !== undefined ? P.z : (terrainZBil(q0[0], q0[1]) || 0) + 0.34, ang = Math.atan2(uy, ux) - Math.PI / 2;
+    const Wo = w + 2, Ho = P.rail ? 7 : 7.5, Hw = P.rail ? 10 : 13, Wt = Wo + 8, th = 1.4;
+    const box = (a, s, sx, sy, sz, z0, m) => {                                       // a = across (+ = right of the inbound driver), s = along (into the hill)
+      const me = new T3.Mesh(new T3.BoxGeometry(sx, sy, sz), m);
+      me.position.set(q0[0] + ux * s + uy * a, q0[1] + uy * s - ux * a, z0 + sz / 2); me.rotation.z = ang; grp.add(me); return me; };
+    for (const sg of [-1, 1]) box(sg * (Wo / 2 + 2), th / 2, 4, th, Hw + 3, zR - 3, conc);              // piers
+    box(0, th / 2, Wo, th, Hw - Ho, zR + Ho, conc);                                                     // lintel over the opening
+    box(0, th / 2 - 0.3, Wt + 0.8, th + 1.0, 0.6, zR + Hw, conc);                                       // coping
+    for (const sg of [-1, 1]) {                                                                         // wing walls, stepping down outward
+      box(sg * (Wt / 2 - 0.4), -5, 0.8, 10, Hw * 0.75 + 3, zR - 3, conc);
+      box(sg * (Wt / 2 - 0.4), -12.5, 0.8, 5, Hw * 0.45 + 3, zR - 3, conc);
+    }
+    box(0, th + 20, Wo, 40, Ho, zR - 0.05, dark);                                                       // barrel (seen from inside)
+    if (!P.rail) box(0, th / 2 + 10, w, 20 + th, 0.3, zR - 0.32, asph);                                 // roadway running in
+    holes.push([q0[0] + ux * 0.2, q0[1] + uy * 0.2, ux, uy, Wo / 2 + 0.3, 41, zR - 2, zR + Ho + 0.8]);
+    n++;
+  }
+  const U = window.__terraUni; holes.slice(0, 4).forEach((h, i) => { U.uPortP.value[i].set(h[0], h[1], h[2], h[3]); U.uPortS.value[i].set(h[4], h[5], h[6], h[7]); });
+  U.uPortN.value = Math.min(4, holes.length);
+  window.__portalInfo = { portals: n };
 })();
 // ── [RAIL-BRIDGE-V1 2026-10-26] build the viaducts of window.__railBridges: concrete deck + box girder, parapets, two rails, piers
 // down to the terrain every ~40 m (none within 14 m of a V16 road ribbon, so the road below passes between them) ──
