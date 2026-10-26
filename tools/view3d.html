@@ -5495,9 +5495,10 @@ const Cine = (() => {
                 tDepth: { value: null }, uFar: { value: 50000 }, uPInv: { value: new THREE.Vector2(1, 1) }, uCamMat: { value: new THREE.Matrix3() },
                 uCamZ: { value: 100 }, uHor: { value: new THREE.Vector3(0.7, 0.75, 0.8) }, uSunC: { value: new THREE.Vector3(1, 1, 1) },
                 uSunD: { value: new THREE.Vector3(0, 0, 1) }, uB0: { value: 1.6e-4 }, uAtm: { value: 1 },
-                uTint: { value: new THREE.Vector3(1, 1, 1) }, uTintMix: { value: 0 }, uExpo: { value: 1 } },   // [TOUR-GRADE-V1] / uExpo [STORM-SKY-V1] per-scene colour grade of the tour
+                uTint: { value: new THREE.Vector3(1, 1, 1) }, uTintMix: { value: 0 }, uExpo: { value: 1 },
+                uAtmCol: { value: new THREE.Vector3(1, 1, 1) }, uAtmColMix: { value: 0 }, uDesat: { value: 0 }, uWarm: { value: 0 } },   // [NATURE-LOOK-V1]   // [TOUR-GRADE-V1] / uExpo [STORM-SKY-V1] per-scene colour grade of the tour
     fragmentShader: `
-      varying vec2 vUv; uniform sampler2D tCol, tAO, tB1, tB2, tB3; uniform float uTime, uNight, uAO; uniform vec3 uTint; uniform float uTintMix, uExpo;
+      varying vec2 vUv; uniform sampler2D tCol, tAO, tB1, tB2, tB3; uniform float uTime, uNight, uAO; uniform vec3 uTint, uAtmCol; uniform float uTintMix, uExpo, uAtmColMix, uDesat, uWarm;
       uniform sampler2D tDepth; uniform float uFar, uCamZ, uB0, uAtm; uniform vec2 uPInv; uniform mat3 uCamMat; uniform vec3 uHor, uSunC, uSunD;
       vec3 shoulder(vec3 x) { return mix(x, 0.82 + 0.18 * (1.0 - exp(-(x - 0.82) / 0.18)), step(0.82, x)); }   // lineaire jusqu'a 0.82, epaule douce
       vec3 toSRGB(vec3 c) { return mix(c * 12.92, 1.055 * pow(c, vec3(1.0 / 2.4)) - 0.055, step(0.0031308, c)); }
@@ -5518,6 +5519,7 @@ const Cine = (() => {
           float T = exp(-od);
           float mu = dot(wd, uSunD), g = 0.72, hg = (1.0 - g * g) / pow(1.0 + g * g - 2.0 * g * mu, 1.5) / 12.566;
           vec3 ins = uHor * (1.0 - 0.25 * uNight) + uSunC * hg * 1.6 * (1.0 - uNight) * step(0.0, uSunD.z + 0.05);
+          ins = mix(ins, uAtmCol * (0.8 + 0.6 * hg), uAtmColMix);   // [NATURE-LOOK-V1] warm hazy distance (game look)
           c = c * T + ins * (1.0 - T);
         }
         vec3 bloom = texture2D(tB1, vUv).rgb * 0.5 + texture2D(tB2, vUv).rgb * 0.35 + texture2D(tB3, vUv).rgb * 0.3;
@@ -5528,6 +5530,7 @@ const Cine = (() => {
         float l = dot(s, vec3(0.2126, 0.7152, 0.0722));
         s = mix(vec3(l), s, 1.10);                                         // saturation
         { float lt = dot(s, vec3(0.2126, 0.7152, 0.0722)); s = mix(s, uTint * (0.25 + 0.95 * lt) + (s - lt) * 0.35, uTintMix); }   // [TOUR-GRADE-V1] duotone towards the frame's dominant tint
+        { float l2 = dot(s, vec3(0.2126, 0.7152, 0.0722)); s = mix(s, vec3(l2), uDesat); s *= vec3(1.0 + 0.06 * uWarm, 1.0 + 0.01 * uWarm, 1.0 - 0.08 * uWarm); }   // [NATURE-LOOK-V1]
         s = mix(s, s * s * (3.0 - 2.0 * s), 0.16);                         // contraste (courbe en S douce)
         vec2 q = vUv - 0.5; s *= 1.0 - 0.32 * dot(q, q) * 1.6;             // vignettage
         s += (h12(gl_FragCoord.xy + fract(uTime) * 61.0) - 0.5) * 0.012;   // grain
@@ -5571,7 +5574,10 @@ const Cine = (() => {
       U.uCamMat.value.setFromMatrix4(camera.matrixWorld); U.uCamZ.value = camera.position.z;
       U.uHor.value.copy(skyUni.uHorizon.value); U.uSunC.value.copy(skyUni.uSunColor.value); U.uSunD.value.copy(skyUni.uSunDir.value);
       const hz = (typeof ENV !== 'undefined' && ENV.haze != null) ? ENV.haze / 100 : 0.3;
-      U.uB0.value = (0.18 + 0.7 * hz) * 1e-4 * (1 + (window.__stormHaze ?? 16) * (window.__stormSky || 0)); U.uExpo.value = window.__stormExpo ?? 1; U.uAtm.value = window.__atmosOff ? 0 : 1; }   // brume legere: garder les couleurs vives
+      U.uB0.value = (0.18 + 0.7 * hz) * 1e-4 * (1 + (window.__stormHaze ?? 16) * (window.__stormSky || 0)) * (window.__atmK ?? 1); U.uExpo.value = window.__stormExpo ?? 1;
+      { window.__lookPresets = window.__lookPresets || { nature: { hazeMix: 0.8, hazeCol: [0.78, 0.74, 0.68], desat: 0.18, warm: 0.6, atmK: 6 } };   // Dirt Bikes fit
+        const L = window.__natureLook; U.uAtmColMix.value = L ? L.hazeMix : 0; if (L) U.uAtmCol.value.set(...L.hazeCol); U.uDesat.value = L ? L.desat : 0; U.uWarm.value = L ? L.warm : 0; }   // [NATURE-LOOK-V1]
+      U.uAtm.value = window.__atmosOff ? 0 : 1; }   // brume legere: garder les couleurs vives
     pass(finalMat, null);
   }
   const chip = document.getElementById('ly-cine');
