@@ -73,7 +73,7 @@ def resample(R, step=6.0):
 # Selection par extremites (tolerance 15 m): Port of Vice City tunnel (= PortMiami Tunnel IRL, Starfish Island -> Port VC, 2 tubes).
 # [MOUNTAIN-PASS-TUNNEL 2026-10-26] route 70 under the ridge between Mount Waffles and Mount Mountain: dashed on the V17 map from
 # (-4940, 5195) to (-4820, 5320); drawn over the crest it climbed to 110 m between 75 m portals (Alexandre: « c'est un tunnel »).
-# Its heightmap cutting is the real portal approach, not an artefact: 'fill': False (view3d does not raise the terrain along it).
+# 'fill': False: view3d's 75%-of-neighbours fill made a plateau there; its trench is bridged smoothly instead (view3d TRENCH-FILL-V1).
 TUNNELS = [((323.0, 216.0), (517.0, -632.0)), ((289.0, 248.0), (517.0, -647.0))]
 TUNNELS_NOFILL = [((-4937.0, 5198.0), (-4806.0, 5332.0))]
 

@@ -623,6 +623,15 @@ const _lin = c => c.map(v => Math.pow(v, 2.2));   // sRGB -> lineaire (les shade
 // direction ~ -44 deg); the screenshot shows a concrete deck at the gorge rim on two tall piers. Deck 76.5 m (the rail grade between
 // the ~76 m NW rim and the ~74 m SE rim; route 50 is at 62 m below). Defined here so the tree pass can keep the deck clear.
 window.__railBridges = [{ name: 'Mountain Pass rail viaduct', c: [-5127, 5161], u: [0.711, -0.703], s0: -72, s1: 138, z: 76.5, w: 7.5 }];
+// [TRENCH-FILL-V1 2026-10-26] the game heightmap carves a trench along its tunnels (as at the Port of Vice City). Mountain Pass has
+// route 70's tunnel and the railway tunnels on both sides of the viaduct (dashed on the V17 map; Alexandre: « y a pas deux creux »).
+// Bridged smoothly side to side in the height grid itself (z = max(z, linear between the two rims)) before anything uses it.
+window.__trenchFills = [   // centrelines = the trench bottoms found in the heightmap (up to ~27 m off the V17 dashes)
+  { name: 'route 70 tunnel', r: 22, p: [[-4958, 5196], [-4940, 5210], [-4935, 5228], [-4924, 5239], [-4916, 5252], [-4908, 5265], [-4898, 5276],
+                                        [-4888, 5287], [-4876, 5296], [-4863, 5305], [-4846, 5310], [-4834, 5319], [-4822, 5326]] },
+  { name: 'Mountain Pass rail tunnel', r: 22, p: [[-5018, 5058], [-5007, 5043], [-4995, 5033], [-4968, 4997], [-4947, 4976], [-4938, 4952]] },
+  { name: 'Mount Waffles rail tunnel', r: 20, p: [[-5410, 5274], [-5380, 5278], [-5350, 5279], [-5335, 5288], [-5305, 5278], [-5292, 5279]] },
+];
 window.__treeClear = (x, y) => window.__railBridges.some(B => { const dx = x - B.c[0], dy = y - B.c[1], s = dx * B.u[0] + dy * B.u[1], n = -dx * B.u[1] + dy * B.u[0];
   return s > B.s0 - 6 && s < B.s1 + 6 && Math.abs(n) < B.w / 2 + 7; });
 window.__lookPresets = {
@@ -1012,6 +1021,25 @@ const data = await (await fetch('/api/scene3d')).json();
       Z = new Float32Array(raw.buffer);
     }
     const { nx, ny, x0, y0, step } = t;
+    { // [TRENCH-FILL-V1] see window.__trenchFills
+      const Z0 = Z.slice(), zb = (x, y) => { const u = (x - x0) / step, v = (y - y0) / step, i = Math.floor(u), j = Math.floor(v), a = u - i, b = v - j, q = (ii, jj) => Z0[jj * nx + ii];
+        return q(i, j) * (1 - a) * (1 - b) + q(i + 1, j) * a * (1 - b) + q(i, j + 1) * (1 - a) * b + q(i + 1, j + 1) * a * b; };
+      let nF = 0;
+      for (const F of window.__trenchFills || []) { const cum = [0]; for (let q = 1; q < F.p.length; q++) cum.push(cum[q - 1] + Math.hypot(F.p[q][0] - F.p[q - 1][0], F.p[q][1] - F.p[q - 1][1]));
+      for (let sI = 0; sI < F.p.length - 1; sI++) {
+        const [ax, ay] = F.p[sI], [bx, by] = F.p[sI + 1], dx = bx - ax, dy = by - ay, Ls = Math.hypot(dx, dy), ux = dx / Ls, uy = dy / Ls, r = F.r;
+        const i0 = Math.floor((Math.min(ax, bx) - r - x0) / step), i1 = Math.ceil((Math.max(ax, bx) + r - x0) / step), j0 = Math.floor((Math.min(ay, by) - r - y0) / step), j1 = Math.ceil((Math.max(ay, by) + r - y0) / step);
+        for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) {
+          const x = x0 + i * step, y = y0 + j * step, al = (x - ax) * ux + (y - ay) * uy, n = -(x - ax) * uy + (y - ay) * ux;
+          if (al < 0 || al > Ls || Math.abs(n) > r) continue;
+          const cx = ax + ux * al, cy = ay + uy * al, side = sg => Math.max(zb(cx - uy * sg * (r + step), cy + ux * sg * (r + step)), zb(cx - uy * sg * (r + 2 * step), cy + ux * sg * (r + 2 * step)));
+          const zL = side(-1), zR = side(1), zt = zL + (zR - zL) * (n + r) / (2 * r), k = j * nx + i;
+          const sa = cum[sI] + al, wE = Math.min(1, sa / 15, (cum[cum.length - 1] - sa) / 15), wS = wE * wE * (3 - 2 * wE);   // taper the ends (no step at the portals)
+          if (zt > Z[k]) { Z[k] += (zt - Z[k]) * wS; nF++; }
+        }
+      } }
+      window.__trenchFilled = nF;
+    }
     const pos = new Float32Array(nx * ny * 3);
     // [BATHY-DISPLAY] le DDS n'a PAS de bathymetrie en eau libre: no-data =
     // -301, et la frontiere donnees/-301 dessinait des falaises rectangulaires
@@ -1286,6 +1314,11 @@ const data = await (await fetch('/api/scene3d')).json();
               if (uNatGround > 0.5 && vPos.z > 2.0) {
                 vec3 b4 = textureLod(uDrape, vUv, 4.0).rgb, b6 = textureLod(uDrape, vUv, 6.5).rgb;
                 float g4 = smoothstep(0.05, 0.14, max(b4.g, b4.r) - b4.b) * (1.0 - smoothstep(0.03, 0.10, b4.b - max(b4.r, b4.g)));
+                // [TRENCH-FILL-V1] grey / white / purple map strokes in the wild (railway paint, grid lines and labels like "I19", country
+                // road paint on cut walls) take the natural ground of the wider zone; towns are caught by urb (256 m), roads have 3D ribbons
+                float strk = max(1.0 - smoothstep(0.05, 0.12, max(c.r, max(c.g, c.b)) - min(c.r, min(c.g, c.b))),   // grey / white
+                                 smoothstep(0.06, 0.14, min(c.r, c.b) - c.g));                                       // purple railway paint
+                g4 = mix(g4, smoothstep(0.06, 0.15, max(b6.g, b6.r) - b6.b), strk);
                 float g6 = smoothstep(0.06, 0.15, max(b6.g, b6.r) - b6.b);
                 float urb = (1.0 - smoothstep(0.04, 0.09, max(b6.r, max(b6.g, b6.b)) - min(b6.r, min(b6.g, b6.b))));   // grey = town
                 natW = g4 * g6 * (1.0 - urb) * smoothstep(2.0, 6.0, vPos.z) * (1.0 - wR) * (1.0 - smoothstep(0.03, 0.10, c.b - max(c.r, c.g)));
@@ -4003,7 +4036,7 @@ window.__camScreen = name => {
       const zAt = (x, y) => { const k = idx(Math.round((x - X0) / ST), Math.round((y - Y0) / ST)); return k < 0 ? null : A[3 * k + 2]; };
       let n = 0;
       for (const t of R.tunnel) {
-        if (t.fill === false) continue;   // [MOUNTAIN-PASS-TUNNEL] its cutting is the real portal approach
+        if (t.fill === false) continue;   // [MOUNTAIN-PASS-TUNNEL] filled smoothly in the height grid instead (TRENCH-FILL-V1)
         const p = t.p, r = t.w / 2 + 2 * ST;   // la tranchee du jeu est jusqu'a ~17 m a cote du trace V16
         for (let s = 0; s < p.length - 1; s++) {
           const ax = p[s][0], ay = p[s][1], dx = p[s + 1][0] - ax, dy = p[s + 1][1] - ay, L = Math.hypot(dx, dy) || 1, nx_ = -dy / L, ny_ = dx / L;
