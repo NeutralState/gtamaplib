@@ -648,7 +648,9 @@ window.__tunnelPortals = [{ name: 'route 70 tunnel S', at: [-4937.2, 5197.7] }, 
 // [FLY-CLEAR-V1 2026-10-28] camera paths of the rendered flyovers (keyframes x, y, z): no tree / bush within 12 m whose top could
 // reach the camera (ground + 24 m above the path height - 2 m), so a shot never flies through a crown
 window.__flyPaths = [[[-4884, 5446, 138.7], [-4896, 5422, 133], [-4935, 5372, 118], [-4975, 5318, 100], [-4996, 5262, 86], [-5022, 5205, 76], [-5080, 5175, 69],
-  [-5150, 5156, 67], [-5225, 5140, 80], [-5300, 5132, 104], [-5370, 5126, 134], [-5425, 5120, 160], [-5450, 5116, 170]]];   // Mountain Pass gorge -> Sunshine Skyway
+  [-5150, 5156, 67], [-5225, 5140, 80], [-5300, 5132, 104], [-5370, 5126, 134], [-5425, 5120, 160], [-5450, 5116, 170]],   // Mountain Pass gorge -> Sunshine Skyway
+  [[-2398, 7619, 49.5], [-2438, 7543, 57], [-2463, 7468, 66], [-2526, 7409, 64], [-2599, 7361, 76], [-2667, 7315, 95], [-2740, 7270, 103], [-2767, 7198, 107],
+   [-2759, 7123, 107], [-2775, 7045, 105], [-2794, 6968, 108], [-2900, 6800, 180]]];   // Kalaga postcard river -> summit climb
 const _flyHit = (x, y) => window.__flyPaths.some(P => { for (let i = 0; i < P.length - 1; i++) { const a = P[i], b = P[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], l2 = dx * dx + dy * dy || 1;
   const t = Math.max(0, Math.min(1, ((x - a[0]) * dx + (y - a[1]) * dy) / l2)); if (Math.hypot(x - a[0] - dx * t, y - a[1] - dy * t) > 12) continue;
   const g = terrainZBil(x, y); if (g === null || g + 24 > a[2] + (b[2] - a[2]) * t - 2) return true; } return false; });
@@ -1415,6 +1417,33 @@ const data = await (await fetch('/api/scene3d')).json();
                     n = normalize(n + vec3(tg * (fl2 - fl) * 1.4 * rkP * pass * fH, 0.0));   // flutes catch the light
                   }
                   base = mix(base, g, natW);
+                }
+              }
+              // [RIVER-V1 2026-10-28] (Mount Kalaga Postcard S2/76): the mountain river below Kalaga as in the frame — olive-green water,
+              // white water where the bed is steep (flow streaks downhill), grey granite slabs and sandy pockets on the banks (map water
+              // within ~20 m, blurred mip 3). Only around the postcard river (the rest of the map keeps its water colours).
+              {
+                float dRv = distance(vPos.xy, vec2(-2620.0, 7380.0)), regR = 1.0 - smoothstep(900.0, 1300.0, dRv);
+                if (regR > 0.001 && vPos.z > 3.0) {
+                  vec2 q = vPos.xy; float dcR = distance(cameraPosition, vPos), fR = 1.0 - smoothstep(60.0, 900.0, dcR);
+                  float wW2 = smoothstep(0.008, 0.05, c.b - max(c.r, c.g));   // wider than WATER-COLOR-V1: no cyan rim left
+                  vec3 b3 = textureLod(uDrape, vUv, 3.0).rgb;
+                  float nearW = smoothstep(0.015, 0.07, b3.b - max(b3.r, b3.g));
+                  float m1 = vnoise(q * 0.12), m2 = vnoise(q * 0.8 + 3.0);
+                  vec3 gran = mix(srgb(vec3(0.44, 0.43, 0.40)), srgb(vec3(0.63, 0.61, 0.57)), m1) * (0.78 + 0.32 * m2 * fR);
+                  vec3 bk = mix(gran, srgb(vec3(0.64, 0.55, 0.42)) * (0.9 + 0.2 * m2), smoothstep(0.62, 0.80, vnoise(q * 0.035 + 5.0)) * 0.8);
+                  float bank = nearW * (1.0 - wW2) * smoothstep(0.30, 0.55, vnoise(q * 0.05 + 1.0) * 0.5 + nearW * 0.7);
+                  base = mix(base, bk, bank * regR);
+                  vec2 fd = vec2(0.57, 0.82), fp = vec2(-fd.y, fd.x);   // the river flows NE (a per-facet normal x ~7 km coords made moire)
+                  q = vPos.xy - vec2(-2620.0, 7380.0);
+                  float fNr = 1.0 - smoothstep(25.0, 140.0, dcR);   // fine streaks only up close (they shimmered as noise further away)
+                  float streak = vnoise(vec2(dot(q, fd) * 0.05, dot(q, fp) * 0.18)) * 0.75 + vnoise(vec2(dot(q, fd) * 0.15, dot(q, fp) * 0.5)) * 0.25 * fNr + 0.12 * (1.0 - fNr);   // soft, no moire
+                  vec3 vd = normalize(cameraPosition - vPos); float fres = pow(1.0 - clamp(vd.z, 0.0, 1.0), 4.0);
+                  vec3 wat = mix(srgb(vec3(0.24, 0.28, 0.14)) * (0.85 + 0.25 * m1), srgb(vec3(0.66, 0.70, 0.66)), fres * 0.35);   // olive water (S2/76), light sky sheen at grazing angles
+                  float foam = smoothstep(0.02, 0.06, slope) * smoothstep(0.40, 0.70, streak)
+                             * smoothstep(0.03, 0.10, c.b - max(c.r, c.g)) * (1.0 - smoothstep(0.22, 0.35, slope));   // rapids on real map water only, never on bank slopes
+                  wat = mix(wat, srgb(vec3(0.80, 0.83, 0.80)), foam * 0.45);
+                  base = mix(base, wat, wW2 * regR);
                 }
               }
             }
@@ -5456,6 +5485,12 @@ window.__camScreen = name => {
         const z = terrainZAt(x, y);
         if (z === null) continue;
         if (window.__treeClear && window.__treeClear(x, y)) continue;   // [RAIL-BRIDGE-V1] no tree through the viaduct deck
+        // [RIVER-V1] postcard river: open water corridor as in S2/76 — no tree within ~8 m of the map water, no bush within ~4 m
+        let rivNear = 0;
+        if ((x + 2620) * (x + 2620) + (y - 7380) * (y - 7380) < 1300 * 1300)
+          for (let rr = 1; rr <= 2 && !rivNear; rr++) for (const [di, dj] of [[1, 0], [-1, 0], [0, 1], [0, -1], [1, 1], [1, -1], [-1, 1], [-1, -1]]) {
+            const ii = i + di * rr, jj = j + dj * rr; if (ii < 0 || jj < 0 || ii >= W2 || jj >= H2) continue;
+            const kk = 4 * (jj * W2 + ii); if (isWater([all[kk], all[kk + 1], all[kk + 2]])) { rivNear = rr; break; } }
         // [GORGE-SHARPEN-V1] bare cliff faces: [VEG-V4] now per plant with steep() (the old |fine - coarse| > 1.5 m test also emptied the gorge floor)
         // [VEG-V2 2026-10-05] aussi en plaine: parcs (vert fonce V16) denses, gazons epars (berges, squares, rues) — avant: seulement > 25 m
         const park = near(...c, 151, 192, 116, 16), lawn = near(...c, 193, 217, 131, 16);
@@ -5469,7 +5504,7 @@ window.__camScreen = name => {
         if (camClear.some(([cx, cy]) => (x - cx) * (x - cx) + (y - cy) * (y - cy) < 900)) continue;
         const zb = gz(x, y);                                                  // [VEG-V4] sit on the drawn ground (3 m gorge mesh / bilinear)
         // [VEG-V4] understorey: 1-4 bushes per 12 m cell on the hills (more in the clearings, as in the frames), a few in parks
-        if (bushes.length < 450000) {
+        if (bushes.length < 450000 && !(rivNear && rivNear <= 1)) {
           const nb = z >= 25 ? Math.min(1, (z - 18) / 30) * (1.4 + 2.2 * (1 - forest)) : (park || bank ? 0.6 : lawn ? 0.15 : 0.25);
           for (let b = 0; b < 4; b++) if (rnd(seed + 31 + b) < nb - b) {
             const bx = x0 + (i + rnd(seed + 41 + b) * step) * MPX, by = yTop - (j + rnd(seed + 51 + b) * step) * MPX;
@@ -5485,7 +5520,7 @@ window.__camScreen = name => {
           if (rnd(sd) >= pz) continue;
           const tx = t ? x0 + (i + rnd(sd + 1) * step) * MPX : x, ty = t ? yTop - (j + rnd(sd + 2) * step) * MPX : y;
           const tz = t ? gz(tx, ty) : zb;
-          if (tz === null || steep(tx, ty, 0.6) || (window.__treeClear && window.__treeClear(tx, ty))) continue;
+          if (tz === null || rivNear || steep(tx, ty, 0.6) || (window.__treeClear && window.__treeClear(tx, ty))) continue;
           if (rnd(sd + 11) < (z < 25 ? 0.75 : z < 40 ? 0.12 : 0)) { pts.push([tx, ty, tz, sd]); continue; }
           // [VEG-V4] three broadleaf shapes: round oak (the TREES-V2 crown), tall sweetgum (high narrow crown), spreading live oak
           const sp = rnd(sd + 13);
@@ -6160,6 +6195,63 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
   }, { tile: 200, maxD: 1500, castShadow: true, receiveShadow: true });
   grp.name = 'boulders'; window.__terrain.layers.meshes.add(grp);
   window.__boulders = items.length;
+})();
+// ── [RIVER-ROCKS-V1 2026-10-28] (Mount Kalaga Postcard S2/76): grey granite blocks along the mountain river below Kalaga — many on
+// the banks (map water within ~8 m), a few in the bed, sunk into the ground — and the big rock dome on the left bank where the
+// hikers walk (~150 m from the camera at bearing ~199 deg, from the hikers' size in the frame: ESTIMATED) ──
+(async () => {
+  for (let t = 0; t < 160 && !(window.__drapeReadyInfo && window.__hgrid && window.__terrain); t++) await new Promise(r => setTimeout(r, 500));
+  const D = window.__drapeReadyInfo; if (!D) return;
+  const T3 = window.__terrain.THREE, { canvas, x0, yTop, MPX } = D;
+  const cx = -2620, cy = 7380, R = 1050;
+  const c0 = Math.max(0, Math.floor((cx - R - x0) / MPX)), c1 = Math.min(canvas.width - 1, Math.ceil((cx + R - x0) / MPX));
+  const r0 = Math.max(0, Math.floor((yTop - (cy + R)) / MPX)), r1 = Math.min(canvas.height - 1, Math.ceil((yTop - (cy - R)) / MPX));
+  const w = c1 - c0 + 1, h = r1 - r0 + 1, px = canvas.getContext('2d', { willReadFrequently: true }).getImageData(c0, r0, w, h).data;
+  const wat = (x, y) => { const i = Math.round((x - x0) / MPX) - c0, j = Math.round((yTop - y) / MPX) - r0; if (i < 0 || j < 0 || i >= w || j >= h) return false; const k = 4 * (j * w + i); return px[k + 2] > Math.max(px[k], px[k + 1]) + 40; };
+  const rnd = k => { const v = Math.sin(k * 12.9898 + 1.7) * 43758.5453; return v - Math.floor(v); };
+  const items = [];
+  for (let y = cy - R; y < cy + R; y += 5) for (let x = cx - R; x < cx + R; x += 5) {
+    if ((x - cx) * (x - cx) + (y - cy) * (y - cy) > R * R) continue;
+    const sd = Math.round(x * 3.7 + y * 101.3), jx = x + (rnd(sd) - 0.5) * 5, jy = y + (rnd(sd + 1) - 0.5) * 5;
+    const inW = wat(jx, jy); let nearW = inW;
+    if (!inW) for (const [dx, dy] of [[8, 0], [-8, 0], [0, 8], [0, -8], [6, 6], [-6, 6], [6, -6], [-6, -6]]) if (wat(jx + dx, jy + dy)) { nearW = true; break; }
+    if (!nearW || rnd(sd + 2) > (inW ? 0.05 : 0.22)) continue;
+    const z = terrainZBil(jx, jy); if (z === null || z < 3) continue;
+    items.push([jx, jy, z, sd, inW ? 0.7 : 1.0]);
+  }
+  // the dome on the left bank (several overlapping flattened lumps)
+  const hd = 198.6 * Math.PI / 180, dx0 = -2398 + 150 * Math.sin(hd), dy0 = 7619 + 150 * Math.cos(hd);
+  const dome = [[0, 0, 22, 9], [18, -10, 15, 7], [-16, 12, 14, 6], [6, 22, 12, 5], [-8, -20, 13, 6]];
+  let sR = 23; const r01 = () => { sR = (sR * 16807) % 2147483647; return sR / 2147483647; };
+  const geo = new T3.IcosahedronGeometry(1, 2), pa = geo.attributes.position, key = new Map();
+  for (let q = 0; q < pa.count; q++) { const k = [pa.getX(q), pa.getY(q), pa.getZ(q)].map(v => v.toFixed(3)).join(); if (!key.has(k)) key.set(k, 0.80 + 0.32 * r01()); const f = key.get(k); pa.setXYZ(q, pa.getX(q) * f, pa.getY(q) * f * 0.9, pa.getZ(q) * f * 0.55); }
+  geo.computeVertexNormals();
+  const mat = new T3.MeshStandardMaterial({ color: 0xffffff, roughness: 0.92, metalness: 0, flatShading: true }); mat.toneMapped = false;
+  const M4 = new T3.Matrix4(), Q = new T3.Quaternion(), E = new T3.Euler(), V = new T3.Vector3(), S = new T3.Vector3(), C = new T3.Color(), lin = v => Math.pow(v, 2.2);
+  const big = dome.map(([ox, oy, r, hh], k) => { const x = dx0 + ox, y = dy0 + oy; return [x, y, terrainZBil(x, y), 777 + k, 0, r, hh]; });
+  // [POSTCARD-SET-V1] the rocks of the frame itself, placed from the camera (S2/76 pose: (-2398, 7619), heading 214.6, eye ~4 m over the
+  // water — the deer, ~50 px tall, stands ~21 m away): [bearing offset deg, distance m, half sizes x y z, colour] — ESTIMATED from the frame
+  const PC = [-2398, 7619], PH = 214.6, GR = [0.64, 0.63, 0.60], SA = [0.74, 0.64, 0.50];
+  const set = [[-25, 17, 2.8, 2.2, 1.7, GR], [12, 12, 7, 4, 1.1, GR], [28, 11, 6, 4, 1.3, GR], [40, 10, 5, 3, 1.6, GR],     // left rock in the water, slab under the camera
+    [3, 19, 4, 2.5, 0.6, GR], [-5, 22, 3, 2, 0.5, GR],                                                                      // gravel / rock bar (the deer)
+    [8, 30, 2, 1.5, 1.0, GR], [14, 33, 2.5, 1.8, 1.2, GR], [2, 34, 1.8, 1.5, 0.9, GR], [18, 28, 3, 2, 1.6, GR],              // rapids
+    [22, 36, 5, 4, 3.5, GR], [30, 30, 4, 3, 2.5, GR], [-18, 30, 3, 2.5, 1.5, GR], [-10, 36, 4, 3, 2.0, GR],                 // bank blocks
+    [-31, 21, 7, 4, 0.22, SA]];                                                                                             // the little beach (kayak, people)
+  const setI = set.map(([b, d, sx, sy, sz, col], k) => { const a = (PH + b) * Math.PI / 180, x = PC[0] + d * Math.sin(a), y = PC[1] + d * Math.cos(a);
+    return [x, y, terrainZBil(x, y), 901 + k, 'set', sx, sy, sz, col, a]; });   // arrays: __tiledInst buckets on it[0], it[1]
+  const all = items.concat(big, setI);
+  const grp = window.__tiledInst(geo, mat, all, (im, k, it) => {
+    if (it[4] === 'set') { const [x, y, z, , , sx, sy, sz, col, a] = it; E.set(0, 0, -a); Q.setFromEuler(E); S.set(sx, sy, sz / 0.55); V.set(x, y, z - sz * 0.25);
+      M4.compose(V, Q, S); im.setMatrixAt(k, M4); C.setRGB(lin(col[0]), lin(col[1]), lin(col[2])); im.setColorAt(k, C); return; }
+    const [x, y, z, sd, kind] = it;
+    if (it.length > 5) { const r = it[5], hh = it[6]; E.set(0, 0, rnd(sd) * 6.28); Q.setFromEuler(E); S.set(r, r * 0.8, hh / 0.55); V.set(x, y, z - hh * 0.35); }
+    else { const r = (0.6 + 2.6 * Math.pow(rnd(sd + 3), 2.2)) * kind; E.set((rnd(sd + 4) - 0.5) * 0.5, (rnd(sd + 5) - 0.5) * 0.5, rnd(sd + 6) * 6.283); Q.setFromEuler(E);
+      S.set(r * (0.9 + 0.6 * rnd(sd + 7)), r, r * (0.8 + 0.5 * rnd(sd + 8))); V.set(x, y, z - r * 0.3); }
+    M4.compose(V, Q, S); im.setMatrixAt(k, M4);
+    const t = rnd(sd + 9), g = 0.52 + 0.20 * t; C.setRGB(lin(g), lin(g * 0.985), lin(g * 0.95)); im.setColorAt(k, C);   // granite grey (lighter: they sit backlit)
+  }, { tile: 200, maxD: 1800, castShadow: true, receiveShadow: true });
+  grp.name = 'river-rocks'; window.__terrain.layers.meshes.add(grp);
+  window.__riverRocks = all.length;
 })();
 // ── [HURRICANE-V1 2026-10-24] « What if a hurricane hit GTA 6 »: storm surge on the game terrain + storm atmosphere ──
 // window.__hurricane({surge: m, storm: 0..1, rain: 0..1, wind: deg (toward), lightning: 0..1}) — surge raises the sea plane, the sea shader only
