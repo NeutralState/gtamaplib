@@ -83,7 +83,7 @@ def make(sid, info):
     ff.stdin.close(); ff.wait()
     out = os.path.join(OUT, '%s_%s.mp4' % (sid.replace('/', '_'), re.sub(r'[^A-Za-z0-9]+', '_', name).strip('_')))
     os.replace(vid, out); return out
-if __name__ == '__main__':
+if __name__ == '__main__' and '--cover' not in sys.argv:
     info = json.load(open(TIMES)) if os.path.exists(TIMES) and '--locate' not in sys.argv else locate()
     want = [a for a in sys.argv[1:] if a.startswith('T4/')] or (list(info) if 'all' in sys.argv else [])
     for sid in want: print(make(sid, info[sid]))
