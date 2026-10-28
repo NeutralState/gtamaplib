@@ -5355,9 +5355,19 @@ window.__camScreen = name => {
     try {
       const W2 = canvas.width, H2 = canvas.height, step = 3;
       const all = canvas.getContext('2d', { willReadFrequently: true }).getImageData(0, 0, W2, H2).data;
-      const trees = [];
+      const trees = [], tallT = [], wideT = [], bushes = [];
+      const vnoise = (x, y, s) => {                                          // [VEG-V4] smooth value noise, cell size s metres
+        const X = x / s, Y = y / s, a = Math.floor(X), b = Math.floor(Y), u = X - a, v = Y - b, su = u * u * (3 - 2 * u), sv = v * v * (3 - 2 * v);
+        const hh = (p, q) => rnd(((p * 73856093) ^ (q * 19349663) ^ s) % 1000003);
+        return (hh(a, b) * (1 - su) + hh(a + 1, b) * su) * (1 - sv) + (hh(a, b + 1) * (1 - su) + hh(a + 1, b + 1) * su) * sv;
+      };
+      const gz = (x, y) => { const g = window.__gorgeZ ? window.__gorgeZ(x, y) : null; return g !== null ? g : terrainZBil(x, y); };
+      const steep = (x, y, lim) => {                                        // [VEG-V4] no plant on a face steeper than lim (rise/run over 8 m), nor on a ledge lip
+        const z0 = gz(x, y), a = gz(x + 4, y), b = gz(x - 4, y), c2 = gz(x, y + 4), d2 = gz(x, y - 4);
+        if (z0 === null || a === null || b === null || c2 === null || d2 === null) return true;
+        return Math.max(Math.abs(a - b), Math.abs(c2 - d2)) / 8 > lim || Math.abs(z0 - (a + b + c2 + d2) / 4) > 1.2; };
       const camClear = data.cameras.filter(c => c.xyz && c.xyz[2] < 300).map(c => [c.xyz[0], c.xyz[1]]);   // [TREES-V2] 30 m clearing around each shot
-      for (let j = 0; j < H2 && trees.length < 220000; j += step) for (let i = 0; i < W2 && trees.length < 220000; i += step) {
+      for (let j = 0; j < H2 && trees.length + tallT.length + wideT.length < 260000; j += step) for (let i = 0; i < W2 && trees.length + tallT.length + wideT.length < 260000; i += step) {
         const k = 4 * (j * W2 + i), c = [all[k], all[k + 1], all[k + 2]];
         // [VEG-V2] berges urbaines (riverwalks): ilot urbain au bord de l'eau (< ~12 m) -> rangee d'arbres, comme sur les frames de la riviere
         const urbanPx = near(...c, 217, 217, 217, 10);
@@ -5378,78 +5388,134 @@ window.__camScreen = name => {
         const z = terrainZAt(x, y);
         if (z === null) continue;
         if (window.__treeClear && window.__treeClear(x, y)) continue;   // [RAIL-BRIDGE-V1] no tree through the viaduct deck
-        if (window.__gorgeZ) { const zg = window.__gorgeZ(x, y); if (zg !== null && Math.abs(zg - z) > 1.5) continue; }   // [GORGE-SHARPEN-V1] bare cliff faces
+        // [GORGE-SHARPEN-V1] bare cliff faces: [VEG-V4] now per plant with steep() (the old |fine - coarse| > 1.5 m test also emptied the gorge floor)
         // [VEG-V2 2026-10-05] aussi en plaine: parcs (vert fonce V16) denses, gazons epars (berges, squares, rues) — avant: seulement > 25 m
         const park = near(...c, 151, 192, 116, 16), lawn = near(...c, 193, 217, 131, 16);
-        let pz = z >= 25 ? Math.min(1, (z - 18) / 40) * (c[1] >= c[0] ? 0.85 : 0.45) : 0;   // [TREES-V2] denser hill forest (game frames)
+        // [VEG-V4 2026-10-28] (Alexandre: vegetation pass; S2/68 + Dirt Bikes frames): the hill forest grows in clumps with
+        // scrubby clearings (2-octave value noise, ~180 m + 60 m), not an even sprinkle; forest cores get a second tree per cell
+        const cl = 0.6 * vnoise(x, y, 180) + 0.4 * vnoise(x, y, 60), forest = Math.min(1, Math.max(0, (cl - 0.30) / 0.32));
+        let pz = z >= 25 ? Math.min(1, (z - 18) / 40) * (c[1] >= c[0] ? 0.85 : 0.45) * (0.35 + 1.15 * forest) : 0;   // [TREES-V2] denser hill forest (game frames)
         if (z < 25 && z > 0.3) pz = bank ? 0.35 : park ? 0.42 : lawn ? 0.07 : (c[1] > c[0] + 15 && c[1] > c[2] + 15 ? 0.12 : 0);
         if (pz <= 0) continue;
+        // [TREES-V2] no tree on a camera spot: every shot stands on a road / track / clearing in the game
+        if (camClear.some(([cx, cy]) => (x - cx) * (x - cx) + (y - cy) * (y - cy) < 900)) continue;
+        const zb = gz(x, y);                                                  // [VEG-V4] sit on the drawn ground (3 m gorge mesh / bilinear)
+        // [VEG-V4] understorey: 1-4 bushes per 12 m cell on the hills (more in the clearings, as in the frames), a few in parks
+        if (bushes.length < 450000) {
+          const nb = z >= 25 ? Math.min(1, (z - 18) / 30) * (1.4 + 2.2 * (1 - forest)) : (park || bank ? 0.6 : lawn ? 0.15 : 0.25);
+          for (let b = 0; b < 4; b++) if (rnd(seed + 31 + b) < nb - b) {
+            const bx = x0 + (i + rnd(seed + 41 + b) * step) * MPX, by = yTop - (j + rnd(seed + 51 + b) * step) * MPX;
+            const bz = gz(bx, by);
+            if (bz !== null && !steep(bx, by, 0.7) && !(window.__treeClear && window.__treeClear(bx, by))) bushes.push([bx, by, bz, seed + 61 + b]);
+          }
+        }
         // [VEG-V3 2026-10-05, Alexandre: « Miami = surtout des palmiers; pas de coniferes en Floride/Georgie/Caroline du Sud »]
-        // plaine: 75 % palmiers / 25 % feuillus (chenes verts); collines: feuillus + 12 % palmiers sabal; aucun conifere
-        if (rnd(seed) < pz) {
-          // [TREES-V2] no tree on a camera spot: every shot stands on a road / track / clearing in the game
-          if (camClear.some(([cx, cy]) => (x - cx) * (x - cx) + (y - cy) * (y - cy) < 900)) continue;
-          if (rnd(seed + 11) < (z < 25 ? 0.75 : 0.12)) pts.push([x, y, z, seed]); else trees.push([x, y, z, seed]); }
+        // plaine: 75 % palmiers / 25 % feuillus (chenes verts); collines: feuillus + palmiers sabal; aucun conifere
+        // [VEG-V4] no palm in the upland forest (none in the Mount Kalaga frames): 12 % below 40 m, none above
+        for (let t = 0; t < (z >= 25 && forest > 0.6 ? 2 : 1); t++) {
+          const sd = seed + 97 * t;
+          if (rnd(sd) >= pz) continue;
+          const tx = t ? x0 + (i + rnd(sd + 1) * step) * MPX : x, ty = t ? yTop - (j + rnd(sd + 2) * step) * MPX : y;
+          const tz = t ? gz(tx, ty) : zb;
+          if (tz === null || steep(tx, ty, 0.6) || (window.__treeClear && window.__treeClear(tx, ty))) continue;
+          if (rnd(sd + 11) < (z < 25 ? 0.75 : z < 40 ? 0.12 : 0)) { pts.push([tx, ty, tz, sd]); continue; }
+          // [VEG-V4] three broadleaf shapes: round oak (the TREES-V2 crown), tall sweetgum (high narrow crown), spreading live oak
+          const sp = rnd(sd + 13);
+          (z >= 25 ? (sp < 0.50 ? trees : sp < 0.80 ? tallT : wideT) : (sp < 0.55 ? trees : sp < 0.70 ? tallT : wideT)).push([tx, ty, tz, sd]);
+        }
       }
       if (trees.length) {
-        const tgeo = (() => {                                                  // [VEG-V3] feuillu (chene vert): tronc + houppier arrondi en 3 masses, pas de conifere
-          const P = [], C = [], trunk = [0.30, 0.24, 0.18];
+        const tt = window.__gcolV && window.__gcolV.foliage && window.__gcolV.foliage.tree && window.__gcolV.foliage.tree.rgb;   // [GROUND-COLOR-V1]
+        // [TREES-V2 2026-10-26] (Alexandre: the trees must look like the game, Dirt Bikes frame): a broken, clumpy crown —
+        // small jittered leaf clumps (not smooth balls), olive to deep green, darker inside; bare branches
+        const g1 = gameTint([0.09, 0.14, 0.06], tt), g2 = gameTint([0.14, 0.19, 0.08], tt), g3 = gameTint([0.21, 0.23, 0.11], tt);   // darker olive (game)
+        const trunk = [0.30, 0.24, 0.18];
+        let sR = 7; const r01 = () => { sR = (sR * 16807) % 2147483647; return sR / 2147483647; };
+        const builder = () => {                                              // [VEG-V4] one vertex-coloured geometry per shape
+          const P = [], C = [];
           const tri = (a, b, c2, col) => { P.push(...a, ...b, ...c2); C.push(...col, ...col, ...col); };
-          for (let q = 0; q < 5; q++) { const a0 = q / 5 * 6.283, a1 = (q + 1) / 5 * 6.283, r = 0.035;
-            tri([Math.cos(a0) * r, Math.sin(a0) * r, 0], [Math.cos(a1) * r, Math.sin(a1) * r, 0], [Math.cos(a1) * r, Math.sin(a1) * r, 0.4], trunk);
-            tri([Math.cos(a0) * r, Math.sin(a0) * r, 0], [Math.cos(a1) * r, Math.sin(a1) * r, 0.4], [Math.cos(a0) * r, Math.sin(a0) * r, 0.4], trunk); }
-          const tt = window.__gcolV && window.__gcolV.foliage && window.__gcolV.foliage.tree && window.__gcolV.foliage.tree.rgb;   // [GROUND-COLOR-V1]
-          const blob = (cx, cy, cz, rx, rz, col) => {                         // masse de feuillage: icosaedre aplati
-            const g = new THREE.IcosahedronGeometry(1, 1).toNonIndexed(), a = g.attributes.position.array;
-            for (let q = 0; q < a.length; q += 9) {
-              const v = [0, 1, 2].map(t => [cx + a[q + 3 * t] * rx, cy + a[q + 3 * t + 1] * rx, cz + a[q + 3 * t + 2] * rz]);
-              const sh = 0.86 + 0.28 * ((v[0][2] - cz) / rz * 0.5 + 0.5);    // dessus plus clair
-              tri(v[0], v[1], v[2], col.map(c3 => c3 * sh));
-            }
-            g.dispose();
-          };
-          // [TREES-V2 2026-10-26] (Alexandre: the trees must look like the game, Dirt Bikes frame): a broken, clumpy crown —
-          // 11 small jittered leaf clumps (not 3 smooth balls), olive to deep green, darker inside; 2 bare branches
-          const g1 = gameTint([0.09, 0.14, 0.06], tt), g2 = gameTint([0.14, 0.19, 0.08], tt), g3 = gameTint([0.21, 0.23, 0.11], tt);   // darker olive (game)
-          let sR = 7; const r01 = () => { sR = (sR * 16807) % 2147483647; return sR / 2147483647; };
-          const blobJ = (cx, cy, cz, rx, rz, col) => {                       // clump with jittered vertices (irregular outline)
-            const g = new THREE.IcosahedronGeometry(1, 1), pa = g.attributes.position, key = new Map();
+          const stem = (r, z1) => { for (let q = 0; q < 5; q++) { const a0 = q / 5 * 6.283, a1 = (q + 1) / 5 * 6.283;
+            tri([Math.cos(a0) * r, Math.sin(a0) * r, 0], [Math.cos(a1) * r, Math.sin(a1) * r, 0], [Math.cos(a1) * r * 0.7, Math.sin(a1) * r * 0.7, z1], trunk);
+            tri([Math.cos(a0) * r, Math.sin(a0) * r, 0], [Math.cos(a1) * r * 0.7, Math.sin(a1) * r * 0.7, z1], [Math.cos(a0) * r * 0.7, Math.sin(a0) * r * 0.7, z1], trunk); } };
+          const branch = (z0, bx, by, bz) => { tri([0, 0, z0], [bx * 0.15, by * 0.15, z0 + 0.04], [bx, by, bz], trunk); tri([0, 0, z0 + 0.04], [bx, by, bz], [bx * 0.9, by * 0.9, bz + 0.03], trunk); };
+          const blobJ = (cx, cy, cz, rx, rz, col, det = 1, lo = 0.35, span = 0.65) => {   // clump with jittered vertices (irregular outline)
+            const g = new THREE.IcosahedronGeometry(1, det), pa = g.attributes.position, key = new Map();
             for (let q = 0; q < pa.count; q++) { const k = [pa.getX(q), pa.getY(q), pa.getZ(q)].map(v => v.toFixed(3)).join(); if (!key.has(k)) key.set(k, 0.72 + 0.5 * r01()); const f = key.get(k); pa.setXYZ(q, pa.getX(q) * f, pa.getY(q) * f, pa.getZ(q) * f); }
-            const ng = g.toNonIndexed(), a = ng.attributes.position.array;
+            const ng = g.index ? g.toNonIndexed() : g, a = ng.attributes.position.array;
             for (let q = 0; q < a.length; q += 9) {
               const v = [0, 1, 2].map(t => [cx + a[q + 3 * t] * rx, cy + a[q + 3 * t + 1] * rx, cz + a[q + 3 * t + 2] * rz]);
-              const sh = 0.70 + 0.45 * ((v[0][2] - 0.35) / 0.65);              // lit top, dark underside
+              const sh = 0.70 + 0.45 * ((v[0][2] - lo) / span);               // lit top, dark underside
               tri(v[0], v[1], v[2], col.map(c3 => c3 * Math.max(0.55, Math.min(1.2, sh))));
             }
-            g.dispose(); ng.dispose();
+            g.dispose(); if (ng !== g) ng.dispose();
           };
-          for (const [bx, by] of [[0.18, 0.05], [-0.12, 0.14]]) {          // two branches from the trunk top
-            tri([0, 0, 0.36], [bx * 0.15, by * 0.15, 0.40], [bx, by, 0.55], trunk); tri([0, 0, 0.40], [bx, by, 0.55], [bx * 0.9, by * 0.9, 0.58], trunk);
-          }
+          const finish = () => { const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(C, 3)); g.computeVertexNormals(); return g; };
+          return { tri, stem, branch, blobJ, finish };
+        };
+        const tgeo = (() => {                                                // round oak: 11 clumps on a 0.4 trunk (TREES-V2 crown)
+          const B = builder();
+          for (let q = 0; q < 5; q++) { const a0 = q / 5 * 6.283, a1 = (q + 1) / 5 * 6.283, r = 0.035;
+            B.tri([Math.cos(a0) * r, Math.sin(a0) * r, 0], [Math.cos(a1) * r, Math.sin(a1) * r, 0], [Math.cos(a1) * r, Math.sin(a1) * r, 0.4], trunk);
+            B.tri([Math.cos(a0) * r, Math.sin(a0) * r, 0], [Math.cos(a1) * r, Math.sin(a1) * r, 0.4], [Math.cos(a0) * r, Math.sin(a0) * r, 0.4], trunk); }
+          for (const [bx, by] of [[0.18, 0.05], [-0.12, 0.14]]) B.branch(0.36, bx, by, 0.55);
           for (let q = 0; q < 11; q++) {
             const ang = r01() * 6.283, rr = 0.05 + 0.22 * Math.sqrt(r01()), zc = 0.48 + 0.45 * r01() - rr * 0.30;   // rounder, taller crown
             const col = [g1, g2, g3][Math.floor(r01() * 3)];
-            blobJ(Math.cos(ang) * rr, Math.sin(ang) * rr, zc, 0.13 + 0.09 * r01(), 0.10 + 0.07 * r01(), col);
+            B.blobJ(Math.cos(ang) * rr, Math.sin(ang) * rr, zc, 0.13 + 0.09 * r01(), 0.10 + 0.07 * r01(), col);
           }
-          const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); g.setAttribute('color', new THREE.Float32BufferAttribute(C, 3)); g.computeVertexNormals(); return g;
+          return B.finish();
+        })();
+        // [VEG-V4] tall sweetgum / tulip tree: bare trunk to 0.55, narrow ragged crown up to 1.0 (the tall trees left of the S2/68 frame)
+        const tallGeo = (() => {
+          const B = builder(); B.stem(0.026, 0.62);
+          for (const [bx, by, z0] of [[0.12, 0.03, 0.36], [-0.08, 0.10, 0.44], [0.03, -0.12, 0.52]]) B.branch(z0, bx, by, z0 + 0.16);
+          for (let q = 0; q < 12; q++) {
+            const ang = r01() * 6.283, zc = 0.42 + 0.52 * r01(), rr = (0.04 + 0.14 * Math.sqrt(r01())) * (1.1 - 0.5 * (zc - 0.42));   // ovoid, wider low
+            B.blobJ(Math.cos(ang) * rr, Math.sin(ang) * rr, zc, 0.09 + 0.05 * r01(), 0.09 + 0.05 * r01(), [g1, g2, g3, g2][Math.floor(r01() * 4)], 1, 0.40, 0.55);
+          }
+          return B.finish();
+        })();
+        // [VEG-V4] spreading live oak: short trunk forking low, wide flat canopy (~1.5x as wide as tall)
+        const wideGeo = (() => {
+          const B = builder(); B.stem(0.04, 0.30);
+          for (let q = 0; q < 4; q++) { const a = q / 4 * 6.283 + 0.4; B.branch(0.26, Math.cos(a) * 0.30, Math.sin(a) * 0.30, 0.48); }
+          for (let q = 0; q < 13; q++) {
+            const ang = r01() * 6.283, rr = 0.06 + 0.34 * Math.sqrt(r01()), zc = 0.55 + 0.20 * r01() - rr * 0.18;
+            B.blobJ(Math.cos(ang) * rr, Math.sin(ang) * rr, zc, 0.14 + 0.08 * r01(), 0.08 + 0.04 * r01(), [g1, g2, g3][Math.floor(r01() * 3)], 1, 0.40, 0.45);
+          }
+          return B.finish();
+        })();
+        // [VEG-V4] bush: 4 low jittered clumps (unit = 1 m tall before scaling), lighter scrub greens
+        const bushGeo = (() => {
+          const B = builder(), b1 = gameTint([0.13, 0.19, 0.07], tt), b2 = gameTint([0.20, 0.25, 0.10], tt), b3 = gameTint([0.26, 0.27, 0.13], tt);
+          for (let q = 0; q < 4; q++) {
+            const ang = q / 4 * 6.283 + r01(), rr = q ? 0.35 + 0.25 * r01() : 0;
+            B.blobJ(Math.cos(ang) * rr * 0.8, Math.sin(ang) * rr * 0.8, 0.45 + 0.15 * r01() - rr * 0.20, 0.40 + 0.15 * r01(), 0.42 + 0.15 * r01(), [b1, b2, b3][q % 3], 1, 0.0, 1.0);
+          }
+          return B.finish();
         })();
         const tmat = new THREE.MeshStandardMaterial({ vertexColors: true, roughness: 0.95, metalness: 0, side: THREE.DoubleSide });
         tmat.toneMapped = false; if (window.__envTex) { tmat.envMap = window.__envTex; tmat.envMapIntensity = 0.4; }
         const prev2 = window.__onEnv; window.__onEnv = t => { tmat.envMap = t; tmat.envMapIntensity = 0.4; tmat.needsUpdate = true; if (prev2) prev2(t); };
         const M4 = new THREE.Matrix4(), Q = new THREE.Quaternion(), V = new THREE.Vector3(), SC = new THREE.Vector3(), CL = new THREE.Color(), ZA = new THREE.Vector3(0, 0, 1);
-        const tm = window.__tiledInst(tgeo, tmat, trees, (im, k, [x, y, z, sd]) => {     // [PERF-V1] tuiles + culling
-          const hh = 8 + 9 * rnd(sd + 3), wide = 0.80 + 0.30 * rnd(sd + 9);   // [TREES-V2] taller, more varied (game hill forest)
-          Q.setFromAxisAngle(ZA, rnd(sd + 4) * 6.283); SC.set(hh * wide, hh * wide, hh); V.set(x, y, z - 0.3);
-          M4.compose(V, Q, SC); im.setMatrixAt(k, M4);
-          { const v = 0.70 + 0.45 * rnd(sd + 5), o = rnd(sd + 6); CL.setRGB(v * (0.95 + 0.25 * o), v * (1.0 - 0.06 * o), v * (0.85 - 0.1 * o)); } im.setColorAt(k, CL);   // [TREES-V2] olive / dry variation
-        }, { tile: 500, maxD: 4500, castShadow: true });
+        const tint = (sd, v0, dv) => { const v = v0 + dv * rnd(sd + 5), o = rnd(sd + 6); CL.setRGB(v * (0.95 + 0.25 * o), v * (1.0 - 0.06 * o), v * (0.85 - 0.1 * o)); return CL; };   // [TREES-V2] olive / dry variation
+        const place = (geo, list, size, opt) => window.__tiledInst(geo, tmat, list, (im, k, [x, y, z, sd]) => {     // [PERF-V1] tuiles + culling
+          const [hh, wide, sink] = size(sd);
+          Q.setFromAxisAngle(ZA, rnd(sd + 4) * 6.283); SC.set(hh * wide, hh * wide, hh); V.set(x, y, z - sink);
+          M4.compose(V, Q, SC); im.setMatrixAt(k, M4); im.setColorAt(k, tint(sd, opt.v0, opt.dv));
+        }, { tile: 500, maxD: opt.maxD, castShadow: opt.shadow });
+        const tm = new THREE.Group();
+        tm.add(place(tgeo, trees, sd => [8 + 9 * rnd(sd + 3), 0.80 + 0.30 * rnd(sd + 9), 0.3], { v0: 0.70, dv: 0.45, maxD: 4500, shadow: true }));   // [TREES-V2] taller, more varied
+        if (tallT.length) tm.add(place(tallGeo, tallT, sd => [13 + 9 * rnd(sd + 3), 0.85 + 0.35 * rnd(sd + 9), 0.3], { v0: 0.72, dv: 0.45, maxD: 4500, shadow: true }));
+        if (wideT.length) tm.add(place(wideGeo, wideT, sd => [7 + 5 * rnd(sd + 3), 1.25 + 0.40 * rnd(sd + 9), 0.3], { v0: 0.68, dv: 0.40, maxD: 4500, shadow: true }));
+        if (bushes.length) tm.add(place(bushGeo, bushes, sd => [1.1 + 1.8 * rnd(sd + 3) ** 1.5, 0.95 + 0.45 * rnd(sd + 9), 0.30], { v0: 0.72, dv: 0.55, maxD: 1600, shadow: false }));
         tm.name = 'trees';
         layers.terrain.add(tm);
         const tc = document.getElementById('ly-palms');
         const syncT = () => { tm.visible = tc.classList.contains('on'); };
         tc.addEventListener('click', () => setTimeout(syncT, 0)); syncT();
-        window.__trees = { mesh: tm, n: trees.length };
-        console.log('[TREES-V1]', trees.length, 'arbres');
+        window.__trees = { mesh: tm, n: trees.length + tallT.length + wideT.length, oak: trees.length, tall: tallT.length, wide: wideT.length, bushes: bushes.length };
+        console.log('[TREES-V1]', window.__trees.n, 'arbres', bushes.length, 'buissons');
       }
     } catch (e) { console.warn('[TREES-V1]', e); }
     if (!pts.length) return;
