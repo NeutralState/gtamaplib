@@ -137,3 +137,28 @@ def make_v2(sid, info, music, approach=3.3, out_name=None):
                     '-af', 'afade=t=in:d=0.03,afade=t=out:st=%.3f:d=%.2f,loudnorm=I=-14:TP=-1.5' % (DUR - fade, fade), '-c:a', 'aac', '-b:a', '256k',
                     '-dn', '-map_metadata', '-1', '-movflags', '+faststart', out], check=True)
     os.remove(vid); return out
+
+
+# ── cover (2026-10-28): 1080x1920 thumbnail for TikTok / YouTube — real frame on top, the 3D at its arrival below, big hook text on the
+# seam; built from the sources (a grab of the Short carried the pulsing WAIT FOR IT under the title) ──
+def make_cover(sid, info):
+    name = info['name']; frame = cv2.imread(os.path.join(REPO, 'frames', name + '.png'))
+    cap = cv2.VideoCapture(TOUR); cap.set(cv2.CAP_PROP_POS_FRAMES, int(round((info['t0'] - 0.5) * FPS)) - 1); _, f3 = cap.read()
+    HH = H // 2
+    def crop(img):                                         # centre crop to 1080 x 960
+        h, w = img.shape[:2]; cw = min(w, h * W / HH); ch = cw * HH / W; x0 = (w - cw) / 2; y0 = (h - ch) / 2
+        return cv2.resize(img[int(y0):int(y0 + ch), int(x0):int(x0 + cw)], (W, HH), interpolation=cv2.INTER_AREA).astype(np.float32)
+    img = np.zeros((H, W, 3), np.float32); img[:HH] = crop(frame); img[HH:] = crop(f3[60:860, 300:1500])
+    img[HH - 3:HH + 3] = 255                                # seam
+    blend(img, caption('GTA 6 TRAILER', 138, HH - 150, 14), 0, 0, 1.0)
+    blend(img, caption('vs', 104, HH + 8, 12), 0, 0, 1.0)
+    blend(img, caption('MY 3D MAP', 138, HH + 150, 14), 0, 0, 1.0)
+    for txt, y in (('GAME', 60), ('3D', H - 120)):
+        f = font(52); im = Image.new('RGBA', (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(im); tw = int(d.textlength(txt, font=f))
+        d.rounded_rectangle([0, 0, tw + 48, 80], radius=18, fill=(20, 12, 30, 200)); d.text((24, 40), txt, font=f, fill=(255, 255, 255, 255), anchor='lm')
+        arr = np.array(im.crop((0, 0, tw + 48, 80))).astype(np.float32); blend(img, (arr[:, :, [2, 1, 0]], arr[:, :, 3:] / 255.0), 36, y, 1.0)
+    out = os.path.join(OUT, 'cover_%s.jpg' % sid.replace('T4/', 'T4_'))
+    cv2.imwrite(out, np.clip(img, 0, 255).astype(np.uint8), [cv2.IMWRITE_JPEG_QUALITY, 93]); return out
+if __name__ == '__main__' and '--cover' in sys.argv:
+    info = json.load(open(TIMES))
+    for sid in [a for a in sys.argv[1:] if a.startswith('T4/')]: print(make_cover(sid, info[sid]))
