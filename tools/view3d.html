@@ -645,7 +645,14 @@ window.__trenchFills = [   // centrelines = the trench bottoms found in the heig
 // route 70's tunnel under the Waffles / Mountain ridge (south and north portals = the ends of the strokes around the dashed V17 section)
 window.__tunnelPortals = [{ name: 'route 70 tunnel S', at: [-4937.2, 5197.7] }, { name: 'route 70 tunnel N', at: [-4806.2, 5332.3] },
   { name: 'Mountain Pass rail tunnel W portal', at: [-5011.5, 5046.8], dir: [0.711, -0.703], z: 76.5, w: 7.5, rail: true }];   // the viaduct runs straight into it
-window.__treeClear = (x, y) => window.__tunnelPortals.some(P => Math.hypot(x - P.at[0], y - P.at[1]) < 20) || window.__railBridges.some(B => { const dx = x - B.c[0], dy = y - B.c[1], s = dx * B.u[0] + dy * B.u[1], n = -dx * B.u[1] + dy * B.u[0];
+// [FLY-CLEAR-V1 2026-10-28] camera paths of the rendered flyovers (keyframes x, y, z): no tree / bush within 12 m whose top could
+// reach the camera (ground + 24 m above the path height - 2 m), so a shot never flies through a crown
+window.__flyPaths = [[[-4884, 5446, 138.7], [-4896, 5422, 133], [-4935, 5372, 118], [-4975, 5318, 100], [-4996, 5262, 86], [-5022, 5205, 76], [-5080, 5175, 69],
+  [-5150, 5156, 67], [-5225, 5140, 80], [-5300, 5132, 104], [-5370, 5126, 134], [-5425, 5120, 160], [-5450, 5116, 170]]];   // Mountain Pass gorge -> Sunshine Skyway
+const _flyHit = (x, y) => window.__flyPaths.some(P => { for (let i = 0; i < P.length - 1; i++) { const a = P[i], b = P[i + 1], dx = b[0] - a[0], dy = b[1] - a[1], l2 = dx * dx + dy * dy || 1;
+  const t = Math.max(0, Math.min(1, ((x - a[0]) * dx + (y - a[1]) * dy) / l2)); if (Math.hypot(x - a[0] - dx * t, y - a[1] - dy * t) > 12) continue;
+  const g = terrainZBil(x, y); if (g === null || g + 24 > a[2] + (b[2] - a[2]) * t - 2) return true; } return false; });
+window.__treeClear = (x, y) => _flyHit(x, y) || window.__tunnelPortals.some(P => Math.hypot(x - P.at[0], y - P.at[1]) < 20) || window.__railBridges.some(B => { const dx = x - B.c[0], dy = y - B.c[1], s = dx * B.u[0] + dy * B.u[1], n = -dx * B.u[1] + dy * B.u[0];
   return s > B.s0 - 6 && s < B.s1 + 6 && Math.abs(n) < B.w / 2 + 7; });
 window.__lookPresets = {
   nature: { hazeMix: 0.8, hazeCol: [0.78, 0.74, 0.68], desat: 0.18, warm: 0.6, atmK: 6, sky: 1 },     // ground level, fitted on Dirt Bikes
@@ -5862,6 +5869,9 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
     let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
     const grow = (P, m) => { for (const q of P) { x0 = Math.min(x0, q[0] - m); y0 = Math.min(y0, q[1] - m); x1 = Math.max(x1, q[0] + m); y1 = Math.max(y1, q[1] + m); } };
     grow(L, 66); if (L70) grow(L70, 40);
+    { const ins = r.p.map(q => q[0] > x0 - 30 && q[0] < x1 + 30 && q[1] > y0 - 30 && q[1] < y1 + 30); let best = [0, -1];   // [ROAD-DRESS-V1] route 50 across the box
+      for (let i = 0; i < ins.length; i++) if (ins[i]) { let j = i; while (j + 1 < ins.length && ins[j + 1]) j++; if (j - i > best[1] - best[0]) best = [i, j]; i = j; }
+      L50 = r.p.slice(best[0], best[1] + 1); }   // longest contiguous run (no chord across a gap)
     const G = G0(), sn = (v, o, d) => o + G.step * (d < 0 ? Math.floor((v - o) / G.step) : Math.ceil((v - o) / G.step));   // box on the 12 m grid lines
     BOX = [sn(x0, G.x0, -1), sn(y0, G.y0, -1), sn(x1, G.x0, 1), sn(y1, G.y0, 1)];
     return true;
@@ -5881,7 +5891,12 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
     else zb = Math.min(Math.max(z, zr - 1.0 * (b.d - dw)), zr + 0.6 + 2.6 * (b.d - dw));   // fill 45 deg below, rock cut ~70 deg above
     return z + (zb - z) * wT;
   };
-  const sharp = (x, y) => bench(x, y, sharp50(x, y));
+  // [ROAD-DRESS-V1] road bed under the whole route 50 ribbon in the box (beyond the cut too: on side slopes the 1.5 m mesh poked
+  // through the flat 17 m ribbon, green blobs on the shoulders under the viaduct)
+  let L50 = null;
+  const bed = (x, y, z) => { if (!L50) return z; const b = near(x, y, L50); if (b.end || b.d > 30) return z;
+    const zr = Math.max(zH(b.px, b.py), 0) + 0.38; return Math.min(z, b.d < 9 ? zr - 0.7 : zr - 0.25 + (b.d - 9) * 0.8); };   // cut slope ~40 deg, no vertical slot
+  const sharp = (x, y) => bed(x, y, bench(x, y, sharp50(x, y)));
   const sharp50 = (x, y) => {
     const z0 = zH(x, y), b = near(x, y); if (b.end || b.d > 60) return z0;
     let zr = -1e9; for (let o = 12; o <= 48; o += 6) zr = Math.max(zr, zH(b.px + b.side * b.nx * o, b.py + b.side * b.ny * o));   // rim of the cut on this side
@@ -6006,7 +6021,7 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
   const R = window.__roadsData; if (!R || !window.__terrain || !window.__gorgeZ) return;
   const r = (R.hwy || []).find(r => r.p.some(q => Math.hypot(q[0] + 4991, q[1] - 5250) < 8)); if (!r) return;
   const T3 = window.__terrain.THREE, p = r.p, n = p.length;
-  const inB = q => q[0] > -5240 && q[0] < -4760 && q[1] > 5110 && q[1] < 5470;
+  const inB = q => true;                                                   // the whole route 50 stroke (2.9 km; was the gorge only: it ended under the viaduct)
   const g0 = (x, y) => { const z = terrainZBil(x, y); return z === null ? 0 : z; };
   const ground = (x, y) => { const z = window.__gorgeZ(x, y); return z !== null ? z : g0(x, y); };
   const lin = v => Math.pow(v, 2.2), mix = (a, b, t) => a.map((v, k) => v + (b[k] - v) * t);
@@ -6044,8 +6059,8 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
         let dO = out; { const [x, y] = at(Q, sg * out, 0); if (ground(x, y) > Q.z + 1.8) dO = 11.2; }   // stop at the foot of the wall
         // apron rides 15 cm over the 3 m gorge mesh (max of three probes across each step, so no ground spike pierces it)
         const gm = d => Math.max(...[-1.5, 0, 1.5].map(o => ground(...at(Q, sg * Math.max(8.5, d + o), 0).slice(0, 2))));
-        const dM = (11 + dO) / 2, z11 = Math.max(gm(11) + 0.15, Q.z - 0.40), zM = Math.max(gm(dM) + 0.15, Q.z - 0.40 - 0.3 * (dM - 11));
-        const zO = Math.max(gm(dO) + 0.12, Q.z - 0.40 - 0.3 * (dO - 11));
+        const dM = (11 + dO) / 2, z11 = Math.max(gm(11) + 0.25, Q.z - 0.40), zM = Math.max(gm(dM) + 0.25, Q.z - 0.40 - 0.3 * (dM - 11));
+        const zO = Math.max(gm(dO) + 0.18, Q.z - 0.40 - 0.3 * (dO - 11));
         sides[sg] = { dO, dM, z11, zM, zO };
       }
       return sides;
@@ -6057,7 +6072,8 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
       { const a0 = at(A, -5, zA), a1 = at(A, 5, zA), b0 = at(B, -5, zB), b1 = at(B, 5, zB); quad(a0, b0, b1, a1, ac(a0), ac(b0), ac(b1), ac(a1)); }
       for (const sg of [-1, 1]) {
         const pa = prof[i][sg], pb = prof[i + 1][sg];
-        const cols = [[5, zA, zB], [8.5, zA, zB], [11, pa.z11, pb.z11]];
+        const up = (Q, d, z) => Math.max(z, ground(...at(Q, sg * d, 0).slice(0, 2)) + 0.15);   // side slope: the shoulder rides the rising ground
+        const cols = [[5, up(A, 5, zA), up(B, 5, zB)], [8.5, up(A, 8.5, zA), up(B, 8.5, zB)], [11, pa.z11, pb.z11]];
         for (let c = 0; c < cols.length - 1; c++) {
           const a0 = at(A, sg * cols[c][0], cols[c][1]), a1 = at(A, sg * cols[c + 1][0], cols[c + 1][1]), b0 = at(B, sg * cols[c][0], cols[c][2]), b1 = at(B, sg * cols[c + 1][0], cols[c + 1][2]);
           quad(a0, b0, b1, a1, dc(a0), dc(b0), dc(b1), dc(a1));
@@ -6073,7 +6089,7 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
         }
       }
       // W-beam guardrail on the ravine side, from the viaduct to ~120 m north of it (ESTIMATED from the frame)
-      if (A.y > 5150 && A.y < 5280) {
+      if (A.y > 5150 && A.y < 5280 && A.x > -5200) {
         const sg = (A.nx * SE[0] + A.ny * SE[1]) > 0 ? 1 : -1, d = 5.6;
         const a0 = at(A, sg * d, zA + 0.50), a1 = at(A, sg * d, zA + 0.85), b0 = at(B, sg * d, zB + 0.50), b1 = at(B, sg * d, zB + 0.85);
         quad(a0, b0, b1, a1, STEEL, STEEL, STEEL, STEEL);
@@ -6083,7 +6099,7 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
       }
       // [CREEK-V1] the frame's little stony creek on the ravine side, ~16-20 m off the road between the viaduct and the gorge middle
       // (ESTIMATED): pale stone bed with a thin blue-grey water line, riding over the ground
-      if (A.y > 5185 && A.y < 5330) {
+      if (A.y > 5185 && A.y < 5330 && A.x > -5100) {
         const sg = (A.nx * SE[0] + A.ny * SE[1]) > 0 ? 1 : -1, oA = 16 + 6 * vn(A.x / 14, A.y / 14), oB = 16 + 6 * vn(B.x / 14, B.y / 14);   // meandering
         const fade = Math.min(1, (A.y - 5185) / 25, (5330 - A.y) / 25);
         const zc = (Q, o) => Math.max(...[-2, 0, 2].map(e => ground(...at(Q, sg * (o + e), 0).slice(0, 2)))) + 0.14;
