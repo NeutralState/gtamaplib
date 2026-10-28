@@ -4377,8 +4377,8 @@ window.__camScreen = name => {
       if (S[n - 1] < 20) continue;
       const w = Math.max(c.minW, r.w); let nl = Math.max(1, Math.min(4, Math.round(w / 2 / 3.6))), laneW = w / 2 / nl;
       // [ROAD-DRESS-V1] route 50 (Mountain Pass, S2/68) is a two-lane road, one lane each way (Alexandre), whatever its V16 width
-      if (r.p.some(q => Math.hypot(q[0] + 4991, q[1] - 5250) < 8)) { nl = 1; laneW = 4.2; }
-      paths.push({ k, c, X, Y, Z, S, L: S[n - 1], nl, laneW, bb: [x0, y0, x1, y1], id: paths.length });
+      let vMul = 1; if (r.p.some(q => Math.hypot(q[0] + 4991, q[1] - 5250) < 8)) { nl = 1; laneW = 4.2; vMul = 0.45; }   // ~45 km/h mountain road
+      paths.push({ k, c, X, Y, Z, S, L: S[n - 1], nl, laneW, vMul, bb: [x0, y0, x1, y1], id: paths.length });
     }
     // jonctions: grille 16 m de tous les points du reseau; aux deux bouts de chaque troncon, les points d'autres troncons a < 12 m
     const CELL = 16, grid = new Map(), key = (ix, iy) => ix * 131071 + iy;
@@ -4396,7 +4396,7 @@ window.__camScreen = name => {
       const all = [...best].map(([pj, [j]]) => [pj, j]), same = all.filter(([pj]) => paths[pj].k === p.k);
       return same.length ? same : all;
     }));
-    const laneV = (pi, lane, d) => { const p = paths[pi], c = p.c, f = p.nl > 1 ? lane / (p.nl - 1) : 0.5; return (c.v[1] - (c.v[1] - c.v[0]) * f) * (0.92 + 0.16 * rnd(pi * 7 + lane * 3 + (d > 0 ? 1 : 0))); };
+    const laneV = (pi, lane, d) => { const p = paths[pi], c = p.c, f = p.nl > 1 ? lane / (p.nl - 1) : 0.5; return (c.v[1] - (c.v[1] - c.v[0]) * f) * (0.92 + 0.16 * rnd(pi * 7 + lane * 3 + (d > 0 ? 1 : 0))) * (p.vMul || 1); };
     // vehicules: places en creneaux reguliers (avec jitter) par troncon/sens/voie -> jamais deux au meme endroit
     const PA = [], SA = [], DA = [], LA = [], TY = [], COL = [];
     const PAL = [['#f2f2ef', 25], ['#b9bcc0', 18], ['#5c6066', 14], ['#17181a', 17], ['#9a1c1f', 7], ['#21407a', 7], ['#1b2a44', 4], ['#c9b58e', 3], ['#2f4a3a', 2], ['#e8b923', 2], ['#d06a2a', 1]];
@@ -4412,6 +4412,7 @@ window.__camScreen = name => {
         if (PA.length >= 24000) break;
       }
     }
+    let convoy = null;
     // [CONVOY-V1 2026-10-28] (S2/68: a biker convoy and a flatbed of concrete pipes on route 50 through the gorge): one path, one lane
     // each way, so the whole group keeps one speed (laneV depends on path / lane / way only); the cars already there are removed
     { const pm = paths.findIndex(q => { for (let i = 0; i < q.X.length; i++) if (Math.hypot(q.X[i] + 4991, q.Y[i] - 5250) < 8) return true; return false; });
@@ -4423,6 +4424,7 @@ window.__camScreen = name => {
         for (let j = 0; j < 14; j++) add(s0 - 150 + j * 13 + 4 * rnd(900 + j), 1, 2, bikeCol[j % bikeCol.length]);
         for (let j = 0; j < 7; j++) add(s0 - 60 + j * 17 + 5 * rnd(950 + j), -1, 2, bikeCol[(j + 3) % bikeCol.length]);
         add(s0 + 40, -1, 3, '#d9d6cf'); add(s0 - 190, 1, 0, '#f2f2ef'); add(s0 + 200, -1, 0, '#b9bcc0'); add(s0 + 120, 1, 0, '#f2f2ef');
+        convoy = { pm, from: PA.length - 25, init: SA.slice(-25), dirs: DA.slice(-25) };
       } }
     const N = PA.length;
     const pa = Int32Array.from(PA), sa = Float32Array.from(SA), da = Int8Array.from(DA), la = Int8Array.from(LA), ty = Uint8Array.from(TY);
@@ -4504,6 +4506,9 @@ window.__camScreen = name => {
     };
     sync();
     window.__traffic = { N, trucks: nT, paths: paths.length };
+    window.__convoyReset = () => { if (!convoy) return false;   // [CONVOY-V1] put the convoy back at its start (before a shot is rendered)
+      for (let k = 0; k < convoy.init.length; k++) { const i = convoy.from + k; pa[i] = convoy.pm; sa[i] = convoy.init[k]; da[i] = convoy.dirs[k]; la[i] = 0; ka[i] = 0; va[i] = laneV(convoy.pm, 0, da[i]); }
+      return true; };
     console.log('[TRAFFIC-V1]', N, 'vehicles,', nT, 'trucks on', paths.length, 'road paths');
   }
   const wait = () => { if (window.__hgrid && window.__roadsData) build(window.__roadsData); else setTimeout(wait, 400); };
