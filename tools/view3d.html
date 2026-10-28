@@ -649,6 +649,7 @@ window.__treeClear = (x, y) => window.__tunnelPortals.some(P => Math.hypot(x - P
   return s > B.s0 - 6 && s < B.s1 + 6 && Math.abs(n) < B.w / 2 + 7; });
 window.__lookPresets = {
   nature: { hazeMix: 0.8, hazeCol: [0.78, 0.74, 0.68], desat: 0.18, warm: 0.6, atmK: 6, sky: 1 },     // ground level, fitted on Dirt Bikes
+  pass: { hazeMix: 0.55, hazeCol: [0.88, 0.82, 0.72], desat: -0.04, warm: 0.9, atmK: 4, sky: 1 },       // [LOOK-PASS-V1] S2/68: clear, saturated, warm low sun
   aerial: { hazeMix: 0.7, hazeCol: [0.66, 0.72, 0.80], desat: 0.18, warm: 0.6, atmK: 2.5, sky: 1 },   // high shots: cool blue distance haze
 };
 function skyColors() {
@@ -1204,18 +1205,19 @@ const data = await (await fetch('/api/scene3d')).json();
       vertexShader: `
         varying vec3 vPos; varying vec3 vN; varying vec2 vUv;
         attribute float aFine; varying float vFine;   // [GORGE-SHARPEN-V1] 1 on the fine gorge mesh (unset = 0 on the coarse terrain)
+        attribute float aCav; varying float vCav;     // [ROCK-GEOM-V1] cavity of the gorge mesh (m; 0 elsewhere)
         #include <common>
         #include <logdepthbuf_pars_vertex>
         #include <fog_pars_vertex>
         void main() {
-          vPos = position; vN = normal; vUv = uv; vFine = aFine;
+          vPos = position; vN = normal; vUv = uv; vFine = aFine; vCav = aCav;
           vec4 mvPosition = modelViewMatrix * vec4(position, 1.0);
           gl_Position = projectionMatrix * mvPosition;
           #include <logdepthbuf_vertex>
           #include <fog_vertex>
         }`,
       fragmentShader: `
-        varying vec3 vPos; varying vec3 vN; varying vec2 vUv; varying float vFine;
+        varying vec3 vPos; varying vec3 vN; varying vec2 vUv; varying float vFine; varying float vCav;
         uniform vec4 uCutBox; uniform float uCutOn; uniform vec4 uPortP[4]; uniform vec4 uPortS[4]; uniform float uPortN;
         uniform vec3 uSunDir;
         uniform sampler2D uDrape, uShadow, uDetail;
@@ -1367,13 +1369,43 @@ const data = await (await fetch('/api/scene3d')).json();
                                 min(length(q - r1 - d12 * clamp(dot(q - r1, d12) / dot(d12, d12), 0.0, 1.0)),
                                     length(q - r2 - d23 * clamp(dot(q - r2, d23) / dot(d23, d23), 0.0, 1.0))));
                   float pass = (1.0 - smoothstep(50.0, 75.0, dPass + (n1 - 0.5) * 16.0)) * step(0.5, vFine);   // the route 50 cliffs only (not the route 70 bench); hillsides stay green
+                  // [GROUND-PASS-V1 2026-10-28] (S2/68): around the gorge (~500 m) no even olive grass but bright scrub, dry yellow grass
+                  // and red laterite soil showing through in patches, as on the frame's slopes; rock (rk) kept
+                  float reg = 1.0 - smoothstep(350.0, 650.0, dPass + (n1 - 0.5) * 120.0);
+                  if (reg > 0.001) {
+                    vec3 soil = srgb(vec3(0.56, 0.38, 0.29)) * (0.85 + 0.30 * n3 * fN);
+                    vec3 scrub = srgb(vec3(0.24, 0.30, 0.11)) * (0.72 + 0.44 * n2);
+                    vec3 dgr = srgb(vec3(0.52, 0.47, 0.22)) * (0.9 + 0.2 * n3);
+                    float soilM = smoothstep(0.56, 0.74, vnoise(q * 0.045 + 9.0) * 0.55 + vnoise(q * 0.22 + 2.0) * 0.30 + n3 * 0.15 * fN);
+                    vec3 gR = mix(scrub, dgr, smoothstep(0.45, 0.75, vnoise(q * 0.03 + 4.0)) * 0.7);
+                    gR = mix(gR, soil, soilM * (1.0 - 0.5 * woods));
+                    g = mix(g, mix(gR, rock, rk), reg);
+                  }
                   if (pass > 0.001) {
-                    float band = 0.5 + 0.5 * sin(vPos.z * 0.55 + (n2 - 0.5) * 3.0) * (0.6 + 0.4 * n3);   // horizontal strata
-                    vec3 red = mix(srgb(vec3(0.60, 0.33, 0.23)), srgb(vec3(0.72, 0.48, 0.33)), band);
-                    red = mix(red, srgb(vec3(0.50, 0.24, 0.17)), smoothstep(0.6, 0.85, n1) * 0.6) * (0.85 + 0.25 * n3 * fN);
+                    // [ROCK-DETAIL-V1 2026-10-28] (frame close-ups): eroded laterite sandstone — vertical flutes and gullies (noise stretched
+                    // down the face, also bent into the lighting normal), muted brick red with pale salmon-grey / white weathered sheets,
+                    // thin horizontal strata, moss and scrub creeping over the lower, less steep parts of the walls
+                    vec2 tg = vec2(-0.766, -0.643);                                   // the gorge axis (a facet tangent made chevrons)
+                    float s = dot(q, tg), zf = vPos.z, fH = 1.0 - smoothstep(80.0, 400.0, dcam);
+                    float fl = vnoise(vec2(s * 0.30, zf * 0.03)) * 0.55 + vnoise(vec2(s * 0.9, zf * 0.07 + 5.0)) * 0.45 * fH + 0.225 * (1.0 - fH);   // flutes, 1-5 m
+                    float fl2 = vnoise(vec2((s + 0.5) * 0.30, zf * 0.03)) * 0.55 + vnoise(vec2((s + 0.5) * 0.9, zf * 0.07 + 5.0)) * 0.45 * fH + 0.225 * (1.0 - fH);
+                    float sheet = smoothstep(0.60, 0.80, vnoise(vec2(s * 0.13, zf * 0.016) + 11.0) * 0.7 + vnoise(vec2(s * 0.5, zf * 0.05)) * 0.3);   // pale run-off streaks
+                    float strata = 0.5 + 0.5 * sin(zf * 0.9 + vnoise(vec2(s * 0.05, zf * 0.1)) * 4.0);
+                    vec3 brick = srgb(vec3(0.52, 0.31, 0.22)), dark = srgb(vec3(0.33, 0.19, 0.13)), pale = srgb(vec3(0.74, 0.64, 0.58));
+                    vec3 red = mix(brick, pale, sheet * 0.35);
+                    float flc = smoothstep(0.22, 0.78, fl);
+                    red *= 0.78 + 0.32 * flc;                                         // fine flutes (the big ribs are geometry now)
+                    float cv = clamp(vCav / 1.6, -1.0, 1.0);                          // [ROCK-GEOM-V1] gullies dark and red, ribs paler
+                    red = mix(red, dark, clamp(-cv, 0.0, 1.0) * 0.65);
+                    red = mix(red, pale * 0.95, clamp(cv, 0.0, 1.0) * 0.18);
+                    red *= 0.93 + 0.10 * strata;
+                    red *= 0.88 + 0.22 * n3 * fN;
                     float rkP = smoothstep(0.16, 0.34, slope + (n2 - 0.5) * 0.06);   // the sharpened cliffs (GORGE-SHARPEN-V1), not the hillsides
+                    float moss = smoothstep(0.55, 0.75, vnoise(q * 0.08 + 3.0) * 0.7 + vnoise(q * 0.5) * 0.3) * (1.0 - smoothstep(0.35, 0.65, slope));
+                    red = mix(red, srgb(vec3(0.30, 0.36, 0.14)) * (0.8 + 0.4 * n3), moss * 0.8);
                     vec3 gP = mix(g, red, rkP);
                     g = mix(g, gP, pass);
+                    n = normalize(n + vec3(tg * (fl2 - fl) * 1.4 * rkP * pass * fH, 0.0));   // flutes catch the light
                   }
                   base = mix(base, g, natW);
                 }
@@ -4242,8 +4274,8 @@ window.__camScreen = name => {
 // (emissifs HDR -> bloom du rendu cinematique).
 (() => {
   const chip = document.getElementById('ly-traffic');
-  let on = localStorage.getItem('ui.traffic3d') !== '0', cars = null, trucks = null;
-  const sync = () => { chip.classList.toggle('on', on); if (cars) { cars.visible = on; trucks.visible = on; } };   // les feux suivent dans __trafficStep
+  let on = localStorage.getItem('ui.traffic3d') !== '0', cars = null, trucks = null, VM = [];
+  const sync = () => { chip.classList.toggle('on', on); for (const im of VM) im.visible = on; };   // les feux suivent dans __trafficStep
   chip.addEventListener('click', () => { on = !on; try { localStorage.setItem('ui.traffic3d', on ? '1' : '0'); } catch (e) {} sync(); });
   sync();
   const rnd = k => { const x = Math.sin(k * 12.9898 + 4.1) * 43758.5453; return x - Math.floor(x); };
@@ -4270,6 +4302,20 @@ window.__camScreen = name => {
       box(-1.25, 0.85, -0.82, 0.82, 0.92, 1.42, f => f[0] === 4 ? BODY : GLASS, [-1.0, 0.45, -0.70, 0.70]);
       lamp(2.252, 0.5, 0.82, 0.62, 0.78, LAMP, 1); lamp(2.252, -0.82, -0.5, 0.62, 0.78, LAMP, 1);
       lamp(-2.252, 0.52, 0.84, 0.64, 0.80, TAIL, 2); lamp(-2.252, -0.84, -0.52, 0.64, 0.80, TAIL, 2);
+    } else if (kind === 'moto') {                                       // [CONVOY-V1] motorcycle + rider (body colour = the bike)
+      box(-1.0, -0.6, -0.08, 0.08, 0.0, 0.62, DARK); box(0.6, 1.0, -0.08, 0.08, 0.0, 0.62, DARK);          // wheels
+      box(-0.75, 0.75, -0.16, 0.16, 0.45, 0.85, BODY); box(0.55, 0.85, -0.3, 0.3, 0.9, 1.05, DARK);         // tank / bars
+      box(-0.55, 0.05, -0.22, 0.22, 0.85, 1.55, [0.10, 0.09, 0.08], [-0.35, 0.25, -0.2, 0.2]);              // rider (leather)
+      box(-0.05, 0.25, -0.14, 0.14, 1.55, 1.82, [0.06, 0.06, 0.07]);                                        // helmet
+      lamp(1.01, -0.08, 0.08, 0.75, 0.88, LAMP, 1); lamp(-1.01, -0.08, 0.08, 0.7, 0.8, TAIL, 2);
+    } else if (kind === 'flat') {                                       // [CONVOY-V1] flatbed with concrete pipes (S2/68)
+      box(-7.0, 5.6, -1.2, 1.2, 0.05, 0.6, DARK);
+      box(3.4, 5.9, -1.25, 1.25, 0.6, 3.0, BODY); box(5.0, 5.92, -1.15, 1.15, 1.9, 2.8, GLASS);
+      box(-7.2, 3.2, -1.3, 1.3, 1.0, 1.35, [0.80, 0.62, 0.12]);                                            // yellow deck
+      for (const [x0, x1] of [[-7.0, -4.2], [-4.0, -1.2], [-1.0, 1.8]]) for (const [y0, y1, z0, z1] of [[-1.25, -0.05, 1.35, 2.55], [0.05, 1.25, 1.35, 2.55], [-0.6, 0.6, 2.45, 3.6]])
+        box(x0, x1, y0, y1, z0, z1, f => (f[0] === 0 || f[0] === 1 && f[1] === 2) ? [0.25, 0.25, 0.24] : [0.72, 0.71, 0.68]);   // pipe ends dark
+      lamp(5.93, 0.75, 1.15, 0.8, 1.0, LAMP, 1); lamp(5.93, -1.15, -0.75, 0.8, 1.0, LAMP, 1);
+      lamp(-7.21, 0.9, 1.25, 1.0, 1.3, TAIL, 2); lamp(-7.21, -1.25, -0.9, 1.0, 1.3, TAIL, 2);
     } else {                                                            // semi-remorque: tracteur teinte + remorque claire
       box(-6.8, 5.6, -1.2, 1.2, 0.05, 0.6, DARK);
       box(3.4, 5.9, -1.25, 1.25, 0.6, 3.0, BODY);
@@ -4329,8 +4375,10 @@ window.__camScreen = name => {
         x0 = Math.min(x0, x); y0 = Math.min(y0, y); x1 = Math.max(x1, x); y1 = Math.max(y1, y);
       }
       if (S[n - 1] < 20) continue;
-      const w = Math.max(c.minW, r.w), nl = Math.max(1, Math.min(4, Math.round(w / 2 / 3.6)));
-      paths.push({ k, c, X, Y, Z, S, L: S[n - 1], nl, laneW: w / 2 / nl, bb: [x0, y0, x1, y1], id: paths.length });
+      const w = Math.max(c.minW, r.w); let nl = Math.max(1, Math.min(4, Math.round(w / 2 / 3.6))), laneW = w / 2 / nl;
+      // [ROAD-DRESS-V1] route 50 (Mountain Pass, S2/68) is a two-lane road, one lane each way (Alexandre), whatever its V16 width
+      if (r.p.some(q => Math.hypot(q[0] + 4991, q[1] - 5250) < 8)) { nl = 1; laneW = 4.2; }
+      paths.push({ k, c, X, Y, Z, S, L: S[n - 1], nl, laneW, bb: [x0, y0, x1, y1], id: paths.length });
     }
     // jonctions: grille 16 m de tous les points du reseau; aux deux bouts de chaque troncon, les points d'autres troncons a < 12 m
     const CELL = 16, grid = new Map(), key = (ix, iy) => ix * 131071 + iy;
@@ -4364,19 +4412,30 @@ window.__camScreen = name => {
         if (PA.length >= 24000) break;
       }
     }
+    // [CONVOY-V1 2026-10-28] (S2/68: a biker convoy and a flatbed of concrete pipes on route 50 through the gorge): one path, one lane
+    // each way, so the whole group keeps one speed (laneV depends on path / lane / way only); the cars already there are removed
+    { const pm = paths.findIndex(q => { for (let i = 0; i < q.X.length; i++) if (Math.hypot(q.X[i] + 4991, q.Y[i] - 5250) < 8) return true; return false; });
+      if (pm >= 0) { const q = paths[pm]; let i0 = 0, bd = 1e9; for (let i = 0; i < q.X.length; i++) { const dd = Math.hypot(q.X[i] + 5030, q.Y[i] - 5240); if (dd < bd) { bd = dd; i0 = i; } }
+        const s0 = q.S[i0];
+        for (let i = PA.length - 1; i >= 0; i--) if (PA[i] === pm && Math.abs(SA[i] - s0) < 420) { PA.splice(i, 1); SA.splice(i, 1); DA.splice(i, 1); LA.splice(i, 1); TY.splice(i, 1); COL.splice(3 * i, 3); }
+        const bikeCol = ['#17181a', '#2b2d31', '#5c1a1a', '#17181a', '#b9bcc0', '#1b2a44'];
+        const add = (sv, d, t, c) => { PA.push(pm); SA.push(Math.min(q.L - 0.1, Math.max(0.1, sv))); DA.push(d); LA.push(0); TY.push(t); tmpC.set(c); COL.push(tmpC.r, tmpC.g, tmpC.b); };
+        for (let j = 0; j < 14; j++) add(s0 - 150 + j * 13 + 4 * rnd(900 + j), 1, 2, bikeCol[j % bikeCol.length]);
+        for (let j = 0; j < 7; j++) add(s0 - 60 + j * 17 + 5 * rnd(950 + j), -1, 2, bikeCol[(j + 3) % bikeCol.length]);
+        add(s0 + 40, -1, 3, '#d9d6cf'); add(s0 - 190, 1, 0, '#f2f2ef'); add(s0 + 200, -1, 0, '#b9bcc0'); add(s0 + 120, 1, 0, '#f2f2ef');
+      } }
     const N = PA.length;
     const pa = Int32Array.from(PA), sa = Float32Array.from(SA), da = Int8Array.from(DA), la = Int8Array.from(LA), ty = Uint8Array.from(TY);
     const va = new Float32Array(N), ka = new Int32Array(N), col = Float32Array.from(COL);
     for (let i = 0; i < N; i++) va[i] = laneV(pa[i], la[i], da[i]);
-    const nT = TY.reduce((s, v) => s + v, 0);
+    const nOf = t => TY.reduce((s, v) => s + (v === t ? 1 : 0), 0), nT = nOf(1);
     const mat = mkMat();
-    cars = new THREE.InstancedMesh(vehGeo('car'), mat, Math.max(1, N - nT));
-    trucks = new THREE.InstancedMesh(vehGeo('truck'), mat, Math.max(1, nT));
-    for (const im of [cars, trucks]) {
+    VM = ['car', 'truck', 'moto', 'flat'].map((k, t) => { const im = new THREE.InstancedMesh(vehGeo(k), mat, Math.max(1, nOf(t))); im.name = 'traffic-' + k + 's'; return im; });
+    [cars, trucks] = VM;
+    for (const im of VM) {
       im.instanceMatrix.setUsage(THREE.DynamicDrawUsage); im.setColorAt(0, tmpC.setRGB(1, 1, 1)); im.instanceColor.setUsage(THREE.DynamicDrawUsage);
       im.count = 0; im.frustumCulled = false; im.castShadow = true; layers.terrain.add(im);
     }
-    cars.name = 'traffic-cars'; trucks.name = 'traffic-trucks';
     // la nuit: un point lumineux par phare/feu (taille au sol ~2.4 m, jamais < 2 px) -> rubans de lumiere vus de loin
     const LP = new Float32Array(N * 6), LC = new Float32Array(N * 6);
     const lg = new THREE.BufferGeometry();
@@ -4405,8 +4464,7 @@ window.__camScreen = name => {
       const cx = camera.position.x, cy = camera.position.y;
       const TC = window.__trafficClear, TR2 = TC ? TC[2] * TC[2] : 0;   // [TRAFFIC-CLEAR] no car parked in front of a tour camera
       const Rv = Math.min(9000, Math.max(2500, 3 * camera.position.distanceTo(controls.target))), R2 = Rv * Rv;
-      const MC = cars.instanceMatrix.array, MT = trucks.instanceMatrix.array, CC = cars.instanceColor.array, CT = trucks.instanceColor.array;
-      let nc = 0, nt = 0;
+      const MA = VM.map(im => im.instanceMatrix.array), CA = VM.map(im => im.instanceColor.array), NA = [0, 0, 0, 0];
       for (let i = 0; i < N; i++) {
         let s = sa[i] + da[i] * va[i] * dt;
         if (s > paths[pa[i]].L || s < 0) { jump(i, s); s = sa[i]; } else sa[i] = s;
@@ -4424,14 +4482,14 @@ window.__camScreen = name => {
         if ((px - cx) * (px - cx) + (py - cy) * (py - cy) > R2) continue;
         if (TC && (px - TC[0]) * (px - TC[0]) + (py - TC[1]) * (py - TC[1]) < TR2) continue;
         const sp = dz * d / Math.hypot(seg, dz), cp = Math.sqrt(1 - sp * sp);
-        const truck = ty[i], M = truck ? MT : MC, o = (truck ? nt : nc) * 16;
+        const tyi = ty[i], truck = tyi === 1 || tyi === 3, M = MA[tyi], o = NA[tyi] * 16;
         M[o] = ux * cp; M[o + 1] = uy * cp; M[o + 2] = sp; M[o + 3] = 0;
         M[o + 4] = -uy; M[o + 5] = ux; M[o + 6] = 0; M[o + 7] = 0;
         M[o + 8] = -ux * sp; M[o + 9] = -uy * sp; M[o + 10] = cp; M[o + 11] = 0;
         M[o + 12] = px; M[o + 13] = py; M[o + 14] = pz; M[o + 15] = 1;
-        const Ca = truck ? CT : CC, oc = (truck ? nt : nc) * 3;
+        const Ca = CA[tyi], oc = NA[tyi] * 3;
         Ca[oc] = col[3 * i]; Ca[oc + 1] = col[3 * i + 1]; Ca[oc + 2] = col[3 * i + 2];
-        if (truck) nt++; else nc++;
+        NA[tyi]++;
         if (night) {
           const hl = truck ? 5.9 : 2.3, tl = truck ? 7.0 : 2.3, hz = pz + (truck ? 0.9 : 0.7), o3 = nl * 3;
           LP[o3] = px + ux * hl; LP[o3 + 1] = py + uy * hl; LP[o3 + 2] = hz;
@@ -4442,9 +4500,7 @@ window.__camScreen = name => {
         }
       }
       lg.setDrawRange(0, nl); if (nl) { lg.attributes.position.needsUpdate = true; lg.attributes.color.needsUpdate = true; }
-      cars.count = nc; trucks.count = nt;
-      cars.instanceMatrix.needsUpdate = trucks.instanceMatrix.needsUpdate = true;
-      cars.instanceColor.needsUpdate = trucks.instanceColor.needsUpdate = true;
+      VM.forEach((im, t) => { im.count = NA[t]; im.instanceMatrix.needsUpdate = true; im.instanceColor.needsUpdate = true; });
     };
     sync();
     window.__traffic = { N, trucks: nT, paths: paths.length };
@@ -5428,7 +5484,7 @@ window.__camScreen = name => {
         const tt = window.__gcolV && window.__gcolV.foliage && window.__gcolV.foliage.tree && window.__gcolV.foliage.tree.rgb;   // [GROUND-COLOR-V1]
         // [TREES-V2 2026-10-26] (Alexandre: the trees must look like the game, Dirt Bikes frame): a broken, clumpy crown —
         // small jittered leaf clumps (not smooth balls), olive to deep green, darker inside; bare branches
-        const g1 = gameTint([0.09, 0.14, 0.06], tt), g2 = gameTint([0.14, 0.19, 0.08], tt), g3 = gameTint([0.21, 0.23, 0.11], tt);   // darker olive (game)
+        const g1 = gameTint([0.06, 0.12, 0.03], tt), g2 = gameTint([0.12, 0.20, 0.05], tt), g3 = gameTint([0.21, 0.27, 0.08], tt);   // [VEG-V5] yellow-green, sunlit (S2/68) — was dark olive
         const trunk = [0.30, 0.24, 0.18];
         let sR = 7; const r01 = () => { sR = (sR * 16807) % 2147483647; return sR / 2147483647; };
         const builder = () => {                                              // [VEG-V4] one vertex-coloured geometry per shape
@@ -5487,7 +5543,7 @@ window.__camScreen = name => {
         })();
         // [VEG-V4] bush: 4 low jittered clumps (unit = 1 m tall before scaling), lighter scrub greens
         const bushGeo = (() => {
-          const B = builder(), b1 = gameTint([0.13, 0.19, 0.07], tt), b2 = gameTint([0.20, 0.25, 0.10], tt), b3 = gameTint([0.26, 0.27, 0.13], tt);
+          const B = builder(), b1 = gameTint([0.10, 0.19, 0.04], tt), b2 = gameTint([0.18, 0.27, 0.06], tt), b3 = gameTint([0.27, 0.30, 0.10], tt);   // [VEG-V5] brighter scrub greens
           for (let q = 0; q < 4; q++) {
             const ang = q / 4 * 6.283 + r01(), rr = q ? 0.35 + 0.25 * r01() : 0;
             B.blobJ(Math.cos(ang) * rr * 0.8, Math.sin(ang) * rr * 0.8, 0.45 + 0.15 * r01() - rr * 0.20, 0.40 + 0.15 * r01(), 0.42 + 0.15 * r01(), [b1, b2, b3][q % 3], 1, 0.0, 1.0);
@@ -5827,10 +5883,14 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
     const zf = Math.min(b.zf, Math.max(zH(b.px, b.py), 0) + 0.38) - 0.3, H = Math.min(zr, zf + 45) - zf; if (H < 8) return z0;   // floor under the ribbon as drawn; no cut on this side: untouched
     const t = Math.max(0, Math.min(1, (z0 - zf) / H));
     const al = (b.i + b.t) * 6, nz = vn(al / 9, b.side * 3) - 0.5, nz2 = vn(al / 3.5, z0 / 6 + b.side * 7) - 0.5;
-    const c = 0.45 + nz * 0.18, k = 0.12 + nz2 * 0.05;                    // where the cliff stands on the old slope, how sharp
+    // [ROCK-GEOM-V1 2026-10-28] (Alexandre: the walls were smooth curtains) buttresses and V gullies down the face, 4-12 m apart:
+    // the cliff line steps in and out along the gorge (ridged noise), so the 1.5 m mesh carries real ribs that catch the light
+    const gA = Math.abs(vn(al / 6, b.side * 5 + 20) - 0.5) * 2, gB = Math.abs(vn(al / 2.6, b.side * 5 + 40) - 0.5) * 2;
+    const c = 0.45 + nz * 0.18 + (gA - 0.5) * 0.20 + (gB - 0.5) * 0.04, k = 0.11 + nz2 * 0.05;   // where the cliff stands on the old slope, how sharp
     let s = Math.max(0, Math.min(1, (t - c + k) / (2 * k))); s = s * s * (3 - 2 * s);
     s = Math.min(1, s + 0.06 * Math.max(0, Math.sin(t * 17 + nz2 * 6)) * (1 - s) * s * 4);   // ledges on the face
     let z = zf + H * Math.max(s, t * 0.12);                                // a little talus at the foot
+    z += (vn(x / 3.0, y / 3.0) - 0.5) * 0.9 * s * (1 - s) * 4;            // [ROCK-GEOM-V1] rough, broken face
     if (z0 > zf + H) z = z0;                                               // above the rim: the hill as it is
     z = Math.max(z0 - 14, Math.min(z0 + 12, z));                           // reshape only, about a cell's worth at most
     if (b.d < 11) z = Math.min(z, zf - (b.d < 9.5 ? 0.9 : 0.2));           // road bed under the ribbon (no z-fight), shoulder at the floor
@@ -5844,14 +5904,17 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
     const T3 = window.__terrain.THREE, tm = window.__terrain.mesh, pa = tm.geometry.attributes.position.array, uva = tm.geometry.attributes.uv.array;
     let NXc = 1; while (Math.abs(pa[3 * NXc + 1] - pa[1]) < 1e-3) NXc++;
     const ux = (uva[2] - uva[0]) / (pa[3] - pa[0]), vy = (uva[2 * NXc + 1] - uva[1]) / (pa[3 * NXc + 1] - pa[1]);   // uv linear in x, y
-    const STEP = 3, NX = Math.round((BOX[2] - BOX[0]) / STEP) + 1, NY = Math.round((BOX[3] - BOX[1]) / STEP) + 1;
-    const pos = new Float32Array(NX * NY * 3), uv = new Float32Array(NX * NY * 2), fine = new Float32Array(NX * NY).fill(1);
+    const STEP = 1.5, NX = Math.round((BOX[2] - BOX[0]) / STEP) + 1, NY = Math.round((BOX[3] - BOX[1]) / STEP) + 1;   // [ROCK-GEOM-V1] was 3 m
+    const pos = new Float32Array(NX * NY * 3), uv = new Float32Array(NX * NY * 2), fine = new Float32Array(NX * NY).fill(1), cav = new Float32Array(NX * NY);
     for (let j = 0; j < NY; j++) for (let i = 0; i < NX; i++) { const k = j * NX + i, x = BOX[0] + i * STEP, y = BOX[1] + j * STEP;
       pos[3 * k] = x; pos[3 * k + 1] = y; pos[3 * k + 2] = sharp(x, y); uv[2 * k] = uva[0] + (x - pa[0]) * ux; uv[2 * k + 1] = uva[1] + (y - pa[1]) * vy; }
+    // [ROCK-GEOM-V1] cavity per vertex (height minus the mean 3 cells around, m): gullies < 0, ribs > 0 -> the rock shader shades them
+    for (let j = 3; j < NY - 3; j++) for (let i = 3; i < NX - 3; i++) { const k = j * NX + i, Z = q => pos[3 * q + 2];
+      cav[k] = Z(k) - (Z(k - 3) + Z(k + 3) + Z(k - 3 * NX) + Z(k + 3 * NX) + Z(k - 3 - 3 * NX) + Z(k + 3 + 3 * NX) + Z(k - 3 + 3 * NX) + Z(k + 3 - 3 * NX)) / 8; }
     const idx = new Uint32Array((NX - 1) * (NY - 1) * 6); let n = 0;
     for (let j = 0; j < NY - 1; j++) for (let i = 0; i < NX - 1; i++) { const a = j * NX + i, b = a + 1, c = a + NX, d = c + 1; idx.set([a, b, d, a, d, c], n); n += 6; }
     const g = new T3.BufferGeometry(); g.setAttribute('position', new T3.BufferAttribute(pos, 3)); g.setAttribute('uv', new T3.BufferAttribute(uv, 2));
-    g.setAttribute('aFine', new T3.BufferAttribute(fine, 1)); g.setIndex(new T3.BufferAttribute(idx, 1)); g.computeVertexNormals();
+    g.setAttribute('aFine', new T3.BufferAttribute(fine, 1)); g.setAttribute('aCav', new T3.BufferAttribute(cav, 1)); g.setIndex(new T3.BufferAttribute(idx, 1)); g.computeVertexNormals();
     const me = new T3.Mesh(g, tm.material); me.name = 'gorge-sharpen'; me.receiveShadow = tm.receiveShadow; tm.parent.add(me);
     window.__terraUni.uCutBox.value.set(BOX[0], BOX[1], BOX[2], BOX[3]); window.__terraUni.uCutOn.value = 1;
     window.__gorgeSharpen = { box: BOX, verts: NX * NY, pts: L.length, pts70: L70 ? L70.length : 0 };
@@ -5929,7 +5992,7 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
   window.__railBridgeInfo = { bridges: window.__railBridges.length, piers: nP };
 })();
 // ── [ROAD-DRESS-V1 2026-10-28] (Alexandre: make the road look like the frame) route 50 through the Mountain Pass gorge as in S2/68:
-// two lanes of light sun-bleached asphalt (~12 m) with solid white edge lines and a double yellow centre line, dusty tan shoulders
+// two lanes (one each way) of light sun-bleached asphalt (~10 m) with solid white edge lines and a double yellow centre line, dusty tan shoulders
 // spilling 3-6 m onto the gorge floor, and a W-beam guardrail on the ravine (SE) side of the stretch before the viaduct (ESTIMATED from
 // the frame). An overlay on the V16 ribbon, computed exactly like ROADS-V1 draws it (vertex normals from the neighbours, z = bilinear
 // ground + 0.38); deck points are left alone. ──
@@ -5942,7 +6005,7 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
   const g0 = (x, y) => { const z = terrainZBil(x, y); return z === null ? 0 : z; };
   const ground = (x, y) => { const z = window.__gorgeZ(x, y); return z !== null ? z : g0(x, y); };
   const lin = v => Math.pow(v, 2.2), mix = (a, b, t) => a.map((v, k) => v + (b[k] - v) * t);
-  const ASP = [0.50, 0.50, 0.49].map(lin), ASP2 = [0.44, 0.44, 0.43].map(lin), DIRT = [0.72, 0.60, 0.46].map(lin), DIRT2 = [0.60, 0.48, 0.36].map(lin);
+  const ASP = [0.50, 0.50, 0.49].map(lin), ASP2 = [0.44, 0.44, 0.43].map(lin), DIRT = [0.80, 0.71, 0.58].map(lin), DIRT2 = [0.70, 0.59, 0.46].map(lin);   // pale dusty tan (S2/68 ~210,189,156)
   const WH = [0.92, 0.92, 0.90].map(lin), YE = [0.95, 0.78, 0.22].map(lin), STEEL = [0.66, 0.67, 0.68].map(lin), POST = [0.42, 0.42, 0.42].map(lin);
   const hsh = (i, j) => { const t = Math.sin(i * 127.1 + j * 311.7) * 43758.5453; return t - Math.floor(t); };
   const vn = (x, y) => { const i = Math.floor(x), j = Math.floor(y), f = x - i, g = y - j, u = f * f * (3 - 2 * f), w = g * g * (3 - 2 * g);
@@ -5986,10 +6049,10 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
     const ac = q => mix(ASP, ASP2, vn(q[0] / 11, q[1] / 11));
     for (let i = 0; i < S.length - 1; i++) {
       const A = S[i], B = S[i + 1], zA = A.z + 0.03, zB = B.z + 0.03;
-      { const a0 = at(A, -6, zA), a1 = at(A, 6, zA), b0 = at(B, -6, zB), b1 = at(B, 6, zB); quad(a0, b0, b1, a1, ac(a0), ac(b0), ac(b1), ac(a1)); }
+      { const a0 = at(A, -5, zA), a1 = at(A, 5, zA), b0 = at(B, -5, zB), b1 = at(B, 5, zB); quad(a0, b0, b1, a1, ac(a0), ac(b0), ac(b1), ac(a1)); }
       for (const sg of [-1, 1]) {
         const pa = prof[i][sg], pb = prof[i + 1][sg];
-        const cols = [[6, zA, zB], [8.5, zA, zB], [11, pa.z11, pb.z11]];
+        const cols = [[5, zA, zB], [8.5, zA, zB], [11, pa.z11, pb.z11]];
         for (let c = 0; c < cols.length - 1; c++) {
           const a0 = at(A, sg * cols[c][0], cols[c][1]), a1 = at(A, sg * cols[c + 1][0], cols[c + 1][1]), b0 = at(B, sg * cols[c][0], cols[c][2]), b1 = at(B, sg * cols[c + 1][0], cols[c + 1][2]);
           quad(a0, b0, b1, a1, dc(a0), dc(b0), dc(b1), dc(a1));
@@ -5999,19 +6062,33 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
         { const a0 = at(A, sg * pa.dM, pa.zM), a1 = at(A, sg * pa.dO, pa.zO), b0 = at(B, sg * pb.dM, pb.zM), b1 = at(B, sg * pb.dO, pb.zO);
           quad(a0, b0, b1, a1, dc(a0, 1.3), dc(b0, 1.3), dc(b1, 1.6), dc(a1, 1.6)); }
         // markings: solid white edge line, one half of the double yellow centre line
-        for (const [d0, w, col] of [[5.3, 0.25, WH], [0.22, 0.17, YE]]) {
+        for (const [d0, w, col] of [[3.9, 0.22, WH], [0.20, 0.16, YE]]) {   // one 3.7 m lane each way + ~1 m paved shoulder (S2/68)
           const a0 = at(A, sg * (d0 - w / 2), zA + 0.03), a1 = at(A, sg * (d0 + w / 2), zA + 0.03), b0 = at(B, sg * (d0 - w / 2), zB + 0.03), b1 = at(B, sg * (d0 + w / 2), zB + 0.03);
           quad(a0, b0, b1, a1, col, col, col, col);
         }
       }
       // W-beam guardrail on the ravine side, from the viaduct to ~120 m north of it (ESTIMATED from the frame)
       if (A.y > 5150 && A.y < 5280) {
-        const sg = (A.nx * SE[0] + A.ny * SE[1]) > 0 ? 1 : -1, d = 7.4;
+        const sg = (A.nx * SE[0] + A.ny * SE[1]) > 0 ? 1 : -1, d = 5.6;
         const a0 = at(A, sg * d, zA + 0.50), a1 = at(A, sg * d, zA + 0.85), b0 = at(B, sg * d, zB + 0.50), b1 = at(B, sg * d, zB + 0.85);
         quad(a0, b0, b1, a1, STEEL, STEEL, STEEL, STEEL);
         { const c = at(A, sg * (d + 0.12), 0), e = 0.08;
           for (const [ox, oy, px, py] of [[e, 0, -e, 0], [0, e, 0, -e]]) quad([c[0] + ox, c[1] + oy, zA - 0.2], [c[0] + px, c[1] + py, zA - 0.2], [c[0] + px, c[1] + py, zA + 0.80], [c[0] + ox, c[1] + oy, zA + 0.80], POST, POST, POST, POST); }
         rail++;
+      }
+      // [CREEK-V1] the frame's little stony creek on the ravine side, ~16-20 m off the road between the viaduct and the gorge middle
+      // (ESTIMATED): pale stone bed with a thin blue-grey water line, riding over the ground
+      if (A.y > 5185 && A.y < 5330) {
+        const sg = (A.nx * SE[0] + A.ny * SE[1]) > 0 ? 1 : -1, oA = 16 + 6 * vn(A.x / 14, A.y / 14), oB = 16 + 6 * vn(B.x / 14, B.y / 14);   // meandering
+        const fade = Math.min(1, (A.y - 5185) / 25, (5330 - A.y) / 25);
+        const zc = (Q, o) => Math.max(...[-2, 0, 2].map(e => ground(...at(Q, sg * (o + e), 0).slice(0, 2)))) + 0.14;
+        const za = zc(A, oA), zb = zc(B, oB);
+        const wa = fade * (0.6 + 0.9 * vn(A.x / 5, A.y / 5)), wb = fade * (0.6 + 0.9 * vn(B.x / 5, B.y / 5));   // irregular width
+        const st = q => mix([0.66, 0.60, 0.50].map(lin), [0.48, 0.42, 0.34].map(lin), vn(q[0] / 1.7, q[1] / 1.7));   // pebbles, not paint
+        if (za < A.z + 3 && zb < B.z + 3) for (const [k, dz] of [[1.5, 0], [0.4, 0.04]]) {
+          const a0 = at(A, sg * (oA - k * wa), za + dz), a1 = at(A, sg * (oA + k * wa), za + dz), b0 = at(B, sg * (oB - k * wb), zb + dz), b1 = at(B, sg * (oB + k * wb), zb + dz);
+          if (dz) { const W = [0.22, 0.33, 0.38].map(lin); quad(a0, b0, b1, a1, W, W, W, W); } else quad(a0, b0, b1, a1, st(a0), st(b0), st(b1), st(a1));
+        }
       }
     }
   }
@@ -6023,6 +6100,45 @@ const _orbitAxis = new THREE.Vector3(0, 0, 1);
   const me = new T3.Mesh(g, mat); me.name = 'road-dress'; me.receiveShadow = true; me.castShadow = true;
   window.__terrain.layers.meshes.add(me);
   window.__roadDress = { runs: runs.length, tris: P.length / 9, railSegs: rail };
+})();
+// ── [BOULDERS-V1 2026-10-28] (S2/68 close-ups): fallen sandstone blocks at the foot of the gorge walls and scattered on the broken
+// slopes around Mountain Pass. 4 m grid over the gorge mesh box: talus (slope 0.25-0.9) gets many, gentle ground a few; never on
+// route 50 / route 70 (14 m), sunk a third into the ground, flattened, jittered. ──
+(async () => {
+  for (let t = 0; t < 160 && !(window.__gorgeSharpen && window.__roadsData && window.__terrain); t++) await new Promise(r => setTimeout(r, 500));
+  const B = window.__gorgeSharpen && window.__gorgeSharpen.box, R = window.__roadsData; if (!B || !R) return;
+  const T3 = window.__terrain.THREE;
+  const gz = (x, y) => { const z = window.__gorgeZ(x, y); return z !== null ? z : terrainZBil(x, y); };
+  const rp = []; for (const k of ['hwy', 'road']) for (const r of R[k]) for (const q of r.p) if (q[0] > B[0] - 20 && q[0] < B[2] + 20 && q[1] > B[1] - 20 && q[1] < B[3] + 20) rp.push(q);
+  const rnd = k => { const v = Math.sin(k * 12.9898) * 43758.5453; return v - Math.floor(v); };
+  const items = [];
+  for (let y = B[1] + 6; y < B[3] - 6; y += 4) for (let x = B[0] + 6; x < B[2] - 6; x += 4) {
+    const sd = Math.round(x * 7.1 + y * 131.7), jx = x + (rnd(sd) - 0.5) * 4, jy = y + (rnd(sd + 1) - 0.5) * 4;
+    const z = gz(jx, jy); if (z === null) continue;
+    const sl = Math.max(Math.abs(gz(jx + 3, jy) - gz(jx - 3, jy)), Math.abs(gz(jx, jy + 3) - gz(jx, jy - 3))) / 6;
+    const p = sl > 1.2 ? 0 : sl > 0.25 ? 0.10 : 0.012;
+    if (rnd(sd + 2) >= p) continue;
+    if (rp.some(q => (q[0] - jx) * (q[0] - jx) + (q[1] - jy) * (q[1] - jy) < 196)) continue;
+    if (window.__treeClear && window.__treeClear(jx, jy)) continue;
+    items.push([jx, jy, z, sd, sl]);
+  }
+  if (!items.length) return;
+  let sR = 11; const r01 = () => { sR = (sR * 16807) % 2147483647; return sR / 2147483647; };
+  const geo = new T3.IcosahedronGeometry(1, 1), pa = geo.attributes.position, key = new Map();
+  for (let q = 0; q < pa.count; q++) { const k = [pa.getX(q), pa.getY(q), pa.getZ(q)].map(v => v.toFixed(3)).join(); if (!key.has(k)) key.set(k, 0.75 + 0.4 * r01()); const f = key.get(k); pa.setXYZ(q, pa.getX(q) * f, pa.getY(q) * f * 0.85, pa.getZ(q) * f * 0.6); }
+  geo.computeVertexNormals();
+  const mat = new T3.MeshStandardMaterial({ color: 0xffffff, roughness: 0.95, metalness: 0, flatShading: true }); mat.toneMapped = false;
+  const M4 = new T3.Matrix4(), Q = new T3.Quaternion(), E = new T3.Euler(), V = new T3.Vector3(), S = new T3.Vector3(), C = new T3.Color();
+  const lin = v => Math.pow(v, 2.2);
+  const grp = window.__tiledInst(geo, mat, items, (im, k, [x, y, z, sd, sl]) => {
+    const r = (0.6 + 2.0 * Math.pow(rnd(sd + 3), 2)) * (sl > 0.25 ? 1.3 : 0.8);
+    E.set((rnd(sd + 4) - 0.5) * 0.6, (rnd(sd + 5) - 0.5) * 0.6, rnd(sd + 6) * 6.283); Q.setFromEuler(E);
+    S.set(r * (0.9 + 0.5 * rnd(sd + 7)), r, r * (0.8 + 0.4 * rnd(sd + 8))); V.set(x, y, z - r * 0.25);
+    M4.compose(V, Q, S); im.setMatrixAt(k, M4);
+    const t = rnd(sd + 9); C.setRGB(lin(0.56 + 0.20 * t), lin(0.40 + 0.22 * t), lin(0.32 + 0.24 * t)); im.setColorAt(k, C);   // brick red to pale salmon-grey
+  }, { tile: 200, maxD: 1500, castShadow: true, receiveShadow: true });
+  grp.name = 'boulders'; window.__terrain.layers.meshes.add(grp);
+  window.__boulders = items.length;
 })();
 // ── [HURRICANE-V1 2026-10-24] « What if a hurricane hit GTA 6 »: storm surge on the game terrain + storm atmosphere ──
 // window.__hurricane({surge: m, storm: 0..1, rain: 0..1, wind: deg (toward), lightning: 0..1}) — surge raises the sea plane, the sea shader only
