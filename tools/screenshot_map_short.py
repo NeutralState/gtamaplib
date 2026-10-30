@@ -12,16 +12,17 @@ OUT = os.path.join(HERE, 'generated', 't4', 'shorts')
 TILES = os.path.join(REPO, 'vendor', 'gtadb.org', 'maps', 'tiles', '6', 'yanis,17')
 CAMS = json.load(open(os.path.join(REPO, 'gtamapdata', 'cameras.json')))
 FPS = 30; SEA = np.array([165, 102, 44], np.float32)
-STOPS = [  # camera, place, real-life inspiration, exact?
+STOPS = [  # camera, place, real-life inspiration, exact? (True = EXACT SPOT, False = AREA, 'probable' = MOST PROBABLE SPOT)
     ('Ferris Wheel [Edge]', 'SHORELINE, VICE CITY', 'IRL: Bayfront Park, Miami', True),
     ('Jason and Lucia on a Motorbike [Edge]', 'STARFISH ISLAND BRIDGE', 'IRL: Star Island, Miami Beach', True),
     ('Open-Air Tattoo Parlour [Edge]', 'ROCKRIDGE', 'IRL: Riverside, Miami', False),
     ('Mendez on the Radio [Edge]', 'ROCKRIDGE', "same block as Trailer 3's robbery", False),
+    ('Hammerhead Shark [Edge]', 'LEONIDA KEYS REEF', 'IRL: Florida Keys reef', 'probable'),
     ('Airboat in Emerald Springs [Edge]', 'EMERALD SPRINGS', 'IRL: Crystal River, Florida', False),
     ('Billy [Edge]', 'THRILLBILLY MUD CLUB', 'IRL: Redneck Yacht Club, Florida', False),
     ('Bikers in Millport [Edge]', 'MILLPORT', 'IRL: Fernandina Beach, Florida', False),
 ]
-OVER = (-2500.0, 1500.0, 11.0)                                   # overview: centre x, y, metres per pixel (Leonida only: Yanis's legend /
+OVER = (-3490.0, 625.0, 12.0)                                    # overview: centre x, y, metres per pixel (Leonida only: Yanis's legend /
                                                                  # frames panel east of x 4000 stays out of the shot)
 _cache = OrderedDict()
 def tile(L, ty, tx):
@@ -65,7 +66,7 @@ def main(music):
     HOOK = caption('WHERE WERE THE NEW|GTA 6 SCREENSHOTS|TAKEN?', 104, 700, 12)
     NAMES = [caption(p, 92, 1470, 10) for _, p, _, _ in STOPS]
     REAL = [caption(r, 54, 1575, 7) for _, _, r, _ in STOPS]
-    T_EX, T_AR = tag('EXACT SPOT (3D MATCH)'), tag('AREA')
+    T_EX, T_AR, T_PR = tag('EXACT SPOT (3D MATCH)'), tag('AREA'), tag('MOST PROBABLE SPOT')
     COUNT = [tag('%d / %d' % (i + 1, len(STOPS))) for i in range(len(STOPS))]
     END = caption('WHICH ONE SHOULD|I REBUILD IN 3D?', 100, 760, 12); SRC = tag('MAP: YANIS V17 COMMUNITY MAP + MY 3D MAP')
     B = BPM_BAR; N1 = len(STOPS); DUR = (N1 + 2) * B; N = int(round(DUR * FPS))
@@ -74,7 +75,7 @@ def main(music):
                            '-c:v', 'libx264', '-preset', 'slow', '-crf', '18', '-pix_fmt', 'yuv420p', vid], stdin=subprocess.PIPE)
     def cam_at(i, zoom):                                          # view on stop i: pin at v 1150 (under the card)
         x, y = pins[i]; return x, y + 190 * zoom, zoom
-    ZS = [1.4 if ex else 2.2 for *_, ex in STOPS]
+    ZS = [1.4 if ex is True else 2.2 for *_, ex in STOPS]
     for n in range(N):
         t = n / FPS; seg = int(t // B); u = (t - seg * B) / B
         if seg == 0:                                               # overview, slow push
@@ -88,7 +89,7 @@ def main(music):
             i = N1; a = cam_at(N1 - 1, ZS[-1]); f = ease(u / 0.4); b = OVER
             cx, cy = a[0] + (b[0] - a[0]) * f, a[1] + (b[1] - a[1]) * f; s = math.exp(math.log(a[2]) + (math.log(b[2]) - math.log(a[2])) * f)
         img = view(cx, cy, s)
-        if 0 <= i < N1 and STOPS[i][3] and u > 0.34: draw_cone(img, STOPS[i][0], cx, cy, s, ease((u - 0.34) / 0.15))
+        if 0 <= i < N1 and STOPS[i][3] is True and u > 0.34: draw_cone(img, STOPS[i][0], cx, cy, s, ease((u - 0.34) / 0.15))
         for j in range(len(pins)):
             if i == N1 or j < i or (j == i and u > 0.3):
                 pu, pv = to_px(*pins[j], cx, cy, s)
@@ -105,7 +106,7 @@ def main(music):
                 img[y0:y0 + ch, x0:x0 + cw] = img[y0:y0 + ch, x0:x0 + cw] * (1 - al) + c * al
                 blend(img, COUNT[i], x0 + 20, y0 + 20, al)
                 blend(img, NAMES[i], 0, 0, al); blend(img, REAL[i], 0, 0, al)
-                tg = T_EX if STOPS[i][3] else T_AR; blend(img, tg, (W - tg[1].shape[1]) // 2, 1640, al)
+                tg = T_PR if STOPS[i][3] == 'probable' else T_EX if STOPS[i][3] else T_AR; blend(img, tg, (W - tg[1].shape[1]) // 2, 1640, al)
             if 0.3 <= u < 0.3 + 0.12:                              # flash on the arrival beat
                 k = 1 - (u - 0.3) / 0.12; img = img * (1 - 0.35 * k) + 255 * 0.35 * k
         else:
