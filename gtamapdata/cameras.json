@@ -6516,7 +6516,7 @@
   "notes": "YANIS-IDS-V1 2026-10-18: id S4/4 -> T3/93 (Yanis V17 frame numbering). | "
  },
  "Speaking with Brian at Effluvia (2)": {
-  "id": "S4/24",
+  "id": "T3/95",
   "player": null,
   "size": [
    3840,
@@ -6573,6 +6573,32 @@
    57.94
   ],
   "notes": "YANIS-IDS-V1 2026-10-18: id S4/6 -> S4/25 (Yanis V17 frame numbering). | "
+ },
+ "Ferris Wheel [Edge]": {
+  "id": "S4/24",
+  "player": null,
+  "size": [
+   2560,
+   1440
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "xyz": [
+   296.5,
+   270.0,
+   32.0
+  ],
+  "ypr": [
+   133.3,
+   -1.5,
+   0.0
+  ],
+  "fov": [
+   48.0,
+   null
+  ],
+  "source": "Screenshot Edge magazine - Ferris Wheel: the Shoreline (Bayfront) observation wheel and the Bayside marina seen across the boat basin from the south shore of Watson Island, Downtown skyline behind, the I-397 port bridge on the far left; WISP hut, containers and palms in the foreground",
+  "note": "POSE 2026-10-29 (ESTIMATED, render overlays): wheel rim seen ~52 deg off its plane (ellipse 410 x 670 px at 2560) -> camera ENE of the wheel on Watson Island S shore, ~300 m; position along the view axis and sideways set by the parallax of the Downtown towers (tallest tower, left condo, central cluster) against the wheel; heading 226.7, pitch -1.5, hfov 48, z 32 (eye height not constrained). Needs markings + solve."
  },
  "Biplane (Video) v2811": {
   "player": null,
