@@ -6610,21 +6610,21 @@
   "constraint_class": "D_no_ground_truth",
   "pose_verified": null,
   "xyz": [
-   417.6,
-   224.9,
-   4.9
+   685.5,
+   211.0,
+   7.4
   ],
   "ypr": [
-   156.4,
-   11.9,
+   140.28,
+   9.63,
    0.0
   ],
   "fov": [
-   56.0,
+   37.22,
    null
   ],
   "source": "Screenshot Edge magazine - Jason and Lucia on a Motorbike: low angle on the riders at dusk, the Downtown skyline out of focus behind them (One Miami East / West at the right of Jason's arm, lit towers next to them), lights across the water on the left",
-  "note": "POSE 2026-10-30 (ESTIMATED, heavy depth of field, the riders hide most of the frame): One Miami pair fitted on the twin towers behind Jason's arm (left edge u 1986, right edge u 2200, West top v 786) for every road point N..E of the towers, then scored on the neighbouring lit towers (u 2143-2315 top v 936, u 2345 top v 907) and checked on renders: best on the MacArthur Causeway road on Watson Island (417.6, 224.9), eye 1.4 m above the road (on the bike), heading 203.6, pitch 11.9 (low angle up at the riders), hfov 56. Position along the view axis weak (the pair alone fixes bearing and scale). Needs markings + solve."
+  "note": "POSE 2026-10-30 (ESTIMATED, least squares on 7 skyline features, RMS 6.2 px at 2560; Alexandre: fit InterContinental and Citigroup): One Miami pair (left edge u 1986, right u 2200, West top v 782), InterContinental (white crown band, right edge u 2314, top v 936, IN FRONT of One Miami -> camera east of Downtown looking west), Citigroup Center (orange crown, left edge u 2343, top v 907). Searched every 40 m around the bay, then on the V16 roads: best on the Star Island bridge (685.5, 211.0), deck 6 m + 1.4 m eye on the bike (railing over the water in the frame's lower left), heading 219.7, pitch 9.6 (low angle up at the riders), hfov 37.2 (telephoto, matches the shallow depth of field). Replaces the first estimate on Watson Island (417.6, 224.9; One Miami only), which put InterContinental 20 deg right of the pair. Needs markings + solve."
  },
  "Biplane (Video) v2811": {
   "player": null,
