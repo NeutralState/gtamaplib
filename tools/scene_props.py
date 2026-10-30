@@ -2081,7 +2081,7 @@ def ferris_edge():
     the frame (2560 x 1440) onto the terrain / the water: the WISP hut on the shore (white walls u 460..975, base v 1430, eaves
     v 1350, red gable u 680..1000 peaking at v 1270 with the WISP sign, grey roof on the left part), the yellow container below
     it, the three-high container stack on the quay (u 2060..2560, base v 1390, top v 1250), palms (and the row on the promenade
-    across the basin), the three utility poles and their
+    across the basin, its seawall railing, the orange market stalls and the big red tent by the wheel), the three utility poles and their
     wires, the two yachts on the basin and the one moored at the pier, the big white tent at the wheel's foot (u 2110..2450,
     base v 1085, ridge v 1000). The V16 box on the shore at u 1360..1860 is not in the frame (palms, a parking lot): cleared.
     The pale concrete block in the bottom-left corner (close to the camera, ~45 m from the pelican's size) is not modelled."""
@@ -2125,6 +2125,22 @@ def ferris_edge():
     # palm row on the Shoreline promenade across the basin (seawall from (1184, 872) to (1888, 992), palms ~10 px behind it)
     for u in range(1150, 1900, 70):
         b = ground(u, 872 + (u - 1184) * 120 / 704 - 10, 1.5); P.append(dict(k='palm', a=r2(b), h=round(float(rng.uniform(9.5, 12.5)), 1), lean_az=round(rng.uniform(0, 360), 0), lean=0.05))
+    for u in range(1180, 1900, 90):                                         # second row, deeper in the plaza (the frame is dense there)
+        b = ground(u + 35, 872 + (u + 35 - 1184) * 120 / 704 - 32, 1.5); P.append(dict(k='palm', a=r2(b), h=round(float(rng.uniform(10.5, 13.5)), 1), lean_az=round(rng.uniform(0, 360), 0), lean=0.05))
+    # seawall railing along the promenade (posts every ~5 m, two rails)
+    rail = [ground(u, 872 + (u - 1184) * 120 / 704 + 4, 1.5) for u in range(1184, 1889, 22)]
+    for z in (0.55, 1.05): P.append(dict(k='line', pts=[r2(q + [0, 0, z]) for q in rail], color='#d8d6d0'))
+    for q in rail: P.append(dict(k='cyl', a=r2(q), b=r2(q + [0, 0, 1.05]), r=0.06, color='#d8d6d0'))
+    # market stalls (orange roofs, u 1612..1775, base v 935) and the big red tent by the wheel (u 1794..1925, base v 974, top v 914)
+    for k in range(5):
+        u = 1625 + k * 33; q = ground(u, 935, 1.5)
+        P.append(dict(k='box', c=r2(q + np.r_[back * 2.0, 0]), s=[3.6, 3.6, 2.3], az=AZ, color='#e7dccb'))
+        P.append(dict(k='box', c=r2(q + np.r_[back * 2.0, 2.3]), s=[4.4, 4.4, 0.5], az=AZ, color='#d4572c'))
+    q0, q1 = ground(1794, 974, 1.5), ground(1925, 974, 1.5); g = min(q0[2], q1[2]); Lr = float(np.linalg.norm((q1 - q0)[:2]))
+    zt_ = up(q0, 1860, 914); ze_ = g + 0.55 * (zt_ - g); cc = (q0 + q1)[:2] / 2 + back * 5
+    P.append(dict(k='box', c=r2([cc[0], cc[1], g]), s=[round(Lr, 1), 10.0, round(ze_ - g, 1)], az=AZ, color='#c6492b'))
+    for f0 in (0.0, 10.0):
+        P.append(dict(k='quad', p=[r2([*q0[:2] + back * f0, ze_]), r2([*q1[:2] + back * f0, ze_]), r2([*q1[:2] + back * 5, zt_]), r2([*q0[:2] + back * 5, zt_])], color='#cf4f2e'))
     # utility poles (u, top v, base v) + sagging wires
     tops = []
     for u, vt, vb in ((277, 1262, 1440), (1095, 1190, 1420), (1400, 1225, 1330)):

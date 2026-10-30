@@ -355,11 +355,64 @@ def us1_hamlet(L):
     return br.E, note, '#94a3b8'
 
 
+def _ground():
+    sys.path.insert(0, os.path.join(ROOT, 'tools'))
+    from horizon_resect import ground
+    return lambda x, y: float(ground(np.array([x]), np.array([y]))[0])
+
+
+# [PORT-BRIDGE-V1 2026-10-29] I-397 port bridge (Downtown <-> Port VC). V16 / heightmap have the north carriageway at the water
+# (0.3 m) and the south one flat at 6 m; S4/24 Ferris Wheel [Edge] (pose ESTIMATED, wheel + skyline) shows a HIGH north deck on
+# big wall piers (frame u 20 / 220 / 420, pier feet at the water v 785 / 775 / 773) and a LOW deck behind it on thin piers.
+# Deck top MEASURED on the frame along the hwy 99 axis (ray x axis, z = eye - d tan): x -200: 11.6, -99: 14.6, -50: 16.8, -12: 20;
+# east of the frame edge (x > -10, the channel and the port approach) ESTIMATED: peak ~21.5 over the channel, down to grade at
+# x ~265 on Dodge Island; west: down to grade at x ~-300 (Biscayne Blvd side).
+PORT_TOP = [(-300, 4.6), (-250, 8.0), (-200, 11.6), (-150, 13.6), (-100, 14.8), (-50, 16.8), (-12, 19.8), (30, 21.4), (80, 19.8),
+            (130, 16.4), (180, 12.6), (230, 8.8), (265, 6.6)]            # slopes < 8 %: v16_roads drops steeper deck edges
+
+
+def port_bridge(L):
+    R = json.load(open(os.path.join(ROOT, 'tools', 'threejs', '_v16_roads.json')))
+    h99 = np.array(R['hwy'][99]['p'])[:, :2]; s88 = np.array(R['hwy'][88]['p'])[:, :2]
+    A = [p for p in s88 if -305 < p[0] < -140] + [p for p in h99[::-1] if -140 <= p[0] < 265 and -700 < p[1] < -350]
+    A = np.array(A); keep = [0]
+    for i in range(1, len(A)):
+        if np.linalg.norm(A[i] - A[keep[-1]]) > 6: keep.append(i)
+    br = Bridge(poly=A[keep]); S1 = float(br.S[-1]); g = _ground()
+    pr = np.array(PORT_TOP, float); X = lambda s: float(br.frame(s)[0][0])
+    DEP = 1.8; zt = lambda s: float(np.interp(X(s), pr[:, 0], pr[:, 1])); zb = lambda s: zt(s) - DEP
+    s_w = float(br.S[np.argmin(np.abs(br.A[:, 0] + 140))])                  # west of x -140 the four V16 ramp lanes: a wider deck
+    br.deck(0.0, s_w, zb, -12.0, 12.0, depth=DEP); br.deck(s_w, S1, zb, -6.8, 6.8, depth=DEP)
+    for a_, b_, ws in ((0.0, s_w, np.arange(-11.0, 11.1, 1.5)), (s_w, S1, np.arange(-6.0, 6.1, 1.2))):  # deck surface lines: v16_roads'
+        ss = list(np.arange(a_, b_, 10.0)) + [b_]                                                       # 4 m grid must see the deck (dense:
+        for w in ws:                                                                                    # the pier caps / footings must not win the cell mode)
+            for s0, s1 in zip(ss[:-1], ss[1:]): br.L(br.P(s0, w, zb(s0) + DEP), br.P(s1, w, zb(s1) + DEP))
+    s50 = float(br.S[np.argmin(np.abs(br.A[:, 0] + 50))]); n = 0
+    for s in s50 + 45.0 * np.arange(-12, 12):                                 # wall piers every 45 m (frame: x -99 / -50 / -12)
+        if not (6 < s < S1 - 6): continue
+        p = br.frame(s)[0]; zw = max(g(p[0], p[1]), 0.0)
+        if zb(s) - zw < 4.0: continue
+        pier_wall(br, s, zb, 0.0, along=3.0, across=6.0, zw=zw); n += 1
+    # south carriageway (hwy 100): the low deck behind, 6 m top, thin twin piers every 22 m over the water
+    h100 = np.array(R['hwy'][100]['p'])[:, :2]; B = h100[(h100[:, 0] > -145) & (h100[:, 0] < 45)]
+    lo = Bridge(poly=B); S2 = float(lo.S[-1]); zbl = lambda s: 6.0 - 1.2
+    lo.deck(0.0, S2, zbl, -6.0, 6.0, depth=1.2, parapet=0.9); m = 0
+    for s in np.arange(11.0, S2 - 5, 22.0):
+        lo.bent(s, zbl, -6.0, 6.0, ncol=2, col=0.8, zw=0.0, cap=0.8, footing=0.8); m += 1
+    note = ('PORT-BRIDGE-V1 2026-10-29 (Alexandre: make the model match S4/24 Ferris Wheel [Edge]): I-397 port bridge. North deck '
+            '(hwy 99 axis + the V16 ramp lanes west of x -140, %.0f m): deck top MEASURED on the Edge frame x -200..-12 (11.6 -> 20 m), '
+            'ESTIMATED beyond (peak 21.4 over the channel, down at < 8 %% to grade at x ~265 / ~-300); %d wall piers every 45 m (frame: x -99 / -50 / -12). '
+            'South deck (hwy 100 over the water, %.0f m): low, 6 m top (V16), %d thin twin piers every 22 m (frame: the lower deck '
+            'behind on many thin piers).' % (S1, n, S2, m))
+    return br.E + lo.E, note, '#a8a29e'
+
+
 OSM_SEGS = [(-310, -104, 29.0), (-74, 42, 29.2), (70, 295, 27.1)]
 OSM_ZTOP, OSM_SPAN = 6.0, 10.0
 
 BUILDERS = {'Lake Surprise Viaduct': lake_surprise, 'New Bahia Honda Bridge': new_bahia_honda, 'Old Bahia Honda Bridge': old_bahia_honda,
-            'Seven Mile Bridge': seven_mile, 'Old Seven Mile Bridge': old_seven_mile, 'US 1 Hamlet Viaduct': us1_hamlet}
+            'Seven Mile Bridge': seven_mile, 'Old Seven Mile Bridge': old_seven_mile, 'US 1 Hamlet Viaduct': us1_hamlet,
+            'Port Boulevard Bridge (I-397)': port_bridge}
 
 if __name__ == '__main__':
     L = json.load(open(D('landmarks.json')))

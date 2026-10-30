@@ -4814,6 +4814,10 @@ window.__camScreen = name => {
       const top = P.filter(p => Math.abs(p[2] - z1) < 0.3); let cx = 0, cy = 0; for (const p of top) { cx += p[0]; cy += p[1]; } cx /= top.length; cy /= top.length;
       const uniq = []; for (const p of top) if (!uniq.some(q => Math.hypot(q[0] - p[0], q[1] - p[1]) < 1.0)) uniq.push(p);
       uniq.sort((a, b) => Math.atan2(a[1] - cy, a[0] - cx) - Math.atan2(b[1] - cy, b[0] - cx));
+      // [HARDROCK-V2 2026-10-29] S4/24 Ferris Wheel [Edge] (463 m away, side-on): the saucer spans 395 px where the V16 footprint
+      // gives 485 (same centre bearing, 0.5 deg) and its roof sits 2 m higher -> the V16 octagon is the plaza: roof ring x 0.815
+      for (const p of uniq) { p[0] = cx + (p[0] - cx) * 0.815; p[1] = cy + (p[1] - cy) * 0.815; }
+      z1 += 2.0;
       if (uniq.length >= 6) {
         const n = uniq.length, at = (p, k, z) => [cx + (p[0] - cx) * k, cy + (p[1] - cy) * k, z];
         const zr = z1 - 1.6;                                                      // bas de la rive du toit
@@ -4827,7 +4831,7 @@ window.__camScreen = name => {
             const b0 = mid(at(p, 0.86, 0), at(q, 0.86, 0), t0), b1 = mid(at(p, 0.86, 0), at(q, 0.86, 0), t1), u0 = mid(p, q, t0), u1 = mid(p, q, t1);
             const A = [b0[0], b0[1], z0], B = [b1[0], b1[1], z0], Cc = [u1[0], u1[1], zr], D = [u0[0], u0[1], zr];
             tri(Pg, A, B, Cc); tri(Pg, A, Cc, D);
-            const g = lin(k % 2 ? 0.50 : 0.44); for (let r = 0; r < 6; r++) Cg.push(g, g * 0.93, g * 0.82);   // verre ambre
+            const g = lin(k % 2 ? 0.56 : 0.50); for (let r = 0; r < 6; r++) Cg.push(g, g * 0.70, g * 0.46);   // verre ambre (S4/24: cuivre-orange de jour)
             // montant (bande fine sombre) sur l'arete du panneau
             const w = 0.012, m0 = mid(at(p, 0.86, 0), at(q, 0.86, 0), t0 + w), m1 = mid(p, q, t0 + w);
             tri(Pf, A, [m0[0], m0[1], z0], [m1[0], m1[1], zr]); tri(Pf, A, [m1[0], m1[1], zr], D);
