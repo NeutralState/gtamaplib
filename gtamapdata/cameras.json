@@ -6678,6 +6678,32 @@
   "source": "Screenshot Edge magazine - Airboat in Emerald Springs: an airboat in a narrow channel of a sunlit cypress swamp",
   "note": "PROVISIONAL 2026-10-30 (AREA LEVEL ONLY): Emerald Springs = Crystal River on the V17 map (label at (-4140, 1760), found by OCR), a cypress swamp of braided channels; position = the channel next to T3/152 Airboat in the Swamp, heading 180 (backlit, a guess), fov 55. The frame shows only trees and water: no feature to fit."
  },
+ "Billy [Edge]": {
+  "player": null,
+  "size": [
+   2560,
+   1440
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "id": "S4/31",
+  "xyz": [
+   -3870.0,
+   4720.0,
+   38.83
+  ],
+  "ypr": [
+   0.0,
+   2.0,
+   0.0
+  ],
+  "fov": [
+   55.0,
+   null
+  ],
+  "source": "Screenshot Edge magazine - Billy: Billy with his dirt bike at a mud / off-road park (sponsor banners WAX Powersports, Hayes Racing Tires, Champion, Gellhorn Customs on a steel spectator gantry, a monster truck, bikers in lawn chairs)",
+  "note": "PROVISIONAL 2026-10-30 (AREA LEVEL ONLY; Alexandre: \u00ab Billy c'est genre dans le Mud Club \u00bb): Thrillbilly Mud Club (Redneck Yacht Club) on the V17 map (label at (-3830, 4790), found by OCR), next to T3/171 Dirt Bikes; position = the pit compound between its tracks, heading 0 (a guess), fov 55. The steel gantry and banners are not on the map: needs the park's layout to fit."
+ },
  "Biplane (Video) v2811": {
   "player": null,
   "size": [
