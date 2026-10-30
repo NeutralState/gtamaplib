@@ -120,6 +120,11 @@
    215,
    32,
    35
+  ],
+  "Ferris Wheel [Edge]": [
+   236,
+   21,
+   62
   ]
  },
  "grade": {
@@ -237,6 +242,15 @@
    0.95,
    0.86,
    0.2
+  ],
+  "Ferris Wheel [Edge]": [
+   0.9,
+   0.97,
+   1.03,
+   0.32,
+   1.07,
+   0.96,
+   0.76
   ]
  },
  "fog": {
@@ -248,5 +262,22 @@
    500,
    4500
   ]
+ },
+ "look": {
+  "_doc": "[TOUR-LOOK-V1 2026-10-29] per-camera atmosphere during the tour: a NATURE-LOOK preset (hazeMix, hazeCol, desat, warm, atmK, sky) + expo (exposure) + refl (water reflection gain), read on the frame",
+  "Ferris Wheel [Edge]": {
+   "hazeMix": 0.6,
+   "hazeCol": [
+    1.0,
+    0.95,
+    0.87
+   ],
+   "desat": 0.25,
+   "warm": 0.15,
+   "atmK": 2.6,
+   "sky": 0,
+   "expo": 1.2,
+   "refl": 0.45
+  }
  }
 }

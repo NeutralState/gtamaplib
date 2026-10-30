@@ -737,6 +737,7 @@ const terraUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
 window.__terraUni = terraUni;   // [DRY-LAND-V1]
 const seaUni = THREE.UniformsUtils.merge([THREE.UniformsLib.fog, {
   uSeaTint:  { value: new THREE.Vector3(1, 1, 1) },   // [TOUR-GRADE-V1] per-scene sea tint (tour)
+  uReflGain: { value: 1 },                            // [TOUR-LOOK-V1] per-scene reflection strength (choppy / sun-glared water)
   uSurge:    { value: 0 },      // [HURRICANE-V1] storm surge (m above the sea); the sea plane is raised by it
   uArr:      { value: null },   // [HURRICANE-V1] arrival map (tools/hurricane_surge.py): level at which the sea reaches each heightmap cell
   uArrOn:    { value: 0 },
@@ -1711,7 +1712,7 @@ const data = await (await fetch('/api/scene3d')).json();
       fragmentShader: `
         varying vec3 vPos;
         uniform vec3 uSunDir, uHorizon, uZenith, uSunColor;
-        uniform float uTime, uNight, uMapSea, uReflOn, uReflDbg, uWaterOn; uniform vec3 uSeaTint;
+        uniform float uTime, uNight, uMapSea, uReflOn, uReflDbg, uWaterOn, uReflGain; uniform vec3 uSeaTint;
         uniform sampler2D uWaterTex; uniform vec4 uWaterBounds; uniform vec3 uWaterMed;
         uniform vec4 uTerrBounds;
         uniform sampler2D uDepth, uDrape, uRefl;
@@ -1805,7 +1806,7 @@ const data = await (await fetch('/api/scene3d')).json();
             float inr = step(0.001, ruv.x) * step(ruv.x, 0.999) * step(0.001, ruv.y) * step(ruv.y, 0.999);
             rcol = mix(skyRefl, texture2D(uRefl, clamp(ruv, 0.001, 0.999)).rgb, inr);
             float F = 0.02 + 0.98 * pow(1.0 - max(dot(n, V), 0.0), 5.0);
-            reflK = clamp(0.03 + 0.80 * F, 0.0, 0.62) * uMapSea;
+            reflK = clamp(0.03 + 0.80 * F, 0.0, 0.62) * uMapSea * uReflGain;
           }
           vec3 H = normalize(V + uSunDir);
           float spec = pow(max(dot(n, H), 0.0), 340.0) * 2.0
@@ -3651,6 +3652,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
     // [TOUR-SUN-V1] lumiere de la scene (tools/threejs/tour_styles.json "sun": [az, el, haze]): interpolee pendant le vol
     sunFrom = sunTo = null;
     { const gr = gradeMap[c.name]; if (window.__setGrade) window.__setGrade(gr && gr.slice(0, 3), gr ? gr[3] : 0, gr && gr.length > 4 ? gr.slice(4, 7) : null); }
+    setLook(lookMap[c.name] || null);                                     // [TOUR-LOOK-V1] per-camera haze / exposure
     if (sunMap[c.name]) { const g = id => +document.getElementById(id).value; sunFrom = [g('env-az'), g('env-el'), g('env-haze')]; sunTo = sunMap[c.name]; }
     from = { pos: camera.position.clone(), quat: camera.quaternion.clone(), fov: camera.fov };
     to = poseOf(c);
@@ -3667,7 +3669,13 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
   }
   let srcMap = null;
   let fullFrame = new Set();
-  let sunMap = {}, sunFrom = null, sunTo = null, gradeMap = {}, cutMap = {}, fogMap = {};
+  let sunMap = {}, sunFrom = null, sunTo = null, gradeMap = {}, cutMap = {}, fogMap = {}, lookMap = {}, lookSet = false;
+  // [TOUR-LOOK-V1 2026-10-29] tour_styles.json "look": a NATURE-LOOK preset + expo for a camera (S4/24 Ferris Wheel [Edge]: bright
+  // warm backlit haze); only what the tour set is cleared again (the peaks renders set __natureLook themselves)
+  const setLook = L => {
+    if (L) { window.__natureLook = L; window.__atmK = L.atmK; window.__stormExpo = L.expo; seaUni.uReflGain.value = L.refl ?? 1; lookSet = true; }
+    else if (lookSet) { window.__natureLook = null; window.__atmK = undefined; window.__stormExpo = undefined; seaUni.uReflGain.value = 1; lookSet = false; }
+  };
   // [CUT-SOLIDS-V1 2026-10-21] scene_props 'cut_solids' {mesh name: z}: while the tour shows that scene's camera, the solid's
   // vertices above z are pulled down to z (render and shadow): T4/36 shows Asia Brickell Key still under construction below the
   // eye of the Pegassi terrace, the other cameras keep the measured 182 m structure
@@ -3690,7 +3698,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
     [['env-az', v[0]], ['env-el', v[1]], ['env-haze', v[2]]].forEach(([id, x]) => { const e = document.getElementById(id); e.value = Math.round(x); e.dispatchEvent(new Event('input')); });
     window.__bakeShadows = keep; if (bake && keep) keep(); };                                            // [TOUR-STYLE-V1] close-ups: frame fully opaque (tools/threejs/tour_styles.json)
   async function start() {
-    try { const j = await (await fetch('/threejs/tour_styles.json', { cache: 'no-store' })).json(); fullFrame = new Set(j.fullframe || []); sunMap = j.sun || {}; gradeMap = j.grade || {}; fogMap = j.fog || {}; } catch (e) {}
+    try { const j = await (await fetch('/threejs/tour_styles.json', { cache: 'no-store' })).json(); fullFrame = new Set(j.fullframe || []); sunMap = j.sun || {}; gradeMap = j.grade || {}; fogMap = j.fog || {}; lookMap = j.look || {}; } catch (e) {}
     try { cutMap = {}; for (const sc of (await (await fetch('/threejs/scene_props.json', { cache: 'no-store' })).json()).scenes || []) if (sc.cut_solids && sc.camera) cutMap[sc.camera] = sc.cut_solids; } catch (e) {}
     if (!srcMap) { try { const d = await (await fetch('/api/map_data')).json(); srcMap = {}; for (const c of d.cameras || []) srcMap[c.name] = c.source || ''; } catch (e) { srcMap = {}; } }
     const okc = c => c && c.corners && c.xyz && c.xyz[2] < 1500;
@@ -3713,6 +3721,7 @@ document.getElementById('btn-shot').addEventListener('click', async () => {
     if (!window.__tourOn) return;
     window.__tourOn = false; phase = null; btn.classList.remove('on');
     if (window.__setGrade) window.__setGrade(null, 0);
+    setLook(null);
     if (window.__cutSolids) window.__cutSolids(null);
     window.__trafficClear = null;
     if (window.__fogOverride) { window.__fogOverride = null; document.getElementById('env-haze').dispatchEvent(new Event('input')); }

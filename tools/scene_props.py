@@ -2084,7 +2084,8 @@ def ferris_edge():
     across the basin, its seawall railing, the orange market stalls and the big red tent by the wheel), the three utility poles and their
     wires, the two yachts on the basin and the one moored at the pier, the big white tent at the wheel's foot (u 2110..2450,
     base v 1085, ridge v 1000). The V16 box on the shore at u 1360..1860 is not in the frame (palms, a parking lot): cleared.
-    The pale concrete block in the bottom-left corner (close to the camera, ~45 m from the pelican's size) is not modelled."""
+    Then the ground (concrete / asphalt / paving instead of the white map drape), the riprap, the bushy tree, parked cars, the
+    portable office, the palms right of the wheel, the Bayfront Park tree band, the Bayside Marketplace pavilion and the pale concrete block in the bottom-left corner (far roof edge ~57 m, pelican's size)."""
     V = View('Ferris Wheel [Edge]'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]; o = V.o
     def ground(u, v, zmin=0.3):                                             # terrain (or water) point under pixel (u, v)
         z = 1.0
@@ -2163,6 +2164,57 @@ def ferris_edge():
     P.append(dict(k='box', c=r2([c[0], c[1], g]), s=[round(Lt, 1), 20.0, round(ze - g, 1)], az=AZ, color='#ecedf0'))
     for f0, f1 in ((0.0, 10.0), (20.0, 10.0)):
         P.append(dict(k='quad', p=[r2([*t0[:2] + back * f0, ze]), r2([*t1[:2] + back * f0, ze]), r2([*t1[:2] + back * f1, zr]), r2([*t0[:2] + back * f1, zr])], color='#f1f2f5'))
+    # ground: the map drape is white there; the frame shows sunlit concrete / asphalt on the Watson quay (171,152,132), grey paving
+    # on the Bayside plaza (127,115,121) and on the marina quay right of the wheel; draped quads (terrain + 6 cm), land only
+    def drape(us, vs, color):
+        for u0, u1 in zip(us[:-1], us[1:]):
+            for v0, v1 in zip(vs[:-1], vs[1:]):
+                Q = [ground(u0, v0), ground(u1, v0), ground(u1, v1), ground(u0, v1)]
+                if max(T(q[0], q[1]) for q in Q) < 0.3: continue                   # the quay edge too (no white rim at the shore)
+                P.append(dict(k='quad', p=[r2([q[0], q[1], max(T(q[0], q[1]), 0.35) + 0.06]) for q in Q], color=color, e=0.0))
+    drape(np.arange(0, 2600, 80), np.arange(1290, 1445, 15), '#8f8173')
+    drape(np.arange(1150, 1960, 60), np.arange(800, 1000, 8), '#77706f')
+    drape(np.arange(2130, 2600, 60), np.arange(940, 1030, 10), '#77706f')
+    # riprap along the Watson shore (u 1430..1700, v 1300..1322) and the bushy tree right of the parking (u 1660..1830)
+    rr = np.random.default_rng(31)
+    for u in np.arange(1430, 1700, 14):
+        q = ground(u + rr.uniform(-5, 5), 1312 + rr.uniform(-6, 6), 0.2); R0 = rr.uniform(0.8, 1.5)
+        P.append(dict(k='blob', c=r2(q), r=[round(R0, 2), round(R0 * 0.8, 2), round(R0 * 0.6, 2)], color=['#6d645c', '#7a7066', '#5e5751'][int(rr.integers(3))]))
+    tb = ground(1745, 1440, 1.0); th = up(tb, 1745, 1310) - tb[2]
+    P.append(dict(k='cyl', a=r2(tb), b=r2(tb + [0, 0, th * 0.5]), r=0.35, color='#4a3a2c'))
+    for k in range(26):
+        ang = rr.uniform(0, 2 * math.pi); rd = math.sqrt(rr.random()); uu = 1745 + 80 * rd * math.cos(ang); vv = 1370 + 55 * rd * math.sin(ang)
+        q = V.on_vplane(uu, vv, tb[:2], back); R0 = rr.uniform(1.0, 1.8)
+        P.append(dict(k='blob', c=r2(q), r=[round(R0, 2), round(R0, 2), round(R0 * 0.75, 2)], color=['#4f6a2e', '#5d7a35', '#45602a'][int(rr.integers(3))]))
+    # parked cars (u0, u1, base v, colour) on the Watson lot and the Bayside plaza, the portable office (dark blue, white roof)
+    for u0, u1, vb, col in ((1110, 1230, 1366, '#d9d9d6'), (1120, 1215, 1400, '#55565a'), (1530, 1640, 1365, '#3d4552'), (1440, 1485, 1410, '#e0dfdb'),
+                            (1880, 1940, 1370, '#2f3136'), (1535, 1575, 890, '#2c2f35'), (1610, 1650, 885, '#9a9da3'), (1470, 1505, 880, '#d8d6d2')):
+        q0, q1 = ground(u0, vb, 1.0), ground(u1, vb, 1.0); q = (q0 + q1) / 2 + np.r_[back * 1.0, 0]
+        P.append(dict(k='box', c=r2(q), s=[4.6, 1.9, 1.0], az=AZ, color=col)); P.append(dict(k='box', c=r2(q + [0, 0, 1.0]), s=[2.6, 1.7, 0.55], az=AZ, color='#2a2d33'))
+    o0, o1 = ground(1220, 1440, 1.0), ground(1430, 1440, 1.0); g = min(o0[2], o1[2]); ho = V.on_vplane(1320, 1355, o0[:2], back)[2] - g
+    c = (o0 + o1)[:2] / 2 + back * 1.8; Lo = float(np.linalg.norm((o1 - o0)[:2]))
+    P.append(dict(k='box', c=r2([c[0], c[1], g]), s=[round(Lo, 1), 3.6, round(ho - 0.3, 1)], az=AZ, color='#2b3850'))
+    P.append(dict(k='box', c=r2([c[0], c[1], g + ho - 0.3]), s=[round(Lo + 0.3, 1), 3.9, 0.3], az=AZ, color='#e6e4df'))
+    # palms on the marina quay right of the wheel (u, top v; base v 965)
+    for u, vt in ((2210, 840), (2290, 860), (2380, 830), (2460, 870), (2540, 845)):
+        b = ground(u, 965, 1.5); P.append(dict(k='palm', a=r2(b), h=round(max(7.0, up(b, u, vt) - b[2] - 1.0), 1), lean_az=round(rr.uniform(0, 360), 0), lean=0.05))
+    # the pale concrete block in the bottom-left corner: ~57 m away (the pelican on it, ~0.7 m tall, is ~35 px), top edge v 1250,
+    # face u 0..150 (it runs on beyond the frame edge); the camera is above it: v 1250 is the FAR edge of its roof, 4 m deep
+    f0 = V.ray(0, 1250); f1 = V.ray(150, 1250); A0 = o + f0 * 57 / np.linalg.norm(f0[:2]); A1 = o + f1 * 57 / np.linalg.norm(f1[:2])
+    gb = max(T(A0[0], A0[1]), T(A1[0], A1[1]), 1.0); ax = (A1 - A0)[:2] / np.linalg.norm((A1 - A0)[:2]); ctr = A1[:2] - ax * 5.0 - back * 2.0
+    P.append(dict(k='box', c=r2([ctr[0], ctr[1], gb]), s=[10.0, 4.0, round(float(A1[2] - gb), 1)], az=AZ, color='#b8afa8'))
+    # Bayfront Park shore left of Bayside: a dark band of tree crowns (u 700..1250, crowns v 760..805) where the drape is lawn
+    for k in range(34):
+        u = float(rr.uniform(700, 1250)); q = ground(u, float(rr.uniform(792, 808)), 1.0); R0 = float(rr.uniform(3.0, 5.0))
+        P.append(dict(k='blob', c=r2(q + [0, 0, R0 * 1.2]), r=[round(R0, 2), round(R0, 2), round(R0 * 0.8, 2)], color=['#3d5226', '#46602c', '#344820'][int(rr.integers(3))]))
+    # the Bayside Marketplace pavilion behind the palms, left of the saucer (white hipped roof u 1385..1555, eaves v 772, ridge v 745):
+    # on the ray beyond the saucer's left edge, ~520 m
+    m0, m1 = V.ray(1385, 772), V.ray(1555, 772); M0 = o + m0 * 520 / np.linalg.norm(m0[:2]); M1 = o + m1 * 520 / np.linalg.norm(m1[:2])
+    gm = max(T(M0[0], M0[1]), T(M1[0], M1[1]), 1.5); Lm = float(np.linalg.norm((M1 - M0)[:2])); cm = (M0 + M1)[:2] / 2 + back * 12
+    zr = float((o + V.ray(1470, 745) * 520 / np.linalg.norm(V.ray(1470, 745)[:2]))[2])
+    P.append(dict(k='box', c=r2([cm[0], cm[1], gm]), s=[round(Lm, 1), 24.0, round(float(M0[2] - gm), 1)], az=AZ, color='#d9d4cc'))
+    for f0 in (0.0, 24.0):
+        P.append(dict(k='quad', p=[r2([*M0[:2] + back * f0, M0[2]]), r2([*M1[:2] + back * f0, M0[2]]), r2([*M1[:2] + back * 12, zr]), r2([*M0[:2] + back * 12, zr])], color='#e9e7e2'))
     # the V16 box on the shore (u 1360..1860): not in the frame
     clear = [[[round(float(q), 1) for q in V.on_plane_z(u, 1240, 10.0)[:2] + back * dd] for u, dd in ((1340, -15), (1880, -15), (1880, 35), (1340, 35))]]
     return dict(scene='S4/24 Ferris Wheel [Edge]', camera='Ferris Wheel [Edge]', note=ferris_edge.__doc__.split('\n')[0], props=P, clear=clear)
