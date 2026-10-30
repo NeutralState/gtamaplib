@@ -6636,9 +6636,9 @@
   "pose_verified": null,
   "id": "S4/30",
   "xyz": [
-   -850.0,
-   6750.0,
-   7.71
+   -1074.5,
+   6470.8,
+   31.75
   ],
   "ypr": [
    45.0,
@@ -6650,7 +6650,7 @@
    null
   ],
   "source": "Screenshot Edge magazine - Bikers in Millport: a biker gang riding down the main street of Millport (Trotman's Supermarket, Jacob's Tavern bar, a pharmacy, a WEST 88 route sign), forested hills behind",
-  "note": "PROVISIONAL 2026-10-30 (TOWN LEVEL ONLY): Millport = Fernandina Beach on the V17 map (label at (-800, 6740), found by OCR); the town is an undetailed grey block on V17, no streets to fit the frame to. Position = centre of the block, heading 315 (towards the inland hills, a guess), fov 60. Needs a street plan of Millport."
+  "note": "PROVISIONAL 2026-10-30 (TOWN LEVEL ONLY): Millport = Fernandina Beach on the V17 map (label at (-800, 6740), found by OCR); the town is an undetailed grey block on V17, no streets to fit the frame to. Position = (-1074.5, 6470.8), picked by Alexandre on the map (2026-10-30), heading 315 (towards the inland hills, a guess), fov 60. Needs a street plan of Millport."
  },
  "Airboat in Emerald Springs [Edge]": {
   "player": null,
@@ -6662,9 +6662,9 @@
   "pose_verified": null,
   "id": "S4/29",
   "xyz": [
-   -4380.0,
-   2150.0,
-   4.0
+   -3940.4,
+   1426.3,
+   5.34
   ],
   "ypr": [
    180.0,
@@ -6676,7 +6676,7 @@
    null
   ],
   "source": "Screenshot Edge magazine - Airboat in Emerald Springs: an airboat in a narrow channel of a sunlit cypress swamp",
-  "note": "PROVISIONAL 2026-10-30 (AREA LEVEL ONLY): Emerald Springs = Crystal River on the V17 map (label at (-4140, 1760), found by OCR), a cypress swamp of braided channels; position = the channel next to T3/152 Airboat in the Swamp, heading 180 (backlit, a guess), fov 55. The frame shows only trees and water: no feature to fit."
+  "note": "PROVISIONAL 2026-10-30 (AREA LEVEL ONLY): Emerald Springs = Crystal River on the V17 map (label at (-4140, 1760), found by OCR), a cypress swamp of braided channels; position = (-3940.4, 1426.3), picked by Alexandre on the map (2026-10-30), heading 180 (backlit, a guess), fov 55. The frame shows only trees and water: no feature to fit."
  },
  "Billy [Edge]": {
   "player": null,
@@ -6755,6 +6755,32 @@
   ],
   "source": "Screenshot Edge magazine - Open-Air Tattoo Parlour: a gang member tattooed on a chair in the parking lot of a two-storey motel-style apartment block (OFFICE sign), lowrider, dog, beer bottles on a table",
   "note": "PROVISIONAL 2026-10-30 (NEIGHBOURHOOD LEVEL; Alexandre: \u00ab definitely in Rockridge \u00bb): Rockridge = Riverside on the V17 map (label at (-1180, 830)); position = the middle of the neighbourhood next to the label, heading 0 (a guess), fov 60. The motel block is not identified on the map: needs its footprint to fit."
+ },
+ "Hammerhead Shark [Edge]": {
+  "player": null,
+  "size": [
+   2560,
+   1440
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "id": "S4/32",
+  "xyz": [
+   -5007.0,
+   -5529.0,
+   -30.56
+  ],
+  "ypr": [
+   0.0,
+   35.0,
+   0.0
+  ],
+  "fov": [
+   70.0,
+   null
+  ],
+  "source": "Screenshot Edge magazine - Hammerhead Shark: a hammerhead seen from the bottom of a narrow reef crevice (coral walls, tube sponges), sunlit surface above",
+  "note": "PROVISIONAL 2026-10-30 (MOST PROBABLE CANDIDATE, low confidence; Alexandre: place it at D): the crevice (a few m wide) is far below the 12 m heightmap grid; reef-like seabed scan (-6..-35 m, >= 8 m relief over 36 m, away from shore) lights up the whole shelf break around Leonida, plus one isolated rough patch inside the Leonida Keys lagoon (D, (-5007, -5529)): camera 2 m above the heightmap seabed there, looking up 35 deg, heading a guess, fov 70."
  },
  "Biplane (Video) v2811": {
   "player": null,
