@@ -2139,8 +2139,8 @@ def ferris_edge():
         if np.linalg.norm((b - a)[:2]) > 20: continue                       # a gap (inlet): no wall across it
         za, zb_ = zt_(a), zt_(b)
         P.append(dict(k='quad', p=[r2([a[0], a[1], -0.3]), r2([b[0], b[1], -0.3]), r2([b[0], b[1], zb_]), r2([a[0], a[1], za])], color='#8a8580'))
-        for d0, d1, col in ((0, 5, '#7f838e'), (5, 9, '#6e7381'), (9, 13, '#6a6f7c'), (13, 17, '#6e7381'), (17, 21, '#6a6f7c'), (21, 25, '#6e7381'),
-                            (25, 29, '#6a6f7c'), (29, 33, '#6e7381'), (33, 37, '#6a6f7c'), (37, 41, '#6e7381'), (41, 45, '#6a6f7c')):
+        for d0, d1, col in ((0, 5, '#6f7686'), (5, 9, '#626a7a'), (9, 13, '#5e6676'), (13, 17, '#626a7a'), (17, 21, '#5e6676'), (21, 25, '#626a7a'),
+                            (25, 29, '#5e6676'), (29, 33, '#626a7a'), (33, 37, '#5e6676'), (37, 41, '#626a7a'), (41, 45, '#5e6676')):
             Q = [a + inl * d0, b + inl * d0, b + inl * d1, a + inl * d1]
             if min(T(q[0], q[1]) for q in Q) < -0.5: continue
             P.append(dict(k='quad', p=[r2([q[0], q[1], zt_(q)]) for q in Q], color=col, e=0.0))
@@ -2190,11 +2190,14 @@ def ferris_edge():
         P.append(dict(k='box', c=r2([q[0], q[1], 3.6]), s=[round(Lb * 0.56, 1), Wb * 0.87, 0.8], az=AZ, color='#34363b'))   # window band
         P.append(dict(k='box', c=r2([q[0], q[1], 5.0]), s=[round(Lb * 0.3, 1), Wb * 0.65, 1.4], az=AZ, color='#e4e2dc'))
     # big white tent at the wheel's foot: walls to the eaves, two roof slopes to the ridge (parallel to the facade, 10 m back)
-    t0, t1 = ground(2110, 1085, 1.5), ground(2450, 1080, 1.5); g = min(t0[2], t1[2]); ze = up(t0, 2280, 1052); zr = up(t0, 2280, 988)
-    Lt = float(np.linalg.norm((t1 - t0)[:2])); c = (t0 + t1)[:2] / 2 + back * 10
-    P.append(dict(k='box', c=r2([c[0], c[1], g]), s=[round(Lt, 1), 20.0, round(ze - g, 1)], az=AZ, color='#dfe0e4'))
-    for f0, f1 in ((0.0, 10.0), (20.0, 10.0)):
-        P.append(dict(k='quad', p=[r2([*t0[:2] + back * f0, ze]), r2([*t1[:2] + back * f0, ze]), r2([*t1[:2] + back * f1, zr]), r2([*t0[:2] + back * f1, zr])], color='#f1f2f5'))
+    # (TENT-V2: event-tent proportions, low 3 m walls under a hip roof rising 4.5 m, the dark round logo on the front slope)
+    t0, t1 = ground(2110, 1085, 1.5), ground(2450, 1080, 1.5); g = min(t0[2], t1[2]); ze = g + 3.0; zr = g + 7.5
+    Lt = float(np.linalg.norm((t1 - t0)[:2])); c = (t0 + t1)[:2] / 2 + back * 10; ex = (t1 - t0)[:2] / Lt
+    P.append(dict(k='box', c=r2([c[0], c[1], g]), s=[round(Lt, 1), 20.0, 3.0], az=AZ, color='#d9dade'))
+    A0, A1, A2, A3 = t0[:2], t1[:2], t1[:2] + back * 20, t0[:2] + back * 20; R0, R1 = c - ex * (Lt / 2 - 10), c + ex * (Lt / 2 - 10)
+    for q in ([A0, A1, R1, R0], [A2, A3, R0, R1]): P.append(dict(k='quad', p=[r2([*q[0], ze]), r2([*q[1], ze]), r2([*q[2], zr]), r2([*q[3], zr])], color='#eceef2'))
+    for q in ([A1, A2, R1, R1], [A3, A0, R0, R0]): P.append(dict(k='quad', p=[r2([*q[0], ze]), r2([*q[1], ze]), r2([*q[2], zr]), r2([*q[3], zr])], color='#e4e6ea'))
+    lc = (A0 + A1) / 2 + back * 5.2; P.append(dict(k='blob', c=r2([lc[0], lc[1], ze + (zr - ze) * 0.52]), r=[1.8, 1.8, 0.25], color='#3b4a8a'))
     # ground: the map drape is white there; the frame shows sunlit concrete / asphalt on the Watson quay (171,152,132), grey paving
     # on the Bayside plaza (127,115,121) and on the marina quay right of the wheel; draped quads (terrain + 6 cm), land only
     def drape(us, vs, color, need=None):                                     # need: every corner on land (no stair-step over the water)
@@ -2245,12 +2248,40 @@ def ferris_edge():
     P.append(dict(k='box', c=r2([cm[0], cm[1], gm]), s=[round(Lm, 1), 24.0, round(float(M0[2] - gm), 1)], az=AZ, color='#d9d4cc'))
     for f0 in (0.0, 24.0):
         P.append(dict(k='quad', p=[r2([*M0[:2] + back * f0, M0[2]]), r2([*M1[:2] + back * f0, M0[2]]), r2([*M1[:2] + back * 12, zr]), r2([*M0[:2] + back * 12, zr])], color='#e9e7e2'))
+    # the Bayside Marketplace (V16 mass #899, the long curved building behind the promenade and the marina): WHITE in the frame (its
+    # measured colour came from the pink T4/10 sunset) with a row of orange awnings along its marina / promenade side
+    recolor = [dict(poly=[[-320, -150], [-90, -150], [-90, 330], [-320, 330]], rgb=[0.86, 0.84, 0.80])]
+    try:
+        MS = json.load(open(os.path.join(THIS, 'threejs', '_v16_massing.json'))); m = MS[898]; Om = np.array(m['o'], float)
+        area = 0.5 * np.sum(Om[:, 0] * np.roll(Om[:, 1], -1) - np.roll(Om[:, 0], -1) * Om[:, 1]); sgn = 1.0 if area > 0 else -1.0
+        for a_, b_ in zip(Om, np.roll(Om, -1, axis=0)):
+            d = b_ - a_; L_ = float(np.linalg.norm(d))
+            if L_ < 6: continue
+            n = np.array([d[1], -d[0]]) / L_ * sgn                          # outward normal
+            if n @ np.array([0.62, 0.78]) < 0.35: continue                  # the NE side (marina / promenade)
+            c = (a_ + b_) / 2 + n * 1.2; azd = math.degrees(math.atan2(d[0], d[1]))
+            P.append(dict(k='box', c=r2([c[0], c[1], m['z'] + 3.1]), s=[round(L_ - 1.0, 1), 2.4, 0.35], az=round(azd, 1), color='#d0612e'))
+    except Exception: pass
     # the V16 box on the shore (u 1360..1860): not in the frame
     clear = [[[round(float(q), 1) for q in V.on_plane_z(u, 1240, 10.0)[:2] + back * dd] for u, dd in ((1340, -15), (1880, -15), (1880, 35), (1340, 35))]]
-    return dict(scene='S4/24 Ferris Wheel [Edge]', camera='Ferris Wheel [Edge]', note=ferris_edge.__doc__.split('\n')[0], props=P, clear=clear)
+    return dict(scene='S4/24 Ferris Wheel [Edge]', camera='Ferris Wheel [Edge]', note=ferris_edge.__doc__.split('\n')[0], props=P, clear=clear, recolor=recolor)
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony, glass_tower_fall, heli_jason, vice_beach_night, heli_cabin, mountain_pass, ferris_edge]
+def one_miami_riverwalk():
+    """S3/88 Vice City 10 (Pegassi Towers) — the Riverwalk at the foot of One Miami (towers: view3d ONEMIAMI-V2): the frame shows a
+    row of palms along the river edge (crop u 2345 / 2425 / 2500 / 2580 / 2710, bases v ~1270) in front of the low podium."""
+    V = View('Vice City 10 (Pegassi Towers)'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]; rng = np.random.default_rng(88)
+    def ground(u, v):
+        z = 3.0
+        for _ in range(6): p = V.on_plane_z(u, v, z); z = max(T(p[0], p[1]), 0.5)
+        return V.on_plane_z(u, v, z)
+    for u in (2345, 2385, 2425, 2462, 2500, 2540, 2580, 2620, 2665, 2710, 2750):
+        b = ground(u + rng.uniform(-6, 6), 1272 + rng.uniform(-4, 4))
+        P.append(dict(k='palm', a=r2(b), h=round(float(rng.uniform(9.0, 12.0)), 1), lean_az=round(rng.uniform(0, 360), 0), lean=0.05, nf=12, fl=4.2, tr=0.28))
+    return dict(scene='S3/88 Vice City 10 (One Miami Riverwalk)', camera='Vice City 10 (Pegassi Towers)', note=one_miami_riverwalk.__doc__.split('\n')[0], props=P)
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony, glass_tower_fall, heli_jason, vice_beach_night, heli_cabin, mountain_pass, ferris_edge, one_miami_riverwalk]
 
 
 def main():

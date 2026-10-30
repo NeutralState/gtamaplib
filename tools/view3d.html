@@ -691,7 +691,7 @@ function sunDirVec() {   // vecteur VERS le soleil; az horaire depuis le nord (+
 // [GROUND-COLOR-V1] teintes du sol et de la vegetation MESUREES sur les frames de jour (tools/ground_colors.py):
 // on garde la luminance calibree de chaque materiau et on prend la teinte/saturation du jeu
 // [STRUCTS-V1] structures rendues en vrai volume par le module STRUCTS (pas de fil de fer vif, pas de faces auto)
-const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)|\(Stacks\)|Flare Stack|\(Truss\)|\(Pipe Racks\)|\(Process Frames\)|\(Counterweight Block\)|Stadium \(V16|Stadium Roof Portique|^Hard Rock Cafe$|^Kaseya Center$|^Oceanarium Dome$|^One Miami Condominium (East|West)$/;
+const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)|\(Stacks\)|Flare Stack|\(Truss\)|\(Pipe Racks\)|\(Process Frames\)|\(Counterweight Block\)|Stadium \(V16|Stadium Roof Portique|^Hard Rock Cafe$|^Kaseya Center$|^Oceanarium Dome$|^One Miami Condominium (East|West)$|^One Miami \(Podium\)$/;
 const _gLum = c => 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
 // sat < 1: materiaux neutres (dalles, asphalte) — la dominante chaude de l'etalonnage du jeu, etalee sur des km2 de ville, virait au desert
 const gameTint = (cur, srgb, sat = 1) => { if (!srgb) return cur; const m0 = srgb.map(v => Math.pow(v, 2.2)), l0 = _gLum(m0), m = m0.map(v => l0 + (v - l0) * sat), k = _gLum(cur) / Math.max(_gLum(m), 1e-4); return m.map(v => v * k); };
@@ -2458,7 +2458,7 @@ if (meshVerts.length) {
     let BSrep = new Set(); try { const r = await fetch('/threejs/_bayside.json', { cache: 'no-store' }); if (r.ok) BSrep = new Set((await r.json()).replace || []); } catch (e) {}
     // [SCENE-PROPS-V1] zones degagees par le decor des scenes du tour (chaussee de la US 1 a Key Lento...): les emprises V16
     // dont le centroide y tombe ne sont pas extrudees (Alexandre: « le building sur la route c'est weird »)
-    let SPclear = [], SPrep = new Set(), SPbare = new Set(); try { const r = await fetch('/threejs/scene_props.json', { cache: 'no-store' }); if (r.ok) for (const sc of (await r.json()).scenes || []) { SPclear.push(...(sc.clear || [])); (sc.replace || []).forEach(n => SPrep.add(n)); (sc.bare_roof || []).forEach(n => SPbare.add(n)); } } catch (e) {}   // bare_roof: no generic roof units / parapet (a tour camera stands there)
+    let SPclear = [], SPrep = new Set(), SPbare = new Set(), SPrecol = []; try { const r = await fetch('/threejs/scene_props.json', { cache: 'no-store' }); if (r.ok) for (const sc of (await r.json()).scenes || []) { SPclear.push(...(sc.clear || [])); SPrecol.push(...(sc.recolor || [])); (sc.replace || []).forEach(n => SPrep.add(n)); (sc.bare_roof || []).forEach(n => SPbare.add(n)); } } catch (e) {}   // bare_roof: no generic roof units / parapet (a tour camera stands there)
     const inClear = O => { let x = 0, y = 0; for (const q of O) { x += q[0]; y += q[1]; } x /= O.length; y /= O.length;
       return SPclear.some(P => { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) { const [xi, yi] = P[i], [xj, yj] = P[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; }); };
     // [CRUISE-V1] paquebot a quai: emprise V16 sur l'eau (227 x 35 m, etrave pointue) qui se projette exactement sur le
@@ -2466,7 +2466,10 @@ if (meshVerts.length) {
     window.__cruise = [];
     const cruiseLike = m => { if (m.z > 0.5 || m.o.length < 12) return false; let x = 0, y = 0; for (const q of m.o) { x += q[0]; y += q[1]; } x /= m.o.length; y /= m.o.length; return Math.hypot(x - 362, y + 286) < 40; };
     if (MS) MS.forEach((m, i) => { if (BSrep.has(i) || inClear(m.o)) return; if (cruiseLike(m)) { window.__cruise.push(m); return; } if (shipLike(m)) { window.__ships.push(m); return; } const c = MC && MC[mkey(m.o)];
-      S['V16 building #' + (i + 1)] = { zmin: m.z, zmax: m.z + m.h, layers: [{ z0: m.z, z1: m.z + m.h, polys: [{ outer: m.o, holes: [] }] }], color: '#cfcfcf', _mass: 1, facade_color: c ? c.rgb : undefined }; });
+      // [RECOLOR-V1 2026-10-29] scene_props 'recolor' [{poly, rgb}]: a scene's frame shows the true daytime colour of V16 masses whose
+      // measured colour came from a tinted frame (S4/24: the Bayside Marketplace is white, it was measured pink on the T4/10 sunset)
+      const rc = SPrecol.find(R => { let x = 0, y = 0; for (const q of m.o) { x += q[0]; y += q[1]; } x /= m.o.length; y /= m.o.length; let cc = false; for (let a = 0, b = R.poly.length - 1; a < R.poly.length; b = a++) { const [xi, yi] = R.poly[a], [xj, yj] = R.poly[b]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) cc = !cc; } return cc; });
+      S['V16 building #' + (i + 1)] = { zmin: m.z, zmax: m.z + m.h, layers: [{ z0: m.z, z1: m.z + m.h, polys: [{ outer: m.o, holes: [] }] }], color: '#cfcfcf', _mass: 1, facade_color: rc ? rc.rgb : c ? c.rgb : undefined }; });
     let massStart = -1;
     const pos = [], nor = [], col = [], ids = [], sty = [], gls = [], bas = [], tops = [], prj = [], acc = [], nls = [], nlz = [];
     let curAcc = [0, 0, 0], curNl = [0, 0, 0, 0], curNlz = [0, 0];
@@ -4936,6 +4939,13 @@ window.__camScreen = name => {
       add(quadsGeo([[[K[0][0], K[0][1], ztop(...K[0])], [K[1][0], K[1][1], ztop(...K[1])], [K[2][0], K[2][1], ztop(...K[2])], [K[3][0], K[3][1], ztop(...K[3])]]]), roofM);
       add(quadsGeo([[[B[0][0], B[0][1], zb - 0.02], [B[3][0], B[3][1], zb - 0.02], [B[2][0], B[2][1], zb - 0.02], [B[1][0], B[1][1], zb - 0.02]]]), tan);   // sous-face du debord
       built++;
+    }
+    // podium: Vice City 10 shows no 14 m white block along the Riverwalk, only a low base behind the palms -> the V16 footprint
+    // (ordered loop of its top edges) at 7.5 m, warm grey stone
+    if (M['One Miami (Podium)']) {
+      const E = M['One Miami (Podium)'].world_edges; let zt = -1e9, z0 = 1e9; for (const e of E) for (const q of e) { zt = Math.max(zt, q[2]); z0 = Math.min(z0, q[2]); }
+      const loop = E.filter(e => Math.abs(e[0][2] - zt) < 0.05 && Math.abs(e[1][2] - zt) < 0.05).map(e => [e[0][0], e[0][1]]);
+      if (loop.length > 3) { const sh = new THREE.Shape(loop.map(q => new THREE.Vector2(q[0], q[1]))); const g = new THREE.ExtrudeGeometry(sh, { depth: 7.5, bevelEnabled: false }); g.translate(0, 0, z0); add(g, stdMat(0xc6bfb2, 0.85, 0.05, 0.3)); built++; }
     }
     window.__structs = Object.assign(window.__structs || {}, { oneMiami: built });
   }
