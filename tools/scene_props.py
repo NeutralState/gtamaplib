@@ -2075,7 +2075,84 @@ def mountain_pass():
                 nolamp=[[[-5500, 5560], [-4620, 5560], [-4620, 4700], [-5500, 4700]]])
 
 
-SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony, glass_tower_fall, heli_jason, vice_beach_night, heli_cabin, mountain_pass]
+def ferris_edge():
+    """S4/24 Ferris Wheel [Edge] — the Shoreline (Bayfront) wheel and the Bayside marina seen across the boat basin from the S shore
+    of Watson Island (pose ESTIMATED on the wheel + the Downtown towers' parallax, cameras.json). Foreground back-projected from
+    the frame (2560 x 1440) onto the terrain / the water: the WISP hut on the shore (white walls u 460..975, base v 1430, eaves
+    v 1350, red gable u 680..1000 peaking at v 1270 with the WISP sign, grey roof on the left part), the yellow container below
+    it, the three-high container stack on the quay (u 2060..2560, base v 1390, top v 1250), palms (and the row on the promenade
+    across the basin), the three utility poles and their
+    wires, the two yachts on the basin and the one moored at the pier, the big white tent at the wheel's foot (u 2110..2450,
+    base v 1085, ridge v 1000). The V16 box on the shore at u 1360..1860 is not in the frame (palms, a parking lot): cleared.
+    The pale concrete block in the bottom-left corner (close to the camera, ~45 m from the pelican's size) is not modelled."""
+    V = View('Ferris Wheel [Edge]'); P = []; r2 = lambda a: [round(float(v), 2) for v in a]; o = V.o
+    def ground(u, v, zmin=0.3):                                             # terrain (or water) point under pixel (u, v)
+        z = 1.0
+        for _ in range(5): p = V.on_plane_z(u, v, z); z = max(T(p[0], p[1]), zmin)
+        return V.on_plane_z(u, v, z)
+    def up(p, u, v):                                                        # z of pixel (u, v) at the horizontal distance of p
+        d = V.ray(u, v); return float(o[2] + d[2] * np.linalg.norm(p[:2] - o[:2]) / np.linalg.norm(d[:2]))
+    side = V.R @ np.array([1.0, 0, 0]); AZ = round(math.degrees(math.atan2(side[0], side[1])), 1)   # screen-horizontal axis on the ground
+    back = (V.R @ np.array([0, 1.0, 0]))[:2]; back = back / np.linalg.norm(back)
+    def facade(u0, u1, v, depth, h, color, zmin=0.3):                       # box whose front bottom edge is pixels (u0..u1, v)
+        a0, a1 = ground(u0, v, zmin), ground(u1, v, zmin); g = min(a0[2], a1[2]); L = float(np.linalg.norm((a1 - a0)[:2]))
+        c = (a0 + a1)[:2] / 2 + back * depth / 2; P.append(dict(k='box', c=r2([c[0], c[1], g]), s=[round(L, 1), depth, round(h, 1)], az=AZ, color=color))
+        return a0, a1, g, L
+    # WISP hut: white walls, grey roof slab over the left part, red gable (ridge front-to-back) over the right part, the sign
+    a0, a1, g, L = facade(460, 975, 1430, 12.0, 0, '#e9e5dd', 1.5)    # on the quay edge (the basin behind it)
+    he = V.on_vplane(600, 1350, a0[:2], back)[2] - g; P[-1]['s'][2] = round(he, 1)
+    zr = V.on_vplane(800, 1270, a0[:2], back)[2]; m = (a0 + (a1 - a0) * (680 - 460) / 515.0)[:2]; e = a1[:2]; mid = (m + e) / 2
+    for s0, s1 in ((m, mid), (e, mid)):                                     # two slopes of the red gable, front edge to 12 m back
+        P.append(dict(k='quad', p=[r2([*s0, g + he]), r2([*s0 + back * 12, g + he]), r2([*s1 + back * 12, zr]), r2([*s1, zr])], color='#8e3a32'))
+    P.append(dict(k='quad', p=[r2([*a0[:2], g + he + 0.05]), r2([*m, g + he + 0.05]), r2([*m + back * 12, g + he + 0.05]), r2([*a0[:2] + back * 12, g + he + 0.05])], color='#8a8d90'))
+    front = lambda u, v: V.on_vplane(u, v, a0[:2] - back * 0.15, back)  # on the facade plane, just in front of it
+    fr = cv2.imread(os.path.join(REPO, 'frames', 'Ferris Wheel [Edge].png'))
+    if fr is not None: cv2.imwrite(os.path.join(THIS, 'threejs', '_prop_wisp_sign.png'), fr[1333:1362, 768:907])
+    P.append(dict(k='tex', p=[r2(front(768, 1362)), r2(front(907, 1362)), r2(front(907, 1333)), r2(front(768, 1333))], img='_prop_wisp_sign.png'))
+    # yellow container below the hut, container stack on the quay (3 high: red / green / dark-red on the left half, white / grey / red)
+    facade(290, 570, 1440, 2.44, 2.6, '#d6a023', 1.5)
+    b0, b1 = ground(2060, 1390, 1.0), ground(2560, 1390, 1.0); g = min(b0[2], b1[2]); Hs = up(b0, 2300, 1250) - g; ht = Hs / 3
+    for half, cols in ((0, ('#5e3a33', '#6f8a6a', '#7b3b31')), (1, ('#7a2f2a', '#8f8b84', '#cfcac2'))):
+        q0 = b0 + (b1 - b0) * half / 2; q1 = b0 + (b1 - b0) * (half + 1) / 2; c = (q0 + q1)[:2] / 2 + back * 1.22; Lh = float(np.linalg.norm((q1 - q0)[:2]))
+        for k, col in enumerate(cols):
+            P.append(dict(k='box', c=r2([c[0], c[1], g + k * ht]), s=[round(Lh - 0.3, 1), 2.44, round(ht - 0.05, 2)], az=AZ, color=col))
+    # palms (u, top v, base v)
+    rng = np.random.default_rng(24)
+    for u, vt, vb in ((530, 1395, 1440), (745, 1345, 1432), (800, 1400, 1440), (985, 1310, 1405), (1060, 1250, 1420), (1110, 1255, 1420),
+                      (1200, 1300, 1420), (1390, 1300, 1440), (1945, 1385, 1440)):
+        b = ground(u, vb, 1.0); h = up(b, u, vt) - b[2]
+        P.append(dict(k='palm', a=r2(b), h=round(max(5.0, h - 1.0), 1), lean_az=round(rng.uniform(0, 360), 0), lean=0.06))
+    # palm row on the Shoreline promenade across the basin (seawall from (1184, 872) to (1888, 992), palms ~10 px behind it)
+    for u in range(1150, 1900, 70):
+        b = ground(u, 872 + (u - 1184) * 120 / 704 - 10, 1.5); P.append(dict(k='palm', a=r2(b), h=round(float(rng.uniform(9.5, 12.5)), 1), lean_az=round(rng.uniform(0, 360), 0), lean=0.05))
+    # utility poles (u, top v, base v) + sagging wires
+    tops = []
+    for u, vt, vb in ((277, 1262, 1440), (1095, 1190, 1420), (1400, 1225, 1330)):
+        b = ground(u, vb, 1.0); h = up(b, u, vt) - b[2]
+        P.append(dict(k='cyl', a=r2(b), b=r2([b[0], b[1], b[2] + h]), r=0.16, color='#4a3f38')); tops.append(np.r_[b[:2], b[2] + h - 0.5])
+    for q0, q1 in zip(tops[:-1], tops[1:]):
+        for dz in (0.0, -0.6):
+            P.append(dict(k='line', pts=[r2(q0 + (q1 - q0) * t + [0, 0, dz - 1.2 * 4 * t * (1 - t)]) for t in np.linspace(0, 1, 9)], color='#2a2422'))
+    # yachts: two crossing the basin (waterline v), one moored at the pier by the tent
+    for (u0, u1, vw), Wb in (((625, 920, 1245), 5.5), ((130, 300, 1085), 4.5), ((1900, 2180, 1178), 5.0)):
+        q0, q1 = V.on_plane_z(u0, vw, 0.3), V.on_plane_z(u1, vw, 0.3); q = (q0 + q1) / 2; Lb = float(np.linalg.norm((q1 - q0)[:2]))
+        q = q + np.r_[back * Wb / 2, 0]                                     # waterline pixel = near side of the hull
+        P.append(dict(k='box', c=r2([q[0], q[1], 0.0]), s=[round(Lb, 1), Wb, 2.8], az=AZ, color='#ecebe6'))      # ~6.5 m tall overall
+        P.append(dict(k='box', c=r2([q[0], q[1], 2.8]), s=[round(Lb * 0.55, 1), Wb * 0.85, 2.2], az=AZ, color='#d9d6cf'))
+        P.append(dict(k='box', c=r2([q[0], q[1], 3.6]), s=[round(Lb * 0.56, 1), Wb * 0.87, 0.8], az=AZ, color='#34363b'))   # window band
+        P.append(dict(k='box', c=r2([q[0], q[1], 5.0]), s=[round(Lb * 0.3, 1), Wb * 0.65, 1.4], az=AZ, color='#e4e2dc'))
+    # big white tent at the wheel's foot: walls to the eaves, two roof slopes to the ridge (parallel to the facade, 10 m back)
+    t0, t1 = ground(2110, 1085, 1.5), ground(2450, 1080, 1.5); g = min(t0[2], t1[2]); ze = up(t0, 2280, 1040); zr = up(t0, 2280, 1000)
+    Lt = float(np.linalg.norm((t1 - t0)[:2])); c = (t0 + t1)[:2] / 2 + back * 10
+    P.append(dict(k='box', c=r2([c[0], c[1], g]), s=[round(Lt, 1), 20.0, round(ze - g, 1)], az=AZ, color='#ecedf0'))
+    for f0, f1 in ((0.0, 10.0), (20.0, 10.0)):
+        P.append(dict(k='quad', p=[r2([*t0[:2] + back * f0, ze]), r2([*t1[:2] + back * f0, ze]), r2([*t1[:2] + back * f1, zr]), r2([*t0[:2] + back * f1, zr])], color='#f1f2f5'))
+    # the V16 box on the shore (u 1360..1860): not in the frame
+    clear = [[[round(float(q), 1) for q in V.on_plane_z(u, 1240, 10.0)[:2] + back * dd] for u, dd in ((1340, -15), (1880, -15), (1880, 35), (1340, 35))]]
+    return dict(scene='S4/24 Ferris Wheel [Edge]', camera='Ferris Wheel [Edge]', note=ferris_edge.__doc__.split('\n')[0], props=P, clear=clear)
+
+
+SCENES = [keys_entrance, brians_marina, keys_landmarks, keys_bridges, seaplane_dock, radio_towers, skyline_night, aviation_lights, brickell_metromover, ferris_marina, arsht_night, convertible_bridge, iguana_roundabout, runway_jet, red_car_terminal, green_car_edison, bike_viaduct, rooftop_explosion, beach_biplane, beach_lifeguards, portofino_detail, napping_room, bayside_bridge, pegassi_terrace, catalan_race, sea_balcony, glass_tower_fall, heli_jason, vice_beach_night, heli_cabin, mountain_pass, ferris_edge]
 
 
 def main():

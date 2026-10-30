@@ -6586,11 +6586,11 @@
   "xyz": [
    296.5,
    270.0,
-   32.0
+   40.0
   ],
   "ypr": [
    133.3,
-   -1.5,
+   -1.85,
    0.0
   ],
   "fov": [
@@ -6598,7 +6598,7 @@
    null
   ],
   "source": "Screenshot Edge magazine - Ferris Wheel: the Shoreline (Bayfront) observation wheel and the Bayside marina seen across the boat basin from the south shore of Watson Island, Downtown skyline behind, the I-397 port bridge on the far left; WISP hut, containers and palms in the foreground",
-  "note": "POSE 2026-10-29 (ESTIMATED, render overlays): wheel rim seen ~52 deg off its plane (ellipse 410 x 670 px at 2560) -> camera ENE of the wheel on Watson Island S shore, ~300 m; position along the view axis and sideways set by the parallax of the Downtown towers (tallest tower, left condo, central cluster) against the wheel; heading 226.7, pitch -1.5, hfov 48, z 32 (eye height not constrained). Needs markings + solve."
+  "note": "POSE 2026-10-29 (ESTIMATED, render overlays): wheel rim seen ~52 deg off its plane (ellipse 410 x 670 px at 2560) -> camera ENE of the wheel on Watson Island S shore, ~300 m; position along the view axis and sideways set by the parallax of the Downtown towers (tallest tower, left condo, central cluster) against the wheel; heading 226.7, pitch -1.85, hfov 48, z 40 (eye height from the wheel base vs the skyline: at z 32 the wheel sat ~55 px high). Needs markings + solve."
  },
  "Biplane (Video) v2811": {
   "player": null,
