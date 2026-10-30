@@ -6730,6 +6730,32 @@
   "source": "Screenshot Edge magazine - Mendez on the Radio: Mendez (vest, earpiece, radio) in the ground-floor corridor of an apartment block during a raid, two armed raiders with duffel bags behind him",
   "note": "PROVISIONAL 2026-10-30 (BLOCK LEVEL; Alexandre: \u00ab Mendez dans le meme bloc que T3/40 \u00bb): the same apartment block as T3/40 Robbery (Floor) (itself PROVISIONAL = Yanis V17 marker dot); interior corridor, so position = T3/40 position, heading copied from T3/40 (no exterior feature to fit), fov 45."
  },
+ "Open-Air Tattoo Parlour [Edge]": {
+  "player": null,
+  "size": [
+   2560,
+   1440
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "id": "S4/27",
+  "xyz": [
+   -1180.0,
+   760.0,
+   7.43
+  ],
+  "ypr": [
+   0.0,
+   0.0,
+   0.0
+  ],
+  "fov": [
+   60.0,
+   null
+  ],
+  "source": "Screenshot Edge magazine - Open-Air Tattoo Parlour: a gang member tattooed on a chair in the parking lot of a two-storey motel-style apartment block (OFFICE sign), lowrider, dog, beer bottles on a table",
+  "note": "PROVISIONAL 2026-10-30 (NEIGHBOURHOOD LEVEL; Alexandre: \u00ab definitely in Rockridge \u00bb): Rockridge = Riverside on the V17 map (label at (-1180, 830)); position = the middle of the neighbourhood next to the label, heading 0 (a guess), fov 60. The motel block is not identified on the map: needs its footprint to fit."
+ },
  "Biplane (Video) v2811": {
   "player": null,
   "size": [
