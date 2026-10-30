@@ -691,7 +691,7 @@ function sunDirVec() {   // vecteur VERS le soleil; az horaire depuis le nord (+
 // [GROUND-COLOR-V1] teintes du sol et de la vegetation MESUREES sur les frames de jour (tools/ground_colors.py):
 // on garde la luminance calibree de chaque materiau et on prend la teinte/saturation du jeu
 // [STRUCTS-V1] structures rendues en vrai volume par le module STRUCTS (pas de fil de fer vif, pas de faces auto)
-const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)|\(Stacks\)|Flare Stack|\(Truss\)|\(Pipe Racks\)|\(Process Frames\)|\(Counterweight Block\)|Stadium \(V16|Stadium Roof Portique|^Hard Rock Cafe$|^Kaseya Center$|^Oceanarium Dome$/;
+const STRUCT_SOLID = /Observation Wheel|Container Crane|Smokestack|\(Stack\)|\(Stacks\)|Flare Stack|\(Truss\)|\(Pipe Racks\)|\(Process Frames\)|\(Counterweight Block\)|Stadium \(V16|Stadium Roof Portique|^Hard Rock Cafe$|^Kaseya Center$|^Oceanarium Dome$|^One Miami Condominium (East|West)$/;
 const _gLum = c => 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
 // sat < 1: materiaux neutres (dalles, asphalte) — la dominante chaude de l'etalonnage du jeu, etalee sur des km2 de ville, virait au desert
 const gameTint = (cur, srgb, sat = 1) => { if (!srgb) return cur; const m0 = srgb.map(v => Math.pow(v, 2.2)), l0 = _gLum(m0), m = m0.map(v => l0 + (v - l0) * sat), k = _gLum(cur) / Math.max(_gLum(m), 1e-4); return m.map(v => v * k); };
@@ -4860,11 +4860,86 @@ window.__camScreen = name => {
         const fg = new THREE.BufferGeometry(); fg.setAttribute('position', new THREE.Float32BufferAttribute(Pf, 3)); fg.computeVertexNormals();
         const fm = stdMat(0xd9d6cf, 0.6, 0.15, 0.7); fm.side = THREE.DoubleSide; add(fg, fm);
         const rg = new THREE.BufferGeometry(); rg.setAttribute('position', new THREE.Float32BufferAttribute(Pr, 3)); rg.computeVertexNormals();
-        const rm2 = stdMat(0x8f9296, 0.8, 0.1, 0.5); rm2.side = THREE.DoubleSide; add(rg, rm2);
+        const rm2 = stdMat(0x505359, 0.8, 0.1, 0.5); rm2.side = THREE.DoubleSide; add(rg, rm2);   // S4/24: dark grey roof
         window.__structs = Object.assign(window.__structs || {}, { hardrock: n });
       }
     }
   }
+  // ---- [ONEMIAMI-V2 2026-10-29] One Miami East / West (Arquitectonica 2005, 44-45 etages): Alexandre « on peut faire beaucoup
+  // mieux, forme IRL et in game ». Plan = parallelogramme des meshes (lames ENE-WSW a bouts biais), hauteurs MVS. Lu dans Vice
+  // City 10 (Pegassi Towers, vue SE, nette): facades blanc-creme en grille de balcons (dalle blanche + garde-corps + vitrage
+  // bleu-gris, ~4.1 m / etage, travees ~3.6 m), cadre blanc aux aretes, bande verticale beige pleine hauteur a l'angle ENE
+  // (entre la grande face et le bout), couronne beige de 8 m en debord; la couronne de l'East monte vers l'ENE (Vice City 10:
+  // son toit penche, celui du West est plat). Remplace le prisme generique (STRUCT_SOLID).
+  {
+    const fc = document.createElement('canvas'); fc.width = 64; fc.height = 64; const fx = fc.getContext('2d');
+    fx.fillStyle = '#56626e'; fx.fillRect(0, 0, 64, 64);                       // vitrage
+    fx.fillStyle = '#76838f'; fx.fillRect(0, 6, 64, 22);                       // reflet du ciel dans le haut du vitrage
+    fx.fillStyle = '#9aa3a8'; fx.fillRect(0, 36, 64, 3);                       // main courante du garde-corps
+    fx.fillStyle = 'rgba(214,214,208,0.35)'; fx.fillRect(0, 39, 64, 11);      // garde-corps vitre
+    fx.fillStyle = '#e7e3db'; fx.fillRect(0, 50, 64, 14);                      // nez de dalle du balcon
+    fx.fillStyle = '#ddd9d1'; fx.fillRect(0, 0, 5, 64); fx.fillRect(59, 0, 5, 64);   // refends entre travees
+    const ftex = new THREE.CanvasTexture(fc); ftex.wrapS = ftex.wrapT = THREE.RepeatWrapping; ftex.colorSpace = THREE.SRGBColorSpace;
+    ftex.anisotropy = 8;
+    const fmat = new THREE.MeshStandardMaterial({ map: ftex, roughness: 0.42, metalness: 0.2 }); fmat.toneMapped = false;
+    if (window.__envTex) { fmat.envMap = window.__envTex; fmat.envMapIntensity = 0.55; }
+    { const prev = window.__onEnv; window.__onEnv = t => { fmat.envMap = t; fmat.envMapIntensity = 0.55; fmat.needsUpdate = true; if (prev) prev(t); }; }
+    const bc = document.createElement('canvas'); bc.width = 64; bc.height = 64; const bx = bc.getContext('2d');   // bout est: la bande de verre bleu
+    bx.fillStyle = '#3e5266'; bx.fillRect(0, 0, 64, 64); bx.fillStyle = '#58708a'; bx.fillRect(0, 6, 64, 24);
+    bx.fillStyle = '#8796a4'; bx.fillRect(0, 50, 64, 10); bx.fillStyle = '#4a5c6e'; bx.fillRect(0, 0, 3, 64);
+    const btex = new THREE.CanvasTexture(bc); btex.wrapS = btex.wrapT = THREE.RepeatWrapping; btex.colorSpace = THREE.SRGBColorSpace; btex.anisotropy = 8;
+    const bmat = fmat.clone(); bmat.map = btex; bmat.roughness = 0.25; bmat.metalness = 0.35;
+    { const prev = window.__onEnv; window.__onEnv = t => { bmat.envMap = t; bmat.envMapIntensity = 0.7; bmat.needsUpdate = true; if (prev) prev(t); }; }
+    const tan = stdMat(0xbcab89, 0.75, 0.05, 0.3), white = stdMat(0xe6e2da, 0.6, 0.05, 0.4), roofM = stdMat(0x8d8f92, 0.85, 0.05, 0.2);
+    const quadsGeo = (Q, uv) => {                                              // Q: [[A,B,C,D]...] (CCW vu de l'exterieur)
+      const P = [], U = [];
+      Q.forEach((q, i) => { const [A, B, C, D] = q; P.push(...A, ...B, ...C, ...A, ...C, ...D); if (uv) { const [a, b, c, d] = uv[i]; U.push(...a, ...b, ...c, ...a, ...c, ...d); } });
+      const g = new THREE.BufferGeometry(); g.setAttribute('position', new THREE.Float32BufferAttribute(P, 3)); if (uv) g.setAttribute('uv', new THREE.Float32BufferAttribute(U, 2)); g.computeVertexNormals(); return g;
+    };
+    const boxAt = (cx, cy, z0, len, wid, h, az, mat) => { const g = new THREE.BoxGeometry(len, wid, h); g.rotateZ(az); g.translate(cx, cy, z0 + h / 2); return add(g, mat); };
+    let built = 0;
+    // plan (coins de la couronne): NW et NE = coins de toit trianguls (MVS); SW de l'East etait DEDUIT (parallelogramme) -> Vice City 10
+    // (pose resolue, 23 clics) voit son arete gauche 14 m plus a l'ENE; SE: la bande beige de Vice City 10 recoupee avec le rayon
+    // T4/10 (SOLVED, le coin SE de l'East y est l'arete gauche) -> East SE 7 m au SW; West SE sur sa face sud, au droit de sa bande
+    // beige dans Vice City 10 (55.5 m du SW). Les deux faces sud font alors ~56 m (au lieu de 73-78 m).
+    const PLAN = { 'One Miami Condominium East': [[-304.2, -560.4], [-289.1, -579.3], [-236.9, -555.7], [-234.1, -526.1]],
+                   'One Miami Condominium West': [[-378.8, -584.1], [-375.6, -608.0], [-325.1, -584.8], [-311.8, -553.8]] };
+    for (const [name, slope] of [['One Miami Condominium East', 8.0], ['One Miami Condominium West', 0.0]]) {
+      if (!M[name]) continue;
+      const P = ptsOf(name); let z0 = 1e9, zt = -1e9; for (const p of P) { z0 = Math.min(z0, p[2]); zt = Math.max(zt, p[2]); }
+      let cx = 0, cy = 0; const K = PLAN[name].map(k => k.slice()); K.forEach(k => { cx += k[0] / 4; cy += k[1] / 4; });
+      K.sort((a, b) => Math.atan2(a[1] - cy, a[0] - cx) - Math.atan2(b[1] - cy, b[0] - cx));   // CCW
+      const B = K.map(k => { const dx = k[0] - cx, dy = k[1] - cy, r = Math.hypot(dx, dy); return [k[0] - dx / r * 0.8, k[1] - dy / r * 0.8]; });   // corps (couronne en debord de 0.8 m)
+      // axe long (ENE): le plus long cote; t = position le long de cet axe (0 au WSW, 1 a l'ENE) pour la pente de la couronne
+      let li = 0; for (let i = 1; i < 4; i++) if (Math.hypot(B[(i + 1) % 4][0] - B[i][0], B[(i + 1) % 4][1] - B[i][1]) > Math.hypot(B[(li + 1) % 4][0] - B[li][0], B[(li + 1) % 4][1] - B[li][1])) li = i;
+      let ax = [B[(li + 1) % 4][0] - B[li][0], B[(li + 1) % 4][1] - B[li][1]]; if (ax[0] < 0) ax = [-ax[0], -ax[1]]; const al = Math.hypot(...ax); ax = [ax[0] / al, ax[1] / al];
+      const sp = K.map(k => (k[0] - cx) * ax[0] + (k[1] - cy) * ax[1]), smin = Math.min(...sp), smax = Math.max(...sp);
+      const zb = zt - 8.0, ztop = (x, y) => zt - slope / 2 + slope * (((x - cx) * ax[0] + (y - cy) * ax[1]) - smin) / (smax - smin);
+      // corps: 4 faces texturees (u = travees de 3.6 m, v = etages de 4.1 m)
+      const Q = [], UV = [], QB = [], UB = [];
+      for (let i = 0; i < 4; i++) {
+        const a = B[i], b = B[(i + 1) % 4], L = Math.hypot(b[0] - a[0], b[1] - a[1]), nu = Math.round(L / 3.6), nv = Math.round((zb - z0) / 4.1);
+        const east = ((a[0] + b[0]) / 2 - cx) * ax[0] + ((a[1] + b[1]) / 2 - cy) * ax[1] > 0 && Math.abs((b[0] - a[0]) * ax[0] + (b[1] - a[1]) * ax[1]) < 0.8 * L;   // the West's oblique east end is 41 deg off the axis
+        (east ? QB : Q).push([[a[0], a[1], z0], [b[0], b[1], z0], [b[0], b[1], zb], [a[0], a[1], zb]]); (east ? UB : UV).push([[0, 0], [nu, 0], [nu, nv], [0, nv]]);
+      }
+      add(quadsGeo(Q, UV), fmat); if (QB.length) add(quadsGeo(QB, UB), bmat);
+      // cadre blanc aux 4 aretes, bande beige pleine hauteur aux 2 angles ENE (entre la grande face et le bout)
+      for (let i = 0; i < 4; i++) {
+        const k = B[i], s = (k[0] - cx) * ax[0] + (k[1] - cy) * ax[1], dx = k[0] - cx, dy = k[1] - cy, r = Math.hypot(dx, dy);
+        const ang = Math.atan2(ax[1], ax[0]);
+        if (s > 0) boxAt(k[0] - ax[0] * 2.4 + dx / r * 0.2, k[1] - ax[1] * 2.4 + dy / r * 0.2, z0, 5.0, 2.2, zb - z0, ang, tan);
+        else boxAt(k[0] + dx / r * 0.15, k[1] + dy / r * 0.15, z0, 1.4, 1.4, zb - z0, ang, white);
+      }
+      // couronne beige (debord 0.8 m), haut en pente le long de l'axe pour l'East, toit gris
+      const CQ = []; for (let i = 0; i < 4; i++) { const a = K[i], b = K[(i + 1) % 4]; CQ.push([[a[0], a[1], zb], [b[0], b[1], zb], [b[0], b[1], ztop(...b)], [a[0], a[1], ztop(...a)]]); }
+      add(quadsGeo(CQ), tan);
+      add(quadsGeo([[[K[0][0], K[0][1], ztop(...K[0])], [K[1][0], K[1][1], ztop(...K[1])], [K[2][0], K[2][1], ztop(...K[2])], [K[3][0], K[3][1], ztop(...K[3])]]]), roofM);
+      add(quadsGeo([[[B[0][0], B[0][1], zb - 0.02], [B[3][0], B[3][1], zb - 0.02], [B[2][0], B[2][1], zb - 0.02], [B[1][0], B[1][1], zb - 0.02]]]), tan);   // sous-face du debord
+      built++;
+    }
+    window.__structs = Object.assign(window.__structs || {}, { oneMiami: built });
+  }
+
 
 
   // ---- Bayfront Park / Bayside (tools/bayside_layout.py): amphitheatre, scene sous treillis, promenade couverte, marina ----
@@ -4949,10 +5024,15 @@ window.__camScreen = name => {
     if (B.boats && B.boats.length) {
       const hull = (() => { const s2 = new THREE.Shape(); s2.moveTo(-0.5, -0.17); s2.lineTo(0.32, -0.17); s2.quadraticCurveTo(0.5, -0.1, 0.52, 0); s2.quadraticCurveTo(0.5, 0.1, 0.32, 0.17); s2.lineTo(-0.5, 0.17); s2.lineTo(-0.5, -0.17);
         const g = new THREE.ExtrudeGeometry(s2, { depth: 0.11, bevelEnabled: false, curveSegments: 4 }); g.translate(0, 0, -0.03); return g; })();
-      const cab = new THREE.BoxGeometry(0.38, 0.24, 0.07); cab.translate(-0.05, 0, 0.115);
-      const hm = new THREE.InstancedMesh(hull, stdMat(0xf5f5f2, 0.3, 0.1, 0.9), B.boats.length), cm = new THREE.InstancedMesh(cab, stdMat(0x3a4450, 0.2, 0.4, 1.0), B.boats.length);
-      B.boats.forEach(([x, y, a, L], i) => { q.setFromAxisAngle(Zax, a); m4.compose(new V3(x, y, 0.15), q, sc3.set(L, L, L)); hm.setMatrixAt(i, m4); cm.setMatrixAt(i, m4); });
-      hm.castShadow = true; grp.add(hm); grp.add(cm);
+      // [BOATS-V2 2026-10-29] S4/24 Ferris Wheel [Edge]: the marina yachts are WHITE (superstructure too) with a dark window band,
+      // not dark slabs: white cabin + flybridge, thin tinted band
+      const cab = new THREE.BoxGeometry(0.40, 0.25, 0.075); cab.translate(-0.05, 0, 0.115);
+      const fly = new THREE.BoxGeometry(0.20, 0.19, 0.045); fly.translate(-0.07, 0, 0.175);
+      const win = new THREE.BoxGeometry(0.405, 0.255, 0.022); win.translate(-0.05, 0, 0.128);
+      const hm = new THREE.InstancedMesh(hull, stdMat(0xf5f5f2, 0.3, 0.1, 0.9), B.boats.length), cm = new THREE.InstancedMesh(cab, stdMat(0xeceae4, 0.35, 0.1, 0.8), B.boats.length);
+      const fm2 = new THREE.InstancedMesh(fly, stdMat(0xf2f1ed, 0.35, 0.1, 0.8), B.boats.length), wm = new THREE.InstancedMesh(win, stdMat(0x2e3640, 0.15, 0.5, 1.0), B.boats.length);
+      B.boats.forEach(([x, y, a, L], i) => { q.setFromAxisAngle(Zax, a); m4.compose(new V3(x, y, 0.15), q, sc3.set(L, L, L)); hm.setMatrixAt(i, m4); cm.setMatrixAt(i, m4); fm2.setMatrixAt(i, m4); wm.setMatrixAt(i, m4); });
+      hm.castShadow = true; cm.castShadow = true; grp.add(hm); grp.add(cm); grp.add(fm2); grp.add(wm);
     }
     window.__structs = Object.assign(window.__structs || {}, { bayside: { seats: B.seats.length, sails: B.arc.sails.length, piers: B.piers.length, boats: B.boats.length } });
   }).catch(e => console.warn('[BAYSIDE]', e));
@@ -5371,9 +5451,10 @@ window.__camScreen = name => {
         const m = p.smooth ? new THREE.MeshStandardMaterial({ color: new THREE.Color(p.color), emissive: new THREE.Color(p.color), emissiveIntensity: 0.3, roughness: 0.45, metalness: 0.1 }) : mat(p.color); if (!p.smooth) m.flatShading = true; add(g, m);
       } else if (p.k === 'palm') {
         const a = p.a, la = p.lean_az * Math.PI / 180, top = [a[0] + Math.sin(la) * p.lean * p.h, a[1] + Math.cos(la) * p.lean * p.h, a[2] + p.h];
-        add(cylGeo(a, top, 0.22, 6), mat('#6b5a45'));
-        for (let k = 0; k < 9; k++) {                                     // palmes retombantes
-          const t = k / 9 * Math.PI * 2 + 0.3, L = 3.6, d = [Math.sin(t), Math.cos(t)], s2 = [-d[1] * 0.45, d[0] * 0.45];
+        add(cylGeo(a, top, p.tr ?? 0.22, 6), mat('#6b5a45'));
+        const NF = p.nf ?? 9, FL = p.fl ?? 3.6;                             // [PALM-CROWN-V1] nf fronds of fl m (S4/24: big Bayside royal palms)
+        for (let k = 0; k < NF; k++) {                                    // palmes retombantes
+          const t = k / NF * Math.PI * 2 + 0.3 + (k % 2) * 0.12, L = FL * (k % 3 ? 1.0 : 0.85), d = [Math.sin(t), Math.cos(t)], s2 = [-d[1] * 0.45 * FL / 3.6, d[0] * 0.45 * FL / 3.6];
           const mid = [top[0] + d[0] * L * 0.55, top[1] + d[1] * L * 0.55, top[2] + 0.5], tip = [top[0] + d[0] * L, top[1] + d[1] * L, top[2] - 1.4];
           const g = new THREE.BufferGeometry();
           g.setAttribute('position', new THREE.Float32BufferAttribute([...top, mid[0] + s2[0], mid[1] + s2[1], mid[2], ...tip, ...top, ...tip, mid[0] - s2[0], mid[1] - s2[1], mid[2]], 3));

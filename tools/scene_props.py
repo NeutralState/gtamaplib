@@ -2123,25 +2123,56 @@ def ferris_edge():
                       (1200, 1300, 1420), (1390, 1300, 1440), (1945, 1385, 1440)):
         b = ground(u, vb, 1.0); h = up(b, u, vt) - b[2]
         P.append(dict(k='palm', a=r2(b), h=round(max(5.0, h - 1.0), 1), lean_az=round(rng.uniform(0, 360), 0), lean=0.06))
-    # palm row on the Shoreline promenade across the basin (seawall from (1184, 872) to (1888, 992), palms ~10 px behind it)
-    for u in range(1150, 1900, 70):
-        b = ground(u, 872 + (u - 1184) * 120 / 704 - 10, 1.5); P.append(dict(k='palm', a=r2(b), h=round(float(rng.uniform(9.5, 12.5)), 1), lean_az=round(rng.uniform(0, 360), 0), lean=0.05))
-    for u in range(1180, 1900, 90):                                         # second row, deeper in the plaza (the frame is dense there)
-        b = ground(u + 35, 872 + (u + 35 - 1184) * 120 / 704 - 32, 1.5); P.append(dict(k='palm', a=r2(b), h=round(float(rng.uniform(10.5, 13.5)), 1), lean_az=round(rng.uniform(0, 360), 0), lean=0.05))
-    # seawall railing along the promenade (posts every ~5 m, two rails)
-    rail = [ground(u, 872 + (u - 1184) * 120 / 704 + 4, 1.5) for u in range(1184, 1889, 22)]
-    for z in (0.55, 1.05): P.append(dict(k='line', pts=[r2(q + [0, 0, z]) for q in rail], color='#d8d6d0'))
-    for q in rail: P.append(dict(k='cyl', a=r2(q), b=r2(q + [0, 0, 1.05]), r=0.06, color='#d8d6d0'))
-    # market stalls (orange roofs, u 1612..1775, base v 935) and the big red tent by the wheel (u 1794..1925, base v 974, top v 914)
-    for k in range(5):
-        u = 1625 + k * 33; q = ground(u, 935, 1.5)
-        P.append(dict(k='box', c=r2(q + np.r_[back * 2.0, 0]), s=[3.6, 3.6, 2.3], az=AZ, color='#e7dccb'))
-        P.append(dict(k='box', c=r2(q + np.r_[back * 2.0, 2.3]), s=[4.4, 4.4, 0.5], az=AZ, color='#d4572c'))
+    # [BAYSIDE-PROMENADE-V2] (Alexandre: « tout ça je suis pas satisfait »): the promenade is built from the V17 shoreline, not from
+    # pixel quads (their stair-step edges stuck out over the water): each frame column u 1100..2120 is walked from the basin up to the
+    # first land -> shore line (smoothed); seawall face, paving strips inland of it (6 / 12 / 20 / 30 m, draped per vertex), railing,
+    # two rows of big royal palms (the frame's are dense, ~11 m apart, full crowns), the market canopies and the red marquee by the wheel
+    shore = []
+    for u in range(1100, 2121, 8):
+        v = 1015.0
+        while v > 780 and T(*ground(u, v, 0.3)[:2]) < 0.0: v -= 1.0         # the visible water edge (terrain 0 m)
+        if v > 780: shore.append(np.array(ground(u, v + 0.5, 0.3)))
+    S_ = np.array(shore); S_[1:-1, :2] = (S_[:-2, :2] + S_[1:-1, :2] + S_[2:, :2]) / 3
+    inl = np.r_[back, 0.0]
+    def zt_(q): return max(T(q[0], q[1]), 0.35) + 0.3                      # 30 cm: the 2 m terrain bumps between vertices stay under it
+    for a, b in zip(S_[:-1], S_[1:]):
+        if np.linalg.norm((b - a)[:2]) > 20: continue                       # a gap (inlet): no wall across it
+        za, zb_ = zt_(a), zt_(b)
+        P.append(dict(k='quad', p=[r2([a[0], a[1], -0.3]), r2([b[0], b[1], -0.3]), r2([b[0], b[1], zb_]), r2([a[0], a[1], za])], color='#8a8580'))
+        for d0, d1, col in ((0, 5, '#7f838e'), (5, 9, '#6e7381'), (9, 13, '#6a6f7c'), (13, 17, '#6e7381'), (17, 21, '#6a6f7c'), (21, 25, '#6e7381'),
+                            (25, 29, '#6a6f7c'), (29, 33, '#6e7381'), (33, 37, '#6a6f7c'), (37, 41, '#6e7381'), (41, 45, '#6a6f7c')):
+            Q = [a + inl * d0, b + inl * d0, b + inl * d1, a + inl * d1]
+            if min(T(q[0], q[1]) for q in Q) < -0.5: continue
+            P.append(dict(k='quad', p=[r2([q[0], q[1], zt_(q)]) for q in Q], color=col, e=0.0))
+    rail = [q + inl * 0.6 for q in S_[::3]]
+    for z in (0.55, 1.05): P.append(dict(k='line', pts=[r2([q[0], q[1], zt_(q) + z]) for q in rail], color='#d8d6d0'))
+    for q in rail: P.append(dict(k='cyl', a=r2([q[0], q[1], zt_(q)]), b=r2([q[0], q[1], zt_(q) + 1.05]), r=0.06, color='#d8d6d0'))
+    sd = np.r_[0, np.cumsum(np.linalg.norm(np.diff(S_[:, :2], axis=0), axis=1))]
+    at_s = lambda s_: np.array([np.interp(s_, sd, S_[:, 0]), np.interp(s_, sd, S_[:, 1]), 0.0])
+    u_of = lambda q: (V.R.T @ (np.array([q[0], q[1], 1.5]) - o))
+    for row, (dd, step, ph) in enumerate(((7.5, 11.0, 0.0), (19.0, 12.0, 5.5))):
+        for s_ in np.arange(ph + 4, sd[-1] - 4, step):
+            q = at_s(s_) + inl * (dd + rng.uniform(-1.5, 1.5)); g = T(q[0], q[1])
+            if g < 0.4: continue
+            P.append(dict(k='palm', a=r2([q[0], q[1], g]), h=round(float(rng.uniform(10.5, 14.0)), 1), lean_az=round(rng.uniform(0, 360), 0), lean=0.04, nf=14, fl=4.8, tr=0.3))
+    # market canopies (orange / red / white pyramids on a 4 m square, frame u 1612..1775) and the red marquee (u 1794..1925, top v 914)
+    def pyramid(c, half, z0, zt, col, walls=None):
+        ex, ey = np.array([math.sin(math.radians(AZ)), math.cos(math.radians(AZ))]) * half, back * half
+        Cn = [c + ex + ey, c - ex + ey, c - ex - ey, c + ex - ey]
+        if walls: P.append(dict(k='box', c=r2([c[0], c[1], z0 - walls[0]]), s=[round(2 * half - 0.4, 1), round(2 * half - 0.4, 1), walls[0]], az=AZ, color=walls[1]))
+        for i in range(4):
+            A_, B_ = Cn[i], Cn[(i + 1) % 4]; P.append(dict(k='quad', p=[r2([*A_, z0]), r2([*B_, z0]), r2([c[0], c[1], zt]), r2([c[0], c[1], zt])], color=col))
+    cols = ['#d4572c', '#e8e4dc', '#c2412a', '#d4572c', '#e8e4dc', '#c2412a']
+    for k in range(6):
+        q = ground(1622 + k * 28, 933, 1.5); c = q[:2] + back * 3.0; g = q[2]
+        for dx in (-1.7, 1.7):
+            for dy in (-1.7, 1.7):
+                pp = c + np.array([math.sin(math.radians(AZ)), math.cos(math.radians(AZ))]) * dx + back * dy
+                P.append(dict(k='cyl', a=r2([pp[0], pp[1], g]), b=r2([pp[0], pp[1], g + 2.4]), r=0.05, color='#d8d6d0'))
+        pyramid(c, 2.2, g + 2.4, g + 3.6, cols[k])
     q0, q1 = ground(1794, 974, 1.5), ground(1925, 974, 1.5); g = min(q0[2], q1[2]); Lr = float(np.linalg.norm((q1 - q0)[:2]))
-    zt_ = up(q0, 1860, 914); ze_ = g + 0.55 * (zt_ - g); cc = (q0 + q1)[:2] / 2 + back * 5
-    P.append(dict(k='box', c=r2([cc[0], cc[1], g]), s=[round(Lr, 1), 10.0, round(ze_ - g, 1)], az=AZ, color='#c6492b'))
-    for f0 in (0.0, 10.0):
-        P.append(dict(k='quad', p=[r2([*q0[:2] + back * f0, ze_]), r2([*q1[:2] + back * f0, ze_]), r2([*q1[:2] + back * 5, zt_]), r2([*q0[:2] + back * 5, zt_])], color='#cf4f2e'))
+    zt2 = up(q0, 1860, 914); cc = (q0 + q1)[:2] / 2 + back * (Lr / 2)
+    pyramid(cc, Lr / 2, g + 3.0, zt2, '#c94a2c', walls=(3.0, '#b8432a'))
     # utility poles (u, top v, base v) + sagging wires
     tops = []
     for u, vt, vb in ((277, 1262, 1440), (1095, 1190, 1420), (1400, 1225, 1330)):
@@ -2159,22 +2190,21 @@ def ferris_edge():
         P.append(dict(k='box', c=r2([q[0], q[1], 3.6]), s=[round(Lb * 0.56, 1), Wb * 0.87, 0.8], az=AZ, color='#34363b'))   # window band
         P.append(dict(k='box', c=r2([q[0], q[1], 5.0]), s=[round(Lb * 0.3, 1), Wb * 0.65, 1.4], az=AZ, color='#e4e2dc'))
     # big white tent at the wheel's foot: walls to the eaves, two roof slopes to the ridge (parallel to the facade, 10 m back)
-    t0, t1 = ground(2110, 1085, 1.5), ground(2450, 1080, 1.5); g = min(t0[2], t1[2]); ze = up(t0, 2280, 1040); zr = up(t0, 2280, 1000)
+    t0, t1 = ground(2110, 1085, 1.5), ground(2450, 1080, 1.5); g = min(t0[2], t1[2]); ze = up(t0, 2280, 1052); zr = up(t0, 2280, 988)
     Lt = float(np.linalg.norm((t1 - t0)[:2])); c = (t0 + t1)[:2] / 2 + back * 10
-    P.append(dict(k='box', c=r2([c[0], c[1], g]), s=[round(Lt, 1), 20.0, round(ze - g, 1)], az=AZ, color='#ecedf0'))
+    P.append(dict(k='box', c=r2([c[0], c[1], g]), s=[round(Lt, 1), 20.0, round(ze - g, 1)], az=AZ, color='#dfe0e4'))
     for f0, f1 in ((0.0, 10.0), (20.0, 10.0)):
         P.append(dict(k='quad', p=[r2([*t0[:2] + back * f0, ze]), r2([*t1[:2] + back * f0, ze]), r2([*t1[:2] + back * f1, zr]), r2([*t0[:2] + back * f1, zr])], color='#f1f2f5'))
     # ground: the map drape is white there; the frame shows sunlit concrete / asphalt on the Watson quay (171,152,132), grey paving
     # on the Bayside plaza (127,115,121) and on the marina quay right of the wheel; draped quads (terrain + 6 cm), land only
-    def drape(us, vs, color):
+    def drape(us, vs, color, need=None):                                     # need: every corner on land (no stair-step over the water)
         for u0, u1 in zip(us[:-1], us[1:]):
             for v0, v1 in zip(vs[:-1], vs[1:]):
                 Q = [ground(u0, v0), ground(u1, v0), ground(u1, v1), ground(u0, v1)]
-                if max(T(q[0], q[1]) for q in Q) < 0.3: continue                   # the quay edge too (no white rim at the shore)
+                if (min if need else max)(T(q[0], q[1]) for q in Q) < (need or 0.3): continue
                 P.append(dict(k='quad', p=[r2([q[0], q[1], max(T(q[0], q[1]), 0.35) + 0.06]) for q in Q], color=color, e=0.0))
-    drape(np.arange(0, 2600, 80), np.arange(1290, 1445, 15), '#8f8173')
-    drape(np.arange(1150, 1960, 60), np.arange(800, 1000, 8), '#77706f')
-    drape(np.arange(2130, 2600, 60), np.arange(940, 1030, 10), '#77706f')
+    drape(np.arange(0, 2600, 40), np.arange(1290, 1445, 6), '#8f8173', 0.0)
+    drape(np.arange(2130, 2600, 30), np.arange(940, 1030, 5), '#77706f', 0.35)
     # riprap along the Watson shore (u 1430..1700, v 1300..1322) and the bushy tree right of the parking (u 1660..1830)
     rr = np.random.default_rng(31)
     for u in np.arange(1430, 1700, 14):
