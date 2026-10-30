@@ -6600,6 +6600,32 @@
   "source": "Screenshot Edge magazine - Ferris Wheel: the Shoreline (Bayfront) observation wheel and the Bayside marina seen across the boat basin from the south shore of Watson Island, Downtown skyline behind, the I-397 port bridge on the far left; WISP hut, containers and palms in the foreground",
   "note": "POSE 2026-10-29 (ESTIMATED, render overlays): wheel rim seen ~52 deg off its plane (ellipse 410 x 670 px at 2560) -> camera ENE of the wheel on Watson Island S shore, ~300 m; position along the view axis and sideways set by the parallax of the Downtown towers (tallest tower, left condo, central cluster) against the wheel; heading 226.7, pitch -1.85, hfov 48, z 40 (eye height from the wheel base vs the skyline: at z 32 the wheel sat ~55 px high). Needs markings + solve."
  },
+ "Jason and Lucia on a Motorbike [Edge]": {
+  "id": "S4/28",
+  "player": null,
+  "size": [
+   2560,
+   1440
+  ],
+  "constraint_class": "D_no_ground_truth",
+  "pose_verified": null,
+  "xyz": [
+   417.6,
+   224.9,
+   4.9
+  ],
+  "ypr": [
+   156.4,
+   11.9,
+   0.0
+  ],
+  "fov": [
+   56.0,
+   null
+  ],
+  "source": "Screenshot Edge magazine - Jason and Lucia on a Motorbike: low angle on the riders at dusk, the Downtown skyline out of focus behind them (One Miami East / West at the right of Jason's arm, lit towers next to them), lights across the water on the left",
+  "note": "POSE 2026-10-30 (ESTIMATED, heavy depth of field, the riders hide most of the frame): One Miami pair fitted on the twin towers behind Jason's arm (left edge u 1986, right edge u 2200, West top v 786) for every road point N..E of the towers, then scored on the neighbouring lit towers (u 2143-2315 top v 936, u 2345 top v 907) and checked on renders: best on the MacArthur Causeway road on Watson Island (417.6, 224.9), eye 1.4 m above the road (on the bike), heading 203.6, pitch 11.9 (low angle up at the riders), hfov 56. Position along the view axis weak (the pair alone fixes bearing and scale). Needs markings + solve."
+ },
  "Biplane (Video) v2811": {
   "player": null,
   "size": [
